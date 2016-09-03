@@ -111,4 +111,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshRole(String userId, String roleCode, String updater,
             String remark);
 
+    public void refreshPdf(String userId, String pdf, String updater,
+            String remark);
+
 }

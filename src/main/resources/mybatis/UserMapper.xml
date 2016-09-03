@@ -266,10 +266,22 @@
 		WHERE
 		user_id = #{userId}			
 	</update>
+	
 	<update id="update_role" parameterType="user">
 		UPDATE tstd_user
 		SET
 		 role_code = #{roleCode}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		user_id = #{userId}			
+	</update>
+	
+	<update id="update_user_pdf" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 pdf = #{pdf}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

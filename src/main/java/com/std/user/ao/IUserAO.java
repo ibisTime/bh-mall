@@ -260,6 +260,18 @@ public interface IUserAO {
     public void doRoleUser(String userId, String roleCode, String updater,
             String remark);
 
+    /**
+     * 完善用户信息
+     * @param userId
+     * @param pdf
+     * @param updater
+     * @param remark 
+     * @create: 2016年8月31日 上午9:22:11 xieyj
+     * @history:
+     */
+    public void doPdfUser(String userId, String pdf, String updater,
+            String remark);
+
     /** 
      * @param start
      * @param limit

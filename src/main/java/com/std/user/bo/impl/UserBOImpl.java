@@ -387,6 +387,22 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data.setRemark(remark);
             userDAO.updateRole(data);
         }
+    }
 
+    /** 
+     * @see com.std.user.bo.IUserBO#refreshStatus(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void refreshPdf(String userId, String pdf, String updater,
+            String remark) {
+        if (StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setPdf(pdf);
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            userDAO.updatePdf(data);
+        }
     }
 }

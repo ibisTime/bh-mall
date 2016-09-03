@@ -97,4 +97,13 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public int updateRole(User data) {
         return super.update(NAMESPACE.concat("update_role"), data);
     }
+
+    /** 
+     * @see com.std.user.dao.IUserDAO#updatePdf(com.std.user.domain.User)
+     */
+    @Override
+    public int updatePdf(User data) {
+        return super.update(NAMESPACE.concat("update_user_pdf"), data);
+
+    }
 }

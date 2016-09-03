@@ -91,4 +91,13 @@ public interface IUserDAO extends IBaseDAO<User> {
      */
     public int updateRole(User data);
 
+    /**
+     * 更新Pdf
+     * @param data
+     * @return 
+     * @create: 2016年8月31日 上午9:17:25 xieyj
+     * @history:
+     */
+    public int updatePdf(User data);
+
 }

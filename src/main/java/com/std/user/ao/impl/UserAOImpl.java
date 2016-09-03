@@ -24,6 +24,7 @@ import com.std.user.bo.IIdentifyBO;
 import com.std.user.bo.ISYSRoleBO;
 import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.IUserBO;
+import com.std.user.bo.IUserRelationBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
@@ -47,6 +48,9 @@ import com.std.user.util.RandomUtil;
 public class UserAOImpl implements IUserAO {
     @Autowired
     protected IUserBO userBO;
+
+    @Autowired
+    protected IUserRelationBO userRelationBO;
 
     @Autowired
     protected ISYSRoleBO sysRoleBO;
@@ -109,9 +113,14 @@ public class UserAOImpl implements IUserAO {
                 pdf, null);
             // 三方认证
             // dentifyBO.doIdentify(userId, realName, idKind, idNo);
-            // 分配账号
+            // 分配账号(人民币和虚拟币)
+            accountBO.distributeAccount(userId, realName,
+                ECurrency.CNY.getCode());
             accountBO.distributeAccount(userId, realName,
                 ECurrency.XNB.getCode());
+            if (EUserKind.F1.getCode().equals(kind)) {
+                userRelationBO.saveUserRelation(userReferee, userId);
+            }
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册。您的登录密码为" + loginPsd
@@ -483,6 +492,16 @@ public class UserAOImpl implements IUserAO {
         }
         userBO.refreshRole(userId, roleCode, updater, remark);
 
+    }
+
+    @Override
+    public void doPdfUser(String userId, String pdf, String updater,
+            String remark) {
+        User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("li01004", "用户名不存在");
+        }
+        userBO.refreshPdf(userId, pdf, updater, remark);
     }
 
     @Override
