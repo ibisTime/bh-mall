@@ -205,6 +205,7 @@ public class UserAOImpl implements IUserAO {
         User condition = new User();
         if (EUserKind.F1.getCode().equals(kind)) {
             condition.setMobile(loginName);
+            condition.setKind(kind);
         } else {
             condition.setLoginName(loginName);
         }
@@ -220,9 +221,6 @@ public class UserAOImpl implements IUserAO {
         }
         User user = userList2.get(0);
 
-        if (EUserKind.F1.getCode().equals(kind) && !kind.equals(user.getKind())) {
-            throw new BizException("xn702002", "登录用户类型不正确");
-        }
         if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
             throw new BizException("xn702002", "当前用户已被锁定，请联系工作人员");
         }

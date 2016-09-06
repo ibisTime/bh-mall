@@ -117,8 +117,8 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
             UserRelation condition) {
         long totalCount = userRelationDAO.selectUserTotalCount(condition);
         Paginable<User> page = new Page<User>(start, pageSize, totalCount);
-        List<User> dataList = userRelationDAO.selectUserList(condition, start,
-            pageSize);
+        List<User> dataList = userRelationDAO.selectUserList(condition,
+            page.getStart(), page.getPageSize());
         page.setList(dataList);
         return page;
     }

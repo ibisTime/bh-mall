@@ -54,9 +54,6 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="mobile != null and mobile != '' ">
-				AND tu.mobile = #{mobile}
-			</if>
 			<if test="mobileForLikeQuery != null and mobileForLikeQuery != '' ">
 				AND tu.mobile like "%"#{mobileForLikeQuery}"%"
 			</if>
