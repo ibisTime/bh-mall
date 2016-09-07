@@ -285,7 +285,7 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053117472419751','详情','2','/order/detail','1','admin',now(),'','SM201605251437509349','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053117482983849','导出','2','/order/export','2','admin',now(),'','SM201605251437509349','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053117501492660','详情','2','/customer/detail','1','admin',now(),'','SM201605261049488614','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053117513968392','代注册','2','/customer/replaceAdd','2','admin',now(),'','SM201605261049488614','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053117513968392','积分账户','2','/customer/replaceAdd','4','admin',now(),'','SM201605261049488614','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053117533734198','充值','2','/account/apply','1','admin',now(),'','SM201605301601220823','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM201605311754289585','审批','2','/account/approve','2','admin',now(),'','SM201605301601220823','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053119091321745','审批','2','/account/approve','1','admin',now(),'','SM201605261131142289','1');
@@ -382,7 +382,6 @@ LIMIT 0, 50000
 
 -- Date: 2016-09-06 23:10
 */
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016053117513968392','积分账户','2','/customer/replaceAdd','4','admin',now(),'','SM201605261049488614','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016083010332711065','完善客户信息','2','/edit','2','admin',now(),'','SM201605261049488614','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016083010343691911','加减积分','2','/score','3','admin',now(),'','SM201605261049488614','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016083010595278054','人民币账户','2','/realAccount','5','admin',now(),'','SM201605261049488614','1');
