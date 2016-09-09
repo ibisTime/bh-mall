@@ -94,6 +94,9 @@
 		,tu.status
 		
 		,tu.pdf
+		,tu.updater
+		,tu.update_datetime
+		,tu.remark
 		FROM
 		tstd_user tu inner join tstd_user_relation t on tu.user_id = t.to_user
 		<include refid="where_user_condition" />
