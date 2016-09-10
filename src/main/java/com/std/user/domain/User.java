@@ -27,7 +27,7 @@ public class User extends ABaseDO {
     // userId
     private String userId;
 
-    // 登陆密码
+    // 登陆名
     private String loginName;
 
     // 登陆密码
