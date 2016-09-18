@@ -29,7 +29,7 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
      */
     @Override
     public int insert(UserExt data) {
-        return super.insert(NAMESPACE.concat("insert_user_ext"), data);
+        return super.insert(NAMESPACE.concat("insert_userExt"), data);
     }
 
     /** 
@@ -82,8 +82,12 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
      */
     @Override
     public int updateUserPhoto(UserExt data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.update(NAMESPACE.concat("update_userExtPhoto"), data);
+    }
+
+    @Override
+    public int updateUser(UserExt data) {
+        return super.update(NAMESPACE.concat("update_userExt"), data);
     }
 
 }

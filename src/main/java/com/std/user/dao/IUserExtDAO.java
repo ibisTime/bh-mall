@@ -20,10 +20,20 @@ public interface IUserExtDAO extends IBaseDAO<UserExt> {
     String NAMESPACE = IUserExtDAO.class.getName().concat(".");
 
     /**
+     * 更新用户头像
      * @param data
      * @return 
      * @create: 2016年9月18日 上午11:12:02 xieyj
      * @history:
      */
     public int updateUserPhoto(UserExt data);
+
+    /** 
+     * 更新用户信息
+     * @param data
+     * @return 
+     * @create: 2016年9月18日 下午2:16:15 zuixian
+     * @history: 
+     */
+    public int updateUser(UserExt data);
 }
