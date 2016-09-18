@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.IUserExtDAO">
+	<resultMap id="userExt_DB_Result" type="user">
+		<result column="user_id" property="userId" />
+		<result column="gender" property="gender" />
+		<result column="birthday" property="birthday" />
+		<result column="photo" property="photo" />		
+		<result column="region" property="region" />
+		
+		<result column="introduce" property="introduce" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="gender != null and gender != '' ">
+				AND t.gender = #{gender}
+			</if>
+			<if test="region != null and region != '' ">
+				AND t.region = #{region}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_userExt" parameterType="userExt" resultMap="userExt_DB_Result">
+		SELECT 
+		t.user_id
+		,t.gender
+		,t.birthday
+		,t.photo
+		,t.region
+		,t.introduce
+		FROM
+		tstd_user_ext t
+		<include refid="where_condition" />
+		ORDER BY t.code DESC
+	</select>
+
+	<select id="select_userExt_count" parameterType="userExt"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_user_ext t
+		<include refid="where_condition" />
+	</select>
+	
+	<insert id="insert_userExt" parameterType="userExt">
+		INSERT INTO
+		tstd_user_ext(
+		user_id
+		,gender
+		,birthday
+		,photo
+		,region
+		,introduce
+		)
+		VALUES(
+		#{userId}
+		,#{gender}
+		,#{birthday}
+		,#{photo}
+		,#{region}
+		,#{introduce}
+		)
+	</insert>
+	
+	<update id="update_userExt" parameterType="userExt">
+		UPDATE tstd_user_ext
+		SET
+		gender = #{gender}
+		,birthday = #{birthday}
+		,region = #{region}
+		,introduce = #{introduce}
+		WHERE userId = #{userId}
+	</update>
+	
+	<update id="update_userExtPhoto" parameterType="userExt">
+		UPDATE tstd_user_ext
+		SET
+		photo = #{photo}
+		WHERE userId = #{userId}
+	</update>
+</mapper>

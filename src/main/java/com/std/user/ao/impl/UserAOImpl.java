@@ -86,7 +86,7 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegister(mobile, loginPwd, loginPwdStrength,
             userReferee);
         // 分配账号
-        accountBO.distributeAccountTwo(userId, mobile, "CNY", userReferee);
+        accountBO.distributeAccount(userId, mobile, "CNY");
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");

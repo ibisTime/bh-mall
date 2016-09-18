@@ -39,7 +39,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void checkLoginPwd(String userId, String loginPwd);
 
     /**
-     *  判断手机号是否存在
+     *  判断前端用户手机号是否存在
      * @param mobile
      * @return 
      * @create: 2015-5-16 下午4:08:06 miyb
@@ -48,7 +48,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void isMobileExist(String mobile);
 
     /**
-     * 更具手机号和类型判断手机号是否存在
+     * 根据手机号和类型判断手机号是否存在
      * @param mobile
      * @param kind 
      * @create: 2016年7月27日 下午3:45:39 xieyj

@@ -207,6 +207,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             PhoneUtil.checkMobile(mobile);
             User condition = new User();
             condition.setMobile(mobile);
+            condition.setKind(EUserKind.F1.getCode());
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");

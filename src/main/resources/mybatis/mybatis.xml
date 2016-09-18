@@ -7,8 +7,9 @@
 		<typeAlias alias="sysMenu" type="com.std.user.domain.SYSMenu" />
 	    <typeAlias alias="sysRole" type="com.std.user.domain.SYSRole" />
  	    <typeAlias alias="sysMenuRole" type="com.std.user.domain.SYSMenuRole" />
+ 	    
  	    <typeAlias alias="userRelation" type="com.std.user.domain.UserRelation" />
  	    <typeAlias alias="signLog" type="com.std.user.domain.SignLog" />
- 	    
-	</typeAliases>	
+ 	    <typeAlias alias="userExt" type="com.std.user.domain.UserExt" />
+	</typeAliases>
 </configuration>	
