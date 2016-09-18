@@ -27,4 +27,7 @@
 	<bean id="sysMenuRoleBO" class="com.std.user.bo.impl.SYSMenuRoleBOImpl">
 		<property name="paginableDAO" ref="sysMenuRoleDAOImpl"/>
 	</bean>
+	<bean id="signLogBO" class="com.std.user.bo.impl.SignLogBOImpl">
+		<property name="paginableDAO" ref="signLogDAOImpl"/>
+	</bean>
 </beans>

@@ -36,6 +36,14 @@ public class SignLog extends ABaseDO {
     // 签到时间
     private Date signDatetime;
 
+    // *************dp properties **************
+
+    // 申请开始时间起
+    private Date signDatetimeStart;
+
+    // 申请开始时间止
+    private Date signDatetimeEnd;
+
     public String getCode() {
         return code;
     }
@@ -66,5 +74,21 @@ public class SignLog extends ABaseDO {
 
     public void setSignDatetime(Date signDatetime) {
         this.signDatetime = signDatetime;
+    }
+
+    public Date getSignDatetimeStart() {
+        return signDatetimeStart;
+    }
+
+    public void setSignDatetimeStart(Date signDatetimeStart) {
+        this.signDatetimeStart = signDatetimeStart;
+    }
+
+    public Date getSignDatetimeEnd() {
+        return signDatetimeEnd;
+    }
+
+    public void setSignDatetimeEnd(Date signDatetimeEnd) {
+        this.signDatetimeEnd = signDatetimeEnd;
     }
 }
