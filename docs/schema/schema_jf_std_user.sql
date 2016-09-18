@@ -52,27 +52,44 @@ CREATE TABLE `tstd_sign_log` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_user`;
 CREATE TABLE `tstd_user` (
-  `user_id` varchar(32) NOT NULL COMMENT 'userId',
-  `login_name` varchar(32) DEFAULT NULL COMMENT '登陆名',
-  `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
-  `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
-  `kind` varchar(4) DEFAULT NULL COMMENT '标识',
-  `level` varchar(4) DEFAULT NULL COMMENT '用户等级',
-  `user_referee` varchar(32) DEFAULT NULL COMMENT '推荐人',
-  `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
-  `id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
-  `id_no` varchar(32) DEFAULT NULL COMMENT '证件号码',
-  `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
-  `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
-  `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
-  `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',
-  `status` varchar(2) DEFAULT NULL COMMENT '状态',
-  `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `pdf` varchar(255) DEFAULT NULL COMMENT '附件',
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `user_id` VARCHAR(32) NOT NULL COMMENT 'userId',
+  `login_name` VARCHAR(32) NULL DEFAULT NULL COMMENT '登陆名',
+  `nickname` VARCHAR(32) NULL DEFAULT NULL COMMENT '昵称',
+  `login_pwd` VARCHAR(32) NULL DEFAULT NULL COMMENT '登陆密码',
+  `login_pwd_strength` CHAR(1) NULL DEFAULT NULL COMMENT '登陆密码强度',
+  `kind` VARCHAR(4) NULL DEFAULT NULL COMMENT '标识',
+  `level` VARCHAR(4) NULL DEFAULT NULL COMMENT '用户等级',
+  `user_referee` VARCHAR(32) NULL DEFAULT NULL COMMENT '推荐人',
+  `mobile` VARCHAR(16) NULL DEFAULT NULL COMMENT '手机号',
+  `id_kind` CHAR(1) NULL DEFAULT NULL COMMENT '证件类型',
+  `id_no` VARCHAR(32) NULL DEFAULT NULL COMMENT '证件号码',
+  `real_name` VARCHAR(16) NULL DEFAULT NULL COMMENT '真实姓名',
+  `trade_pwd` VARCHAR(32) NULL DEFAULT NULL COMMENT '安全密码',
+  `trade_pwd_strength` CHAR(1) NULL DEFAULT NULL COMMENT '安全密码强度',
+  `role_code` VARCHAR(32) NULL DEFAULT NULL COMMENT '角色编号',
+  `status` VARCHAR(2) NULL DEFAULT NULL COMMENT '状态',
+  `updater` VARCHAR(32) NULL DEFAULT NULL COMMENT '修改人',
+  `update_datetime` DATETIME NULL DEFAULT NULL COMMENT '修改时间',
+  `remark` VARCHAR(255) NULL DEFAULT NULL COMMENT '备注',
+  `pdf` VARCHAR(255) NULL DEFAULT NULL COMMENT '附件',
+  PRIMARY KEY (`user_id`)  COMMENT '')
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+
+-- ----------------------------
+--  Table structure for `tstd_user_relation`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_user_ext`;
+CREATE TABLE `tstd_user_ext` (
+  `user_id` VARCHAR(32) NOT NULL COMMENT '用户编号',
+  `gender` CHAR(1) NULL DEFAULT NULL COMMENT '性别(1 男 0 女)',
+  `birthday` VARCHAR(16) NULL DEFAULT NULL COMMENT '生日',
+  `photo` VARCHAR(255) NULL DEFAULT NULL COMMENT '头像',
+  `region` VARCHAR(255) NULL DEFAULT NULL COMMENT '所在地区',
+  `introduce` VARCHAR(255) NULL DEFAULT NULL COMMENT '简介',
+  PRIMARY KEY (`user_id`)  COMMENT '')
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
 
 -- ----------------------------
 --  Table structure for `tstd_user_relation`
