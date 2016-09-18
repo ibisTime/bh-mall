@@ -106,4 +106,9 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
         return super.update(NAMESPACE.concat("update_user_pdf"), data);
 
     }
+
+    @Override
+    public int updateNickname(User data) {
+        return super.update(NAMESPACE.concat("update_user_nickname"), data);
+    }
 }

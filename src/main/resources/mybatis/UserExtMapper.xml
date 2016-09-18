@@ -73,13 +73,13 @@
 		,birthday = #{birthday}
 		,region = #{region}
 		,introduce = #{introduce}
-		WHERE userId = #{userId}
+		WHERE user_id = #{userId}
 	</update>
 	
 	<update id="update_userExtPhoto" parameterType="userExt">
 		UPDATE tstd_user_ext
 		SET
 		photo = #{photo}
-		WHERE userId = #{userId}
+		WHERE user_id = #{userId}
 	</update>
 </mapper>

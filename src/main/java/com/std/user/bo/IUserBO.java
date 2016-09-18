@@ -114,4 +114,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshPdf(String userId, String pdf, String updater,
             String remark);
 
+    public void refreshNickname(String userId, String nickname);
+
 }

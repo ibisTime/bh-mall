@@ -326,4 +326,12 @@ public interface IUserAO {
      */
     public void sendAppSms(String userId, String content);
 
+    /** 
+     * 更改昵称
+     * @param userId
+     * @param nickname 
+     * @create: 2016年9月18日 下午5:27:53 zuixian
+     * @history: 
+     */
+    public void editNickname(String userId, String nickname);
 }

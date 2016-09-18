@@ -30,6 +30,9 @@ public class User extends ABaseDO {
     // 登陆名
     private String loginName;
 
+    // 昵称
+    private String nickname;
+
     // 登陆密码
     private String loginPwd;
 
@@ -272,5 +275,13 @@ public class User extends ABaseDO {
 
     public void setUserRefereeName(String userRefereeName) {
         this.userRefereeName = userRefereeName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

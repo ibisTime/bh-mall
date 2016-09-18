@@ -406,4 +406,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             userDAO.updatePdf(data);
         }
     }
+
+    @Override
+    public void refreshNickname(String userId, String nickname) {
+        if (StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setNickname(nickname);
+            userDAO.updateNickname(data);
+        }
+    }
 }

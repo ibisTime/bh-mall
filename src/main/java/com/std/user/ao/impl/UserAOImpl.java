@@ -556,4 +556,13 @@ public class UserAOImpl implements IUserAO {
         }
         smsOutBO.sendSmsOut(user.getMobile(), content, "805903");
     }
+
+    @Override
+    public void editNickname(String userId, String nickname) {
+        if (userId != null && userId != "") {
+            userBO.refreshNickname(userId, nickname);
+        } else {
+            throw new BizException("xn702001", "用户ID不存在");
+        }
+    }
 }

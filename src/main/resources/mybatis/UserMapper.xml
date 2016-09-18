@@ -5,6 +5,7 @@
 	<resultMap id="user_DB_Result" type="user">
 		<result column="user_id" property="userId" />
 		<result column="login_name" property="loginName" />
+		<result column="nickname" property="nickname" />
 		<result column="login_pwd_strength" property="loginPwdStrength" />		
 		<result column="kind" property="kind" />
 		
@@ -285,6 +286,14 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE
+		user_id = #{userId}			
+	</update>
+	
+	<update id="update_user_nickname" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 nickname = #{nickname}
 		WHERE
 		user_id = #{userId}			
 	</update>
