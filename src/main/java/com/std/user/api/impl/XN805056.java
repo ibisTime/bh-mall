@@ -48,6 +48,7 @@ public class XN805056 extends AProcessor {
 
             res.setRemark(user.getRemark());
             res.setPdf(user.getPdf());
+            res.setUserExt(user.getUserExt());
         }
         return res;
     }

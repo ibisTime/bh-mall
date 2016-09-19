@@ -35,5 +35,5 @@ public interface IUserExtDAO extends IBaseDAO<UserExt> {
      * @create: 2016年9月18日 下午2:16:15 zuixian
      * @history: 
      */
-    public int updateUser(UserExt data);
+    public int updateUserExt(UserExt data);
 }

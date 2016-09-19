@@ -19,8 +19,8 @@
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="role_code" property="roleCode" />
 		<result column="status" property="status" />
-		
 		<result column="updater" property="updater" />
+		
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 		<result column="pdf" property="pdf" />
@@ -39,6 +39,9 @@
 			<choose>
 				 <when test="kind == '07'">
 				  AND (t.kind = 05 or t.kind = 02)
+				 </when>
+				 <when test="kind == 'ff3'">
+				  AND (t.kind = 'f1' or t.kind = 'f2')
 				 </when>
 				 <when test="kind != null and kind != '' ">
 				  AND t.kind = #{kind}
@@ -94,6 +97,7 @@
 		user_id
 		,login_name
 		,login_pwd_strength
+		,nickname
 		,kind	
 		
 		,level
@@ -106,8 +110,8 @@
 		,trade_pwd_strength
 		,role_code
 		,status
-		
 		,updater
+		
 		,update_datetime
 		,remark
 		,pdf
@@ -132,14 +136,15 @@
 		,login_name
 		,login_pwd
 		,login_pwd_strength
-		,kind
+		,nickname
 		
+		,kind
 		,level
 		,user_referee
 		,mobile
 		,status
-		,updater
 		
+		,updater
 		,update_datetime
 		,remark
 		)
@@ -148,14 +153,15 @@
 		,#{loginName}
 		,#{loginPwd}
 		,#{loginPwdStrength}
-		,#{kind}
+		,#{nickname}
 		
+		,#{kind}
 		,#{level}
 		,#{userReferee}
 		,#{mobile}
 		,#{status}
-		,#{updater}
 		
+		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
 		)

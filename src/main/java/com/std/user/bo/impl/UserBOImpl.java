@@ -207,7 +207,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             PhoneUtil.checkMobile(mobile);
             User condition = new User();
             condition.setMobile(mobile);
-            condition.setKind(EUserKind.F1.getCode());
+            condition.setKind("ff3");
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");
@@ -277,15 +277,17 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setUserId(userId);
             user.setLoginName(mobile);
             user.setLoginPwd(MD5Util.md5(loginPwd));
-            user.setLoginPwdStrength(loginPwdStrength);
-            user.setKind(EUserKind.F1.getCode());
 
+            user.setLoginPwdStrength(loginPwdStrength);
+            user.setNickname(userId.substring(userId.length() - 8,
+                userId.length()));
+            user.setKind(EUserKind.F1.getCode());
             user.setLevel("0");
             user.setUserReferee(userReferee);
+
             user.setMobile(mobile);
             user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
             user.setUpdater(userId);
-
             user.setUpdateDatetime(new Date());
             user.setRemark(EUserKind.F1.getValue());
             userDAO.insert(user);

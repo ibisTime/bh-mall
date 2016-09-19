@@ -1,5 +1,6 @@
 package com.std.user.bo.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,24 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
     private IUserExtDAO userExtDAO;
 
     @Override
-    public String saveUserExt(UserExt data) {
+    public void saveUserExt(UserExt data) {
         if (data != null) {
             userExtDAO.insert(data);
         }
-        return data.getUserId();
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserExtBO#saveUserExt(java.lang.String)
+     */
+    @Override
+    public void saveUserExt(String userId) {
+        if (StringUtils.isNotBlank(userId)) {
+            UserExt data = new UserExt();
+            data.setUserId(userId);
+            if (data != null) {
+                userExtDAO.insert(data);
+            }
+        }
     }
 
     @Override
@@ -33,12 +47,25 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
     }
 
     @Override
-    public int refreshUser(UserExt data) {
+    public int refreshUserExt(UserExt data) {
         int count = 0;
         if (data != null && data.getUserId() != null) {
-            count = userExtDAO.updateUser(data);
+            count = userExtDAO.updateUserExt(data);
         }
         return count;
     }
 
+    /** 
+     * @see com.std.user.bo.IUserExtBO#doGetUserExt(java.lang.String)
+     */
+    @Override
+    public UserExt doGetUserExt(String userId) {
+        UserExt result = null;
+        if (StringUtils.isNotBlank(userId)) {
+            UserExt condition = new UserExt();
+            condition.setUserId(userId);
+            result = userExtDAO.select(condition);
+        }
+        return result;
+    }
 }

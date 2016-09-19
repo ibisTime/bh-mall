@@ -24,6 +24,7 @@ import com.std.user.bo.IIdentifyBO;
 import com.std.user.bo.ISYSRoleBO;
 import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.IUserBO;
+import com.std.user.bo.IUserExtBO;
 import com.std.user.bo.IUserRelationBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.common.DateUtil;
@@ -31,6 +32,7 @@ import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PropertiesUtil;
 import com.std.user.domain.User;
+import com.std.user.domain.UserExt;
 import com.std.user.enums.ECurrency;
 import com.std.user.enums.EIDKind;
 import com.std.user.enums.EUserKind;
@@ -51,6 +53,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected IUserRelationBO userRelationBO;
+
+    @Autowired
+    protected IUserExtBO userExtBO;
 
     @Autowired
     protected ISYSRoleBO sysRoleBO;
@@ -81,12 +86,15 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, loginPwd, loginPwdStrength,
             userReferee);
-        // 分配账号
+        // 插入用户扩展信息
+        userExtBO.saveUserExt(userId);
+        // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, "CNY");
+        accountBO.distributeAccount(userId, mobile, "XNB");
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
@@ -522,6 +530,9 @@ public class UserAOImpl implements IUserAO {
             if (userReferee != null) {
                 user.setUserRefereeName(userReferee.getLoginName());
             }
+            // 获取用户扩展信息
+            UserExt userExt = userExtBO.doGetUserExt(userId);
+            user.setUserExt(userExt);
         }
         return user;
     }

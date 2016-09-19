@@ -46,7 +46,7 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
      */
     @Override
     public UserExt select(UserExt condition) {
-        return super.select(NAMESPACE.concat("select_user_ext"), condition,
+        return super.select(NAMESPACE.concat("select_userExt"), condition,
             UserExt.class);
     }
 
@@ -86,7 +86,7 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
     }
 
     @Override
-    public int updateUser(UserExt data) {
+    public int updateUserExt(UserExt data) {
         return super.update(NAMESPACE.concat("update_userExt"), data);
     }
 

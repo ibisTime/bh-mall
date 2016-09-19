@@ -2,15 +2,17 @@ package com.std.user.dto.res;
 
 import java.util.Date;
 
+import com.std.user.domain.UserExt;
+
 public class XN805056Res {
     // userId
     private String userId;
 
-    // 登陆密码
+    // 登陆名称
     private String loginName;
 
-    // 登陆密码
-    // private String loginPwd;
+    // 昵称
+    private String nickName;
 
     // 登陆密码强度
     private String loginPwdStrength;
@@ -39,9 +41,6 @@ public class XN805056Res {
     // 真实姓名
     private String realName;
 
-    // 交易密码
-    // private String tradePwd;
-
     // 交易密码强度
     private String tradePwdStrength;
 
@@ -62,6 +61,9 @@ public class XN805056Res {
 
     // pdf
     private String pdf;
+
+    // 扩展用户
+    private UserExt userExt;
 
     public String getUserId() {
         return userId;
@@ -205,5 +207,13 @@ public class XN805056Res {
 
     public void setUserRefereeName(String userRefereeName) {
         this.userRefereeName = userRefereeName;
+    }
+
+    public UserExt getUserExt() {
+        return userExt;
+    }
+
+    public void setUserExt(UserExt userExt) {
+        this.userExt = userExt;
     }
 }

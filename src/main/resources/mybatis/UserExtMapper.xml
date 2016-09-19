@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.std.user.dao.IUserExtDAO">
-	<resultMap id="userExt_DB_Result" type="user">
+	<resultMap id="userExt_DB_Result" type="userExt">
 		<result column="user_id" property="userId" />
 		<result column="gender" property="gender" />
 		<result column="birthday" property="birthday" />
@@ -37,7 +37,7 @@
 		FROM
 		tstd_user_ext t
 		<include refid="where_condition" />
-		ORDER BY t.code DESC
+		ORDER BY t.user_id DESC
 	</select>
 
 	<select id="select_userExt_count" parameterType="userExt"

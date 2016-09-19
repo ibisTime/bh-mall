@@ -23,7 +23,7 @@ public class UserExtAOImpl implements IUserExtAO {
         data.setPhoto(photo);
         data.setRegion(region);
         data.setIntroduce(introduce);
-        return userExtBO.refreshUser(data);
+        return userExtBO.refreshUserExt(data);
     }
 
     @Override

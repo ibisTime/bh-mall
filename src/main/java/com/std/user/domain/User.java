@@ -30,14 +30,14 @@ public class User extends ABaseDO {
     // 登陆名
     private String loginName;
 
-    // 昵称
-    private String nickname;
-
     // 登陆密码
     private String loginPwd;
 
     // 登陆密码强度
     private String loginPwdStrength;
+
+    // 昵称
+    private String nickname;
 
     // 身份标识
     private String kind;
@@ -92,6 +92,8 @@ public class User extends ABaseDO {
     private String realNameForLikeQuery;
 
     private String userRefereeName;
+
+    private UserExt userExt;
 
     public String getLoginNameForLikeQuery() {
         return loginNameForLikeQuery;
@@ -283,5 +285,13 @@ public class User extends ABaseDO {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public UserExt getUserExt() {
+        return userExt;
+    }
+
+    public void setUserExt(UserExt userExt) {
+        this.userExt = userExt;
     }
 }
