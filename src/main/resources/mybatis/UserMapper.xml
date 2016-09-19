@@ -96,8 +96,8 @@
 		SELECT 
 		user_id
 		,login_name
-		,login_pwd_strength
 		,nickname
+		,login_pwd_strength
 		,kind	
 		
 		,level
@@ -134,9 +134,9 @@
 		INSERT INTO tstd_user(
 		user_id
 		,login_name
+		,nickname
 		,login_pwd
 		,login_pwd_strength
-		,nickname
 		
 		,kind
 		,level
@@ -151,9 +151,9 @@
 		VALUES(
 		#{userId}
 		,#{loginName}
+		,#{nickname}
 		,#{loginPwd}
 		,#{loginPwdStrength}
-		,#{nickname}
 		
 		,#{kind}
 		,#{level}
@@ -166,6 +166,7 @@
 		,#{remark}
 		)
 	</insert>
+	
     <insert id="insert_ren" parameterType="user">
 		INSERT INTO tstd_user(
 		user_id

@@ -30,14 +30,14 @@ public class User extends ABaseDO {
     // 登陆名
     private String loginName;
 
+    // 昵称
+    private String nickname;
+
     // 登陆密码
     private String loginPwd;
 
     // 登陆密码强度
     private String loginPwdStrength;
-
-    // 昵称
-    private String nickname;
 
     // 身份标识
     private String kind;
