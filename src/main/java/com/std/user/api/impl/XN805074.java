@@ -26,16 +26,14 @@ public class XN805074 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userExtAO.refreshUserExt(req.getUserId(), req.getGender(),
-            req.getBirthday(), req.getPhoto(), req.getRegion(),
-            req.getIntroduce());
+            req.getBirthday(), req.getRegion(), req.getIntroduce());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805074Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getGender(),
-            req.getBirthday(), req.getPhoto(), req.getRegion());
+        StringValidater.validateBlank(req.getUserId());
     }
 
 }

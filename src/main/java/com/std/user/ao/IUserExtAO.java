@@ -2,15 +2,19 @@ package com.std.user.ao;
 
 public interface IUserExtAO {
 
-    /** 
+    /**
      * 更改用户信息
-     * @param data
+     * @param userId
+     * @param gender
+     * @param birthday
+     * @param region
+     * @param introduce
      * @return 
-     * @create: 2016年9月18日 下午2:37:19 zuixian
-     * @history: 
+     * @create: 2016年9月19日 下午2:26:45 xieyj
+     * @history:
      */
     public int refreshUserExt(String userId, String gender, String birthday,
-            String photo, String region, String introduce);
+            String region, String introduce);
 
     /** 
      * 更改用户头像
