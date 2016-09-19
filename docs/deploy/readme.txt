@@ -41,6 +41,8 @@
   ../bin/shutdown.sh
   ../bin/startup.sh
   
+  http://121.43.101.148:5305/std-user/api
+  
  --------------------cswlm
   cd /home/wwwroot/cswlm/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
@@ -56,4 +58,5 @@
   ../bin/shutdown.sh
   ../bin/startup.sh
   
-http://121.43.101.148:5305/std-user/api
+http://121.43.101.148:5405/std-user/api
+

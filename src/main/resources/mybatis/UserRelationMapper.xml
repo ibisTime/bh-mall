@@ -129,7 +129,7 @@
 	
 	<delete id="delete_userRelation" parameterType="userRelation">
 		DELETE FROM
-		tstd_userRelation
+		tstd_user_relation
 		WHERE
 		code = #{code}
 	</delete>
@@ -139,7 +139,7 @@
 		SET
 		status= #{status}
 		,update_datetime= #{updateDatetime}
-		WHERE userId = #{userId} AND toUser = #{toUser}
+		WHERE user_id = #{userId} AND to_user = #{toUser}
 	</update>
 	
 </mapper>
