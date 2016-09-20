@@ -216,4 +216,12 @@ public class XN805056Res {
     public void setUserExt(UserExt userExt) {
         this.userExt = userExt;
     }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 }
