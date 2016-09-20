@@ -12,7 +12,7 @@ public class XN805056Res {
     private String loginName;
 
     // 昵称
-    private String nickName;
+    private String nickname;
 
     // 登陆密码强度
     private String loginPwdStrength;
@@ -217,11 +217,11 @@ public class XN805056Res {
         this.userExt = userExt;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
