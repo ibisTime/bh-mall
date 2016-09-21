@@ -143,7 +143,8 @@ public class UserAOImpl implements IUserAO {
                 pdf, null);
         } else if (EUserKind.Integral.getCode().equals(kind)
                 || EUserKind.Goods.getCode().equals(kind)
-                || EUserKind.CaiGo.getCode().equals(kind)) {
+                || EUserKind.CaiGo.getCode().equals(kind)
+                || EUserKind.Merchant.getCode().equals(kind)) {
             // 验证登录名
             userBO.isLoginNameExist(loginName, null);
             int level = 1;
@@ -172,6 +173,8 @@ public class UserAOImpl implements IUserAO {
                 roleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
             } else if (EUserKind.CaiGo.getCode().equals(kind)) {
                 roleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
+            } else if (EUserKind.Merchant.getCode().equals(kind)) {
+                roleCode = PropertiesUtil.Config.SJROLECODE;
             }
             // 插入用户信息
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,

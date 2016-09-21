@@ -48,6 +48,8 @@ public class PropertiesUtil {
         public static String NOTOP_JFROLECODE = props
             .getProperty("NOTOP_JFROLECODE");
 
+        public static String SJROLECODE = props.getProperty("SJROLECODE");
+
     }
 
 }
