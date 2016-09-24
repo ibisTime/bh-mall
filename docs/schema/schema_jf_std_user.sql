@@ -77,7 +77,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 
 -- ----------------------------
---  Table structure for `tstd_user_relation`
+--  Table structure for `tstd_user_ext`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_user_ext`;
 CREATE TABLE `tstd_user_ext` (
