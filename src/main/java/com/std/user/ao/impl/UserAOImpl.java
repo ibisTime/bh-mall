@@ -95,6 +95,10 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, "CNY");
         accountBO.distributeAccount(userId, mobile, "XNB");
+        // 设置用户关系
+        if (StringUtils.isNotBlank(userReferee)) {
+            userRelationBO.saveUserRelation(userReferee, userId);
+        }
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
@@ -477,17 +481,22 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "用户名不存在");
         }
         String mobile = user.getMobile();
-        if (EUserStatus.Ren_Locked.getCode().equalsIgnoreCase(toStatus)) {
-            userBO.refreshStatus(userId, EUserStatus.Ren_Locked, updater,
-                remark);
-            // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已经被注销用户", "805052");
-        } else {
-            userBO.refreshStatus(userId, EUserStatus.NORMAL, updater, remark);
-            // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已经被激活用户", "805052");
+        if (!EUserKind.Operator.getCode().equals(user.getKind())) {
+            if (EUserStatus.Ren_Locked.getCode().equalsIgnoreCase(toStatus)) {
+                userBO.refreshStatus(userId, EUserStatus.Ren_Locked, updater,
+                    remark);
+                // 发送短信
+                smsOutBO.sendSmsOut(mobile,
+                    "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您已经被注销用户",
+                    "805052");
+            } else {
+                userBO.refreshStatus(userId, EUserStatus.NORMAL, updater,
+                    remark);
+                // 发送短信
+                smsOutBO.sendSmsOut(mobile,
+                    "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您已经被激活用户",
+                    "805052");
+            }
         }
 
     }
