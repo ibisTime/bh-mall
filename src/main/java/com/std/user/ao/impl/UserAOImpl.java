@@ -86,7 +86,7 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, loginPwd, loginPwdStrength,
             userReferee);

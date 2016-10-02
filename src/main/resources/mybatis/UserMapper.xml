@@ -138,12 +138,14 @@
 		,login_pwd
 		,login_pwd_strength
 		
+		,trade_pwd
+		,trade_pwd_strength
 		,kind
 		,level
 		,user_referee
+		
 		,mobile
 		,status
-		
 		,updater
 		,update_datetime
 		,remark
@@ -155,12 +157,14 @@
 		,#{loginPwd}
 		,#{loginPwdStrength}
 		
+		,#{tradePwd}
+		,#{tradePwdStrength}
 		,#{kind}
 		,#{level}
 		,#{userReferee}
+		
 		,#{mobile}
 		,#{status}
-		
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
