@@ -40,7 +40,6 @@ public class CompanyConverter {
         result.setUserId(req.getUserId());
         result.setLocation(req.getLocation());
         result.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
-        result.setIsDefault(req.getIsDefault());
         result.setUpdater(req.getUpdater());
         result.setRemark(req.getRemark());
         return result;

@@ -35,14 +35,7 @@ public class XN806004 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806004Req.class);
         StringValidater.validateBlank(req.getCode(), req.getType(),
-            req.getName(), req.getAbbrName(), req.getGsyyzzh(),
-            req.getDomain(), req.getLogo(), req.getIcon(), req.getSlogan(),
-            req.getCorporation(), req.getQrCode(), req.getProvince(),
-            req.getCity(), req.getArea(), req.getAddress(), req.getLongitude(),
-            req.getLatitude(), req.getCopyright(), req.getDescription(),
-            req.getScale(), req.getContacts(), req.getMobile(), req.getFax(),
-            req.getEmail(), req.getQq(), req.getWeChat(), req.getUserId(),
-            req.getLocation(), req.getOrderNo(), req.getIsDefault(),
-            req.getUpdater());
+            req.getName(), req.getProvince(), req.getCity(), req.getArea(),
+            req.getAddress(), req.getDescription(), req.getUpdater());
     }
 }

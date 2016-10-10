@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum EGeneratePrefix {
-    COM("Com", "公司");
+    COM("GS", "公司");
 
     public static Map<String, EGeneratePrefix> getOrderTypeMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();
