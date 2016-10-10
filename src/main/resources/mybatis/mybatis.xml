@@ -12,5 +12,6 @@
  	    <typeAlias alias="signLog" type="com.std.user.domain.SignLog" />
  	    <typeAlias alias="userExt" type="com.std.user.domain.UserExt" />
  	    <typeAlias alias="signLog" type="com.std.user.domain.SignLog" />
+ 	    <typeAlias alias="company" type="com.std.user.domain.Company" />
 	</typeAliases>
 </configuration>	

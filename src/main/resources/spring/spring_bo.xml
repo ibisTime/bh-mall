@@ -30,4 +30,7 @@
 	<bean id="signLogBO" class="com.std.user.bo.impl.SignLogBOImpl">
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
 	</bean>
+	<bean id="companyBO" class="com.std.user.bo.impl.CompanyBOImpl">
+		<property name="paginableDAO" ref="companyDAOImpl"/>
+	</bean>
 </beans>
