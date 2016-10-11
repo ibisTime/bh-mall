@@ -33,4 +33,7 @@
 	<bean id="companyBO" class="com.std.user.bo.impl.CompanyBOImpl">
 		<property name="paginableDAO" ref="companyDAOImpl"/>
 	</bean>
+	<bean id="levelRuleBO" class="com.std.user.bo.impl.LevelRuleBOImpl">
+		<property name="paginableDAO" ref="levelRuleDAOImpl"/>
+	</bean>
 </beans>
