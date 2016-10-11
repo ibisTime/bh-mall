@@ -2,6 +2,7 @@ package com.std.user.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,13 +79,16 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public Company getCompanyByPCA(String province, String city, String area) {
         Company condition = new Company();
-        condition.setProvince(province);
-        condition.setCity(city);
-        condition.setArea(area);
+        condition.setProvinceForQuery(province);
+        condition.setCityForQuery(city);
+        condition.setAreaForQuery(area);
         List<Company> list = companyBO.queryCompanyList(condition);
-        if (list == null) {
-            throw new BizException("xn0000", "该地区不存在公司");
+        Company result = null;
+        if (CollectionUtils.sizeIsEmpty(list)) {
+            result = companyBO.getDefaultCompany();
+        } else {
+            result = list.get(0);
         }
-        return list.get(0);
+        return result;
     }
 }
