@@ -12,7 +12,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /** 
- * 新增用户组
+ * 修改用户组
  * @author: zuixian 
  * @since: 2016年10月11日 下午6:57:07 
  * @history:
@@ -29,8 +29,8 @@ public class XN805112 extends AProcessor {
         LevelRule data = new LevelRule();
         data.setCode(req.getCode());
         data.setLevel(req.getLevel());
-        data.setAmountMin(StringValidater.toInteger(req.getAmountMin()));
-        data.setAmountMax(StringValidater.toInteger(req.getAmountMax()));
+        data.setAmountMin(StringValidater.toLong(req.getAmountMin()));
+        data.setAmountMax(StringValidater.toLong(req.getAmountMax()));
         data.setRemark(req.getRemark());
         int count = levelRuleAO.editLevelRule(data);
         return new BooleanRes(count > 0 ? true : false);

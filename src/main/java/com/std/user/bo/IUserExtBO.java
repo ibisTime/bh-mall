@@ -23,6 +23,18 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
      */
     public void saveUserExt(String userId);
 
+    /**
+     * 新增用户扩展,包含定位地址
+     * @param userId
+     * @param province
+     * @param city
+     * @param area 
+     * @create: 2016年10月12日 上午12:20:42 xieyj
+     * @history:
+     */
+    public void saveUserExt(String userId, String province, String city,
+            String area);
+
     /** 
      * 更新用户头像
      * @param data

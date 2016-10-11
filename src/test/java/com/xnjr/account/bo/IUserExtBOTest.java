@@ -18,7 +18,6 @@ public class IUserExtBOTest extends ABizTest {
         data.setGender("1");
         data.setBirthday("2013/12/22");
         data.setPhoto("http://dskfjkl.cn");
-        data.setRegion("杭州市仓前镇");
         data.setIntroduce("完成信息");
         userExtBO.saveUserExt(data);
     }

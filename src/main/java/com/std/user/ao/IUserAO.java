@@ -44,6 +44,25 @@ public interface IUserAO {
             String loginPwdStrength, String userReferee, String smsCaptcha);
 
     /**
+     * 简单注册，不分配账户
+     * @param mobile
+     * @param loginPwd
+     * @param loginPwdStrength
+     * @param userReferee
+     * @param smsCaptcha
+     * @param province
+     * @param city
+     * @param area
+     * @param amount
+     * @return 
+     * @create: 2016年10月12日 上午5:11:01 xieyj
+     * @history:
+     */
+    public String doRegisterSingle(String mobile, String loginPwd,
+            String loginPwdStrength, String userReferee, String smsCaptcha,
+            String province, String city, String area, Long amount);
+
+    /**
      * 代注册
      * @param loginName
      * @param mobile
@@ -282,6 +301,17 @@ public interface IUserAO {
      */
     public Paginable<User> queryUserPage(int start, int limit, User condition);
 
+    /** 
+     * @param start
+     * @param limit
+     * @param condition
+     * @return 
+     * @create: 2015-6-7 上午10:04:12 miyb
+     * @history: 
+     */
+    public Paginable<User> queryAreaUserPage(int start, int limit,
+            User condition);
+
     /**
      * 
      * @param condition
@@ -334,4 +364,17 @@ public interface IUserAO {
      * @history: 
      */
     public void editNickname(String userId, String nickname);
+
+    /**
+     * 单人活动加积分
+     * @param userId
+     * @param direction
+     * @param amount
+     * @param remark
+     * @param refNo 
+     * @create: 2016年10月11日 下午8:07:17 xieyj
+     * @history:
+     */
+    public void doTransfer(String userId, String direction, Long amount,
+            String remark, String refNo);
 }

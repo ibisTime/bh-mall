@@ -26,7 +26,7 @@ public class IUserBOTest extends ABizTest {
     @Test
     public void doRegister() {
         String userId = userBO.doRegister("13958092437", "123456", "127.0.0.1",
-            "");
+            "", 0L);
         logger.info("doRegister : {}", userId);
     }
 }

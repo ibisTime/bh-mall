@@ -24,6 +24,8 @@
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 		<result column="pdf" property="pdf" />
+		<result column="amount" property="amount" />
+		<result column="lj_amount" property="ljAmount" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
@@ -35,6 +37,12 @@
 			</if>
 			<if test="loginNameForLikeQuery != null and loginNameForLikeQuery != '' ">
 				AND t.login_name like "%"#{loginNameForLikeQuery}"%"
+			</if>
+			<if test="nickname != null and nickname != '' ">
+				AND t.nickname = #{nickname}
+			</if>
+			<if test="nicknameForLikeQuery != null and nicknameForLikeQuery != '' ">
+				AND t.nickname like "%"#{nicknameForLikeQuery}"%"
 			</if>
 			<choose>
 				 <when test="kind == '07'">
@@ -89,34 +97,44 @@
 			<if test="tradePwd != null and tradePwd != '' ">
 				AND t.trade_pwd = #{tradePwd}
 			</if>	
-				
+			<if test="province != null and province != '' ">
+				AND tue.province = #{province}
+			</if>
+			<if test="city != null and city != '' ">
+				AND tue.city = #{city}
+			</if>
+			<if test="area != null and area != '' ">
+				AND tue.area = #{area}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
 		SELECT 
-		user_id
-		,login_name
-		,nickname
-		,login_pwd_strength
-		,kind	
+		t.user_id
+		,t.login_name
+		,t.nickname
+		,t.login_pwd_strength
+		,t.kind	
 		
-		,level
-		,user_referee
-		,mobile
-		,id_kind
-		,id_no
+		,t.level
+		,t.user_referee
+		,t.mobile
+		,t.id_kind
+		,t.id_no
 		
-		,real_name
-		,trade_pwd_strength
-		,role_code
-		,status
-		,updater
+		,t.real_name
+		,t.trade_pwd_strength
+		,t.role_code
+		,t.status
+		,t.updater
 		
-		,update_datetime
-		,remark
-		,pdf
+		,t.update_datetime
+		,t.remark
+		,t.pdf
+		,t.amount
+		,t.lj_amount
 		FROM
-		tstd_user t
+		tstd_user t left join tstd_user_ext tue on t.user_id = tue.user_id
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -126,7 +144,7 @@
 	</select>
 
 	<select id="select_user_count" parameterType="user" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_user t
+		SELECT count(1) FROM tstd_user t left join tstd_user_ext tue on t.user_id = tue.user_id
 		<include refid="where_condition"/>
 	</select>
 
@@ -149,6 +167,8 @@
 		,updater
 		,update_datetime
 		,remark
+		,amount
+		,lj_amount
 		)
 		VALUES(
 		#{userId}
@@ -168,6 +188,8 @@
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		,#{amount}
+		,#{ljAmount}
 		)
 	</insert>
 	
@@ -307,5 +329,15 @@
 		 nickname = #{nickname}
 		WHERE
 		user_id = #{userId}			
+	</update>
+	
+	<update id="update_user_amount" parameterType="user">
+		UPDATE tstd_user
+		SET
+		level = #{level}
+        ,amount = #{amount}
+		,lj_amount = #{ljAmount}	
+		WHERE
+		user_id = #{userId}		
 	</update>
 </mapper>

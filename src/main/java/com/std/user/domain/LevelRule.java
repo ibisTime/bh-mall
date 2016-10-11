@@ -6,14 +6,19 @@ public class LevelRule extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
+    // 编号
     private String code;
 
+    // 等级
     private String level;
 
-    private Integer amountMin;
+    // 数量最小值
+    private Long amountMin;
 
-    private Integer amountMax;
+    // 数量最大值
+    private Long amountMax;
 
+    // 备注
     private String remark;
 
     public String getCode() {
@@ -32,19 +37,19 @@ public class LevelRule extends ABaseDO {
         this.level = level;
     }
 
-    public Integer getAmountMin() {
+    public Long getAmountMin() {
         return amountMin;
     }
 
-    public void setAmountMin(Integer amountMin) {
+    public void setAmountMin(Long amountMin) {
         this.amountMin = amountMin;
     }
 
-    public Integer getAmountMax() {
+    public Long getAmountMax() {
         return amountMax;
     }
 
-    public void setAmountMax(Integer amountMax) {
+    public void setAmountMax(Long amountMax) {
         this.amountMax = amountMax;
     }
 
