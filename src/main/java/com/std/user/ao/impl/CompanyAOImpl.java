@@ -9,6 +9,7 @@ import com.std.user.ao.ICompanyAO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Company;
+import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 
 @Service
@@ -82,8 +83,13 @@ public class CompanyAOImpl implements ICompanyAO {
         condition.setCity(city);
         condition.setArea(area);
         List<Company> list = companyBO.queryCompanyList(condition);
+        // 若该地区无公司，则返回默认公司
         if (list == null) {
-            throw new BizException("xn0000", "该地区不存在公司");
+            // 设置查询默认公司条件
+            Company company = new Company();
+            company.setIsDefault(EBoolean.YES.getCode());
+            List<Company> list1 = companyBO.queryCompanyList(company);
+            return list1.get(0);
         }
         return list.get(0);
     }
