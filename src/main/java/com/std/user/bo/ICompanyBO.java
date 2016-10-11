@@ -25,4 +25,6 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public Company getCompanyByUserId(String userId);
 
+    public Company getDefaultCompany();
+
 }

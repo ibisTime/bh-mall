@@ -2,6 +2,7 @@ package com.std.user.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,6 @@ import com.std.user.ao.ICompanyAO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Company;
-import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 
 @Service
@@ -79,18 +79,16 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public Company getCompanyByPCA(String province, String city, String area) {
         Company condition = new Company();
-        condition.setProvince(province);
-        condition.setCity(city);
-        condition.setArea(area);
+        condition.setProvinceForQuery(province);
+        condition.setCityForQuery(city);
+        condition.setAreaForQuery(area);
         List<Company> list = companyBO.queryCompanyList(condition);
-        // 若该地区无公司，则返回默认公司
-        if (list == null) {
-            // 设置查询默认公司条件
-            Company company = new Company();
-            company.setIsDefault(EBoolean.YES.getCode());
-            List<Company> list1 = companyBO.queryCompanyList(company);
-            return list1.get(0);
+        Company result = null;
+        if (CollectionUtils.sizeIsEmpty(list)) {
+            result = companyBO.getDefaultCompany();
+        } else {
+            result = list.get(0);
         }
-        return list.get(0);
+        return result;
     }
 }

@@ -74,6 +74,62 @@ public class Company extends ABaseDO {
 
     private String remark;
 
+    // ******************db properties *******************
+    // 名称
+    private String nameForQuery;
+
+    // 简称
+    private String abbrNameForQuery;
+
+    // 省份
+    private String provinceForQuery;
+
+    // 城市
+    private String cityForQuery;
+
+    // 县区
+    private String areaForQuery;
+
+    public String getNameForQuery() {
+        return nameForQuery;
+    }
+
+    public void setNameForQuery(String nameForQuery) {
+        this.nameForQuery = nameForQuery;
+    }
+
+    public String getAbbrNameForQuery() {
+        return abbrNameForQuery;
+    }
+
+    public void setAbbrNameForQuery(String abbrNameForQuery) {
+        this.abbrNameForQuery = abbrNameForQuery;
+    }
+
+    public String getProvinceForQuery() {
+        return provinceForQuery;
+    }
+
+    public void setProvinceForQuery(String provinceForQuery) {
+        this.provinceForQuery = provinceForQuery;
+    }
+
+    public String getCityForQuery() {
+        return cityForQuery;
+    }
+
+    public void setCityForQuery(String cityForQuery) {
+        this.cityForQuery = cityForQuery;
+    }
+
+    public String getAreaForQuery() {
+        return areaForQuery;
+    }
+
+    public void setAreaForQuery(String areaForQuery) {
+        this.areaForQuery = areaForQuery;
+    }
+
     public String getCode() {
         return code;
     }
