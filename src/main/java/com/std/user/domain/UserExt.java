@@ -61,6 +61,16 @@ public class UserExt extends ABaseDO {
     // 介绍
     private String introduce;
 
+    // ******************db properties *******************
+    // 省份
+    private String provinceForQuery;
+
+    // 城市
+    private String cityForQuery;
+
+    // 县区
+    private String areaForQuery;
+
     public String getUserId() {
         return userId;
     }
@@ -163,5 +173,29 @@ public class UserExt extends ABaseDO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getProvinceForQuery() {
+        return provinceForQuery;
+    }
+
+    public void setProvinceForQuery(String provinceForQuery) {
+        this.provinceForQuery = provinceForQuery;
+    }
+
+    public String getCityForQuery() {
+        return cityForQuery;
+    }
+
+    public void setCityForQuery(String cityForQuery) {
+        this.cityForQuery = cityForQuery;
+    }
+
+    public String getAreaForQuery() {
+        return areaForQuery;
+    }
+
+    public void setAreaForQuery(String areaForQuery) {
+        this.areaForQuery = areaForQuery;
     }
 }
