@@ -150,4 +150,11 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         condition.setIsDefault(EBoolean.YES.getCode());
         return companyDAO.select(condition);
     }
+
+    @Override
+    public Company getCompanyByDomain(String domain) {
+        Company condition = new Company();
+        condition.setDomain(domain);
+        return companyDAO.select(condition);
+    }
 }

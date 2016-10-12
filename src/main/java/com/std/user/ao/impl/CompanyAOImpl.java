@@ -91,4 +91,12 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         return result;
     }
+
+    @Override
+    public Company getCompanyByDomain(String domain) {
+        if ("".equals(domain) || null == domain) {
+            throw new BizException("xn0000", "请输入合法域名");
+        }
+        return companyBO.getCompanyByDomain(domain);
+    }
 }

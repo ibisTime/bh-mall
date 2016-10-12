@@ -51,6 +51,9 @@
 			<if test="abbrName != null and abbrName != '' ">
 				AND t.abbr_name = #{abbrName}
 			</if>
+			<if test="domain != null and domain != '' ">
+				AND t.domain = #{domain}
+			</if>
 			<if test="abbrNameForQuery != null and abbrNameForQuery != '' ">
 				AND t.abbr_name like "%"#{abbrNameForQuery}"%"
 			</if>

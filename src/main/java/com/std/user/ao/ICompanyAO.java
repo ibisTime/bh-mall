@@ -34,4 +34,7 @@ public interface ICompanyAO {
     // 通过用户ID来查询公司信息
     public Company getCompanyByUserId(String userId);
 
+    // 通过域名来查询公司信息
+    public Company getCompanyByDomain(String domain);
+
 }
