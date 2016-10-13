@@ -40,4 +40,19 @@
 	<bean id="aJourBO" class="com.std.user.bo.impl.AJourBOImpl">
 		<property name="paginableDAO" ref="aJourDAOImpl"/>
 	</bean>
+	<bean id="cMaterialBO" class="com.std.user.bo.impl.CMaterialBOImpl">
+		<property name="paginableDAO" ref="cMaterialDAOImpl"/>
+	</bean>
+	<bean id="cMenuBO" class="com.std.user.bo.impl.CMenuBOImpl">
+		<property name="paginableDAO" ref="cMenuDAOImpl"/>
+	</bean>
+	<bean id="cBannerBO" class="com.std.user.bo.impl.CBannerBOImpl">
+		<property name="paginableDAO" ref="cBannerDAOImpl"/>
+	</bean>
+	<bean id="cIntentionBO" class="com.std.user.bo.impl.CIntentionBOImpl">
+		<property name="paginableDAO" ref="cIntentionDAOImpl"/>
+	</bean>
+	<bean id="cPasswordBO" class="com.std.user.bo.impl.CPasswordBOImpl">
+		<property name="paginableDAO" ref="cPasswordDAOImpl"/>
+	</bean>
 </beans>

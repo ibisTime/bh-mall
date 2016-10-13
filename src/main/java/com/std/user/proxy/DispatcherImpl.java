@@ -1,12 +1,6 @@
 package com.std.user.proxy;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.std.user.api.IProcessor;
-import com.std.user.common.ConfigDescribe;
-import com.std.user.common.ConfigLoader;
 import com.std.user.common.JsonUtil;
 import com.std.user.common.ReflectUtil;
 import com.std.user.enums.EErrorCode;
@@ -22,13 +16,15 @@ public class DispatcherImpl implements IDispatcher {
         try {
             // 加载配置文件,proxy实例化
             String classname = "com.std.user.api.impl.XNOther";
-            ConfigDescribe configDescribe = ConfigLoader.loadConfig();
-            if (StringUtils.isNotBlank(transcode) && configDescribe != null) {
-                List<String> codeList = configDescribe.getCodeList();
-                if (codeList.contains(transcode)) {
-                    classname = "com.std.user.api.impl.XN" + transcode;
-                }
-            }
+            // ConfigDescribe configDescribe = ConfigLoader.loadConfig();
+            // if (StringUtils.isNotBlank(transcode) && configDescribe != null)
+            // {
+            // List<String> codeList = configDescribe.getCodeList();
+            // if (codeList.contains(transcode)) {
+            // classname = "com.std.user.api.impl.XN" + transcode;
+            // }
+            // }
+            classname = "com.std.user.api.impl.XN" + transcode;
             IProcessor processor = (IProcessor) ReflectUtil
                 .getInstance(classname);
             // 接口调用
