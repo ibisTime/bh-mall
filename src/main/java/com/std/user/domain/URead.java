@@ -18,6 +18,8 @@ public class URead extends ABaseDO {
 
     private Date readDatetime;
 
+    private B2cSms b2cSms;
+
     public Integer getId() {
         return id;
     }
@@ -56,5 +58,13 @@ public class URead extends ABaseDO {
 
     public void setReadDatetime(Date readDatetime) {
         this.readDatetime = readDatetime;
+    }
+
+    public B2cSms getB2cSms() {
+        return b2cSms;
+    }
+
+    public void setB2cSms(B2cSms b2cSms) {
+        this.b2cSms = b2cSms;
     }
 }

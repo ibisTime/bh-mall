@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.IUReadAO;
+import com.std.user.bo.IB2cSmsBO;
 import com.std.user.bo.IUReadBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.domain.B2cSms;
 import com.std.user.domain.URead;
 import com.std.user.exception.BizException;
 
@@ -16,6 +18,9 @@ public class UReadAOImpl implements IUReadAO {
 
     @Autowired
     private IUReadBO uReadBO;
+
+    @Autowired
+    private IB2cSmsBO b2cSmsBO;
 
     @Override
     public String addURead(URead data) {
@@ -32,7 +37,15 @@ public class UReadAOImpl implements IUReadAO {
 
     @Override
     public Paginable<URead> queryUReadPage(int start, int limit, URead condition) {
-        return uReadBO.getPaginable(start, limit, condition);
+        Paginable<URead> uReadPage = uReadBO.getPaginable(start, limit,
+            condition);
+        List<URead> uReadList = uReadPage.getList();
+        B2cSms b2cSms = new B2cSms();
+        for (URead uRead : uReadList) {
+            b2cSms = b2cSmsBO.getB2cSms(uRead.getSmsCode());
+            uRead.setB2cSms(b2cSms);
+        }
+        return uReadPage;
     }
 
     @Override
@@ -42,6 +55,9 @@ public class UReadAOImpl implements IUReadAO {
 
     @Override
     public URead getURead(Integer id) {
-        return uReadBO.getURead(id);
+        URead uRead = uReadBO.getURead(id);
+        B2cSms b2cSms = b2cSmsBO.getB2cSms(uRead.getSmsCode());
+        uRead.setB2cSms(b2cSms);
+        return uRead;
     }
 }
