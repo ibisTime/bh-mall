@@ -22,5 +22,7 @@
  	    
  	    <typeAlias alias="cPassword" type="com.std.user.domain.CPassword" />
  	    <typeAlias alias="cBanner" type="com.std.user.domain.CBanner" />
+ 	    
+ 	    <typeAlias alias="b2cSms" type="com.std.user.domain.B2cSms" />
 	</typeAliases>
 </configuration>	

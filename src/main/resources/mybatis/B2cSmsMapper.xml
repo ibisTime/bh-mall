@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.IB2cSmsDAO">
+	<resultMap id="b2cSms_DB_Result" type="b2cSms">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="to_level" property="toLevel" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="toLevel != null and toLevel != '' ">
+				AND t.to_level = #{toLevel}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_b2cSms" parameterType="b2cSms" resultMap="b2cSms_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.title
+		,t.content
+		,t.to_level
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tstd_b2c_sms t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_b2cSms_count" parameterType="b2cSms"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_b2c_sms t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_b2cSms" parameterType="b2cSms">
+		INSERT INTO
+		tstd_b2c_sms(
+		code
+		,type
+		,title
+		,content
+		,to_level
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{type}
+		,#{title}
+		,#{content}
+		,#{toLevel}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_b2cSms" parameterType="b2cSms">
+		UPDATE tstd_b2c_sms
+		SET
+		title = #{title}
+		,content = #{content}
+		,to_level = #{toLevel}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_b2cSms_status" parameterType="b2cSms">
+		UPDATE tstd_b2c_sms
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

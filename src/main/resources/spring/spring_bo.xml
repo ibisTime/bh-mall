@@ -55,4 +55,8 @@
 	<bean id="cPasswordBO" class="com.std.user.bo.impl.CPasswordBOImpl">
 		<property name="paginableDAO" ref="cPasswordDAOImpl"/>
 	</bean>
+	
+	<bean id="b2cSmsBO" class="com.std.user.bo.impl.B2cSmsBOImpl">
+		<property name="paginableDAO" ref="b2cSmsDAOImpl"/>
+	</bean>
 </beans>
