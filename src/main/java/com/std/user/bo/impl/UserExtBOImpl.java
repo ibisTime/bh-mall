@@ -31,9 +31,23 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
         if (StringUtils.isNotBlank(userId)) {
             UserExt data = new UserExt();
             data.setUserId(userId);
-            if (data != null) {
-                userExtDAO.insert(data);
-            }
+            userExtDAO.insert(data);
+        }
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserExtBO#saveUserExt(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void saveUserExt(String userId, String province, String city,
+            String area) {
+        if (StringUtils.isNotBlank(userId)) {
+            UserExt data = new UserExt();
+            data.setUserId(userId);
+            data.setProvince(province);
+            data.setCity(city);
+            data.setArea(area);
+            userExtDAO.insert(data);
         }
     }
 

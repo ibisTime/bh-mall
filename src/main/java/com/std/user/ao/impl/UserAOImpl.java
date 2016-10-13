@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.IUserAO;
+import com.std.user.bo.IAJourBO;
 import com.std.user.bo.IAccountBO;
 import com.std.user.bo.IBankCardBO;
+import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.IIdentifyBO;
 import com.std.user.bo.ISYSRoleBO;
 import com.std.user.bo.ISmsOutBO;
@@ -31,9 +33,12 @@ import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PropertiesUtil;
+import com.std.user.domain.Company;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
+import com.std.user.enums.EBizType;
 import com.std.user.enums.ECurrency;
+import com.std.user.enums.EDirection;
 import com.std.user.enums.EIDKind;
 import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserPwd;
@@ -72,6 +77,12 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     ISmsOutBO smsOutBO;
 
+    @Autowired
+    protected IAJourBO aJourBO;
+
+    @Autowired
+    protected ICompanyBO companyBO;
+
     @Override
     public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
@@ -89,7 +100,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, loginPwd, loginPwdStrength,
-            userReferee);
+            userReferee, 0L);
         // 插入用户扩展信息
         userExtBO.saveUserExt(userId);
         // 分配账号(人民币和虚拟币)
@@ -99,6 +110,32 @@ public class UserAOImpl implements IUserAO {
         if (StringUtils.isNotBlank(userReferee)) {
             userRelationBO.saveUserRelation(userReferee, userId);
         }
+        // 发送短信
+        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
+        return userId;
+    }
+
+    @Override
+    @Transactional
+    public String doRegisterSingle(String mobile, String loginPwd,
+            String loginPwdStrength, String userReferee, String smsCaptcha,
+            String province, String city, String area, Long amount) {
+        // 验证手机号
+        userBO.isMobileExist(mobile);
+        // 验证推荐人是否是平台的已注册用户
+        userBO.checkUserReferee(userReferee);
+        // 短信验证码是否正确
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        // 插入用户信息
+        String userId = userBO.doRegister(mobile, loginPwd, loginPwdStrength,
+            userReferee, amount);
+        if (amount != null && amount > 0) {
+            aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
+                "注册送积分");
+        }
+        // 插入用户扩展信息
+        userExtBO.saveUserExt(userId, province, city, area);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
@@ -587,5 +624,43 @@ public class UserAOImpl implements IUserAO {
         } else {
             throw new BizException("xn702001", "用户ID不存在");
         }
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#doTransfer(java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.String)
+     */
+    @Override
+    public void doTransfer(String userId, String direction, Long amount,
+            String remark, String refNo) {
+        EBizType bizType = null;
+        Long transAmount = null;
+        if (EDirection.PLUS.getCode().equalsIgnoreCase(direction)) {
+            bizType = EBizType.AJ_SR;
+            transAmount = amount;
+        }
+        if (EDirection.MINUS.getCode().equalsIgnoreCase(direction)) {
+            bizType = EBizType.AJ_ZC;
+            transAmount = -amount;
+        }
+        // 资金变动
+        userBO.refreshAmount(userId, transAmount, refNo, bizType, remark);
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#queryAreaUserPage(int, int, com.std.user.domain.User)
+     */
+    @Override
+    public Paginable<User> queryAreaUserPage(int start, int limit,
+            User condition) {
+        Company company = companyBO
+            .getCompanyByUserId(condition.getOssUserId());
+        if (company != null) {
+            condition.setProvince(company.getProvince());
+            condition.setCity(company.getCity());
+            condition.setArea(company.getArea());
+        } else {
+            throw new BizException("xn702001", "该用户不是公司实际控制人");
+        }
+        return userBO.getPaginable(start, limit, condition);
     }
 }

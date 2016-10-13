@@ -26,9 +26,6 @@ public class BizConnecter {
 
     public static final String ACCOUNT_URL = PropertiesUtil.Config.ACCOUNT_URL;
 
-    // public static final String IDENTIFY_URL =
-    // PropertiesUtil.Config.IDENTIFY_URL;
-
     public static final String POST_URL = "...";
 
     public static <T> T getBizData(String code, String json, Class<T> clazz) {

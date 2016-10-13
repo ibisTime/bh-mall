@@ -14,14 +14,7 @@ public class UserExtAOImpl implements IUserExtAO {
     private IUserExtBO userExtBO;
 
     @Override
-    public int refreshUserExt(String userId, String gender, String birthday,
-            String region, String introduce) {
-        UserExt data = new UserExt();
-        data.setUserId(userId);
-        data.setGender(gender);
-        data.setBirthday(birthday);
-        data.setRegion(region);
-        data.setIntroduce(introduce);
+    public int refreshUserExt(UserExt data) {
         return userExtBO.refreshUserExt(data);
     }
 
@@ -32,5 +25,4 @@ public class UserExtAOImpl implements IUserExtAO {
         data.setPhoto(photo);
         return userExtBO.refreshUserPhoto(data);
     }
-
 }

@@ -18,12 +18,19 @@ import org.springframework.stereotype.Component;
 
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.PaginableBOImpl;
+import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PwdUtil;
 import com.std.user.core.OrderNoGenerater;
+import com.std.user.dao.IAJourDAO;
+import com.std.user.dao.ILevelRuleDAO;
 import com.std.user.dao.IUserDAO;
+import com.std.user.domain.AccountJour;
+import com.std.user.domain.LevelRule;
 import com.std.user.domain.User;
+import com.std.user.enums.EAccountJourStatus;
+import com.std.user.enums.EBizType;
 import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
@@ -37,6 +44,12 @@ import com.std.user.exception.BizException;
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Autowired
     private IUserDAO userDAO;
+
+    @Autowired
+    private IAJourDAO aJourDAO;
+
+    @Autowired
+    private ILevelRuleDAO levelRuleDAO;
 
     /**
      * @see com.ibis.pz.user.IUserBO#refreshIdentity(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -268,7 +281,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public String doRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee) {
+            String loginPwdStrength, String userReferee, Long amount) {
         // 交易密码888888
         String tradePsd = "888888";
         String userId = null;
@@ -294,6 +307,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setUpdater(userId);
             user.setUpdateDatetime(new Date());
             user.setRemark(EUserKind.F1.getValue());
+            if (amount == null) {
+                amount = 0L;
+            }
+            user.setAmount(amount);
+            user.setLjAmount(amount);
             userDAO.insert(user);
         }
         return userId;
@@ -421,5 +439,51 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data.setNickname(nickname);
             userDAO.updateNickname(data);
         }
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#refreshAmount(java.lang.String, java.lang.Long, java.lang.String, com.std.user.enums.EBizType, java.lang.String)
+     */
+    @Override
+    public void refreshAmount(String userId, Long transAmount, String refNo,
+            EBizType bizType, String remark) {
+        User dbUser = this.getUser(userId);
+        Long nowAmount = dbUser.getAmount() + transAmount;
+        if (nowAmount < 0) {
+            throw new BizException("li779001", "积分数不足");
+        }
+        User user = new User();
+        user.setUserId(userId);
+        user.setAmount(nowAmount);
+        Long ljAmount = dbUser.getLjAmount();
+        if (transAmount > 0) {
+            ljAmount = ljAmount + transAmount;
+            user.setLjAmount(ljAmount);
+            // 重新设置等级
+            LevelRule lrCondition = new LevelRule();
+            List<LevelRule> lrList = levelRuleDAO.selectList(lrCondition);
+            for (LevelRule levelRule : lrList) {
+                if (levelRule.getAmountMin() >= ljAmount
+                        && ljAmount < levelRule.getAmountMax()) {
+                    user.setLevel(levelRule.getLevel());
+                    break;
+                }
+            }
+        }
+        userDAO.updateAmount(user);
+        // 记录流水
+        AccountJour accountJour = new AccountJour();
+        accountJour.setBizType(bizType.getCode());
+        accountJour.setRefNo(refNo);
+        accountJour.setTransAmount(transAmount);
+        accountJour.setPreAmount(dbUser.getAmount());
+        accountJour.setPostAmount(nowAmount);
+        accountJour.setRemark(remark);
+        accountJour.setCreateDatetime(new Date());
+        accountJour.setAccountNumber(userId);
+        accountJour.setStatus(EAccountJourStatus.todoCheck.getCode());
+        accountJour.setWorkDate(DateUtil
+            .getToday(DateUtil.DB_DATE_FORMAT_STRING));
+        aJourDAO.insert(accountJour);
     }
 }

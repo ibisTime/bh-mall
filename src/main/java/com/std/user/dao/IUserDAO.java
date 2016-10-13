@@ -109,4 +109,12 @@ public interface IUserDAO extends IBaseDAO<User> {
      */
     public int updateNickname(User data);
 
+    /**
+     * 更新金额
+     * @param data
+     * @return 
+     * @create: 2016年10月11日 下午7:07:24 xieyj
+     * @history:
+     */
+    public int updateAmount(User data);
 }

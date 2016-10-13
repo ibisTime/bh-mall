@@ -15,6 +15,6 @@
  	    <typeAlias alias="company" type="com.std.user.domain.Company" />
  	    
  	    <typeAlias alias="levelRule" type="com.std.user.domain.LevelRule" />
- 	    <typeAlias alias="cMenu" type="com.std.user.domain.CMenu" />
+ 	    <typeAlias alias="accountJour" type="com.std.user.domain.AccountJour" />
 	</typeAliases>
 </configuration>	

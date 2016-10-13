@@ -36,4 +36,8 @@
 	<bean id="levelRuleBO" class="com.std.user.bo.impl.LevelRuleBOImpl">
 		<property name="paginableDAO" ref="levelRuleDAOImpl"/>
 	</bean>
+	
+	<bean id="aJourBO" class="com.std.user.bo.impl.AJourBOImpl">
+		<property name="paginableDAO" ref="aJourDAOImpl"/>
+	</bean>
 </beans>

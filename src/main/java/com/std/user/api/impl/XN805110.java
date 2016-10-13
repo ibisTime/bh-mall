@@ -28,8 +28,8 @@ public class XN805110 extends AProcessor {
     public Object doBusiness() throws BizException {
         LevelRule data = new LevelRule();
         data.setLevel(req.getLevel());
-        data.setAmountMin(StringValidater.toInteger(req.getAmountMin()));
-        data.setAmountMax(StringValidater.toInteger(req.getAmountMax()));
+        data.setAmountMin(StringValidater.toLong(req.getAmountMin()));
+        data.setAmountMax(StringValidater.toLong(req.getAmountMax()));
         data.setRemark(req.getRemark());
         String code = levelRuleAO.addLevelRule(data);
         return new PKCodeRes(code);
