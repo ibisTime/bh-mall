@@ -24,5 +24,6 @@
  	    <typeAlias alias="cBanner" type="com.std.user.domain.CBanner" />
  	    
  	    <typeAlias alias="b2cSms" type="com.std.user.domain.B2cSms" />
+ 	    <typeAlias alias="uRead" type="com.std.user.domain.URead" />
 	</typeAliases>
 </configuration>	

@@ -59,4 +59,8 @@
 	<bean id="b2cSmsBO" class="com.std.user.bo.impl.B2cSmsBOImpl">
 		<property name="paginableDAO" ref="b2cSmsDAOImpl"/>
 	</bean>
+	
+	<bean id="uReadBO" class="com.std.user.bo.impl.UReadBOImpl">
+		<property name="paginableDAO" ref="uReadDAOImpl"/>
+	</bean>
 </beans>
