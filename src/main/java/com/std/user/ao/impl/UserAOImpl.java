@@ -100,7 +100,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, loginPwd, loginPwdStrength,
-            userReferee, 0L);
+            userReferee, 0L, null);
         // 插入用户扩展信息
         userExtBO.saveUserExt(userId);
         // 分配账号(人民币和虚拟币)
@@ -127,9 +127,14 @@ public class UserAOImpl implements IUserAO {
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
         // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        String companyCode = null;
+        Company company = getCompany(province, city, area);
+        if (company != null) {
+            companyCode = company.getCode();
+        }
         // 插入用户信息
         String userId = userBO.doRegister(mobile, loginPwd, loginPwdStrength,
-            userReferee, amount);
+            userReferee, amount, companyCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 "注册送积分");
@@ -140,6 +145,22 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
         return userId;
+    }
+
+    // 获取默认公司编号
+    private Company getCompany(String province, String city, String area) {
+        Company condition = new Company();
+        condition.setProvinceForQuery(province);
+        condition.setCityForQuery(city);
+        condition.setAreaForQuery(area);
+        List<Company> list = companyBO.queryCompanyList(condition);
+        Company result = null;
+        if (CollectionUtils.sizeIsEmpty(list)) {
+            result = companyBO.getDefaultCompany();
+        } else {
+            result = list.get(0);
+        }
+        return result;
     }
 
     @Override

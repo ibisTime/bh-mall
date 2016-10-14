@@ -90,6 +90,9 @@ public class User extends ABaseDO {
     // 累计金额
     private Long ljAmount;
 
+    // 所属公司
+    private String companyCode;
+
     /***** 模糊查询使用字段 ******/
     private String loginNameForLikeQuery;
 
@@ -369,5 +372,13 @@ public class User extends ABaseDO {
 
     public void setOssUserId(String ossUserId) {
         this.ossUserId = ossUserId;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

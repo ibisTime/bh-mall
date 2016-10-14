@@ -9,8 +9,8 @@
 		<result column="content" property="content" />
 		<result column="to_level" property="toLevel" />
 		<result column="status" property="status" />
-		<result column="updater" property="updater" />
 		<result column="company_code" property="companyCode" />
+		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>

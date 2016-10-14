@@ -46,7 +46,8 @@ CREATE TABLE `tstd_b2c_sms` (
   `title` varchar(64) DEFAULT NULL COMMENT '标题',
   `content` text COMMENT '内容',
   `to_level` varchar(4) DEFAULT NULL COMMENT 'to等级',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态(0 待发布，1 已发布)',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `updater` varchar(32) DEFAULT NULL COMMENT '最后修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '最后修改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
@@ -314,8 +315,9 @@ CREATE TABLE `tstd_user` (
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `pdf` varchar(255) DEFAULT NULL COMMENT '附件',
-  `amount` bigint(20) DEFAULT NULL COMMENT '现有积分',
-  `lj_amount` bigint(20) DEFAULT NULL COMMENT '累计积分',
+  `amount` bigint(20) unsigned zerofill DEFAULT NULL COMMENT '现有积分',
+  `lj_amount` bigint(20) unsigned zerofill DEFAULT NULL COMMENT '累计积分',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
