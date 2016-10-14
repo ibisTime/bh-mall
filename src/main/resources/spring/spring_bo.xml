@@ -66,4 +66,7 @@
 	<bean id="certificateBO" class="com.std.user.bo.impl.CertificateBOImpl">
 		<property name="paginableDAO" ref="certificateDAOImpl"/>
 	</bean>
+	<bean id="companyCertificateBO" class="com.std.user.bo.impl.CompanyCertificateBOImpl">
+		<property name="paginableDAO" ref="companyCertificateDAOImpl"/>
+	</bean>
 </beans>

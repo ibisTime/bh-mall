@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.ICompanyCertificateDAO">
+	<resultMap id="companyCertificate_DB_Result" type="companyCertificate">
+		<result column="code" property="code" />
+		<result column="certificate_code" property="certificateCode" />
+		<result column="company_code" property="companyCode" />
+		<result column="status" property="status" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="approve_user" property="approveUser" />
+		<result column="approve_datetime" property="approveDatetime" />
+		<result column="approve_note" property="approveNote" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="approveUser != null and approveUser != '' ">
+				AND t.approve_user = #{approveUser}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_companyCertificate" parameterType="companyCertificate" resultMap="companyCertificate_DB_Result">
+		SELECT
+		t.code
+		,t.certificate_code
+		,t.company_code
+		,t.status
+		,t.apply_user
+		,t.apply_datetime
+		,t.approve_user
+		,t.approve_datetime
+		,t.approve_note
+		FROM
+		tstd_company_certificate t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_companyCertificate_count" parameterType="companyCertificate"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_company_certificate t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_companyCertificate" parameterType="companyCertificate">
+		INSERT INTO
+		tstd_company_certificate(
+		code
+		,certificate_code
+		,company_code
+		,status
+		,apply_user
+		,apply_datetime
+		,approve_user
+		,approve_datetime
+		,approve_note
+		)
+		VALUES(
+		#{code}
+		,#{certificateCode}
+		,#{companyCode}
+		,#{status}
+		,#{applyUser}
+		,#{applyDatetime}
+		,#{approveUser}
+		,#{approveDatetime}
+		,#{approveNote}
+		)
+	</insert>
+
+	<update id="update_companyCertificate" parameterType="companyCertificate">
+		UPDATE tstd_company_certificate
+		SET
+		status = #{status}
+		,approve_user = #{approveUser}
+		,approve_datetime = #{approveDatetime}
+		,approve_note = #{approveNote}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>
