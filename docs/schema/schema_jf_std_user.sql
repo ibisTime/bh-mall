@@ -103,7 +103,7 @@ CREATE TABLE `tstd_certificate` (
   `description` text COMMENT '描述',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` varchar(255) DEFAULT NULL COMMENT '更新时间',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -114,15 +114,15 @@ CREATE TABLE `tstd_certificate` (
 DROP TABLE IF EXISTS `tstd_cintention`;
 CREATE TABLE `tstd_cintention` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `from_company` varchar(64) NOT NULL COMMENT '合作公司',
-  `from_person` varchar(64) NOT NULL COMMENT '合作联系人',
-  `from_contact` varchar(64) NOT NULL COMMENT '联系方式',
-  `content` varchar(255) NOT NULL COMMENT '内容',
-  `status` char(1) NOT NULL COMMENT '状态',
+  `from_company` varchar(64) DEFAULT NULL COMMENT '合作公司',
+  `from_person` varchar(64) DEFAULT NULL COMMENT '合作联系人',
+  `from_contact` varchar(64) DEFAULT NULL COMMENT '联系方式',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `status` char(1) DEFAULT NULL COMMENT '状态',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL,
-  `company_code` varchar(32) NOT NULL COMMENT '公司编号',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
