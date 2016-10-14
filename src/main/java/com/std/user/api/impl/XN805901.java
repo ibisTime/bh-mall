@@ -71,6 +71,7 @@ public class XN805901 extends AProcessor {
             } else {
                 res.setBankcardFlag(EBoolean.NO.getCode());
             }
+            res.setCompanyCode(user.getCompanyCode());
         }
         return res;
     }

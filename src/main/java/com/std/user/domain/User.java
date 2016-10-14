@@ -118,6 +118,12 @@ public class User extends ABaseDO {
     // ossUserId
     private String ossUserId;
 
+    // 关注数
+    private Integer totalFollowNum;
+
+    // 粉丝数
+    private Integer totalFansNum;
+
     public String getLoginNameForLikeQuery() {
         return loginNameForLikeQuery;
     }
@@ -380,5 +386,21 @@ public class User extends ABaseDO {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public Integer getTotalFollowNum() {
+        return totalFollowNum;
+    }
+
+    public void setTotalFollowNum(Integer totalFollowNum) {
+        this.totalFollowNum = totalFollowNum;
+    }
+
+    public Integer getTotalFansNum() {
+        return totalFansNum;
+    }
+
+    public void setTotalFansNum(Integer totalFansNum) {
+        this.totalFansNum = totalFansNum;
     }
 }

@@ -39,6 +39,9 @@ public class XN805054Req extends APageReq {
     // 修改人
     private String updater;
 
+    // 公司编号
+    private String companyCode;
+
     public String getLoginName() {
         return loginName;
     }
@@ -125,6 +128,14 @@ public class XN805054Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
 }

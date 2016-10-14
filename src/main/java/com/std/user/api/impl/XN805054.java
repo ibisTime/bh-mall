@@ -39,7 +39,7 @@ public class XN805054 extends AProcessor {
         condition.setStatus(req.getStatus());
 
         condition.setUpdater(req.getUpdater());
-
+        condition.setCompanyCode(req.getCompanyCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IUserAO.DEFAULT_ORDER_COLUMN;

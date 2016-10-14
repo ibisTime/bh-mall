@@ -36,6 +36,7 @@ import com.std.user.common.PropertiesUtil;
 import com.std.user.domain.Company;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
+import com.std.user.domain.UserRelation;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.ECurrency;
 import com.std.user.enums.EDirection;
@@ -603,6 +604,23 @@ public class UserAOImpl implements IUserAO {
             // 获取用户扩展信息
             UserExt userExt = userExtBO.doGetUserExt(userId);
             user.setUserExt(userExt);
+
+            user.setTotalFansNum(0);
+            user.setTotalFollowNum(0);
+            // 获取我粉丝的人
+            UserRelation condition = new UserRelation();
+            condition.setToUser(userId);
+            List<User> relationList = userRelationBO.queryUserList(condition);
+            if (!CollectionUtils.sizeIsEmpty(relationList)) {
+                user.setTotalFansNum(relationList.size());
+            }
+            // 获取我关注的人
+            condition.setUserId(userId);
+            List<User> fansRelationList = userRelationBO
+                .queryUserList(condition);
+            if (!CollectionUtils.sizeIsEmpty(fansRelationList)) {
+                user.setTotalFollowNum(fansRelationList.size());
+            }
         }
         return user;
     }
