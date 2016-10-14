@@ -46,6 +46,12 @@ public class XN805901Res {
     // 公司编号
     private String companyCode;
 
+    // 关注数
+    private String totalFollowNum;
+
+    // 粉丝数
+    private String totalFansNum;
+
     public String getUserId() {
         return userId;
     }
@@ -164,5 +170,21 @@ public class XN805901Res {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getTotalFollowNum() {
+        return totalFollowNum;
+    }
+
+    public void setTotalFollowNum(String totalFollowNum) {
+        this.totalFollowNum = totalFollowNum;
+    }
+
+    public String getTotalFansNum() {
+        return totalFansNum;
+    }
+
+    public void setTotalFansNum(String totalFansNum) {
+        this.totalFansNum = totalFansNum;
     }
 }

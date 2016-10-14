@@ -4,6 +4,9 @@ public class XN805055Req {
     // 登录名
     private String loginName;
 
+    // 昵称
+    private String nickname;
+
     // 身份标识
     private String kind;
 
@@ -122,4 +125,11 @@ public class XN805055Req {
         this.updater = updater;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
