@@ -1,5 +1,6 @@
 package com.std.user.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -14,6 +15,7 @@ import com.std.user.core.OrderNoGenerater;
 import com.std.user.domain.CMenu;
 import com.std.user.domain.Company;
 import com.std.user.exception.BizException;
+import com.std.user.util.PinYin;
 
 @Service
 public class CompanyAOImpl implements ICompanyAO {
@@ -84,7 +86,42 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public List<Company> queryCompanyList(Company condition) {
-        return companyBO.queryCompanyList(condition);
+        List<Company> list = companyBO.queryCompanyList(condition);
+        // 将结果按首字母排序
+        return sortByFirstLetter(list);
+    }
+
+    // 将结果按首字母排序
+    private List<Company> sortByFirstLetter(List<Company> list) {
+        List<Company> result = new ArrayList<>();
+        // 用来记录result的长度
+        int i = 0;
+        // 用来判断该元素是否已添加
+        boolean isAdd = false;
+        // 遍历待排序数组
+        for (Company company : list) {
+            isAdd = false;
+            if (i == 0) {
+                result.add(company);
+                i++;
+            } else {
+                // 遍历已排序数组
+                for (int j = 0; j < i; j++) {
+                    // 若待排序元素的首字母小于其元素，则将待排序元素插入到其位置
+                    if (PinYin.cn2py(company.getName()).charAt(0) < PinYin
+                        .cn2py(result.get(j).getName()).charAt(0)) {
+                        result.add(j, company);
+                        isAdd = true;
+                        i++;
+                        break;
+                    }
+                }
+                if (!isAdd) {
+                    result.add(company);
+                }
+            }
+        }
+        return result;
     }
 
     @Override
