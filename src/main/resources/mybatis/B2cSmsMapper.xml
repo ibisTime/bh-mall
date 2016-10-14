@@ -10,6 +10,7 @@
 		<result column="to_level" property="toLevel" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
+		<result column="company_code" property="companyCode" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
@@ -27,6 +28,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_b2cSms" parameterType="b2cSms" resultMap="b2cSms_DB_Result">
@@ -37,6 +41,7 @@
 		,t.content
 		,t.to_level
 		,t.status
+		,t.company_code
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -65,6 +70,7 @@
 		,content
 		,to_level
 		,status
+		,company_code
 		,updater
 		,update_datetime
 		,remark
@@ -76,6 +82,7 @@
 		,#{content}
 		,#{toLevel}
 		,#{status}
+		,#{companyCode}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
