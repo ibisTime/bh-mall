@@ -11,8 +11,23 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
+			<if test="smsCode != null and smsCode != '' ">
+				AND t.sms_code = #{smsCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="readDatetimeStart != null and readDatetimeStart != '' ">
+				<![CDATA[AND t.read_datetime >= #{readDatetimeStart}]]>
+			</if>
+			<if test="readDatetimeEnd != null and readDatetimeEnd != '' ">
+				<![CDATA[AND t.read_datetime <= #{readDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
@@ -62,6 +77,13 @@
 		SET
 		,status = #{status}
 		,read_datetime = #{readDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_uRead_status" parameterType="uRead">
+		UPDATE tstd_uread
+		SET
+		,status = #{status}
 		WHERE code = #{code}
 	</update>
 

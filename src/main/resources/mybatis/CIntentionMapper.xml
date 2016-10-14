@@ -19,6 +19,21 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="fromCompany != null and fromCompany != '' ">
+				AND t.from_company = #{fromCompany}
+			</if>
+			<if test="fromPerson != null and fromPerson != '' ">
+				AND t.from_person = #{fromPerson}
+			</if>
+			<if test="fromContact != null and fromContact != '' ">
+				AND t.from_contact = #{fromContact}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_cIntention" parameterType="cIntention" resultMap="cIntention_DB_Result">

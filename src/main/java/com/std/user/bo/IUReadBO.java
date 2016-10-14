@@ -13,6 +13,8 @@ public interface IUReadBO extends IPaginableBO<URead> {
 
     public int refreshURead(URead data);
 
+    public int refreshUReadStatus(URead data);
+
     public List<URead> queryUReadList(URead condition);
 
     public URead getURead(Integer id);

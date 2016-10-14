@@ -11,6 +11,15 @@ public class XN805131Req {
     // 作用等级（选填）
     private String toLevel;
 
+    // 状态（选填）
+    private String status;
+
+    // 公司编号（选填）
+    private String companyCode;
+
+    // 更新人（选填）
+    private String updater;
+
     public String getType() {
         return type;
     }
@@ -33,5 +42,29 @@ public class XN805131Req {
 
     public void setToLevel(String toLevel) {
         this.toLevel = toLevel;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 }

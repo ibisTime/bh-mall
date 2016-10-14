@@ -12,6 +12,8 @@ public interface IUReadAO {
 
     public int editURead(URead data);
 
+    public int dropUReadOnFront(Integer id);
+
     public Paginable<URead> queryUReadPage(int start, int limit, URead condition);
 
     public List<URead> queryUReadList(URead condition);

@@ -11,6 +11,7 @@ import com.std.user.bo.IUReadBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.B2cSms;
 import com.std.user.domain.URead;
+import com.std.user.enums.EUReadStatus;
 import com.std.user.exception.BizException;
 
 @Service
@@ -59,5 +60,21 @@ public class UReadAOImpl implements IUReadAO {
         B2cSms b2cSms = b2cSmsBO.getB2cSms(uRead.getSmsCode());
         uRead.setB2cSms(b2cSms);
         return uRead;
+    }
+
+    @Override
+    public int dropUReadOnFront(Integer id) {
+        if (!uReadBO.isUReadExist(id)) {
+            throw new BizException("xn0000", "该编号不存在");
+        }
+        URead data = new URead();
+        data.setId(id);
+        URead uRead = uReadBO.getURead(id);
+        if (EUReadStatus.TOREAD.getCode().equals(uRead.getStatus())) {
+            data.setStatus(EUReadStatus.DELETE_NO.getCode());
+        } else {
+            data.setStatus(EUReadStatus.DELETE_YES.getCode());
+        }
+        return uReadBO.refreshUReadStatus(data);
     }
 }

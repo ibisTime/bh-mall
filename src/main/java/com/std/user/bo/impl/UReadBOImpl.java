@@ -1,5 +1,6 @@
 package com.std.user.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import com.std.user.bo.IUReadBO;
 import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.dao.IUReadDAO;
 import com.std.user.domain.URead;
+import com.std.user.enums.EUReadStatus;
 import com.std.user.exception.BizException;
 
 @Component
@@ -40,6 +42,8 @@ public class UReadBOImpl extends PaginableBOImpl<URead> implements IUReadBO {
     public int refreshURead(URead data) {
         int count = 0;
         if (null != data.getId()) {
+            data.setStatus(EUReadStatus.READ_YES.getCode());
+            data.setReadDatetime(new Date());
             count = uReadDAO.update(data);
         }
         return count;
@@ -62,5 +66,14 @@ public class UReadBOImpl extends PaginableBOImpl<URead> implements IUReadBO {
             }
         }
         return data;
+    }
+
+    @Override
+    public int refreshUReadStatus(URead data) {
+        int count = 0;
+        if (null != data.getId()) {
+            count = uReadDAO.updateStatus(data);
+        }
+        return count;
     }
 }

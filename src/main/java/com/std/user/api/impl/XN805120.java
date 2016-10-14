@@ -30,6 +30,7 @@ public class XN805120 extends AProcessor {
         data.setTitle(req.getTitle());
         data.setContent(req.getContent());
         data.setToLevel(req.getToLevel());
+        data.setCompanyCode(req.getCompanyCode());
         data.setUpdater(req.getUpdater());
         String code = b2cSmsAO.addB2cSms(data);
         return new PKCodeRes(code);
@@ -39,7 +40,8 @@ public class XN805120 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805120Req.class);
         StringValidater.validateBlank(req.getType(), req.getTitle(),
-            req.getContent(), req.getToLevel(), req.getUpdater());
+            req.getContent(), req.getToLevel(), req.getCompanyCode(),
+            req.getUpdater());
     }
 
 }

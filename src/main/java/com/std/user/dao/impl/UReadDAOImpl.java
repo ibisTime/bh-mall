@@ -49,4 +49,9 @@ public class UReadDAOImpl extends AMybatisTemplate implements IUReadDAO {
     public int update(URead data) {
         return super.update(NAMESPACE.concat("update_uRead"), data);
     }
+
+    @Override
+    public int updateStatus(URead data) {
+        return super.update(NAMESPACE.concat("update_uRead_status"), data);
+    }
 }

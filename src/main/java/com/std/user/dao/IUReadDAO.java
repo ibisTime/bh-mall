@@ -7,4 +7,6 @@ public interface IUReadDAO extends IBaseDAO<URead> {
     String NAMESPACE = IUReadDAO.class.getName().concat(".");
 
     public int update(URead data);
+
+    public int updateStatus(URead data);
 }

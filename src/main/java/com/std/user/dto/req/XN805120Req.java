@@ -14,6 +14,9 @@ public class XN805120Req {
     // 作用等级(必填)
     private String toLevel;
 
+    // 公司编号(必填)
+    private String companyCode;
+
     // 更新人(必填)
     private String updater;
 
@@ -55,5 +58,13 @@ public class XN805120Req {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

@@ -26,6 +26,9 @@ public class B2cSms extends ABaseDO {
     // 状态
     private String status;
 
+    // 公司编号
+    private String companyCode;
+
     // 更新人
     private String updater;
 
@@ -105,6 +108,14 @@ public class B2cSms extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
 }
