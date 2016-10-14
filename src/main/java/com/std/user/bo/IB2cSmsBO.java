@@ -15,7 +15,7 @@ public interface IB2cSmsBO extends IPaginableBO<B2cSms> {
 
     public int refreshB2cSms(B2cSms data);
 
-    public int refreshB2cSmsStatus(String status);
+    public int refreshB2cSmsStatus(String code, String updater);
 
     public List<B2cSms> queryB2cSmsList(B2cSms condition);
 

@@ -19,6 +19,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="title != null and title != '' ">
+				AND t.title like "%"#{title}"%"
+			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
@@ -27,6 +30,9 @@
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
@@ -107,9 +113,11 @@
 		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
-
+	
+	<delete id="delete_b2cSms" parameterType="b2cSms">
+		DELETE FROM tstd_b2c_sms
+		WHERE code = #{code}
+	</delete>
 </mapper>

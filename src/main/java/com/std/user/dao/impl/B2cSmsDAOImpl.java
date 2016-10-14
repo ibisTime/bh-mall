@@ -50,7 +50,7 @@ public class B2cSmsDAOImpl extends AMybatisTemplate implements IB2cSmsDAO {
      */
     @Override
     public int update(B2cSms data) {
-        return super.update(NAMESPACE.concat("udpate_b2cSms"), data);
+        return super.update(NAMESPACE.concat("update_b2cSms"), data);
 
     }
 
@@ -59,7 +59,7 @@ public class B2cSmsDAOImpl extends AMybatisTemplate implements IB2cSmsDAO {
      */
     @Override
     public int updateStatus(B2cSms data) {
-        return super.update(NAMESPACE.concat("udpate_b2cSms_status"), data);
+        return super.update(NAMESPACE.concat("update_b2cSms_status"), data);
     }
 
 }

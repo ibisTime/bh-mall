@@ -60,6 +60,7 @@ public class B2cSmsBOImpl extends PaginableBOImpl<B2cSms> implements IB2cSmsBO {
     public int refreshB2cSms(B2cSms data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
+            data.setUpdateDatetime(new Date());
             count = b2cSmsDAO.update(data);
         }
         return count;
@@ -85,12 +86,14 @@ public class B2cSmsBOImpl extends PaginableBOImpl<B2cSms> implements IB2cSmsBO {
     }
 
     @Override
-    public int refreshB2cSmsStatus(String code) {
+    public int refreshB2cSmsStatus(String code, String updater) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             B2cSms data = new B2cSms();
             data.setCode(code);
             data.setStatus(EBoolean.YES.getCode());
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
             count = b2cSmsDAO.updateStatus(data);
         }
         return count;

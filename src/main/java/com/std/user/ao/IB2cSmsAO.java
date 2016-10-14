@@ -14,7 +14,7 @@ public interface IB2cSmsAO {
 
     public int editB2cSms(B2cSms data);
 
-    public int publishB2cSms(String code);
+    public int publishB2cSms(String code, String updater);
 
     public Paginable<B2cSms> queryB2cSmsPage(int start, int limit,
             B2cSms condition);

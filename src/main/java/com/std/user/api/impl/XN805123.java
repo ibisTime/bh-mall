@@ -24,13 +24,13 @@ public class XN805123 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        b2cSmsAO.publishB2cSms(req.getCode());
+        b2cSmsAO.publishB2cSms(req.getCode(), req.getUpdater());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805123Req.class);
-        StringValidater.validateBlank(req.getCode());
+        StringValidater.validateBlank(req.getCode(), req.getUpdater());
     }
 }

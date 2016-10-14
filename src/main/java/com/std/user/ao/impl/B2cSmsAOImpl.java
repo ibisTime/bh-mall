@@ -45,15 +45,15 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
     }
 
     @Override
-    public int publishB2cSms(String code) {
+    public int publishB2cSms(String code, String updater) {
         // 读取等级用户，生成阅读记录
         B2cSms data = b2cSmsBO.getB2cSms(code);
         if (!EBoolean.NO.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "该消息已发布");
+            throw new BizException("xn0000", "该记录已发布");
         }
         User user = new User();
         user.setLevel(data.getToLevel());
-        return b2cSmsBO.refreshB2cSmsStatus(code);
+        return b2cSmsBO.refreshB2cSmsStatus(code, updater);
     }
 
     @Override
