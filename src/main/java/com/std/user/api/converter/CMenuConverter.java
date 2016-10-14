@@ -45,6 +45,7 @@ public class CMenuConverter {
         CMenu result = new CMenu();
         result.setName(req.getName());
         result.setLocation(req.getLocation());
+        result.setStatus(req.getStatus());
         result.setParentCode(req.getParentCode());
         result.setContentType(req.getContentType());
         result.setCompanyCode(req.getCompanyCode());
@@ -56,6 +57,7 @@ public class CMenuConverter {
         CMenu result = new CMenu();
         result.setName(req.getName());
         result.setLocation(req.getLocation());
+        result.setStatus(req.getStatus());
         result.setParentCode(req.getParentCode());
         result.setContentType(req.getContentType());
         result.setCompanyCode(req.getCompanyCode());

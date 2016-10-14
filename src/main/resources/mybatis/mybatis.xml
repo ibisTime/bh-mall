@@ -25,5 +25,7 @@
  	    
  	    <typeAlias alias="b2cSms" type="com.std.user.domain.B2cSms" />
  	    <typeAlias alias="uRead" type="com.std.user.domain.URead" />
+ 	    
+ 	    <typeAlias alias="certificate" type="com.std.user.domain.Certificate" />
 	</typeAliases>
 </configuration>	

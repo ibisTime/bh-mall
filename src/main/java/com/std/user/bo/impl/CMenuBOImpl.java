@@ -34,8 +34,10 @@ public class CMenuBOImpl extends PaginableBOImpl<CMenu> implements ICMenuBO {
     public String saveCMenu(CMenu data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.CM.getCode());
-            data.setCode(code);
+            if (null == data.getCode()) {
+                code = OrderNoGenerater.generate(EGeneratePrefix.CM.getCode());
+                data.setCode(code);
+            }
             cMenuDAO.insert(data);
         }
         return code;

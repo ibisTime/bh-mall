@@ -8,6 +8,9 @@ public class XN806091Req {
     // userId（选填）
     private String location;
 
+    // 状态（选填）
+    private String status;
+
     // 公司名称（选填）
     private String parentCode;
 
@@ -55,5 +58,13 @@ public class XN806091Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

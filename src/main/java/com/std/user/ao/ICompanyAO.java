@@ -10,6 +10,8 @@ public interface ICompanyAO {
 
     public String addCompany(Company data);
 
+    public String addGWCompany(Company data);
+
     public int dropCompany(String code);
 
     public int editCompany(Company data);
