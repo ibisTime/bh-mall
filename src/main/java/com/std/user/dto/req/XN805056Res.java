@@ -1,4 +1,4 @@
-package com.std.user.dto.res;
+package com.std.user.dto.req;
 
 import java.util.Date;
 
@@ -63,23 +63,16 @@ public class XN805056Res {
     private String pdf;
 
     // 现有金额
-    private String amount;
+    private Long amount;
 
     // 累计金额
-    private String ljAmount;
+    private Long ljAmount;
 
     // 公司编号
     private String companyCode;
 
     // 扩展用户
     private UserExt userExt;
-
-    // ************* db properties ************
-    // 关注数
-    private String totalFollowNum;
-
-    // 粉丝数
-    private String totalFansNum;
 
     public String getUserId() {
         return userId;
@@ -241,19 +234,19 @@ public class XN805056Res {
         this.nickname = nickname;
     }
 
-    public String getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
-    public String getLjAmount() {
+    public Long getLjAmount() {
         return ljAmount;
     }
 
-    public void setLjAmount(String ljAmount) {
+    public void setLjAmount(Long ljAmount) {
         this.ljAmount = ljAmount;
     }
 
@@ -263,21 +256,5 @@ public class XN805056Res {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getTotalFollowNum() {
-        return totalFollowNum;
-    }
-
-    public void setTotalFollowNum(String totalFollowNum) {
-        this.totalFollowNum = totalFollowNum;
-    }
-
-    public String getTotalFansNum() {
-        return totalFansNum;
-    }
-
-    public void setTotalFansNum(String totalFansNum) {
-        this.totalFansNum = totalFansNum;
     }
 }

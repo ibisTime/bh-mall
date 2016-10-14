@@ -43,6 +43,9 @@ public class XN805901Res {
     // 是否绑定银行卡
     private String bankcardFlag;
 
+    // 公司编号
+    private String companyCode;
+
     public String getUserId() {
         return userId;
     }
@@ -153,5 +156,13 @@ public class XN805901Res {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

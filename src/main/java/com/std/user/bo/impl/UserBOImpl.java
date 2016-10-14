@@ -281,7 +281,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public String doRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, Long amount) {
+            String loginPwdStrength, String userReferee, Long amount,
+            String companyCode) {
         // 交易密码888888
         String tradePsd = "888888";
         String userId = null;
@@ -312,6 +313,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
             user.setAmount(amount);
             user.setLjAmount(amount);
+            user.setCompanyCode(companyCode);
             userDAO.insert(user);
         }
         return userId;
