@@ -9,6 +9,9 @@ public class XN805054Req extends APageReq {
     // 登录名
     private String loginName;
 
+    // 昵称
+    private String nickname;
+
     // 身份标识
     private String kind;
 
@@ -138,4 +141,11 @@ public class XN805054Req extends APageReq {
         this.companyCode = companyCode;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

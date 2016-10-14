@@ -26,17 +26,18 @@ public class XN805055 extends AProcessor {
 
         User condition = new User();
         condition.setLoginNameForLikeQuery(req.getLoginName());
+        condition.setNickname(req.getNickname());
         condition.setKind(req.getKind());
         condition.setLevel(req.getLevel());
         condition.setUserReferee(req.getUserReferee());
-        condition.setMobileForLikeQuery(req.getMobile());
 
+        condition.setMobileForLikeQuery(req.getMobile());
         condition.setIdKind(req.getIdKind());
         condition.setIdNo(req.getIdNo());
         condition.setRealName(req.getRealName());
         condition.setRoleCode(req.getRoleCode());
-        condition.setStatus(req.getStatus());
 
+        condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());
         return userAO.queryUserList(condition);
     }
