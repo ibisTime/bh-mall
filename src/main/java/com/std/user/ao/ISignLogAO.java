@@ -22,7 +22,7 @@ public interface ISignLogAO {
      * @create: 2016年9月18日 下午7:23:58 zuixian
      * @history: 
      */
-    public String saveSignLog(String userId, String location);
+    public String addSignLog(String userId, String location, Long amount);
 
     /** 
      * 列表查询签到记录

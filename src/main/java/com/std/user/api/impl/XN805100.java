@@ -25,14 +25,15 @@ public class XN805100 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(signLogAO.saveSignLog(req.getUserId(),
-            req.getLocation()));
+        Long amount = StringValidater.toLong(req.getAmount());
+        return new PKCodeRes(signLogAO.addSignLog(req.getUserId(),
+            req.getLocation(), amount));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805100Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getLocation());
+        StringValidater.validateBlank(req.getUserId());
     }
 
 }

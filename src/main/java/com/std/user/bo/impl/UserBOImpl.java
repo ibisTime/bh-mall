@@ -32,6 +32,7 @@ import com.std.user.domain.User;
 import com.std.user.enums.EAccountJourStatus;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EUserKind;
+import com.std.user.enums.EUserLevel;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
 
@@ -298,7 +299,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setNickname(userId.substring(userId.length() - 8,
                 userId.length()));
             user.setKind(EUserKind.F1.getCode());
-            user.setLevel("0");
+            user.setLevel(EUserLevel.ONE.getCode());
             user.setUserReferee(userReferee);
 
             user.setMobile(mobile);
@@ -457,6 +458,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         User user = new User();
         user.setUserId(userId);
         user.setAmount(nowAmount);
+        // 设置原来的用户等级
+        user.setLevel(dbUser.getLevel());
         Long ljAmount = dbUser.getLjAmount();
         if (transAmount > 0) {
             ljAmount = ljAmount + transAmount;
@@ -467,7 +470,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             for (LevelRule levelRule : lrList) {
                 if (levelRule.getAmountMin() >= ljAmount
                         && ljAmount < levelRule.getAmountMax()) {
-                    user.setLevel(levelRule.getLevel());
+                    user.setLevel(levelRule.getCode());
                     break;
                 }
             }

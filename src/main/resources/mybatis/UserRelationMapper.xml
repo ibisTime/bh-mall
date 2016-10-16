@@ -5,19 +5,22 @@
 	<resultMap id="user_DB_Result" type="user">
 		<result column="user_id" property="userId" />
 		<result column="login_name" property="loginName" />
+		<result column="nickname" property="nickname" />
+		<result column="photo" property="photo" />
 		<result column="kind" property="kind" />
+		
 		<result column="level" property="level" />		
 		<result column="user_referee" property="userReferee" />
-		
 		<result column="mobile" property="mobile" />
 		<result column="id_kind" property="idKind" />
 		<result column="id_no" property="idNo" />
+		
 		<result column="real_name" property="realName" />
 		<result column="status" property="status" />
-		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		
 		<result column="pdf" property="pdf" />
 	</resultMap>
 	
@@ -83,6 +86,8 @@
 		SELECT 
 		tu.user_id
 		,tu.login_name
+		,tu.nickname
+		,(select photo from tstd_user_ext tue where tue.user_id=tu.user_id) as photo
 		,tu.kind	
 		,tu.level
 		,tu.user_referee
