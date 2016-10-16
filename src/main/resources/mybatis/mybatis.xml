@@ -27,5 +27,6 @@
  	    <typeAlias alias="uRead" type="com.std.user.domain.URead" />
  	    
  	    <typeAlias alias="certificate" type="com.std.user.domain.Certificate" />
+ 	    <typeAlias alias="companyCertificate" type="com.std.user.domain.CompanyCertificate" />
 	</typeAliases>
 </configuration>	

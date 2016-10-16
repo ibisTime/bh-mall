@@ -91,7 +91,7 @@ public class CertificateBOImpl extends PaginableBOImpl<Certificate> implements
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
             data.setUpdateDatetime(new Date());
-            count = certificateDAO.update(data);
+            count = certificateDAO.updateStatus(data);
         }
         return count;
     }
