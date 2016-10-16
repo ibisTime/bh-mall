@@ -9,7 +9,7 @@ public interface IUReadBO extends IPaginableBO<URead> {
 
     public boolean isUReadExist(Integer id);
 
-    public String saveURead(URead data);
+    public void saveURead(String smsCode, String userId);
 
     public int refreshURead(URead data);
 

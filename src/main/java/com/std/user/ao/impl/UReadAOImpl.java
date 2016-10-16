@@ -24,11 +24,6 @@ public class UReadAOImpl implements IUReadAO {
     private IB2cSmsBO b2cSmsBO;
 
     @Override
-    public String addURead(URead data) {
-        return uReadBO.saveURead(data);
-    }
-
-    @Override
     public int editURead(URead data) {
         if (!uReadBO.isUReadExist(data.getId())) {
             throw new BizException("xn0000", "该编号不存在");

@@ -26,7 +26,7 @@ public class XN805140 extends AProcessor {
     public Object doBusiness() throws BizException {
         URead data = new URead();
         data.setSmsCode(req.getSmsCode());
-        data.setUserId(StringValidater.toInteger(req.getUserId()));
+        data.setUserId(req.getUserId());
         int count = uReadAO.editURead(data);
         return new BooleanRes(count > 0 ? true : false);
     }

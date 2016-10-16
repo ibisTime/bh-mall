@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.std.user.ao.IB2cSmsAO;
 import com.std.user.bo.IB2cSmsBO;
+import com.std.user.bo.IUReadBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.B2cSms;
@@ -22,6 +23,9 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private IUReadBO ureadBO;
 
     @Override
     public String addB2cSms(B2cSms data) {
@@ -51,8 +55,13 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
         if (!EBoolean.NO.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该记录已发布");
         }
-        User user = new User();
-        user.setLevel(data.getToLevel());
+        User condition = new User();
+        condition.setLevel(data.getToLevel());
+        condition.setCompanyCode(data.getCompanyCode());
+        List<User> userList = userBO.queryUserList(condition);
+        for (User user : userList) {
+            ureadBO.saveURead(code, user.getUserId());
+        }
         return b2cSmsBO.refreshB2cSmsStatus(code, updater);
     }
 
