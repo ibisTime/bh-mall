@@ -25,7 +25,7 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
     private IUserBO userBO;
 
     @Autowired
-    private IUReadBO ureadBO;
+    private IUReadBO uReadBO;
 
     @Override
     public String addB2cSms(B2cSms data) {
@@ -60,7 +60,7 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
         condition.setCompanyCode(data.getCompanyCode());
         List<User> userList = userBO.queryUserList(condition);
         for (User user : userList) {
-            ureadBO.saveURead(code, user.getUserId());
+            uReadBO.saveURead(code, user.getUserId());
         }
         return b2cSmsBO.refreshB2cSmsStatus(code, updater);
     }

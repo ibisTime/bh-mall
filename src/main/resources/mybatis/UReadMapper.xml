@@ -86,6 +86,4 @@
 		,status = #{status}
 		WHERE code = #{code}
 	</update>
-
-
 </mapper>
