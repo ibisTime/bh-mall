@@ -4,9 +4,13 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.std.user.bo.ISmsOutBO;
+import com.std.user.dto.req.CD799001Req;
+import com.std.user.dto.req.CD799002Req;
 import com.std.user.dto.req.XN799001Req;
 import com.std.user.dto.req.XN799002Req;
 import com.std.user.dto.req.XN799003Req;
+import com.std.user.dto.res.BooleanRes;
+import com.std.user.dto.res.PKCodeRes;
 import com.std.user.dto.res.XN799001Res;
 import com.std.user.dto.res.XN799002Res;
 import com.std.user.dto.res.XN799003Res;
@@ -55,5 +59,48 @@ public class SmsOutBOImpl implements ISmsOutBO {
             logger.error("调用短信验证服务异常");
             throw new BizException("xn799003", "短信发送异常，请稍后再试");
         }
+    }
+
+    @Override
+    public String sendSmsOut(String mobile, String content) {
+        String code = null;
+        try {
+            CD799001Req req = new CD799001Req();
+            req.setChannel("GJ1002-CSMD-K");
+            req.setMobile(mobile);
+            req.setContent(content);
+            PKCodeRes res = BizConnecter.getBizData("799001",
+                JsonUtils.object2Json(req), PKCodeRes.class);
+            code = res.getCode();
+        } catch (Exception e) {
+            logger.error("调用短信发送服务异常");
+        }
+        return code;
+    }
+
+    @Override
+    public boolean checkCaptcha(String code, String captcha) {
+        CD799002Req req = new CD799002Req();
+        req.setCode(code);
+        req.setCaptcha(captcha);
+        BooleanRes res = BizConnecter.getBizData("799002",
+            JsonUtils.object2Json(req), BooleanRes.class);
+        return res.getIsSuccess();
+    }
+
+    @Override
+    public String sendCaptcha(String mobile) {
+        String code = null;
+        try {
+            CD799001Req req = new CD799001Req();
+            req.setChannel("GJ1002-CSMD-K");
+            req.setMobile(mobile);
+            PKCodeRes res = BizConnecter.getBizData("799001",
+                JsonUtils.object2Json(req), PKCodeRes.class);
+            code = res.getCode();
+        } catch (Exception e) {
+            logger.error("调用短信发送服务异常");
+        }
+        return code;
     }
 }

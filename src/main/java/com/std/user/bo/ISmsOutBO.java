@@ -29,4 +29,30 @@ public interface ISmsOutBO {
      * @history:
      */
     public void sendCaptcha(String mobile, String bizType);
+
+    /** 
+     * 发送指定内容短信
+     * @param mobile
+     * @param content 
+     * @create: 2016年10月17日 上午11:05:36 zuixian
+     * @history: 
+     */
+    public String sendSmsOut(String mobile, String content);
+
+    /** 
+     * 验证用户验证码是否正确
+     * @param code
+     * @param captcha 
+     * @create: 2016年10月17日 上午11:06:17 zuixian
+     * @history: 
+     */
+    public boolean checkCaptcha(String code, String captcha);
+
+    /** 
+     * 发送验证码
+     * @param mobile 
+     * @create: 2016年10月17日 上午11:06:55 zuixian
+     * @history: 
+     */
+    public String sendCaptcha(String mobile);
 }
