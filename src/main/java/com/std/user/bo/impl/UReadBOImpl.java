@@ -3,6 +3,7 @@ package com.std.user.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,12 +31,13 @@ public class UReadBOImpl extends PaginableBOImpl<URead> implements IUReadBO {
     }
 
     @Override
-    public String saveURead(URead data) {
-        String code = null;
-        if (data != null) {
+    public void saveURead(String smsCode, String userId) {
+        if (StringUtils.isNotBlank(smsCode) && StringUtils.isNotBlank(userId)) {
+            URead data = new URead();
+            data.setSmsCode(smsCode);
+            data.setUserId(userId);
             uReadDAO.insert(data);
         }
-        return code;
     }
 
     @Override

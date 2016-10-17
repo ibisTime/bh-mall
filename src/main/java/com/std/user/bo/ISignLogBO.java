@@ -6,15 +6,24 @@ import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.SignLog;
 
 public interface ISignLogBO extends IPaginableBO<SignLog> {
-
-    /** 
-     * 签到
-     * @param data
+    /**
+     * 判断今天是否签到
+     * @param userId
      * @return 
-     * @create: 2016年9月18日 下午7:16:06 zuixian
-     * @history: 
+     * @create: 2016年10月14日 下午7:43:40 xieyj
+     * @history:
      */
-    public int saveSignLog(SignLog data);
+    public Boolean isSignToday(String userId);
+
+    /**
+     * 签到
+     * @param userId
+     * @param location
+     * @return 
+     * @create: 2016年10月14日 下午7:21:18 xieyj
+     * @history:
+     */
+    public String saveSignLog(String userId, String location);
 
     /** 
      * 列表查询签到记录

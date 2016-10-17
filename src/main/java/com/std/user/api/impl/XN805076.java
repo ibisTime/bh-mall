@@ -35,8 +35,7 @@ public class XN805076 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805076Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getLoginPwd(),
-            req.getLoginPwdStrength(), req.getSmsCaptcha(), req.getProvince(),
-            req.getCity(), req.getArea());
+            req.getLoginPwdStrength(), req.getSmsCaptcha());
         PhoneUtil.checkMobile(req.getMobile());// 判断格式
     }
 }

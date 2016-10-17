@@ -29,7 +29,7 @@ public class XN805145 extends AProcessor {
         URead condition = new URead();
         condition.setSmsCode(req.getSmsCode());
         condition.setStatus(req.getStatus());
-        condition.setUserId(StringValidater.toInteger(req.getUserId()));
+        condition.setUserId(req.getUserId());
         condition.setReadDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setReadDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),

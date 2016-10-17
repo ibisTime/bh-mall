@@ -8,8 +8,6 @@ import com.std.user.domain.URead;
 public interface IUReadAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addURead(URead data);
-
     public int editURead(URead data);
 
     public int dropUReadOnFront(Integer id);

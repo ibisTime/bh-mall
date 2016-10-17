@@ -8,6 +8,9 @@ public class XN805100Req {
     // 地区（必填）
     private String location;
 
+    // 金额（必填）
+    private String amount;
+
     public String getUserId() {
         return userId;
     }
@@ -22,5 +25,13 @@ public class XN805100Req {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 }

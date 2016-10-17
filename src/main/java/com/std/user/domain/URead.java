@@ -12,7 +12,7 @@ public class URead extends ABaseDO {
 
     private String smsCode;
 
-    private Integer userId;
+    private String userId;
 
     private String status;
 
@@ -42,11 +42,11 @@ public class URead extends ABaseDO {
         this.smsCode = smsCode;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

@@ -124,6 +124,9 @@ public class User extends ABaseDO {
     // 粉丝数
     private Integer totalFansNum;
 
+    // 头像
+    private String photo;
+
     public String getLoginNameForLikeQuery() {
         return loginNameForLikeQuery;
     }
@@ -402,5 +405,13 @@ public class User extends ABaseDO {
 
     public void setTotalFansNum(Integer totalFansNum) {
         this.totalFansNum = totalFansNum;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
