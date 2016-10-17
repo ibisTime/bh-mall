@@ -3,7 +3,6 @@ package com.std.user.ao.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.ICertificateAO;
@@ -13,8 +12,6 @@ import com.std.user.domain.Certificate;
 import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 
-//CHECK ��鲢��ע�� 
-@Component
 @Service
 public class CertificateAOImpl implements ICertificateAO {
 
