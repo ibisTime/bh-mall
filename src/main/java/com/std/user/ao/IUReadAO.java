@@ -6,7 +6,7 @@ import com.std.user.bo.base.Paginable;
 import com.std.user.domain.URead;
 
 public interface IUReadAO {
-    static final String DEFAULT_ORDER_COLUMN = "code";
+    static final String DEFAULT_ORDER_COLUMN = "id";
 
     public int editURead(URead data);
 
