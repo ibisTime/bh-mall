@@ -157,7 +157,7 @@ public class CompanyAOImpl implements ICompanyAO {
         condition.setCityForQuery(city);
         condition.setAreaForQuery(area);
         List<Company> list = companyBO.queryCompanyList(condition);
-        Company result = null;
+        Company result = new Company();
         if (CollectionUtils.sizeIsEmpty(list)) {
             result = companyBO.getDefaultCompany();
         } else {

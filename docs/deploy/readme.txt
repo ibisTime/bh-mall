@@ -44,7 +44,7 @@
   http://121.43.101.148:5305/std-user/api
   
  --------------------cswlm
-  cd /home/wwwroot/cswlm/tomcat_std_user/webapps
+  cd /home/wwwroot/forum/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
   cp ./std-user/WEB-INF/classes/config.properties .
   

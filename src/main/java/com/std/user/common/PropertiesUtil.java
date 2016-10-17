@@ -52,6 +52,7 @@ public class PropertiesUtil {
 
         public static String SJROLECODE = props.getProperty("SJROLECODE");
 
+        public static String SMS_CHANNEL = props.getProperty("SMS_CHANNEL");
     }
 
 }
