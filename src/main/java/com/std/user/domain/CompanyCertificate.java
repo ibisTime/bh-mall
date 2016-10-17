@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.std.user.dao.base.ABaseDO;
 
-//CHECK ��鲢��ע�� 
 public class CompanyCertificate extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
