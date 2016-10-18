@@ -196,6 +196,15 @@ public interface IUserAO {
     public void doFindLoginPwdByOss(String loginName, String smsCaptcha,
             String newLoginPwd, String loginPwdStrength);
 
+    /** 
+     * admin管理员重置密码
+     * @param userId
+     * @param adminPwd 
+     * @create: 2016年10月18日 下午2:21:27 zuixian
+     * @history: 
+     */
+    public void doFindLoginPwdByOss(String userId, String adminPwd);
+
     /**
      * 重置登录密码
      * @param userId

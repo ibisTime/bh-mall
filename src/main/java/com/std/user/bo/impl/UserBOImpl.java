@@ -400,7 +400,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data.setRemark(remark);
             userDAO.updateStatus(data);
         }
-
     }
 
     @Override

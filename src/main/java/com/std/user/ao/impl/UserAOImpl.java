@@ -38,9 +38,11 @@ import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
 import com.std.user.enums.EBizType;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECurrency;
 import com.std.user.enums.EDirection;
 import com.std.user.enums.EIDKind;
+import com.std.user.enums.EUser;
 import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserPwd;
 import com.std.user.enums.EUserStatus;
@@ -431,6 +433,20 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
+    public void doFindLoginPwdByOss(String userId, String adminPwd) {
+        User user = userBO.getUser(EUser.ADMIN.getCode());
+        if (!StringUtils.isNotBlank(adminPwd)) {
+            throw new BizException("li01004", "密码不能为空！");
+        }
+        if (!MD5Util.md5(adminPwd).equals(user.getLoginPwd())) {
+            throw new BizException("li01004", "密码错误请重新输入！");
+        }
+        userBO.refreshLoginPwd(userId, MD5Util.md5(EUserPwd.InitPwd.getCode()),
+            EBoolean.YES.getCode());
+    }
+
+    @Override
+    @Transactional
     public void doResetLoginPwd(String userId, String oldLoginPwd,
             String newLoginPwd, String loginPwdStrength) {
         if (oldLoginPwd.equals(newLoginPwd)) {
@@ -557,7 +573,6 @@ public class UserAOImpl implements IUserAO {
                     "805052");
             }
         }
-
     }
 
     @Override

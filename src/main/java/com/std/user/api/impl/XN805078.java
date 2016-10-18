@@ -5,6 +5,7 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805078Req;
+import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -22,7 +23,9 @@ public class XN805078 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return null;
+        userAO.doResetLoginPwd(req.getUserId(), req.getAdminPwd(), "888888",
+            "1");
+        return new BooleanRes(true);
     }
 
     @Override
