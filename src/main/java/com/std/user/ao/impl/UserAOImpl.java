@@ -434,13 +434,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doFindLoginPwdByOss(String userId, String adminPwd) {
-        User user = userBO.getUser(EUser.ADMIN.getCode());
-        if (!StringUtils.isNotBlank(adminPwd)) {
-            throw new BizException("li01004", "密码不能为空！");
-        }
-        if (!MD5Util.md5(adminPwd).equals(user.getLoginPwd())) {
-            throw new BizException("li01004", "密码错误请重新输入！");
-        }
+        // 验证当前登录密码是否正确
+        userBO.checkLoginPwd(EUser.ADMIN.getCode(), adminPwd);
         userBO.refreshLoginPwd(userId, MD5Util.md5(EUserPwd.InitPwd.getCode()),
             EBoolean.YES.getCode());
     }
@@ -556,22 +551,23 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "用户名不存在");
         }
         String mobile = user.getMobile();
+        String smsContent = "";
+        EUserStatus userStatus = null;
+        if (EUserStatus.Ren_Locked.getCode().equalsIgnoreCase(toStatus)) {
+            smsContent = "用户，您已经被注销用户";
+            userStatus = EUserStatus.Ren_Locked;
+        } else {
+            smsContent = "用户，您已经被激活用户";
+            userStatus = EUserStatus.NORMAL;
+        }
+        // admin 不注销
+        if (!userId.equals(EUser.ADMIN.getCode())) {
+            userBO.refreshStatus(userId, userStatus, updater, remark);
+        }
         if (!EUserKind.Operator.getCode().equals(user.getKind())) {
-            if (EUserStatus.Ren_Locked.getCode().equalsIgnoreCase(toStatus)) {
-                userBO.refreshStatus(userId, EUserStatus.Ren_Locked, updater,
-                    remark);
-                // 发送短信
-                smsOutBO.sendSmsOut(mobile,
-                    "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您已经被注销用户",
-                    "805052");
-            } else {
-                userBO.refreshStatus(userId, EUserStatus.NORMAL, updater,
-                    remark);
-                // 发送短信
-                smsOutBO.sendSmsOut(mobile,
-                    "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您已经被激活用户",
-                    "805052");
-            }
+            // 发送短信
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + smsContent, "805052");
         }
     }
 

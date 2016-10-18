@@ -23,8 +23,7 @@ public class XN805078 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doResetLoginPwd(req.getUserId(), req.getAdminPwd(), "888888",
-            "1");
+        userAO.doFindLoginPwdByOss(req.getUserId(), req.getAdminPwd());
         return new BooleanRes(true);
     }
 
