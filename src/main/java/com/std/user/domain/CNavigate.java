@@ -32,6 +32,11 @@ public class CNavigate extends ABaseDO {
 
     private String companyCode;
 
+    /******************db data******/
+
+    // 是否地方查询
+    private String isDfNavigate;
+
     public String getCode() {
         return code;
     }
@@ -134,5 +139,13 @@ public class CNavigate extends ABaseDO {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getIsDfNavigate() {
+        return isDfNavigate;
+    }
+
+    public void setIsDfNavigate(String isDfNavigate) {
+        this.isDfNavigate = isDfNavigate;
     }
 }

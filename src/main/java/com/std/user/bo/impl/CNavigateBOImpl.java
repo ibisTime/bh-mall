@@ -35,8 +35,10 @@ public class CNavigateBOImpl extends PaginableBOImpl<CNavigate> implements
     public String saveCNavigate(CNavigate data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.DH.getCode());
-            data.setCode(code);
+            if (data.getCode() == null) {
+                code = OrderNoGenerater.generate(EGeneratePrefix.DH.getCode());
+                data.setCode(code);
+            }
             cNavigateDAO.insert(data);
         }
         return code;

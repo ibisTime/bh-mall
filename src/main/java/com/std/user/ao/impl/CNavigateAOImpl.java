@@ -1,5 +1,6 @@
 package com.std.user.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import com.std.user.ao.ICNavigateAO;
 import com.std.user.bo.ICNavigateBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.CNavigate;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECNavigateStatus;
 import com.std.user.exception.BizException;
 
@@ -68,17 +70,40 @@ public class CNavigateAOImpl implements ICNavigateAO {
         Paginable<CNavigate> page = cNavigateBO.getPaginable(start, limit,
             condition);
         List<CNavigate> list = page.getList();
+        List<CNavigate> newList = new ArrayList<CNavigate>();
         for (CNavigate cNavigate : list) {
             if (cNavigate.getBelong().contains("DH")) {
-                list.remove(cNavigate);
+                for (CNavigate cNavigate1 : list) {
+                    if (cNavigate1.getBelong().equals(cNavigate.getBelong())) {
+                        newList.add(cNavigate);
+                    }
+                }
             }
         }
+        list.removeAll(newList);
         return page;
     }
 
     @Override
     public List<CNavigate> queryCNavigateList(CNavigate condition) {
         return cNavigateBO.queryCNavigateList(condition);
+    }
+
+    @Override
+    public List<CNavigate> queryCNavigateListCSW(CNavigate condition) {
+        List<CNavigate> list = cNavigateBO.queryCNavigateList(condition);
+        List<CNavigate> newList = new ArrayList<CNavigate>();
+        for (CNavigate cNavigate : list) {
+            if (cNavigate.getBelong().contains("DH")) {
+                for (CNavigate cNavigate1 : list) {
+                    if (cNavigate1.getBelong().equals(cNavigate.getBelong())) {
+                        newList.add(cNavigate);
+                    }
+                }
+            }
+        }
+        list.removeAll(newList);
+        return list;
     }
 
     @Override
@@ -90,6 +115,22 @@ public class CNavigateAOImpl implements ICNavigateAO {
     public int editCNavigateCSW(CNavigate data) {
         if (!cNavigateBO.isCNavigateExist(data.getCode())) {
             throw new BizException("xn0000", "该编号不存在");
+        }
+        if (!EBoolean.NO.getCode().equals(data.getCompanyCode())) {
+            CNavigate data1 = cNavigateBO.getCNavigate(data.getCode());
+            if (EBoolean.YES.getCode().equals(data1.getBelong())) {
+                throw new BizException("xn0000", "地方不能修改全局导航");
+            }
+            CNavigate navigate = data1;
+            navigate.setCode(null);
+            navigate.setBelong(data.getCode());
+            navigate.setCompanyCode(data.getCompanyCode());
+            navigate.setName(data.getName());
+            navigate.setUrl(data.getUrl());
+            navigate.setPic(data.getPic());
+            navigate.setOrderNo(data.getOrderNo());
+            String code = cNavigateBO.saveCNavigate(navigate);
+            return code == null ? 0 : 1;
         }
         return cNavigateBO.refreshCNavigateCSW(data);
     }

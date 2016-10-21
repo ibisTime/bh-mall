@@ -30,7 +30,9 @@ public class XN805122 extends AProcessor {
         data.setType(req.getType());
         data.setTitle(req.getTitle());
         data.setContent(req.getContent());
+        data.setToCompany(req.getToCompany());
         data.setToLevel(req.getToLevel());
+        data.setToUser(req.getToUser());
         data.setUpdater(req.getUpdater());
         b2cSmsAO.editB2cSms(data);
         return new BooleanRes(true);

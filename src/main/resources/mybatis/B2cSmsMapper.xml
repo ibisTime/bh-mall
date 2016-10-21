@@ -7,7 +7,9 @@
 		<result column="type" property="type" />
 		<result column="title" property="title" />
 		<result column="content" property="content" />
+		<result column="to_company" property="toCompany" />
 		<result column="to_level" property="toLevel" />
+		<result column="to_user" property="toUser" />
 		<result column="status" property="status" />
 		<result column="company_code" property="companyCode" />
 		<result column="updater" property="updater" />
@@ -25,8 +27,14 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
+			<if test="toCompany != null and toCompany != '' ">
+				AND t.to_company = #{toCompany}
+			</if>
 			<if test="toLevel != null and toLevel != '' ">
 				AND t.to_level = #{toLevel}
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -45,7 +53,9 @@
 		,t.type
 		,t.title
 		,t.content
+		,t.to_company
 		,t.to_level
+		,t.to_user
 		,t.status
 		,t.company_code
 		,t.updater
@@ -74,7 +84,9 @@
 		,type
 		,title
 		,content
+		,to_company
 		,to_level
+		,to_user
 		,status
 		,company_code
 		,updater
@@ -86,7 +98,9 @@
 		,#{type}
 		,#{title}
 		,#{content}
+		,#{toCompany}
 		,#{toLevel}
+		,#{toUser}
 		,#{status}
 		,#{companyCode}
 		,#{updater}
@@ -100,7 +114,9 @@
 		SET
 		title = #{title}
 		,content = #{content}
+		,to_company = #{toCompany}
 		,to_level = #{toLevel}
+		,to_user = #{toUser}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

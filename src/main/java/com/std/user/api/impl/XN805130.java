@@ -28,7 +28,9 @@ public class XN805130 extends AProcessor {
         B2cSms condition = new B2cSms();
         condition.setType(req.getType());
         condition.setTitle(req.getTitle());
+        condition.setToCompany(req.getToCompany());
         condition.setToLevel(req.getToLevel());
+        condition.setToUser(req.getToUser());
         condition.setStatus(req.getStatus());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setUpdater(req.getUpdater());

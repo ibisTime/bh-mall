@@ -2,8 +2,10 @@ package com.std.user.api.impl;
 
 import com.std.user.ao.ICNavigateAO;
 import com.std.user.api.AProcessor;
+import com.std.user.api.converter.CNavigateConverter;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
+import com.std.user.domain.CNavigate;
 import com.std.user.dto.req.XN806052Req;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
@@ -23,12 +25,13 @@ public class XN806052 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return null;
+        CNavigate condition = CNavigateConverter.converter(req);
+        return cNavigateAO.queryCNavigateListCSW(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806052Req.class);
-        StringValidater.validateBlank(req.getCode());
+        StringValidater.validateBlank(req.getCompanyCode());
     }
 }

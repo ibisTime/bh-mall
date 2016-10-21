@@ -8,8 +8,14 @@ public class XN805131Req {
     // 标题（选填）
     private String title;
 
-    // 作用等级（选填）
+    // 作用公司
+    private String toCompany;
+
+    // 作用等级
     private String toLevel;
+
+    // 作用用户
+    private String toUser;
 
     // 状态（选填）
     private String status;
@@ -66,5 +72,21 @@ public class XN805131Req {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getToCompany() {
+        return toCompany;
+    }
+
+    public void setToCompany(String toCompany) {
+        this.toCompany = toCompany;
+    }
+
+    public String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 }
