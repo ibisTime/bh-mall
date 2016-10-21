@@ -11,8 +11,14 @@ public class XN805120Req {
     // 内容(必填)
     private String content;
 
-    // 作用等级(必填)
+    // 作用公司
+    private String toCompany;
+
+    // 作用等级
     private String toLevel;
+
+    // 作用用户
+    private String toUser;
 
     // 公司编号(必填)
     private String companyCode;
@@ -66,5 +72,21 @@ public class XN805120Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getToCompany() {
+        return toCompany;
+    }
+
+    public void setToCompany(String toCompany) {
+        this.toCompany = toCompany;
+    }
+
+    public String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 }
