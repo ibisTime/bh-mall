@@ -72,4 +72,12 @@
 	<bean id="companyCertificateBO" class="com.std.user.bo.impl.CompanyCertificateBOImpl">
 		<property name="paginableDAO" ref="companyCertificateDAOImpl"/>
 	</bean>
+	
+	<bean id="sysDictBO" class="com.std.user.bo.impl.SYSDictBOImpl">
+		<property name="paginableDAO" ref="sysDictDAOImpl"/>
+	</bean>	
+	
+	<bean id="sysConfigBO" class="com.std.user.bo.impl.SYSConfigBOImpl">
+		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
+	</bean>	
 </beans>

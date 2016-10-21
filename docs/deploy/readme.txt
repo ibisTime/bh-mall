@@ -13,18 +13,10 @@
 
 
 部署步骤：
-1，切换到本地tomcat部署包所在目录,例如
-  cd /Users/myb858/Documents/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp9/wtpwebapps
-  
-2，打包
-  rm -rf user.tar.gz
-  tar zcvf user.tar.gz std-user/
-  scp -P57652 ./user.tar.gz root@121.43.101.148:/mnt/wwwroot/
-  
-    scp -P57652 ./std-user.war root@121.43.101.148:/home
+1 scp -P57652 ./std-user.war root@121.43.101.148:/home
   
   
-3，部署
+2，部署
   ssh root@121.43.101.148 -p 57652
   
   cd /home/wwwroot/caigo/tomcat_std_user/webapps
