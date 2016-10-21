@@ -13,10 +13,10 @@ package com.std.user.enums;
  * @since: 2015-3-7 上午8:41:50 
  * @history:
  */
-public enum ECMenuStatus {
+public enum ECNavigateStatus {
     APPROVE_NO("0", "下架"), APPROVE_YES("1", "上架");
 
-    ECMenuStatus(String code, String value) {
+    ECNavigateStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }

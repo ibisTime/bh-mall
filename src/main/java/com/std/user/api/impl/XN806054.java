@@ -2,40 +2,33 @@ package com.std.user.api.impl;
 
 import com.std.user.ao.ICNavigateAO;
 import com.std.user.api.AProcessor;
-import com.std.user.api.converter.CNavigateConverter;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.domain.CNavigate;
-import com.std.user.dto.req.XN806040Req;
-import com.std.user.dto.res.PKCodeRes;
+import com.std.user.dto.req.XN806054Req;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /** 
- * 新增导航
+ * 详情查询Banner
  * @author: zuixian 
  * @since: 2016年10月10日 下午3:58:13 
  * @history:
  */
-public class XN806040 extends AProcessor {
+public class XN806054 extends AProcessor {
     private ICNavigateAO cNavigateAO = SpringContextHolder
         .getBean(ICNavigateAO.class);
 
-    private XN806040Req req = null;
+    private XN806054Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        CNavigate data = CNavigateConverter.converter(req);
-        String code = cNavigateAO.addCNavigate(data);
-        return new PKCodeRes(code);
+        return cNavigateAO.getCNavigate(req.getCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN806040Req.class);
-        StringValidater.validateBlank(req.getName(), req.getType(),
-            req.getOrderNo(), req.getUrl(), req.getStatus(),
-            req.getCompanyCode());
+        req = JsonUtil.json2Bean(inputparams, XN806054Req.class);
+        StringValidater.validateBlank(req.getCode());
     }
 }

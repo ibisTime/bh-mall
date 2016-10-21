@@ -1,42 +1,44 @@
-package com.std.user.dto.req;
+package com.std.user.domain;
 
-public class XN806040Req {
+import com.std.user.dao.base.ABaseDO;
 
-    // 名字（必填）
+public class CNavigate extends ABaseDO {
+
+    private static final long serialVersionUID = 1L;
+
+    private String code;
+
     private String name;
 
-    // 类型（必填）
     private String type;
 
-    // 访问Url（必填）
     private String url;
 
-    // 图片（选填）
     private String pic;
 
-    // 状态（必填）
     private String status;
 
-    // 位置（选填）
     private String location;
 
-    // 相对位置编号（必填）
-    private String orderNo;
+    private Integer orderNo;
 
-    // 属于（选填）
     private String belong;
 
-    // 父编号（选填）
     private String parentCode;
 
-    // 内容源类型（选填）
+    private String remark;
+
     private String contentType;
 
-    // 公司编号（必填）
     private String companyCode;
 
-    // 备注(选填)
-    private String remark;
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getName() {
         return name;
@@ -86,11 +88,11 @@ public class XN806040Req {
         this.location = location;
     }
 
-    public String getOrderNo() {
+    public Integer getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(String orderNo) {
+    public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
 
@@ -110,6 +112,14 @@ public class XN806040Req {
         this.parentCode = parentCode;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getContentType() {
         return contentType;
     }
@@ -124,13 +134,5 @@ public class XN806040Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 }

@@ -49,6 +49,9 @@
 	<bean id="cBannerBO" class="com.std.user.bo.impl.CBannerBOImpl">
 		<property name="paginableDAO" ref="cBannerDAOImpl"/>
 	</bean>
+	<bean id="cNavigateBO" class="com.std.user.bo.impl.CNavigateBOImpl">
+		<property name="paginableDAO" ref="cNavigateDAOImpl"/>
+	</bean>
 	<bean id="cIntentionBO" class="com.std.user.bo.impl.CIntentionBOImpl">
 		<property name="paginableDAO" ref="cIntentionDAOImpl"/>
 	</bean>

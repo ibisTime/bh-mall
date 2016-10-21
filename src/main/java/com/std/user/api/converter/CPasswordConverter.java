@@ -1,11 +1,8 @@
 package com.std.user.api.converter;
 
-import com.std.user.domain.CBanner;
 import com.std.user.domain.CPassword;
 import com.std.user.dto.req.XN806020Req;
 import com.std.user.dto.req.XN806022Req;
-import com.std.user.dto.req.XN806050Req;
-import com.std.user.dto.req.XN806051Req;
 
 public class CPasswordConverter {
 
@@ -28,28 +25,6 @@ public class CPasswordConverter {
         result.setAccount(req.getAccount());
         result.setPassword(req.getPassword());
         result.setRemark(req.getRemark());
-        result.setCompanyCode(req.getCompanyCode());
-        return result;
-    }
-
-    // 分页查询Banner
-    public static CBanner converter(XN806050Req req) {
-        CBanner result = new CBanner();
-        result.setName(req.getName());
-        result.setLocation(req.getLocation());
-        result.setStatus(req.getStatus());
-        result.setUpdater(req.getUpdater());
-        result.setCompanyCode(req.getCompanyCode());
-        return result;
-    }
-
-    // 列表查询Banner
-    public static CBanner converter(XN806051Req req) {
-        CBanner result = new CBanner();
-        result.setName(req.getName());
-        result.setLocation(req.getLocation());
-        result.setStatus(req.getStatus());
-        result.setUpdater(req.getUpdater());
         result.setCompanyCode(req.getCompanyCode());
         return result;
     }

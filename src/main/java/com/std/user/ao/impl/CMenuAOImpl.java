@@ -9,7 +9,7 @@ import com.std.user.ao.ICMenuAO;
 import com.std.user.bo.ICMenuBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.CMenu;
-import com.std.user.enums.ECMenuStatus;
+import com.std.user.enums.ECNavigateStatus;
 import com.std.user.exception.BizException;
 
 @Service
@@ -62,11 +62,11 @@ public class CMenuAOImpl implements ICMenuAO {
         CMenu menu = cMenuBO.getCMenu(code);
         CMenu data = new CMenu();
         data.setCode(code);
-        if (ECMenuStatus.APPROVE_NO.getCode()
+        if (ECNavigateStatus.APPROVE_NO.getCode()
             .equalsIgnoreCase(menu.getStatus())) {
-            data.setStatus(ECMenuStatus.APPROVE_YES.getCode());
+            data.setStatus(ECNavigateStatus.APPROVE_YES.getCode());
         } else {
-            data.setStatus(ECMenuStatus.APPROVE_NO.getCode());
+            data.setStatus(ECNavigateStatus.APPROVE_NO.getCode());
         }
         return cMenuBO.refreshCMenuStatus(data);
     }

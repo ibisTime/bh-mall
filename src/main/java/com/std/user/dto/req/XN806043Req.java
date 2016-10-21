@@ -1,6 +1,9 @@
 package com.std.user.dto.req;
 
-public class XN806040Req {
+public class XN806043Req {
+
+    // 编号（必填）
+    private String code;
 
     // 名字（必填）
     private String name;
@@ -37,6 +40,14 @@ public class XN806040Req {
 
     // 备注(选填)
     private String remark;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getName() {
         return name;

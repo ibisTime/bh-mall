@@ -4,19 +4,22 @@ public class XN806050Req extends APageReq {
 
     private static final long serialVersionUID = 1L;
 
-    // 种类（选填）
+    // 名称（选填）
     private String name;
 
-    // 内容标题（选填）
-    private String location;
-
-    // 菜单编号（选填）
+    // 显示状态（选填）
     private String status;
 
-    // 种类（选填）
-    private String updater;
+    // 类型（选填）
+    private String type;
 
-    // 内容标题（选填）
+    // 属于（选填）
+    private String Belong;
+
+    // 父编号（选填）
+    private String parentCode;
+
+    // 公司编号（选填）
     private String companyCode;
 
     public String getName() {
@@ -27,14 +30,6 @@ public class XN806050Req extends APageReq {
         this.name = name;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -43,19 +38,35 @@ public class XN806050Req extends APageReq {
         this.status = status;
     }
 
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
     public String getCompanyCode() {
         return companyCode;
     }
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getBelong() {
+        return Belong;
+    }
+
+    public void setBelong(String belong) {
+        Belong = belong;
+    }
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
     }
 }
