@@ -39,7 +39,7 @@ public class CompanyAOImpl implements ICompanyAO {
         CMenu ind = new CMenu();
         menuCode = OrderNoGenerater.generate("ind");
         ind.setCode(menuCode);
-        ind.setName("首页");
+        ind.setName("web首页");
         ind.setStatus(EBoolean.YES.getCode());
         ind.setOrderNo(0);
         ind.setParentCode(EBoolean.NO.getCode());
@@ -48,7 +48,7 @@ public class CompanyAOImpl implements ICompanyAO {
         CMenu inw = new CMenu();
         menuCode = OrderNoGenerater.generate("inw");
         inw.setCode(menuCode);
-        inw.setName("首页");
+        inw.setName("微信首页");
         inw.setStatus(EBoolean.YES.getCode());
         inw.setOrderNo(0);
         inw.setParentCode(EBoolean.NO.getCode());
