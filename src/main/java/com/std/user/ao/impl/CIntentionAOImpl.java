@@ -4,22 +4,44 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ICIntentionAO;
 import com.std.user.bo.ICIntentionBO;
+import com.std.user.bo.ICompanyBO;
+import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.CIntention;
+import com.std.user.domain.Company;
 import com.std.user.exception.BizException;
 
 @Service
 public class CIntentionAOImpl implements ICIntentionAO {
 
     @Autowired
+    private ICompanyBO companyBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
+
+    @Autowired
     private ICIntentionBO cIntentionBO;
 
     @Override
+    @Transactional
     public String addCIntention(CIntention data) {
-        return cIntentionBO.saveCIntention(data);
+        String code = cIntentionBO.saveCIntention(data);
+        Company company = companyBO.getCompany(data.getCompanyCode());
+        String mobile = company.getMobile();
+        StringBuilder sb = new StringBuilder();
+        sb.append("现有合作意向:").append(data.getFromCompany()).append(",")
+            .append(data.getFromPerson()).append(",")
+            .append(data.getFromContact()).append(",")
+            .append(data.getContent()).append("。");
+        String content = sb.toString();
+        // 发送短信
+        smsOutBO.sendSmsOut(mobile, content, "806060");
+        return code;
     }
 
     @Override

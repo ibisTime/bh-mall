@@ -4,6 +4,7 @@ import com.std.user.ao.ICompanyAO;
 import com.std.user.api.AProcessor;
 import com.std.user.api.converter.CompanyConverter;
 import com.std.user.common.JsonUtil;
+import com.std.user.common.PhoneUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.Company;
 import com.std.user.dto.req.XN806005Req;
@@ -37,5 +38,6 @@ public class XN806005 extends AProcessor {
         StringValidater.validateBlank(req.getType(), req.getName(),
             req.getProvince(), req.getCity(), req.getArea(), req.getAddress(),
             req.getDescription(), req.getUpdater());
+        PhoneUtil.checkMobile(req.getMobile());
     }
 }
