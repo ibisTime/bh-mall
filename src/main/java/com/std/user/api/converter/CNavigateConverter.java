@@ -70,6 +70,7 @@ public class CNavigateConverter {
         result.setType(req.getType());
         result.setBelong(req.getBelong());
         result.setParentCode(req.getParentCode());
+        result.setIsDfNavigate(req.getIsDfNavigate());
         result.setCompanyCode(req.getCompanyCode());
         return result;
     }

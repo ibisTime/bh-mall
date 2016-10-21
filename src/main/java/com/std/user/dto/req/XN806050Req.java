@@ -22,6 +22,9 @@ public class XN806050Req extends APageReq {
     // 公司编号（选填）
     private String companyCode;
 
+    // 是否地方查询
+    private String isDfNavigate;
+
     public String getName() {
         return name;
     }
@@ -68,5 +71,13 @@ public class XN806050Req extends APageReq {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getIsDfNavigate() {
+        return isDfNavigate;
+    }
+
+    public void setIsDfNavigate(String isDfNavigate) {
+        this.isDfNavigate = isDfNavigate;
     }
 }

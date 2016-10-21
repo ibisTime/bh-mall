@@ -1,5 +1,6 @@
 package com.std.user.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,15 +70,17 @@ public class CNavigateAOImpl implements ICNavigateAO {
         Paginable<CNavigate> page = cNavigateBO.getPaginable(start, limit,
             condition);
         List<CNavigate> list = page.getList();
+        List<CNavigate> newList = new ArrayList<CNavigate>();
         for (CNavigate cNavigate : list) {
             if (cNavigate.getBelong().contains("DH")) {
                 for (CNavigate cNavigate1 : list) {
                     if (cNavigate1.getBelong().equals(cNavigate.getBelong())) {
-                        list.remove(cNavigate1);
+                        newList.add(cNavigate);
                     }
                 }
             }
         }
+        list.removeAll(newList);
         return page;
     }
 
@@ -89,15 +92,17 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public List<CNavigate> queryCNavigateListCSW(CNavigate condition) {
         List<CNavigate> list = cNavigateBO.queryCNavigateList(condition);
+        List<CNavigate> newList = new ArrayList<CNavigate>();
         for (CNavigate cNavigate : list) {
             if (cNavigate.getBelong().contains("DH")) {
                 for (CNavigate cNavigate1 : list) {
                     if (cNavigate1.getBelong().equals(cNavigate.getBelong())) {
-                        list.remove(cNavigate1);
+                        newList.add(cNavigate);
                     }
                 }
             }
         }
+        list.removeAll(newList);
         return list;
     }
 
@@ -112,10 +117,12 @@ public class CNavigateAOImpl implements ICNavigateAO {
             throw new BizException("xn0000", "该编号不存在");
         }
         if (!EBoolean.NO.getCode().equals(data.getCompanyCode())) {
-            if (EBoolean.YES.getCode().equals(data.getBelong())) {
+            CNavigate data1 = cNavigateBO.getCNavigate(data.getCode());
+            if (EBoolean.YES.getCode().equals(data1.getBelong())) {
                 throw new BizException("xn0000", "地方不能修改全局导航");
             }
-            CNavigate navigate = new CNavigate();
+            CNavigate navigate = data1;
+            navigate.setCode(null);
             navigate.setBelong(data.getCode());
             navigate.setCompanyCode(data.getCompanyCode());
             navigate.setName(data.getName());

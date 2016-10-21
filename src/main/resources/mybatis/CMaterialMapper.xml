@@ -24,6 +24,9 @@
 			<if test="title != null and title != '' ">
 				AND t.title like "%"#{title}"%"
 			</if>
+			<if test="kind != null and kind != '' ">
+				AND t.kind = #{kind}
+			</if>
 			<if test="menuCode != null and menuCode != '' ">
 				AND t.menu_code = #{menuCode}
 			</if>

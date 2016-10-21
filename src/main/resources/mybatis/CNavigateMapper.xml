@@ -43,9 +43,19 @@
 			<if test="contentType != null and contentType != '' ">
 				AND t.content_type = #{contentType}
 			</if>
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
+			<choose>
+				<when test="isDfNavigate == 1">
+				 	AND (t.company_code = #{companyCode} or t.belong = 2)
+				 </when>
+				 <when test="isDfNavigate == 0">
+				 	AND belong in (1,2)
+				 </when>
+				 <otherwise>
+					 <if test="companyCode != null and companyCode != '' ">
+						AND t.company_code = #{companyCode}
+					</if>
+				 </otherwise>
+			</choose>
 		</trim>
 	</sql>
 	<select id="select_cNavigate" parameterType="cNavigate" resultMap="cNavigate_DB_Result">
