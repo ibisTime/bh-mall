@@ -16,6 +16,7 @@ import com.std.user.core.OrderNoGenerater;
 import com.std.user.domain.CNavigate;
 import com.std.user.domain.Company;
 import com.std.user.enums.EBoolean;
+import com.std.user.enums.ECNavigateType;
 import com.std.user.exception.BizException;
 import com.std.user.util.PinYin;
 
@@ -43,21 +44,21 @@ public class CompanyAOImpl implements ICompanyAO {
         addMenu("com", "公司简介", code);
         addMenu("cin", "我要合作", code);
         addMenu("wei", "微信顶级菜单", code);
-
         return code;
     }
 
     private void addMenu(String prefix, String name, String companyCode) {
-        String menuCode = null;
-        CNavigate wei = new CNavigate();
-        menuCode = OrderNoGenerater.generate(prefix);
-        wei.setCode(menuCode);
-        wei.setName(name);
-        wei.setStatus(EBoolean.YES.getCode());
-        wei.setOrderNo(1);
-        wei.setParentCode(EBoolean.NO.getCode());
-        wei.setCompanyCode(companyCode);
-        cNavigateBO.saveCNavigate(wei);
+        String code = null;
+        CNavigate cn = new CNavigate();
+        code = OrderNoGenerater.generate(prefix);
+        cn.setCode(code);
+        cn.setName(name);
+        cn.setType(ECNavigateType.CAIDAN.getCode());
+        cn.setStatus(EBoolean.YES.getCode());
+        cn.setOrderNo(1);
+        cn.setParentCode(EBoolean.NO.getCode());
+        cn.setCompanyCode(companyCode);
+        cNavigateBO.saveCNavigate(cn);
     }
 
     @Override
