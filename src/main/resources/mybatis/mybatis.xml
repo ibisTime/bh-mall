@@ -28,5 +28,7 @@
  	    
  	    <typeAlias alias="certificate" type="com.std.user.domain.Certificate" />
  	    <typeAlias alias="companyCertificate" type="com.std.user.domain.CompanyCertificate" />
+	    <typeAlias alias="sysDict" type="com.std.user.domain.SYSDict" />
+	    <typeAlias alias="sysConfig" type="com.std.user.domain.SYSConfig" />
 	</typeAliases>
 </configuration>	
