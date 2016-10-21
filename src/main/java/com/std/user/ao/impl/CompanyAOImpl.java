@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ICompanyAO;
 import com.std.user.bo.ICNavigateBO;
@@ -33,46 +34,30 @@ public class CompanyAOImpl implements ICompanyAO {
     }
 
     @Override
+    @Transactional
     public String addGWCompany(Company data) {
         String code = companyBO.saveCompany(data);
+
+        addMenu("ind", "web首页", code);
+        addMenu("inw", "微信首页", code);
+        addMenu("com", "公司简介", code);
+        addMenu("cin", "我要合作", code);
+        addMenu("wei", "微信顶级菜单", code);
+
+        return code;
+    }
+
+    private void addMenu(String prefix, String name, String companyCode) {
         String menuCode = null;
-        CNavigate ind = new CNavigate();
-        menuCode = OrderNoGenerater.generate("ind");
-        ind.setCode(menuCode);
-        ind.setName("web首页");
-        ind.setStatus(EBoolean.YES.getCode());
-        ind.setOrderNo(0);
-        ind.setParentCode(EBoolean.NO.getCode());
-        ind.setCompanyCode(code);
-        cNavigateBO.saveCNavigate(ind);
-        CNavigate inw = new CNavigate();
-        menuCode = OrderNoGenerater.generate("inw");
-        inw.setCode(menuCode);
-        inw.setName("微信首页");
-        inw.setStatus(EBoolean.YES.getCode());
-        inw.setOrderNo(0);
-        inw.setParentCode(EBoolean.NO.getCode());
-        inw.setCompanyCode(code);
-        cNavigateBO.saveCNavigate(ind);
-        CNavigate com = new CNavigate();
-        menuCode = OrderNoGenerater.generate("com");
-        com.setCode(menuCode);
-        com.setName("公司简介");
-        com.setStatus(EBoolean.YES.getCode());
-        com.setOrderNo(1);
-        com.setParentCode(EBoolean.NO.getCode());
-        com.setCompanyCode(code);
-        cNavigateBO.saveCNavigate(com);
         CNavigate wei = new CNavigate();
-        menuCode = OrderNoGenerater.generate("wei");
+        menuCode = OrderNoGenerater.generate(prefix);
         wei.setCode(menuCode);
-        wei.setName("微信顶级菜单");
+        wei.setName(name);
         wei.setStatus(EBoolean.YES.getCode());
         wei.setOrderNo(1);
         wei.setParentCode(EBoolean.NO.getCode());
-        wei.setCompanyCode(code);
+        wei.setCompanyCode(companyCode);
         cNavigateBO.saveCNavigate(wei);
-        return code;
     }
 
     @Override
