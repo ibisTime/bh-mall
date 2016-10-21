@@ -15,13 +15,11 @@
  	    <typeAlias alias="company" type="com.std.user.domain.Company" />
  	    
  	    <typeAlias alias="levelRule" type="com.std.user.domain.LevelRule" />
- 	    <typeAlias alias="cMenu" type="com.std.user.domain.CMenu" />
  	    <typeAlias alias="accountJour" type="com.std.user.domain.AccountJour" />
  	    <typeAlias alias="cMaterial" type="com.std.user.domain.CMaterial" />
  	    <typeAlias alias="cIntention" type="com.std.user.domain.CIntention" />
  	    
  	    <typeAlias alias="cPassword" type="com.std.user.domain.CPassword" />
- 	    <typeAlias alias="cBanner" type="com.std.user.domain.CBanner" />
  	    <typeAlias alias="cNavigate" type="com.std.user.domain.CNavigate" />
  	    
  	    <typeAlias alias="b2cSms" type="com.std.user.domain.B2cSms" />

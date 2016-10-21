@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.ICompanyAO;
-import com.std.user.bo.ICMenuBO;
+import com.std.user.bo.ICNavigateBO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.core.OrderNoGenerater;
-import com.std.user.domain.CMenu;
+import com.std.user.domain.CNavigate;
 import com.std.user.domain.Company;
 import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
@@ -25,7 +25,7 @@ public class CompanyAOImpl implements ICompanyAO {
     private ICompanyBO companyBO;
 
     @Autowired
-    private ICMenuBO cMenuBO;
+    private ICNavigateBO cNavigateBO;
 
     @Override
     public String addCompany(Company data) {
@@ -36,7 +36,7 @@ public class CompanyAOImpl implements ICompanyAO {
     public String addGWCompany(Company data) {
         String code = companyBO.saveCompany(data);
         String menuCode = null;
-        CMenu ind = new CMenu();
+        CNavigate ind = new CNavigate();
         menuCode = OrderNoGenerater.generate("ind");
         ind.setCode(menuCode);
         ind.setName("web首页");
@@ -44,8 +44,8 @@ public class CompanyAOImpl implements ICompanyAO {
         ind.setOrderNo(0);
         ind.setParentCode(EBoolean.NO.getCode());
         ind.setCompanyCode(code);
-        cMenuBO.saveCMenu(ind);
-        CMenu inw = new CMenu();
+        cNavigateBO.saveCNavigate(ind);
+        CNavigate inw = new CNavigate();
         menuCode = OrderNoGenerater.generate("inw");
         inw.setCode(menuCode);
         inw.setName("微信首页");
@@ -53,8 +53,8 @@ public class CompanyAOImpl implements ICompanyAO {
         inw.setOrderNo(0);
         inw.setParentCode(EBoolean.NO.getCode());
         inw.setCompanyCode(code);
-        cMenuBO.saveCMenu(ind);
-        CMenu com = new CMenu();
+        cNavigateBO.saveCNavigate(ind);
+        CNavigate com = new CNavigate();
         menuCode = OrderNoGenerater.generate("com");
         com.setCode(menuCode);
         com.setName("公司简介");
@@ -62,8 +62,8 @@ public class CompanyAOImpl implements ICompanyAO {
         com.setOrderNo(1);
         com.setParentCode(EBoolean.NO.getCode());
         com.setCompanyCode(code);
-        cMenuBO.saveCMenu(com);
-        CMenu wei = new CMenu();
+        cNavigateBO.saveCNavigate(com);
+        CNavigate wei = new CNavigate();
         menuCode = OrderNoGenerater.generate("wei");
         wei.setCode(menuCode);
         wei.setName("微信顶级菜单");
@@ -71,7 +71,7 @@ public class CompanyAOImpl implements ICompanyAO {
         wei.setOrderNo(1);
         wei.setParentCode(EBoolean.NO.getCode());
         wei.setCompanyCode(code);
-        cMenuBO.saveCMenu(wei);
+        cNavigateBO.saveCNavigate(wei);
         return code;
     }
 

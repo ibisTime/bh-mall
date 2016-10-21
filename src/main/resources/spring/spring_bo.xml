@@ -43,12 +43,6 @@
 	<bean id="cMaterialBO" class="com.std.user.bo.impl.CMaterialBOImpl">
 		<property name="paginableDAO" ref="cMaterialDAOImpl"/>
 	</bean>
-	<bean id="cMenuBO" class="com.std.user.bo.impl.CMenuBOImpl">
-		<property name="paginableDAO" ref="cMenuDAOImpl"/>
-	</bean>
-	<bean id="cBannerBO" class="com.std.user.bo.impl.CBannerBOImpl">
-		<property name="paginableDAO" ref="cBannerDAOImpl"/>
-	</bean>
 	<bean id="cNavigateBO" class="com.std.user.bo.impl.CNavigateBOImpl">
 		<property name="paginableDAO" ref="cNavigateDAOImpl"/>
 	</bean>
