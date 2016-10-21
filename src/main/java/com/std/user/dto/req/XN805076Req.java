@@ -25,9 +25,6 @@ public class XN805076Req {
     // 区/县(必填)
     private String area;
 
-    // 注册送积分数量
-    private String amount;
-
     public String getMobile() {
         return mobile;
     }
@@ -90,13 +87,5 @@ public class XN805076Req {
 
     public void setArea(String area) {
         this.area = area;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
     }
 }

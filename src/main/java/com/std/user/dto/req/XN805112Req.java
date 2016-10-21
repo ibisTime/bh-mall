@@ -5,40 +5,29 @@ public class XN805112Req {
     // 编号（必填）
     private String code;
 
-    // 等级（必填）
-    private String level;
+    // 等级名称（必填）
+    private String name;
 
-    // 数量最小值（必填）
-    private String amountMin;
-
-    // 数量最大值（必填）
-    private String amountMax;
+    // 作用（必填）
+    private String effect;
 
     // 备注（选填）
     private String remark;
 
-    public String getLevel() {
-        return level;
+    public String getCode() {
+        return code;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getAmountMin() {
-        return amountMin;
+    public String getName() {
+        return name;
     }
 
-    public void setAmountMin(String amountMin) {
-        this.amountMin = amountMin;
-    }
-
-    public String getAmountMax() {
-        return amountMax;
-    }
-
-    public void setAmountMax(String amountMax) {
-        this.amountMax = amountMax;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getRemark() {
@@ -49,11 +38,11 @@ public class XN805112Req {
         this.remark = remark;
     }
 
-    public String getCode() {
-        return code;
+    public String getEffect() {
+        return effect;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setEffect(String effect) {
+        this.effect = effect;
     }
 }

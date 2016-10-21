@@ -44,7 +44,7 @@ public interface IUserAO {
             String loginPwdStrength, String userReferee, String smsCaptcha);
 
     /**
-     * 简单注册，不分配账户
+     * 注册送积分，不分配账户
      * @param mobile
      * @param loginPwd
      * @param loginPwdStrength
@@ -53,14 +53,13 @@ public interface IUserAO {
      * @param province
      * @param city
      * @param area
-     * @param amount
      * @return 
      * @create: 2016年10月12日 上午5:11:01 xieyj
      * @history:
      */
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String province, String city, String area, Long amount);
+            String province, String city, String area);
 
     /**
      * 代注册
@@ -96,6 +95,18 @@ public interface IUserAO {
      */
     public String doAddUser(String mobile, String realName, String userReferee,
             String updater, String remark, String kind);
+
+    /**
+     * 城市网代注册
+     * @param mobile
+     * @param companyCode
+     * @param userReferee
+     * @return 
+     * @create: 2016年10月21日 下午4:18:19 xieyj
+     * @history:
+     */
+    public String doAddUser(String mobile, String companyCode,
+            String userReferee);
 
     /**
      * 用户登陆
@@ -309,17 +320,6 @@ public interface IUserAO {
      * @history: 
      */
     public Paginable<User> queryUserPage(int start, int limit, User condition);
-
-    /** 
-     * @param start
-     * @param limit
-     * @param condition
-     * @return 
-     * @create: 2015-6-7 上午10:04:12 miyb
-     * @history: 
-     */
-    public Paginable<User> queryAreaUserPage(int start, int limit,
-            User condition);
 
     /**
      * 

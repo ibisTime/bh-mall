@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ISignLogAO;
+import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.common.DateUtil;
 import com.std.user.domain.SignLog;
+import com.std.user.domain.User;
 import com.std.user.enums.EBizType;
+import com.std.user.enums.ERuleKind;
+import com.std.user.enums.ERuleType;
 import com.std.user.exception.BizException;
 
 @Service
@@ -24,9 +28,13 @@ public class SignLogAOImpl implements ISignLogAO {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private IRuleBO ruleBO;
+
     @Override
     @Transactional
-    public String addSignLog(String userId, String location, Long amount) {
+    public String addSignLog(String userId, String location) {
+        User user = userBO.getUser(userId);
         // 判断是否已经签到
         Boolean result = signLogBO.isSignToday(userId);
         if (result) {
@@ -34,7 +42,9 @@ public class SignLogAOImpl implements ISignLogAO {
         }
         // 添加签到记录
         String code = signLogBO.saveSignLog(userId, location);
-        // 送积分
+        // 签到送积分
+        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
+            user.getLevel());
         userBO.refreshAmount(userId, amount, code, EBizType.AJ_SR, "每日签到");
         return code;
     }

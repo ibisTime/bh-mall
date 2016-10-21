@@ -12,7 +12,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 简单注册，不分配账户,落地省市区地址
+ * 注册送积分，不产生大账户，用户名为"C"+手机号
  * @author: xieyj 
  * @since: 2016年10月11日 下午11:14:11 
  * @history:
@@ -24,11 +24,10 @@ public class XN805076 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Long amount = StringValidater.toLong(req.getAmount());
         return new XN805076Res(userAO.doRegisterSingle(req.getMobile(),
             req.getLoginPwd(), req.getLoginPwdStrength(), req.getUserReferee(),
             req.getSmsCaptcha(), req.getProvince(), req.getCity(),
-            req.getArea(), amount));
+            req.getArea()));
     }
 
     @Override

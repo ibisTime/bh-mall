@@ -27,6 +27,7 @@
 		<result column="amount" property="amount" />
 		<result column="lj_amount" property="ljAmount" />
 		<result column="company_code" property="companyCode" />
+		<result column="company_name" property="companyName" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
@@ -101,14 +102,8 @@
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
-			<if test="province != null and province != '' ">
-				AND tue.province = #{province}
-			</if>
-			<if test="city != null and city != '' ">
-				AND tue.city = #{city}
-			</if>
-			<if test="area != null and area != '' ">
-				AND tue.area = #{area}
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 		</trim>
 	</sql>
@@ -138,8 +133,9 @@
 		,t.amount
 		,t.lj_amount
 		,t.company_code
+		,tc.name as company_name
 		FROM
-		tstd_user t left join tstd_user_ext tue on t.user_id = tue.user_id
+		tstd_user t left join tstd_company tc on t.company_code = tc.code
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -149,7 +145,7 @@
 	</select>
 
 	<select id="select_user_count" parameterType="user" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_user t left join tstd_user_ext tue on t.user_id = tue.user_id
+		SELECT count(1) FROM tstd_user t left join tstd_company tc on t.company_code = tc.code
 		<include refid="where_condition"/>
 	</select>
 
@@ -250,7 +246,6 @@
 		,#{roleCode}
 		)
 	</insert>
-	 
 	
 	<update id="update_identity" parameterType="user">
 		UPDATE tstd_user

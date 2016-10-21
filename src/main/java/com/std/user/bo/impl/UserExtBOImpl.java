@@ -8,6 +8,7 @@ import com.std.user.bo.IUserExtBO;
 import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.dao.IUserExtDAO;
 import com.std.user.domain.UserExt;
+import com.std.user.exception.BizException;
 
 @Component
 public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
@@ -15,13 +16,6 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
 
     @Autowired
     private IUserExtDAO userExtDAO;
-
-    @Override
-    public void saveUserExt(UserExt data) {
-        if (data != null) {
-            userExtDAO.insert(data);
-        }
-    }
 
     /** 
      * @see com.std.user.bo.IUserExtBO#saveUserExt(java.lang.String)
@@ -51,10 +45,21 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
         }
     }
 
+    /**
+     * 更新用户头像
+     * @param userId
+     * @param photo
+     * @return 
+     * @create: 2016年10月21日 下午7:47:19 xieyj
+     * @history:
+     */
     @Override
-    public int refreshUserPhoto(UserExt data) {
+    public int refreshUserPhoto(String userId, String photo) {
         int count = 0;
-        if (data != null && data.getUserId() != null) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(photo)) {
+            UserExt data = new UserExt();
+            data.setUserId(userId);
+            data.setPhoto(photo);
             count = userExtDAO.updateUserPhoto(data);
         }
         return count;
@@ -73,12 +78,15 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
      * @see com.std.user.bo.IUserExtBO#doGetUserExt(java.lang.String)
      */
     @Override
-    public UserExt doGetUserExt(String userId) {
+    public UserExt getUserExt(String userId) {
         UserExt result = null;
         if (StringUtils.isNotBlank(userId)) {
             UserExt condition = new UserExt();
             condition.setUserId(userId);
             result = userExtDAO.select(condition);
+            if (result == null) {
+                throw new BizException("xn000000", "用户扩展信息不存在");
+            }
         }
         return result;
     }

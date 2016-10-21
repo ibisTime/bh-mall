@@ -5,14 +5,14 @@ public class XN805113Req extends APageReq {
     private static final long serialVersionUID = 1L;
 
     // 等级（选填）
-    private String level;
+    private String name;
 
-    public String getLevel() {
-        return level;
+    public String getName() {
+        return name;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

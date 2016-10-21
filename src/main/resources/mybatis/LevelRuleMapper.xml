@@ -4,9 +4,10 @@
 <mapper namespace="com.std.user.dao.ILevelRuleDAO">
 	<resultMap id="levelRule_DB_Result" type="levelRule">
 		<result column="code" property="code" />
-		<result column="level" property="level" />
+		<result column="name" property="name" />
 		<result column="amount_min" property="amountMin" />
 		<result column="amount_max" property="amountMax" />
+		<result column="effect" property="effect" />
 		<result column="remark" property="remark" />
 	</resultMap>
 	<sql id="where_condition">
@@ -14,17 +15,18 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="level != null and level != '' ">
-				AND t.level = #{level}
+			<if test="name != null and name != '' ">
+				AND t.name = #{name}
 			</if>
 		</trim>
 	</sql>
 	<select id="select_levelRule" parameterType="levelRule" resultMap="levelRule_DB_Result">
 		SELECT
 		t.code
-		,t.level
+		,t.name
 		,t.amount_min
 		,t.amount_max
+		,t.effect
 		,t.remark
 		FROM
 		tstd_level_rule t
@@ -49,6 +51,7 @@
 		,level
 		,amount_min
 		,amount_max
+		,t.effect
 		,remark
 		)
 		VALUES(
@@ -56,6 +59,7 @@
 		,#{level}
 		,#{amountMin}
 		,#{amountMax}
+		,#{effect}
 		,#{remark}
 		)
 	</insert>
@@ -66,6 +70,7 @@
 		level = #{level}
 		,amount_min = #{amountMin}
 		,amount_max = #{amountMax}
+		,effect = #{effect}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>

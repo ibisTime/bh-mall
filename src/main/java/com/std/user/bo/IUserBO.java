@@ -75,7 +75,7 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public void checkUserReferee(String userReferee);
 
-    public String doRegister(String mobile, String loginPwd,
+    public String doRegister(String loginName, String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, Long amount,
             String companyCode);
 

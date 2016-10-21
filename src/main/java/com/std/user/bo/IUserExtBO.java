@@ -5,15 +5,6 @@ import com.std.user.domain.UserExt;
 
 public interface IUserExtBO extends IPaginableBO<UserExt> {
 
-    /** 
-     * 新增用户扩展
-     * @param data
-     * @return 
-     * @create: 2016年9月18日 下午2:23:31 zuixian
-     * @history: 
-     */
-    public void saveUserExt(UserExt data);
-
     /**
      * 新增用户扩展
      * @param userId
@@ -35,14 +26,15 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
     public void saveUserExt(String userId, String province, String city,
             String area);
 
-    /** 
+    /**
      * 更新用户头像
-     * @param data
+     * @param userId
+     * @param photo
      * @return 
-     * @create: 2016年9月18日 下午2:25:47 zuixian
-     * @history: 
+     * @create: 2016年10月21日 下午7:47:19 xieyj
+     * @history:
      */
-    public int refreshUserPhoto(UserExt data);
+    public int refreshUserPhoto(String userId, String photo);
 
     /** 
      * 更新用户信息
@@ -60,5 +52,5 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
      * @create: 2016年9月19日 上午10:47:01 xieyj
      * @history:
      */
-    public UserExt doGetUserExt(String userId);
+    public UserExt getUserExt(String userId);
 }

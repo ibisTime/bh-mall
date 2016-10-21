@@ -9,14 +9,17 @@ public class LevelRule extends ABaseDO {
     // 编号
     private String code;
 
-    // 等级
-    private String level;
+    // 名称
+    private String name;
 
     // 数量最小值
     private Long amountMin;
 
     // 数量最大值
     private Long amountMax;
+
+    // 作用
+    private String effect;
 
     // 备注
     private String remark;
@@ -29,12 +32,12 @@ public class LevelRule extends ABaseDO {
         this.code = code;
     }
 
-    public String getLevel() {
-        return level;
+    public String getName() {
+        return name;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getAmountMin() {
@@ -51,6 +54,14 @@ public class LevelRule extends ABaseDO {
 
     public void setAmountMax(Long amountMax) {
         this.amountMax = amountMax;
+    }
+
+    public String getEffect() {
+        return effect;
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
     }
 
     public String getRemark() {

@@ -8,17 +8,18 @@ public interface IUserExtAO {
      * 更改用户信息
      * @param data
      * @return 
-     * @create: 2016年10月11日 下午5:29:11 xieyj
+     * @create: 2016年10月21日 下午6:53:13 xieyj
      * @history:
      */
-    public int refreshUserExt(UserExt data);
+    public int editUserExt(UserExt data);
 
-    /** 
+    /**
      * 更改用户头像
-     * @param data
+     * @param userId
+     * @param photo
      * @return 
-     * @create: 2016年9月18日 下午2:37:41 zuixian
-     * @history: 
+     * @create: 2016年10月21日 下午6:53:07 xieyj
+     * @history:
      */
-    public int refreshUserExtPhoto(String userId, String photo);
+    public int editUserExtPhoto(String userId, String photo);
 }

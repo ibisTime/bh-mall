@@ -28,7 +28,7 @@ public class XN805113 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         LevelRule condition = new LevelRule();
-        condition.setLevel(req.getLevel());
+        condition.setName(req.getName());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ICompanyAO.DEFAULT_ORDER_COLUMN;

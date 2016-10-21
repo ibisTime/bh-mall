@@ -440,7 +440,7 @@ CREATE TABLE `tsys_config` (
 DROP TABLE IF EXISTS `tstd_rule`;
 CREATE TABLE `tstd_rule` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `category` varchar(4) DEFAULT NULL COMMENT '类别(1 积分 2 举报)',
+  `kind` varchar(4) DEFAULT NULL COMMENT '类别(1 积分 2 举报)',
   `type` varchar(4) DEFAULT NULL COMMENT '类型(A注册送积分/B 每次签到/C 资料完善/D 发帖/E 评论  /F 加精华)',
   `level` varchar(4) DEFAULT NULL COMMENT '作用等级(1 一级/2 二级/3 三级)',
   `value` int(11) DEFAULT NULL COMMENT '值(积分数/次数)',

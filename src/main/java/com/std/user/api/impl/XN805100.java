@@ -25,9 +25,8 @@ public class XN805100 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Long amount = StringValidater.toLong(req.getAmount());
         return new PKCodeRes(signLogAO.addSignLog(req.getUserId(),
-            req.getLocation(), amount));
+            req.getLocation()));
     }
 
     @Override
@@ -35,5 +34,4 @@ public class XN805100 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805100Req.class);
         StringValidater.validateBlank(req.getUserId());
     }
-
 }

@@ -19,6 +19,5 @@ public class IUserExtBOTest extends ABizTest {
         data.setBirthday("2013/12/22");
         data.setPhoto("http://dskfjkl.cn");
         data.setIntroduce("完成信息");
-        userExtBO.saveUserExt(data);
     }
 }

@@ -93,6 +93,9 @@ public class User extends ABaseDO {
     // 所属公司
     private String companyCode;
 
+    // 公司名称
+    private String companyName;
+
     /***** 模糊查询使用字段 ******/
     private String loginNameForLikeQuery;
 
@@ -105,15 +108,6 @@ public class User extends ABaseDO {
     private String userRefereeName;
 
     private UserExt userExt;
-
-    // 省
-    private String province;
-
-    // 市区
-    private String city;
-
-    // 区(县)
-    private String area;
 
     // ossUserId
     private String ossUserId;
@@ -343,30 +337,6 @@ public class User extends ABaseDO {
         this.ljAmount = ljAmount;
     }
 
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
     public String getNicknameForLikeQuery() {
         return nicknameForLikeQuery;
     }
@@ -413,5 +383,13 @@ public class User extends ABaseDO {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }

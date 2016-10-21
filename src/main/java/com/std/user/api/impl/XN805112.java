@@ -28,9 +28,8 @@ public class XN805112 extends AProcessor {
     public Object doBusiness() throws BizException {
         LevelRule data = new LevelRule();
         data.setCode(req.getCode());
-        data.setLevel(req.getLevel());
-        data.setAmountMin(StringValidater.toLong(req.getAmountMin()));
-        data.setAmountMax(StringValidater.toLong(req.getAmountMax()));
+        data.setName(req.getName());
+        data.setEffect(req.getEffect());
         data.setRemark(req.getRemark());
         int count = levelRuleAO.editLevelRule(data);
         return new BooleanRes(count > 0 ? true : false);
@@ -39,8 +38,7 @@ public class XN805112 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805112Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getLevel(),
-            req.getAmountMin(), req.getAmountMax());
+        StringValidater.validateBlank(req.getCode(), req.getName(),
+            req.getEffect());
     }
-
 }

@@ -15,14 +15,15 @@ public interface ISignLogAO {
 
     String DEFAULT_ORDER_COLUMN = "order_no";
 
-    /** 
+    /**
      * 签到
-     * @param data
+     * @param userId
+     * @param location
      * @return 
-     * @create: 2016年9月18日 下午7:23:58 zuixian
-     * @history: 
+     * @create: 2016年10月22日 上午12:14:56 xieyj
+     * @history:
      */
-    public String addSignLog(String userId, String location, Long amount);
+    public String addSignLog(String userId, String location);
 
     /** 
      * 列表查询签到记录
