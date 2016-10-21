@@ -9,6 +9,7 @@ import com.std.user.ao.ICNavigateAO;
 import com.std.user.bo.ICNavigateBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.CNavigate;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECNavigateStatus;
 import com.std.user.exception.BizException;
 
@@ -70,7 +71,11 @@ public class CNavigateAOImpl implements ICNavigateAO {
         List<CNavigate> list = page.getList();
         for (CNavigate cNavigate : list) {
             if (cNavigate.getBelong().contains("DH")) {
-                list.remove(cNavigate);
+                for (CNavigate cNavigate1 : list) {
+                    if (cNavigate1.getBelong().equals(cNavigate.getBelong())) {
+                        list.remove(cNavigate1);
+                    }
+                }
             }
         }
         return page;
@@ -82,6 +87,21 @@ public class CNavigateAOImpl implements ICNavigateAO {
     }
 
     @Override
+    public List<CNavigate> queryCNavigateListCSW(CNavigate condition) {
+        List<CNavigate> list = cNavigateBO.queryCNavigateList(condition);
+        for (CNavigate cNavigate : list) {
+            if (cNavigate.getBelong().contains("DH")) {
+                for (CNavigate cNavigate1 : list) {
+                    if (cNavigate1.getBelong().equals(cNavigate.getBelong())) {
+                        list.remove(cNavigate1);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
     public CNavigate getCNavigate(String code) {
         return cNavigateBO.getCNavigate(code);
     }
@@ -90,6 +110,20 @@ public class CNavigateAOImpl implements ICNavigateAO {
     public int editCNavigateCSW(CNavigate data) {
         if (!cNavigateBO.isCNavigateExist(data.getCode())) {
             throw new BizException("xn0000", "该编号不存在");
+        }
+        if (!EBoolean.NO.getCode().equals(data.getCompanyCode())) {
+            if (EBoolean.YES.getCode().equals(data.getBelong())) {
+                throw new BizException("xn0000", "地方不能修改全局导航");
+            }
+            CNavigate navigate = new CNavigate();
+            navigate.setBelong(data.getCode());
+            navigate.setCompanyCode(data.getCompanyCode());
+            navigate.setName(data.getName());
+            navigate.setUrl(data.getUrl());
+            navigate.setPic(data.getPic());
+            navigate.setOrderNo(data.getOrderNo());
+            String code = cNavigateBO.saveCNavigate(navigate);
+            return code == null ? 0 : 1;
         }
         return cNavigateBO.refreshCNavigateCSW(data);
     }

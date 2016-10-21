@@ -27,5 +27,7 @@ public interface ICNavigateAO {
 
     public List<CNavigate> queryCNavigateList(CNavigate condition);
 
+    public List<CNavigate> queryCNavigateListCSW(CNavigate condition);
+
     public CNavigate getCNavigate(String code);
 }
