@@ -3,6 +3,7 @@ package com.std.user.bo.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,20 +21,6 @@ public class FieldTimesBOImpl extends PaginableBOImpl<FieldTimes> implements
     @Autowired
     private IFieldTimesDAO fieldTimesDAO;
 
-    @Override
-    public String saveFieldTimes(FieldTimes data) {
-        String code = null;
-        if (data != null) {
-            fieldTimesDAO.insert(data);
-        }
-        return code;
-    }
-
-    @Override
-    public List<FieldTimes> queryFieldTimesList(FieldTimes condition) {
-        return fieldTimesDAO.selectList(condition);
-    }
-
     /** 
      * @see com.std.user.bo.IFieldTimesBO#isFieldTimesExist(java.lang.String, java.lang.String)
      */
@@ -47,5 +34,21 @@ public class FieldTimesBOImpl extends PaginableBOImpl<FieldTimes> implements
             throw new BizException("xn000000", fieldType.getValue()
                     + "已修改一次，无法再次修改");
         }
+    }
+
+    @Override
+    public void saveFieldTimes(EFieldType fieldType, String userId) {
+        if (StringUtils.isNotBlank(userId)) {
+            FieldTimes data = new FieldTimes();
+            data.setType(fieldType.getCode());
+            data.setUserId(userId);
+            data.setTimes(1);
+            fieldTimesDAO.insert(data);
+        }
+    }
+
+    @Override
+    public List<FieldTimes> queryFieldTimesList(FieldTimes condition) {
+        return fieldTimesDAO.selectList(condition);
     }
 }

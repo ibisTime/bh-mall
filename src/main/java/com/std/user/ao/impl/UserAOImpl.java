@@ -719,20 +719,24 @@ public class UserAOImpl implements IUserAO {
      * @see com.std.user.ao.IUserAO#editLoginName(java.lang.String, java.lang.String)
      */
     @Override
+    @Transactional
     public void editLoginName(String userId, String loginName) {
         fieldTimesBO.isFieldTimesExist(EFieldType.LOGINNAME, userId);
         if (StringUtils.isNotBlank(userId)) {
             userBO.refreshLoginName(userId, loginName);
+            fieldTimesBO.saveFieldTimes(EFieldType.LOGINNAME, userId);
         } else {
             throw new BizException("xn000000", "用户ID不存在");
         }
     }
 
     @Override
+    @Transactional
     public void editNickname(String userId, String nickname) {
         fieldTimesBO.isFieldTimesExist(EFieldType.NICKNAME, userId);
         if (StringUtils.isNotBlank(userId)) {
             userBO.refreshNickname(userId, nickname);
+            fieldTimesBO.saveFieldTimes(EFieldType.NICKNAME, userId);
         } else {
             throw new BizException("xn000000", "用户ID不存在");
         }

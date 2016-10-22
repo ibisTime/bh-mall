@@ -50,6 +50,17 @@ public class UserExtAOImpl implements IUserExtAO {
 
     @Override
     public int editUserExtPhoto(String userId, String photo) {
+        User user = userBO.getUser(userId);
+        UserExt userExt = userExtBO.getUserExt(userId);
+        if (StringUtils.isBlank(userExt.getPhoto())) {
+            // 首次上传头像送积分
+            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF,
+                ERuleType.SCTX, user.getLevel());
+            if (amount != null && amount > 0) {
+                userBO.refreshAmount(userId, amount, null, EBizType.AJ_SR,
+                    ERuleType.SCTX.getValue());
+            }
+        }
         return userExtBO.refreshUserPhoto(userId, photo);
     }
 }

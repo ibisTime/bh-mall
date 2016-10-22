@@ -4,8 +4,11 @@ public class XN805113Req extends APageReq {
 
     private static final long serialVersionUID = 1L;
 
-    // 等级（选填）
+    // 等级名称（选填）
     private String name;
+
+    // 作用（选填）
+    private String effect;
 
     public String getName() {
         return name;
@@ -13,6 +16,14 @@ public class XN805113Req extends APageReq {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEffect() {
+        return effect;
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
     }
 
 }

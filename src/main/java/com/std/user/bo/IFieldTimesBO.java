@@ -10,7 +10,7 @@ public interface IFieldTimesBO extends IPaginableBO<FieldTimes> {
 
     public void isFieldTimesExist(EFieldType fieldType, String userId);
 
-    public String saveFieldTimes(FieldTimes data);
+    public void saveFieldTimes(EFieldType fieldType, String userId);
 
     public List<FieldTimes> queryFieldTimesList(FieldTimes condition);
 

@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /** 
- * 删除用户组
+ * 删除用户组(作废)
  * @author: zuixian 
  * @since: 2016年10月11日 下午6:57:07 
  * @history:
