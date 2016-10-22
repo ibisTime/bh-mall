@@ -6,33 +6,46 @@ public class CNavigate extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
+    // 编号
     private String code;
 
+    // 名称
     private String name;
 
+    // 类型
     private String type;
 
+    // url
     private String url;
 
+    // pic
     private String pic;
 
+    // 状态(1 启用 0 不启用)
     private String status;
 
+    // UI 位置
     private String location;
 
+    // 序号
     private Integer orderNo;
 
+    // 属于
     private String belong;
 
+    // 父编号
     private String parentCode;
 
+    // 备注
     private String remark;
 
+    // 内容样式
     private String contentType;
 
+    // 所属公司
     private String companyCode;
 
-    /******************db data******/
+    /******************db data******************/
 
     // 是否地方查询
     private String isDfNavigate;

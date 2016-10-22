@@ -3,6 +3,7 @@ package com.std.user.ao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,9 +96,9 @@ public class CNavigateAOImpl implements ICNavigateAO {
         List<CNavigate> newList = new ArrayList<CNavigate>();
         for (CNavigate cNavigate : list) {
             if (cNavigate.getBelong().contains("DH")) {
-                for (CNavigate cNavigate1 : list) {
-                    if (cNavigate1.getBelong().equals(cNavigate.getBelong())) {
-                        newList.add(cNavigate);
+                for (CNavigate dfNavigate : list) {
+                    if (dfNavigate.getCode().equals(cNavigate.getBelong())) {
+                        newList.add(dfNavigate);
                     }
                 }
             }
@@ -112,26 +113,31 @@ public class CNavigateAOImpl implements ICNavigateAO {
     }
 
     @Override
-    public int editCNavigateCSW(CNavigate data) {
-        if (!cNavigateBO.isCNavigateExist(data.getCode())) {
-            throw new BizException("xn0000", "该编号不存在");
-        }
+    public void editCNavigateCSW(CNavigate data) {
+        CNavigate cNavigate = cNavigateBO.getCNavigate(data.getCode());
+        // 判断是全局地方默认或者地方独有，全局和地方默认companyCode=0
         if (!EBoolean.NO.getCode().equals(data.getCompanyCode())) {
-            CNavigate data1 = cNavigateBO.getCNavigate(data.getCode());
-            if (EBoolean.YES.getCode().equals(data1.getBelong())) {
-                throw new BizException("xn0000", "地方不能修改全局导航");
+            // 判断是否地方首次修改地方默认，是则新增，否则修改地方独有
+            if (EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
+                CNavigate navigate = cNavigate;
+                navigate.setCode(null);
+                navigate.setBelong(data.getCode());
+                navigate.setCompanyCode(data.getCompanyCode());
+                navigate.setName(data.getName());
+                navigate.setUrl(data.getUrl());
+                navigate.setPic(data.getPic());
+                navigate.setOrderNo(data.getOrderNo());
+                cNavigateBO.saveCNavigate(navigate);
+            } else {
+                // 地方独有修改，属于不变
+                data.setBelong(cNavigate.getBelong());
+                cNavigateBO.refreshCNavigateCSW(data);
             }
-            CNavigate navigate = data1;
-            navigate.setCode(null);
-            navigate.setBelong(data.getCode());
-            navigate.setCompanyCode(data.getCompanyCode());
-            navigate.setName(data.getName());
-            navigate.setUrl(data.getUrl());
-            navigate.setPic(data.getPic());
-            navigate.setOrderNo(data.getOrderNo());
-            String code = cNavigateBO.saveCNavigate(navigate);
-            return code == null ? 0 : 1;
+        } else {
+            if (StringUtils.isBlank(data.getBelong())) {
+                throw new BizException("xn0000", "属于不能为空");
+            }
+            cNavigateBO.refreshCNavigateCSW(data);
         }
-        return cNavigateBO.refreshCNavigateCSW(data);
     }
 }

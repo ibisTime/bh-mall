@@ -12,12 +12,12 @@ public class XN806052Req {
     private String type;
 
     // 属于（选填）
-    private String Belong;
+    private String belong;
 
     // 父编号（选填）
     private String parentCode;
 
-    // 公司编号（选填）
+    // 公司编号（必填）
     private String companyCode;
 
     public String getName() {
@@ -45,11 +45,11 @@ public class XN806052Req {
     }
 
     public String getBelong() {
-        return Belong;
+        return belong;
     }
 
     public void setBelong(String belong) {
-        Belong = belong;
+        this.belong = belong;
     }
 
     public String getParentCode() {

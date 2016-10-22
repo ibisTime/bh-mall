@@ -27,8 +27,8 @@ public class XN806043 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         CNavigate data = CNavigateConverter.converter(req);
-        int count = cNavigateAO.editCNavigateCSW(data);
-        return new BooleanRes(count > 0 ? true : false);
+        cNavigateAO.editCNavigateCSW(data);
+        return new BooleanRes(true);
     }
 
     @Override

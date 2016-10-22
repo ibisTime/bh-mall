@@ -17,7 +17,7 @@ public interface ICNavigateAO {
     // 导航上下架
     public int editCNavigateStatus(String code);
 
-    public int editCNavigateCSW(CNavigate data);
+    public void editCNavigateCSW(CNavigate data);
 
     public Paginable<CNavigate> queryCNavigatePage(int start, int limit,
             CNavigate condition);

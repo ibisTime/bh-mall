@@ -26,6 +26,9 @@ public class XN806052 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         CNavigate condition = CNavigateConverter.converter(req);
+        condition.setIsDfNavigate("2");
+        // 按序号正序排列
+        condition.setOrder("order_no", "asc");
         return cNavigateAO.queryCNavigateListCSW(condition);
     }
 

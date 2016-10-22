@@ -290,7 +290,7 @@ CREATE TABLE `tstd_cnavigate` (
   `status` varchar(4) DEFAULT NULL COMMENT '状态(1 显示 0 不显示)',
   `location` varchar(4) DEFAULT NULL COMMENT '位置',
   `order_no` int(11) DEFAULT NULL COMMENT '相对位置编号',
-  `belong` varchar(4) DEFAULT NULL COMMENT '属于(1 全局 2 地方默认 3 地方默认编号)',
+  `belong` varchar(32) DEFAULT NULL COMMENT '属于(1 全局 2 地方默认 3 地方默认编号)',
   `parent_code` varchar(32) DEFAULT NULL COMMENT '父编号',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `content_type` varchar(32) DEFAULT NULL COMMENT '内容源类型(ele/list)',
