@@ -36,6 +36,7 @@ public class UReadBOImpl extends PaginableBOImpl<URead> implements IUReadBO {
             URead data = new URead();
             data.setSmsCode(smsCode);
             data.setUserId(userId);
+            data.setStatus(EUReadStatus.TOREAD.getCode());
             uReadDAO.insert(data);
         }
     }
@@ -43,7 +44,7 @@ public class UReadBOImpl extends PaginableBOImpl<URead> implements IUReadBO {
     @Override
     public int refreshURead(URead data) {
         int count = 0;
-        if (null != data.getId()) {
+        if (null != data) {
             data.setStatus(EUReadStatus.READ_YES.getCode());
             data.setReadDatetime(new Date());
             count = uReadDAO.update(data);

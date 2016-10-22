@@ -75,15 +75,15 @@
 	<update id="update_uRead" parameterType="uRead">
 		UPDATE tstd_uread
 		SET
-		,status = #{status}
+		status = #{status}
 		,read_datetime = #{readDatetime}
-		WHERE code = #{code}
+		WHERE sms_code = #{smsCode} AND user_id = #{userId}
 	</update>
 	
 	<update id="update_uRead_status" parameterType="uRead">
 		UPDATE tstd_uread
 		SET
-		,status = #{status}
-		WHERE code = #{code}
+		status = #{status}
+		WHERE sms_code = #{smsCode} AND user_id = #{userId}
 	</update>
 </mapper>

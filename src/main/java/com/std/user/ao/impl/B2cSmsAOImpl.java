@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.IB2cSmsAO;
 import com.std.user.bo.IB2cSmsBO;
@@ -49,6 +50,7 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
     }
 
     @Override
+    @Transactional
     public int publishB2cSms(String code, String updater) {
         // 读取等级用户，生成阅读记录
         B2cSms data = b2cSmsBO.getB2cSms(code);
@@ -56,8 +58,9 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
             throw new BizException("xn0000", "该记录已发布");
         }
         User condition = new User();
+        condition.setCompanyCode(data.getToCompany());
         condition.setLevel(data.getToLevel());
-        condition.setCompanyCode(data.getCompanyCode());
+        condition.setUserId(data.getToUser());
         List<User> userList = userBO.queryUserList(condition);
         for (User user : userList) {
             uReadBO.saveURead(code, user.getUserId());

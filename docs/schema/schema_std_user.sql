@@ -343,11 +343,12 @@ CREATE TABLE `tstd_b2c_sms` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_uread`;
 CREATE TABLE `tstd_uread` (
-  `id` bigint(32) NOT NULL COMMENT 'id',
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `sms_code` varchar(32) DEFAULT NULL COMMENT '广播内容编号',
-  `user_id` bigint(32) DEFAULT NULL COMMENT 'C端用户编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT 'C端用户编号',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `read_datetime` date DEFAULT NULL COMMENT '阅读时间'
+  `read_datetime` datetime DEFAULT NULL COMMENT '阅读时间',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

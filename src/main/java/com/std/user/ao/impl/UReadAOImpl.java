@@ -25,9 +25,6 @@ public class UReadAOImpl implements IUReadAO {
 
     @Override
     public int editURead(URead data) {
-        if (!uReadBO.isUReadExist(data.getId())) {
-            throw new BizException("xn0000", "该编号不存在");
-        }
         return uReadBO.refreshURead(data);
     }
 
@@ -46,7 +43,13 @@ public class UReadAOImpl implements IUReadAO {
 
     @Override
     public List<URead> queryUReadList(URead condition) {
-        return uReadBO.queryUReadList(condition);
+        List<URead> uReadList = uReadBO.queryUReadList(condition);
+        B2cSms b2cSms = new B2cSms();
+        for (URead uRead : uReadList) {
+            b2cSms = b2cSmsBO.getB2cSms(uRead.getSmsCode());
+            uRead.setB2cSms(b2cSms);
+        }
+        return uReadList;
     }
 
     @Override
