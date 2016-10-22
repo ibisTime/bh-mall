@@ -33,5 +33,4 @@ public class XN805075 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805075Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getNickname());
     }
-
 }

@@ -434,6 +434,16 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public void refreshLoginName(String userId, String loginName) {
+        if (StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setLoginName(loginName);
+            userDAO.updateLoginName(data);
+        }
+    }
+
+    @Override
     public void refreshNickname(String userId, String nickname) {
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();

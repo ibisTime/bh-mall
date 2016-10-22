@@ -325,6 +325,14 @@
 		user_id = #{userId}			
 	</update>
 	
+	<update id="update_user_loginName" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 login_name = #{loginName}
+		WHERE
+		user_id = #{userId}			
+	</update>
+	
 	<update id="update_user_nickname" parameterType="user">
 		UPDATE tstd_user
 		SET

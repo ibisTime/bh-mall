@@ -30,5 +30,7 @@
 	    <typeAlias alias="sysDict" type="com.std.user.domain.SYSDict" />
 	    <typeAlias alias="sysConfig" type="com.std.user.domain.SYSConfig" />
 	    <typeAlias alias="rule" type="com.std.user.domain.Rule" />
+	    
+	    <typeAlias alias="fieldTimes" type="com.std.user.domain.FieldTimes" />
 	</typeAliases>
 </configuration>	

@@ -365,6 +365,15 @@ public interface IUserAO {
      */
     public void sendAppSms(String userId, String content);
 
+    /**
+     * 更改用户名
+     * @param userId
+     * @param loginName 
+     * @create: 2016年10月22日 下午12:04:40 xieyj
+     * @history:
+     */
+    public void editLoginName(String userId, String loginName);
+
     /** 
      * 更改昵称
      * @param userId

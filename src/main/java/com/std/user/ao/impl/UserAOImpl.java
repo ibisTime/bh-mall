@@ -22,6 +22,7 @@ import com.std.user.bo.IAJourBO;
 import com.std.user.bo.IAccountBO;
 import com.std.user.bo.IBankCardBO;
 import com.std.user.bo.ICompanyBO;
+import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
 import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISYSRoleBO;
@@ -42,6 +43,7 @@ import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECurrency;
 import com.std.user.enums.EDirection;
+import com.std.user.enums.EFieldType;
 import com.std.user.enums.EIDKind;
 import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
@@ -92,6 +94,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected IRuleBO ruleBO;
+
+    @Autowired
+    protected IFieldTimesBO fieldTimesBO;
 
     @Override
     public void doCheckMobile(String mobile) {
@@ -597,10 +602,10 @@ public class UserAOImpl implements IUserAO {
         String smsContent = "";
         EUserStatus userStatus = null;
         if (EUserStatus.Ren_Locked.getCode().equalsIgnoreCase(toStatus)) {
-            smsContent = "用户，您已经被注销用户";
+            smsContent = "用户，您已经被注销。";
             userStatus = EUserStatus.Ren_Locked;
         } else {
-            smsContent = "用户，您已经被激活用户";
+            smsContent = "用户，您已经被激活。";
             userStatus = EUserStatus.NORMAL;
         }
         // admin 不注销
@@ -705,17 +710,31 @@ public class UserAOImpl implements IUserAO {
     public void sendAppSms(String userId, String content) {
         User user = userBO.getUser(userId);
         if (user == null) {
-            throw new BizException("xn702001", "用户不存在");
+            throw new BizException("xn000000", "用户不存在");
         }
         smsOutBO.sendSmsOut(user.getMobile(), content, "805903");
     }
 
+    /** 
+     * @see com.std.user.ao.IUserAO#editLoginName(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void editLoginName(String userId, String loginName) {
+        fieldTimesBO.isFieldTimesExist(EFieldType.LOGINNAME, userId);
+        if (StringUtils.isNotBlank(userId)) {
+            userBO.refreshLoginName(userId, loginName);
+        } else {
+            throw new BizException("xn000000", "用户ID不存在");
+        }
+    }
+
     @Override
     public void editNickname(String userId, String nickname) {
-        if (userId != null && userId != "") {
+        fieldTimesBO.isFieldTimesExist(EFieldType.NICKNAME, userId);
+        if (StringUtils.isNotBlank(userId)) {
             userBO.refreshNickname(userId, nickname);
         } else {
-            throw new BizException("xn702001", "用户ID不存在");
+            throw new BizException("xn000000", "用户ID不存在");
         }
     }
 
