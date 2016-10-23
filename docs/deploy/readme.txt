@@ -13,7 +13,8 @@
 
 
 部署步骤：
-1 scp -P57652 ./std-user.war root@121.43.101.148:/home
+1、
+scp -P57652 ./std-user.war root@121.43.101.148:/home
   
   
 2，部署

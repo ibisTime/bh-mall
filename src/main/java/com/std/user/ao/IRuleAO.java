@@ -20,4 +20,5 @@ public interface IRuleAO {
 
     public Rule getRule(String code);
 
+    public Rule getRuleByUserId(String userId);
 }

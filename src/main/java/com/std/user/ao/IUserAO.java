@@ -384,7 +384,7 @@ public interface IUserAO {
     public void editNickname(String userId, String nickname);
 
     /**
-     * 单人活动加积分
+     * 单人划转加积分
      * @param userId
      * @param direction
      * @param amount
@@ -395,4 +395,16 @@ public interface IUserAO {
      */
     public void doTransfer(String userId, String direction, Long amount,
             String remark, String refNo);
+
+    /**
+     * 活动加积分
+     * @param userId
+     * @param direction
+     * @param ruleType
+     * @param refNo 
+     * @create: 2016年10月23日 下午8:48:34 xieyj
+     * @history:
+     */
+    public void doTransfer(String userId, String direction, String ruleType,
+            String refNo);
 }

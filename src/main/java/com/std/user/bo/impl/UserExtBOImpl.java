@@ -8,7 +8,6 @@ import com.std.user.bo.IUserExtBO;
 import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.dao.IUserExtDAO;
 import com.std.user.domain.UserExt;
-import com.std.user.exception.BizException;
 
 @Component
 public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
@@ -84,9 +83,6 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
             UserExt condition = new UserExt();
             condition.setUserId(userId);
             result = userExtDAO.select(condition);
-            if (result == null) {
-                throw new BizException("xn000000", "用户扩展信息不存在");
-            }
         }
         return result;
     }

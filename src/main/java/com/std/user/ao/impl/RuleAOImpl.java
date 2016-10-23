@@ -2,13 +2,17 @@ package com.std.user.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.IRuleAO;
 import com.std.user.bo.IRuleBO;
+import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Rule;
+import com.std.user.domain.User;
+import com.std.user.enums.ERuleKind;
 import com.std.user.exception.BizException;
 
 @Service
@@ -16,6 +20,9 @@ public class RuleAOImpl implements IRuleAO {
 
     @Autowired
     private IRuleBO ruleBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String addRule(Rule data) {
@@ -45,11 +52,30 @@ public class RuleAOImpl implements IRuleAO {
 
     @Override
     public List<Rule> queryRuleList(Rule condition) {
-        return ruleBO.queryRuleList(condition);
+        List<Rule> ruleList = ruleBO.queryRuleList(condition);
+        if (CollectionUtils.sizeIsEmpty(ruleList)) {
+            condition.setLevel(null);
+            ruleList = ruleBO.queryRuleList(condition);
+        }
+        return ruleList;
     }
 
     @Override
     public Rule getRule(String code) {
         return ruleBO.getRule(code);
+    }
+
+    @Override
+    public Rule getRuleByUserId(String userId) {
+        Rule rule = null;
+        User user = userBO.getUser(userId);
+        Rule condition = new Rule();
+        condition.setKind(ERuleKind.JB.getCode());
+        condition.setLevel(user.getLevel());
+        List<Rule> ruleList = ruleBO.queryRuleList(condition);
+        if (CollectionUtils.sizeIsEmpty(ruleList)) {
+            rule = ruleList.get(0);
+        }
+        return rule;
     }
 }

@@ -141,7 +141,7 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         String companyCode = null;
         Company company = getCompany(province, city, area);
         if (company != null) {
@@ -760,5 +760,20 @@ public class UserAOImpl implements IUserAO {
         }
         // 资金变动
         userBO.refreshAmount(userId, transAmount, refNo, bizType, remark);
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#doTransfer(java.lang.String, java.lang.String, com.std.user.enums.ERuleKind, com.std.user.enums.ERuleType, java.lang.String)
+     */
+    @Override
+    public void doTransfer(String userId, String direction, String ruleType,
+            String refNo) {
+        User user = userBO.getUser(userId);
+        ERuleType eRuleType = ERuleType.getRuleTypeMap().get(ruleType);
+        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, eRuleType,
+            user.getLevel());
+        if (amount != 0) {
+            doTransfer(userId, direction, amount, eRuleType.getValue(), refNo);
+        }
     }
 }
