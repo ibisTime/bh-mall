@@ -34,10 +34,11 @@ public class CIntentionAOImpl implements ICIntentionAO {
         Company company = companyBO.getCompany(data.getCompanyCode());
         String mobile = company.getMobile();
         StringBuilder sb = new StringBuilder();
-        sb.append("现有合作意向:").append(data.getFromCompany()).append(",")
-            .append(data.getFromPerson()).append(",")
-            .append(data.getFromContact()).append(",")
-            .append(data.getContent()).append("。");
+        sb.append("您有申请合作意向公司:").append("公司名称:").append(data.getFromCompany())
+            .append(",").append("联系人:").append(data.getFromPerson())
+            .append(",").append("联系方式:").append(data.getFromContact())
+            .append(",").append("意向描述:").append(data.getContent())
+            .append(",请尽快联系处理，谢谢！");
         String content = sb.toString();
         // 发送短信
         smsOutBO.sendSmsOut(mobile, content, "806060");

@@ -32,6 +32,11 @@ public class CMaterial extends ABaseDO {
 
     private String menuCode;
 
+    /*********db data*********/
+
+    // 公司编号
+    private String companyCode;
+
     public String getCode() {
         return code;
     }
@@ -126,5 +131,13 @@ public class CMaterial extends ABaseDO {
 
     public void setMenuCode(String menuCode) {
         this.menuCode = menuCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

@@ -27,6 +27,7 @@ public class XN806111 extends AProcessor {
         condition.setKind(req.getKind());
         condition.setTitle(req.getTitle());
         condition.setMenuCode(req.getMenuCode());
+        condition.setCompanyCode(req.getCompanyCode());
         return cMaterialAO.queryCMaterialList(condition);
     }
 
