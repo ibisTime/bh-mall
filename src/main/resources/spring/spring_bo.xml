@@ -70,7 +70,9 @@
 	<bean id="sysDictBO" class="com.std.user.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl"/>
 	</bean>	
-	
+	<bean id="sysConfigBO" class="com.std.user.bo.impl.SYSConfigBOImpl">
+		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
+	</bean>	
 	<bean id="ruleBO" class="com.std.user.bo.impl.RuleBOImpl">
 		<property name="paginableDAO" ref="ruleDAOImpl"/>
 	</bean>	
