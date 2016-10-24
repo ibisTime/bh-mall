@@ -29,6 +29,7 @@ public class XN806110 extends AProcessor {
         CMaterial condition = new CMaterial();
         condition.setKind(req.getKind());
         condition.setTitle(req.getTitle());
+        condition.setCompanyCode(req.getCompanyCode());
         condition.setMenuCode(req.getMenuCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

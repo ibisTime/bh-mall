@@ -11,6 +11,9 @@ public class XN806111Req {
     // 菜单编号（选填）
     private String menuCode;
 
+    // 公司编号（选填）
+    private String companyCode;
+
     public String getKind() {
         return kind;
     }
@@ -33,5 +36,13 @@ public class XN806111Req {
 
     public void setMenuCode(String menuCode) {
         this.menuCode = menuCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

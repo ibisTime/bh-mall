@@ -39,7 +39,7 @@ public class CompanyAOImpl implements ICompanyAO {
     public String addGWCompany(Company data) {
         String code = companyBO.saveCompany(data);
 
-        addMenu("ind", "web首页", code);
+        addMenu("ind", "首页", code);
         addMenu("inw", "微信首页", code);
         addMenu("com", "公司简介", code);
         addMenu("cin", "我要合作", code);

@@ -30,6 +30,9 @@
 			<if test="menuCode != null and menuCode != '' ">
 				AND t.menu_code = #{menuCode}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND tc.company_code = #{companyCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_cMaterial" parameterType="cMaterial" resultMap="cMaterial_DB_Result">
@@ -46,8 +49,9 @@
 		,t.remark
 		,t.create_time
 		,t.menu_code
+		,tc.company_code
 		FROM
-		tstd_cmaterial t
+		tstd_cmaterial t inner join tstd_cnavigate tc on t.menu_code = tc.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -58,7 +62,7 @@
 
 	<select id="select_cMaterial_count" parameterType="cMaterial"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_cmaterial t
+		SELECT count(1) FROM tstd_cmaterial t inner join tstd_cnavigate tc on t.menu_code = tc.code
 		<include refid="where_condition" />
 	</select>
 
