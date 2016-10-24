@@ -156,6 +156,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     public Company getCompanyByDomain(String domain) {
         Company condition = new Company();
         condition.setDomain(domain);
-        return companyDAO.select(condition);
+        List<Company> list = companyDAO.selectList(condition);
+        return list.get(0);
     }
 }
