@@ -79,11 +79,7 @@
 		FROM
 		tstd_cnavigate t
 		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>
+		ORDER BY order_no
 	</select>
 
 	<select id="select_cNavigate_count" parameterType="cNavigate"

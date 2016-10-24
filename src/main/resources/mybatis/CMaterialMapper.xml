@@ -49,6 +49,7 @@
 		,t.remark
 		,t.create_time
 		,t.menu_code
+		,tc.company_code
 		FROM
 		tstd_cmaterial t inner join tstd_cnavigate tc on t.menu_code = tc.code
 		<include refid="where_condition" />
@@ -61,7 +62,7 @@
 
 	<select id="select_cMaterial_count" parameterType="cMaterial"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_cmaterial t
+		SELECT count(1) FROM tstd_cmaterial t inner join tstd_cnavigate tc on t.menu_code = tc.code
 		<include refid="where_condition" />
 	</select>
 
