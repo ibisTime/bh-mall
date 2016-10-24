@@ -776,4 +776,23 @@ public class UserAOImpl implements IUserAO {
             doTransfer(userId, direction, amount, eRuleType.getValue(), refNo);
         }
     }
+
+    @Override
+    @Transactional
+    public void doTransferAdd(String fromUser, String toUser, Long amount,
+            String remark, String refNo) {
+        Long transAmount = null;
+        if (amount != null && amount != 0L) {
+            EBizType fromBizType = null;
+            EBizType toBizType = null;
+            transAmount = amount;
+            fromBizType = EBizType.AJ_ZC;
+            toBizType = EBizType.AJ_SR;
+            // 来方资金变动
+            userBO.refreshAmount(fromUser, -transAmount, refNo, fromBizType,
+                remark);
+            // 来方资金变动
+            userBO.refreshAmount(toUser, transAmount, refNo, toBizType, remark);
+        }
+    }
 }

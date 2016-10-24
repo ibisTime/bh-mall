@@ -407,4 +407,17 @@ public interface IUserAO {
      */
     public void doTransfer(String userId, String direction, String ruleType,
             String refNo);
+
+    /**
+     * 单向划转加钱
+     * @param fromUser
+     * @param toUser
+     * @param amount
+     * @param remark
+     * @param refNo 
+     * @create: 2016年10月24日 下午11:06:02 xieyj
+     * @history:
+     */
+    public void doTransferAdd(String fromUser, String toUser, Long amount,
+            String remark, String refNo);
 }
