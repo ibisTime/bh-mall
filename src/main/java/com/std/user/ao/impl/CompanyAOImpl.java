@@ -133,7 +133,16 @@ public class CompanyAOImpl implements ICompanyAO {
         if (!companyBO.isCompanyExist(code)) {
             throw new BizException("xn0000", "该编号不存在");
         }
-        return companyBO.refreshCompanyLocation(code, updater, remark);
+        int count = 0;
+        Company company = companyBO.getCompany(code);
+        if (company.getLocation().equals(EBoolean.NO.getCode())) {
+            count = companyBO.refreshCompanyLocation(code, updater, remark,
+                EBoolean.YES.getCode());
+        } else {
+            count = companyBO.refreshCompanyLocation(code, updater, remark,
+                EBoolean.NO.getCode());
+        }
+        return count;
     }
 
     @Override
