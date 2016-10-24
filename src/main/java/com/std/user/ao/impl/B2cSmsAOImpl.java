@@ -58,9 +58,15 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
             throw new BizException("xn0000", "该记录已发布");
         }
         User condition = new User();
-        condition.setCompanyCode(data.getToCompany());
-        condition.setLevel(data.getToLevel());
-        condition.setUserId(data.getToUser());
+        if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
+            condition.setCompanyCode(data.getToCompany());
+        }
+        if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
+            condition.setLevel(data.getToLevel());
+        }
+        if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
+            condition.setUserId(data.getToUser());
+        }
         List<User> userList = userBO.queryUserList(condition);
         for (User user : userList) {
             uReadBO.saveURead(code, user.getUserId());

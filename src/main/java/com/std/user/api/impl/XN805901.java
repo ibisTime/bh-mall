@@ -6,12 +6,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.std.user.ao.IBankCardAO;
+import com.std.user.ao.ICompanyAO;
 import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.common.PropertiesUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.BankCard;
+import com.std.user.domain.Company;
 import com.std.user.domain.User;
 import com.std.user.dto.req.XN805901Req;
 import com.std.user.dto.res.XN805901Res;
@@ -28,6 +30,9 @@ import com.std.user.spring.SpringContextHolder;
  */
 public class XN805901 extends AProcessor {
     private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+
+    private ICompanyAO companyAO = SpringContextHolder
+        .getBean(ICompanyAO.class);
 
     private IBankCardAO bankCardAO = SpringContextHolder
         .getBean(IBankCardAO.class);
@@ -73,6 +78,12 @@ public class XN805901 extends AProcessor {
             }
             res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
             res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));
+            if (user.getCompanyCode() == null) {
+                Company company = companyAO.getCompanyByUserId(res.getUserId());
+                if (company != null) {
+                    user.setCompanyCode(company.getCode());
+                }
+            }
             res.setCompanyCode(user.getCompanyCode());
         }
         return res;
