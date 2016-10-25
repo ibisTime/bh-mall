@@ -14,6 +14,7 @@ import com.std.user.bo.base.Paginable;
 import com.std.user.domain.B2cSms;
 import com.std.user.domain.User;
 import com.std.user.enums.EBoolean;
+import com.std.user.enums.EUserKind;
 import com.std.user.exception.BizException;
 
 @Service
@@ -67,6 +68,7 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
         if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
             condition.setUserId(data.getToUser());
         }
+        condition.setKind(EUserKind.F1.getCode());
         List<User> userList = userBO.queryUserList(condition);
         for (User user : userList) {
             uReadBO.saveURead(code, user.getUserId());
