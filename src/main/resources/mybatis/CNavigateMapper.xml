@@ -45,10 +45,10 @@
 			</if>
 			<choose>
 				 <when test="companyCode != 0 and isFront == 0">
-				 	AND (t.company_code = #{companyCode} or t.belong = 2)
+				 	AND t.company_code = #{companyCode} or (t.belong = 2 and NOT EXISTS (select * from tstd_cnavigate tc where tc.belong = t.code))
 				 </when>
 				 <when test="isFront == 1">
-				 	AND (t.company_code = #{companyCode} or t.belong in (1,2))
+				 	AND t.company_code = #{companyCode} or t.belong in (1,2)
 				 </when>
 			</choose>
 		</trim>

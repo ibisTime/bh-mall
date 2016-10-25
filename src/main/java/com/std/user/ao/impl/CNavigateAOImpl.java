@@ -65,24 +65,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public Paginable<CNavigate> queryCNavigatePage(int start, int limit,
             CNavigate condition) {
-        Paginable<CNavigate> page = cNavigateBO.getPaginable(start, limit,
-            condition);
-        if (!EBoolean.NO.getCode().equals(condition.getCompanyCode())) {
-            List<CNavigate> list = page.getList();
-            List<CNavigate> newList = new ArrayList<CNavigate>();
-            for (CNavigate cNavigate : list) {
-                if (cNavigate.getBelong().contains("DH")) {
-                    for (CNavigate cNavigate1 : list) {
-                        if (cNavigate1.getBelong()
-                            .equals(cNavigate.getBelong())) {
-                            newList.add(cNavigate);
-                        }
-                    }
-                }
-            }
-            list.removeAll(newList);
-        }
-        return page;
+        return cNavigateBO.getPaginable(start, limit, condition);
     }
 
     @Override
