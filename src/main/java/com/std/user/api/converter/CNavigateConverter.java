@@ -92,8 +92,6 @@ public class CNavigateConverter {
     // 列表查询城市网导航
     public static CNavigate converter(XN806052Req req) {
         CNavigate result = new CNavigate();
-        result.setName(req.getName());
-        result.setStatus(req.getStatus());
         result.setType(req.getType());
         result.setBelong(req.getBelong());
         result.setParentCode(req.getParentCode());

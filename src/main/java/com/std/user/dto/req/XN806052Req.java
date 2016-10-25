@@ -1,17 +1,10 @@
 package com.std.user.dto.req;
 
 public class XN806052Req {
-
-    // 名称（选填）
-    private String name;
-
-    // 显示状态（选填）
-    private String status;
-
     // 类型（选填）
     private String type;
 
-    // 属于（选填）
+    // 属于（选填）全局+地方默认(没修改)+地方修改过的
     private String belong;
 
     // 父编号（选填）
@@ -19,22 +12,6 @@ public class XN806052Req {
 
     // 公司编号（必填）
     private String companyCode;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getType() {
         return type;
