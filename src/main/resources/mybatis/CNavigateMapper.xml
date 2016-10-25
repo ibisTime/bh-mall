@@ -44,12 +44,17 @@
 				AND t.content_type = #{contentType}
 			</if>
 			<choose>
-				 <when test="companyCode != 0 and isFront == 0">
+				 <when test='companyCode != "0" and isFront == "0"'>
 				 	AND t.company_code = #{companyCode} or (t.belong = 2 and NOT EXISTS (select * from tstd_cnavigate tc where tc.belong = t.code))
 				 </when>
-				 <when test="isFront == 1">
+				 <when test='isFront == "1"'>
 				 	AND t.company_code = #{companyCode} or t.belong in (1,2)
 				 </when>
+				 <otherwise>
+				 	<if test="companyCode != null and companyCode != '' ">
+							AND t.company_code = #{companyCode}
+					</if>
+				 </otherwise>
 			</choose>
 		</trim>
 	</sql>
