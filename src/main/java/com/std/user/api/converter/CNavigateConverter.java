@@ -7,7 +7,6 @@ import com.std.user.dto.req.XN806042Req;
 import com.std.user.dto.req.XN806043Req;
 import com.std.user.dto.req.XN806050Req;
 import com.std.user.dto.req.XN806051Req;
-import com.std.user.dto.req.XN806052Req;
 import com.std.user.dto.req.XN806053Req;
 
 public class CNavigateConverter {
@@ -85,16 +84,6 @@ public class CNavigateConverter {
         result.setBelong(req.getBelong());
         result.setParentCode(req.getParentCode());
         result.setContentType(req.getContentType());
-        result.setCompanyCode(req.getCompanyCode());
-        return result;
-    }
-
-    // 列表查询城市网导航
-    public static CNavigate converter(XN806052Req req) {
-        CNavigate result = new CNavigate();
-        result.setType(req.getType());
-        result.setBelong(req.getBelong());
-        result.setParentCode(req.getParentCode());
         result.setCompanyCode(req.getCompanyCode());
         return result;
     }

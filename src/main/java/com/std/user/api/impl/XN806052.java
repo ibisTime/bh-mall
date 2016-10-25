@@ -2,7 +2,6 @@ package com.std.user.api.impl;
 
 import com.std.user.ao.ICNavigateAO;
 import com.std.user.api.AProcessor;
-import com.std.user.api.converter.CNavigateConverter;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.CNavigate;
@@ -25,10 +24,11 @@ public class XN806052 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        CNavigate condition = CNavigateConverter.converter(req);
+        CNavigate condition = new CNavigate();
+        condition.setType(req.getType());
+        condition.setParentCode(req.getParentCode());
+        condition.setCompanyCode(req.getCompanyCode());
         condition.setIsDfNavigate("2");
-        // 按序号正序排列
-        condition.setOrder("order_no", "asc");
         return cNavigateAO.queryCNavigateListCSW(condition);
     }
 
