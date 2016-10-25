@@ -6,6 +6,7 @@ import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.CNavigate;
 import com.std.user.dto.req.XN806052Req;
+import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -28,6 +29,7 @@ public class XN806052 extends AProcessor {
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setStatus(EBoolean.YES.getCode());
         condition.setIsDfNavigate("2");
         return cNavigateAO.queryCNavigateListCSW(condition);
     }
