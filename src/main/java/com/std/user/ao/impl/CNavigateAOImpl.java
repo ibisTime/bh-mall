@@ -36,7 +36,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public void editCNavigate(CNavigate data) {
         CNavigate cNavigate = cNavigateBO.getCNavigate(data.getCode());
-        // 判断是全局地方默认或者地方独有，全局和地方默认companyCode=0
+        // 非0 地方改
         if (!EBoolean.NO.getCode().equals(data.getCompanyCode())) {
             // 判断是否地方首次修改地方默认，是则新增，否则修改地方独有
             if (EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
@@ -55,8 +55,13 @@ public class CNavigateAOImpl implements ICNavigateAO {
                 cNavigateBO.refreshCNavigate(data);
             }
         } else {
-            if (StringUtils.isBlank(data.getBelong())) {
-                throw new BizException("xn0000", "属于不能为空");
+            if (!EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
+                data.setCompanyCode(cNavigate.getCompanyCode());
+                data.setBelong(cNavigate.getBelong());
+            } else {
+                if (StringUtils.isBlank(data.getBelong())) {
+                    throw new BizException("xn0000", "属于不能为空");
+                }
             }
             cNavigateBO.refreshCNavigate(data);
         }
