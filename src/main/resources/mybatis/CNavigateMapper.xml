@@ -44,20 +44,12 @@
 				AND t.content_type = #{contentType}
 			</if>
 			<choose>
-				 <when test="isDfNavigate == 0">
-				 	AND belong in (1,2)
-				 </when>
-				 <when test="isDfNavigate == 1">
+				 <when test="companyCode != 0 and isFront == 0">
 				 	AND (t.company_code = #{companyCode} or t.belong = 2)
 				 </when>
-				 <when test="isDfNavigate == 2">
-				 	AND (t.company_code = #{companyCode} or t.belong in(1,2))
+				 <when test="isFront == 1">
+				 	AND (t.company_code = #{companyCode} or t.belong in (1,2))
 				 </when>
-				 <otherwise>
-					 <if test="companyCode != null and companyCode != '' ">
-						AND t.company_code = #{companyCode}
-					</if>
-				 </otherwise>
 			</choose>
 		</trim>
 	</sql>
@@ -122,6 +114,13 @@
 		)
 	</insert>
 
+	<delete id="delete_cNavigate" parameterType="cNavigate">
+		DELETE FROM
+		tstd_cnavigate
+		WHERE
+		code = #{code}
+	</delete>
+	
 	<update id="update_cNavigate" parameterType="cNavigate">
 		UPDATE tstd_cnavigate
 		SET
@@ -140,30 +139,4 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_cNavigate_csw" parameterType="cNavigate">
-		UPDATE tstd_cnavigate
-		SET
-		name = #{name}
-		,url = #{url}
-		,pic = #{pic}
-		,order_no = #{orderNo}
-		,belong = #{belong}
-		,company_code = #{companyCode}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_cNavigate_status" parameterType="cNavigate">
-		UPDATE tstd_cnavigate
-		SET
-		status = #{status}
-		WHERE code = #{code}
-	</update>
-
-	<delete id="delete_cNavigate" parameterType="cNavigate">
-		DELETE FROM
-		tstd_cnavigate
-		WHERE
-		code = #{code}
-	</delete>
-
 </mapper>

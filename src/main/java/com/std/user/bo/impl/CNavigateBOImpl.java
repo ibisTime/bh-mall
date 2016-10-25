@@ -82,22 +82,4 @@ public class CNavigateBOImpl extends PaginableBOImpl<CNavigate> implements
         }
         return data;
     }
-
-    @Override
-    public int refreshCNavigateCSW(CNavigate data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = cNavigateDAO.updateCSW(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshCNavigateStatus(CNavigate data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = cNavigateDAO.updateStatus(data);
-        }
-        return count;
-    }
 }

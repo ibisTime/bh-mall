@@ -47,8 +47,8 @@ public class CNavigate extends ABaseDO {
 
     /******************db data******************/
 
-    // 是否地方查询
-    private String isDfNavigate;
+    // 是否前端查询
+    private String isFront;
 
     public String getCode() {
         return code;
@@ -154,11 +154,12 @@ public class CNavigate extends ABaseDO {
         this.companyCode = companyCode;
     }
 
-    public String getIsDfNavigate() {
-        return isDfNavigate;
+    public String getIsFront() {
+        return isFront;
     }
 
-    public void setIsDfNavigate(String isDfNavigate) {
-        this.isDfNavigate = isDfNavigate;
+    public void setIsFront(String isFront) {
+        this.isFront = isFront;
     }
+
 }

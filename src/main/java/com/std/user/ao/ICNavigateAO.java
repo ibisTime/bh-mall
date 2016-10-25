@@ -8,26 +8,25 @@ import com.std.user.domain.CNavigate;
 public interface ICNavigateAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
+    // 新增导航
     public String addCNavigate(CNavigate data);
 
-    public int dropCNavigate(String code);
+    // 删除导航
+    public void dropCNavigate(String code);
 
-    public int editCNavigate(CNavigate data);
+    // 修改导航
+    public void editCNavigate(CNavigate data);
 
-    // 导航上下架
-    public int editCNavigateStatus(String code);
-
-    public void editCNavigateCSW(CNavigate data);
-
+    // 总部/地方分页查询
     public Paginable<CNavigate> queryCNavigatePage(int start, int limit,
             CNavigate condition);
 
-    public Paginable<CNavigate> queryCNavigatePageCSW(int start, int limit,
-            CNavigate condition);
+    // 前端列表查询
+    public List<CNavigate> queryCNavigateListByFront(CNavigate condition);
 
+    // 列表查询
     public List<CNavigate> queryCNavigateList(CNavigate condition);
 
-    public List<CNavigate> queryCNavigateListCSW(CNavigate condition);
-
+    // 详情查询
     public CNavigate getCNavigate(String code);
 }

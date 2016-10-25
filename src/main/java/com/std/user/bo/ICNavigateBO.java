@@ -15,10 +15,6 @@ public interface ICNavigateBO extends IPaginableBO<CNavigate> {
 
     public int refreshCNavigate(CNavigate data);
 
-    public int refreshCNavigateStatus(CNavigate data);
-
-    public int refreshCNavigateCSW(CNavigate data);
-
     public List<CNavigate> queryCNavigateList(CNavigate condition);
 
     public CNavigate getCNavigate(String code);

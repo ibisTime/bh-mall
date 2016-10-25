@@ -27,15 +27,16 @@ public class XN806042 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         CNavigate data = CNavigateConverter.converter(req);
-        int count = cNavigateAO.editCNavigate(data);
-        return new BooleanRes(count > 0 ? true : false);
+        cNavigateAO.editCNavigate(data);
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806042Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getType(), req.getOrderNo(), req.getStatus(),
-            req.getCompanyCode());
+            req.getType(), req.getStatus(), req.getLocation(),
+            req.getOrderNo(), req.getBelong(), req.getCompanyCode());
+
     }
 }

@@ -2,91 +2,14 @@ package com.std.user.dto.req;
 
 public class XN806053Req {
 
-    // 名字（选填）
-    private String name;
+    // 编号（选填）
+    private String code;
 
-    // 类型（选填）
-    private String type;
-
-    // 状态（选填）
-    private String status;
-
-    // 位置（选填）
-    private String location;
-
-    // 属于（选填）
-    private String belong;
-
-    // 父编号（选填）
-    private String parentCode;
-
-    // 内容源类型（选填）
-    private String contentType;
-
-    // 公司编号（选填）
-    private String companyCode;
-
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getBelong() {
-        return belong;
-    }
-
-    public void setBelong(String belong) {
-        this.belong = belong;
-    }
-
-    public String getParentCode() {
-        return parentCode;
-    }
-
-    public void setParentCode(String parentCode) {
-        this.parentCode = parentCode;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 }

@@ -1,17 +1,38 @@
 package com.std.user.dto.req;
 
 public class XN806052Req {
+
+    // 名字（选填）
+    private String name;
+
     // 类型（选填）
     private String type;
 
-    // 属于（选填）全局+地方默认(没修改)+地方修改过的
+    // 状态（选填）
+    private String status;
+
+    // 位置（选填）
+    private String location;
+
+    // 属于（选填）
     private String belong;
 
     // 父编号（选填）
     private String parentCode;
 
-    // 公司编号（必填）
+    // 内容源类型（选填）
+    private String contentType;
+
+    // 公司编号（选填）
     private String companyCode;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getType() {
         return type;
@@ -19,6 +40,22 @@ public class XN806052Req {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getBelong() {
@@ -35,6 +72,14 @@ public class XN806052Req {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getCompanyCode() {

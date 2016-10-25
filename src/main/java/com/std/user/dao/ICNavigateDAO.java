@@ -8,7 +8,4 @@ public interface ICNavigateDAO extends IBaseDAO<CNavigate> {
 
     public int update(CNavigate data);
 
-    public int updateStatus(CNavigate data);
-
-    public int updateCSW(CNavigate data);
 }

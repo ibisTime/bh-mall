@@ -24,8 +24,8 @@ public class XN806041 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        int count = cNavigateAO.dropCNavigate(req.getCode());
-        return new BooleanRes(count > 0 ? true : false);
+        cNavigateAO.dropCNavigate(req.getCode());
+        return new BooleanRes(true);
     }
 
     @Override

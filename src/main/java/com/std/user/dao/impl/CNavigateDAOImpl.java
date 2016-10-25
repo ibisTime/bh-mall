@@ -49,14 +49,4 @@ public class CNavigateDAOImpl extends AMybatisTemplate implements ICNavigateDAO 
     public int update(CNavigate data) {
         return super.update(NAMESPACE.concat("update_cNavigate"), data);
     }
-
-    @Override
-    public int updateCSW(CNavigate data) {
-        return super.update(NAMESPACE.concat("update_cNavigate_csw"), data);
-    }
-
-    @Override
-    public int updateStatus(CNavigate data) {
-        return super.update(NAMESPACE.concat("update_cNavigate_status"), data);
-    }
 }

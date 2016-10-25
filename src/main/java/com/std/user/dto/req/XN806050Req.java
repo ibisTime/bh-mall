@@ -4,26 +4,29 @@ public class XN806050Req extends APageReq {
 
     private static final long serialVersionUID = 1L;
 
-    // 名称（选填）
+    // 名字（选填）
     private String name;
-
-    // 显示状态（选填）
-    private String status;
 
     // 类型（选填）
     private String type;
 
+    // 状态（选填）
+    private String status;
+
+    // 位置（选填）
+    private String location;
+
     // 属于（选填）
-    private String Belong;
+    private String belong;
 
     // 父编号（选填）
     private String parentCode;
 
+    // 内容源类型（选填）
+    private String contentType;
+
     // 公司编号（选填）
     private String companyCode;
-
-    // 是否地方查询
-    private String isDfNavigate;
 
     public String getName() {
         return name;
@@ -31,22 +34,6 @@ public class XN806050Req extends APageReq {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getType() {
@@ -57,12 +44,28 @@ public class XN806050Req extends APageReq {
         this.type = type;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getBelong() {
-        return Belong;
+        return belong;
     }
 
     public void setBelong(String belong) {
-        Belong = belong;
+        this.belong = belong;
     }
 
     public String getParentCode() {
@@ -73,11 +76,19 @@ public class XN806050Req extends APageReq {
         this.parentCode = parentCode;
     }
 
-    public String getIsDfNavigate() {
-        return isDfNavigate;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setIsDfNavigate(String isDfNavigate) {
-        this.isDfNavigate = isDfNavigate;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }
