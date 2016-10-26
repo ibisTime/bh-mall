@@ -141,7 +141,7 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076");
         String companyCode = null;
         Company company = getCompany(province, city, area);
         if (company != null) {
