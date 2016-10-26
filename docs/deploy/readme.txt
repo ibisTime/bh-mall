@@ -51,6 +51,9 @@ scp -P57652 ./std-user.war root@121.43.101.148:/home
   ../bin/shutdown.sh
   ../bin/startup.sh
   
+  http://121.43.101.148:5405/std-user/api
+  
+  
   --------------------cdhome
   cd /home/wwwroot/cdhome/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
