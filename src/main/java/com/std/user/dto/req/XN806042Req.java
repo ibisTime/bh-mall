@@ -41,6 +41,9 @@ public class XN806042Req {
     // 备注(选填)
     private String remark;
 
+    // 是否地方修改(必填)
+    private String isCompanyEdit;
+
     public String getCode() {
         return code;
     }
@@ -143,5 +146,13 @@ public class XN806042Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getIsCompanyEdit() {
+        return isCompanyEdit;
+    }
+
+    public void setIsCompanyEdit(String isCompanyEdit) {
+        this.isCompanyEdit = isCompanyEdit;
     }
 }

@@ -19,6 +19,7 @@ public class CMaterialConverter {
         result.setEndNote(req.getEndNote());
         result.setRemark(req.getRemark());
         result.setMenuCode(req.getMenuCode());
+        result.setCompanyCode(req.getCompanyCode());
         return result;
     }
 

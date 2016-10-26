@@ -32,10 +32,10 @@ public class CMaterial extends ABaseDO {
 
     private String menuCode;
 
-    /*********db data*********/
-
     // 公司编号
     private String companyCode;
+
+    /*********db data*********/
 
     public String getCode() {
         return code;

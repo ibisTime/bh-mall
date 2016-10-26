@@ -45,6 +45,9 @@ public class CNavigate extends ABaseDO {
     // 所属公司
     private String companyCode;
 
+    // 是否公司修改
+    private String isCompanyEdit;
+
     /******************db data******************/
 
     // 是否前端查询
@@ -162,4 +165,11 @@ public class CNavigate extends ABaseDO {
         this.isFront = isFront;
     }
 
+    public String getIsCompanyEdit() {
+        return isCompanyEdit;
+    }
+
+    public void setIsCompanyEdit(String isCompanyEdit) {
+        this.isCompanyEdit = isCompanyEdit;
+    }
 }

@@ -43,6 +43,7 @@ public class CNavigateConverter {
         result.setRemark(req.getRemark());
         result.setContentType(req.getContentType());
         result.setCompanyCode(req.getCompanyCode());
+        result.setIsCompanyEdit(req.getIsCompanyEdit());
         return result;
     }
 

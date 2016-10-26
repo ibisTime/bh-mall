@@ -32,6 +32,9 @@ public class XN806100Req {
     // 尾注（选填）
     private String endNote;
 
+    // 公司编号
+    private String companyCode;
+
     public String getKind() {
         return kind;
     }
@@ -110,5 +113,13 @@ public class XN806100Req {
 
     public void setEndNote(String endNote) {
         this.endNote = endNote;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

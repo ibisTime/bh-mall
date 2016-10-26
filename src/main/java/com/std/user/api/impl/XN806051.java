@@ -28,10 +28,11 @@ public class XN806051 extends AProcessor {
         CNavigate condition = new CNavigate();
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
+        condition.setLocation(req.getLocation());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setStatus(EBoolean.YES.getCode());
         condition.setIsFront(EBoolean.YES.getCode());
-        return cNavigateAO.queryCNavigateListByFront(condition);
+        return cNavigateAO.queryCNavigateList(condition);
     }
 
     @Override

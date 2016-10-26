@@ -15,6 +15,7 @@
 		<result column="remark" property="remark" />
 		<result column="create_time" property="createTime" />
 		<result column="menu_code" property="menuCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -31,7 +32,7 @@
 				AND t.menu_code = #{menuCode}
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
-				AND tc.company_code = #{companyCode}
+				AND t.company_code = #{companyCode}
 			</if>
 		</trim>
 	</sql>
@@ -49,9 +50,9 @@
 		,t.remark
 		,t.create_time
 		,t.menu_code
-		,tc.company_code
+		,t.company_code
 		FROM
-		tstd_cmaterial t inner join tstd_cnavigate tc on t.menu_code = tc.code
+		tstd_cmaterial t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -62,7 +63,7 @@
 
 	<select id="select_cMaterial_count" parameterType="cMaterial"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_cmaterial t inner join tstd_cnavigate tc on t.menu_code = tc.code
+		SELECT count(1) FROM tstd_cmaterial t
 		<include refid="where_condition" />
 	</select>
 
@@ -81,6 +82,7 @@
 		,remark
 		,create_time
 		,menu_code
+		,company_code
 		)
 		VALUES(
 		#{code}
@@ -95,6 +97,7 @@
 		,#{remark}
 		,#{createTime}
 		,#{menuCode}
+		,#{companyCode}
 		)
 	</insert>
 

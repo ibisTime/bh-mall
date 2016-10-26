@@ -7,6 +7,9 @@ public class XN806051Req {
     // 属于（选填）全局+地方默认(没修改)+地方修改过的
     private String belong;
 
+    // UI位置（选填）
+    private String location;
+
     // 父编号（选填）
     private String parentCode;
 
@@ -43,5 +46,13 @@ public class XN806051Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

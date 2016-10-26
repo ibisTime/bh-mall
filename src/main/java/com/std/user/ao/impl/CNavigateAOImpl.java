@@ -1,6 +1,5 @@
 package com.std.user.ao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.std.user.ao.ICNavigateAO;
 import com.std.user.bo.ICNavigateBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.core.EGeneratePrefix;
+import com.std.user.core.OrderNoGenerater;
 import com.std.user.domain.CNavigate;
 import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
@@ -36,18 +37,30 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public void editCNavigate(CNavigate data) {
         CNavigate cNavigate = cNavigateBO.getCNavigate(data.getCode());
-        // 非0 地方改
-        if (!EBoolean.NO.getCode().equals(data.getCompanyCode())) {
+        // 1 地方改
+        if (EBoolean.YES.getCode().equals(data.getIsCompanyEdit())) {
             // 判断是否地方首次修改地方默认，是则新增，否则修改地方独有
             if (EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
                 CNavigate navigate = cNavigate;
-                navigate.setCode(null);
+                // 为指定新增特殊前缀格式
+                String oldCode = data.getCode();
+                if (!data.getCode().contains(EGeneratePrefix.DH.getCode())) {
+                    navigate.setCode(OrderNoGenerater.generate(oldCode
+                        .substring(0, 3)));
+                } else {
+                    navigate.setCode(null);
+                }
+                navigate.setName(data.getName());
+                navigate.setStatus(data.getStatus());
                 navigate.setBelong(data.getCode());
                 navigate.setCompanyCode(data.getCompanyCode());
-                navigate.setName(data.getName());
+                navigate.setParentCode(data.getParentCode());
+                navigate.setLocation(data.getLocation());
+                navigate.setOrderNo(data.getOrderNo());
+                navigate.setContentType(data.getContentType());
+                navigate.setRemark(data.getRemark());
                 navigate.setUrl(data.getUrl());
                 navigate.setPic(data.getPic());
-                navigate.setOrderNo(data.getOrderNo());
                 cNavigateBO.saveCNavigate(navigate);
             } else {
                 // 地方独有修改，属于不变
@@ -56,7 +69,6 @@ public class CNavigateAOImpl implements ICNavigateAO {
             }
         } else {
             if (!EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
-                data.setCompanyCode(cNavigate.getCompanyCode());
                 data.setBelong(cNavigate.getBelong());
             } else {
                 if (StringUtils.isBlank(data.getBelong())) {
@@ -71,23 +83,6 @@ public class CNavigateAOImpl implements ICNavigateAO {
     public Paginable<CNavigate> queryCNavigatePage(int start, int limit,
             CNavigate condition) {
         return cNavigateBO.getPaginable(start, limit, condition);
-    }
-
-    @Override
-    public List<CNavigate> queryCNavigateListByFront(CNavigate condition) {
-        List<CNavigate> list = cNavigateBO.queryCNavigateList(condition);
-        List<CNavigate> newList = new ArrayList<CNavigate>();
-        for (CNavigate cNavigate : list) {
-            if (cNavigate.getBelong().contains("DH")) {
-                for (CNavigate dfNavigate : list) {
-                    if (dfNavigate.getCode().equals(cNavigate.getBelong())) {
-                        newList.add(dfNavigate);
-                    }
-                }
-            }
-        }
-        list.removeAll(newList);
-        return list;
     }
 
     @Override

@@ -21,9 +21,6 @@ public interface ICNavigateAO {
     public Paginable<CNavigate> queryCNavigatePage(int start, int limit,
             CNavigate condition);
 
-    // 前端列表查询
-    public List<CNavigate> queryCNavigateListByFront(CNavigate condition);
-
     // 列表查询
     public List<CNavigate> queryCNavigateList(CNavigate condition);
 
