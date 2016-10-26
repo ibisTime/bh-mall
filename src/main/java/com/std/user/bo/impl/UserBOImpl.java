@@ -483,6 +483,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                     break;
                 }
             }
+        } else {
+            user.setLjAmount(ljAmount);
         }
         userDAO.updateAmount(user);
         // 记录流水
