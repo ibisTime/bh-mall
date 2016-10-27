@@ -1,5 +1,6 @@
 package com.std.user.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +38,7 @@ public class LevelRuleBOImpl extends PaginableBOImpl<LevelRule> implements
         if (data != null) {
             code = OrderNoGenerater.generate(EGeneratePrefix.UZ.getCode());
             data.setCode(code);
+            data.setUpdateDatetime(new Date());
             levelRuleDAO.insert(data);
         }
         return code;
@@ -57,6 +59,7 @@ public class LevelRuleBOImpl extends PaginableBOImpl<LevelRule> implements
     public int refreshLevelRule(LevelRule data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
+            data.setUpdateDatetime(new Date());
             count = levelRuleDAO.update(data);
         }
         return count;

@@ -23,19 +23,19 @@ public class LevelRuleAOImpl implements ILevelRuleAO {
     }
 
     @Override
-    public int editLevelRule(LevelRule data) {
-        if (!levelRuleBO.isLevelRuleExist(data.getCode())) {
-            throw new BizException("xn0000", "该编号不存在");
-        }
-        return levelRuleBO.refreshLevelRule(data);
-    }
-
-    @Override
     public int dropLevelRule(String code) {
         if (!levelRuleBO.isLevelRuleExist(code)) {
             throw new BizException("xn0000", "该编号不存在");
         }
         return levelRuleBO.removeLevelRule(code);
+    }
+
+    @Override
+    public int editLevelRule(LevelRule data) {
+        if (!levelRuleBO.isLevelRuleExist(data.getCode())) {
+            throw new BizException("xn0000", "该编号不存在");
+        }
+        return levelRuleBO.refreshLevelRule(data);
     }
 
     @Override

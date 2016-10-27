@@ -30,6 +30,8 @@ public class XN805112 extends AProcessor {
         data.setCode(req.getCode());
         data.setName(req.getName());
         data.setEffect(req.getEffect());
+        data.setUpdater(req.getUpdater());
+
         data.setRemark(req.getRemark());
         int count = levelRuleAO.editLevelRule(data);
         return new BooleanRes(count > 0 ? true : false);

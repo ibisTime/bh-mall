@@ -113,10 +113,10 @@ public class User extends ABaseDO {
     private String ossUserId;
 
     // 关注数
-    private Integer totalFollowNum;
+    private Long totalFollowNum;
 
     // 粉丝数
-    private Integer totalFansNum;
+    private Long totalFansNum;
 
     // 头像
     private String photo;
@@ -361,19 +361,19 @@ public class User extends ABaseDO {
         this.companyCode = companyCode;
     }
 
-    public Integer getTotalFollowNum() {
+    public Long getTotalFollowNum() {
         return totalFollowNum;
     }
 
-    public void setTotalFollowNum(Integer totalFollowNum) {
+    public void setTotalFollowNum(Long totalFollowNum) {
         this.totalFollowNum = totalFollowNum;
     }
 
-    public Integer getTotalFansNum() {
+    public Long getTotalFansNum() {
         return totalFansNum;
     }
 
-    public void setTotalFansNum(Integer totalFansNum) {
+    public void setTotalFansNum(Long totalFansNum) {
         this.totalFansNum = totalFansNum;
     }
 

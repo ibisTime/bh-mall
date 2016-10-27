@@ -39,6 +39,8 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         if (data != null) {
             code = OrderNoGenerater.generate(EGeneratePrefix.COM.getCode());
             data.setCode(code);
+            // 默认站点设置否
+            data.setIsDefault(EBoolean.NO.getCode());
             data.setUpdateDatetime(new Date());
             companyDAO.insert(data);
         }

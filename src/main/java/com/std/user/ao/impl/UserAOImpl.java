@@ -642,12 +642,23 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public Paginable<User> queryUserPage(int start, int limit, User condition) {
-        return userBO.getPaginable(start, limit, condition);
+        Paginable<User> page = userBO.getPaginable(start, limit, condition);
+        List<User> list = page.getList();
+        for (User user : list) {
+            UserExt userExt = userExtBO.getUserExt(user.getUserId());
+            user.setUserExt(userExt);
+        }
+        return page;
     }
 
     @Override
     public List<User> queryUserList(User condition) {
-        return userBO.queryUserList(condition);
+        List<User> list = userBO.queryUserList(condition);
+        for (User user : list) {
+            UserExt userExt = userExtBO.getUserExt(user.getUserId());
+            user.setUserExt(userExt);
+        }
+        return list;
     }
 
     @Override
@@ -664,22 +675,18 @@ public class UserAOImpl implements IUserAO {
             UserExt userExt = userExtBO.getUserExt(userId);
             user.setUserExt(userExt);
 
-            user.setTotalFansNum(0);
-            user.setTotalFollowNum(0);
+            user.setTotalFansNum(0L);
+            user.setTotalFollowNum(0L);
+            // 获取我关注的人
+            UserRelation toCondition = new UserRelation();
+            toCondition.setUserId(userId);
+            toCondition.setStatus(EBoolean.YES.getCode());
+            user.setTotalFollowNum(userRelationBO.getTotalCount(toCondition));
             // 获取我粉丝的人
             UserRelation condition = new UserRelation();
             condition.setToUser(userId);
-            List<User> relationList = userRelationBO.queryUserList(condition);
-            if (!CollectionUtils.sizeIsEmpty(relationList)) {
-                user.setTotalFansNum(relationList.size());
-            }
-            // 获取我关注的人
-            condition.setUserId(userId);
-            List<User> fansRelationList = userRelationBO
-                .queryUserList(condition);
-            if (!CollectionUtils.sizeIsEmpty(fansRelationList)) {
-                user.setTotalFollowNum(fansRelationList.size());
-            }
+            condition.setStatus(EBoolean.YES.getCode());
+            user.setTotalFansNum(userRelationBO.getTotalCount(condition));
         }
         return user;
     }

@@ -31,6 +31,8 @@ public class XN805110 extends AProcessor {
         data.setAmountMin(StringValidater.toLong(req.getAmountMin()));
         data.setAmountMax(StringValidater.toLong(req.getAmountMax()));
         data.setEffect(req.getEffect());
+
+        data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
         String code = levelRuleAO.addLevelRule(data);
         return new PKCodeRes(code);
