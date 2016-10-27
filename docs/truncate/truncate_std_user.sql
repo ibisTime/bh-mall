@@ -17,6 +17,7 @@ truncate tstd_company_certificate;
 truncate tstd_cpassword;
 truncate tstd_home;
 truncate tstd_level_rule;
+truncate tstd_rule;
 truncate tstd_sign_log;
 truncate tstd_uread;
 truncate tstd_user;
