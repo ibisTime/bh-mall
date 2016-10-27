@@ -75,9 +75,9 @@
 		,t.content_type
 		,t.company_code
 		FROM
-		tstd_cnavigate t
+		tstd_cnavigate t 
 		<include refid="where_condition" />
-		ORDER BY order_no
+		ORDER BY t.type,order_no
 	</select>
 
 	<select id="select_cNavigate_count" parameterType="cNavigate"

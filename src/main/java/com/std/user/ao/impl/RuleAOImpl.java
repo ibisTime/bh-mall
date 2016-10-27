@@ -12,6 +12,7 @@ import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Rule;
 import com.std.user.domain.User;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.ERuleKind;
 import com.std.user.exception.BizException;
 
@@ -73,8 +74,14 @@ public class RuleAOImpl implements IRuleAO {
         condition.setKind(ERuleKind.JB.getCode());
         condition.setLevel(user.getLevel());
         List<Rule> ruleList = ruleBO.queryRuleList(condition);
-        if (CollectionUtils.sizeIsEmpty(ruleList)) {
+        if (!CollectionUtils.isEmpty(ruleList)) {
             rule = ruleList.get(0);
+        } else {
+            condition.setLevel(EBoolean.NO.getCode());
+            ruleList = ruleBO.queryRuleList(condition);
+            if (!CollectionUtils.isEmpty(ruleList)) {
+                rule = ruleList.get(0);
+            }
         }
         return rule;
     }

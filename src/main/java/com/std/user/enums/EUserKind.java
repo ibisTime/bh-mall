@@ -14,7 +14,7 @@ package com.std.user.enums;
  * @history:
  */
 public enum EUserKind {
-    F1("f1", "前端个人用户"), F2("f2", "渠道商"), Operator("01", "平台运营商"), Integral(
+    F1("f1", "前端个人用户/需求方"), F2("f2", "渠道商/服务方"), Operator("01", "平台运营商"), Integral(
             "02", "积分商"), Goods("03", "货品商"), Merchant("04", "商家"), CaiGo("05",
             "菜狗/加盟商");
 
