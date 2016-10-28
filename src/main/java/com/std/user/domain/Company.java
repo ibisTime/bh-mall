@@ -68,6 +68,8 @@ public class Company extends ABaseDO {
 
     private String isDefault;
 
+    private String isHot;
+
     private String updater;
 
     private Date updateDatetime;
@@ -89,6 +91,10 @@ public class Company extends ABaseDO {
 
     // 县区
     private String areaForQuery;
+
+    private String loginName;
+
+    private String passWord;
 
     public String getNameForQuery() {
         return nameForQuery;
@@ -392,5 +398,29 @@ public class Company extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
+
+    public String getIsHot() {
+        return isHot;
+    }
+
+    public void setIsHot(String isHot) {
+        this.isHot = isHot;
     }
 }

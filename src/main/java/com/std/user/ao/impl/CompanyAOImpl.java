@@ -150,6 +150,39 @@ public class CompanyAOImpl implements ICompanyAO {
     }
 
     @Override
+    public int editCompanyHot(String code, String isHot, String orderNo,
+            String updater) {
+        if (!companyBO.isCompanyExist(code)) {
+            throw new BizException("xn0000", "该编号不存在");
+        }
+        Company data = companyBO.getCompany(code);
+        data.setIsHot(isHot);
+        data.setOrderNo(Integer.valueOf(orderNo));
+        data.setUpdater(updater);
+        return companyBO.refreshCompanyHot(data);
+    }
+
+    @Override
+    public int editCompanyHotLocation(String code, String action) {
+        Company data = companyBO.getCompany(code);
+        Integer location = data.getOrderNo();
+        if (null == location) {
+            location = 2;
+        }
+        if (EBoolean.YES.getCode().equalsIgnoreCase(action)) {
+            if (location > 0) {
+                location--;
+            } else {
+                throw new BizException("xn0000", "次序不可小于零");
+            }
+        } else {
+            location++;
+        }
+        data.setOrderNo(location);
+        return companyBO.refreshCompanyHot(data);
+    }
+
+    @Override
     public Company getCompanyByUserId(String userId) {
         return companyBO.getCompanyByUserId(userId);
     }

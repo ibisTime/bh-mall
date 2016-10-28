@@ -136,6 +136,15 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     }
 
     @Override
+    public int refreshCompanyHot(Company data) {
+        if (data == null) {
+            throw new BizException("xn0000", "该公司不存在");
+        }
+        data.setUpdateDatetime(new Date());
+        return companyDAO.updateDefault(data);
+    }
+
+    @Override
     public Company getCompanyByUserId(String userId) {
         Company data = null;
         if (StringUtils.isNotBlank(userId)) {

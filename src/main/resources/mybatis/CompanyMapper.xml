@@ -33,6 +33,8 @@
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="is_default" property="isDefault" />
+		<result column="is_hot" property="isHot" />
+		<result column="login_name" property="loginName" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -62,6 +64,15 @@
 			</if>
 			<if test="isDefault != null and isDefault != '' ">
 				AND t.is_default = #{isDefault} 
+			</if>
+			<if test="isHot != null and isHot != '' ">
+				AND t.is_hot = #{isHot} 
+			</if>
+			<if test="loginName != null and loginName != '' ">
+				AND t.login_name = #{loginName} 
+			</if>
+			<if test="passWord != null and passWord != '' ">
+				AND t.pass_word = #{passWord} 
 			</if>
 			<if test="location != null and location != '' ">
 				AND t.location = #{location} 
@@ -121,6 +132,8 @@
 		,t.location
 		,t.order_no
 		,t.is_default
+		,t.is_hot
+		,t.login_name
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -266,6 +279,16 @@
 		UPDATE tstd_company
 		SET
 		is_default = #{isDefault}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_company_hot" parameterType="company">
+		UPDATE tstd_company
+		SET
+		is_hot = #{isHot}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}
 	</update>
 

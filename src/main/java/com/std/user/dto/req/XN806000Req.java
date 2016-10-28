@@ -89,6 +89,12 @@ public class XN806000Req {
     // 是否默认（必填）
     private String isDefault;
 
+    // 登录名（必填）
+    private String loginName;
+
+    // 密码（必填）
+    private String passWord;
+
     // 更新人（必填）
     private String updater;
 
@@ -352,5 +358,21 @@ public class XN806000Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 }
