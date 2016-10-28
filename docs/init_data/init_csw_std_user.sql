@@ -4,12 +4,12 @@ LIMIT 0, 50000
 
 -- Date: 2016-10-26 23:03
 */
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('1','新手上路',0,10000,'1','新手上路');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('2','初级会员',10000,100000,'0','初级会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('3','中级会员',100000,500000,'0','中级会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('4','高级会员',500000,2000000,'0','高级会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('5','金牌会员',2000000,10000000,'0','金牌会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('6','论坛元老',10000000,1000000000,'0','论坛元老');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('1','新手上路',0,10000,'1','admin',now(),'新手上路');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('2','初级会员',10000,100000,'0','admin',now(),'初级会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('3','中级会员',100000,500000,'0','admin',now(),'中级会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('4','高级会员',500000,2000000,'0','admin',now(),'高级会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('5','金牌会员',2000000,10000000,'0','admin',now(),'金牌会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('6','论坛元老',10000000,1000000000,'0','admin',now(),'论坛元老');
 
 /*
 -- Query: SELECT * FROM csw_std_user.tstd_rule

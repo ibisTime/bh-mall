@@ -34,7 +34,7 @@
 		,t.amount_max
 		,t.effect
 		,t.updater
-		,t.updateDateime
+		,t.update_datetime
 		,t.remark
 		FROM
 		tstd_level_rule t
@@ -61,7 +61,7 @@
 		,amount_max
 		,effect
 		,updater
-		,update_dateime
+		,update_datetime
 		,remark
 		)
 		VALUES(
@@ -71,7 +71,7 @@
 		,#{amountMax}
 		,#{effect}
 		,#{updater}
-		,#{updateDateime}
+		,#{updateDatetime}
 		,#{remark}
 		)
 	</insert>
