@@ -34,6 +34,7 @@ public class XN805120 extends AProcessor {
         data.setToUser(req.getToUser());
         data.setCompanyCode(req.getCompanyCode());
         data.setUpdater(req.getUpdater());
+        data.setRemark(req.getRemark());
         String code = b2cSmsAO.addB2cSms(data);
         return new PKCodeRes(code);
     }
