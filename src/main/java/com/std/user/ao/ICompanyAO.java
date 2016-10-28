@@ -22,6 +22,13 @@ public interface ICompanyAO {
     // 设置默认
     public int editCompanyDefault(String code);
 
+    // 设置热门
+    public int editCompanyHot(String code, String isHot, String orderNo,
+            String updater);
+
+    // 热门位置上下移
+    public int editCompanyHotLocation(String code, String action);
+
     public Paginable<Company> queryCompanyPage(int start, int limit,
             Company condition);
 

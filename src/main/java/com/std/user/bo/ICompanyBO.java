@@ -20,6 +20,8 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public int refreshCompanyDefault(String code);
 
+    public int refreshCompanyHot(Company data);
+
     public List<Company> queryCompanyList(Company condition);
 
     public Company getCompany(String code);
