@@ -37,6 +37,9 @@ public class XN805055Req {
     // 修改人
     private String updater;
 
+    // 公司编号
+    private String companyCode;
+
     public String getLoginName() {
         return loginName;
     }
@@ -131,5 +134,13 @@ public class XN805055Req {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

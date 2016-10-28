@@ -16,14 +16,8 @@ public class XN805076Req {
     // 手机验证码（必填）
     private String smsCaptcha;
 
-    // 省(必填)
-    private String province;
-
-    // 市(必填)
-    private String city;
-
-    // 区/县(必填)
-    private String area;
+    // 公司编号（选填）
+    private String companyCode;
 
     public String getMobile() {
         return mobile;
@@ -65,27 +59,11 @@ public class XN805076Req {
         this.smsCaptcha = smsCaptcha;
     }
 
-    public String getProvince() {
-        return province;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

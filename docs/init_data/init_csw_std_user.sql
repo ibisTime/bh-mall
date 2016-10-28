@@ -33,7 +33,7 @@ INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2006','2',NULL,'6',25,'admin',now(),'被举报次数');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2007','2',NULL,'0',5,'admin',now(),'被举报次数');
 
-INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`updater`,`update_datetime`,`remark`,`pdf`) VALUES ('U201600000000000000','admin',NULL,'21218cca77804d2ba1922c33e0151105','1','01','2','','','','','','21218cca77804d2ba1922c33e0151105','1','SR201600000000000000','0','admin',now(),'管理端系统方',NULL);
+INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`updater`,`update_datetime`,`remark`,`pdf`) VALUES ('U201600000000000000','admin',NULL,'21218cca77804d2ba1922c33e0151105','1','01','0','','','','','','21218cca77804d2ba1922c33e0151105','1','SR201600000000000000','0','admin',now(),'管理端系统方',NULL);
 
 /*
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,kind FROM csw_std_user.tsys_menu
