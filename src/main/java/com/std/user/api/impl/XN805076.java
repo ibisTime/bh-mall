@@ -26,8 +26,7 @@ public class XN805076 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new XN805076Res(userAO.doRegisterSingle(req.getMobile(),
             req.getLoginPwd(), req.getLoginPwdStrength(), req.getUserReferee(),
-            req.getSmsCaptcha(), req.getProvince(), req.getCity(),
-            req.getArea()));
+            req.getSmsCaptcha(), req.getCompanyCode()));
     }
 
     @Override

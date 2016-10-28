@@ -32,7 +32,7 @@ public class UserRelation extends ABaseDO {
     // 关系人编号(下家，关注人)
     private String toUser;
 
-    // 状态(1 正常 0 假删除 一段时间内程序定时器删除)
+    // 状态(1 正常 0 假删除定时器删除 预留)
     private String status;
 
     // 更新时间

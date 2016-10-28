@@ -135,8 +135,7 @@
 	<delete id="delete_userRelation" parameterType="userRelation">
 		DELETE FROM
 		tstd_user_relation
-		WHERE
-		code = #{code}
+		WHERE user_id = #{userId} AND to_user = #{toUser}
 	</delete>
 	
 	<update id="update_userRelationStatus" parameterType="userRelation">

@@ -1,5 +1,7 @@
 package com.std.user.domain;
 
+import java.util.Date;
+
 import com.std.user.dao.base.ABaseDO;
 
 public class LevelRule extends ABaseDO {
@@ -20,6 +22,12 @@ public class LevelRule extends ABaseDO {
 
     // 作用
     private String effect;
+
+    // 更新人
+    private String updater;
+
+    // 更新时间
+    private Date updateDatetime;
 
     // 备注
     private String remark;
@@ -62,6 +70,22 @@ public class LevelRule extends ABaseDO {
 
     public void setEffect(String effect) {
         this.effect = effect;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
     }
 
     public String getRemark() {

@@ -11,8 +11,11 @@ public class XN805110Req {
     // 数量最大值（必填）
     private String amountMax;
 
-    // 作用
+    // 作用（必填）
     private String effect;
+
+    // 更新人（必填）
+    private String updater;
 
     // 备注（选填）
     private String remark;
@@ -47,6 +50,14 @@ public class XN805110Req {
 
     public void setEffect(String effect) {
         this.effect = effect;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
     public String getRemark() {

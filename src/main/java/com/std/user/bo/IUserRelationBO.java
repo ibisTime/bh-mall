@@ -28,7 +28,7 @@ public interface IUserRelationBO extends IPaginableBO<UserRelation> {
 
     public int refreshUserRelation(String userId, String toUser);
 
-    public int removeUserRelation(String code);
+    public int removeUserRelation(String userId, String toUser);
 
     public List<User> queryUserList(UserRelation condition);
 

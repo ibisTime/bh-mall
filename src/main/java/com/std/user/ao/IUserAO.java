@@ -50,16 +50,14 @@ public interface IUserAO {
      * @param loginPwdStrength
      * @param userReferee
      * @param smsCaptcha
-     * @param province
-     * @param city
-     * @param area
+     * @param companyCode
      * @return 
      * @create: 2016年10月12日 上午5:11:01 xieyj
      * @history:
      */
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String province, String city, String area);
+            String companyCode);
 
     /**
      * 代注册

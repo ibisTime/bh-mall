@@ -87,15 +87,16 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
         return count;
     }
 
-    /** 
-     * @see com.std.user.bo.IUserRelationBO#removeUserRelation(java.lang.String)
+    /**
+     * @see com.std.user.bo.IUserRelationBO#removeUserRelation(java.lang.String, java.lang.String)
      */
     @Override
-    public int removeUserRelation(String code) {
+    public int removeUserRelation(String userId, String toUser) {
         int count = 0;
-        if (StringUtils.isNotBlank(code)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(toUser)) {
             UserRelation data = new UserRelation();
-            data.setCode(code);
+            data.setUserId(userId);
+            data.setToUser(toUser);
             count = userRelationDAO.delete(data);
         }
         return count;

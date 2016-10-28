@@ -89,7 +89,7 @@ public class UserRelationAOImpl implements IUserRelationAO {
         if (!userRelationBO.isExistUserRelation(userId, toUserId)) {
             throw new BizException("xn702001", "用户关系未建立，无法解除");
         }
-        userRelationBO.refreshUserRelation(userId, toUserId);
+        userRelationBO.removeUserRelation(userId, toUserId);
     }
 
     /** 

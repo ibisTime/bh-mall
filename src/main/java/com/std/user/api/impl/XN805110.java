@@ -31,6 +31,8 @@ public class XN805110 extends AProcessor {
         data.setAmountMin(StringValidater.toLong(req.getAmountMin()));
         data.setAmountMax(StringValidater.toLong(req.getAmountMax()));
         data.setEffect(req.getEffect());
+
+        data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
         String code = levelRuleAO.addLevelRule(data);
         return new PKCodeRes(code);
@@ -40,7 +42,6 @@ public class XN805110 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805110Req.class);
         StringValidater.validateBlank(req.getName(), req.getAmountMin(),
-            req.getAmountMax());
+            req.getAmountMax(), req.getEffect(), req.getUpdater());
     }
-
 }

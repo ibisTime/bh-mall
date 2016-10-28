@@ -4,12 +4,12 @@ LIMIT 0, 50000
 
 -- Date: 2016-10-26 23:03
 */
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('1','新手上路',0,10000,'1','新手上路');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('2','初级会员',10000,100000,'0','初级会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('3','中级会员',100000,500000,'0','中级会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('4','高级会员',500000,2000000,'0','高级会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('5','金牌会员',2000000,10000000,'0','金牌会员');
-INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`remark`) VALUES ('6','论坛元老',10000000,1000000000,'0','论坛元老');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('1','新手上路',0,10000,'1','admin',now(),'新手上路');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('2','初级会员',10000,100000,'0','admin',now(),'初级会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('3','中级会员',100000,500000,'0','admin',now(),'中级会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('4','高级会员',500000,2000000,'0','admin',now(),'高级会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('5','金牌会员',2000000,10000000,'0','admin',now(),'金牌会员');
+INSERT INTO `tstd_level_rule` (`code`,`name`,`amount_min`,`amount_max`,`effect`,`updater`,`update_datetime`,`remark`) VALUES ('6','论坛元老',10000000,1000000000,'0','admin',now(),'论坛元老');
 
 /*
 -- Query: SELECT * FROM csw_std_user.tstd_rule
@@ -24,15 +24,16 @@ INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1005','1','D','0',2000,'admin',now(),'发帖');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1006','1','E','0',1000,'admin',now(),'评论');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1007','1','F','0',1000,'admin',now(),'加精华');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1008','1','G','0',-1000,'admin',now(),'被举报扣积分');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2001','2',NULL,'3',10,'admin',now(),'被举报次数');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2002','2',NULL,'4',15,'admin',now(),'被举报次数');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2003','2',NULL,'5',20,'admin',now(),'被举报次数');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2004','2',NULL,'6',25,'admin',now(),'被举报次数');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2005','2',NULL,'0',5,'admin',now(),'被举报次数');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2006','2',NULL,'1',1,'admin',now(),'被举报次数');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1008','1','G','0',1000,'admin',now(),'被举报扣积分');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2001','2',NULL,'1',1,'admin',now(),'被举报次数');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2002','2',NULL,'2',5,'admin',now(),'被举报次数');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2003','2',NULL,'3',10,'admin',now(),'被举报次数');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2004','2',NULL,'4',15,'admin',now(),'被举报次数');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2005','2',NULL,'5',20,'admin',now(),'被举报次数');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2006','2',NULL,'6',25,'admin',now(),'被举报次数');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2007','2',NULL,'0',5,'admin',now(),'被举报次数');
 
-INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`updater`,`update_datetime`,`remark`,`pdf`) VALUES ('U201600000000000000','admin',NULL,'21218cca77804d2ba1922c33e0151105','1','01','2','','','','','','21218cca77804d2ba1922c33e0151105','1','SR201600000000000000','0','admin',now(),'管理端系统方',NULL);
+INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`updater`,`update_datetime`,`remark`,`pdf`) VALUES ('U201600000000000000','admin',NULL,'21218cca77804d2ba1922c33e0151105','1','01','0','','','','','','21218cca77804d2ba1922c33e0151105','1','SR201600000000000000','0','admin',now(),'管理端系统方',NULL);
 
 /*
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,kind FROM csw_std_user.tsys_menu

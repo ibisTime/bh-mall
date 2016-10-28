@@ -114,7 +114,7 @@ public class RuleBOImpl extends PaginableBOImpl<Rule> implements IRuleBO {
         condition.setType(type.getCode());
         condition.setLevel(level);
         List<Rule> ruleList = ruleDAO.selectList(condition);
-        if (!CollectionUtils.sizeIsEmpty(ruleList)) {
+        if (CollectionUtils.isNotEmpty(ruleList)) {
             Rule rule = ruleList.get(0);
             amount = Long.valueOf(rule.getValue());
         }

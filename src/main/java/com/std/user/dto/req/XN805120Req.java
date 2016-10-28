@@ -11,13 +11,13 @@ public class XN805120Req {
     // 内容(必填)
     private String content;
 
-    // 作用公司
+    // 作用公司(必填)
     private String toCompany;
 
-    // 作用等级
+    // 作用等级(必填)
     private String toLevel;
 
-    // 作用用户
+    // 作用用户(必填)
     private String toUser;
 
     // 公司编号(必填)
@@ -25,6 +25,9 @@ public class XN805120Req {
 
     // 更新人(必填)
     private String updater;
+
+    // 备注(选填)
+    private String remark;
 
     public String getType() {
         return type;
@@ -88,5 +91,13 @@ public class XN805120Req {
 
     public void setToUser(String toUser) {
         this.toUser = toUser;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -135,17 +135,20 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String province, String city, String area) {
+            String companyCode) {
         // 验证手机号
         userBO.isMobileExist(mobile);
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076");
-        String companyCode = null;
-        Company company = getCompany(province, city, area);
-        if (company != null) {
-            companyCode = company.getCode();
+        // 设置公司
+        Company company = companyBO.getCompany(companyCode);
+        if (company == null) {
+            Company result = companyBO.getDefaultCompany();
+            if (result != null) {
+                companyCode = result.getCode();
+            }
         }
         // 注册送积分
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC);
@@ -163,22 +166,6 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
         return userId;
-    }
-
-    // 获取默认公司编号
-    private Company getCompany(String province, String city, String area) {
-        Company condition = new Company();
-        condition.setProvinceForQuery(province);
-        condition.setCityForQuery(city);
-        condition.setAreaForQuery(area);
-        List<Company> list = companyBO.queryCompanyList(condition);
-        Company result = null;
-        if (CollectionUtils.sizeIsEmpty(list)) {
-            result = companyBO.getDefaultCompany();
-        } else {
-            result = list.get(0);
-        }
-        return result;
     }
 
     @Override
@@ -642,12 +629,23 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public Paginable<User> queryUserPage(int start, int limit, User condition) {
-        return userBO.getPaginable(start, limit, condition);
+        Paginable<User> page = userBO.getPaginable(start, limit, condition);
+        List<User> list = page.getList();
+        for (User user : list) {
+            UserExt userExt = userExtBO.getUserExt(user.getUserId());
+            user.setUserExt(userExt);
+        }
+        return page;
     }
 
     @Override
     public List<User> queryUserList(User condition) {
-        return userBO.queryUserList(condition);
+        List<User> list = userBO.queryUserList(condition);
+        for (User user : list) {
+            UserExt userExt = userExtBO.getUserExt(user.getUserId());
+            user.setUserExt(userExt);
+        }
+        return list;
     }
 
     @Override
@@ -664,22 +662,18 @@ public class UserAOImpl implements IUserAO {
             UserExt userExt = userExtBO.getUserExt(userId);
             user.setUserExt(userExt);
 
-            user.setTotalFansNum(0);
-            user.setTotalFollowNum(0);
+            user.setTotalFansNum(0L);
+            user.setTotalFollowNum(0L);
+            // 获取我关注的人
+            UserRelation toCondition = new UserRelation();
+            toCondition.setUserId(userId);
+            toCondition.setStatus(EBoolean.YES.getCode());
+            user.setTotalFollowNum(userRelationBO.getTotalCount(toCondition));
             // 获取我粉丝的人
             UserRelation condition = new UserRelation();
             condition.setToUser(userId);
-            List<User> relationList = userRelationBO.queryUserList(condition);
-            if (!CollectionUtils.sizeIsEmpty(relationList)) {
-                user.setTotalFansNum(relationList.size());
-            }
-            // 获取我关注的人
-            condition.setUserId(userId);
-            List<User> fansRelationList = userRelationBO
-                .queryUserList(condition);
-            if (!CollectionUtils.sizeIsEmpty(fansRelationList)) {
-                user.setTotalFollowNum(fansRelationList.size());
-            }
+            condition.setStatus(EBoolean.YES.getCode());
+            user.setTotalFansNum(userRelationBO.getTotalCount(condition));
         }
         return user;
     }
@@ -733,7 +727,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void editNickname(String userId, String nickname) {
-        fieldTimesBO.isFieldTimesExist(EFieldType.NICKNAME, userId);
+        // 昵称只能修改一次
+        // fieldTimesBO.isFieldTimesExist(EFieldType.NICKNAME, userId);
         if (StringUtils.isNotBlank(userId)) {
             userBO.refreshNickname(userId, nickname);
             fieldTimesBO.saveFieldTimes(EFieldType.NICKNAME, userId);

@@ -15,6 +15,7 @@
 部署步骤：
 1、
 scp -P57652 ./std-user.war root@121.43.101.148:/home
+T6dh%$%$ss1
   
   
 2，部署

@@ -39,6 +39,13 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         if (data != null) {
             code = OrderNoGenerater.generate(EGeneratePrefix.COM.getCode());
             data.setCode(code);
+            // 新增第一家公司，为默认城市,后续默认为否
+            long count = companyDAO.selectTotalCount(null);
+            if (count == 0) {
+                data.setIsDefault(EBoolean.YES.getCode());
+            } else {
+                data.setIsDefault(EBoolean.NO.getCode());
+            }
             data.setUpdateDatetime(new Date());
             companyDAO.insert(data);
         }

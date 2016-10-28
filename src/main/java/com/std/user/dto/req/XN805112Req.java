@@ -11,6 +11,9 @@ public class XN805112Req {
     // 作用（必填）
     private String effect;
 
+    // 更新人
+    private String updater;
+
     // 备注（选填）
     private String remark;
 
@@ -44,5 +47,13 @@ public class XN805112Req {
 
     public void setEffect(String effect) {
         this.effect = effect;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 }

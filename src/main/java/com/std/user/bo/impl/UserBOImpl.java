@@ -477,7 +477,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             LevelRule lrCondition = new LevelRule();
             List<LevelRule> lrList = levelRuleDAO.selectList(lrCondition);
             for (LevelRule levelRule : lrList) {
-                if (levelRule.getAmountMin() >= ljAmount
+                if (ljAmount >= levelRule.getAmountMin()
                         && ljAmount < levelRule.getAmountMax()) {
                     user.setLevel(levelRule.getCode());
                     break;
