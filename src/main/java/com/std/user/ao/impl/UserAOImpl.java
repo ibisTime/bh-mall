@@ -727,7 +727,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void editNickname(String userId, String nickname) {
-        fieldTimesBO.isFieldTimesExist(EFieldType.NICKNAME, userId);
+        // 昵称只能修改一次
+        // fieldTimesBO.isFieldTimesExist(EFieldType.NICKNAME, userId);
         if (StringUtils.isNotBlank(userId)) {
             userBO.refreshNickname(userId, nickname);
             fieldTimesBO.saveFieldTimes(EFieldType.NICKNAME, userId);
