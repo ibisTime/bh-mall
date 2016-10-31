@@ -29,6 +29,10 @@ public interface ICompanyAO {
     // 热门位置上下移
     public int editCompanyHotLocation(String code, String action);
 
+    // 修改公司密码
+    public void editCompanyPsw(String code, String oldPassword,
+            String newPassword);
+
     public Paginable<Company> queryCompanyPage(int start, int limit,
             Company condition);
 

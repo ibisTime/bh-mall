@@ -5,6 +5,7 @@
 	<resultMap id="companyCertificate_DB_Result" type="companyCertificate">
 		<result column="code" property="code" />
 		<result column="certificate_code" property="certificateCode" />
+		<result column="certificate_type" property="certificateType" />
 		<result column="company_code" property="companyCode" />
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
@@ -36,6 +37,7 @@
 		SELECT
 		t.code
 		,t.certificate_code
+		,tc.type as certificate_type
 		,t.company_code
 		,t.status
 		,t.apply_user
@@ -44,7 +46,7 @@
 		,t.approve_datetime
 		,t.approve_note
 		FROM
-		tstd_company_certificate t
+		tstd_company_certificate t inner join tstd_certificate tc on t.certificate_code = tc.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -55,7 +57,7 @@
 
 	<select id="select_companyCertificate_count" parameterType="companyCertificate"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_company_certificate t
+		SELECT count(1) FROM tstd_company_certificate t inner join tstd_certificate tc on t.certificate_code = tc.code
 		<include refid="where_condition" />
 	</select>
 

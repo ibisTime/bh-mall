@@ -42,7 +42,7 @@ public class CompanyConverter {
         result.setLocation(req.getLocation());
         result.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         result.setLoginName(req.getLoginName());
-        result.setPassWord(req.getPassWord());
+        result.setPassword(req.getPassword());
         result.setUpdater(req.getUpdater());
         result.setRemark(req.getRemark());
         return result;

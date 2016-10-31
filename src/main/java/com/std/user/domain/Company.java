@@ -8,113 +8,73 @@ public class Company extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
-    // 编号
     private String code;
 
-    // 类型(1 公司 2个体户)
     private String type;
 
-    // 真实姓名/公司名称
     private String name;
 
-    // 缩写
     private String abbrName;
 
-    // 工商营业执照号/身份证正反照
     private String gsyyzzh;
 
-    // 域名
     private String domain;
 
-    // logo
     private String logo;
 
-    // 图标
     private String icon;
 
-    // 广告语
     private String slogan;
 
-    // 法人
     private String corporation;
 
-    // 二维码
     private String qrCode;
 
-    // 省
     private String province;
 
-    // 市
     private String city;
 
-    // 区
     private String area;
 
-    // 具体地址
     private String address;
 
-    // 经度
     private String longitude;
 
-    // 纬度
     private String latitude;
 
-    // 底部图片
     private String copyright;
 
-    // 描述
     private String description;
 
-    // 规模
     private String scale;
 
-    // 联系人姓名
     private String contacts;
 
-    // 电话
     private String mobile;
 
-    // 传真
     private String fax;
 
-    // 邮箱
     private String email;
 
-    // qq
     private String qq;
 
-    // 微信
     private String weChat;
 
-    // 用户编号
     private String userId;
 
-    // UI位置（0 禁用 1 正常）
     private String location;
 
-    // 序号
     private Integer orderNo;
 
-    // 是否默认（1 是 0 否）
     private String isDefault;
 
-    // 是否热门（1 是 0 否）
     private String isHot;
 
-    // 更新人
     private String updater;
 
-    // 更新时间
     private Date updateDatetime;
 
-    // 备注
     private String remark;
-
-    // 登录名
-    private String loginName;
-
-    // 密码
-    private String passWord;
 
     // ******************db properties *******************
     // 名称
@@ -131,6 +91,13 @@ public class Company extends ABaseDO {
 
     // 县区
     private String areaForQuery;
+
+    private String loginName;
+
+    private String password;
+
+    // 资质编号
+    private String certificateType;
 
     public String getNameForQuery() {
         return nameForQuery;
@@ -444,12 +411,12 @@ public class Company extends ABaseDO {
         this.loginName = loginName;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String passWord) {
+        this.password = passWord;
     }
 
     public String getIsHot() {
@@ -458,5 +425,13 @@ public class Company extends ABaseDO {
 
     public void setIsHot(String isHot) {
         this.isHot = isHot;
+    }
+
+    public String getCertificateType() {
+        return certificateType;
+    }
+
+    public void setCertificateType(String certificateType) {
+        this.certificateType = certificateType;
     }
 }

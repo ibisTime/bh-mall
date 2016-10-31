@@ -76,7 +76,13 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public Paginable<Company> queryCompanyPage(int start, int limit,
             Company condition) {
-        return companyBO.getPaginable(start, limit, condition);
+        Paginable<Company> page = null;
+        if (null != condition.getCertificateType()) {
+            page = companyBO.getPaginableJJ(start, limit, condition);
+        } else {
+            page = companyBO.getPaginable(start, limit, condition);
+        }
+        return page;
     }
 
     @Override
@@ -211,4 +217,16 @@ public class CompanyAOImpl implements ICompanyAO {
         return companyBO.getCompanyByDomain(domain);
     }
 
+    @Override
+    public void editCompanyPsw(String code, String oldPassword,
+            String newPassword) {
+        Company condition = new Company();
+        condition.setCode(code);
+        condition.setPassword(oldPassword);
+        List<Company> list = companyBO.queryCompanyList(condition);
+        if (list == null || list.size() == 0) {
+            throw new BizException("xn0000", "密码不正确");
+        }
+        companyBO.refreshCompanyPsw(code, newPassword);
+    }
 }

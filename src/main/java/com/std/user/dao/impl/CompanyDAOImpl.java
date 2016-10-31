@@ -46,6 +46,24 @@ public class CompanyDAOImpl extends AMybatisTemplate implements ICompanyDAO {
     }
 
     @Override
+    public long selectTotalCountJJ(Company condition) {
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_company_count_jj"), condition);
+    }
+
+    @Override
+    public List<Company> selectListJJ(Company condition) {
+        return super.selectList(NAMESPACE.concat("select_company_jj"),
+            condition, Company.class);
+    }
+
+    @Override
+    public List<Company> selectListJJ(Company condition, int start, int count) {
+        return super.selectList(NAMESPACE.concat("select_company_jj"), start,
+            count, condition, Company.class);
+    }
+
+    @Override
     public int update(Company data) {
         return super.update(NAMESPACE.concat("update_company"), data);
     }
@@ -63,5 +81,10 @@ public class CompanyDAOImpl extends AMybatisTemplate implements ICompanyDAO {
     @Override
     public int updateHot(Company data) {
         return super.update(NAMESPACE.concat("update_company_hot"), data);
+    }
+
+    @Override
+    public int updatePsw(Company data) {
+        return super.update(NAMESPACE.concat("update_company_psw"), data);
     }
 }
