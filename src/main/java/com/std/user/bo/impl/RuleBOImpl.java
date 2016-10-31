@@ -13,6 +13,7 @@ import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.dao.IRuleDAO;
 import com.std.user.domain.Rule;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
@@ -87,27 +88,11 @@ public class RuleBOImpl extends PaginableBOImpl<Rule> implements IRuleBO {
     }
 
     /** 
-     * @see com.std.forum.bo.IRuleBO#getRuleByCondition(java.lang.String, java.lang.String)
-     */
-    @Override
-    public Long getRuleByCondition(ERuleKind kind, ERuleType type) {
-        Long amount = 0L;
-        Rule condition = new Rule();
-        condition.setKind(kind.getCode());
-        condition.setType(type.getCode());
-        List<Rule> ruleList = ruleDAO.selectList(condition);
-        if (!CollectionUtils.sizeIsEmpty(ruleList)) {
-            Rule rule = ruleList.get(0);
-            amount = Long.valueOf(rule.getValue());
-        }
-        return amount;
-    }
-
-    /** 
      * @see com.std.forum.bo.IRuleBO#getRuleByCondition(com.std.forum.enums.ERuleKind, com.std.forum.enums.ERuleType, java.lang.String)
      */
     @Override
     public Long getRuleByCondition(ERuleKind kind, ERuleType type, String level) {
+        // 先查询专门等级，如果没有，查全局的
         Long amount = 0L;
         Rule condition = new Rule();
         condition.setKind(kind.getCode());
@@ -119,9 +104,16 @@ public class RuleBOImpl extends PaginableBOImpl<Rule> implements IRuleBO {
             amount = Long.valueOf(rule.getValue());
         }
         if (amount == 0L) {
-            amount = this.getRuleByCondition(kind, type);
+            Rule allCondition = new Rule();
+            allCondition.setKind(kind.getCode());
+            allCondition.setType(type.getCode());
+            allCondition.setLevel(EBoolean.NO.getCode());
+            List<Rule> allRuleList = ruleDAO.selectList(allCondition);
+            if (CollectionUtils.isNotEmpty(allRuleList)) {
+                Rule rule = allRuleList.get(0);
+                amount = Long.valueOf(rule.getValue());
+            }
         }
-
         return amount;
     }
 }
