@@ -72,7 +72,7 @@
 				AND t.login_name = #{loginName} 
 			</if>
 			<if test="passWord != null and passWord != '' ">
-				AND t.pass_word = #{passWord} 
+				AND t.pass_word = #{password} 
 			</if>
 			<if test="location != null and location != '' ">
 				AND t.location = #{location} 
@@ -97,6 +97,9 @@
 			</if>
 			<if test="areaForQuery != null and areaForQuery != '' ">
 				AND t.area like "%"#{areaForQuery}"%"
+			</if>
+			<if test="certificateType != null and certificateType != '' ">
+				AND tc.type = #{certificateType}
 			</if>
 		</trim>
 	</sql>
@@ -150,6 +153,61 @@
 	<select id="select_company_count" parameterType="company"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tstd_company t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_company_jj" parameterType="company" resultMap="company_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.name
+		,t.abbr_name
+		,t.gsyyzzh
+		,t.domain
+		,t.logo
+		,t.icon
+		,t.slogan
+		,t.corporation
+		,t.qr_code
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+		,t.longitude
+		,t.latitude
+		,t.copyright
+		,t.description
+		,t.scale
+		,t.contacts
+		,t.mobile
+		,t.fax
+		,t.email
+		,t.qq
+		,t.we_chat
+		,t.user_id
+		,t.location
+		,t.order_no
+		,t.is_default
+		,t.is_hot
+		,t.login_name
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		(tstd_company t inner join tstd_company_certificate tcc on t.code = tcc.company_code)
+		inner join tstd_certificate tc on tcc.certificate_code = tc.code
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_company_count_jj" parameterType="company"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM (tstd_company t inner join tstd_company_certificate tcc on t.code = tcc.company_code)
+		inner join tstd_certificate tc on tcc.certificate_code = tc.code
 		<include refid="where_condition" />
 	</select>
 
@@ -289,6 +347,13 @@
 		,order_no = #{orderNo}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_company_psw">
+	    UPDATE tstd_company
+		SET
+		pass_word = #{password}
 		WHERE code = #{code}
 	</update>
 

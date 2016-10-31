@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.std.user.bo.ICompanyBO;
+import com.std.user.bo.base.Page;
+import com.std.user.bo.base.Paginable;
 import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.core.EGeneratePrefix;
 import com.std.user.core.OrderNoGenerater;
@@ -75,7 +77,29 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
 
     @Override
     public List<Company> queryCompanyList(Company condition) {
-        return companyDAO.selectList(condition);
+        List<Company> list = null;
+        if (null != condition.getCertificateType()) {
+            list = companyDAO.selectListJJ(condition);
+        } else {
+            list = companyDAO.selectList(condition);
+        }
+        return list;
+    }
+
+    @Override
+    public Paginable<Company> getPaginableJJ(int start, int pageSize,
+            Company condition) {
+        prepare(condition);
+
+        long totalCount = companyDAO.selectTotalCountJJ(condition);
+
+        Paginable<Company> page = new Page<Company>(start, pageSize, totalCount);
+
+        List<Company> dataList = companyDAO.selectListJJ(condition,
+            page.getStart(), page.getPageSize());
+
+        page.setList(dataList);
+        return page;
     }
 
     @Override
@@ -174,5 +198,13 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         condition.setDomain(domain);
         List<Company> list = companyDAO.selectList(condition);
         return list.get(0);
+    }
+
+    @Override
+    public int refreshCompanyPsw(String code, String password) {
+        Company data = new Company();
+        data.setCode(code);
+        data.setPassword(password);
+        return companyDAO.updatePsw(data);
     }
 }

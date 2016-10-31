@@ -93,7 +93,7 @@ public class XN806000Req {
     private String loginName;
 
     // 密码（必填）
-    private String passWord;
+    private String password;
 
     // 更新人（必填）
     private String updater;
@@ -368,11 +368,11 @@ public class XN806000Req {
         this.loginName = loginName;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String passWord) {
+        this.password = passWord;
     }
 }

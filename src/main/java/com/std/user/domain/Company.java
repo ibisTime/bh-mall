@@ -94,7 +94,10 @@ public class Company extends ABaseDO {
 
     private String loginName;
 
-    private String passWord;
+    private String password;
+
+    // 资质编号
+    private String certificateType;
 
     public String getNameForQuery() {
         return nameForQuery;
@@ -408,12 +411,12 @@ public class Company extends ABaseDO {
         this.loginName = loginName;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String passWord) {
+        this.password = passWord;
     }
 
     public String getIsHot() {
@@ -422,5 +425,13 @@ public class Company extends ABaseDO {
 
     public void setIsHot(String isHot) {
         this.isHot = isHot;
+    }
+
+    public String getCertificateType() {
+        return certificateType;
+    }
+
+    public void setCertificateType(String certificateType) {
+        this.certificateType = certificateType;
     }
 }

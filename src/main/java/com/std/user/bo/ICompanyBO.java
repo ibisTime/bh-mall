@@ -3,6 +3,7 @@ package com.std.user.bo;
 import java.util.List;
 
 import com.std.user.bo.base.IPaginableBO;
+import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Company;
 
 public interface ICompanyBO extends IPaginableBO<Company> {
@@ -22,7 +23,12 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public int refreshCompanyHot(Company data);
 
+    public int refreshCompanyPsw(String code, String password);
+
     public List<Company> queryCompanyList(Company condition);
+
+    public Paginable<Company> getPaginableJJ(int start, int pageSize,
+            Company condition);
 
     public Company getCompany(String code);
 

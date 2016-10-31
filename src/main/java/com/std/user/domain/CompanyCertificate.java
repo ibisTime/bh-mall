@@ -26,6 +26,11 @@ public class CompanyCertificate extends ABaseDO {
 
     private String approveNote;
 
+    /******************db data **********/
+
+    // 资质类型
+    private String certificateType;
+
     public String getCode() {
         return code;
     }
@@ -96,5 +101,13 @@ public class CompanyCertificate extends ABaseDO {
 
     public void setApproveNote(String approveNote) {
         this.approveNote = approveNote;
+    }
+
+    public String getCertificateType() {
+        return certificateType;
+    }
+
+    public void setCertificateType(String certificateType) {
+        this.certificateType = certificateType;
     }
 }
