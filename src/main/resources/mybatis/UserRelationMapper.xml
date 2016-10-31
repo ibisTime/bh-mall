@@ -49,10 +49,10 @@
 	<sql id="where_user_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="userId != null and userId != '' ">
-				AND t.user_id = #{userId}
+				AND t.user_id = #{userId} AND t.to_user = tu.user_id
 			</if>
 			<if test="toUser != null and toUser != '' ">
-				AND t.to_user = #{toUser}
+				AND t.to_user = #{toUser} AND t.user_id = tu.user_id
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -103,14 +103,14 @@
 		,tu.update_datetime
 		,tu.remark
 		FROM
-		tstd_user tu inner join tstd_user_relation t on tu.user_id = t.to_user
+		tstd_user tu,tstd_user_relation t 
 		<include refid="where_user_condition" />
 		ORDER BY tu.user_id DESC	
 	</select>
 
 	<select id="select_user_count" parameterType="userRelation"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_user tu inner join tstd_user_relation t on tu.user_id = t.to_user
+		SELECT count(1) FROM tstd_user tu,tstd_user_relation t 
 		<include refid="where_user_condition" />
 	</select>
 	

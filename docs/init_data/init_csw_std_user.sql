@@ -39,7 +39,7 @@ INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pw
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,kind FROM csw_std_user.tsys_menu
 LIMIT 0, 50000
 
--- Date: 2016-10-26 23:04
+-- Date: 2016-10-31 16:08
 */
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM201600000000000000','根目录','1','#','1','admin',now(),NULL,'','');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM201600001000000000','系统根目录','1','#','1','admin',now(),NULL,'SM201600000000000000','1');
@@ -114,7 +114,7 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101321385955090','删除','2','/delete','3','admin',now(),'','SM2016100916175763347','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101403000449381','新增','2','/add','1','admin',now(),'','SM2016092821365831995','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM201610140301522469','重置密码','2','/resetPwd','3','admin',now(),'','SM2016092821365831995','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101403040235885','注销','2','/cancel','4','admin',now(),'','SM2016092821365831995','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101403040235885','注销/取消','2','/cancel','4','admin',now(),'','SM2016092821365831995','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101403052639778','设置角色','2','/setRole','5','admin',now(),'','SM2016092821365831995','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101403064885124','城市管理','1','/general/city.htm','1','admin',now(),'','SM2016092821553717238','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101403072489983','新增','2','/add','1','admin',now(),'','SM2016101403064885124','1');
@@ -126,20 +126,18 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101404444655681','修改','2','/edit','2','admin',now(),'','SM2016101404423631536','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016101404450438722','详情','2','/detail','3','admin',now(),'','SM2016101404423631536','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011060812993','新增','2','/add','1','admin',now(),'','SM2016100916013626119','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011064964715','禁登录','2','/lock','2','admin',now(),'','SM2016100916013626119','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011072576549','删除','2','/delete','3','admin',now(),'','SM2016100916013626119','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011074960231','详情','2','/detail','4','admin',now(),'','SM2016100916013626119','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011064964715','禁登录/取消','2','/lock','2','admin',now(),'','SM2016100916013626119','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011074960231','详情','2','/detail1','3','admin',now(),'','SM2016100916013626119','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011143488156','新增','2','/add','1','admin',now(),'','SM2016100916294811547','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011150391575','禁登录','2','/lock','2','admin',now(),'','SM2016100916294811547','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011152312981','删除','2','/delete','3','admin',now(),'','SM2016100916294811547','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011154720662','详情','2','/detail','4','admin',now(),'','SM2016100916294811547','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011150391575','禁登录/取消','2','/lock','2','admin',now(),'','SM2016100916294811547','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102011154720662','详情','2','/detail1','4','admin',now(),'','SM2016100916294811547','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102014034887877','删除','2','/delete','3','hzAdmin',now(),'','SM2016100916145734721','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102014042498646','详情','2','/detail','4','hzAdmin',now(),'','SM2016100916145734721','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM201610231500322171','置顶','2','/top','1','admin',now(),'','SM2016100916121992653','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102315091640096','精华','2','/digest','2','admin',now(),'','SM2016100916121992653','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM201610231500322171','置顶/取消','2','/top','1','admin',now(),'','SM2016100916121992653','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102315091640096','精华/取消','2','/digest','2','admin',now(),'','SM2016100916121992653','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102315094472925','转版','2','/change','3','admin',now(),'','SM2016100916121992653','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102315103179381','锁帖/取消','2','/lock','4','admin',now(),'','SM2016100916121992653','1');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102315111143910','头条','2','/headline','5','admin',now(),'','SM2016100916121992653','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102315111143910','头条/取消','2','/headline','5','admin',now(),'','SM2016100916121992653','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102315125303658','批量删除','2','/multidelete','5','admin',now(),'','SM2016100916121992653','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102317263644357','帖子回收站','1','/forum/post/recycle.htm','5','hzxhAdmin',now(),'','SM2016092821592671896','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102317284048726','还原','2','/restore','1','hzxhAdmin',now(),'','SM2016102317263644357','1');
@@ -150,6 +148,7 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM201610231858541205','批量审查','2','/multicheck','2','admin',now(),'','SM2016102318523143152','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102318591599199','审查','2','/check','1','admin',now(),'','SM2016102318534564231','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102319000078279','批量审查','2','/multicheck','2','admin',now(),'','SM2016102318534564231','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016102717450558955','新增引流','2','/add','1','admin',now(),'','SM2016101404423631536','1');
 
 /*
 -- Query: SELECT * FROM csw_std_user.tsys_role
@@ -165,7 +164,7 @@ INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`rema
 -- Query: SELECT `role_code`,`menu_code`,`updater`,now() as `update_datetime`,`remark` FROM csw_std_user.tsys_menu_role where role_code in ('SR201600000000000000','SR201600000000000001','SR201600000000000002')
 LIMIT 0, 50000
 
--- Date: 2016-10-26 23:05
+-- Date: 2016-10-31 16:09
 */
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM201600001000000000','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM201600001000000001','admin',now(),NULL);
@@ -289,9 +288,9 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016092821543428878','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016092821584799672','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016101404423631536','admin',now(),NULL);
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016101404442584832','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016101404444655681','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016101404450438722','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016102717450558955','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016092821592671896','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016100916121992653','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM201610231500322171','admin',now(),NULL);
@@ -334,14 +333,13 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016100916294811547','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016102011143488156','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016102011150391575','admin',now(),NULL);
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016102011152312981','admin',now(),NULL);
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016102011154720662','admin',now(),NULL);
 
 /*
 -- Query: select `to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as update_datetime,`remark` from tsys_dict
 LIMIT 0, 50000
 
--- Date: 2016-10-26 23:07
+-- Date: 2016-10-31 16:11
 */
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'user_status','用户状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','user_status','0','正常','admin',now(),'');
@@ -405,9 +403,9 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'plate_location','版块地位','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_location','1','引流','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_location','2','普通','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'post_location','版块地位','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_location','1','置顶','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_location','2','精华','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'post_location','帖子地位','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_location','A','置顶','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_location','B','精华','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'post_status','帖子状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_status','A','草稿中','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_status','B','已发布','admin',now(),'');
@@ -465,6 +463,21 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','comment_status','E','待回收','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','comment_status','F','被过滤','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','C2','上传头像','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_location','C','头条','xhAdmin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'user_status','用户状态','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','user_status','0','正常','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','user_status','1','程序锁定','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','user_status','2','人工锁定','admin',now(),'');
+
+/*
+-- Query: SELECT * FROM csw_std_user.tsys_config
+LIMIT 0, 50000
+
+-- Date: 2016-10-31 13:47
+*/
+INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','sysMobile','400-1000000','系统电话','admin',now(),NULL);
+INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','serviceTime','9:30-21:30','服务时间','admin',now(),NULL);
+
 
 /*
 -- Query: SELECT * FROM csw_std_user.tstd_cnavigate
@@ -472,32 +485,32 @@ LIMIT 0, 50000
 
 -- Date: 2016-10-26 20:16
 */
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000001','头条','1','page:headline','http://121.43.101.148:8901/2016102612/20161030012082327385729.jpg','1','0',1,'1',NULL,NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000002','有料','1','page:forum','http://121.43.101.148:8901/2016102619/20161030007521812573567.png','1','0',2,'1',NULL,NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000003','小蜜','1','page:xiaomi','http://121.43.101.148:8901/2016102619/20161030007494518329720.png','1','0',3,'1',NULL,NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000004','视频','1','page:custom','http://121.43.101.148:8901/2016102322/20161029710045765507331.jpg','1',NULL,4,'2',NULL,NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000005','我的','1','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,5,'1',NULL,NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000001','头条','1','page:headline','http://121.43.101.148:8901/CSW20161031/toutiao.png','1','0',1,'1',NULL,NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000002','有料','1','page:forum','http://121.43.101.148:8901/CSW20161031/youliao.png','1','0',2,'1',NULL,NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000003','小蜜','1','page:xiaomi','http://121.43.101.148:8901/CSW20161031/xiaomifeng.png','1','0',3,'1',NULL,NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000004','视频','1','page:custom','http://121.43.101.148:8901/CSW20161031/shiping.png','1',NULL,4,'2',NULL,NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000005','我的','1','page:mine','http://121.43.101.148:8901/CSW20161031/wode.png','1',NULL,5,'1',NULL,NULL,NULL,'0');
 
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000006','积分商城','3','page:mall','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,1,'1','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000007','每日签到','3','page:signin','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,2,'1','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000008','活动引流','3','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,3,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000006','积分商城','3','page:mall','http://121.43.101.148:8901/CSW20161031/0_jfsc.png','1',NULL,1,'1','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000007','每日签到','3','page:signin','http://121.43.101.148:8901/CSW20161031/0_mrqd.png','1',NULL,2,'1','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000008','同城活动','3','page:mine','http://121.43.101.148:8901/CSW20161031/0_tchd.png','1',NULL,3,'2','DH2016100000000000001',NULL,NULL,'0');
 
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000009','板块1','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,1,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000010','板块2','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,2,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000011','板块3','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,3,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000012','板块4','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,4,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000013','板块5','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,5,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000014','板块6','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,6,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000015','板块7','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,7,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000016','板块8','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,8,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000009','招聘','4','page:mine','http://121.43.101.148:8901/CSW20161031/1_zhaopin.png','1',NULL,1,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000010','出租','4','page:mine','http://121.43.101.148:8901/CSW20161031/2_chuzhu.png','1',NULL,2,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000011','二手','4','page:mine','http://121.43.101.148:8901/CSW20161031/3_ersou.png','1',NULL,3,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000012','求助','4','page:mine','http://121.43.101.148:8901/CSW20161031/4_qiuzhu.png','1',NULL,4,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000013','便民','4','page:mine','http://121.43.101.148:8901/CSW20161031/5_bianming.png','1',NULL,5,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000014','车友','4','page:mine','http://121.43.101.148:8901/CSW20161031/6_cheyou.png','1',NULL,6,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000015','情感','4','page:mine','http://121.43.101.148:8901/CSW20161031/7_qinggan.png','1',NULL,7,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000016','吃货','4','page:mine','http://121.43.101.148:8901/CSW20161031/8_chihuo.png','1',NULL,8,'2','DH2016100000000000001',NULL,NULL,'0');
 
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000017','板块1','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,1,'2','DH2016100000000000003',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000018','板块2','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,2,'2','DH2016100000000000003',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000019','板块3','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,3,'2','DH2016100000000000003',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000020','板块4','4','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,4,'2','DH2016100000000000003',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000017','引流1','4','page:mine','http://121.43.101.148:8901/CSW20161031/xiaomifeng.png','1',NULL,1,'2','DH2016100000000000003',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000018','引流2','4','page:mine','http://121.43.101.148:8901/CSW20161031/xiaomifeng.png','1',NULL,2,'2','DH2016100000000000003',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000019','引流3','4','page:mine','http://121.43.101.148:8901/CSW20161031/xiaomifeng.png','1',NULL,3,'2','DH2016100000000000003',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000020','引流4','4','page:mine','http://121.43.101.148:8901/CSW20161031/xiaomifeng.png','1',NULL,4,'2','DH2016100000000000003',NULL,NULL,'0');
 
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000021','板块1','2','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,1,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000022','板块2','2','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,2,'2','DH2016100000000000001',NULL,NULL,'0');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000023','板块3','2','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,3,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000021','banner1','2','page:mine','http://121.43.101.148:8901/CSW20161031/banner1.png','1',NULL,1,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000022','banner2','2','page:mine','http://121.43.101.148:8901/CSW20161031/banner2.png','1',NULL,2,'2','DH2016100000000000001',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000023','banner3','2','page:mine','http://121.43.101.148:8901/CSW20161031/banner3.png','1',NULL,3,'2','DH2016100000000000001',NULL,NULL,'0');
 
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000024','广告图','5','page:mine','http://121.43.101.148:8901/2016102321/20161029709452842325978.png','1',NULL,1,'1','0',NULL,NULL,'0');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`) VALUES ('DH2016100000000000024','广告图','5','page:mine','http://121.43.101.148:8901/CSW20161031/adv.png','1',NULL,1,'1','0',NULL,NULL,'0');

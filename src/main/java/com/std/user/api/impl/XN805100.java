@@ -5,7 +5,6 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805100Req;
-import com.std.user.dto.res.PKCodeRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -25,8 +24,7 @@ public class XN805100 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(signLogAO.addSignLog(req.getUserId(),
-            req.getLocation()));
+        return signLogAO.addSignLog(req.getUserId(), req.getLocation());
     }
 
     @Override

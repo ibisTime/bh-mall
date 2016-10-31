@@ -14,6 +14,7 @@ import com.std.user.bo.base.Paginable;
 import com.std.user.common.DateUtil;
 import com.std.user.domain.SignLog;
 import com.std.user.domain.User;
+import com.std.user.dto.res.XN805100Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
@@ -33,7 +34,7 @@ public class SignLogAOImpl implements ISignLogAO {
 
     @Override
     @Transactional
-    public String addSignLog(String userId, String location) {
+    public XN805100Res addSignLog(String userId, String location) {
         User user = userBO.getUser(userId);
         // 判断是否已经签到
         Boolean result = signLogBO.isSignToday(userId);
@@ -46,7 +47,7 @@ public class SignLogAOImpl implements ISignLogAO {
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
             user.getLevel());
         userBO.refreshAmount(userId, amount, code, EBizType.AJ_SR, "每日签到");
-        return code;
+        return new XN805100Res(code, amount);
     }
 
     @Override

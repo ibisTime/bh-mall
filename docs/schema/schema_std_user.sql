@@ -247,7 +247,7 @@ CREATE TABLE `tstd_company` (
   `pass_word` varchar(4) DEFAULT NULL COMMENT '密码',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注/报价区间',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -45,6 +45,7 @@ import com.std.user.enums.ECurrency;
 import com.std.user.enums.EDirection;
 import com.std.user.enums.EFieldType;
 import com.std.user.enums.EIDKind;
+import com.std.user.enums.ELoginType;
 import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
@@ -151,7 +152,8 @@ public class UserAOImpl implements IUserAO {
             }
         }
         // 注册送积分
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC);
+        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
+            EBoolean.NO.getCode());
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             mobile, loginPwd, loginPwdStrength, userReferee, amount,
@@ -164,7 +166,7 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
+                + "用户，恭喜您成功注册。您的手机号请妥善保管您的账户相关信息。", "805041");
         return userId;
     }
 
@@ -290,7 +292,8 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(mobile);
         companyBO.isCompanyExist(companyCode);
         // 注册送积分
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC);
+        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
+            EBoolean.NO.getCode());
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             mobile, EUserPwd.InitPwd.getCode(), "1", userReferee, amount,
@@ -311,11 +314,8 @@ public class UserAOImpl implements IUserAO {
     public String doLogin(String loginName, String loginPwd, String kind) {
         User condition = new User();
         if (EUserKind.F1.getCode().equals(kind)) {
-            if (loginName.contains(EPrefixCode.CSW.getCode())) {
-                condition.setLoginName(loginName);
-            } else {
-                condition.setMobile(loginName);
-            }
+            condition.setLoginName(loginName);
+            condition.setLoginType(ELoginType.ALL.getCode());
             condition.setKind(kind);
         } else {
             condition.setLoginName(loginName);
@@ -716,6 +716,8 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public void editLoginName(String userId, String loginName) {
         fieldTimesBO.isFieldTimesExist(EFieldType.LOGINNAME, userId);
+        // 判断登录名是否已存在,全系统唯一
+        userBO.isLoginNameExist(loginName, null);
         if (StringUtils.isNotBlank(userId)) {
             userBO.refreshLoginName(userId, loginName);
             fieldTimesBO.saveFieldTimes(EFieldType.LOGINNAME, userId);

@@ -74,9 +74,17 @@
 			<if test="passWord != null and passWord != '' ">
 				AND t.pass_word = #{password} 
 			</if>
-			<if test="location != null and location != '' ">
-				AND t.location = #{location} 
-			</if>
+			<choose>
+				 <when test='location == "12"'>
+				 	AND t.location in ('1','2')
+				 </when>
+				 <otherwise>
+					 <if test="location != null and location != '' ">
+						AND t.location = #{location} 
+					 </if>
+				 </otherwise>
+			</choose>
+			
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
