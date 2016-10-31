@@ -121,6 +121,9 @@ public class User extends ABaseDO {
     // 头像
     private String photo;
 
+    // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
+    private String loginType;
+
     public String getLoginNameForLikeQuery() {
         return loginNameForLikeQuery;
     }
@@ -391,5 +394,13 @@ public class User extends ABaseDO {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
     }
 }

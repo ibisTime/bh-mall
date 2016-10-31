@@ -48,7 +48,7 @@ public class UserRelationDAOImpl extends AMybatisTemplate implements
      */
     @Override
     public int delete(UserRelation data) {
-        return super.delete(NAMESPACE.concat("insert_userRelation"), data);
+        return super.delete(NAMESPACE.concat("delete_userRelation"), data);
     }
 
     /** 

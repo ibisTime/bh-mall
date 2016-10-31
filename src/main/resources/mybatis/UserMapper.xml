@@ -35,7 +35,17 @@
 				AND t.user_id = #{userId}
 			</if>
 			<if test="loginName != null and loginName != '' ">
-				AND t.login_name = #{loginName}
+				<choose>
+					<when test='loginType == "3"'>
+						AND (t.login_name = #{loginName} OR t.mobile = #{loginName})
+					</when>
+					<when test='loginType == "2"'>
+						AND t.mobile = #{loginName}
+					</when>
+				    <otherwise>
+						AND t.login_name = #{loginName}
+					</otherwise>
+				</choose>
 			</if>
 			<if test="loginNameForLikeQuery != null and loginNameForLikeQuery != '' ">
 				AND t.login_name like "%"#{loginNameForLikeQuery}"%"

@@ -70,6 +70,9 @@ public class RuleAOImpl implements IRuleAO {
     public Rule getRuleByUserId(String userId) {
         Rule rule = null;
         User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("xn702002", "用户不存在");
+        }
         Rule condition = new Rule();
         condition.setKind(ERuleKind.JB.getCode());
         condition.setLevel(user.getLevel());
