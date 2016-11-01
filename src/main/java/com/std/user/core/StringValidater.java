@@ -8,6 +8,9 @@
  */
 package com.std.user.core;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.std.user.exception.BizException;
@@ -18,6 +21,7 @@ import com.std.user.exception.BizException;
  * @history:
  */
 public class StringValidater {
+
     /** 
      * 判断参数是否为空
      * @param userId 
@@ -28,6 +32,19 @@ public class StringValidater {
         for (String param : params) {
             if (StringUtils.isBlank(param)) {
                 throw new BizException("xn702000", "必填型入参，请按要求填写完整");
+            }
+        }
+    }
+
+    public static void validateEmoji(String... params) {
+        Pattern pattern = Pattern
+            .compile("[^(\u2E80-\u9FFF\\w\\s`~!@#\\$%\\^&\\*\\(\\)_+-？（）——=\\[\\]{}\\|;。，、《》”：；“！……’:‘\"<,>\\.?/\\\\*)]");
+        for (String param : params) {
+            if (StringUtils.isNotBlank(param)) {
+                Matcher matcher = pattern.matcher(param);
+                if (matcher.find()) {
+                    throw new BizException("xn000000", "包含非法字符，请删除带有表情");
+                }
             }
         }
     }
@@ -101,7 +118,7 @@ public class StringValidater {
     }
 
     public static void main(String[] args) {
-        // System.out.println(StringValidater.toLong("1000"));
-        StringValidater.validateNumber("1000");
+        String params = "1212《》";
+        StringValidater.validateEmoji(params);
     }
 }

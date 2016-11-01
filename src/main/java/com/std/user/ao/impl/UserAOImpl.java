@@ -126,9 +126,6 @@ public class UserAOImpl implements IUserAO {
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
-        // 发送短信
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，恭喜您成功注册。请妥善保管您的账户相关信息。", "805041");
         return userId;
     }
 
@@ -164,9 +161,6 @@ public class UserAOImpl implements IUserAO {
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
-        // 发送短信
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，恭喜您成功注册。您的手机号请妥善保管您的账户相关信息。", "805041");
         return userId;
     }
 
