@@ -710,6 +710,11 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public void editLoginName(String userId, String loginName) {
         fieldTimesBO.isFieldTimesExist(EFieldType.LOGINNAME, userId);
+        // 判断原登录名和现登录是否一致
+        User user = userBO.getUser(userId);
+        if (user.getLoginName().equalsIgnoreCase(loginName)) {
+            throw new BizException("xn000000", "现登录名和原来一致，无需修改");
+        }
         // 判断登录名是否已存在,全系统唯一
         userBO.isLoginNameExist(loginName, null);
         if (StringUtils.isNotBlank(userId)) {
