@@ -71,7 +71,7 @@
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName} 
 			</if>
-			<if test="passWord != null and passWord != '' ">
+			<if test="password != null and password != '' ">
 				AND t.pass_word = #{password} 
 			</if>
 			<choose>
