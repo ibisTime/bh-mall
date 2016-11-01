@@ -767,6 +767,9 @@ public class UserAOImpl implements IUserAO {
             String refNo) {
         User user = userBO.getUser(userId);
         ERuleType eRuleType = ERuleType.getRuleTypeMap().get(ruleType);
+        if (null == eRuleType) {
+            throw new BizException("xn000000", "产生规则项不存在");
+        }
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, eRuleType,
             user.getLevel());
         if (amount != 0) {

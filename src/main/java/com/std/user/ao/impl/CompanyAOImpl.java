@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public String addCompany(Company data) {
+        checkCompanyUserId(null, data.getUserId());
         return companyBO.saveCompany(data);
     }
 
@@ -62,7 +64,27 @@ public class CompanyAOImpl implements ICompanyAO {
         if (!companyBO.isCompanyExist(data.getCode())) {
             throw new BizException("xn0000", "该编号不存在");
         }
+        checkCompanyUserId(data.getCode(), data.getUserId());
         return companyBO.refreshCompany(data);
+    }
+
+    // 判断用户是否唯一负责一个公司
+    private void checkCompanyUserId(String companyCode, String userId) {
+        // 判断负责人是否已经存在
+        Company condition = new Company();
+        condition.setUserId(userId);
+        List<Company> companyList = companyBO.queryCompanyList(condition);
+        if (CollectionUtils.isNotEmpty(companyList)) {
+            if (StringUtils.isBlank(companyCode)) {
+                throw new BizException("xn0000", "该负责人已负责其他站点，请选择其他人");
+            } else {
+                Company data = companyList.get(0);
+                if (data.getUserId().equals(userId)
+                        && !data.getCode().equals(companyCode)) {
+                    throw new BizException("xn0000", "该负责人已负责其他站点，请选择其他人");
+                }
+            }
+        }
     }
 
     @Override

@@ -56,7 +56,7 @@ public interface IUserDAO extends IBaseDAO<User> {
     public int updateTradePwd(User data);
 
     /** 
-     * 设置登陆密码
+     * 设置登录密码
      * @param data
      * @return 
      * @create: 2015-2-23 下午4:28:41 miyb

@@ -24,7 +24,8 @@ INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1005','1','D','0',2000,'admin',now(),'发帖');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1006','1','E','0',1000,'admin',now(),'评论');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1007','1','F','0',1000,'admin',now(),'加精华');
-INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1008','1','G','0',1000,'admin',now(),'被举报扣积分');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1008','1','G','0',1000,'admin',now(),'帖子被举报扣积分');
+INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('1009','1','H','0',1000,'admin',now(),'评论被举报扣积分');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2001','2',NULL,'1',1,'admin',now(),'被举报次数');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2002','2',NULL,'2',5,'admin',now(),'被举报次数');
 INSERT INTO `tstd_rule` (`code`,`kind`,`type`,`level`,`value`,`updater`,`update_datetime`,`remark`) VALUES ('2003','2',NULL,'3',10,'admin',now(),'被举报次数');
@@ -421,11 +422,13 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'rule_type','规则类型','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','A','注册送积分','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','B','每日签到','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','C1','资料完善','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','C1','上传头像','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','C2','资料完善','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','D','发帖','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','E','评论','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','F','加精华','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','G','举报','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','G','帖子举报','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','H','评论举报','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'prod_kind','产品类别','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','A','家用电器','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','B','手机数码','admin',now(),'');
@@ -462,7 +465,6 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','comment_status','D','审批通过','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','comment_status','E','待回收','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','comment_status','F','被过滤','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','C2','上传头像','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_location','C','头条','xhAdmin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'user_status','用户状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','user_status','0','正常','admin',now(),'');
