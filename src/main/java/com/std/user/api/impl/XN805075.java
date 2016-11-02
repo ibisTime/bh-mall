@@ -32,5 +32,6 @@ public class XN805075 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805075Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getNickname());
+        StringValidater.validateEmoji(req.getNickname());
     }
 }
