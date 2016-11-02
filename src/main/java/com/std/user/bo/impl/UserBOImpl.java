@@ -462,7 +462,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         User dbUser = this.getUser(userId);
         Long nowAmount = dbUser.getAmount() + transAmount;
         if (nowAmount < 0) {
-            throw new BizException("li779001", "亲，积分不够");
+            throw new BizException("li779001", "亲，余额不足了哦");
         }
         User user = new User();
         user.setUserId(userId);

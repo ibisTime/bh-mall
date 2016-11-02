@@ -148,7 +148,7 @@ public class UserAOImpl implements IUserAO {
                 companyCode = result.getCode();
             }
         }
-        // 注册送积分
+        // 注册送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
             EBoolean.NO.getCode());
         // 插入用户信息
@@ -285,7 +285,7 @@ public class UserAOImpl implements IUserAO {
         // 验证手机号
         userBO.isMobileExist(mobile);
         companyBO.isCompanyExist(companyCode);
-        // 注册送积分
+        // 注册送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
             EBoolean.NO.getCode());
         // 插入用户信息

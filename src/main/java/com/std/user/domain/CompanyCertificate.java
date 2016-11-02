@@ -31,6 +31,9 @@ public class CompanyCertificate extends ABaseDO {
     // 资质类型
     private String certificateType;
 
+    // 公司
+    private Company company;
+
     public String getCode() {
         return code;
     }
@@ -109,5 +112,13 @@ public class CompanyCertificate extends ABaseDO {
 
     public void setCertificateType(String certificateType) {
         this.certificateType = certificateType;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

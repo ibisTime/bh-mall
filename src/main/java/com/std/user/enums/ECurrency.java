@@ -6,7 +6,7 @@ package com.std.user.enums;
  * @history:
  */
 public enum ECurrency {
-    CNY("CNY", "人民币"), XNB("XNB", "积分虚拟币");
+    CNY("CNY", "人民币"), XNB("XNB", "虚拟币");
 
     ECurrency(String code, String value) {
         this.code = code;

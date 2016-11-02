@@ -39,14 +39,15 @@ public class SignLogAOImpl implements ISignLogAO {
         // 判断是否已经签到
         Boolean result = signLogBO.isSignToday(userId);
         if (result) {
-            throw new BizException("XN000000", "今日已签到，请明日再来");
+            throw new BizException("XN000000", "今日已签到，请明日再来哦");
         }
         // 添加签到记录
         String code = signLogBO.saveSignLog(userId, location);
-        // 签到送积分
+        // 签到送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
             user.getLevel());
-        userBO.refreshAmount(userId, amount, code, EBizType.AJ_SR, "每日签到");
+        userBO.refreshAmount(userId, amount, code, EBizType.AJ_SR,
+            ERuleType.MRQD.getValue());
         return new XN805100Res(code, amount);
     }
 

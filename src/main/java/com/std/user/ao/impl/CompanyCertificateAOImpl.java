@@ -2,12 +2,15 @@ package com.std.user.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.ICompanyCertificateAO;
+import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.ICompanyCertificateBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.domain.Company;
 import com.std.user.domain.CompanyCertificate;
 import com.std.user.exception.BizException;
 
@@ -16,6 +19,9 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
 
     @Autowired
     private ICompanyCertificateBO companyCertificateBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Override
     public String addCompanyCertificate(CompanyCertificate data) {
@@ -41,7 +47,16 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
     @Override
     public Paginable<CompanyCertificate> queryCompanyCertificatePage(int start,
             int limit, CompanyCertificate condition) {
-        return companyCertificateBO.getPaginable(start, limit, condition);
+        Paginable<CompanyCertificate> page = companyCertificateBO.getPaginable(
+            start, limit, condition);
+        List<CompanyCertificate> list = page.getList();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (CompanyCertificate data : list) {
+                Company company = companyBO.getCompany(data.getCompanyCode());
+                data.setCompany(company);
+            }
+        }
+        return page;
     }
 
     @Override
@@ -52,6 +67,10 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
 
     @Override
     public CompanyCertificate getCompanyCertificate(String code) {
-        return companyCertificateBO.getCompanyCertificate(code);
+        CompanyCertificate data = companyCertificateBO
+            .getCompanyCertificate(code);
+        Company company = companyBO.getCompany(data.getCompanyCode());
+        data.setCompany(company);
+        return data;
     }
 }

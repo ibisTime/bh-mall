@@ -54,6 +54,22 @@ T6dh%$%$ss1
   
   http://121.43.101.148:5405/std-user/api
   
+  --------------------jj-service
+  cd /home/wwwroot/jj-service/tomcat_std_user/webapps
+  cp ./std-user/WEB-INF/classes/application.properties .
+  cp ./std-user/WEB-INF/classes/config.properties .
+  
+  rm -rf std-user.war
+  rm -rf std-user
+  mv /home/std-user.war .
+  
+  mv -f application.properties ./std-user/WEB-INF/classes/
+  mv -f config.properties ./std-user/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh
+  
+  http://121.43.101.148:5505/std-user/api
   
   --------------------cdhome
   cd /home/wwwroot/cdhome/tomcat_std_user/webapps
