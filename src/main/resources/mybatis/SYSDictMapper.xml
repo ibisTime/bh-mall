@@ -47,11 +47,7 @@
 		FROM
 		tsys_dict t 
 		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				${order}
-			</if>
-		</trim>	
+		ORDER BY id
 	</select>
 
 	<select id="select_sysDict_count" parameterType="sysDict" resultType="java.lang.Long">
