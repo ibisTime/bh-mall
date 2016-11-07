@@ -10,7 +10,7 @@ public interface ICompanyCertificateAO {
 
     public String addCompanyCertificate(CompanyCertificate data);
 
-    public int dropCompanyCertificate(String code, String userId);
+    public int dropCompanyCertificate(String code);
 
     public int editCompanyCertificate(CompanyCertificate data);
 

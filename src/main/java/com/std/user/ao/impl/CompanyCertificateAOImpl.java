@@ -35,12 +35,9 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
     }
 
     @Override
-    public int dropCompanyCertificate(String code, String userId) {
+    public int dropCompanyCertificate(String code) {
         CompanyCertificate data = companyCertificateBO
             .getCompanyCertificate(code);
-        if (!userId.equals(data.getApplyUser())) {
-            throw new BizException("xn0000", "申请人错误，无法删除");
-        }
         if (EComCertificateStatus.APPROVE_YES.getCode()
             .equals(data.getStatus())) {
             throw new BizException("xn0000", "资质申请已通过，无法删除");

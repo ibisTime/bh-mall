@@ -4,7 +4,6 @@ import com.std.user.ao.ICompanyCertificateAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.domain.CompanyCertificate;
 import com.std.user.dto.req.XN806142Req;
 import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
@@ -25,12 +24,8 @@ public class XN806142 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        CompanyCertificate data = new CompanyCertificate();
-        data.setCode(req.getCode());
-        data.setUserId(req.getUserId());
-        int count = companyCertificateAO.dropCompanyCertificate(req.getCode(),
-            req.getUserId());
-        return new BooleanRes(count > 0 ? true : false);
+        companyCertificateAO.dropCompanyCertificate(req.getCode());
+        return new BooleanRes(true);
     }
 
     @Override
