@@ -4,8 +4,11 @@ public class XN806150Req extends APageReq {
 
     private static final long serialVersionUID = 1L;
 
-    // 类别（选填）
+    // 编号（选填）
     private String certificateCode;
+
+    // 类型（选填）
+    private String certificateType;
 
     // 名称（选填）
     private String companyCode;
@@ -57,5 +60,13 @@ public class XN806150Req extends APageReq {
 
     public void setApproveUser(String approveUser) {
         this.approveUser = approveUser;
+    }
+
+    public String getCertificateType() {
+        return certificateType;
+    }
+
+    public void setCertificateType(String certificateType) {
+        this.certificateType = certificateType;
     }
 }

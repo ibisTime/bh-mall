@@ -41,7 +41,7 @@ public class XN806000Req {
     // 区（必填）
     private String area;
 
-    // 公司地址（必填）
+    // 公司地址（选填）
     private String address;
 
     // 经度（必填）

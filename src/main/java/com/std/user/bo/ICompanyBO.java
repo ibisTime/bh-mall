@@ -10,6 +10,8 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public boolean isCompanyExist(String code);
 
+    public void checkLoginName(String loginName);
+
     public String saveCompany(Company data);
 
     public int removeCompany(String code);

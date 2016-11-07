@@ -19,6 +19,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="certificateType != null and certificateType != '' ">
+				AND tc.type = #{certificateType}
+			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>

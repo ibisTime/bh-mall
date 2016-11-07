@@ -252,6 +252,9 @@
 		,location
 		,order_no
 		,is_default
+		,is_hot
+		,login_name
+		,pass_word
 		,updater
 		,update_datetime
 		,remark
@@ -287,6 +290,9 @@
 		,#{location}
 		,#{orderNo}
 		,#{isDefault}
+		,#{isHot}
+		,#{loginName}
+		,#{password}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}

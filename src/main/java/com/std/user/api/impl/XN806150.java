@@ -29,6 +29,7 @@ public class XN806150 extends AProcessor {
     public Object doBusiness() throws BizException {
         CompanyCertificate condition = new CompanyCertificate();
         condition.setCertificateCode(req.getCertificateCode());
+        condition.setCertificateType(req.getCertificateType());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());

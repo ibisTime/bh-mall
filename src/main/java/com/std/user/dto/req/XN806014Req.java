@@ -22,6 +22,17 @@ public class XN806014Req extends APageReq {
     // 是否默认（选填）
     private String isDefault;
 
+    // 是否热门（选填）
+    private String isHot;
+
+    public String getIsHot() {
+        return isHot;
+    }
+
+    public void setIsHot(String isHot) {
+        this.isHot = isHot;
+    }
+
     // UI位置（选填）
     private String location;
 

@@ -1,5 +1,7 @@
 package com.std.user.dto.res;
 
+import com.std.user.domain.UserExt;
+
 public class XN805901Res {
     // 用户ID
     private String userId;
@@ -12,12 +14,6 @@ public class XN805901Res {
 
     // 状态
     private String status;
-
-    // 拥有的服务list
-    private String serveList;
-
-    // 拥有的报价list
-    private String quoteList;
 
     // 用户等级
     private String level;
@@ -52,6 +48,8 @@ public class XN805901Res {
     // 粉丝数
     private String totalFansNum;
 
+    private UserExt userExt;
+
     public String getUserId() {
         return userId;
     }
@@ -82,22 +80,6 @@ public class XN805901Res {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getServeList() {
-        return serveList;
-    }
-
-    public void setServeList(String serveList) {
-        this.serveList = serveList;
-    }
-
-    public String getQuoteList() {
-        return quoteList;
-    }
-
-    public void setQuoteList(String quoteList) {
-        this.quoteList = quoteList;
     }
 
     public String getLevel() {
@@ -186,5 +168,13 @@ public class XN805901Res {
 
     public void setTotalFansNum(String totalFansNum) {
         this.totalFansNum = totalFansNum;
+    }
+
+    public UserExt getUserExt() {
+        return userExt;
+    }
+
+    public void setUserExt(UserExt userExt) {
+        this.userExt = userExt;
     }
 }

@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.ICompanyCertificateAO;
+import com.std.user.bo.ICertificateBO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.ICompanyCertificateBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.domain.Certificate;
 import com.std.user.domain.Company;
 import com.std.user.domain.CompanyCertificate;
 import com.std.user.exception.BizException;
@@ -22,6 +24,9 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
 
     @Autowired
     private ICompanyBO companyBO;
+
+    @Autowired
+    private ICertificateBO certificateBO;
 
     @Override
     public String addCompanyCertificate(CompanyCertificate data) {
@@ -71,6 +76,9 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
             .getCompanyCertificate(code);
         Company company = companyBO.getCompany(data.getCompanyCode());
         data.setCompany(company);
+        Certificate certificate = certificateBO.getCertificate(data
+            .getCertificateCode());
+        data.setCertificate(certificate);
         return data;
     }
 }

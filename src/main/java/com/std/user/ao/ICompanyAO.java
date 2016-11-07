@@ -50,4 +50,10 @@ public interface ICompanyAO {
     // 通过域名来查询公司信息
     public Company getCompanyByDomain(String domain);
 
+    // 登录
+    public String doLogin(String loginName, String password);
+
+    // 找回密码
+    public void doFindLoginPwd(String loginName, String mobile,
+            String smsCaptcha, String newPassword);
 }

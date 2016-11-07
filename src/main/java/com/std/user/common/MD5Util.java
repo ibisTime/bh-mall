@@ -11,6 +11,8 @@ package com.std.user.common;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.lang3.StringUtils;
+
 /** 
  * @author: miyb 
  * @since: 2015-2-26 下午4:54:49 
@@ -18,20 +20,24 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MD5Util {
     public static String md5(String pswd) {
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            StringBuffer strbuf = new StringBuffer();
+        if (StringUtils.isNotBlank(pswd)) {
+            try {
+                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                StringBuffer strbuf = new StringBuffer();
 
-            md5.update(pswd.getBytes(), 0, pswd.length());
-            byte[] digest = md5.digest();
+                md5.update(pswd.getBytes(), 0, pswd.length());
+                byte[] digest = md5.digest();
 
-            for (int i = 0; i < digest.length; i++) {
-                strbuf.append(byte2Hex(digest[i]));
+                for (int i = 0; i < digest.length; i++) {
+                    strbuf.append(byte2Hex(digest[i]));
+                }
+
+                return strbuf.toString();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
             }
-
-            return strbuf.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        } else {
+            return null;
         }
     }
 
@@ -42,7 +48,6 @@ public class MD5Util {
     }
 
     public static void main(String[] args) {
-        System.out.print(md5("111111"));
+        System.out.print(md5(null));
     }
-
 }

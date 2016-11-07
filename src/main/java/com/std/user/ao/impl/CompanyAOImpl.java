@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.std.user.ao.ICompanyAO;
 import com.std.user.bo.ICNavigateBO;
 import com.std.user.bo.ICompanyBO;
+import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.common.MD5Util;
 import com.std.user.domain.Company;
 import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
@@ -27,9 +29,17 @@ public class CompanyAOImpl implements ICompanyAO {
     @Autowired
     private ICNavigateBO cNavigateBO;
 
+    @Autowired
+    private ISmsOutBO smsOutBO;
+
     @Override
     public String addCompany(Company data) {
-        checkCompanyUserId(null, data.getUserId());
+        if (StringUtils.isNotBlank(data.getUserId())) {
+            checkCompanyUserId(null, data.getUserId());
+        }
+        if (StringUtils.isNotBlank(data.getLoginName())) {
+            companyBO.checkLoginName(data.getLoginName());
+        }
         return companyBO.saveCompany(data);
     }
 
@@ -64,7 +74,9 @@ public class CompanyAOImpl implements ICompanyAO {
         if (!companyBO.isCompanyExist(data.getCode())) {
             throw new BizException("xn0000", "该编号不存在");
         }
-        checkCompanyUserId(data.getCode(), data.getUserId());
+        if (StringUtils.isNotBlank(data.getUserId())) {
+            checkCompanyUserId(data.getCode(), data.getUserId());
+        }
         return companyBO.refreshCompany(data);
     }
 
@@ -251,4 +263,42 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         companyBO.refreshCompanyPsw(code, newPassword);
     }
+
+    @Override
+    public String doLogin(String loginName, String password) {
+        Company condition = new Company();
+        condition.setLoginName(loginName);
+        List<Company> companyList1 = companyBO.queryCompanyList(condition);
+        if (CollectionUtils.isEmpty(companyList1)) {
+            throw new BizException("xn702002", "登录名不存在");
+        }
+        condition.setPassword(MD5Util.md5(password));
+        List<Company> companyList2 = companyBO.queryCompanyList(condition);
+        if (CollectionUtils.isEmpty(companyList2)) {
+            throw new BizException("xn702002", "登录密码错误");
+        }
+        Company company = companyList2.get(0);
+        return company.getCode();
+    }
+
+    @Override
+    public void doFindLoginPwd(String loginName, String mobile,
+            String smsCaptcha, String newPassword) {
+        Company company = null;
+        Company condition = new Company();
+        condition.setLoginName(loginName);
+        List<Company> companyList = companyBO.queryCompanyList(condition);
+        if (CollectionUtils.isEmpty(companyList)) {
+            throw new BizException("xn000000", "该登录名不存在");
+        } else {
+            company = companyList.get(0);
+            if (!mobile.equals(company.getMobile())) {
+                throw new BizException("xn000000", "该公司无此联系电话");
+            }
+        }
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "806009");
+        companyBO.refreshCompanyPsw(company.getCode(), newPassword);
+    }
+
 }

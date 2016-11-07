@@ -34,6 +34,17 @@ public class CompanyCertificate extends ABaseDO {
     // 公司
     private Company company;
 
+    // 资质
+    private Certificate certificate;
+
+    public Certificate getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(Certificate certificate) {
+        this.certificate = certificate;
+    }
+
     public String getCode() {
         return code;
     }

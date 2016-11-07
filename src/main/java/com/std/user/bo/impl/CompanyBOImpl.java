@@ -3,6 +3,7 @@ package com.std.user.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.base.Page;
 import com.std.user.bo.base.Paginable;
 import com.std.user.bo.base.PaginableBOImpl;
+import com.std.user.common.MD5Util;
 import com.std.user.core.EGeneratePrefix;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.dao.ICompanyDAO;
@@ -49,6 +51,9 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
                 data.setIsDefault(EBoolean.NO.getCode());
             }
             data.setUpdateDatetime(new Date());
+            // 密码MD5加密
+            data.setPassword(MD5Util.md5(data.getPassword()));
+            data.setIsHot(EBoolean.NO.getCode());
             companyDAO.insert(data);
         }
         return code;
@@ -175,9 +180,6 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
             Company condition = new Company();
             condition.setUserId(userId);
             data = companyDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "该用户编号不存在公司");
-            }
         }
         return data;
     }
@@ -204,7 +206,20 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     public int refreshCompanyPsw(String code, String password) {
         Company data = new Company();
         data.setCode(code);
-        data.setPassword(password);
+        data.setPassword(MD5Util.md5(password));
         return companyDAO.updatePsw(data);
+    }
+
+    /** 
+     * @see com.std.user.bo.ICompanyBO#checkLoginName(java.lang.String)
+     */
+    @Override
+    public void checkLoginName(String loginName) {
+        Company condition = new Company();
+        condition.setLoginName(loginName);
+        List<Company> companyList = companyDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(companyList)) {
+            throw new BizException("xn702002", "登录名已存在");
+        }
     }
 }

@@ -135,6 +135,7 @@ public class CompanyConverter {
         result.setUserId(req.getUserId());
         result.setLocation(req.getLocation());
         result.setIsDefault(req.getIsDefault());
+        result.setIsHot(req.getIsHot());
         return result;
     }
 
@@ -151,6 +152,7 @@ public class CompanyConverter {
         result.setUserId(req.getUserId());
         result.setLocation(req.getLocation());
         result.setIsDefault(req.getIsDefault());
+        result.setIsHot(req.getIsHot());
         return result;
     }
 }

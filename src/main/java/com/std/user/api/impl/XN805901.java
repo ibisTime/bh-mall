@@ -85,6 +85,7 @@ public class XN805901 extends AProcessor {
                 }
             }
             res.setCompanyCode(user.getCompanyCode());
+            res.setUserExt(user.getUserExt());
         }
         return res;
     }
