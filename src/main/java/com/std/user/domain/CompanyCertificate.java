@@ -8,22 +8,31 @@ public class CompanyCertificate extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
+    // 编号
     private String code;
 
+    // 资质编号
     private String certificateCode;
 
+    // 公司编号
     private String companyCode;
 
+    // 状态(0 待审核 1 审核通过 2 审核不通过)
     private String status;
 
+    // 申请人
     private String applyUser;
 
+    // 申请时间
     private Date applyDatetime;
 
+    // 审核人
     private String approveUser;
 
+    // 审核时间
     private Date approveDatetime;
 
+    // 审核意见
     private String approveNote;
 
     /******************db data **********/
@@ -36,6 +45,9 @@ public class CompanyCertificate extends ABaseDO {
 
     // 资质
     private Certificate certificate;
+
+    // 用户编号
+    private String userId;
 
     public Certificate getCertificate() {
         return certificate;
@@ -131,5 +143,13 @@ public class CompanyCertificate extends ABaseDO {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

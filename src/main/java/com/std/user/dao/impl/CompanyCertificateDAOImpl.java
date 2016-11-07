@@ -54,4 +54,13 @@ public class CompanyCertificateDAOImpl extends AMybatisTemplate implements
         return super
             .update(NAMESPACE.concat("update_companyCertificate"), data);
     }
+
+    /** 
+     * @see com.std.user.dao.ICompanyCertificateDAO#updateStatus(com.std.user.domain.CompanyCertificate)
+     */
+    @Override
+    public int updateStatus(CompanyCertificate data) {
+        return super.update(
+            NAMESPACE.concat("update_companyCertificate_status"), data);
+    }
 }

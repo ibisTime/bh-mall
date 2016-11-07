@@ -10,9 +10,12 @@ public interface ICompanyCertificateAO {
 
     public String addCompanyCertificate(CompanyCertificate data);
 
-    public int dropCompanyCertificate(String code);
+    public int dropCompanyCertificate(String code, String userId);
 
     public int editCompanyCertificate(CompanyCertificate data);
+
+    public int approveCompanyCertificate(String code, String approver,
+            String approveResult, String approveNote);
 
     public Paginable<CompanyCertificate> queryCompanyCertificatePage(int start,
             int limit, CompanyCertificate condition);

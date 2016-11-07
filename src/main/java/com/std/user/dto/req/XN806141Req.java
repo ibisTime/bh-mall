@@ -2,16 +2,16 @@ package com.std.user.dto.req;
 
 public class XN806141Req {
 
-    // 资质编号（必填）
+    // 编号（必填）
     private String code;
 
-    // 所属公司编号（必填）
-    private String status;
+    // 审核结果（必填）
+    private String approveResult;
 
-    // 申请人（必填）
+    // 审核人（必填）
     private String approveUser;
 
-    // 申请人（必填）
+    // 审核说明（必填）
     private String approveNote;
 
     public String getCode() {
@@ -22,12 +22,12 @@ public class XN806141Req {
         this.code = code;
     }
 
-    public String getStatus() {
-        return status;
+    public String getApproveResult() {
+        return approveResult;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setApproveResult(String approveResult) {
+        this.approveResult = approveResult;
     }
 
     public String getApproveUser() {

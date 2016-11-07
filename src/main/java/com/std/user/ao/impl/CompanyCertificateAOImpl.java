@@ -14,6 +14,7 @@ import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Certificate;
 import com.std.user.domain.Company;
 import com.std.user.domain.CompanyCertificate;
+import com.std.user.enums.EComCertificateStatus;
 import com.std.user.exception.BizException;
 
 @Service
@@ -34,19 +35,41 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
     }
 
     @Override
+    public int dropCompanyCertificate(String code, String userId) {
+        CompanyCertificate data = companyCertificateBO
+            .getCompanyCertificate(code);
+        if (!userId.equals(data.getApplyUser())) {
+            throw new BizException("xn0000", "申请人错误，无法删除");
+        }
+        if (EComCertificateStatus.APPROVE_YES.getCode()
+            .equals(data.getStatus())) {
+            throw new BizException("xn0000", "资质申请已通过，无法删除");
+        }
+        return companyCertificateBO.removeCompanyCertificate(code);
+    }
+
+    @Override
     public int editCompanyCertificate(CompanyCertificate data) {
         if (!companyCertificateBO.isCompanyCertificateExist(data.getCode())) {
             throw new BizException("xn0000", "该编号不存在");
+        }
+        if (EComCertificateStatus.APPROVE_YES.getCode()
+            .equals(data.getStatus())) {
+            throw new BizException("xn0000", "该资质申请已通过，无需修改");
         }
         return companyCertificateBO.refreshCompanyCertificate(data);
     }
 
     @Override
-    public int dropCompanyCertificate(String code) {
-        if (!companyCertificateBO.isCompanyCertificateExist(code)) {
-            throw new BizException("xn0000", "该编号不存在");
+    public int approveCompanyCertificate(String code, String approver,
+            String approveResult, String approveNote) {
+        CompanyCertificate data = companyCertificateBO
+            .getCompanyCertificate(code);
+        if (!EComCertificateStatus.TOAPPROVE.getCode().equals(data.getStatus())) {
+            throw new BizException("xn0000", "该申请资质不是申请状态，无法审核");
         }
-        return companyCertificateBO.removeCompanyCertificate(code);
+        return companyCertificateBO.refreshCompanyCertificateStatus(code,
+            approver, approveResult, approveNote);
     }
 
     @Override

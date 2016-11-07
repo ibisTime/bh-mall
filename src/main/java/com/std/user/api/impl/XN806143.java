@@ -4,36 +4,39 @@ import com.std.user.ao.ICompanyCertificateAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.dto.req.XN806141Req;
+import com.std.user.domain.CompanyCertificate;
+import com.std.user.dto.req.XN806143Req;
 import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
-/** 
- * 审核公司资质
- * @author: zuixian 
- * @since: 2016年10月10日 下午3:58:13 
+/**
+ * 修改公司资质
+ * @author: xieyj 
+ * @since: 2016年11月7日 下午4:16:57 
  * @history:
  */
-public class XN806141 extends AProcessor {
+public class XN806143 extends AProcessor {
     private ICompanyCertificateAO companyCertificateAO = SpringContextHolder
         .getBean(ICompanyCertificateAO.class);
 
-    private XN806141Req req = null;
+    private XN806143Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        int count = companyCertificateAO.approveCompanyCertificate(
-            req.getCode(), req.getApproveUser(), req.getApproveResult(),
-            req.getApproveNote());
+        CompanyCertificate data = new CompanyCertificate();
+        data.setCode(req.getCode());
+        data.setCertificateCode(req.getCertificateCode());
+        data.setApplyUser(req.getApplyUser());
+        int count = companyCertificateAO.editCompanyCertificate(data);
         return new BooleanRes(count > 0 ? true : false);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN806141Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getApproveUser(),
-            req.getApproveResult());
+        req = JsonUtil.json2Bean(inputparams, XN806143Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getCertificateCode(),
+            req.getApplyUser());
     }
 }

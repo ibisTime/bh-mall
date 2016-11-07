@@ -89,8 +89,15 @@
 		,#{approveNote}
 		)
 	</insert>
+	
+	<delete id="delete_companyCertificate" parameterType="companyCertificate">
+		DELETE FROM
+		tstd_company_certificate
+		WHERE
+		code = #{code}
+	</delete>
 
-	<update id="update_companyCertificate" parameterType="companyCertificate">
+	<update id="update_companyCertificate_status" parameterType="companyCertificate">
 		UPDATE tstd_company_certificate
 		SET
 		status = #{status}
@@ -99,6 +106,12 @@
 		,approve_note = #{approveNote}
 		WHERE code = #{code}
 	</update>
-
-
+	
+	<update id="update_companyCertificate" parameterType="companyCertificate">
+		UPDATE tstd_company_certificate
+		SET
+		certificate_code = #{certificateCode}
+		,apply_user = #{applyUser}
+		WHERE code = #{code}
+	</update>
 </mapper>

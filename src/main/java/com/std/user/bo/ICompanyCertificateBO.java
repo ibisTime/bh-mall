@@ -15,6 +15,9 @@ public interface ICompanyCertificateBO extends IPaginableBO<CompanyCertificate> 
 
     public int refreshCompanyCertificate(CompanyCertificate data);
 
+    public int refreshCompanyCertificateStatus(String code, String approver,
+            String approveResult, String approveNote);
+
     public List<CompanyCertificate> queryCompanyCertificateList(
             CompanyCertificate condition);
 

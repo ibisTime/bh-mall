@@ -7,4 +7,6 @@ public interface ICompanyCertificateDAO extends IBaseDAO<CompanyCertificate> {
     String NAMESPACE = ICompanyCertificateDAO.class.getName().concat(".");
 
     public int update(CompanyCertificate data);
+
+    public int updateStatus(CompanyCertificate data);
 }

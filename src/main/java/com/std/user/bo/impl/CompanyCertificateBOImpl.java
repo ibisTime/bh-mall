@@ -13,6 +13,7 @@ import com.std.user.core.EGeneratePrefix;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.dao.ICompanyCertificateDAO;
 import com.std.user.domain.CompanyCertificate;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.EComCertificateStatus;
 import com.std.user.exception.BizException;
 
@@ -61,8 +62,29 @@ public class CompanyCertificateBOImpl extends
     public int refreshCompanyCertificate(CompanyCertificate data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
-            data.setApproveDatetime(new Date());
+            data.setApplyDatetime(new Date());
+            data.setStatus(EComCertificateStatus.TOAPPROVE.getCode());
             count = companyCertificateDAO.update(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshCompanyCertificateStatus(String code, String approver,
+            String approveResult, String approveNote) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            CompanyCertificate data = new CompanyCertificate();
+            data.setCode(code);
+            if (EBoolean.YES.getCode().equals(approveResult)) {
+                data.setStatus(EComCertificateStatus.APPROVE_YES.getCode());
+            } else {
+                data.setStatus(EComCertificateStatus.APPROVE_NO.getCode());
+            }
+            data.setApproveUser(approver);
+            data.setApproveDatetime(new Date());
+            data.setApproveNote(approveNote);
+            count = companyCertificateDAO.updateStatus(data);
         }
         return count;
     }
@@ -81,7 +103,7 @@ public class CompanyCertificateBOImpl extends
             condition.setCode(code);
             data = companyCertificateDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "该编号不存在");
+                throw new BizException("xn0000", "该资质申请编号不存在");
             }
         }
         return data;
