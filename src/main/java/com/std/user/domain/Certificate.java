@@ -10,7 +10,6 @@ public class Certificate extends ABaseDO {
 
     private String code;
 
-    // 1 摄影/2 拍摄/3培训/ 4店铺代运营/5培训/6美工
     private String type;
 
     private String name;
