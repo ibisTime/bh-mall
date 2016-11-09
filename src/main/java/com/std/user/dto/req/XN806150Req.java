@@ -10,8 +10,11 @@ public class XN806150Req extends APageReq {
     // 类型（选填）
     private String certificateType;
 
-    // 名称（选填）
+    // 公司编号（选填）
     private String companyCode;
+
+    // 名称（选填）
+    private String companyName;
 
     // 状态（选填）
     private String status;
@@ -21,6 +24,15 @@ public class XN806150Req extends APageReq {
 
     // 更新人（选填）
     private String approveUser;
+
+    // 省（选填）
+    private String province;
+
+    // 市（选填）
+    private String city;
+
+    // 区（选填）
+    private String area;
 
     public String getCertificateCode() {
         return certificateCode;
@@ -68,5 +80,37 @@ public class XN806150Req extends APageReq {
 
     public void setCertificateType(String certificateType) {
         this.certificateType = certificateType;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

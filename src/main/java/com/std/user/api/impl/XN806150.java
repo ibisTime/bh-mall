@@ -2,7 +2,6 @@ package com.std.user.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.std.user.ao.ICMaterialAO;
 import com.std.user.ao.ICompanyCertificateAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
@@ -31,12 +30,16 @@ public class XN806150 extends AProcessor {
         condition.setCertificateCode(req.getCertificateCode());
         condition.setCertificateType(req.getCertificateType());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setCompanyName(req.getCompanyName());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
         condition.setApproveUser(req.getApproveUser());
+        condition.setProvinceForQuery(req.getProvince());
+        condition.setCityForQuery(req.getCity());
+        condition.setAreaForQuery(req.getArea());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = ICMaterialAO.DEFAULT_ORDER_COLUMN;
+            column = ICompanyCertificateAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());

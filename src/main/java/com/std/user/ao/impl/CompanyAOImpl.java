@@ -197,6 +197,9 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         Company data = companyBO.getCompany(code);
         data.setIsHot(isHot);
+        if (StringUtils.isBlank(orderNo)) {
+            orderNo = "0";
+        }
         data.setOrderNo(Integer.valueOf(orderNo));
         data.setUpdater(updater);
         return companyBO.refreshCompanyHot(data);
@@ -256,7 +259,7 @@ public class CompanyAOImpl implements ICompanyAO {
             String newPassword) {
         Company condition = new Company();
         condition.setCode(code);
-        condition.setPassword(oldPassword);
+        condition.setPassword(MD5Util.md5(oldPassword));
         List<Company> list = companyBO.queryCompanyList(condition);
         if (list == null || list.size() == 0) {
             throw new BizException("xn0000", "密码不正确");

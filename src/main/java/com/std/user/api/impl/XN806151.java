@@ -29,7 +29,9 @@ public class XN806151 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
         condition.setApproveUser(req.getApproveUser());
-
+        condition.setProvinceForQuery(req.getProvince());
+        condition.setCityForQuery(req.getCity());
+        condition.setAreaForQuery(req.getArea());
         return companyCertificateAO.queryCompanyCertificateList(condition);
     }
 

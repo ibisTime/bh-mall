@@ -469,7 +469,6 @@ LIMIT 0, 50000
 INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','sysMobile','400-1000000','系统电话','admin',now(),NULL);
 INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','serviceTime','9:30-21:30','服务时间','admin',now(),NULL);
 
-
 /*
 -- Query: SELECT * FROM csw_std_user.tstd_cnavigate
 LIMIT 0, 50000

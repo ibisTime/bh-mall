@@ -40,6 +40,9 @@ public class CompanyCertificate extends ABaseDO {
     // 资质类型
     private String certificateType;
 
+    // 公司名称
+    private String companyName;
+
     // 公司
     private Company company;
 
@@ -48,6 +51,23 @@ public class CompanyCertificate extends ABaseDO {
 
     // 用户编号
     private String userId;
+
+    // 省份
+    private String provinceForQuery;
+
+    // 城市
+    private String cityForQuery;
+
+    // 县区
+    private String areaForQuery;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
     public Certificate getCertificate() {
         return certificate;
@@ -151,5 +171,29 @@ public class CompanyCertificate extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getProvinceForQuery() {
+        return provinceForQuery;
+    }
+
+    public void setProvinceForQuery(String provinceForQuery) {
+        this.provinceForQuery = provinceForQuery;
+    }
+
+    public String getCityForQuery() {
+        return cityForQuery;
+    }
+
+    public void setCityForQuery(String cityForQuery) {
+        this.cityForQuery = cityForQuery;
+    }
+
+    public String getAreaForQuery() {
+        return areaForQuery;
+    }
+
+    public void setAreaForQuery(String areaForQuery) {
+        this.areaForQuery = areaForQuery;
     }
 }

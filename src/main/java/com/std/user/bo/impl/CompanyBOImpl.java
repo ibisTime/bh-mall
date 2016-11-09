@@ -170,7 +170,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
             throw new BizException("xn0000", "该公司不存在");
         }
         data.setUpdateDatetime(new Date());
-        return companyDAO.updateDefault(data);
+        return companyDAO.updateHot(data);
     }
 
     @Override

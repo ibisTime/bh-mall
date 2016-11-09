@@ -17,6 +17,15 @@ public class XN806151Req {
     // 更新人（选填）
     private String approveUser;
 
+    // 省（选填）
+    private String province;
+
+    // 市（选填）
+    private String city;
+
+    // 区（选填）
+    private String area;
+
     public String getCertificateCode() {
         return certificateCode;
     }
@@ -55,5 +64,29 @@ public class XN806151Req {
 
     public void setApproveUser(String approveUser) {
         this.approveUser = approveUser;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }
