@@ -35,12 +35,18 @@ public class CompanyCertificateBOImpl extends
     }
 
     @Override
-    public String saveCompanyCertificate(CompanyCertificate data) {
+    public String saveCompanyCertificate(String companyCode,
+            String certificateCode, String applyUser) {
         String code = null;
-        if (data != null) {
+        if (StringUtils.isNotBlank(companyCode)
+                && StringUtils.isNotBlank(certificateCode)) {
+            CompanyCertificate data = new CompanyCertificate();
             code = OrderNoGenerater.generate(EGeneratePrefix.GZ.getCode());
             data.setCode(code);
+            data.setCompanyCode(companyCode);
+            data.setCertificateCode(certificateCode);
             data.setStatus(EComCertificateStatus.TOAPPROVE.getCode());
+            data.setApplyUser(applyUser);
             data.setApplyDatetime(new Date());
             companyCertificateDAO.insert(data);
         }

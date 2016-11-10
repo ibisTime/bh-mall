@@ -30,8 +30,19 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
     private ICertificateBO certificateBO;
 
     @Override
-    public String addCompanyCertificate(CompanyCertificate data) {
-        return companyCertificateBO.saveCompanyCertificate(data);
+    public String applyCompanyCertificate(String companyCode,
+            String certificateCode, String applyUser) {
+        // 判断是否已申请该资质
+        CompanyCertificate condition = new CompanyCertificate();
+        condition.setCompanyCode(companyCode);
+        condition.setCertificateCode(certificateCode);
+        List<CompanyCertificate> list = companyCertificateBO
+            .queryCompanyCertificateList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            throw new BizException("xn0000", "公司已有该资质处理的记录，无需再次申请");
+        }
+        return companyCertificateBO.saveCompanyCertificate(companyCode,
+            certificateCode, applyUser);
     }
 
     @Override
@@ -48,7 +59,7 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
     @Override
     public int editCompanyCertificate(CompanyCertificate data) {
         if (!companyCertificateBO.isCompanyCertificateExist(data.getCode())) {
-            throw new BizException("xn0000", "该编号不存在");
+            throw new BizException("xn0000", "该资质申请不存在");
         }
         if (EComCertificateStatus.APPROVE_YES.getCode()
             .equals(data.getStatus())) {
@@ -63,7 +74,7 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
         CompanyCertificate data = companyCertificateBO
             .getCompanyCertificate(code);
         if (!EComCertificateStatus.TOAPPROVE.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "该申请资质不是申请状态，无法审核");
+            throw new BizException("xn0000", "该资质申请不是申请状态，无法审核");
         }
         return companyCertificateBO.refreshCompanyCertificateStatus(code,
             approver, approveResult, approveNote);

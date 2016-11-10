@@ -9,7 +9,8 @@ public interface ICompanyCertificateBO extends IPaginableBO<CompanyCertificate> 
 
     public boolean isCompanyCertificateExist(String code);
 
-    public String saveCompanyCertificate(CompanyCertificate data);
+    public String saveCompanyCertificate(String companyCode,
+            String certificateCode, String applyUser);
 
     public int removeCompanyCertificate(String code);
 

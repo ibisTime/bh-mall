@@ -8,7 +8,8 @@ import com.std.user.domain.CompanyCertificate;
 public interface ICompanyCertificateAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addCompanyCertificate(CompanyCertificate data);
+    public String applyCompanyCertificate(String companyCode,
+            String certificateCode, String applyUser);
 
     public int dropCompanyCertificate(String code);
 
