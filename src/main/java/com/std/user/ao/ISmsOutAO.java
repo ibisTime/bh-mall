@@ -10,4 +10,14 @@ public interface ISmsOutAO {
      * @history:
      */
     public void sendCaptcha(String mobile, String bizType);
+
+    /**
+     * 发送内容
+     * @param tokenId
+     * @param userId
+     * @param content 
+     * @create: 2016年11月10日 上午10:30:53 xieyj
+     * @history:
+     */
+    public void sendContent(String tokenId, String userId, String content);
 }
