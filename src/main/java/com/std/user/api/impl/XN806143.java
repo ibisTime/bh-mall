@@ -29,8 +29,8 @@ public class XN806143 extends AProcessor {
         data.setCode(req.getCode());
         data.setCertificateCode(req.getCertificateCode());
         data.setApplyUser(req.getApplyUser());
-        int count = companyCertificateAO.editCompanyCertificate(data);
-        return new BooleanRes(count > 0 ? true : false);
+        companyCertificateAO.editCompanyCertificate(data);
+        return new BooleanRes(true);
     }
 
     @Override

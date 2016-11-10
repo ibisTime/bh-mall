@@ -11,11 +11,11 @@ public interface ICompanyCertificateAO {
     public String applyCompanyCertificate(String companyCode,
             String certificateCode, String applyUser);
 
-    public int dropCompanyCertificate(String code);
+    public void dropCompanyCertificate(String code);
 
-    public int editCompanyCertificate(CompanyCertificate data);
+    public void editCompanyCertificate(CompanyCertificate data);
 
-    public int approveCompanyCertificate(String code, String approver,
+    public void approveCompanyCertificate(String code, String approver,
             String approveResult, String approveNote);
 
     public Paginable<CompanyCertificate> queryCompanyCertificatePage(int start,

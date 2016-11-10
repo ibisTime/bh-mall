@@ -80,7 +80,7 @@ public class CertificateBOImpl extends PaginableBOImpl<Certificate> implements
             condition.setCode(code);
             data = certificateDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "该编号不存在");
+                throw new BizException("xn0000", "该资质不存在");
             }
         }
         return data;

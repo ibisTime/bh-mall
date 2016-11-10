@@ -24,10 +24,9 @@ public class XN806141 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        int count = companyCertificateAO.approveCompanyCertificate(
-            req.getCode(), req.getApproveUser(), req.getApproveResult(),
-            req.getApproveNote());
-        return new BooleanRes(count > 0 ? true : false);
+        companyCertificateAO.approveCompanyCertificate(req.getCode(),
+            req.getApproveUser(), req.getApproveResult(), req.getApproveNote());
+        return new BooleanRes(true);
     }
 
     @Override

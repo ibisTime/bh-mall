@@ -10,10 +10,12 @@ import com.std.user.ao.ICompanyCertificateAO;
 import com.std.user.bo.ICertificateBO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.ICompanyCertificateBO;
+import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Certificate;
 import com.std.user.domain.Company;
 import com.std.user.domain.CompanyCertificate;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.EComCertificateStatus;
 import com.std.user.exception.BizException;
 
@@ -28,6 +30,9 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
 
     @Autowired
     private ICertificateBO certificateBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
 
     @Override
     public String applyCompanyCertificate(String companyCode,
@@ -46,18 +51,18 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
     }
 
     @Override
-    public int dropCompanyCertificate(String code) {
+    public void dropCompanyCertificate(String code) {
         CompanyCertificate data = companyCertificateBO
             .getCompanyCertificate(code);
         if (EComCertificateStatus.APPROVE_YES.getCode()
             .equals(data.getStatus())) {
             throw new BizException("xn0000", "资质申请已通过，无法删除");
         }
-        return companyCertificateBO.removeCompanyCertificate(code);
+        companyCertificateBO.removeCompanyCertificate(code);
     }
 
     @Override
-    public int editCompanyCertificate(CompanyCertificate data) {
+    public void editCompanyCertificate(CompanyCertificate data) {
         if (!companyCertificateBO.isCompanyCertificateExist(data.getCode())) {
             throw new BizException("xn0000", "该资质申请不存在");
         }
@@ -65,19 +70,27 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
             .equals(data.getStatus())) {
             throw new BizException("xn0000", "该资质申请已通过，无需修改");
         }
-        return companyCertificateBO.refreshCompanyCertificate(data);
+        companyCertificateBO.refreshCompanyCertificate(data);
     }
 
     @Override
-    public int approveCompanyCertificate(String code, String approver,
+    public void approveCompanyCertificate(String code, String approver,
             String approveResult, String approveNote) {
         CompanyCertificate data = companyCertificateBO
             .getCompanyCertificate(code);
         if (!EComCertificateStatus.TOAPPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该资质申请不是申请状态，无法审核");
         }
-        return companyCertificateBO.refreshCompanyCertificateStatus(code,
-            approver, approveResult, approveNote);
+        Certificate certificate = certificateBO.getCertificate(data
+            .getCertificateCode());
+        Company company = companyBO.getCompany(data.getCompanyCode());
+        companyCertificateBO.refreshCompanyCertificateStatus(code, approver,
+            approveResult, approveNote);
+        // 发布短信，资质审核通过
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            smsOutBO.sendSmsOut(company.getMobile(), "尊敬的企业，您发起的资质申请["
+                    + certificate.getName() + "]已审核通过,可登陆网站发布服务。", null);
+        }
     }
 
     @Override
