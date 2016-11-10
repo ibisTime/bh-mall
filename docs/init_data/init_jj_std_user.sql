@@ -194,16 +194,18 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'active_status','激活状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','active_status','0','不启用','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','active_status','1','启用','admin',now(),'');
+
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'qua_kind','资质类型','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','1','软件外包','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','1','培训','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','2','摄影/拍摄','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','3','培训','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','3','美工外包','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','4','店铺代运营','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','5','美工外包','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','6','客服外包','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','7','仓配服务','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','5','客服外包','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','6','仓配服务','admin',now(),'');
+INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','7','软件开发','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','8','产业园','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','qua_kind','9','人才招聘','admin',now(),'');
+
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'position_kind','所属职位','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','position_kind','A','运营总监','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','position_kind','B','运营主管','admin',now(),'');
@@ -299,13 +301,13 @@ LIMIT 0, 50000
 
 -- Date: 2016-11-05 20:52
 */
-INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('1','1','软件外包','软件外包','1','admin',now(),NULL);
+INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('1','1','培训','培训','1','admin',now(),NULL);
 INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('2','2','摄影/拍摄','摄影/拍摄','1','admin',now(),NULL);
-INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('3','3','培训','培训','1','admin',now(),NULL);
+INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('3','3','美工外包','美工外包','1','admin',now(),NULL);
 INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('4','4','店铺代运营','店铺代运营','1','admin',now(),NULL);
-INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('5','5','美工外包','美工外包','1','admin',now(),NULL);
-INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('6','6','客服外包','客服外包','1','admin',now(),NULL);
-INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('7','7','仓配服务','仓配服务','1','admin',now(),NULL);
+INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('5','5','客服外包','客服外包','1','admin',now(),NULL);
+INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('6','6','仓配服务','仓配服务','1','admin',now(),NULL);
+INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('7','7','软件开发','软件开发','1','admin',now(),NULL);
 INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('8','8','产业园','产业园','1','admin',now(),NULL);
 INSERT INTO `tstd_certificate` (`code`,`type`,`name`,`description`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('9','9','人才招聘','人才招聘','1','admin',now(),NULL);
 
