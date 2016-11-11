@@ -89,7 +89,11 @@ public class CompanyCertificateAOImpl implements ICompanyCertificateAO {
         // 发布短信，资质审核通过
         if (EBoolean.YES.getCode().equals(approveResult)) {
             smsOutBO.sendSmsOut(company.getMobile(), "尊敬的企业，您发起的资质申请["
-                    + certificate.getName() + "]已审核通过,可登陆网站发布服务。", null);
+                    + certificate.getName() + "]已审核通过,可登录网站发布服务。", null);
+        } else {
+            smsOutBO.sendSmsOut(company.getMobile(), "尊敬的企业，您发起的资质申请["
+                    + certificate.getName() + "]已审核不通过,原因[" + approveNote
+                    + "]。请修改后重新提交", null);
         }
     }
 
