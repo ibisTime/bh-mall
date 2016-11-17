@@ -115,8 +115,8 @@ public class UserAOImpl implements IUserAO {
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
-        String userId = userBO.doRegister(mobile, mobile, loginPwd,
-            loginPwdStrength, userReferee, 0L, null);
+        String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
+            loginPwdStrength, userReferee, 0L, null, null);
         // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
         accountBO.distributeAccount(userId, mobile, ECurrency.XNB.getCode());
@@ -153,14 +153,40 @@ public class UserAOImpl implements IUserAO {
             EBoolean.NO.getCode());
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            mobile, loginPwd, loginPwdStrength, userReferee, amount,
-            companyCode);
+            null, mobile, loginPwd, loginPwdStrength, userReferee, amount,
+            companyCode, null);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
+        return userId;
+    }
+
+    @Override
+    public String doThirdRegister(String openId, String nickname, String photo,
+            String gender, String companyCode) {
+        // 设置公司
+        Company company = companyBO.getCompany(companyCode);
+        if (company == null) {
+            Company result = companyBO.getDefaultCompany();
+            if (result != null) {
+                companyCode = result.getCode();
+            }
+        }
+        // 注册送钱
+        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
+            EBoolean.NO.getCode());
+        // 插入用户信息
+        String userId = userBO.doRegister(openId, nickname, null,
+            EUserPwd.InitPwd.getCode(), "1", null, amount, companyCode, openId);
+        if (amount != null && amount > 0) {
+            aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
+                ERuleType.ZC.getValue());
+        }
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, photo, gender);
         return userId;
     }
 
@@ -289,9 +315,10 @@ public class UserAOImpl implements IUserAO {
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
             EBoolean.NO.getCode());
         // 插入用户信息
-        String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            mobile, EUserPwd.InitPwd.getCode(), "1", userReferee, amount,
-            companyCode);
+        String loginPwd = RandomUtil.generate6();
+        String userId = userBO
+            .doRegister(EPrefixCode.CSW.getCode() + mobile, null, mobile,
+                loginPwd, "1", userReferee, amount, companyCode, null);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -300,7 +327,7 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，恭喜您成功注册。初始化密码为888888，请及时登录网站更改密码。", "805079");
+                + "用户，恭喜您成功注册。初始化密码为" + loginPwd + "，请及时登录网站更改密码。", "805079");
         return userId;
     }
 

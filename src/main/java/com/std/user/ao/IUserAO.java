@@ -107,6 +107,20 @@ public interface IUserAO {
             String userReferee);
 
     /**
+     * 微信等第三方注册
+     * @param openId
+     * @param nickName
+     * @param photo
+     * @param gender
+     * @param companyCode
+     * @return 
+     * @create: 2016年11月17日 下午12:05:20 xieyj
+     * @history:
+     */
+    public String doThirdRegister(String openId, String nickName, String photo,
+            String gender, String companyCode);
+
+    /**
      * 用户登陆
      * @param loginName
      * @param loginPwd

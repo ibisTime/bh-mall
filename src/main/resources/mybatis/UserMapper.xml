@@ -28,6 +28,7 @@
 		<result column="lj_amount" property="ljAmount" />
 		<result column="company_code" property="companyCode" />
 		<result column="company_name" property="companyName" />
+		<result column="open_id" property="openId" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
@@ -112,8 +113,8 @@
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
+			<if test="openId != null and openId != '' ">
+				AND t.open_id = #{openId}
 			</if>
 		</trim>
 	</sql>
@@ -144,6 +145,7 @@
 		,t.lj_amount
 		,t.company_code
 		,tc.name as company_name
+		,t.open_id
 		FROM
 		tstd_user t left join tstd_company tc on t.company_code = tc.code
 		<include refid="where_condition"/>
@@ -181,6 +183,7 @@
 		,amount
 		,lj_amount
 		,company_code
+		,open_id
 		)
 		VALUES(
 		#{userId}
@@ -203,6 +206,7 @@
 		,#{amount}
 		,#{ljAmount}
 		,#{companyCode}
+		,#{openId}
 		)
 	</insert>
 	
@@ -292,7 +296,6 @@
 		WHERE
 		user_id = #{userId}			
 	</update>	
-	
 	
 	<update id="update_mobile" parameterType="user">
 		UPDATE tstd_user

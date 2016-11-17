@@ -45,6 +45,9 @@ public class XN805054Req extends APageReq {
     // 公司编号
     private String companyCode;
 
+    // 第三方登录开放编号
+    private String openId;
+
     public String getLoginName() {
         return loginName;
     }
@@ -147,5 +150,13 @@ public class XN805054Req extends APageReq {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

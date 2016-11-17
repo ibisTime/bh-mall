@@ -40,6 +40,9 @@ public class XN805055Req {
     // 公司编号
     private String companyCode;
 
+    // 第三方登录开放编号
+    private String openId;
+
     public String getLoginName() {
         return loginName;
     }
@@ -142,5 +145,13 @@ public class XN805055Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

@@ -124,6 +124,9 @@ public class User extends ABaseDO {
     // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
     private String loginType;
 
+    // 第三方登录开放编号
+    private String openId;
+
     public String getLoginNameForLikeQuery() {
         return loginNameForLikeQuery;
     }
@@ -402,5 +405,13 @@ public class User extends ABaseDO {
 
     public void setLoginType(String loginType) {
         this.loginType = loginType;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

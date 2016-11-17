@@ -27,6 +27,16 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
             String area);
 
     /**
+     * 新增用户扩展
+     * @param userId
+     * @param photo
+     * @param gender 
+     * @create: 2016年11月17日 下午12:43:27 xieyj
+     * @history:
+     */
+    public void saveUserExt(String userId, String photo, String gender);
+
+    /**
      * 更新用户头像
      * @param userId
      * @param photo

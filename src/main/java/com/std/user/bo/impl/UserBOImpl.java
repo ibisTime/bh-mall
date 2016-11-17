@@ -281,14 +281,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public String doRegister(String loginName, String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, Long amount,
-            String companyCode) {
+    public String doRegister(String loginName, String nickname, String mobile,
+            String loginPwd, String loginPwdStrength, String userReferee,
+            Long amount, String companyCode, String openId) {
         // 交易密码888888
         String tradePsd = "888888";
         String userId = null;
-        if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(loginPwd)
-                && StringUtils.isNotBlank(loginPwdStrength)) {
+        if (StringUtils.isNotBlank(loginPwdStrength)) {
             User user = new User();
             userId = OrderNoGenerater.generate("U");
             user.setUserId(userId);
@@ -296,8 +295,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setLoginPwd(MD5Util.md5(loginPwd));
 
             user.setLoginPwdStrength(loginPwdStrength);
-            user.setNickname(userId.substring(userId.length() - 8,
-                userId.length()));
+            if (StringUtils.isBlank(nickname)) {
+                user.setNickname(userId.substring(userId.length() - 8,
+                    userId.length()));
+            } else {
+                user.setNickname(nickname);
+            }
             user.setKind(EUserKind.F1.getCode());
             user.setLevel(EUserLevel.ONE.getCode());
             user.setUserReferee(userReferee);
@@ -315,6 +318,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setAmount(amount);
             user.setLjAmount(amount);
             user.setCompanyCode(companyCode);
+            user.setOpenId(openId);
             userDAO.insert(user);
         }
         return userId;

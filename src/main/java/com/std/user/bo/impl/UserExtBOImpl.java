@@ -44,6 +44,20 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
         }
     }
 
+    /** 
+     * @see com.std.user.bo.IUserExtBO#saveUserExt(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void saveUserExt(String userId, String photo, String gender) {
+        if (StringUtils.isNotBlank(userId)) {
+            UserExt data = new UserExt();
+            data.setUserId(userId);
+            data.setPhoto(photo);
+            data.setGender(gender);
+            userExtDAO.insert(data);
+        }
+    }
+
     /**
      * 更新用户头像
      * @param userId

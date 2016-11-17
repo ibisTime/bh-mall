@@ -40,6 +40,7 @@ public class XN805055 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setOpenId(req.getOpenId());
         return userAO.queryUserList(condition);
     }
 
