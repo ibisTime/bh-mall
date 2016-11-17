@@ -86,6 +86,7 @@ CREATE TABLE `tstd_user` (
   `amount` bigint(20) DEFAULT NULL COMMENT '现有积分',
   `lj_amount` bigint(20) DEFAULT NULL COMMENT '累计积分',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `open_id` varchar(32) DEFAULT NULL COMMENT '开放编号',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
