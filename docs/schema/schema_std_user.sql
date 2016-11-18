@@ -115,6 +115,22 @@ CREATE TABLE `tstd_user_ext` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `tstd_address`
+-- ----------------------------
+CREATE TABLE `tstd_address` (
+  `code` varchar(32) NOT NULL COMMENT '收件编号',
+  `addressee` varchar(64) DEFAULT NULL COMMENT '收件人姓名',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
+  `province` varchar(64) DEFAULT NULL COMMENT '省份',
+  `city` varchar(64) DEFAULT NULL COMMENT '城市',
+  `district` varchar(64) DEFAULT NULL COMMENT '区',
+  `detail_address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `is_default` char(1) DEFAULT NULL COMMENT '是否默认地址',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `tstd_user_relation`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_user_relation`;
