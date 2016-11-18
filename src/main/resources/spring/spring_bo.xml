@@ -18,19 +18,16 @@
 	<bean id="userBO" class="com.std.user.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl" />
 	</bean>
-	<bean id="addressBO" class="com.xnjr.mall.bo.impl.AddressBOImpl">
-		<property name="paginableDAO" ref="addressDAOImpl"/>
-	</bean>	
 	<bean id="userRelationBO" class="com.std.user.bo.impl.UserRelationBOImpl">
 		<property name="paginableDAO" ref="userRelationDAOImpl" />
 	</bean>
 	<bean id="addressBO" class="com.std.user.bo.impl.AddressBOImpl">
 		<property name="paginableDAO" ref="addressDAOImpl"/>
 	</bean>	
-	
 	<bean id="sysMenuBO" class="com.std.user.bo.impl.SYSMenuBOImpl">
 		<property name="paginableDAO" ref="sysMenuDAOImpl"/>
 	</bean>
+	
 	<bean id="sysRoleBO" class="com.std.user.bo.impl.SYSRoleBOImpl">
 		<property name="paginableDAO" ref="sysRoleDAOImpl"/>
 	</bean>
