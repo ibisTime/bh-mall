@@ -99,6 +99,9 @@ public class Company extends ABaseDO {
     // 资质编号
     private String certificateType;
 
+    // 是否需要初始化密码表（选填）
+    private String isNeedInitPwd;
+
     public String getNameForQuery() {
         return nameForQuery;
     }
@@ -433,5 +436,13 @@ public class Company extends ABaseDO {
 
     public void setCertificateType(String certificateType) {
         this.certificateType = certificateType;
+    }
+
+    public String getIsNeedInitPwd() {
+        return isNeedInitPwd;
+    }
+
+    public void setIsNeedInitPwd(String isNeedInitPwd) {
+        this.isNeedInitPwd = isNeedInitPwd;
     }
 }

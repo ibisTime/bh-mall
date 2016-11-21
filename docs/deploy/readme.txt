@@ -17,7 +17,6 @@
 scp -P57652 ./std-user.war root@121.43.101.148:/home
 T6dh%$%$ss1
   
-  
 2，部署
   ssh root@121.43.101.148 -p 57652
   
@@ -104,3 +103,6 @@ http://121.43.101.148:6302/std-user/api
   ../bin/startup.sh
   
 http://121.43.101.148:6405/std-user/api
+
+http://121.43.101.148:6402/std-user/api
+

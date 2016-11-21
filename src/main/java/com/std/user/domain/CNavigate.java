@@ -2,6 +2,11 @@ package com.std.user.domain;
 
 import com.std.user.dao.base.ABaseDO;
 
+/**
+ * @author: xieyj 
+ * @since: 2016年11月19日 下午12:29:45 
+ * @history:
+ */
 public class CNavigate extends ABaseDO {
 
     private static final long serialVersionUID = 1L;

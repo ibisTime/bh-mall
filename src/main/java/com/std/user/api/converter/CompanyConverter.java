@@ -45,6 +45,7 @@ public class CompanyConverter {
         result.setPassword(req.getPassword());
         result.setUpdater(req.getUpdater());
         result.setRemark(req.getRemark());
+        result.setIsNeedInitPwd(req.getIsNeedInitPwd());
         return result;
     }
 

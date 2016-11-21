@@ -9,7 +9,8 @@ public interface ICPasswordBO extends IPaginableBO<CPassword> {
 
     public boolean isCPasswordExist(String code);
 
-    public String saveCPassword(CPassword data);
+    public String saveCPassword(String type, String account, String password,
+            String remark, String companyCode);
 
     public int removeCPassword(String code);
 

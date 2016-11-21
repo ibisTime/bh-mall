@@ -153,6 +153,26 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016110116130272229','详情','2','/detail','3','admin',now(),'','SM2016102318534564231','1');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016110116361367923','详情','2','/detail','9','admin',now(),'','SM2016100916121992653','1');
 
+
+/*
+-- Query: SELECT `code`,`name`,`type`,`url`,`order_no`,'admin' as `updater`,now() as `update_datetime`,`remark`,`parent_code`,`kind` FROM csw_std_user.tsys_menu where update_datetime > '2016-11-16 00:00:00'
+LIMIT 0, 50000
+
+-- Date: 2016-11-18 17:58
+*/
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111609533597067','删除','2','/delete','3','admin',now(),'','SM2016102318534564231','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111610310639642','重置密码','2','/reset','3','admin',now(),'','SM2016100916013626119','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710052216322','版块类别','1','/forum/kind.htm','2','admin',now(),'','SM2016092821592671896','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710055258697','新增','2','/add','1','admin',now(),'','SM2016111710052216322','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710061147281','修改','2','/edit','2','admin',now(),'','SM2016111710052216322','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710063033450','删除','2','/delete','3','admin',now(),'','SM2016111710052216322','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710070679281','详情','2','/detail','4','admin',now(),'','SM2016111710052216322','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710075424082','商品类别','1','/store/kind.htm','0','admin',now(),'','SM2016100916091382814','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710081810317','新增','2','/add','1','admin',now(),'','SM2016111710075424082','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710083716259','修改','2','/edit','2','admin',now(),'','SM2016111710075424082','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710085399337','删除','2','/delete','3','admin',now(),'','SM2016111710075424082','1');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`kind`) VALUES ('SM2016111710091650147','详情','2','/detail','4','admin',now(),'','SM2016111710075424082','1');
+
 /*
 -- Query: SELECT * FROM csw_std_user.tsys_role
 LIMIT 0, 50000
@@ -338,6 +358,29 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM201610091627167791','admin',now(),NULL);
 
 /*
+-- Query: SELECT role_code,menu_code,'admin' as updater,now() as update_datetime,remark FROM csw_std_user.tsys_menu_role where menu_code in(select code FROM tsys_menu where update_datetime > '2016-11-16 00:00:00')
+LIMIT 0, 50000
+
+-- Date: 2016-11-18 17:56
+*/
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111609533597067','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710052216322','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710055258697','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710061147281','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710063033450','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710070679281','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710075424082','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710081810317','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710083716259','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710085399337','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000002','SM2016111710091650147','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM2016111610310639642','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM2016111710052216322','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM2016111710070679281','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM2016111710075424082','admin',now(),NULL);
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`) VALUES ('SR201600000000000000','SM2016111710091650147','admin',now(),NULL);
+
+/*
 -- Query: select `to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as update_datetime,`remark` from tsys_dict
 LIMIT 0, 50000
 
@@ -380,16 +423,6 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','city_location','0','不启用','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','city_location','1','正常','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','city_location','2','推荐','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'plate_kind','版块分类','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','1','招聘','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','2','出租','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','3','二手','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','4','求助','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','5','便民','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','6','车友','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','7','情感','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','8','吃货','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_kind','9','其他','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'plate_location','版块地位','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_location','1','引流','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','plate_location','2','普通','admin',now(),'');
@@ -418,9 +451,6 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','F','设置精华帖','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','G','帖子违规','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','rule_type','H','评论违规','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'prod_kind','产品类别','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','A','家用电器','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','B','手机数码','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'prod_status','产品状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_status','0','未发布','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_status','1','上架中','admin',now(),'');
@@ -435,15 +465,6 @@ INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`update
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','0',NULL,'msg_status','消息状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','msg_status','0','未发布','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','msg_status','1','已发布','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','C','电脑办公','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','D','家居厨具','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','E','服饰挂链','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','F','化妆清洗','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','G','运动户外','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_status','H','日用食品','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','I','母婴玩具','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','J','图书音像','admin',now(),'');
-INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','prod_kind','K','汽车用品','admin',now(),'');
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_status','D','审批通过','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_status','E','待回收','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`to_system`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('8','1','post_status','F','被过滤','admin',now(),NULL);
@@ -466,9 +487,7 @@ LIMIT 0, 50000
 
 -- Date: 2016-10-31 13:47
 */
-INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','sysMobile','400-1000000','系统电话','admin',now(),NULL);
-INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','serviceTime','9:30-21:30','服务时间','admin',now(),NULL);
-
+INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','cswDescription','城市网介绍','城市网介绍','admin',now(),NULL);
 /*
 -- Query: SELECT * FROM csw_std_user.tstd_cnavigate
 LIMIT 0, 50000

@@ -18,8 +18,10 @@ public class CPasswordAOImpl implements ICPasswordAO {
     private ICPasswordBO cPasswordBO;
 
     @Override
-    public String addCPassword(CPassword data) {
-        return cPasswordBO.saveCPassword(data);
+    public String addCPassword(String type, String account, String password,
+            String remark, String companyCode) {
+        return cPasswordBO.saveCPassword(type, account, password, remark,
+            companyCode);
     }
 
     @Override

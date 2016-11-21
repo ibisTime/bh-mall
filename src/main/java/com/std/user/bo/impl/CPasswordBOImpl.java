@@ -32,13 +32,17 @@ public class CPasswordBOImpl extends PaginableBOImpl<CPassword> implements
     }
 
     @Override
-    public String saveCPassword(CPassword data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.PW.getCode());
-            data.setCode(code);
-            cPasswordDAO.insert(data);
-        }
+    public String saveCPassword(String type, String account, String password,
+            String remark, String companyCode) {
+        String code = OrderNoGenerater.generate(EGeneratePrefix.PW.getCode());
+        CPassword data = new CPassword();
+        data.setCode(code);
+        data.setType(type);
+        data.setAccount(account);
+        data.setPassword(password);
+        data.setRemark(remark);
+        data.setCompanyCode(companyCode);
+        cPasswordDAO.insert(data);
         return code;
     }
 

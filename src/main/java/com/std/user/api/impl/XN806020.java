@@ -2,10 +2,8 @@ package com.std.user.api.impl;
 
 import com.std.user.ao.ICPasswordAO;
 import com.std.user.api.AProcessor;
-import com.std.user.api.converter.CPasswordConverter;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.domain.CPassword;
 import com.std.user.dto.req.XN806020Req;
 import com.std.user.dto.res.PKCodeRes;
 import com.std.user.exception.BizException;
@@ -26,8 +24,8 @@ public class XN806020 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        CPassword data = CPasswordConverter.converter(req);
-        String code = cPasswordAO.addCPassword(data);
+        String code = cPasswordAO.addCPassword(req.getType(), req.getAccount(),
+            req.getPassword(), req.getRemark(), req.getCompanyCode());
         return new PKCodeRes(code);
     }
 

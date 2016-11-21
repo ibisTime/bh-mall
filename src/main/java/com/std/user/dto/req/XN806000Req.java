@@ -104,6 +104,9 @@ public class XN806000Req {
     // 备注（选填）
     private String remark;
 
+    // 是否需要初始化密码表（选填）
+    private String isNeedInitPwd;
+
     public String getType() {
         return type;
     }
@@ -374,5 +377,13 @@ public class XN806000Req {
 
     public void setPassword(String passWord) {
         this.password = passWord;
+    }
+
+    public String getIsNeedInitPwd() {
+        return isNeedInitPwd;
+    }
+
+    public void setIsNeedInitPwd(String isNeedInitPwd) {
+        this.isNeedInitPwd = isNeedInitPwd;
     }
 }

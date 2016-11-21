@@ -8,7 +8,8 @@ import com.std.user.domain.CPassword;
 public interface ICPasswordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addCPassword(CPassword data);
+    public String addCPassword(String type, String account, String password,
+            String remark, String companyCode);
 
     public int dropCPassword(String code);
 

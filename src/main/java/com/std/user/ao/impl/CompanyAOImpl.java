@@ -11,12 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ICompanyAO;
 import com.std.user.bo.ICNavigateBO;
+import com.std.user.bo.ICPasswordBO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.common.MD5Util;
 import com.std.user.domain.Company;
 import com.std.user.enums.EBoolean;
+import com.std.user.enums.EPasswordType;
+import com.std.user.enums.EXiaoMi;
 import com.std.user.exception.BizException;
 import com.std.user.util.PinYin;
 
@@ -32,6 +35,9 @@ public class CompanyAOImpl implements ICompanyAO {
     @Autowired
     private ISmsOutBO smsOutBO;
 
+    @Autowired
+    private ICPasswordBO cPasswordBO;
+
     @Override
     public String addCompany(Company data) {
         if (StringUtils.isNotBlank(data.getUserId())) {
@@ -40,7 +46,19 @@ public class CompanyAOImpl implements ICompanyAO {
         if (StringUtils.isNotBlank(data.getLoginName())) {
             companyBO.checkLoginName(data.getLoginName());
         }
-        return companyBO.saveCompany(data);
+        String code = companyBO.saveCompany(data);
+        if (EBoolean.YES.getCode().equals(data.getIsNeedInitPwd())) {
+            cPasswordBO
+                .saveCPassword(EPasswordType.company.getCode(),
+                    EXiaoMi.APPKEY.getCode(), null, EXiaoMi.APPKEY.getValue(),
+                    code);
+            cPasswordBO.saveCPassword(EPasswordType.company.getCode(),
+                EXiaoMi.TO.getCode(), null, EXiaoMi.TO.getValue(), code);
+            cPasswordBO.saveCPassword(EPasswordType.company.getCode(),
+                EXiaoMi.TENANTID.getCode(), null, EXiaoMi.TENANTID.getValue(),
+                code);
+        }
+        return code;
     }
 
     @Override
