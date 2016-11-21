@@ -11,7 +11,7 @@ public class B2cSms extends ABaseDO {
     // 编号
     private String code;
 
-    // 类型(1 公告 2 新闻)
+    // 类型(1 公告 2 新闻 3 极光推送)
     private String type;
 
     // 标题

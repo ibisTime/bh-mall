@@ -33,4 +33,5 @@ public interface ISmsOutBO {
      */
     public void sendSmsOut(String mobile, String content, String bizType);
 
+    // public void sendSms(String systemCode,String )
 }

@@ -11,11 +11,14 @@ import com.std.user.bo.IB2cSmsBO;
 import com.std.user.bo.IUReadBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.common.PropertiesUtil;
 import com.std.user.domain.B2cSms;
 import com.std.user.domain.User;
+import com.std.user.enums.EB2cSmsType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.EUserKind;
 import com.std.user.exception.BizException;
+import com.std.user.sent.JPushClientSend;
 
 @Service
 public class B2cSmsAOImpl implements IB2cSmsAO {
@@ -58,20 +61,26 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
         if (!EBoolean.NO.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该记录已发布");
         }
-        User condition = new User();
-        if (!EBoolean.NO.getCode().equals(data.getToCompany())) {
-            condition.setCompanyCode(data.getToCompany());
-        }
-        if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
-            condition.setLevel(data.getToLevel());
-        }
-        if (!EBoolean.NO.getCode().equals(data.getToUser())) {
-            condition.setUserId(data.getToUser());
-        }
-        condition.setKind(EUserKind.F1.getCode());
-        List<User> userList = userBO.queryUserList(condition);
-        for (User user : userList) {
-            uReadBO.saveURead(code, user.getUserId());
+        // 判断是极光推送还是站内信
+        if (!EB2cSmsType.APP_PUSH.getCode().equals(data.getType())) {
+            User condition = new User();
+            if (!EBoolean.NO.getCode().equals(data.getToCompany())) {
+                condition.setCompanyCode(data.getToCompany());
+            }
+            if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
+                condition.setLevel(data.getToLevel());
+            }
+            if (!EBoolean.NO.getCode().equals(data.getToUser())) {
+                condition.setUserId(data.getToUser());
+            }
+            condition.setKind(EUserKind.F1.getCode());
+            List<User> userList = userBO.queryUserList(condition);
+            for (User user : userList) {
+                uReadBO.saveURead(code, user.getUserId());
+            }
+        } else {
+            JPushClientSend.toSendPush(PropertiesUtil.Config.APP_KEY,
+                PropertiesUtil.Config.MASTER_SECRET, data.getTitle());
         }
         return b2cSmsBO.refreshB2cSmsStatus(code, updater);
     }
