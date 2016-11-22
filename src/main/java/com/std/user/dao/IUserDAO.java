@@ -74,6 +74,15 @@ public interface IUserDAO extends IBaseDAO<User> {
     public int updateMobile(User data);
 
     /**
+     * 绑定手机号
+     * @param data
+     * @return 
+     * @create: 2016年11月22日 下午8:02:25 xieyj
+     * @history:
+     */
+    public int updateBindMobile(User data);
+
+    /**
      * 更新状态
      * @param data
      * @return 

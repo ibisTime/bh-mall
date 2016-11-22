@@ -92,6 +92,9 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public int refreshMobile(String userId, String mobile);
 
+    public int refreshBindMobile(String userId, String loginName,
+            String mobile, String loginPwd, String loginPwdStrength);
+
     public User getUser(String userId);
 
     public User getUserByMobile(String mobile);

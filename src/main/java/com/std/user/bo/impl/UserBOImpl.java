@@ -211,6 +211,22 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return count;
     }
 
+    @Override
+    public int refreshBindMobile(String userId, String loginName,
+            String mobile, String loginPwd, String loginPwdStrength) {
+        int count = 0;
+        User data = new User();
+        data.setUserId(userId);
+        data.setLoginName(loginName);
+        data.setMobile(mobile);
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(loginPwdStrength);
+        if (data != null && StringUtils.isNotBlank(data.getUserId())) {
+            count = userDAO.updateBindMobile(data);
+        }
+        return count;
+    }
+
     /** 
      * @see com.ibis.pz.user.IUserBO#isMobileExist(java.lang.String)
      */

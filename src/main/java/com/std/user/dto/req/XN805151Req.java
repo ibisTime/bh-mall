@@ -17,6 +17,12 @@ public class XN805151Req {
     // 公司编号（选填）
     private String companyCode;
 
+    // 手机号（必填）
+    private String mobile;
+
+    // 短信验证码（必填）
+    private String smsCaptcha;
+
     public String getOpenId() {
         return openId;
     }
@@ -55,5 +61,21 @@ public class XN805151Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getSmsCaptcha() {
+        return smsCaptcha;
+    }
+
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
     }
 }

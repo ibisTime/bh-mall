@@ -2,7 +2,6 @@ package com.std.user.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.std.user.ao.ICMaterialAO;
 import com.std.user.ao.ICPasswordAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
@@ -33,7 +32,7 @@ public class XN806030 extends AProcessor {
         condition.setCompanyCode(req.getCompanyCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = ICMaterialAO.DEFAULT_ORDER_COLUMN;
+            column = ICPasswordAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());

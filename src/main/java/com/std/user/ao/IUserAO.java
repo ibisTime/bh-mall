@@ -109,16 +109,19 @@ public interface IUserAO {
     /**
      * 微信等第三方注册
      * @param openId
+     * @param mobile
+     * @param smsCaptcha
      * @param nickName
      * @param photo
      * @param gender
      * @param companyCode
      * @return 
-     * @create: 2016年11月17日 下午12:05:20 xieyj
+     * @create: 2016年11月22日 下午9:01:52 xieyj
      * @history:
      */
-    public String doThirdRegister(String openId, String nickName, String photo,
-            String gender, String companyCode);
+    public String doThirdRegister(String openId, String mobile,
+            String smsCaptcha, String nickName, String photo, String gender,
+            String companyCode);
 
     /**
      * 用户登陆
@@ -194,6 +197,16 @@ public interface IUserAO {
      */
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha, String tradePwd);
+
+    /**
+     * 绑定手机号
+     * @param userId
+     * @param mobile
+     * @param smsCaptcha 
+     * @create: 2016年11月22日 下午8:07:27 xieyj
+     * @history:
+     */
+    public void doBindMoblie(String userId, String mobile, String smsCaptcha);
 
     /**
      * 找回登录密码
