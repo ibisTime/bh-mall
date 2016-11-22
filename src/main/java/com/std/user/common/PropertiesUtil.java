@@ -57,5 +57,8 @@ public class PropertiesUtil {
         public static String APP_KEY = props.getProperty("APP_KEY");
 
         public static String MASTER_SECRET = props.getProperty("MASTER_SECRET");
+
+        public static String APNS_PRODUCTION = props
+            .getProperty("APNS_PRODUCTION");
     }
 }

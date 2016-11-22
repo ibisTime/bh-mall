@@ -11,9 +11,9 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 登录
- * @author: myb858 
- * @since: 2015年8月23日 下午1:39:09 
+ * 登录(可根据不同商铺登录)
+ * @author: xieyj 
+ * @since: 2016年11月22日 下午3:39:17 
  * @history:
  */
 public class XN805043 extends AProcessor {
@@ -24,8 +24,7 @@ public class XN805043 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new XN805043Res(userAO.doLogin(req.getLoginName(),
-            req.getLoginPwd(), req.getKind()));
-
+            req.getLoginPwd(), req.getKind(), req.getCompanyCode()));
     }
 
     @Override

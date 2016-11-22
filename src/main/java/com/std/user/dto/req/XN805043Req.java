@@ -10,6 +10,9 @@ public class XN805043Req {
     // 类型（选填）
     private String kind;
 
+    // 公司编号（选填）
+    private String companyCode;
+
     public String getLoginName() {
         return loginName;
     }
@@ -32,5 +35,13 @@ public class XN805043Req {
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

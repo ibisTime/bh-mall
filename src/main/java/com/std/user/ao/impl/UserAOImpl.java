@@ -332,12 +332,14 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public String doLogin(String loginName, String loginPwd, String kind) {
+    public String doLogin(String loginName, String loginPwd, String kind,
+            String companyCode) {
         User condition = new User();
         if (EUserKind.F1.getCode().equals(kind)) {
             condition.setLoginName(loginName);
             condition.setLoginType(ELoginType.ALL.getCode());
             condition.setKind(kind);
+            condition.setCompanyCode(companyCode);
         } else {
             condition.setLoginName(loginName);
         }

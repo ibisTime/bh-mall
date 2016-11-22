@@ -122,14 +122,16 @@ public interface IUserAO {
 
     /**
      * 用户登陆
-     * @param loginName
+     * @param loginName 
      * @param loginPwd
-     * @param kind
+     * @param kind 
+     * @param companyCode (选填)
      * @return 
-     * @create: 2016年6月11日 下午9:40:18 xieyj
+     * @create: 2016年11月22日 下午3:27:08 xieyj
      * @history:
      */
-    public String doLogin(String loginName, String loginPwd, String kind);
+    public String doLogin(String loginName, String loginPwd, String kind,
+            String companyCode);
 
     /**
      * 实名认证

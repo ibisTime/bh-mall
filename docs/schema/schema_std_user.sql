@@ -451,7 +451,7 @@ CREATE TABLE `tsys_config` (
   `to_system` varchar(4) DEFAULT NULL COMMENT '针对系统',
   `ckey` varchar(32) DEFAULT NULL COMMENT 'key值',
   `cvalue` varchar(255) DEFAULT NULL COMMENT '值',
-  `note` varchar(255) DEFAULT NULL COMMENT '配置说明',
+  `note` TEXT DEFAULT NULL COMMENT '配置说明',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
