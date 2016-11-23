@@ -466,6 +466,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doBindMoblie(String userId, String mobile, String smsCaptcha) {
         User user = userBO.getUser(userId);
+        // 验证手机号
+        userBO.isMobileExist(mobile);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
