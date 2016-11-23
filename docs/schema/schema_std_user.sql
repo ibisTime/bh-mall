@@ -67,7 +67,7 @@ CREATE TABLE `tsys_menu_role` (
 DROP TABLE IF EXISTS `tstd_user`;
 CREATE TABLE `tstd_user` (
   `user_id` varchar(32) NOT NULL COMMENT 'userId',
-  `login_name` varchar(32) DEFAULT NULL COMMENT '登陆名',
+  `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
   `nickname` varchar(32) DEFAULT NULL COMMENT '昵称',
   `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
   `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
@@ -83,10 +83,10 @@ CREATE TABLE `tstd_user` (
   `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',
   `status` varchar(2) DEFAULT NULL COMMENT '状态',
   `pdf` varchar(255) DEFAULT NULL COMMENT '附件',
-  `amount` bigint(20) DEFAULT NULL COMMENT '现有积分',
-  `lj_amount` bigint(20) DEFAULT NULL COMMENT '累计积分',
+  `amount` bigint(20) DEFAULT '0' COMMENT '现有积分',
+  `lj_amount` bigint(20) DEFAULT '0' COMMENT '累计积分',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `open_id` varchar(32) DEFAULT NULL COMMENT '开放编号',
+  `open_id` varchar(64) DEFAULT NULL COMMENT '开放编号',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',

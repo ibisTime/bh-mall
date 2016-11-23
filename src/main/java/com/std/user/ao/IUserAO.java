@@ -109,8 +109,6 @@ public interface IUserAO {
     /**
      * 微信等第三方注册
      * @param openId
-     * @param mobile
-     * @param smsCaptcha
      * @param nickName
      * @param photo
      * @param gender
@@ -119,9 +117,8 @@ public interface IUserAO {
      * @create: 2016年11月22日 下午9:01:52 xieyj
      * @history:
      */
-    public String doThirdRegister(String openId, String mobile,
-            String smsCaptcha, String nickName, String photo, String gender,
-            String companyCode);
+    public String doThirdRegister(String openId, String nickName, String photo,
+            String gender, String companyCode);
 
     /**
      * 用户登陆

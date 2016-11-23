@@ -166,13 +166,8 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doThirdRegister(String openId, String mobile,
-            String smsCaptcha, String nickname, String photo, String gender,
-            String companyCode) {
-        // 短信验证码是否正确（往手机号发送）
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805151");
-        // 验证手机号
-        userBO.isMobileExist(mobile);
+    public String doThirdRegister(String openId, String nickname, String photo,
+            String gender, String companyCode) {
         User condition = new User();
         condition.setOpenId(openId);
         long count = userBO.getTotalCount(condition);
@@ -191,18 +186,15 @@ public class UserAOImpl implements IUserAO {
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
             EBoolean.NO.getCode());
         // 插入用户信息
-        String loginPwd = RandomUtil.generate6();
-        String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            nickname, mobile, loginPwd, "1", null, amount, companyCode, openId);
+        String loginPwd = EUserPwd.InitPwd.getCode();
+        String userId = userBO.doRegister(openId, nickname, null, loginPwd,
+            "1", null, amount, companyCode, openId);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender);
-        // 发送短信
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，登录密码为" + loginPwd + "，请及时登录更改密码。", "805151");
         return userId;
     }
 
@@ -477,7 +469,7 @@ public class UserAOImpl implements IUserAO {
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
-        if (StringUtils.isBlank(user.getMobile())) {
+        if (StringUtils.isNotBlank(user.getMobile())) {
             throw new BizException("li01004", "手机号已经绑定，无需再次操作");
         }
         // 短信验证码是否正确（往手机号发送）
