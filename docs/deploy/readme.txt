@@ -13,7 +13,7 @@
 
 
 部署步骤：
-1、
+1、包上传
 scp -P57652 ./std-user.war root@121.43.101.148:/home
 T6dh%$%$ss1
   
@@ -87,7 +87,7 @@ T6dh%$%$ss1
   
 http://121.43.101.148:6302/std-user/api
 
-  --------------------mall
+  --------------------mall  --------------------
   cd /home/wwwroot/b2cmall/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
   cp ./std-user/WEB-INF/classes/config.properties .
@@ -103,6 +103,3 @@ http://121.43.101.148:6302/std-user/api
   ../bin/startup.sh
   
 http://121.43.101.148:6405/std-user/api
-
-http://121.43.101.148:6402/std-user/api
-
