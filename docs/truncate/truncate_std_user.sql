@@ -1,9 +1,5 @@
 truncate tstd_bankcard;
-truncate tstd_user;
-truncate tstd_user_ext;
-truncate tsys_menu;
-truncate tsys_menu_role;
-truncate tsys_role;
+truncate tstd_address;
 truncate tstd_sign_log;
 truncate tstd_account_jour;
 truncate tstd_b2c_sms;
