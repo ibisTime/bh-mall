@@ -58,6 +58,15 @@ public interface IUserBO extends IPaginableBO<User> {
     public void isMobileExist(String mobile, String kind);
 
     /**
+     * @param mobile
+     * @param kind
+     * @param companyCode 
+     * @create: 2016年11月24日 上午10:01:31 xieyj
+     * @history:
+     */
+    public void isMobileExist(String mobile, String kind, String companyCode);
+
+    /**
      * 判断登录名是否存在
      * @param loginName
      * @param kind 
@@ -100,6 +109,9 @@ public interface IUserBO extends IPaginableBO<User> {
     public User getUserByMobile(String mobile);
 
     public User getUserByMobileAndKind(String mobile, String kind);
+
+    public User getUserByMobileAndKind(String mobile, String kind,
+            String companyCode);
 
     public User getUserByLoginName(String loginName);
 

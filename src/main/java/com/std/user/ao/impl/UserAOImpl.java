@@ -104,6 +104,14 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(mobile);
     }
 
+    /** 
+     * @see com.std.user.ao.IUserAO#doCheckMobile(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doCheckMobile(String mobile, String kind, String companyCode) {
+        userBO.isMobileExist(mobile, kind, companyCode);
+    }
+
     @Override
     @Transactional
     public String doRegister(String mobile, String loginPwd,
@@ -133,9 +141,14 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode) {
+            String companyCode, String isMall) {
         // 验证手机号
-        userBO.isMobileExist(mobile);
+        if (StringUtils.isNotBlank(isMall)
+                && EBoolean.YES.getCode().equals(isMall)) {
+            userBO.isMobileExist(mobile, null, companyCode);
+        } else {
+            userBO.isMobileExist(mobile);
+        }
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
@@ -433,7 +446,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doChangeMoblie(String userId, String newMobile,
-            String smsCaptcha, String tradePwd) {
+            String smsCaptcha, String tradePwd, String isMall) {
         User user = userBO.getUser(userId);
         if (user == null) {
             throw new BizException("li01004", "用户名不存在");
@@ -442,7 +455,14 @@ public class UserAOImpl implements IUserAO {
         if (newMobile.equals(oldMobile)) {
             throw new BizException("li01009", "新手机与原手机一致");
         }
-        userBO.isMobileExist(newMobile);
+        // 验证手机号
+        if (StringUtils.isNotBlank(isMall)
+                && EBoolean.YES.getCode().equals(isMall)) {
+            userBO.isMobileExist(newMobile, user.getKind(),
+                user.getCompanyCode());
+        } else {
+            userBO.isMobileExist(newMobile);
+        }
         // 验证交易密码
         userBO.checkTradePwd(userId, tradePwd);
         // 短信验证码是否正确（往新手机号发送）
@@ -495,13 +515,31 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "用户不存在,请先注册");
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805048");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805171");
 
         userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
             loginPwdStrength);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805048");
+                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805171");
+    }
+
+    @Override
+    @Transactional
+    public void doFindLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd, String loginPwdStrength, String companyCode) {
+        User user = userBO.getUserByMobileAndKind(mobile,
+            EUserKind.F1.getCode(), companyCode);
+        if (user == null) {// 这里其实还有一种处理方法：就是直接注册
+            throw new BizException("li01004", "用户不存在,请先注册");
+        }
+        // 短信验证码是否正确
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805171");
+        userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
+            loginPwdStrength);
+        // 发送短信
+        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805171");
     }
 
     @Override

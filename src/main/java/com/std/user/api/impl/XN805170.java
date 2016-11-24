@@ -1,11 +1,11 @@
 package com.std.user.api.impl;
 
-import com.std.user.ao.IAddressAO;
+import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.domain.Address;
-import com.std.user.dto.req.XN805166Req;
+import com.std.user.dto.req.XN805170Req;
+import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -17,19 +17,17 @@ import com.std.user.spring.SpringContextHolder;
  * @history:
  */
 public class XN805170 extends AProcessor {
-    private IAddressAO addressAO = SpringContextHolder
-        .getBean(IAddressAO.class);
+    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
-    private XN805166Req req = null;
+    private XN805170Req req = null;
 
     /** 
      * @see com.xnjr.cpzc.service.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        Address condition = new Address();
-        condition.setCode(req.getCode());
-        return addressAO.getAddress(req.getCode());
+        userAO.doCheckMobile(req.getMobile(), null, req.getCompanyCode());
+        return new BooleanRes(true);
     }
 
     /** 
@@ -37,7 +35,7 @@ public class XN805170 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN805166Req.class);
-        StringValidater.validateBlank(req.getCode());
+        req = JsonUtil.json2Bean(inputparams, XN805170Req.class);
+        StringValidater.validateBlank(req.getMobile(), req.getCompanyCode());
     }
 }

@@ -155,6 +155,29 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
      */
     @Override
+    public User getUserByMobileAndKind(String mobile, String kind,
+            String companyCode) {
+        User data = null;
+        if (StringUtils.isNotBlank(mobile)) {
+            User condition = new User();
+            condition.setMobile(mobile);
+            condition.setKind(kind);
+            condition.setCompanyCode(companyCode);
+            List<User> list = userDAO.selectList(condition);
+            if (list != null && list.size() > 1) {
+                throw new BizException("li01006", "手机号重复");
+            }
+            if (CollectionUtils.isNotEmpty(list)) {
+                data = list.get(0);
+            }
+        }
+        return data;
+    }
+
+    /** 
+     * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
+     */
+    @Override
     public User getUserByLoginName(String loginName) {
         User data = null;
         if (StringUtils.isNotBlank(loginName)) {
@@ -199,13 +222,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public int refreshMobile(String userId, String mobile) {
-        // 手机号校验
-        isMobileExist(mobile);
-        User data = new User();
-        data.setUserId(userId);
-        data.setMobile(mobile);
         int count = 0;
-        if (data != null && StringUtils.isNotBlank(data.getUserId())) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(mobile)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setMobile(mobile);
             count = userDAO.updateMobile(data);
         }
         return count;
@@ -256,6 +277,25 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             User condition = new User();
             condition.setMobile(mobile);
             condition.setKind(kind);
+            long count = getTotalCount(condition);
+            if (count > 0) {
+                throw new BizException("li01003", "手机号已经存在");
+            }
+        }
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#isMobileExist(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void isMobileExist(String mobile, String kind, String companyCode) {
+        if (StringUtils.isNotBlank(mobile)) {
+            // 判断格式
+            PhoneUtil.checkMobile(mobile);
+            User condition = new User();
+            condition.setMobile(mobile);
+            condition.setKind(kind);
+            condition.setCompanyCode(companyCode);
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");

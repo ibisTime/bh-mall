@@ -30,6 +30,16 @@ public interface IUserAO {
     public void doCheckMobile(String mobile);
 
     /**
+     * 检查手机号是否存在
+     * @param mobile
+     * @param kind
+     * @param companyCode 
+     * @create: 2016年11月24日 上午10:03:45 xieyj
+     * @history:
+     */
+    public void doCheckMobile(String mobile, String kind, String companyCode);
+
+    /**
      * 注册
      * @param mobile
      * @param loginPwd
@@ -51,13 +61,14 @@ public interface IUserAO {
      * @param userReferee
      * @param smsCaptcha
      * @param companyCode
+     * @param isMall 1 区分商户手机号
      * @return 
-     * @create: 2016年10月12日 上午5:11:01 xieyj
+     * @create: 2016年11月24日 上午11:07:45 xieyj
      * @history:
      */
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode);
+            String companyCode, String isMall);
 
     /**
      * 代注册
@@ -188,12 +199,12 @@ public interface IUserAO {
      * @param newMobile
      * @param smsCaptcha
      * @param tradePwd
-     * @return 
-     * @create: 2015年9月17日 下午12:42:33 myb858
+     * @param isMall 1 区分商户
+     * @create: 2016年11月24日 上午11:13:37 xieyj
      * @history:
      */
     public void doChangeMoblie(String userId, String newMobile,
-            String smsCaptcha, String tradePwd);
+            String smsCaptcha, String tradePwd, String isMall);
 
     /**
      * 绑定手机号
@@ -217,6 +228,19 @@ public interface IUserAO {
      */
     public void doFindLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd, String loginPwdStrength);
+
+    /**
+     * 找回登录密码
+     * @param mobile
+     * @param smsCaptcha
+     * @param newLoginPwd
+     * @param loginPwdStrength
+     * @param companyCode 
+     * @create: 2016年11月24日 上午10:11:13 xieyj
+     * @history:
+     */
+    public void doFindLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd, String loginPwdStrength, String companyCode);
 
     /**
      * 管理端找回登录密码

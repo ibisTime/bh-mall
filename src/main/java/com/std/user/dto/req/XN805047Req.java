@@ -13,6 +13,9 @@ public class XN805047Req {
     // 交易密码
     private String tradePwd;
 
+    // 是否区分不同商户（选填 1 区分，其他不区分）
+    private String isMall;
+
     public String getUserId() {
         return userId;
     }
@@ -45,4 +48,11 @@ public class XN805047Req {
         this.tradePwd = tradePwd;
     }
 
+    public String getIsMall() {
+        return isMall;
+    }
+
+    public void setIsMall(String isMall) {
+        this.isMall = isMall;
+    }
 }
