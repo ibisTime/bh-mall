@@ -197,6 +197,25 @@ CREATE TABLE `tstd_account_jour` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `tstd_coupon`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_coupon`;
+CREATE TABLE `tstd_coupon` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `amount` bigint(20) DEFAULT NULL COMMENT '积分面值',
+  `cny_price` bigint(20) DEFAULT NULL COMMENT '人民币价格',
+  `use_times` int(11) DEFAULT NULL COMMENT '使用次数',
+  `style` varchar(32) DEFAULT NULL COMMENT '排版样式',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态(0 待使用，1 已使用，2 已作废)',
+  `creator` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `create_datetime` datetime DEFAULT NULL COMMENT '生成时间',
+  `scanner` varchar(32) DEFAULT NULL COMMENT '扫描人',
+  `scan_datetime` datetime DEFAULT NULL COMMENT '扫描时间',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `tstd_level_rule`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_level_rule`;

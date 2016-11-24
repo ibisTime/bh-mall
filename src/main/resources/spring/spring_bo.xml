@@ -83,4 +83,8 @@
 	<bean id="ruleBO" class="com.std.user.bo.impl.RuleBOImpl">
 		<property name="paginableDAO" ref="ruleDAOImpl"/>
 	</bean>	
+	
+	<bean id="couponBO" class="com.std.user.bo.impl.CouponBOImpl">
+		<property name="paginableDAO" ref="couponDAOImpl"/>
+	</bean>	
 </beans>
