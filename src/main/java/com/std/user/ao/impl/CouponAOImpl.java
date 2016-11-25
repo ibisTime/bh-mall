@@ -37,6 +37,9 @@ public class CouponAOImpl implements ICouponAO {
         if (!coupon.getCompanyCode().equals(user.getCompanyCode())) {
             throw new BizException("xn0000", "该用户不属于该商户，无法扫描");
         }
+        if (ECouponStatus.USED.getCode().equals(coupon.getStatus())) {
+            throw new BizException("xn0000", "该卡券已使用，不能二次扫描");
+        }
         // 资金变动
         userBO.refreshAmount(userId, coupon.getAmount(), code, EBizType.AJ_SR,
             "扫描卡券加积分");
