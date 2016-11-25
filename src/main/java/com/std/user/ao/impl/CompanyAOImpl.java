@@ -190,11 +190,11 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         Company company = companyBO.getCompany(code);
         if (company.getLocation().equals(EBoolean.NO.getCode())) {
-            count = companyBO.refreshCompanyLocation(code, updater,
-                EBoolean.YES.getCode());
+            count = companyBO.refreshCompanyLocation(code,
+                EBoolean.YES.getCode(), updater);
         } else {
-            count = companyBO.refreshCompanyLocation(code, updater,
-                EBoolean.NO.getCode());
+            count = companyBO.refreshCompanyLocation(code,
+                EBoolean.NO.getCode(), updater);
         }
         return count;
     }
