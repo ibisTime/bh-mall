@@ -1,5 +1,6 @@
 truncate tstd_bankcard;
 truncate tstd_address;
+truncate tstd_coupon;
 truncate tstd_sign_log;
 truncate tstd_account_jour;
 truncate tstd_b2c_sms;
