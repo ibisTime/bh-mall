@@ -6,7 +6,7 @@ package com.std.user.enums;
  * @history:
  */
 public enum EB2cSmsType {
-    NOTICE("1", "公告"), NEWS("2", "新闻"), APP_PUSH("3", "APP推送");
+    NOTICE("1", "公告"), NEWS("2", "新闻"), APP_PUSH("3", "APP推送"), SMS("4", "短信");
 
     EB2cSmsType(String code, String value) {
         this.code = code;

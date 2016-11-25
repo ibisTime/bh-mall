@@ -514,6 +514,8 @@ INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_n
 INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000006','0','1','车友',NULL,1,'1','0');
 INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000007','0','1','情感',NULL,1,'1','0');
 INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000008','0','1','吃货',NULL,1,'1','0');
+INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000009','0','1','其他',NULL,1,'1','0');
+
 
 INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000011','0','2','家用电器',NULL,1,'1','0');
 INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000012','0','2','手机数码',NULL,1,'1','0');

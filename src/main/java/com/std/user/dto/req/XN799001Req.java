@@ -17,6 +17,17 @@ public class XN799001Req {
     // 业务类型 -- 必填
     private String bizType;
 
+    // 公司编号 -- 选填
+    private String companyCode;
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getMobile() {
         return mobile;
     }

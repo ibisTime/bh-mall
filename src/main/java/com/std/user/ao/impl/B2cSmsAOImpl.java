@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.IB2cSmsAO;
 import com.std.user.bo.IB2cSmsBO;
+import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.IUReadBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
@@ -31,6 +32,9 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
 
     @Autowired
     private IUReadBO uReadBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
 
     @Override
     public String addB2cSms(B2cSms data) {
@@ -61,26 +65,32 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
         if (!EBoolean.NO.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该记录已发布");
         }
+        User condition = new User();
+        if (!EBoolean.NO.getCode().equals(data.getToCompany())) {
+            condition.setCompanyCode(data.getToCompany());
+        }
+        if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
+            condition.setLevel(data.getToLevel());
+        }
+        if (!EBoolean.NO.getCode().equals(data.getToUser())) {
+            condition.setUserId(data.getToUser());
+        }
+        condition.setKind(EUserKind.F1.getCode());
+        List<User> userList = userBO.queryUserList(condition);
         // 判断是极光推送还是站内信
-        if (!EB2cSmsType.APP_PUSH.getCode().equals(data.getType())) {
-            User condition = new User();
-            if (!EBoolean.NO.getCode().equals(data.getToCompany())) {
-                condition.setCompanyCode(data.getToCompany());
-            }
-            if (!EBoolean.NO.getCode().equals(data.getToLevel())) {
-                condition.setLevel(data.getToLevel());
-            }
-            if (!EBoolean.NO.getCode().equals(data.getToUser())) {
-                condition.setUserId(data.getToUser());
-            }
-            condition.setKind(EUserKind.F1.getCode());
-            List<User> userList = userBO.queryUserList(condition);
+        if (EB2cSmsType.NOTICE.getCode().equals(data.getType())
+                || EB2cSmsType.NEWS.getCode().equals(data.getType())) {
             for (User user : userList) {
                 uReadBO.saveURead(code, user.getUserId());
             }
-        } else {
+        } else if (EB2cSmsType.APP_PUSH.getCode().equals(data.getType())) {
             JPushClientSend.toSendPush(PropertiesUtil.Config.APP_KEY,
                 PropertiesUtil.Config.MASTER_SECRET, data.getTitle());
+        } else if (EB2cSmsType.SMS.getCode().equals(data.getType())) {
+            for (User user : userList) {
+                smsOutBO.sendSmsOut(user.getMobile(), data.getTitle(),
+                    "805123", data.getCompanyCode());
+            }
         }
         return b2cSmsBO.refreshB2cSmsStatus(code, updater);
     }

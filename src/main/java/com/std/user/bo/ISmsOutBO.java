@@ -33,5 +33,16 @@ public interface ISmsOutBO {
      */
     public void sendSmsOut(String mobile, String content, String bizType);
 
+    /**
+     * @param mobile
+     * @param content
+     * @param bizType
+     * @param companyCode 
+     * @create: 2016年11月25日 上午9:25:54 xieyj
+     * @history:
+     */
+    public void sendSmsOut(String mobile, String content, String bizType,
+            String companyCode);
+
     // public void sendSms(String systemCode,String )
 }
