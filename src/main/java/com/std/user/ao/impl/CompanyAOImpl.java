@@ -269,7 +269,11 @@ public class CompanyAOImpl implements ICompanyAO {
         if ("".equals(domain) || null == domain) {
             throw new BizException("xn0000", "请输入合法域名");
         }
-        return companyBO.getCompanyByDomain(domain);
+        Company company = companyBO.getCompanyByDomain(domain);
+        if (EBoolean.NO.getCode().equals(company.getLocation())) {
+            throw new BizException("xn0000", "该商城违规，正等待系统处理，请稍后再试。");
+        }
+        return company;
     }
 
     @Override
