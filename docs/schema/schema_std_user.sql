@@ -117,6 +117,7 @@ CREATE TABLE `tstd_user_ext` (
 -- ----------------------------
 --  Table structure for `tstd_address`
 -- ----------------------------
+DROP TABLE IF EXISTS `tstd_address`;
 CREATE TABLE `tstd_address` (
   `code` varchar(32) NOT NULL COMMENT '收件编号',
   `addressee` varchar(64) DEFAULT NULL COMMENT '收件人姓名',

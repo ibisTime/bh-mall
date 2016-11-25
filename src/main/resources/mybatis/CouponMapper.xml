@@ -16,6 +16,7 @@
 		<result column="scanner_mobile" property="scannerMobile" />
 		<result column="scan_datetime" property="scanDatetime" />
 		<result column="company_code" property="companyCode" />
+		<result column="domain" property="domain" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -56,6 +57,7 @@
 		,tu.mobile as scanner_mobile
 		,t.scan_datetime
 		,t.company_code
+		,(select domain from tstd_company tc where tc.code = t.company_code) as domain
 		FROM
 		tstd_coupon t left join tstd_user tu on t.scanner = tu.user_id
 		<include refid="where_condition" />

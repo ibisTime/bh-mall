@@ -52,6 +52,9 @@ public class Coupon extends ABaseDO {
 
     private String scannerMobile;
 
+    // 域名
+    private String domain;
+
     public String getCreatorName() {
         return creatorName;
     }
@@ -154,5 +157,13 @@ public class Coupon extends ABaseDO {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 }
