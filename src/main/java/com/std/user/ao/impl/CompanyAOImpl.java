@@ -183,17 +183,17 @@ public class CompanyAOImpl implements ICompanyAO {
     }
 
     @Override
-    public int editCompanyLocation(String code, String updater, String remark) {
+    public int editCompanyLocation(String code, String updater) {
+        int count = 0;
         if (!companyBO.isCompanyExist(code)) {
             throw new BizException("xn0000", "该编号不存在");
         }
-        int count = 0;
         Company company = companyBO.getCompany(code);
         if (company.getLocation().equals(EBoolean.NO.getCode())) {
-            count = companyBO.refreshCompanyLocation(code, updater, remark,
+            count = companyBO.refreshCompanyLocation(code, updater,
                 EBoolean.YES.getCode());
         } else {
-            count = companyBO.refreshCompanyLocation(code, updater, remark,
+            count = companyBO.refreshCompanyLocation(code, updater,
                 EBoolean.NO.getCode());
         }
         return count;

@@ -18,8 +18,8 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public int refreshCompany(Company data);
 
-    public int refreshCompanyLocation(String code, String updater,
-            String remark, String location);
+    public int refreshCompanyLocation(String code, String location,
+            String updater);
 
     public int refreshCompanyDefault(String code);
 

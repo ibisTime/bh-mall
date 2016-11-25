@@ -122,14 +122,13 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     }
 
     @Override
-    public int refreshCompanyLocation(String code, String updater,
-            String remark, String location) {
+    public int refreshCompanyLocation(String code, String location,
+            String updater) {
         Company data = new Company();
         data.setCode(code);
         data.setLocation(location);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        data.setRemark(remark);
         return companyDAO.updateLocation(data);
     }
 

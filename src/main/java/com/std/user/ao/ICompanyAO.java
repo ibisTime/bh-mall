@@ -17,7 +17,7 @@ public interface ICompanyAO {
     public int editCompany(Company data);
 
     // 禁用公司
-    public int editCompanyLocation(String code, String updater, String remark);
+    public int editCompanyLocation(String code, String updater);
 
     // 设置默认
     public int editCompanyDefault(String code);

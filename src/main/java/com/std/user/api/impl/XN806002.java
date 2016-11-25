@@ -25,7 +25,7 @@ public class XN806002 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         int count = companyAO.editCompanyLocation(req.getCode(),
-            req.getUpdater(), req.getRemark());
+            req.getUpdater());
         return new BooleanRes(count > 0 ? true : false);
     }
 
