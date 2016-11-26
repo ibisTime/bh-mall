@@ -195,10 +195,14 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
 
     @Override
     public Company getCompanyByDomain(String domain) {
+        Company result = null;
         Company condition = new Company();
         condition.setDomain(domain);
         List<Company> list = companyDAO.selectList(condition);
-        return list.get(0);
+        if (CollectionUtils.isNotEmpty(list)) {
+            result = list.get(0);
+        }
+        return result;
     }
 
     @Override

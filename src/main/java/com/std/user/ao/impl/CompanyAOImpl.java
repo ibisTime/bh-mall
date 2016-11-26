@@ -190,11 +190,11 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         Company company = companyBO.getCompany(code);
         if (company.getLocation().equals(EBoolean.NO.getCode())) {
-            count = companyBO.refreshCompanyLocation(code, 
-                EBoolean.YES.getCode(),updater);
+            count = companyBO.refreshCompanyLocation(code,
+                EBoolean.YES.getCode(), updater);
         } else {
-            count = companyBO.refreshCompanyLocation(code, 
-                EBoolean.NO.getCode(),updater);
+            count = companyBO.refreshCompanyLocation(code,
+                EBoolean.NO.getCode(), updater);
         }
         return count;
     }
@@ -270,6 +270,9 @@ public class CompanyAOImpl implements ICompanyAO {
             throw new BizException("xn0000", "请输入合法域名");
         }
         Company company = companyBO.getCompanyByDomain(domain);
+        if (null == company) {
+            throw new BizException("xn0000", "域名地址不存在，请检查");
+        }
         if (EBoolean.NO.getCode().equals(company.getLocation())) {
             throw new BizException("xn0000", "该商城违规，正等待系统处理，请稍后再试。");
         }
