@@ -90,6 +90,8 @@ public class B2cSmsAOImpl implements IB2cSmsAO {
             for (User user : userList) {
                 smsOutBO.sendSmsOut(user.getMobile(), data.getTitle(),
                     "805123", data.getCompanyCode());
+                // 统计商户发了多少短信
+                uReadBO.saveURead(code, user.getUserId());
             }
         }
         return b2cSmsBO.refreshB2cSmsStatus(code, updater);
