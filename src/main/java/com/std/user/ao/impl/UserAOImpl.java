@@ -480,20 +480,18 @@ public class UserAOImpl implements IUserAO {
                     + "，请妥善保管您的账户相关信息。", "805047");
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doBindMoblie(java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
-    public void doBindMoblie(String userId, String mobile, String smsCaptcha) {
+    public void doBindMoblie(String userId, String mobile, String smsCaptcha,
+            String companyCode) {
         User user = userBO.getUser(userId);
-        // 验证手机号
-        userBO.isMobileExist(mobile);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
         if (StringUtils.isNotBlank(user.getMobile())) {
             throw new BizException("li01004", "手机号已经绑定，无需再次操作");
         }
+        // 验证手机号
+        userBO.isMobileExist(mobile, null, companyCode);
         // 短信验证码是否正确（往手机号发送）
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805153");
         // 插入用户信息

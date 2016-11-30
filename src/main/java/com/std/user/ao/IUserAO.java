@@ -210,11 +210,13 @@ public interface IUserAO {
      * 绑定手机号
      * @param userId
      * @param mobile
-     * @param smsCaptcha 
-     * @create: 2016年11月22日 下午8:07:27 xieyj
+     * @param smsCaptcha
+     * @param companyCode 
+     * @create: 2016年11月30日 下午4:06:12 xieyj
      * @history:
      */
-    public void doBindMoblie(String userId, String mobile, String smsCaptcha);
+    public void doBindMoblie(String userId, String mobile, String smsCaptcha,
+            String companyCode);
 
     /**
      * 找回登录密码
