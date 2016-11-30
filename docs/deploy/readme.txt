@@ -9,9 +9,6 @@
 5，验证：项目跑起来。在浏览器输入“http://IP:端口/项目名/api"，出现版本信息即成功。
 
 
-
-
-
 部署步骤：
 1、包上传
 scp -P57652 ./std-user.war root@121.43.101.148:/home
@@ -101,5 +98,37 @@ http://121.43.101.148:6302/std-user/api
   
   ../bin/shutdown.sh
   ../bin/startup.sh
+  http://121.43.101.148:6405/std-user/api
   
-http://121.43.101.148:6405/std-user/api
+  --------------------push-sms
+  cd /home/wwwroot/push-sms/tomcat_std_user/webapps
+  cp ./std-user/WEB-INF/classes/application.properties .
+  cp ./std-user/WEB-INF/classes/config.properties .
+  
+  rm -rf std-user.war
+  rm -rf std-user
+  mv /home/std-user.war .
+  
+  mv -f application.properties ./std-user/WEB-INF/classes/
+  mv -f config.properties ./std-user/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh
+  
+  --------------------zhpay
+  cd /home/wwwroot/zhpay/tomcat_std_user/webapps
+  cp ./std-user/WEB-INF/classes/application.properties .
+  cp ./std-user/WEB-INF/classes/config.properties .
+  
+  rm -rf std-user.war
+  rm -rf std-user
+  mv /home/std-user.war .
+  
+  mv -f application.properties ./std-user/WEB-INF/classes/
+  mv -f config.properties ./std-user/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh
+  
+  http://121.43.101.148:5605/std-user/api
+  
