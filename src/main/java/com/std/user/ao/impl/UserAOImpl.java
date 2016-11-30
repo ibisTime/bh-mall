@@ -215,7 +215,7 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf) {
+            String remark, String kind, String pdf, String roleCode) {
         String userId = null;
         // 插入用户信息
         String loginPsd = EUserPwd.InitPwd.getCode();
@@ -252,7 +252,7 @@ public class UserAOImpl implements IUserAO {
             // 插入用户信息
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
-                pdf, null);
+                pdf, roleCode);
         } else if (EUserKind.Integral.getCode().equals(kind)
                 || EUserKind.Goods.getCode().equals(kind)
                 || EUserKind.CaiGo.getCode().equals(kind)
@@ -278,20 +278,20 @@ public class UserAOImpl implements IUserAO {
                 }
             }
 
-            String roleCode = null;
+            String cxRoleCode = null;
             if (EUserKind.Integral.getCode().equals(kind)) {
-                roleCode = PropertiesUtil.Config.NOTOP_JFROLECODE;
+                cxRoleCode = PropertiesUtil.Config.NOTOP_JFROLECODE;
             } else if (EUserKind.Goods.getCode().equals(kind)) {
-                roleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
+                cxRoleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
             } else if (EUserKind.CaiGo.getCode().equals(kind)) {
-                roleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
+                cxRoleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
             } else if (EUserKind.Merchant.getCode().equals(kind)) {
-                roleCode = PropertiesUtil.Config.SJROLECODE;
+                cxRoleCode = PropertiesUtil.Config.SJROLECODE;
             }
             // 插入用户信息
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, level + "", remark,
-                updater, pdf, roleCode);
+                updater, pdf, cxRoleCode);
             // 分配人民币账号
             accountBO.distributeAccount(userId, realName,
                 ECurrency.CNY.getCode());

@@ -82,13 +82,14 @@ public interface IUserAO {
      * @param remark
      * @param kind
      * @param pdf
+     * @param roleCode
      * @return 
-     * @create: 2016年7月20日 下午3:07:23 xieyj
+     * @create: 2016年11月30日 下午8:19:03 xieyj
      * @history:
      */
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf);
+            String remark, String kind, String pdf, String roleCode);
 
     /**
      * 代注册

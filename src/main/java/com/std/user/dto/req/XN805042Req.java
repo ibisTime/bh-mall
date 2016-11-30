@@ -31,6 +31,17 @@ public class XN805042Req {
     // 附件(选填)
     private String pdf;
 
+    // 角色编号(选填)
+    private String roleCode;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
     public String getMobile() {
         return mobile;
     }

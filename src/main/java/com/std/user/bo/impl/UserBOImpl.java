@@ -408,7 +408,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         } else {
             throw new BizException("jd00001", "原登录密码错误");
         }
-
     }
 
     @Override
