@@ -115,6 +115,8 @@ http://121.43.101.148:6302/std-user/api
   ../bin/shutdown.sh
   ../bin/startup.sh
   
+http://121.43.101.148:6505/std-user/api
+  
   --------------------zhpay
   cd /home/wwwroot/zhpay/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
