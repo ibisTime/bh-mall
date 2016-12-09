@@ -8,6 +8,8 @@
  */
 package com.std.user.bo;
 
+import com.std.user.dto.res.XN802013Res;
+
 /** 
  * @author: miyb 
  * @since: 2015-3-15 下午3:15:49 
@@ -39,4 +41,14 @@ public interface IAccountBO {
             String currency, String userReferee);
 
     public void refreshRealName(String userId, String realName);
+
+    public XN802013Res getAccountDetail(String userId, String currency);
+
+    /**
+     * 登录送积分接口
+     * @param userId
+     * @create: 2016年12月9日 上午9:47:25 xieyj
+     * @history:
+     */
+    public void loginAddJf(String userId);
 }

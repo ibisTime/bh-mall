@@ -48,6 +48,17 @@ public class XN805054Req extends APageReq {
     // 第三方登录开放编号
     private String openId;
 
+    // 是否查询金额 1 是
+    private String isGetAmount;
+
+    public String getIsGetAmount() {
+        return isGetAmount;
+    }
+
+    public void setIsGetAmount(String isGetAmount) {
+        this.isGetAmount = isGetAmount;
+    }
+
     public String getLoginName() {
         return loginName;
     }

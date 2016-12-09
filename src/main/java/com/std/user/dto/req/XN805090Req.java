@@ -28,6 +28,17 @@ public class XN805090Req extends APageReq {
     // 手机号(选填)
     private String mobile;
 
+    // 是否查询金额 1 是
+    private String isGetAmount;
+
+    public String getIsGetAmount() {
+        return isGetAmount;
+    }
+
+    public void setIsGetAmount(String isGetAmount) {
+        this.isGetAmount = isGetAmount;
+    }
+
     public String getUserId() {
         return userId;
     }

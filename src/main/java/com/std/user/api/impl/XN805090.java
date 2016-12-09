@@ -31,6 +31,7 @@ public class XN805090 extends AProcessor {
         condition.setMobileForLikeQuery(req.getMobile());
         condition.setUserId(req.getUserId());
         condition.setToUser(req.getToUser());
+        condition.setIsGetAmount(req.getIsGetAmount());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IUserAO.DEFAULT_ORDER_COLUMN;

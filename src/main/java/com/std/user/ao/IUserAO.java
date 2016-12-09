@@ -54,6 +54,20 @@ public interface IUserAO {
             String loginPwdStrength, String userReferee, String smsCaptcha);
 
     /**
+     * 注册分配账户送积分
+     * @param mobile
+     * @param loginPwd
+     * @param loginPwdStrength
+     * @param userReferee
+     * @param smsCaptcha
+     * @return 
+     * @create: 2016年12月9日 上午8:36:08 xieyj
+     * @history:
+     */
+    public String doRegisterAddJf(String mobile, String loginPwd,
+            String loginPwdStrength, String userReferee, String smsCaptcha);
+
+    /**
      * 注册送积分，不分配账户
      * @param mobile
      * @param loginPwd
@@ -144,6 +158,17 @@ public interface IUserAO {
      */
     public String doLogin(String loginName, String loginPwd, String kind,
             String companyCode);
+
+    /**
+     * 用户登陆送积分
+     * @param loginName 
+     * @param loginPwd
+     * @param kind 
+     * @return 
+     * @create: 2016年11月22日 下午3:27:08 xieyj
+     * @history:
+     */
+    public String doLoginAddJf(String loginName, String loginPwd, String kind);
 
     /**
      * 实名认证

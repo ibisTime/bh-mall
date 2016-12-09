@@ -26,6 +26,7 @@ import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
 import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISYSRoleBO;
+import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.IUserExtBO;
@@ -39,6 +40,7 @@ import com.std.user.domain.Company;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
+import com.std.user.dto.res.XN802013Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECurrency;
@@ -99,6 +101,9 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     protected IFieldTimesBO fieldTimesBO;
 
+    @Autowired
+    protected ISignLogBO signLogBO;
+
     @Override
     public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
@@ -128,6 +133,32 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
         accountBO.distributeAccount(userId, mobile, ECurrency.XNB.getCode());
+        // 设置用户关系
+        if (StringUtils.isNotBlank(userReferee)) {
+            userRelationBO.saveUserRelation(userReferee, userId);
+        }
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId);
+        return userId;
+    }
+
+    @Override
+    @Transactional
+    public String doRegisterAddJf(String mobile, String loginPwd,
+            String loginPwdStrength, String userReferee, String smsCaptcha) {
+        // 验证手机号
+        userBO.isMobileExist(mobile);
+        // 验证推荐人是否是平台的已注册用户
+        userBO.checkUserReferee(userReferee);
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
+        // 插入用户信息
+        String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
+            loginPwdStrength, userReferee, 0L, null, null);
+        // 分配账号(人民币和虚拟币)
+        accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
+        accountBO.distributeAccountTwo(userId, mobile, ECurrency.XNB.getCode(),
+            userReferee);
         // 设置用户关系
         if (StringUtils.isNotBlank(userReferee)) {
             userRelationBO.saveUserRelation(userReferee, userId);
@@ -380,6 +411,43 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn702002", "当前用户已被锁定，请联系工作人员");
         }
         return user.getUserId();
+    }
+
+    @Override
+    @Transactional
+    public String doLoginAddJf(String loginName, String loginPwd, String kind) {
+        User condition = new User();
+        if (EUserKind.F1.getCode().equals(kind)) {
+            condition.setLoginName(loginName);
+            condition.setLoginType(ELoginType.ALL.getCode());
+            condition.setKind(kind);
+        } else {
+            condition.setLoginName(loginName);
+        }
+        List<User> userList1 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList1)) {
+            throw new BizException("xn702002", "登录名不存在");
+        }
+        condition.setLoginPwd(MD5Util.md5(loginPwd));
+        List<User> userList2 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList2)) {
+            throw new BizException("xn702002", "登录密码错误");
+        }
+        User user = userList2.get(0);
+
+        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+            throw new BizException("xn702002", "当前用户已被锁定，请联系工作人员");
+        }
+        // 签到日志
+        String userId = user.getUserId();
+        // 判断是否已经签到
+        Boolean result = signLogBO.isSignToday(userId);
+        if (!result) {
+            signLogBO.saveSignLog(userId, "");
+            // 加积分
+            accountBO.loginAddJf(userId);
+        }
+        return userId;
     }
 
     @Override
@@ -726,6 +794,15 @@ public class UserAOImpl implements IUserAO {
         for (User user : list) {
             UserExt userExt = userExtBO.getUserExt(user.getUserId());
             user.setUserExt(userExt);
+            if (EBoolean.YES.getCode().equals(condition.getIsGetAmount())) {
+                XN802013Res res = accountBO.getAccountDetail(user.getUserId(),
+                    ECurrency.XNB.getCode());
+                if (res != null) {
+                    user.setAmount(res.getAmount());
+                } else {
+                    user.setAmount(0L);
+                }
+            }
         }
         return page;
     }

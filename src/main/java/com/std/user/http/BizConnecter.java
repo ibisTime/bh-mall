@@ -69,6 +69,7 @@ public class BizConnecter {
         } else {
             postUrl = POST_URL;
         }
+        System.out.println("postUrl:" + postUrl);
         return postUrl;
     }
 }

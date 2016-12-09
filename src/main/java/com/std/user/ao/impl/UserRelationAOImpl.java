@@ -14,11 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.IUserRelationAO;
+import com.std.user.bo.IAccountBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.IUserRelationBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
 import com.std.user.domain.UserRelation;
+import com.std.user.dto.res.XN802013Res;
+import com.std.user.enums.EBoolean;
+import com.std.user.enums.ECurrency;
 import com.std.user.exception.BizException;
 
 /** 
@@ -35,6 +39,9 @@ public class UserRelationAOImpl implements IUserRelationAO {
     @Autowired
     IUserBO userBO;
 
+    @Autowired
+    IAccountBO accountBO;
+
     /** 
      * @see com.std.user.ao.IUserRelationAO#queryUserList(com.std.user.domain.UserRelation)
      */
@@ -49,7 +56,21 @@ public class UserRelationAOImpl implements IUserRelationAO {
     @Override
     public Paginable<User> queryUserPage(int start, int limit,
             UserRelation condition) {
-        return userRelationBO.queryUserPage(start, limit, condition);
+        Paginable<User> page = userRelationBO.queryUserPage(start, limit,
+            condition);
+        List<User> list = page.getList();
+        for (User user : list) {
+            if (EBoolean.YES.getCode().equals(condition.getIsGetAmount())) {
+                XN802013Res res = accountBO.getAccountDetail(user.getUserId(),
+                    ECurrency.XNB.getCode());
+                if (res != null) {
+                    user.setAmount(res.getAmount());
+                } else {
+                    user.setAmount(0L);
+                }
+            }
+        }
+        return page;
     }
 
     /** 

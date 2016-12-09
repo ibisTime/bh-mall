@@ -45,6 +45,17 @@ public class UserRelation extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 是否查询金额 1 是
+    private String isGetAmount;
+
+    public String getIsGetAmount() {
+        return isGetAmount;
+    }
+
+    public void setIsGetAmount(String isGetAmount) {
+        this.isGetAmount = isGetAmount;
+    }
+
     public String getCode() {
         return code;
     }
