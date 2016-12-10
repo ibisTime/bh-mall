@@ -339,7 +339,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String loginName, String nickname, String mobile,
             String loginPwd, String loginPwdStrength, String userReferee,
-            Long amount, String companyCode, String openId) {
+            String level, Long amount, String companyCode, String openId) {
         // 交易密码888888
         String tradePsd = "888888";
         String userId = null;
@@ -359,8 +359,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
             user.setKind(EUserKind.F1.getCode());
             user.setLevel(EUserLevel.ONE.getCode());
+            if (StringUtils.isNotBlank(level)) {
+                user.setLevel(level);
+            }
             user.setUserReferee(userReferee);
-
             user.setMobile(mobile);
             user.setTradePwd(MD5Util.md5(tradePsd));
             user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));

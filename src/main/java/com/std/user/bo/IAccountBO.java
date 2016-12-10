@@ -8,7 +8,9 @@
  */
 package com.std.user.bo;
 
+import com.std.user.dto.res.XN802001Res;
 import com.std.user.dto.res.XN802013Res;
+import com.std.user.dto.res.XN802317Res;
 
 /** 
  * @author: miyb 
@@ -37,7 +39,7 @@ public interface IAccountBO {
      * @create: 2016年7月6日 下午8:39:57 xieyj
      * @history:
      */
-    public String distributeAccountTwo(String userId, String realName,
+    public XN802001Res distributeAccountTwo(String userId, String realName,
             String currency, String userReferee);
 
     public void refreshRealName(String userId, String realName);
@@ -50,5 +52,5 @@ public interface IAccountBO {
      * @create: 2016年12月9日 上午9:47:25 xieyj
      * @history:
      */
-    public void loginAddJf(String userId);
+    public XN802317Res loginAddJf(String userId);
 }

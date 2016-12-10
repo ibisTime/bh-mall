@@ -12,6 +12,8 @@ import java.util.List;
 
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
+import com.std.user.dto.res.XN805154Res;
+import com.std.user.dto.res.XN805155Res;
 
 /** 
  * @author: miyb 
@@ -64,7 +66,7 @@ public interface IUserAO {
      * @create: 2016年12月9日 上午8:36:08 xieyj
      * @history:
      */
-    public String doRegisterAddJf(String mobile, String loginPwd,
+    public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha);
 
     /**
@@ -168,7 +170,8 @@ public interface IUserAO {
      * @create: 2016年11月22日 下午3:27:08 xieyj
      * @history:
      */
-    public String doLoginAddJf(String loginName, String loginPwd, String kind);
+    public XN805155Res doLoginAddJf(String loginName, String loginPwd,
+            String kind);
 
     /**
      * 实名认证

@@ -11,6 +11,7 @@ import com.std.user.dto.req.XN802317Req;
 import com.std.user.dto.res.XN802000Res;
 import com.std.user.dto.res.XN802001Res;
 import com.std.user.dto.res.XN802013Res;
+import com.std.user.dto.res.XN802317Res;
 import com.std.user.enums.ECurrency;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
@@ -36,20 +37,15 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public String distributeAccountTwo(String userId, String realName,
+    public XN802001Res distributeAccountTwo(String userId, String realName,
             String currency, String userReferee) {
         XN802001Req req = new XN802001Req();
         req.setUserId(userId);
         req.setRealName(realName);
         req.setCurrency(currency);
         req.setUserReferee(userReferee);
-        XN802001Res res = BizConnecter.getBizData("802001",
-            JsonUtils.object2Json(req), XN802001Res.class);
-        String accountNumber = null;
-        if (res != null) {
-            accountNumber = res.getAccountNumber();
-        }
-        return accountNumber;
+        return BizConnecter.getBizData("802001", JsonUtils.object2Json(req),
+            XN802001Res.class);
     }
 
     @Override
@@ -73,13 +69,13 @@ public class AccountBOImpl implements IAccountBO {
      * @see com.std.user.bo.IAccountBO#loginAddJf(java.lang.String, java.lang.String)
      */
     @Override
-    public void loginAddJf(String userId) {
+    public XN802317Res loginAddJf(String userId) {
         XN802317Req req = new XN802317Req();
         // 从菜狗扣除积分
         req.setFromUserId("U201600000000000001");
         req.setToUserId(userId);
-        req.setRemark("首次登录送积分");
-        BizConnecter.getBizData("802317", JsonUtils.object2Json(req),
-            Object.class);
+        req.setRemark("每天首次登录送积分");
+        return BizConnecter.getBizData("802317", JsonUtils.object2Json(req),
+            XN802317Res.class);
     }
 }

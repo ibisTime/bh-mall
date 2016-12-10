@@ -40,7 +40,11 @@ import com.std.user.domain.Company;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
+import com.std.user.dto.res.XN802001Res;
 import com.std.user.dto.res.XN802013Res;
+import com.std.user.dto.res.XN802317Res;
+import com.std.user.dto.res.XN805154Res;
+import com.std.user.dto.res.XN805155Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECurrency;
@@ -129,7 +133,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, 0L, null, null);
+            loginPwdStrength, userReferee, null, 0L, null, null);
         // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
         accountBO.distributeAccount(userId, mobile, ECurrency.XNB.getCode());
@@ -144,28 +148,28 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doRegisterAddJf(String mobile, String loginPwd,
+    public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha) {
         // 验证手机号
         userBO.isMobileExist(mobile);
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, 0L, null, null);
+            loginPwdStrength, userReferee, "0", 0L, null, null);
         // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
-        accountBO.distributeAccountTwo(userId, mobile, ECurrency.XNB.getCode(),
-            userReferee);
+        XN802001Res accountRes = accountBO.distributeAccountTwo(userId, mobile,
+            ECurrency.XNB.getCode(), userReferee);
         // 设置用户关系
         if (StringUtils.isNotBlank(userReferee)) {
             userRelationBO.saveUserRelation(userReferee, userId);
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
-        return userId;
+        return new XN805154Res(userId, accountRes.getAmount());
     }
 
     @Override
@@ -197,8 +201,8 @@ public class UserAOImpl implements IUserAO {
             EBoolean.NO.getCode());
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            null, mobile, loginPwd, loginPwdStrength, userReferee, amount,
-            companyCode, null);
+            null, mobile, loginPwd, loginPwdStrength, userReferee, null,
+            amount, companyCode, null);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -232,7 +236,7 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String loginPwd = EUserPwd.InitPwd.getCode();
         String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, amount, companyCode, openId);
+            "1", null, null, amount, companyCode, openId);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -368,9 +372,9 @@ public class UserAOImpl implements IUserAO {
             EBoolean.NO.getCode());
         // 插入用户信息
         String loginPwd = RandomUtil.generate6();
-        String userId = userBO
-            .doRegister(EPrefixCode.CSW.getCode() + mobile, null, mobile,
-                loginPwd, "1", userReferee, amount, companyCode, null);
+        String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
+            null, mobile, loginPwd, "1", userReferee, null, amount,
+            companyCode, null);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -415,7 +419,8 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doLoginAddJf(String loginName, String loginPwd, String kind) {
+    public XN805155Res doLoginAddJf(String loginName, String loginPwd,
+            String kind) {
         User condition = new User();
         if (EUserKind.F1.getCode().equals(kind)) {
             condition.setLoginName(loginName);
@@ -440,14 +445,16 @@ public class UserAOImpl implements IUserAO {
         }
         // 签到日志
         String userId = user.getUserId();
+        String amount = null;
         // 判断是否已经签到
         Boolean result = signLogBO.isSignToday(userId);
         if (!result) {
             signLogBO.saveSignLog(userId, "");
             // 加积分
-            accountBO.loginAddJf(userId);
+            XN802317Res res = accountBO.loginAddJf(userId);
+            amount = res.getAmount();
         }
-        return userId;
+        return new XN805155Res(userId, amount);
     }
 
     @Override

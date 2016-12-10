@@ -5,7 +5,6 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805155Req;
-import com.std.user.dto.res.XN805043Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -23,8 +22,8 @@ public class XN805155 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805043Res(userAO.doLoginAddJf(req.getLoginName(),
-            req.getLoginPwd(), req.getKind()));
+        return userAO.doLoginAddJf(req.getLoginName(), req.getLoginPwd(),
+            req.getKind());
     }
 
     @Override
