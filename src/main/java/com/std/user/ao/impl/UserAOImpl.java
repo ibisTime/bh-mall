@@ -155,7 +155,7 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee);
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
             loginPwdStrength, userReferee, "0", 0L, null, null);
@@ -588,13 +588,13 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "用户不存在,请先注册");
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805171");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805048");
 
         userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
             loginPwdStrength);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805171");
+                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805048");
     }
 
     @Override
@@ -607,7 +607,7 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "用户不存在,请先注册");
         }
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805171");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805171");
         userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
             loginPwdStrength);
         // 发送短信
