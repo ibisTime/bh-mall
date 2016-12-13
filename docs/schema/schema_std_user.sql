@@ -28,7 +28,7 @@ CREATE TABLE `tsys_menu` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `parent_code` varchar(32) DEFAULT NULL COMMENT '父亲节点',
-  `kind` varchar(16) DEFAULT NULL COMMENT '六方',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -43,7 +43,7 @@ CREATE TABLE `tsys_role` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `kind` varchar(16) DEFAULT NULL COMMENT '六方',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -58,6 +58,7 @@ CREATE TABLE `tsys_menu_role` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -90,6 +91,7 @@ CREATE TABLE `tstd_user` (
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -111,6 +113,7 @@ CREATE TABLE `tstd_user_ext` (
   `area` varchar(64) DEFAULT NULL COMMENT '区',
   `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `introduce` varchar(255) DEFAULT NULL COMMENT '简介',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -128,6 +131,7 @@ CREATE TABLE `tstd_address` (
   `detail_address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `is_default` char(1) DEFAULT NULL COMMENT '是否默认地址',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -141,26 +145,7 @@ CREATE TABLE `tstd_user_relation` (
   `to_user` varchar(32) DEFAULT NULL COMMENT '关系人编号',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `update_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `tstd_bankcard`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_bankcard`;
-CREATE TABLE `tstd_bankcard` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
-  `bank_code` varchar(8) DEFAULT NULL COMMENT '银行行号',
-  `bank_name` varchar(32) DEFAULT NULL COMMENT '银行名称',
-  `subbranch` varchar(255) DEFAULT NULL COMMENT '开户支行',
-  `bankcard_no` varchar(64) DEFAULT NULL COMMENT '银行卡编号',
-  `bind_mobile` varchar(32) DEFAULT NULL COMMENT '银行卡绑定手机号',
-  `status` varchar(2) DEFAULT NULL COMMENT '状态',
-  `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -173,28 +158,8 @@ CREATE TABLE `tstd_sign_log` (
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `location` varchar(255) DEFAULT NULL COMMENT '位置',
   `sign_datetime` datetime DEFAULT NULL COMMENT '签到时间',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `tstd_account_jour`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_account_jour`;
-CREATE TABLE `tstd_account_jour` (
-  `aj_no` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `biz_type` varchar(4) DEFAULT NULL COMMENT '业务类型',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
-  `trans_amount` bigint(32) DEFAULT NULL COMMENT '发送金额',
-  `pre_amount` bigint(32) DEFAULT NULL COMMENT '发生前金额',
-  `post_amount` bigint(32) DEFAULT NULL COMMENT '发生后金额',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `account_number` varchar(32) DEFAULT NULL COMMENT '账户',
-  `status` char(1) DEFAULT NULL COMMENT '状态',
-  `work_date` varchar(8) DEFAULT NULL COMMENT '对账时间',
-  `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
-  `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
-  PRIMARY KEY (`aj_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -213,6 +178,7 @@ CREATE TABLE `tstd_coupon` (
   `scanner` varchar(32) DEFAULT NULL COMMENT '扫描人',
   `scan_datetime` datetime DEFAULT NULL COMMENT '扫描时间',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -229,6 +195,7 @@ CREATE TABLE `tstd_level_rule` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '说明',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -241,6 +208,7 @@ CREATE TABLE `tstd_field_times` (
   `type` varchar(4) DEFAULT NULL COMMENT '类型(1 登录名 2 昵称)',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `times` int(11) DEFAULT NULL COMMENT '修改次数',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -285,6 +253,7 @@ CREATE TABLE `tstd_company` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注/报价区间',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -298,7 +267,9 @@ CREATE TABLE `tstd_cpassword` (
   `account` varchar(64) DEFAULT NULL COMMENT '账号',
   `password` varchar(64) DEFAULT NULL COMMENT '密码',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号'
+  `belong` varchar(32) DEFAULT NULL COMMENT '属于',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -315,7 +286,8 @@ CREATE TABLE `tstd_cintention` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `belong` varchar(32) DEFAULT NULL COMMENT '属于',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -336,7 +308,7 @@ CREATE TABLE `tstd_cnavigate` (
   `parent_code` varchar(32) DEFAULT NULL COMMENT '父编号',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `content_type` varchar(32) DEFAULT NULL COMMENT '内容源类型(ele/list)',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -357,27 +329,8 @@ CREATE TABLE `tstd_cmaterial` (
   `remark` varchar(64) DEFAULT NULL COMMENT '备注',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `menu_code` varchar(32) DEFAULT NULL COMMENT '菜单编号',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `tstd_b2c_sms`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_b2c_sms`;
-CREATE TABLE `tstd_b2c_sms` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `type` varchar(4) DEFAULT NULL COMMENT '类别',
-  `title` varchar(64) DEFAULT NULL COMMENT '标题',
-  `content` text COMMENT '内容',
-  `to_company` varchar(32) DEFAULT NULL COMMENT 'to公司',
-  `to_level` varchar(4) DEFAULT NULL COMMENT 'to等级',
-  `to_user` varchar(32) DEFAULT NULL COMMENT '针对用户',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态(0 待发布，1 已发布)',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `updater` varchar(32) DEFAULT NULL COMMENT '最后修改人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '最后修改时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `belong` varchar(32) DEFAULT NULL COMMENT '属于',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -391,6 +344,7 @@ CREATE TABLE `tstd_uread` (
   `user_id` varchar(32) DEFAULT NULL COMMENT 'C端用户编号',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `read_datetime` datetime DEFAULT NULL COMMENT '阅读时间',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -407,6 +361,7 @@ CREATE TABLE `tstd_certificate` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -421,27 +376,25 @@ CREATE TABLE `tstd_company_certificate` (
   `status` varchar(4) DEFAULT NULL COMMENT '状态(0 待审核 1 审核通过 2审核不通过)',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
-  `approve_user` varchar(45) DEFAULT NULL COMMENT '审核人',
+  `approve_user` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `approve_note` varchar(255) DEFAULT NULL COMMENT '审核意见',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `tstd_home`
+--  Table structure for `tstd_company_certificate`
 -- ----------------------------
-DROP TABLE IF EXISTS `tstd_home`;
-CREATE TABLE `tstd_home` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `type` varchar(4) DEFAULT NULL COMMENT '类型（1 首页/2 人才首页/3 服务首页）',
-  `pic1` varchar(255) DEFAULT NULL COMMENT '图1',
-  `pic2` varchar(255) DEFAULT NULL COMMENT '图2',
-  `pic3` varchar(255) DEFAULT NULL COMMENT '图3',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态（1 发布中 0 不发布）',
-  `order_no` int(11) DEFAULT NULL COMMENT '序号',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` varchar(45) DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+DROP TABLE IF EXISTS `tstd_invitation`;
+CREATE TABLE `tstd_invitation` (
+  `code` VARCHAR(32) NOT NULL COMMENT '',
+  `invitation_code` VARCHAR(32) NULL COMMENT '邀请码',
+  `status` VARCHAR(4) NULL COMMENT '状态(0 未使用 1已使用 2 作废)',
+  `create_datetime` DATETIME NULL COMMENT '创建时间',
+  `use_datetime` DATETIME NULL COMMENT '使用时间',
+  `user_id` VARCHAR(32) NULL COMMENT '使用人编号',
+  `system_code` VARCHAR(32) NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -451,7 +404,6 @@ CREATE TABLE `tstd_home` (
 DROP TABLE IF EXISTS `tsys_dict`;
 CREATE TABLE `tsys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
-  `to_system` varchar(4) DEFAULT NULL COMMENT '针对系统',
   `type` char(1) DEFAULT NULL COMMENT '类型（第一层/第二层）',
   `parent_key` varchar(32) DEFAULT NULL COMMENT '父key',
   `dkey` varchar(32) DEFAULT NULL COMMENT 'key',
@@ -459,6 +411,7 @@ CREATE TABLE `tsys_dict` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -468,13 +421,13 @@ CREATE TABLE `tsys_dict` (
 DROP TABLE IF EXISTS `tsys_config`;
 CREATE TABLE `tsys_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `to_system` varchar(4) DEFAULT NULL COMMENT '针对系统',
   `ckey` varchar(32) DEFAULT NULL COMMENT 'key值',
   `cvalue` varchar(255) DEFAULT NULL COMMENT '值',
   `note` TEXT DEFAULT NULL COMMENT '配置说明',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -491,7 +444,20 @@ CREATE TABLE `tstd_rule` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tstd_rule`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_system`;
+CREATE TABLE `tstd_system` (
+  `code` VARCHAR(32) NOT NULL COMMENT '编号',
+  `name` VARCHAR(255) NULL COMMENT '名称',
+  `abbr_name` VARCHAR(255) NULL COMMENT '简称',
+  `remark` VARCHAR(255) NULL COMMENT '备注',
+  PRIMARY KEY (`code`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
