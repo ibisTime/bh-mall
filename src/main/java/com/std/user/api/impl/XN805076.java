@@ -26,14 +26,17 @@ public class XN805076 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new XN805076Res(userAO.doRegisterSingle(req.getMobile(),
             req.getLoginPwd(), req.getLoginPwdStrength(), req.getUserReferee(),
-            req.getSmsCaptcha(), req.getCompanyCode(), req.getIsMall()));
+            req.getSmsCaptcha(), req.getCompanyCode(), req.getIsMall(),
+            req.getSystemCode()));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805076Req.class);
-        StringValidater.validateBlank(req.getMobile(), req.getLoginPwd(),
-            req.getLoginPwdStrength(), req.getSmsCaptcha());
+        StringValidater
+            .validateBlank(req.getMobile(), req.getLoginPwd(),
+                req.getLoginPwdStrength(), req.getSmsCaptcha(),
+                req.getSystemCode());
         PhoneUtil.checkMobile(req.getMobile());// 判断格式
     }
 }

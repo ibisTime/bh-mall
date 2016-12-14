@@ -19,6 +19,17 @@ public class XN805076Req {
     // 公司编号（选填）
     private String companyCode;
 
+    // 系统编号（必填）
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     // 是否区分不同商户（选填 1 区分，其他不区分）
     private String isMall;
 

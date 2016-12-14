@@ -52,6 +52,56 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Autowired
     private ILevelRuleDAO levelRuleDAO;
 
+    @Override
+    public void isMobileExist(String mobile, String systemCode) {
+        if (StringUtils.isNotBlank(mobile)) {
+            // 判断格式
+            PhoneUtil.checkMobile(mobile);
+            User condition = new User();
+            condition.setMobile(mobile);
+            condition.setKind("ff3");
+            long count = getTotalCount(condition);
+            if (count > 0) {
+                throw new BizException("li01003", "手机号已经存在");
+            }
+        }
+    }
+
+    @Override
+    public void isMobileExist(String mobile, String kind, String systemCode) {
+        if (StringUtils.isNotBlank(mobile)) {
+            // 判断格式
+            PhoneUtil.checkMobile(mobile);
+            User condition = new User();
+            condition.setMobile(mobile);
+            condition.setKind(kind);
+            long count = getTotalCount(condition);
+            if (count > 0) {
+                throw new BizException("li01003", "手机号已经存在");
+            }
+        }
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#isMobileExist(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void isMobileExist(String mobile, String kind, String companyCode,
+            String systemCode) {
+        if (StringUtils.isNotBlank(mobile)) {
+            // 判断格式
+            PhoneUtil.checkMobile(mobile);
+            User condition = new User();
+            condition.setMobile(mobile);
+            condition.setKind(kind);
+            condition.setCompanyCode(companyCode);
+            long count = getTotalCount(condition);
+            if (count > 0) {
+                throw new BizException("li01003", "手机号已经存在");
+            }
+        }
+    }
+
     /**
      * @see com.ibis.pz.user.IUserBO#refreshIdentity(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
@@ -114,36 +164,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
      */
     @Override
-    public User getUserByMobile(String mobile) {
+    public User getUserByMobile(String mobile, String systemCode) {
         User data = null;
         if (StringUtils.isNotBlank(mobile)) {
             User condition = new User();
             condition.setMobile(mobile);
             List<User> list = userDAO.selectList(condition);
-            if (list != null && list.size() > 1) {
-                throw new BizException("li01006", "手机号重复");
-            }
-            if (CollectionUtils.isNotEmpty(list)) {
-                data = list.get(0);
-            }
-        }
-        return data;
-    }
-
-    /** 
-     * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
-     */
-    @Override
-    public User getUserByMobileAndKind(String mobile, String kind) {
-        User data = null;
-        if (StringUtils.isNotBlank(mobile)) {
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind(kind);
-            List<User> list = userDAO.selectList(condition);
-            if (list != null && list.size() > 1) {
-                throw new BizException("li01006", "手机号重复");
-            }
             if (CollectionUtils.isNotEmpty(list)) {
                 data = list.get(0);
             }
@@ -156,17 +182,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      */
     @Override
     public User getUserByMobileAndKind(String mobile, String kind,
-            String companyCode) {
+            String systemCode) {
         User data = null;
         if (StringUtils.isNotBlank(mobile)) {
             User condition = new User();
             condition.setMobile(mobile);
             condition.setKind(kind);
-            condition.setCompanyCode(companyCode);
+            condition.setSystemCode(systemCode);
             List<User> list = userDAO.selectList(condition);
-            if (list != null && list.size() > 1) {
-                throw new BizException("li01006", "手机号重复");
-            }
             if (CollectionUtils.isNotEmpty(list)) {
                 data = list.get(0);
             }
@@ -178,7 +201,27 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
      */
     @Override
-    public User getUserByLoginName(String loginName) {
+    public User getUserByMobileAndKind(String mobile, String kind,
+            String companyCode, String systemCode) {
+        User data = null;
+        if (StringUtils.isNotBlank(mobile)) {
+            User condition = new User();
+            condition.setMobile(mobile);
+            condition.setKind(kind);
+            condition.setCompanyCode(companyCode);
+            List<User> list = userDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(list)) {
+                data = list.get(0);
+            }
+        }
+        return data;
+    }
+
+    /** 
+     * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
+     */
+    @Override
+    public User getUserByLoginName(String loginName, String systemCode) {
         User data = null;
         if (StringUtils.isNotBlank(loginName)) {
             User condition = new User();
@@ -249,65 +292,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     /** 
-     * @see com.ibis.pz.user.IUserBO#isMobileExist(java.lang.String)
-     */
-    @Override
-    public void isMobileExist(String mobile) {
-        if (StringUtils.isNotBlank(mobile)) {
-            // 判断格式
-            PhoneUtil.checkMobile(mobile);
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind("ff3");
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "手机号已经存在");
-            }
-        }
-    }
-
-    /** 
-     * @see com.ibis.pz.user.IUserBO#isMobileExist(java.lang.String)
-     */
-    @Override
-    public void isMobileExist(String mobile, String kind) {
-        if (StringUtils.isNotBlank(mobile)) {
-            // 判断格式
-            PhoneUtil.checkMobile(mobile);
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind(kind);
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "手机号已经存在");
-            }
-        }
-    }
-
-    /** 
-     * @see com.std.user.bo.IUserBO#isMobileExist(java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void isMobileExist(String mobile, String kind, String companyCode) {
-        if (StringUtils.isNotBlank(mobile)) {
-            // 判断格式
-            PhoneUtil.checkMobile(mobile);
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind(kind);
-            condition.setCompanyCode(companyCode);
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "手机号已经存在");
-            }
-        }
-    }
-
-    /** 
      * @see com.std.user.bo.IUserBO#isLoginNameExist(java.lang.String)
      */
     @Override
-    public void isLoginNameExist(String loginName, String kind) {
+    public void isLoginNameExist(String loginName, String kind,
+            String systemCode) {
         if (StringUtils.isNotBlank(loginName)) {
             // 判断格式
             User condition = new User();
@@ -324,7 +313,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.std.user.bo.IUserBO#checkUserReferee(java.lang.String)
      */
     @Override
-    public void checkUserReferee(String userReferee) {
+    public void checkUserReferee(String userReferee, String systemCode) {
         if (StringUtils.isNotBlank(userReferee)) {
             // 判断格式
             User condition = new User();
@@ -339,9 +328,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String loginName, String nickname, String mobile,
             String loginPwd, String loginPwdStrength, String userReferee,
-            String level, Long amount, String companyCode, String openId) {
-        // 交易密码888888
-        String tradePsd = "888888";
+            String level, Long amount, String companyCode, String openId,
+            String jpushId, String systemCode) {
         String userId = null;
         if (StringUtils.isNotBlank(loginPwdStrength)) {
             User user = new User();
@@ -364,8 +352,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
             user.setUserReferee(userReferee);
             user.setMobile(mobile);
-            user.setTradePwd(MD5Util.md5(tradePsd));
-            user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));
+            // String tradePsd = EUserPwd.InitPwd.getCode();
+            // user.setTradePwd(MD5Util.md5(tradePsd));
+            // user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));
             user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
             user.setUpdater(userId);
             user.setUpdateDatetime(new Date());
@@ -377,6 +366,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setLjAmount(amount);
             user.setCompanyCode(companyCode);
             user.setOpenId(openId);
+            user.setJpushId(jpushId);
+            user.setSystemCode(systemCode);
             userDAO.insert(user);
         }
         return userId;
@@ -416,7 +407,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public String doAddUser(String loginName, String mobile, String loginPsd,
             String userReferee, String realName, String idKind, String idNo,
             String tradePsd, String kind, String level, String remark,
-            String updater, String pdf, String roleCode) {
+            String updater, String pdf, String roleCode, String systemCode) {
         String userId = null;
         if (StringUtils.isNotBlank(loginName) || StringUtils.isNotBlank(mobile)) {
             User user = new User();
@@ -444,6 +435,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setRemark(remark);
             user.setPdf(pdf);
             user.setRoleCode(roleCode);
+            user.setSystemCode(systemCode);
             userDAO.insertRen(user);
         }
         return userId;

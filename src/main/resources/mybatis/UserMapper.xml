@@ -26,9 +26,12 @@
 		<result column="pdf" property="pdf" />
 		<result column="amount" property="amount" />
 		<result column="lj_amount" property="ljAmount" />
+		
 		<result column="company_code" property="companyCode" />
 		<result column="company_name" property="companyName" />
 		<result column="open_id" property="openId" />
+		<result column="jpush_id" property="jpushId" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
@@ -116,6 +119,12 @@
 			<if test="openId != null and openId != '' ">
 				AND t.open_id = #{openId}
 			</if>
+			<if test="jpushId != null and jpushId != '' ">
+				AND t.jpush_id = #{jpushId}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
@@ -146,6 +155,8 @@
 		,t.company_code
 		,tc.name as company_name
 		,t.open_id
+		,t.jpush_id
+		,t.system_code
 		FROM
 		tstd_user t left join tstd_company tc on t.company_code = tc.code
 		<include refid="where_condition"/>
@@ -184,6 +195,8 @@
 		,lj_amount
 		,company_code
 		,open_id
+		,jpush_id
+		,system_code
 		)
 		VALUES(
 		#{userId}
@@ -203,10 +216,13 @@
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		
 		,#{amount}
 		,#{ljAmount}
 		,#{companyCode}
 		,#{openId}
+		,#{jpushId}
+		,#{systemCode}
 		)
 	</insert>
 	
@@ -234,6 +250,7 @@
 		,remark
 		,pdf
 		,role_code
+		,system_code
 		)
 		VALUES(
 		#{userId}
@@ -258,6 +275,7 @@
 		,#{remark}
 		,#{pdf}
 		,#{roleCode}
+		,#{systemCode}
 		)
 	</insert>
 	
@@ -268,7 +286,7 @@
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_real_name" parameterType="user">
@@ -276,7 +294,7 @@
 		SET
 		 real_name= #{realName}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}
 	</update>
 	
 	<update id="update_trade_pwd" parameterType="user">
@@ -285,7 +303,7 @@
 		 trade_pwd = #{tradePwd}
 		,trade_pwd_strength = #{tradePwdStrength}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_login_pwd" parameterType="user">
@@ -294,7 +312,7 @@
 		 login_pwd = #{loginPwd}
 		,login_pwd_strength = #{loginPwdStrength}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>	
 	
 	<update id="update_mobile" parameterType="user">
@@ -302,7 +320,7 @@
 		SET
 		 mobile = #{mobile}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_bind_mobile" parameterType="user">
@@ -313,7 +331,7 @@
 		,login_pwd = #{loginPwd}
 		,login_pwd_strength = #{loginPwdStrength}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_status" parameterType="user">
@@ -324,7 +342,7 @@
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_role" parameterType="user">
@@ -335,7 +353,7 @@
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_user_pdf" parameterType="user">
@@ -346,7 +364,7 @@
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_user_loginName" parameterType="user">
@@ -354,7 +372,7 @@
 		SET
 		 login_name = #{loginName}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_user_nickname" parameterType="user">
@@ -362,7 +380,7 @@
 		SET
 		 nickname = #{nickname}
 		WHERE
-		user_id = #{userId}			
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_user_amount" parameterType="user">
@@ -372,6 +390,6 @@
         ,amount = #{amount}
 		,lj_amount = #{ljAmount}	
 		WHERE
-		user_id = #{userId}		
+		user_id = #{userId}	
 	</update>
 </mapper>

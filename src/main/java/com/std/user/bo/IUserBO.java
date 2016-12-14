@@ -21,6 +21,38 @@ import com.std.user.enums.EUserStatus;
  * @history:
  */
 public interface IUserBO extends IPaginableBO<User> {
+
+    /**
+     *  判断前端用户手机号是否存在
+     * @param mobile
+     * @param systemCode 
+     * @create: 2016年12月14日 下午5:47:05 xieyj
+     * @history:
+     */
+    public void isMobileExist(String mobile, String systemCode);
+
+    /**
+     * 根据手机号和类型判断手机号是否存在
+     * @param mobile
+     * @param kind
+     * @param systemCode 
+     * @create: 2016年12月14日 下午5:47:16 xieyj
+     * @history:
+     */
+    public void isMobileExist(String mobile, String kind, String systemCode);
+
+    /**
+     * 根据手机号和类型判断手机号是否存在
+     * @param mobile
+     * @param kind
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2016年12月14日 下午5:47:26 xieyj
+     * @history:
+     */
+    public void isMobileExist(String mobile, String kind, String companyCode,
+            String systemCode);
+
     /**
      * 验证交易密码:拿tradePwd进行MD5后与数据库中userId得数据库交易密码比对
      * @param userId
@@ -40,40 +72,15 @@ public interface IUserBO extends IPaginableBO<User> {
     public void checkLoginPwd(String userId, String loginPwd);
 
     /**
-     *  判断前端用户手机号是否存在
-     * @param mobile
-     * @return 
-     * @create: 2015-5-16 下午4:08:06 miyb
-     * @history:
-     */
-    public void isMobileExist(String mobile);
-
-    /**
-     * 根据手机号和类型判断手机号是否存在
-     * @param mobile
-     * @param kind 
-     * @create: 2016年7月27日 下午3:45:39 xieyj
-     * @history:
-     */
-    public void isMobileExist(String mobile, String kind);
-
-    /**
-     * @param mobile
-     * @param kind
-     * @param companyCode 
-     * @create: 2016年11月24日 上午10:01:31 xieyj
-     * @history:
-     */
-    public void isMobileExist(String mobile, String kind, String companyCode);
-
-    /**
      * 判断登录名是否存在
      * @param loginName
-     * @param kind 
-     * @create: 2016年7月28日 下午8:16:37 xieyj
+     * @param kind
+     * @param systemCode 
+     * @create: 2016年12月14日 下午5:47:53 xieyj
      * @history:
      */
-    public void isLoginNameExist(String loginName, String kind);
+    public void isLoginNameExist(String loginName, String kind,
+            String systemCode);
 
     /**
      *  判断推荐人是否存在(手机号)
@@ -82,11 +89,12 @@ public interface IUserBO extends IPaginableBO<User> {
      * @create: 2015-5-16 下午4:08:06 miyb
      * @history:
      */
-    public void checkUserReferee(String userReferee);
+    public void checkUserReferee(String userReferee, String systemCode);
 
     public String doRegister(String loginName, String nickname, String mobile,
             String loginPwd, String loginPwdStrength, String userReferee,
-            String level, Long amount, String companyCode, String openId);
+            String level, Long amount, String companyCode, String openId,
+            String jpushId, String systemCode);
 
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
@@ -106,21 +114,22 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public User getUser(String userId);
 
-    public User getUserByMobile(String mobile);
-
-    public User getUserByMobileAndKind(String mobile, String kind);
+    public User getUserByMobile(String mobile, String systemCode);
 
     public User getUserByMobileAndKind(String mobile, String kind,
-            String companyCode);
+            String systemCode);
 
-    public User getUserByLoginName(String loginName);
+    public User getUserByMobileAndKind(String mobile, String kind,
+            String companyCode, String systemCode);
+
+    public User getUserByLoginName(String loginName, String systemCode);
 
     public List<User> queryUserList(User condition);
 
     public String doAddUser(String loginName, String mobile, String loginPsd,
             String userReferee, String realName, String idKind, String idNo,
             String tradePsd, String kind, String level, String remark,
-            String updater, String pdf, String roleCode);
+            String updater, String pdf, String roleCode, String systemCode);
 
     public void refreshStatus(String userId, EUserStatus normal,
             String updater, String remark);

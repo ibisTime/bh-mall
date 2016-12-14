@@ -25,7 +25,7 @@ public class XN805070 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new XN805070Res(userAO.doAddUser(req.getMobile(),
             req.getRealName(), req.getUserReferee(), req.getUpdater(),
-            req.getRemark(), req.getKind()));
+            req.getRemark(), req.getKind(), req.getSystemCode()));
     }
 
     @Override

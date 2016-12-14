@@ -15,7 +15,7 @@ package com.std.user.enums;
  */
 public enum EUser {
     // li表示程序
-    LI("li", "程序"), ADMIN("U201600000000000000", "userId");
+    LI("li", "程序");
 
     EUser(String code, String value) {
         this.code = code;

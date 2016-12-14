@@ -55,8 +55,8 @@ import com.std.user.enums.ELoginType;
 import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
-import com.std.user.enums.EUser;
 import com.std.user.enums.EUserKind;
+import com.std.user.enums.EUserLevel;
 import com.std.user.enums.EUserPwd;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
@@ -109,56 +109,64 @@ public class UserAOImpl implements IUserAO {
     protected ISignLogBO signLogBO;
 
     @Override
-    public void doCheckMobile(String mobile) {
-        userBO.isMobileExist(mobile);
+    public void doCheckMobile(String mobile, String kind, String systemCode) {
+        userBO.isMobileExist(mobile, kind, systemCode);
     }
 
     /** 
      * @see com.std.user.ao.IUserAO#doCheckMobile(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public void doCheckMobile(String mobile, String kind, String companyCode) {
-        userBO.isMobileExist(mobile, kind, companyCode);
+    public void doCheckMobile(String mobile, String kind, String companyCode,
+            String systemCode) {
+        userBO.isMobileExist(mobile, kind, companyCode, systemCode);
     }
 
     @Override
     @Transactional
     public String doRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha) {
+            String loginPwdStrength, String userReferee, String smsCaptcha,
+            String kind, String systemCode) {
         // 验证手机号
-        userBO.isMobileExist(mobile);
-        // 验证推荐人是否是平台的已注册用户
-        userBO.checkUserReferee(userReferee);
+        userBO.isMobileExist(mobile, kind, systemCode);
+        // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
+        if (StringUtils.isNotBlank(userReferee)) {
+            User refereeUser = userBO.getUserByMobileAndKind(userReferee, kind,
+                systemCode);
+            if (null == refereeUser) {
+                throw new BizException("xn702002", "推荐人不存在");
+            }
+            userReferee = refereeUser.getUserId();
+        }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, null, 0L, null, null);
-        // 分配账号(人民币和虚拟币)
-        accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
-        accountBO.distributeAccount(userId, mobile, ECurrency.XNB.getCode());
-        // 设置用户关系
-        if (StringUtils.isNotBlank(userReferee)) {
-            userRelationBO.saveUserRelation(userReferee, userId);
-        }
+            loginPwdStrength, userReferee, EUserLevel.ZERO.getCode(), 0L, null,
+            null, null, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
+        // 分配账号(人民币和虚拟币)
+        // accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
+        // accountBO.distributeAccount(userId, mobile, ECurrency.XNB.getCode());
         return userId;
     }
 
     @Override
     @Transactional
     public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha) {
+            String loginPwdStrength, String userReferee, String smsCaptcha,
+            String systemCode) {
         // 验证手机号
-        userBO.isMobileExist(mobile);
+        userBO.isMobileExist(mobile, systemCode);
         // 验证推荐人是否是平台的已注册用户
-        userBO.checkUserReferee(userReferee);
+        userBO.checkUserReferee(userReferee, systemCode);
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, "0", 0L, null, null);
+            loginPwdStrength, userReferee, "0", 0L, null, null, null,
+            systemCode);
         // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
         XN802001Res accountRes = accountBO.distributeAccountTwo(userId, mobile,
@@ -176,16 +184,16 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode, String isMall) {
+            String companyCode, String isMall, String systemCode) {
         // 验证手机号
         if (StringUtils.isNotBlank(isMall)
                 && EBoolean.YES.getCode().equals(isMall)) {
             userBO.isMobileExist(mobile, null, companyCode);
         } else {
-            userBO.isMobileExist(mobile);
+            userBO.isMobileExist(mobile, systemCode);
         }
         // 验证推荐人是否是平台的已注册用户
-        userBO.checkUserReferee(userReferee);
+        userBO.checkUserReferee(userReferee, systemCode);
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076");
         // 设置公司
@@ -202,7 +210,7 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             null, mobile, loginPwd, loginPwdStrength, userReferee, null,
-            amount, companyCode, null);
+            amount, companyCode, null, null, systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -215,7 +223,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public String doThirdRegister(String openId, String nickname, String photo,
-            String gender, String companyCode) {
+            String gender, String companyCode, String systemCode) {
         User condition = new User();
         condition.setOpenId(openId);
         long count = userBO.getTotalCount(condition);
@@ -236,7 +244,7 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String loginPwd = EUserPwd.InitPwd.getCode();
         String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, null, amount, companyCode, openId);
+            "1", null, null, amount, companyCode, openId, null, systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -250,20 +258,21 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf, String roleCode) {
+            String remark, String kind, String pdf, String roleCode,
+            String systemCode) {
         String userId = null;
         // 插入用户信息
         String loginPsd = EUserPwd.InitPwd.getCode();
         if (EUserKind.F1.getCode().equals(kind)
                 || EUserKind.F2.getCode().equals(kind)) {
             // 验证手机号
-            userBO.isMobileExist(mobile, kind);
+            userBO.isMobileExist(mobile, kind, systemCode);
             // 插入用户信息
             loginPsd = RandomUtil.generate6();
             String tradePsd = EUserPwd.InitPwd.getCode();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, tradePsd, kind, "0", remark, updater,
-                pdf, null);
+                pdf, null, systemCode);
             // 三方认证
             // dentifyBO.doIdentify(userId, realName, idKind, idNo);
             // 分配账号(人民币和虚拟币)
@@ -279,21 +288,21 @@ public class UserAOImpl implements IUserAO {
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册。您的登录密码为" + loginPsd
-                    + "，请及时登录菜狗商城修改密码。如有疑问，请联系客服："
+                    + "，请及时登录网站修改密码。如有疑问，请联系客服："
                     + PropertiesUtil.Config.COMPANY_MOBILE + "。", "805042");
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             // 验证登录名
-            userBO.isLoginNameExist(loginName, null);
+            userBO.isLoginNameExist(loginName, null, systemCode);
             // 插入用户信息
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
-                pdf, roleCode);
+                pdf, roleCode, systemCode);
         } else if (EUserKind.Integral.getCode().equals(kind)
                 || EUserKind.Goods.getCode().equals(kind)
                 || EUserKind.CaiGo.getCode().equals(kind)
                 || EUserKind.Merchant.getCode().equals(kind)) {
             // 验证登录名
-            userBO.isLoginNameExist(loginName, null);
+            userBO.isLoginNameExist(loginName, null, systemCode);
             int level = 1;
             if (StringUtils.isNotBlank(userReferee)) {
                 String preUserId = userReferee;
@@ -326,7 +335,7 @@ public class UserAOImpl implements IUserAO {
             // 插入用户信息
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, level + "", remark,
-                updater, pdf, cxRoleCode);
+                updater, pdf, cxRoleCode, systemCode);
             // 分配人民币账号
             accountBO.distributeAccount(userId, realName,
                 ECurrency.CNY.getCode());
@@ -337,35 +346,14 @@ public class UserAOImpl implements IUserAO {
         return userId;
     }
 
-    @Override
-    @Transactional
-    public String doAddUser(String mobile, String realName, String userReferee,
-            String updater, String remark, String kind) {
-        // 验证手机号
-        userBO.isMobileExist(mobile);
-        // 插入用户信息
-        String loginPsd = RandomUtil.generate6();
-        String tradePsd = RandomUtil.generate6();
-        String userId = userBO.doAddUser(null, mobile, loginPsd, null,
-            realName, null, null, tradePsd, kind, "0", remark, updater, null,
-            null);
-        // 分配账号
-        accountBO.distributeAccount(userId, realName, ECurrency.CNY.getCode());
-        // 发送短信
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您已成功注册。您的登录密码为" + loginPsd + ";交易密码为" + tradePsd
-                + "，请及时登录个金所网站修改密码。如有疑问，请联系客服：400-0008-139。", "805042");
-        return userId;
-    }
-
     /** 
      * @see com.std.user.ao.IUserAO#doAddUser(java.lang.String, java.lang.String)
      */
     @Override
     public String doAddUser(String mobile, String companyCode,
-            String userReferee) {
+            String userReferee, String systemCode) {
         // 验证手机号
-        userBO.isMobileExist(mobile);
+        userBO.isMobileExist(mobile, systemCode);
         companyBO.isCompanyExist(companyCode);
         // 注册送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
@@ -374,7 +362,7 @@ public class UserAOImpl implements IUserAO {
         String loginPwd = RandomUtil.generate6();
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             null, mobile, loginPwd, "1", userReferee, null, amount,
-            companyCode, null);
+            companyCode, null, null, systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -389,7 +377,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
-            String companyCode) {
+            String companyCode, String systemCode) {
         User condition = new User();
         if (EUserKind.F1.getCode().equals(kind)) {
             condition.setLoginName(loginName);
@@ -399,18 +387,17 @@ public class UserAOImpl implements IUserAO {
         } else {
             condition.setLoginName(loginName);
         }
+        condition.setSystemCode(systemCode);
         List<User> userList1 = userBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn702002", "登录名不存在");
         }
-
         condition.setLoginPwd(MD5Util.md5(loginPwd));
         List<User> userList2 = userBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {
             throw new BizException("xn702002", "登录密码错误");
         }
         User user = userList2.get(0);
-
         if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
             throw new BizException("xn702002", "当前用户已被锁定，请联系工作人员");
         }
@@ -420,7 +407,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public XN805155Res doLoginAddJf(String loginName, String loginPwd,
-            String kind) {
+            String kind, String systemCode) {
         User condition = new User();
         if (EUserKind.F1.getCode().equals(kind)) {
             condition.setLoginName(loginName);
@@ -461,12 +448,12 @@ public class UserAOImpl implements IUserAO {
     public void doIdentify(String userId, String idKind, String idNo,
             String realName) {
         // 三方认证
-        // dentifyBO.doIdentify(userId, realName, idKind, idNo);
+        dentifyBO.doIdentify(userId, realName, idKind, idNo);
         // 更新用户表
         userBO
             .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
         // 回写Account表realName;
-        accountBO.refreshRealName(userId, realName);
+        // accountBO.refreshRealName(userId, realName);
     }
 
     @Override
@@ -499,7 +486,7 @@ public class UserAOImpl implements IUserAO {
             String idNo, String realName, String tradePwd,
             String tradePwdStrength, String smsCaptcha) {
         // 三方认证
-        // dentifyBO.doIdentify(userId, realName, idKind, idNo);
+        dentifyBO.doIdentify(userId, realName, idKind, idNo);
         // 更新用户表
         userBO
             .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
@@ -524,11 +511,11 @@ public class UserAOImpl implements IUserAO {
             String smsCaptcha, String tradePwd, String isMall) {
         User user = userBO.getUser(userId);
         if (user == null) {
-            throw new BizException("li01004", "用户名不存在");
+            throw new BizException("xn000000", "用户不存在");
         }
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
-            throw new BizException("li01009", "新手机与原手机一致");
+            throw new BizException("xn000000", "新手机与原手机一致");
         }
         // 验证手机号
         if (StringUtils.isNotBlank(isMall)
@@ -536,7 +523,7 @@ public class UserAOImpl implements IUserAO {
             userBO.isMobileExist(newMobile, user.getKind(),
                 user.getCompanyCode());
         } else {
-            userBO.isMobileExist(newMobile);
+            userBO.isMobileExist(newMobile, user.getSystemCode());
         }
         // 验证交易密码
         userBO.checkTradePwd(userId, tradePwd);
@@ -551,7 +538,7 @@ public class UserAOImpl implements IUserAO {
                     + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
                         DateUtil.DATA_TIME_PATTERN_1)
-                    + "提交的更改绑定手机号码服务审核通过，您的新绑定手机号码为" + newMobile
+                    + "提交的更改绑定手机号码服务已审核通过，现绑定手机号码为" + newMobile
                     + "，请妥善保管您的账户相关信息。", "805047");
     }
 
@@ -581,15 +568,14 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doFindLoginPwd(String mobile, String smsCaptcha,
-            String newLoginPwd, String loginPwdStrength) {
-        User user = userBO.getUserByMobileAndKind(mobile,
-            EUserKind.F1.getCode());
+            String newLoginPwd, String loginPwdStrength, String kind,
+            String systemCode) {
+        User user = userBO.getUserByMobileAndKind(mobile, kind, systemCode);
         if (user == null) {// 这里其实还有一种处理方法：就是直接注册
             throw new BizException("li01004", "用户不存在,请先注册");
         }
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805048");
-
         userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
             loginPwdStrength);
         // 发送短信
@@ -600,9 +586,10 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doFindLoginPwd(String mobile, String smsCaptcha,
-            String newLoginPwd, String loginPwdStrength, String companyCode) {
-        User user = userBO.getUserByMobileAndKind(mobile,
-            EUserKind.F1.getCode(), companyCode);
+            String newLoginPwd, String loginPwdStrength, String kind,
+            String companyCode, String systemCode) {
+        User user = userBO.getUserByMobileAndKind(mobile, kind, companyCode,
+            systemCode);
         if (user == null) {// 这里其实还有一种处理方法：就是直接注册
             throw new BizException("li01004", "用户不存在,请先注册");
         }
@@ -616,10 +603,25 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public void doSendLoginPwdSms(String loginName, String systemCode) {
+        User condition = new User();
+        condition.setLoginName(loginName);
+        condition.setSystemCode(systemCode);
+        List<User> userList = userBO.queryUserList(condition);
+        User data = null;
+        if (CollectionUtils.isEmpty(userList)) {
+            throw new BizException("xn702001", "登录名不存在");
+        } else {
+            data = userList.get(0);
+        }
+        smsOutBO.sendCaptcha(data.getMobile(), "805059");
+    }
+
+    @Override
     @Transactional
     public void doFindLoginPwdByOss(String loginName, String smsCaptcha,
-            String newLoginPwd, String loginPwdStrength) {
-        User user = userBO.getUserByLoginName(loginName);
+            String newLoginPwd, String loginPwdStrength, String systemCode) {
+        User user = userBO.getUserByLoginName(loginName, systemCode);
         if (user == null) {
             throw new BizException("li01004", "用户不存在,请先注册");
         }
@@ -635,9 +637,10 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public void doFindLoginPwdByOss(String userId, String adminPwd) {
+    public void doFindLoginPwdByOss(String userId, String adminUserId,
+            String adminPwd) {
         // 验证当前登录密码是否正确
-        userBO.checkLoginPwd(EUser.ADMIN.getCode(), adminPwd);
+        userBO.checkLoginPwd(adminUserId, adminPwd);
         userBO.refreshLoginPwd(userId, MD5Util.md5(EUserPwd.InitPwd.getCode()),
             EBoolean.YES.getCode());
     }
@@ -654,7 +657,6 @@ public class UserAOImpl implements IUserAO {
         // 重置
         userBO.refreshLoginPwd(userId, MD5Util.md5(newLoginPwd),
             loginPwdStrength);
-
         // 发送短信
         User user = userBO.getUser(userId);
         String mobile = user.getMobile();
@@ -683,7 +685,6 @@ public class UserAOImpl implements IUserAO {
             .equalsIgnoreCase(idNo))) {
             throw new BizException("li01009", "证件验证不通过");
         }
-
         // 短信验证码是否正确
         String mobile = user.getMobile();
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805050");
@@ -724,11 +725,11 @@ public class UserAOImpl implements IUserAO {
         if (oldTradePwd.equals(newTradePwd)) {
             throw new BizException("li01008", "新交易密码与原有交易密码重复");
         }
-        User user = null;
         User conditon = new User();
         conditon.setUserId(userId);
         conditon.setTradePwd(MD5Util.md5(oldTradePwd));
         List<User> list = userBO.queryUserList(conditon);
+        User user = null;
         if (CollectionUtils.isNotEmpty(list)) {
             user = list.get(0);
         } else {
@@ -762,15 +763,15 @@ public class UserAOImpl implements IUserAO {
             smsContent = "用户，您已经被激活。";
             userStatus = EUserStatus.NORMAL;
         }
-        // admin 不注销
-        if (!userId.equals(EUser.ADMIN.getCode())) {
-            userBO.refreshStatus(userId, userStatus, updater, remark);
-        }
-        if (!EUserKind.Operator.getCode().equals(user.getKind())) {
-            // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + smsContent, "805052");
-        }
+        // // admin 不注销
+        // if (!userId.equals(EUser.ADMIN.getCode())) {
+        // userBO.refreshStatus(userId, userStatus, updater, remark);
+        // }
+        // if (!EUserKind.Operator.getCode().equals(user.getKind())) {
+        // // 发送短信
+        // smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+        // + smsContent, "805052");
+        // }
     }
 
     @Override
@@ -854,23 +855,6 @@ public class UserAOImpl implements IUserAO {
         return user;
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doSendLoginPwdSms(java.lang.String)
-     */
-    @Override
-    public void doSendLoginPwdSms(String loginName) {
-        User condition = new User();
-        condition.setLoginName(loginName);
-        List<User> userList = userBO.queryUserList(condition);
-        User data = null;
-        if (CollectionUtils.isEmpty(userList)) {
-            throw new BizException("xn702001", "登录名不存在");
-        } else {
-            data = userList.get(0);
-        }
-        smsOutBO.sendCaptcha(data.getMobile(), "805059");
-    }
-
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
         userBO.checkTradePwd(userId, tradePwd);
@@ -898,7 +882,7 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn000000", "现登录名和原来一致，无需修改");
         }
         // 判断登录名是否已存在,全系统唯一
-        userBO.isLoginNameExist(loginName, null);
+        userBO.isLoginNameExist(loginName, null, user.getSystemCode());
         if (StringUtils.isNotBlank(userId)) {
             userBO.refreshLoginName(userId, loginName);
             fieldTimesBO.saveFieldTimes(EFieldType.LOGINNAME, userId);
@@ -910,8 +894,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void editNickname(String userId, String nickname) {
-        // 昵称只能修改一次
-        // fieldTimesBO.isFieldTimesExist(EFieldType.NICKNAME, userId);
         if (StringUtils.isNotBlank(userId)) {
             userBO.refreshNickname(userId, nickname);
             fieldTimesBO.saveFieldTimes(EFieldType.NICKNAME, userId);

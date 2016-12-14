@@ -26,7 +26,8 @@ public class XN805170 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doCheckMobile(req.getMobile(), null, req.getCompanyCode());
+        userAO.doCheckMobile(req.getMobile(), req.getKind(),
+            req.getCompanyCode(), req.getSystemCode());
         return new BooleanRes(true);
     }
 
@@ -36,6 +37,7 @@ public class XN805170 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805170Req.class);
-        StringValidater.validateBlank(req.getMobile(), req.getCompanyCode());
+        StringValidater.validateBlank(req.getMobile(), req.getKind(),
+            req.getCompanyCode(), req.getSystemCode());
     }
 }

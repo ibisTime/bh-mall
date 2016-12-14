@@ -25,13 +25,13 @@ public class XN805151 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new XN805151Res(userAO.doThirdRegister(req.getOpenId(),
             req.getNickname(), req.getPhoto(), req.getGender(),
-            req.getCompanyCode()));
+            req.getCompanyCode(), req.getSystemCode()));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805151Req.class);
         StringValidater.validateBlank(req.getOpenId(), req.getNickname(),
-            req.getPhoto(), req.getGender());
+            req.getPhoto(), req.getGender(), req.getSystemCode());
     }
 }

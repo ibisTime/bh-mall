@@ -132,6 +132,8 @@ http://121.43.101.148:6505/std-user/api
   ../bin/shutdown.sh
   ../bin/startup.sh
   
+    http://121.43.101.148:5605/std-user/api
+  
    --------------------qlqq
   cd /home/wwwroot/ride/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .

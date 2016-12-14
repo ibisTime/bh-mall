@@ -23,15 +23,15 @@ public class XN805040 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doCheckMobile(req.getMobile());
+        userAO.doCheckMobile(req.getMobile(), req.getKind(),
+            req.getSystemCode());
         return new XN805040Res(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805040Req.class);
-        StringValidater.validateBlank(req.getMobile());
-
+        StringValidater.validateBlank(req.getMobile(), req.getKind(),
+            req.getSystemCode());
     }
-
 }

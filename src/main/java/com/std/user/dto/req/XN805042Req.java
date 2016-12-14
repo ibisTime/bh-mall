@@ -34,6 +34,17 @@ public class XN805042Req {
     // 角色编号(选填)
     private String roleCode;
 
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getRoleCode() {
         return roleCode;
     }

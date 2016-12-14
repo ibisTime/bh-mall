@@ -384,7 +384,7 @@ CREATE TABLE `tstd_company_certificate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `tstd_company_certificate`
+--  Table structure for `tstd_invitation`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_invitation`;
 CREATE TABLE `tstd_invitation` (

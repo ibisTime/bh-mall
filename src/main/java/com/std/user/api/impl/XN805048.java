@@ -17,7 +17,6 @@ import com.std.user.spring.SpringContextHolder;
  * @history:
  */
 public class XN805048 extends AProcessor {
-
     private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
     private XN805048Req req = null;
@@ -25,7 +24,8 @@ public class XN805048 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doFindLoginPwd(req.getMobile(), req.getSmsCaptcha(),
-            req.getNewLoginPwd(), req.getLoginPwdStrength());
+            req.getNewLoginPwd(), req.getLoginPwdStrength(), req.getKind(),
+            req.getSystemCode());
         return new XN805048Res(true);
     }
 
@@ -33,8 +33,7 @@ public class XN805048 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805048Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getSmsCaptcha(),
-            req.getNewLoginPwd(), req.getLoginPwdStrength());
-
+            req.getNewLoginPwd(), req.getLoginPwdStrength(), req.getKind(),
+            req.getSystemCode());
     }
-
 }

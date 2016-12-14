@@ -23,10 +23,12 @@ public class XN805042 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805042Res(userAO.doAddUser(req.getLoginName(),
-            req.getMobile(), req.getIdKind(), req.getIdNo(), req.getRealName(),
-            req.getUserReferee(), req.getUpdater(), req.getRemark(),
-            req.getKind(), req.getPdf(), req.getRoleCode()));
+        return new XN805042Res(
+            userAO.doAddUser(req.getLoginName(), req.getMobile(),
+                req.getIdKind(), req.getIdNo(), req.getRealName(),
+                req.getUserReferee(), req.getUpdater(), req.getRemark(),
+                req.getKind(), req.getPdf(), req.getRoleCode(),
+                req.getSystemCode()));
     }
 
     @Override
