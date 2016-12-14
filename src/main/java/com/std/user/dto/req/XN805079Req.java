@@ -16,6 +16,17 @@ public class XN805079Req {
     // 推荐人(选填)
     private String userReferee;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getMobile() {
         return mobile;
     }

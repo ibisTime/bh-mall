@@ -346,6 +346,27 @@ public class UserAOImpl implements IUserAO {
         return userId;
     }
 
+    @Override
+    @Transactional
+    public String doAddUser(String mobile, String realName, String userReferee,
+            String updater, String remark, String kind, String systemCode) {
+        // 验证手机号
+        userBO.isMobileExist(mobile, kind, systemCode);
+        // 插入用户信息
+        String loginPsd = RandomUtil.generate6();
+        String tradePsd = RandomUtil.generate6();
+        String userId = userBO.doAddUser(null, mobile, loginPsd, null,
+            realName, null, null, tradePsd, kind, "0", remark, updater, null,
+            null, systemCode);
+        // 分配账号
+        accountBO.distributeAccount(userId, realName, ECurrency.CNY.getCode());
+        // 发送短信
+        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                + "用户，您已成功注册。您的登录密码为" + loginPsd + ";交易密码为" + tradePsd
+                + "，请及时登录个金所网站修改密码。如有疑问，请联系客服：400-0008-139。", "805042");
+        return userId;
+    }
+
     /** 
      * @see com.std.user.ao.IUserAO#doAddUser(java.lang.String, java.lang.String)
      */

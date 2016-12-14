@@ -24,7 +24,7 @@ public class XN805900 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         String userId = userAO.doLogin(req.getLoginName(), req.getLoginPwd(),
-            null, null);
+            null, null, req.getSystemCode());
         XN805900Res res = new XN805900Res();
         res.setTokenId(userId);
         res.setUserId(userId);
@@ -34,7 +34,7 @@ public class XN805900 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805900Req.class);
-        StringValidater.validateBlank(req.getLoginName(), req.getLoginPwd());
+        StringValidater.validateBlank(req.getLoginName(), req.getLoginPwd(),
+            req.getSystemCode());
     }
-
 }

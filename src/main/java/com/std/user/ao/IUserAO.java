@@ -118,6 +118,9 @@ public interface IUserAO {
             String remark, String kind, String pdf, String roleCode,
             String systemCode);
 
+    public String doAddUser(String mobile, String realName, String userReferee,
+            String updater, String remark, String kind, String systemCode);
+
     /**
      *  城市网代注册
      * @param mobile

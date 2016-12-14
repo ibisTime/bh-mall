@@ -23,13 +23,13 @@ public class XN805155 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return userAO.doLoginAddJf(req.getLoginName(), req.getLoginPwd(),
-            req.getKind());
+            req.getKind(), req.getSystemCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805155Req.class);
         StringValidater.validateBlank(req.getLoginName(), req.getLoginPwd(),
-            req.getKind());
+            req.getKind(), req.getSystemCode());
     }
 }
