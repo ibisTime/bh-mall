@@ -31,7 +31,6 @@ import com.std.user.domain.LevelRule;
 import com.std.user.domain.User;
 import com.std.user.enums.EAccountJourStatus;
 import com.std.user.enums.EBizType;
-import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserLevel;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
@@ -330,8 +329,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String loginName, String nickname, String mobile,
             String loginPwd, String loginPwdStrength, String userReferee,
-            String level, Long amount, String companyCode, String openId,
-            String jpushId, String systemCode) {
+            String kind, String level, Long amount, String companyCode,
+            String openId, String jpushId, String systemCode) {
         String userId = null;
         if (StringUtils.isNotBlank(loginPwdStrength)) {
             User user = new User();
@@ -347,7 +346,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             } else {
                 user.setNickname(nickname);
             }
-            user.setKind(EUserKind.F1.getCode());
+            user.setKind(kind);
             user.setLevel(EUserLevel.ONE.getCode());
             if (StringUtils.isNotBlank(level)) {
                 user.setLevel(level);
@@ -360,7 +359,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
             user.setUpdater(userId);
             user.setUpdateDatetime(new Date());
-            user.setRemark(EUserKind.F1.getValue());
             if (amount == null) {
                 amount = 0L;
             }

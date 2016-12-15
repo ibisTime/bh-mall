@@ -142,8 +142,8 @@ public class UserAOImpl implements IUserAO {
         // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, EUserLevel.ZERO.getCode(), 0L, null,
-            null, null, systemCode);
+            loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(), 0L,
+            null, null, null, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
         // 分配账号(人民币和虚拟币)
@@ -165,8 +165,8 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, "0", 0L, null, null, null,
-            systemCode);
+            loginPwdStrength, userReferee, EUserKind.F1.getCode(), "0", 0L,
+            null, null, null, systemCode);
         // 分配账号(人民币和虚拟币)
         accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
         XN802001Res accountRes = accountBO.distributeAccountTwo(userId, mobile,
@@ -209,8 +209,9 @@ public class UserAOImpl implements IUserAO {
             EBoolean.NO.getCode());
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            null, mobile, loginPwd, loginPwdStrength, userReferee, null,
-            amount, companyCode, null, null, systemCode);
+            null, mobile, loginPwd, loginPwdStrength, userReferee,
+            EUserKind.F1.getCode(), null, amount, companyCode, null, null,
+            systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -244,7 +245,8 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String loginPwd = EUserPwd.InitPwd.getCode();
         String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, null, amount, companyCode, openId, null, systemCode);
+            "1", null, EUserKind.F1.getCode(), "0", amount, companyCode,
+            openId, null, systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -382,8 +384,9 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String loginPwd = RandomUtil.generate6();
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            null, mobile, loginPwd, "1", userReferee, null, amount,
-            companyCode, null, null, systemCode);
+            null, mobile, loginPwd, "1", userReferee, EUserKind.F1.getCode(),
+            EUserLevel.ZERO.getCode(), amount, companyCode, null, null,
+            systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
@@ -400,7 +403,8 @@ public class UserAOImpl implements IUserAO {
     public String doLogin(String loginName, String loginPwd, String kind,
             String companyCode, String systemCode) {
         User condition = new User();
-        if (EUserKind.F1.getCode().equals(kind)) {
+        if (EUserKind.F1.getCode().equals(kind)
+                || EUserKind.F2.getCode().equals(kind)) {
             condition.setLoginName(loginName);
             condition.setLoginType(ELoginType.ALL.getCode());
             condition.setKind(kind);

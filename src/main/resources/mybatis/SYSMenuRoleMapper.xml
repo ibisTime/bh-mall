@@ -9,7 +9,8 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />		
 		
-		<result column="remark" property="remark" />		
+		<result column="remark" property="remark" />	
+		<result column="system_code" property="systemCode" />		
 	</resultMap>
 	
 	<resultMap id="sysMenu_DB_Result" type="sysMenu">
@@ -21,6 +22,7 @@
 		
 		<result column="parent_code" property="parentCode" />	
 		<result column="remark" property="remark" />
+		<result column="system_code" property="systemCode" />		
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">	
@@ -36,6 +38,9 @@
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	
@@ -50,8 +55,8 @@
 			<if test="type != null and type != '' ">
 				AND m.type = #{type}
 			</if>
-			<if test="kind != null and kind != '' ">
-				AND m.kind = #{kind}
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
 			</if>
 		</trim>
 	</sql>
@@ -63,7 +68,8 @@
 		,menu_code	
 		,updater
 		,update_datetime
-		,remark		
+		,remark	
+		,system_code	
 		FROM
 		tsys_menu_role t
 		<include refid="where_condition"/>
@@ -81,13 +87,15 @@
 		,updater	
 		,update_datetime	
 		,remark			
+		,system_code	
 		)
 		VALUES(
 		#{roleCode}
 		,#{menuCode}
 		,#{updater}	
 		,#{updateDatetime}
-		,#{remark}		
+		,#{remark}	
+		,#{systemCode}	
 		)
 	</insert>
 
@@ -123,6 +131,7 @@
 		,m.type
 		,m.order_no
 		,m.remark
+		,m.system_code
 		FROM
 		tsys_menu_role t INNER JOIN tsys_menu m
 		ON t.menu_code = m.code

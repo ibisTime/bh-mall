@@ -27,7 +27,6 @@ public class XN805005 extends AProcessor {
     public Object doBusiness() throws BizException {
         SYSMenu condition = new SYSMenu();
         condition.setCode(req.getCode());
-
         condition.setName(req.getName());
         condition.setType(req.getType());
         condition.setUrl(req.getUrl());
@@ -36,7 +35,6 @@ public class XN805005 extends AProcessor {
 
         condition.setUpdater(req.getUpdater());
         condition.setRemark(req.getRemark());
-        condition.setKind(req.getKind());
         return new BooleanRes(sysMenuAO.editSYSMenu(condition));
     }
 
@@ -45,6 +43,6 @@ public class XN805005 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805005Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
             req.getType(), req.getUrl(), req.getParentCode(), req.getOrderNo(),
-            req.getUpdater(), req.getKind());
+            req.getUpdater());
     }
 }

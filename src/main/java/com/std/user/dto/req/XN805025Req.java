@@ -11,9 +11,6 @@ public class XN805025Req {
     // 角色编号(必填)
     private String code;
 
-    // 六方(必填)
-    private String kind;
-
     // 角色名称(必填)
     private String name;
 
@@ -32,14 +29,6 @@ public class XN805025Req {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
     }
 
     public String getName() {

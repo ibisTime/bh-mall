@@ -28,6 +28,7 @@ public class XN807715 extends AProcessor {
     public Object doBusiness() throws BizException {
         SYSConfig data = new SYSConfig();
         data.setCkeyForQuery(req.getCkey());
+        data.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISYSConfigAO.DEFAULT_ORDER_COLUMN;
@@ -42,6 +43,7 @@ public class XN807715 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN807715Req.class);
         StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 
 }

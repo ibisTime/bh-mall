@@ -22,8 +22,16 @@ public class XN805003Req {
     // 备注(选填)
     private String remark;
 
-    // 六方(必填)
-    private String kind;
+    // 系统编号（必填）
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getName() {
         return name;
@@ -80,13 +88,4 @@ public class XN805003Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
 }

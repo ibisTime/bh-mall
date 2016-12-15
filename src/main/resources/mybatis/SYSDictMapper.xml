@@ -4,7 +4,6 @@
 <mapper namespace="com.std.user.dao.ISYSDictDAO">
 	<resultMap id="sysDict_DB_Result" type="sysDict">
 		<result column="id" property="id" />
-		<result column="to_system" property="toSystem" />
 		<result column="type" property="type" />
 		<result column="parent_key" property="parentKey" />
 		<result column="dkey" property="dkey" />
@@ -12,15 +11,13 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="id != null">
 				AND t.id = #{id}
 			</if>	
-			<if test="toSystem != null and toSystem != '' ">
-				AND t.to_system = #{toSystem}
-			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
@@ -30,12 +27,14 @@
 			<if test="parentKey != null and parentKey != '' ">
 				AND t.parent_key = #{parentKey}
 			</if>	
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>	
 		</trim>
 	</sql>
 	<select id="select_sysDict" parameterType="sysDict" resultMap="sysDict_DB_Result">
 		SELECT
 		id
-		,to_system
 		,type
 		,parent_key
 		,dkey
@@ -44,6 +43,7 @@
 		,updater
 		,update_datetime
 		,remark
+		,system_code
 		FROM
 		tsys_dict t 
 		<include refid="where_condition" />
@@ -57,24 +57,24 @@
 	
 	<insert id="insert_sysDict" parameterType="sysDict" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tsys_dict(
-		to_system
-		,type
+		type
 		,parent_key
 		,dkey
 		,dvalue
 		,updater
 		,update_datetime
 		,remark
+		,system_code
 		)
 		VALUES(
-		#{toSystem}
-		,#{type}
+		#{type}
 		,#{parentKey}
 		,#{dkey}
 		,#{dvalue}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		,#{systemCode}
 		)
 	</insert>
 

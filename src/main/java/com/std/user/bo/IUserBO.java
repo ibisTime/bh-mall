@@ -93,8 +93,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public String doRegister(String loginName, String nickname, String mobile,
             String loginPwd, String loginPwdStrength, String userReferee,
-            String level, Long amount, String companyCode, String openId,
-            String jpushId, String systemCode);
+            String kind, String level, Long amount, String companyCode,
+            String openId, String jpushId, String systemCode);
 
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);

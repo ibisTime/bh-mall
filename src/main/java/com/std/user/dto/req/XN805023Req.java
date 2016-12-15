@@ -20,15 +20,15 @@ public class XN805023Req {
     // 备注(选填)
     private String remark;
 
-    // 六方(必填)
-    private String kind;
+    // 系统编号（必填）
+    private String systemCode;
 
-    public String getKind() {
-        return kind;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
     public String getName() {

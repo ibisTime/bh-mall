@@ -21,5 +21,5 @@ public interface ISYSConfigAO {
 
     public SYSConfig getSYSConfig(Long id);
 
-    public SYSConfig getConfigValue(String ckey);
+    public SYSConfig getConfigValue(String ckey, String systemCode);
 }

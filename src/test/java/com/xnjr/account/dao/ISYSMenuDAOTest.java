@@ -32,7 +32,6 @@ public class ISYSMenuDAOTest extends ADAOTest {
         data.setUpdateDatetime(new Date());
         data.setParentCode("");
         data.setRemark("新建测试");
-        data.setKind("1");
         int lineNum = sysMenuDao.insert(data);
         logger.info("insert : {}", lineNum);
     }
