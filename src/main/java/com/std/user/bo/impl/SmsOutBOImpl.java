@@ -18,7 +18,8 @@ public class SmsOutBOImpl implements ISmsOutBO {
     static Logger logger = Logger.getLogger(SmsOutBOImpl.class);
 
     @Override
-    public void sendCaptcha(String mobile, String bizType) {
+    public void sendCaptcha(String mobile, String bizType, String kind,
+            String systemCode) {
         try {
             XN799003Req req = new XN799003Req();
             req.setChannel(PropertiesUtil.Config.SMS_CHANNEL + "-K");

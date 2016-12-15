@@ -7,6 +7,28 @@ public class XN805904Req {
     // 业务类型(必填)
     private String bizType;
 
+    // 种类(必填)
+    private String kind;
+
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getMobile() {
         return mobile;
     }

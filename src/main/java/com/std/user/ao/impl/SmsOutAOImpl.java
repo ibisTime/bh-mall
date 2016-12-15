@@ -29,8 +29,9 @@ public class SmsOutAOImpl implements ISmsOutAO {
      * @see com.std.user.ao.ISmsOutAO#sendCaptcha(java.lang.String, java.lang.String)
      */
     @Override
-    public void sendCaptcha(String mobile, String bizType) {
-        smsOutBO.sendCaptcha(mobile, bizType);
+    public void sendCaptcha(String mobile, String bizType, String kind,
+            String systemCode) {
+        smsOutBO.sendCaptcha(mobile, bizType, kind, systemCode);
     }
 
     @Override

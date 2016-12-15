@@ -60,6 +60,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             User condition = new User();
             condition.setMobile(mobile);
             condition.setKind("ff3");
+            condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");
@@ -75,6 +76,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             User condition = new User();
             condition.setMobile(mobile);
             condition.setKind(kind);
+            condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");

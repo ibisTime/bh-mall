@@ -5,11 +5,13 @@ public interface ISmsOutBO {
      * 发送验证码
      * @param mobile
      * @param bizType
-     * @return 
-     * @create: 2016年10月17日 下午5:49:10 xieyj
+     * @param kind
+     * @param systemCode 
+     * @create: 2016年12月15日 上午7:29:42 xieyj
      * @history:
      */
-    public void sendCaptcha(String mobile, String bizType);
+    public void sendCaptcha(String mobile, String bizType, String kind,
+            String systemCode);
 
     /**
      * 验证用户验证码是否正确

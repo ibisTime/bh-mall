@@ -635,7 +635,8 @@ public class UserAOImpl implements IUserAO {
         } else {
             data = userList.get(0);
         }
-        smsOutBO.sendCaptcha(data.getMobile(), "805059");
+        smsOutBO.sendCaptcha(data.getMobile(), "805059",
+            EUserKind.Operator.getCode(), systemCode);
     }
 
     @Override

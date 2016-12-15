@@ -23,13 +23,15 @@ public class XN805904 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        smsOutAO.sendCaptcha(req.getMobile(), req.getBizType());
+        smsOutAO.sendCaptcha(req.getMobile(), req.getBizType(), req.getKind(),
+            req.getSystemCode());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805904Req.class);
-        StringValidater.validateBlank(req.getMobile(), req.getBizType());
+        StringValidater.validateBlank(req.getMobile(), req.getBizType(),
+            req.getKind(), req.getSystemCode());
     }
 }
