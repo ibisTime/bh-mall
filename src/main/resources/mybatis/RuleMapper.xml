@@ -11,6 +11,7 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -26,6 +27,9 @@
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_rule" parameterType="rule" resultMap="rule_DB_Result">
@@ -38,6 +42,7 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.system_code
 		FROM
 		tstd_rule t
 		<include refid="where_condition" />
@@ -65,6 +70,7 @@
 		,updater
 		,update_datetime
 		,remark
+		,system_code
 		)
 		VALUES(
 		#{code}
@@ -75,6 +81,7 @@
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		,#{systemCode}
 		)
 	</insert>
 
@@ -90,6 +97,4 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
-
 </mapper>

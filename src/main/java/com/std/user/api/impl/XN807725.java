@@ -30,6 +30,7 @@ public class XN807725 extends AProcessor {
         condition.setKind(req.getKind());
         condition.setType(req.getType());
         condition.setLevel(req.getLevel());
+        condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IRuleAO.DEFAULT_ORDER_COLUMN;
@@ -44,5 +45,6 @@ public class XN807725 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN807725Req.class);
         StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 }
