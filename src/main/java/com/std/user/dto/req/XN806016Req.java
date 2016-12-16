@@ -8,6 +8,17 @@ public class XN806016Req {
     // 密码(必填)
     private String password;
 
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getLoginName() {
         return loginName;
     }

@@ -31,7 +31,7 @@ public class UserExtAOImpl implements IUserExtAO {
     protected IAJourBO aJourBO;
 
     @Override
-    public int editUserExt(UserExt data) {
+    public int editUserExtAddJf(UserExt data) {
         User user = userBO.getUser(data.getUserId());
         UserExt userExt = userExtBO.getUserExt(data.getUserId());
         if (StringUtils.isBlank(userExt.getGender())
@@ -49,7 +49,19 @@ public class UserExtAOImpl implements IUserExtAO {
     }
 
     @Override
+    public int editUserExt(UserExt data) {
+        userBO.getUser(data.getUserId());
+        return userExtBO.refreshUserExt(data);
+    }
+
+    @Override
     public int editUserExtPhoto(String userId, String photo) {
+        userBO.getUser(userId);
+        return userExtBO.refreshUserPhoto(userId, photo);
+    }
+
+    @Override
+    public int editUserExtPhotoAddJf(String userId, String photo) {
         User user = userBO.getUser(userId);
         UserExt userExt = userExtBO.getUserExt(userId);
         if (StringUtils.isBlank(userExt.getPhoto())) {

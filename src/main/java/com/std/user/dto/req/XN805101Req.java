@@ -9,6 +9,16 @@ public class XN805101Req extends APageReq {
 
     private String userId;
 
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getUserId() {
         return userId;
     }

@@ -7,7 +7,7 @@
 		<result column="user_id" property="userId" />
 		<result column="location" property="location" />
 		<result column="sign_datetime" property="signDatetime" />
-		
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -20,6 +20,9 @@
 			<if test="signDatetimeEnd != null and signDatetimeEnd != '' ">
 				<![CDATA[AND t.sign_datetime <= #{signDatetimeEnd}]]>
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_signLog" parameterType="signLog" resultMap="signLog_DB_Result">
@@ -28,7 +31,7 @@
 		,user_id
 		,location
 		,sign_datetime
-		
+		,system_code
 		FROM
 		tstd_sign_log t
 		<include refid="where_condition" />
@@ -48,12 +51,14 @@
 		,user_id
 		,location
 		,sign_datetime
+		,system_code
 		)
 		VALUES(
 		#{code}
 		,#{userId}
 		,#{location}
 		,#{signDatetime}
+		,#{systemCode}
 		)
 	</insert>
 </mapper>

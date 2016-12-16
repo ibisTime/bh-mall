@@ -25,12 +25,13 @@ public class XN806016 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new XN806016Res(companyAO.doLogin(req.getLoginName(),
-            req.getPassword()));
+            req.getPassword(), req.getSystemCode()));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806016Req.class);
-        StringValidater.validateBlank(req.getLoginName(), req.getPassword());
+        StringValidater.validateBlank(req.getLoginName(), req.getPassword(),
+            req.getSystemCode());
     }
 }

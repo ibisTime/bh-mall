@@ -30,6 +30,7 @@ public class XN806030 extends AProcessor {
         condition.setType(req.getType());
         condition.setAccount(req.getAccount());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ICPasswordAO.DEFAULT_ORDER_COLUMN;
@@ -44,5 +45,6 @@ public class XN806030 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806030Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 }

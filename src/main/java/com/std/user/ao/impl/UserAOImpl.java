@@ -8,6 +8,7 @@
  */
 package com.std.user.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PropertiesUtil;
 import com.std.user.domain.Company;
+import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
@@ -55,6 +57,7 @@ import com.std.user.enums.ELoginType;
 import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
+import com.std.user.enums.EUser;
 import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserLevel;
 import com.std.user.enums.EUserPwd;
@@ -173,7 +176,7 @@ public class UserAOImpl implements IUserAO {
             ECurrency.XNB.getCode(), userReferee);
         // 设置用户关系
         if (StringUtils.isNotBlank(userReferee)) {
-            userRelationBO.saveUserRelation(userReferee, userId);
+            userRelationBO.saveUserRelation(userReferee, userId, systemCode);
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
@@ -199,7 +202,7 @@ public class UserAOImpl implements IUserAO {
         // 设置公司
         Company company = companyBO.getCompany(companyCode);
         if (company == null) {
-            Company result = companyBO.getDefaultCompany();
+            Company result = companyBO.getDefaultCompany(systemCode);
             if (result != null) {
                 companyCode = result.getCode();
             }
@@ -234,7 +237,7 @@ public class UserAOImpl implements IUserAO {
         // 设置公司
         Company company = companyBO.getCompany(companyCode);
         if (company == null) {
-            Company result = companyBO.getDefaultCompany();
+            Company result = companyBO.getDefaultCompany(systemCode);
             if (result != null) {
                 companyCode = result.getCode();
             }
@@ -283,7 +286,8 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccount(userId, realName,
                 ECurrency.XNB.getCode());
             if (EUserKind.F1.getCode().equals(kind)) {
-                userRelationBO.saveUserRelation(userReferee, userId);
+                userRelationBO
+                    .saveUserRelation(userReferee, userId, systemCode);
                 // 新增扩展信息
                 userExtBO.saveUserExt(userId);
             }
@@ -461,7 +465,7 @@ public class UserAOImpl implements IUserAO {
         // 判断是否已经签到
         Boolean result = signLogBO.isSignToday(userId);
         if (!result) {
-            signLogBO.saveSignLog(userId, "");
+            signLogBO.saveSignLog(userId, "", systemCode);
             // 加积分
             XN802317Res res = accountBO.loginAddJf(userId);
             amount = res.getAmount();
@@ -666,7 +670,7 @@ public class UserAOImpl implements IUserAO {
     public void doFindLoginPwdByOss(String userId, String adminUserId,
             String adminPwd) {
         // 验证当前登录密码是否正确
-        userBO.checkLoginPwd(adminUserId, adminPwd);
+        userBO.checkLoginPwd(adminUserId, adminPwd, "管理员密码");
         userBO.refreshLoginPwd(userId, MD5Util.md5(EUserPwd.InitPwd.getCode()),
             EBoolean.YES.getCode());
     }
@@ -729,7 +733,7 @@ public class UserAOImpl implements IUserAO {
             String tradePwdStrength, String smsCaptcha) {
         User user = userBO.getUser(userId);
         if (user == null) {
-            throw new BizException("li01004", "用户名不存在");
+            throw new BizException("li010004", "用户名不存在");
         }
         // 短信验证码是否正确
         String mobile = user.getMobile();
@@ -779,6 +783,10 @@ public class UserAOImpl implements IUserAO {
         if (user == null) {
             throw new BizException("li01004", "用户名不存在");
         }
+        // admin 不注销
+        if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
+            throw new BizException("li01004", "管理员无法注销");
+        }
         String mobile = user.getMobile();
         String smsContent = "";
         EUserStatus userStatus = null;
@@ -789,15 +797,12 @@ public class UserAOImpl implements IUserAO {
             smsContent = "用户，您已经被激活。";
             userStatus = EUserStatus.NORMAL;
         }
-        // // admin 不注销
-        // if (!userId.equals(EUser.ADMIN.getCode())) {
-        // userBO.refreshStatus(userId, userStatus, updater, remark);
-        // }
-        // if (!EUserKind.Operator.getCode().equals(user.getKind())) {
-        // // 发送短信
-        // smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-        // + smsContent, "805052");
-        // }
+        userBO.refreshStatus(userId, userStatus, updater, remark);
+        if (!EUserKind.Operator.getCode().equals(user.getKind())) {
+            // 发送短信
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + smsContent, "805052");
+        }
     }
 
     @Override
@@ -805,10 +810,16 @@ public class UserAOImpl implements IUserAO {
             String remark) {
         User user = userBO.getUser(userId);
         if (user == null) {
-            throw new BizException("li01004", "用户名不存在");
+            throw new BizException("li01004", "用户不存在");
+        }
+        SYSRole role = sysRoleBO.getSYSRole(roleCode);
+        if (role == null) {
+            throw new BizException("li01004", "角色不存在");
+        }
+        if (!user.getSystemCode().equals(role.getSystemCode())) {
+            throw new BizException("li01004", "用户和角色系统不对应");
         }
         userBO.refreshRole(userId, roleCode, updater, remark);
-
     }
 
     @Override
@@ -847,6 +858,25 @@ public class UserAOImpl implements IUserAO {
         for (User user : list) {
             UserExt userExt = userExtBO.getUserExt(user.getUserId());
             user.setUserExt(userExt);
+        }
+        return list;
+    }
+
+    @Override
+    public List<User> getUserRefereeList(String userId) {
+        List<User> list = new ArrayList<User>();
+        User user = userBO.getUser(userId);
+        String refeere = user.getUserReferee();
+        Integer refeereLevel = 0;
+        while (true) {
+            User userRefeere = userBO.getUser(refeere);
+            userRefeere.setRefeereLevel(refeereLevel + 1);
+            list.add(userRefeere);
+            refeereLevel++;
+            refeere = userRefeere.getUserReferee();
+            if (StringUtils.isBlank(refeere)) {
+                break;
+            }
         }
         return list;
     }

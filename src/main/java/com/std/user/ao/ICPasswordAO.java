@@ -9,7 +9,7 @@ public interface ICPasswordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public String addCPassword(String type, String account, String password,
-            String remark, String companyCode);
+            String remark, String companyCode, String systemCode);
 
     public int dropCPassword(String code);
 

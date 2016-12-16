@@ -12,5 +12,4 @@ public class XN805114Req {
     public void setCode(String code) {
         this.code = code;
     }
-
 }

@@ -33,7 +33,7 @@ public class CPasswordBOImpl extends PaginableBOImpl<CPassword> implements
 
     @Override
     public String saveCPassword(String type, String account, String password,
-            String remark, String companyCode) {
+            String remark, String companyCode, String systemCode) {
         String code = OrderNoGenerater.generate(EGeneratePrefix.PW.getCode());
         CPassword data = new CPassword();
         data.setCode(code);

@@ -3,6 +3,7 @@ package com.std.user.api.impl;
 import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
+import com.std.user.core.StringValidater;
 import com.std.user.domain.User;
 import com.std.user.dto.req.XN805055Req;
 import com.std.user.exception.BizException;
@@ -23,7 +24,6 @@ public class XN805055 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         User condition = new User();
         condition.setLoginNameForLikeQuery(req.getLoginName());
         condition.setNickname(req.getNickname());
@@ -41,12 +41,13 @@ public class XN805055 extends AProcessor {
         condition.setUpdater(req.getUpdater());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setOpenId(req.getOpenId());
+        condition.setSystemCode(req.getSystemCode());
         return userAO.queryUserList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805055Req.class);
+        StringValidater.validateBlank(req.getSystemCode());
     }
-
 }

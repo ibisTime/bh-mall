@@ -42,7 +42,8 @@ public class SignLogAOImpl implements ISignLogAO {
             throw new BizException("XN000000", "今日已签到，请明日再来哦");
         }
         // 添加签到记录
-        String code = signLogBO.saveSignLog(userId, location);
+        String code = signLogBO.saveSignLog(userId, location,
+            user.getSystemCode());
         // 签到送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
             user.getLevel());

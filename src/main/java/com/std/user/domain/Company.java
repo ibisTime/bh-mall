@@ -76,6 +76,8 @@ public class Company extends ABaseDO {
 
     private String remark;
 
+    private String systemCode;
+
     // ******************db properties *******************
     // 名称
     private String nameForQuery;
@@ -101,6 +103,14 @@ public class Company extends ABaseDO {
 
     // 是否需要初始化密码表（选填）
     private String isNeedInitPwd;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getNameForQuery() {
         return nameForQuery;

@@ -90,7 +90,7 @@ public class UserRelationAOImpl implements IUserRelationAO {
         if (userRelationBO.isExistUserRelation(userId, toUserId)) {
             throw new BizException("xn702001", "用户关系已建立");
         }
-        userRelationBO.saveUserRelation(userId, toUserId);
+        userRelationBO.saveUserRelation(userId, toUserId, user.getSystemCode());
     }
 
     /** 
@@ -128,7 +128,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
         }
         // 判断两者关系是否存在
         if (!userRelationBO.isExistUserRelation(userId, toUserId)) {
-            userRelationBO.saveUserRelation(userId, toUserId);
+            userRelationBO.saveUserRelation(userId, toUserId,
+                user.getSystemCode());
         }
     }
 }

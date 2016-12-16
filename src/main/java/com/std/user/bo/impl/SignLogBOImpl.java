@@ -42,7 +42,7 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog> implements
     }
 
     @Override
-    public String saveSignLog(String userId, String location) {
+    public String saveSignLog(String userId, String location, String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId)) {
             SignLog data = new SignLog();
@@ -51,6 +51,7 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog> implements
             data.setUserId(userId);
             data.setLocation(location);
             data.setSignDatetime(new Date());
+            data.setSystemCode(systemCode);
             signLogDAO.insert(data);
         }
         return code;

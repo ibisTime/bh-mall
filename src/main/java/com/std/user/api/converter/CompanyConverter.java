@@ -46,6 +46,7 @@ public class CompanyConverter {
         result.setUpdater(req.getUpdater());
         result.setRemark(req.getRemark());
         result.setIsNeedInitPwd(req.getIsNeedInitPwd());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -82,6 +83,7 @@ public class CompanyConverter {
         result.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         result.setUpdater(req.getUpdater());
         result.setRemark(req.getRemark());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -137,6 +139,7 @@ public class CompanyConverter {
         result.setLocation(req.getLocation());
         result.setIsDefault(req.getIsDefault());
         result.setIsHot(req.getIsHot());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -154,6 +157,7 @@ public class CompanyConverter {
         result.setLocation(req.getLocation());
         result.setIsDefault(req.getIsDefault());
         result.setIsHot(req.getIsHot());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 }

@@ -404,6 +404,21 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+            User condition = new User();
+            condition.setUserId(userId);
+            condition.setLoginPwd(MD5Util.md5(loginPwd));
+            long count = this.getTotalCount(condition);
+            if (count != 1) {
+                throw new BizException("jd00001", alertStr + "错误");
+            }
+        } else {
+            throw new BizException("jd00001", alertStr + "错误");
+        }
+    }
+
+    @Override
     public String doAddUser(String loginName, String mobile, String loginPsd,
             String userReferee, String realName, String idKind, String idNo,
             String tradePsd, String kind, String level, String remark,
@@ -512,47 +527,49 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void refreshAmount(String userId, Long transAmount, String refNo,
             EBizType bizType, String remark) {
-        User dbUser = this.getUser(userId);
-        Long nowAmount = dbUser.getAmount() + transAmount;
-        if (nowAmount < 0) {
-            throw new BizException("li779001", "亲，余额不足了哦");
-        }
-        User user = new User();
-        user.setUserId(userId);
-        user.setAmount(nowAmount);
-        // 设置原来的用户等级
-        user.setLevel(dbUser.getLevel());
-        Long ljAmount = dbUser.getLjAmount();
-        if (transAmount > 0) {
-            ljAmount = ljAmount + transAmount;
-            user.setLjAmount(ljAmount);
-            // 重新设置等级
-            LevelRule lrCondition = new LevelRule();
-            List<LevelRule> lrList = levelRuleDAO.selectList(lrCondition);
-            for (LevelRule levelRule : lrList) {
-                if (ljAmount >= levelRule.getAmountMin()
-                        && ljAmount < levelRule.getAmountMax()) {
-                    user.setLevel(levelRule.getCode());
-                    break;
-                }
+        if (transAmount != null && transAmount != 0L) {
+            User dbUser = this.getUser(userId);
+            Long nowAmount = dbUser.getAmount() + transAmount;
+            if (nowAmount < 0) {
+                throw new BizException("li779001", "亲，余额不足了哦");
             }
-        } else {
-            user.setLjAmount(ljAmount);
+            User user = new User();
+            user.setUserId(userId);
+            user.setAmount(nowAmount);
+            // 设置原来的用户等级
+            user.setLevel(dbUser.getLevel());
+            Long ljAmount = dbUser.getLjAmount();
+            if (transAmount > 0) {
+                ljAmount = ljAmount + transAmount;
+                user.setLjAmount(ljAmount);
+                // 重新设置等级
+                LevelRule lrCondition = new LevelRule();
+                List<LevelRule> lrList = levelRuleDAO.selectList(lrCondition);
+                for (LevelRule levelRule : lrList) {
+                    if (ljAmount >= levelRule.getAmountMin()
+                            && ljAmount < levelRule.getAmountMax()) {
+                        user.setLevel(levelRule.getCode());
+                        break;
+                    }
+                }
+            } else {
+                user.setLjAmount(ljAmount);
+            }
+            userDAO.updateAmount(user);
+            // 记录流水
+            AccountJour accountJour = new AccountJour();
+            accountJour.setBizType(bizType.getCode());
+            accountJour.setRefNo(refNo);
+            accountJour.setTransAmount(transAmount);
+            accountJour.setPreAmount(dbUser.getAmount());
+            accountJour.setPostAmount(nowAmount);
+            accountJour.setRemark(remark);
+            accountJour.setCreateDatetime(new Date());
+            accountJour.setAccountNumber(userId);
+            accountJour.setStatus(EAccountJourStatus.todoCheck.getCode());
+            accountJour.setWorkDate(DateUtil
+                .getToday(DateUtil.DB_DATE_FORMAT_STRING));
+            aJourDAO.insert(accountJour);
         }
-        userDAO.updateAmount(user);
-        // 记录流水
-        AccountJour accountJour = new AccountJour();
-        accountJour.setBizType(bizType.getCode());
-        accountJour.setRefNo(refNo);
-        accountJour.setTransAmount(transAmount);
-        accountJour.setPreAmount(dbUser.getAmount());
-        accountJour.setPostAmount(nowAmount);
-        accountJour.setRemark(remark);
-        accountJour.setCreateDatetime(new Date());
-        accountJour.setAccountNumber(userId);
-        accountJour.setStatus(EAccountJourStatus.todoCheck.getCode());
-        accountJour.setWorkDate(DateUtil
-            .getToday(DateUtil.DB_DATE_FORMAT_STRING));
-        aJourDAO.insert(accountJour);
     }
 }

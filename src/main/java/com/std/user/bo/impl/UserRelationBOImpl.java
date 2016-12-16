@@ -56,7 +56,8 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
      * @see com.std.user.bo.IUserRelationBO#saveUserRelation(java.lang.String, java.lang.String)
      */
     @Override
-    public String saveUserRelation(String userId, String toUser) {
+    public String saveUserRelation(String userId, String toUser,
+            String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(toUser)) {
             UserRelation data = new UserRelation();
@@ -66,6 +67,7 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
             data.setToUser(toUser);
             data.setStatus(EBoolean.YES.getCode());
             data.setUpdateDatetime(new Date());
+            data.setSystemCode(systemCode);
             userRelationDAO.insert(data);
         }
         return code;

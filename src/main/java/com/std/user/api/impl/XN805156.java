@@ -18,7 +18,7 @@ import com.std.user.spring.SpringContextHolder;
  * @since: 2016年9月19日 下午1:33:07 
  * @history:
  */
-public class XN805074 extends AProcessor {
+public class XN805156 extends AProcessor {
     private IUserExtAO userExtAO = SpringContextHolder
         .getBean(IUserExtAO.class);
 
@@ -27,7 +27,7 @@ public class XN805074 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         UserExt data = UserExtConverter.converter(req);
-        userExtAO.editUserExtAddJf(data);
+        userExtAO.editUserExt(data);
         return new BooleanRes(true);
     }
 

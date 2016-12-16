@@ -18,6 +18,17 @@ public class CPassword extends ABaseDO {
 
     private String companyCode;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getCode() {
         return code;
     }

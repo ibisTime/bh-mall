@@ -43,6 +43,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	
@@ -65,11 +68,12 @@
 	
 	<select id="select_userRelation" parameterType="userRelation" resultMap="userRelation_DB_Result">
 		SELECT 
-		t.code,
-		t.user_id,
-		t.to_user,
-		t.status,
-		t.update_datetime
+		t.code
+		,t.user_id
+		,t.to_user
+		,t.status
+		,t.update_datetime
+		,t.system_code
 		FROM
 		tstd_user_relation t
 		<include refid="where_condition" />
@@ -102,6 +106,7 @@
 		,tu.updater
 		,tu.update_datetime
 		,tu.remark
+		,tu.system_code
 		FROM
 		tstd_user tu,tstd_user_relation t 
 		<include refid="where_user_condition" />
@@ -122,6 +127,7 @@
 		,to_user
 		,status
 		,update_datetime
+		,system_code
 		)
 		VALUES(
 		#{code}
@@ -129,6 +135,7 @@
 		,#{toUser}
 		,#{status}
 		,#{updateDatetime}
+		,#{systemCode}
 		)
 	</insert>
 	

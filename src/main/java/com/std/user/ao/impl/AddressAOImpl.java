@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.IAddressAO;
 import com.std.user.bo.IAddressBO;
+import com.std.user.bo.IUserBO;
 import com.std.user.domain.Address;
+import com.std.user.domain.User;
 import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 
@@ -29,11 +31,15 @@ import com.std.user.exception.BizException;
 @Service
 public class AddressAOImpl implements IAddressAO {
     @Autowired
+    IUserBO userBO;
+
+    @Autowired
     IAddressBO addressBO;
 
     @Override
     @Transactional
     public String addAddress(Address data) {
+        User user = userBO.getUser(data.getUserId());
         String code = null;
         if (data != null) {
             // 如果新增地址设置为默认地址，该用户其他地址设置为非默认
@@ -41,6 +47,7 @@ public class AddressAOImpl implements IAddressAO {
                 addressBO.refreshAddressDefByUser(data.getUserId(),
                     EBoolean.NO.getCode());
             }
+            data.setSystemCode(user.getSystemCode());
             code = addressBO.saveAddress(data);
         }
         return code;

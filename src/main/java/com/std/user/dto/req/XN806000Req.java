@@ -107,6 +107,17 @@ public class XN806000Req {
     // 是否需要初始化密码表（选填）
     private String isNeedInitPwd;
 
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getType() {
         return type;
     }

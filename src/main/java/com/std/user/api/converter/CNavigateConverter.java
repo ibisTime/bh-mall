@@ -58,6 +58,7 @@ public class CNavigateConverter {
         result.setParentCode(req.getParentCode());
         result.setContentType(req.getContentType());
         result.setCompanyCode(req.getCompanyCode());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -72,6 +73,7 @@ public class CNavigateConverter {
         result.setParentCode(req.getParentCode());
         result.setContentType(req.getContentType());
         result.setCompanyCode(req.getCompanyCode());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 }

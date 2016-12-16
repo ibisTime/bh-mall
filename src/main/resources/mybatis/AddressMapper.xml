@@ -12,6 +12,7 @@
 		<result column="detail_address" property="detailAddress" />
 		<result column="is_default" property="isDefault" />
 		<result column="user_id" property="userId" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -23,6 +24,9 @@
 			</if>
 			<if test="isDefault != null and isDefault != '' ">
 				AND t.is_default = #{isDefault}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
 			</if>
 		</trim>
 	</sql>
@@ -36,7 +40,8 @@
 		district,
 		detail_address,
 		is_default,
-		user_id
+		user_id,
+		system_code
 		FROM
 		tstd_address t
 		<include refid="where_condition" />
@@ -64,6 +69,7 @@
 		,detail_address
 		,is_default
 		,user_id
+		,system_code
 		)
 		VALUES(
 		#{code}
@@ -75,6 +81,7 @@
 		,#{detailAddress}
 		,#{isDefault}
 		,#{userId}
+		,#{systemCode}
 		)
 	</insert>
 

@@ -136,6 +136,17 @@ public class User extends ABaseDO {
     // 是否查询金额 1 是
     private String isGetAmount;
 
+    // 推荐人等级
+    private Integer refeereLevel;
+
+    public Integer getRefeereLevel() {
+        return refeereLevel;
+    }
+
+    public void setRefeereLevel(Integer refeereLevel) {
+        this.refeereLevel = refeereLevel;
+    }
+
     public String getJpushId() {
         return jpushId;
     }

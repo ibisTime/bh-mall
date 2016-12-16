@@ -16,6 +16,7 @@
 		<result column="create_time" property="createTime" />
 		<result column="menu_code" property="menuCode" />
 		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -34,6 +35,9 @@
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_cMaterial" parameterType="cMaterial" resultMap="cMaterial_DB_Result">
@@ -51,6 +55,7 @@
 		,t.create_time
 		,t.menu_code
 		,t.company_code
+		,t.system_code
 		FROM
 		tstd_cmaterial t
 		<include refid="where_condition" />
@@ -83,6 +88,7 @@
 		,create_time
 		,menu_code
 		,company_code
+		,system_code	
 		)
 		VALUES(
 		#{code}
@@ -98,6 +104,7 @@
 		,#{createTime}
 		,#{menuCode}
 		,#{companyCode}
+		,#{systemCode}
 		)
 	</insert>
 

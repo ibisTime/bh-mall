@@ -32,6 +32,7 @@ public class XN805090 extends AProcessor {
         condition.setUserId(req.getUserId());
         condition.setToUser(req.getToUser());
         condition.setIsGetAmount(req.getIsGetAmount());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IUserAO.DEFAULT_ORDER_COLUMN;
@@ -46,5 +47,6 @@ public class XN805090 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805090Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 }

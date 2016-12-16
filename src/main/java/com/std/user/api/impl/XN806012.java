@@ -24,12 +24,13 @@ public class XN806012 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return companyAO.getCompanyByPCA(req.getProvince(), req.getCity(),
-            req.getArea());
+            req.getArea(), req.getSystemCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806012Req.class);
-        StringValidater.validateBlank(req.getProvince(), req.getCity());
+        StringValidater.validateBlank(req.getProvince(), req.getCity(),
+            req.getSystemCode());
     }
 }

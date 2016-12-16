@@ -37,7 +37,7 @@ public class XN806005 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN806005Req.class);
         StringValidater.validateBlank(req.getType(), req.getName(),
             req.getProvince(), req.getCity(), req.getArea(), req.getAddress(),
-            req.getDescription(), req.getUpdater());
+            req.getDescription(), req.getUpdater(), req.getSystemCode());
         PhoneUtil.checkMobile(req.getMobile());
     }
 }

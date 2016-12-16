@@ -25,7 +25,7 @@ public class XN806009 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         companyAO.doFindLoginPwd(req.getLoginName(), req.getMobile(),
-            req.getSmsCaptcha(), req.getNewPassword());
+            req.getSmsCaptcha(), req.getNewPassword(), req.getSystemCode());
         return new BooleanRes(true);
     }
 
@@ -33,6 +33,6 @@ public class XN806009 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806009Req.class);
         StringValidater.validateBlank(req.getLoginName(), req.getMobile(),
-            req.getSmsCaptcha(), req.getNewPassword());
+            req.getSmsCaptcha(), req.getNewPassword(), req.getSystemCode());
     }
 }

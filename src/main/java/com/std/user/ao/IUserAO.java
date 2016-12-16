@@ -420,6 +420,14 @@ public interface IUserAO {
     public List<User> queryUserList(User condition);
 
     /**
+     * @param userId
+     * @return 
+     * @create: 2016年12月15日 下午8:52:16 xieyj
+     * @history:
+     */
+    public List<User> getUserRefereeList(String userId);
+
+    /**
      * 查询用户的详细信息
      * @param userId
      * @create: 2014-12-10 下午7:37:18 miyb

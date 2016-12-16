@@ -16,6 +16,7 @@ public class CIntentionConverter {
         result.setFromContact(req.getFromContact());
         result.setContent(req.getContent());
         result.setCompanyCode(req.getCompanyCode());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -38,6 +39,7 @@ public class CIntentionConverter {
         result.setCompanyCode(req.getCompanyCode());
         result.setStatus(req.getStatus());
         result.setUpdater(req.getUpdater());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -50,6 +52,7 @@ public class CIntentionConverter {
         result.setCompanyCode(req.getCompanyCode());
         result.setStatus(req.getStatus());
         result.setUpdater(req.getUpdater());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 }

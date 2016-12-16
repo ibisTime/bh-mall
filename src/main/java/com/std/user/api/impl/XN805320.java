@@ -31,6 +31,7 @@ public class XN805320 extends AProcessor {
         data.setStyle(req.getStyle());
         data.setCreator(req.getCreator());
         data.setCompanyCode(req.getCompanyCode());
+        data.setSystemCode(req.getSystemCode());
         return new PKCodeRes(couponAO.addCoupon(data));
     }
 
@@ -39,6 +40,7 @@ public class XN805320 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805320Req.class);
         StringValidater.validateAmount(req.getAmount(), req.getCnyPrice());
         StringValidater.validateNumber(req.getUseTimes());
-        StringValidater.validateBlank(req.getCreator(), req.getCompanyCode());
+        StringValidater.validateBlank(req.getCreator(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 }

@@ -38,6 +38,9 @@ public class UserRelation extends ABaseDO {
     // 更新时间
     private Date updateDatetime;
 
+    // 系统编号
+    private String systemCode;
+
     // ***************** db properties *****************
     // 手机号
     private String mobileForLikeQuery;
@@ -47,6 +50,14 @@ public class UserRelation extends ABaseDO {
 
     // 是否查询金额 1 是
     private String isGetAmount;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getIsGetAmount() {
         return isGetAmount;

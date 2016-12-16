@@ -29,12 +29,14 @@ public class XN805331 extends AProcessor {
         condition.setScanner(req.getScanner());
         condition.setScannerMobile(req.getScannerMobile());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
         return couponAO.queryCouponList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805331Req.class);
-        StringValidater.validateBlank(req.getCompanyCode());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }

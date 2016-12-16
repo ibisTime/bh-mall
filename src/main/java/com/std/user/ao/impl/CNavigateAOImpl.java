@@ -61,6 +61,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
                 navigate.setRemark(data.getRemark());
                 navigate.setUrl(data.getUrl());
                 navigate.setPic(data.getPic());
+                navigate.setSystemCode(data.getSystemCode());
                 cNavigateBO.saveCNavigate(navigate);
             } else {
                 // 地方独有修改，属于不变

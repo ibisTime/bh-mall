@@ -24,7 +24,8 @@ import com.std.user.domain.UserRelation;
 public interface IUserRelationBO extends IPaginableBO<UserRelation> {
     public boolean isExistUserRelation(String userId, String toUser);
 
-    public String saveUserRelation(String userId, String toUser);
+    public String saveUserRelation(String userId, String toUser,
+            String systemCode);
 
     public int refreshUserRelation(String userId, String toUser);
 

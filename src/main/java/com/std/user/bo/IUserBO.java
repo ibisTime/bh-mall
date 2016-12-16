@@ -72,6 +72,16 @@ public interface IUserBO extends IPaginableBO<User> {
     public void checkLoginPwd(String userId, String loginPwd);
 
     /**
+     * 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库交易密码比对
+     * @param userId
+     * @param loginPwd
+     * @param alertStr 
+     * @create: 2016年12月15日 下午8:11:26 xieyj
+     * @history:
+     */
+    public void checkLoginPwd(String userId, String loginPwd, String alertStr);
+
+    /**
      * 判断登录名是否存在
      * @param loginName
      * @param kind

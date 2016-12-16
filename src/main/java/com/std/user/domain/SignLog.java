@@ -44,6 +44,17 @@ public class SignLog extends ABaseDO {
     // 申请开始时间止
     private Date signDatetimeEnd;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getCode() {
         return code;
     }

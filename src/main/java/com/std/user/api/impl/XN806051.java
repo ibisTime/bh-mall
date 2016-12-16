@@ -32,12 +32,14 @@ public class XN806051 extends AProcessor {
         condition.setCompanyCode(req.getCompanyCode());
         condition.setStatus(EBoolean.YES.getCode());
         condition.setIsFront(EBoolean.YES.getCode());
+        condition.setSystemCode(req.getSystemCode());
         return cNavigateAO.queryCNavigateList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806051Req.class);
-        StringValidater.validateBlank(req.getCompanyCode());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }
