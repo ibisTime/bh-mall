@@ -63,6 +63,7 @@ import com.std.user.enums.EUserLevel;
 import com.std.user.enums.EUserPwd;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
+import com.std.user.third.hx.impl.InstantMsgImpl;
 import com.std.user.util.RandomUtil;
 
 /** 
@@ -74,6 +75,9 @@ import com.std.user.util.RandomUtil;
 public class UserAOImpl implements IUserAO {
     @Autowired
     protected IUserBO userBO;
+
+    @Autowired
+    protected InstantMsgImpl instantMsgImpl;
 
     @Autowired
     protected IUserRelationBO userRelationBO;
@@ -129,7 +133,7 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String kind, String systemCode) {
+            String kind, String isRegHx, String systemCode) {
         // 验证手机号
         userBO.isMobileExist(mobile, kind, systemCode);
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
@@ -142,16 +146,21 @@ public class UserAOImpl implements IUserAO {
             userReferee = refereeUser.getUserId();
         }
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
             loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(), 0L,
             null, null, null, systemCode);
         // 新增扩展信息
-        userExtBO.saveUserExt(userId);
+        userExtBO.saveUserExt(userId, systemCode);
         // 分配账号(人民币和虚拟币)
         // accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
         // accountBO.distributeAccount(userId, mobile, ECurrency.XNB.getCode());
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            // 注册环信
+            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd.getCode(),
+                systemCode);
+        }
         return userId;
     }
 
@@ -179,7 +188,7 @@ public class UserAOImpl implements IUserAO {
             userRelationBO.saveUserRelation(userReferee, userId, systemCode);
         }
         // 新增扩展信息
-        userExtBO.saveUserExt(userId);
+        userExtBO.saveUserExt(userId, systemCode);
         return new XN805154Res(userId, accountRes.getAmount());
     }
 
@@ -220,7 +229,7 @@ public class UserAOImpl implements IUserAO {
                 ERuleType.ZC.getValue());
         }
         // 新增扩展信息
-        userExtBO.saveUserExt(userId);
+        userExtBO.saveUserExt(userId, systemCode);
         return userId;
     }
 
@@ -289,7 +298,7 @@ public class UserAOImpl implements IUserAO {
                 userRelationBO
                     .saveUserRelation(userReferee, userId, systemCode);
                 // 新增扩展信息
-                userExtBO.saveUserExt(userId);
+                userExtBO.saveUserExt(userId, systemCode);
             }
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
@@ -396,7 +405,7 @@ public class UserAOImpl implements IUserAO {
                 ERuleType.ZC.getValue());
         }
         // 新增扩展信息
-        userExtBO.saveUserExt(userId);
+        userExtBO.saveUserExt(userId, systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，恭喜您成功注册。初始化密码为" + loginPwd + "，请及时登录网站更改密码。", "805079");

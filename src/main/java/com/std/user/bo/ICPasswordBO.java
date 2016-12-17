@@ -1,6 +1,7 @@
 package com.std.user.bo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.CPassword;
@@ -18,6 +19,8 @@ public interface ICPasswordBO extends IPaginableBO<CPassword> {
 
     public List<CPassword> queryCPasswordList(CPassword condition);
 
-    public CPassword getCPassword(String code);
+    public Map<String, String> queryCPasswordList(String type, String account,
+            String companyCode, String systemCode);
 
+    public CPassword getCPassword(String code);
 }

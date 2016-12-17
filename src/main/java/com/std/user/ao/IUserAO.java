@@ -46,21 +46,22 @@ public interface IUserAO {
             String systemCode);
 
     /**
-     * 注册
+     *  注册
      * @param mobile
      * @param loginPwd
      * @param loginPwdStrength
      * @param userReferee
      * @param smsCaptcha
      * @param kind
+     * @param isRegHx 1 注册环信，0 不注册
      * @param systemCode
      * @return 
-     * @create: 2016年12月14日 下午7:58:13 xieyj
+     * @create: 2016年12月16日 上午11:40:16 xieyj
      * @history:
      */
     public String doRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String kind, String systemCode);
+            String kind, String isRegHx, String systemCode);
 
     /**
      * 注册分配账户送积分

@@ -8,6 +8,7 @@ public class CPassword extends ABaseDO {
 
     private String code;
 
+    // 1 环形
     private String type;
 
     private String account;

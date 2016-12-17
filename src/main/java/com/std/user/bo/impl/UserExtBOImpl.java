@@ -20,10 +20,11 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
      * @see com.std.user.bo.IUserExtBO#saveUserExt(java.lang.String)
      */
     @Override
-    public void saveUserExt(String userId) {
+    public void saveUserExt(String userId, String systemCode) {
         if (StringUtils.isNotBlank(userId)) {
             UserExt data = new UserExt();
             data.setUserId(userId);
+            data.setSystemCode(systemCode);
             userExtDAO.insert(data);
         }
     }
@@ -33,13 +34,14 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
      */
     @Override
     public void saveUserExt(String userId, String province, String city,
-            String area) {
+            String area, String systemCode) {
         if (StringUtils.isNotBlank(userId)) {
             UserExt data = new UserExt();
             data.setUserId(userId);
             data.setProvince(province);
             data.setCity(city);
             data.setArea(area);
+            data.setSystemCode(systemCode);
             userExtDAO.insert(data);
         }
     }

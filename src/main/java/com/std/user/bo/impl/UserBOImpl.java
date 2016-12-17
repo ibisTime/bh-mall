@@ -374,6 +374,51 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public String doRegister(String userId, String loginName, String nickname,
+            String mobile, String loginPwd, String loginPwdStrength,
+            String userReferee, String kind, String level, Long amount,
+            String companyCode, String openId, String jpushId, String systemCode) {
+        if (StringUtils.isNotBlank(loginPwdStrength)) {
+            User user = new User();
+            user.setUserId(userId);
+            user.setLoginName(loginName);
+            user.setLoginPwd(MD5Util.md5(loginPwd));
+
+            user.setLoginPwdStrength(loginPwdStrength);
+            if (StringUtils.isBlank(nickname)) {
+                user.setNickname(userId.substring(userId.length() - 8,
+                    userId.length()));
+            } else {
+                user.setNickname(nickname);
+            }
+            user.setKind(kind);
+            user.setLevel(EUserLevel.ONE.getCode());
+            if (StringUtils.isNotBlank(level)) {
+                user.setLevel(level);
+            }
+            user.setUserReferee(userReferee);
+            user.setMobile(mobile);
+            // String tradePsd = EUserPwd.InitPwd.getCode();
+            // user.setTradePwd(MD5Util.md5(tradePsd));
+            // user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));
+            user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
+            user.setUpdater(userId);
+            user.setUpdateDatetime(new Date());
+            if (amount == null) {
+                amount = 0L;
+            }
+            user.setAmount(amount);
+            user.setLjAmount(amount);
+            user.setCompanyCode(companyCode);
+            user.setOpenId(openId);
+            user.setJpushId(jpushId);
+            user.setSystemCode(systemCode);
+            userDAO.insert(user);
+        }
+        return userId;
+    }
+
+    @Override
     public void checkTradePwd(String userId, String tradePwd) {
         if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
             User condition = new User();

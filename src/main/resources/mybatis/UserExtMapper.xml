@@ -18,6 +18,7 @@
 		<result column="area" property="area" />
 		<result column="address" property="address" />
 		<result column="introduce" property="introduce" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -45,6 +46,9 @@
 			<if test="areaForQuery != null and areaForQuery != '' ">
 				AND t.area like "%"#{areaForQuery}"%"
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	
@@ -63,6 +67,7 @@
 		,t.area
 		,t.address
 		,t.introduce
+		,t.system_code
 		FROM
 		tstd_user_ext t
 		<include refid="where_condition" />
@@ -91,6 +96,7 @@
 		,area
 		,address
 		,introduce
+		,system_code
 		)
 		VALUES(
 		#{userId}
@@ -106,6 +112,7 @@
 		,#{area}
 		,#{address}
 		,#{introduce}
+		,#{systemCode}
 		)
 	</insert>
 	

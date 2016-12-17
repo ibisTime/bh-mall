@@ -309,6 +309,7 @@ CREATE TABLE `tstd_cnavigate` (
   `parent_code` varchar(32) DEFAULT NULL COMMENT '父编号',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `content_type` varchar(32) DEFAULT NULL COMMENT '内容源类型(ele/list)',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号', 
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号', 
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

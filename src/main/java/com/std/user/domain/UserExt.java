@@ -61,6 +61,9 @@ public class UserExt extends ABaseDO {
     // 介绍
     private String introduce;
 
+    // 系统编号
+    private String systemCode;
+
     // ******************db properties *******************
     // 省份
     private String provinceForQuery;
@@ -70,6 +73,14 @@ public class UserExt extends ABaseDO {
 
     // 县区
     private String areaForQuery;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getUserId() {
         return userId;

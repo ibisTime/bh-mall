@@ -19,8 +19,19 @@ public class XN805041Req {
     // 类别（必填）
     private String kind;
 
+    // 是否注册环信（必填）
+    private String isRegHx;
+
     // 系统编号(必填)
     private String systemCode;
+
+    public String getIsRegHx() {
+        return isRegHx;
+    }
+
+    public void setIsRegHx(String isRegHx) {
+        this.isRegHx = isRegHx;
+    }
 
     public String getKind() {
         return kind;

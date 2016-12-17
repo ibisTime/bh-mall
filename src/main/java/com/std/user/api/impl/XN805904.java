@@ -3,6 +3,7 @@ package com.std.user.api.impl;
 import com.std.user.ao.ISmsOutAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
+import com.std.user.common.PhoneUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805904Req;
 import com.std.user.dto.res.BooleanRes;
@@ -33,5 +34,6 @@ public class XN805904 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805904Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getBizType(),
             req.getKind(), req.getSystemCode());
+        PhoneUtil.checkMobile(req.getMobile(), "请输入正确的手机号码");
     }
 }

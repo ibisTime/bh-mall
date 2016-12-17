@@ -153,5 +153,4 @@
 		,company_code = #{companyCode}
 		WHERE code = #{code}
 	</update>
-	
 </mapper>

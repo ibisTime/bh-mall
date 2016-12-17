@@ -1,6 +1,8 @@
 package com.std.user.bo.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,22 @@ public class CPasswordBOImpl extends PaginableBOImpl<CPassword> implements
     @Override
     public List<CPassword> queryCPasswordList(CPassword condition) {
         return cPasswordDAO.selectList(condition);
+    }
+
+    @Override
+    public Map<String, String> queryCPasswordList(String type, String account,
+            String companyCode, String systemCode) {
+        Map<String, String> resultMap = new HashMap<String, String>();
+        CPassword condition = new CPassword();
+        condition.setType(type);
+        condition.setAccount(account);
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<CPassword> list = cPasswordDAO.selectList(condition);
+        for (CPassword cPassword : list) {
+            resultMap.put(cPassword.getAccount(), cPassword.getPassword());
+        }
+        return resultMap;
     }
 
     @Override

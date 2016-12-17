@@ -24,6 +24,7 @@ public class CNavigateConverter {
         result.setRemark(req.getRemark());
         result.setContentType(req.getContentType());
         result.setCompanyCode(req.getCompanyCode());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
