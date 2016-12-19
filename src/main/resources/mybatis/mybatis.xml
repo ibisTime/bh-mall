@@ -33,5 +33,6 @@
 	    <typeAlias alias="fieldTimes" type="com.std.user.domain.FieldTimes" />
 	    
 	    <typeAlias alias="coupon" type="com.std.user.domain.Coupon" />
+	    <typeAlias alias="invitation" type="com.std.user.domain.Invitation" />
 	</typeAliases>
 </configuration>	
