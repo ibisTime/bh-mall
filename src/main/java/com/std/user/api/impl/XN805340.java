@@ -23,7 +23,8 @@ public class XN805340 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return invitationAO.addInvitation(Integer.valueOf(req.getNumber()));
+        invitationAO.addInvitation(Integer.valueOf(req.getNumber()));
+        return new Boolean(true);
     }
 
     @Override
