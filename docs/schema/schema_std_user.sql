@@ -268,7 +268,7 @@ CREATE TABLE `tstd_cpassword` (
   `account` varchar(64) DEFAULT NULL COMMENT '账号',
   `password` varchar(64) DEFAULT NULL COMMENT '密码',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `belong` varchar(32) DEFAULT NULL COMMENT '属于',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '属于',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
