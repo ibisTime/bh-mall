@@ -75,4 +75,14 @@ public class UserExtAOImpl implements IUserExtAO {
         }
         return userExtBO.refreshUserPhoto(userId, photo);
     }
+
+    /** 
+     * @see com.std.user.ao.IUserExtAO#editUserExtLngLat(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public int editUserExtLngLat(String userId, String longitude,
+            String latitude) {
+        userBO.getUser(userId);
+        return userExtBO.refreshUserExtLngLat(userId, longitude, latitude);
+    }
 }

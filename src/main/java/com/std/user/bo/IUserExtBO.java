@@ -35,7 +35,8 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
      * @create: 2016年11月17日 下午12:43:27 xieyj
      * @history:
      */
-    public void saveUserExt(String userId, String photo, String gender);
+    public void saveUserExt(String userId, String photo, String gender,
+            String systemCode);
 
     /**
      * 更新用户头像
@@ -55,6 +56,18 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
      * @history: 
      */
     public int refreshUserExt(UserExt data);
+
+    /**
+     * 更新用户位置信息
+     * @param userId
+     * @param longitude
+     * @param latitude
+     * @return 
+     * @create: 2016年12月22日 下午9:25:29 xieyj
+     * @history:
+     */
+    public int refreshUserExtLngLat(String userId, String longitude,
+            String latitude);
 
     /**
      * 获取扩展信息

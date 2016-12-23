@@ -97,6 +97,28 @@ CREATE TABLE `tstd_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `tstd_account_jour`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_account_jour`;
+CREATE TABLE `tstd_account_jour` (
+  `aj_no` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `biz_type` varchar(4) DEFAULT NULL COMMENT '业务类型',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
+  `trans_amount` bigint(32) DEFAULT NULL COMMENT '发送金额',
+  `pre_amount` bigint(32) DEFAULT NULL COMMENT '发生前金额',
+  `post_amount` bigint(32) DEFAULT NULL COMMENT '发生后金额',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `account_number` varchar(32) DEFAULT NULL COMMENT '账户',
+  `status` char(1) DEFAULT NULL COMMENT '状态',
+  `work_date` varchar(8) DEFAULT NULL COMMENT '对账时间',
+  `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
+  `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`aj_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `tstd_user_ext`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_user_ext`;
@@ -114,6 +136,8 @@ CREATE TABLE `tstd_user_ext` (
   `area` varchar(64) DEFAULT NULL COMMENT '区',
   `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `introduce` varchar(255) DEFAULT NULL COMMENT '简介',
+  `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
+  `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

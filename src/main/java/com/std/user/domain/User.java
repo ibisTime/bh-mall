@@ -458,4 +458,5 @@ public class User extends ABaseDO {
     public void setOpenId(String openId) {
         this.openId = openId;
     }
+
 }

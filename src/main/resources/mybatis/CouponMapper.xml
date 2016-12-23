@@ -62,7 +62,7 @@
 		,t.scan_datetime
 		,t.company_code
 		,(select domain from tstd_company tc where tc.code = t.company_code) as domain
-		,system_code
+		,t.system_code
 		FROM
 		tstd_coupon t left join tstd_user tu on t.scanner = tu.user_id
 		<include refid="where_condition" />

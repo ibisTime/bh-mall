@@ -90,4 +90,12 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
         return super.update(NAMESPACE.concat("update_userExt"), data);
     }
 
+    /** 
+     * @see com.std.user.dao.IUserExtDAO#updateUserExtLonLat(com.std.user.domain.UserExt)
+     */
+    @Override
+    public int updateUserExtLngLat(UserExt data) {
+        return super.update(NAMESPACE.concat("update_userExtLngLat"), data);
+    }
+
 }

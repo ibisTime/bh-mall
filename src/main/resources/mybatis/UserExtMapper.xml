@@ -18,6 +18,9 @@
 		<result column="area" property="area" />
 		<result column="address" property="address" />
 		<result column="introduce" property="introduce" />
+		<result column="longitude" property="longitude" />
+		<result column="latitude" property="latitude" />
+		
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -137,6 +140,14 @@
 		UPDATE tstd_user_ext
 		SET
 		photo = #{photo}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_userExtLngLat" parameterType="userExt">
+		UPDATE tstd_user_ext
+		SET
+		longitude = #{longitude}
+		,latitude = #{latitude}
 		WHERE user_id = #{userId}
 	</update>
 </mapper>

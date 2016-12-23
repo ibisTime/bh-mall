@@ -226,7 +226,7 @@ public class UserAOImpl implements IUserAO {
             systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
-                ERuleType.ZC.getValue());
+                ERuleType.ZC.getValue(), systemCode);
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
@@ -261,10 +261,10 @@ public class UserAOImpl implements IUserAO {
             openId, null, systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
-                ERuleType.ZC.getValue());
+                ERuleType.ZC.getValue(), systemCode);
         }
         // 新增扩展信息
-        userExtBO.saveUserExt(userId, photo, gender);
+        userExtBO.saveUserExt(userId, photo, gender, systemCode);
         return userId;
     }
 
@@ -402,7 +402,7 @@ public class UserAOImpl implements IUserAO {
             systemCode);
         if (amount != null && amount > 0) {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
-                ERuleType.ZC.getValue());
+                ERuleType.ZC.getValue(), systemCode);
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
@@ -879,6 +879,9 @@ public class UserAOImpl implements IUserAO {
         Integer refeereLevel = 0;
         while (true) {
             User userRefeere = userBO.getUser(refeere);
+            if (userRefeere == null) {
+                break;
+            }
             userRefeere.setRefeereLevel(refeereLevel + 1);
             list.add(userRefeere);
             refeereLevel++;

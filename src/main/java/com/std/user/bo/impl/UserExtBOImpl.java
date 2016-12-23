@@ -50,12 +50,14 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
      * @see com.std.user.bo.IUserExtBO#saveUserExt(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public void saveUserExt(String userId, String photo, String gender) {
+    public void saveUserExt(String userId, String photo, String gender,
+            String systemCode) {
         if (StringUtils.isNotBlank(userId)) {
             UserExt data = new UserExt();
             data.setUserId(userId);
             data.setPhoto(photo);
             data.setGender(gender);
+            data.setSystemCode(systemCode);
             userExtDAO.insert(data);
         }
     }
@@ -101,5 +103,22 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
             result = userExtDAO.select(condition);
         }
         return result;
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserExtBO#refreshUserLngLat(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public int refreshUserExtLngLat(String userId, String longitude,
+            String latitude) {
+        int count = 0;
+        if (StringUtils.isNotBlank(userId)) {
+            UserExt data = new UserExt();
+            data.setUserId(userId);
+            data.setLongitude(longitude);
+            data.setLatitude(latitude);
+            count = userExtDAO.updateUserExtLngLat(data);
+        }
+        return count;
     }
 }

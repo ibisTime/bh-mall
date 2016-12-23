@@ -41,4 +41,16 @@ public interface IUserExtAO {
      * @history:
      */
     public int editUserExtPhoto(String userId, String photo);
+
+    /**
+     * 更改用户位置信息
+     * @param userId
+     * @param longitude
+     * @param latitude
+     * @return 
+     * @create: 2016年12月22日 下午9:29:43 xieyj
+     * @history:
+     */
+    public int editUserExtLngLat(String userId, String longitude,
+            String latitude);
 }

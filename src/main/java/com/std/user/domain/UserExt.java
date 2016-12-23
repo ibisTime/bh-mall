@@ -61,6 +61,12 @@ public class UserExt extends ABaseDO {
     // 介绍
     private String introduce;
 
+    // 经度
+    private String longitude;
+
+    // 维度
+    private String latitude;
+
     // 系统编号
     private String systemCode;
 
@@ -208,5 +214,21 @@ public class UserExt extends ABaseDO {
 
     public void setAreaForQuery(String areaForQuery) {
         this.areaForQuery = areaForQuery;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 }
