@@ -165,6 +165,18 @@ public interface IUserAO {
             String companyCode, String systemCode);
 
     /**
+     * 微信登录
+     * @param code 微信提供
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2016年12月27日 下午5:38:18 haiqingzheng
+     * @history:
+     */
+    public String doLoginWeChat(String code, String companyCode,
+            String systemCode);
+
+    /**
      * 用户登录送积分
      * @param loginName
      * @param loginPwd

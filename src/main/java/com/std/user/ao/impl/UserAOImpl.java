@@ -10,7 +10,10 @@ package com.std.user.ao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.std.user.ao.IUserAO;
 import com.std.user.bo.IAJourBO;
 import com.std.user.bo.IAccountBO;
 import com.std.user.bo.IBankCardBO;
+import com.std.user.bo.ICPasswordBO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
@@ -37,6 +43,7 @@ import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PropertiesUtil;
+import com.std.user.domain.CPassword;
 import com.std.user.domain.Company;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
@@ -62,6 +69,7 @@ import com.std.user.enums.EUserLevel;
 import com.std.user.enums.EUserPwd;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
+import com.std.user.http.PostSimulater;
 import com.std.user.third.hx.impl.InstantMsgImpl;
 import com.std.user.util.RandomUtil;
 
@@ -113,6 +121,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected ISignLogBO signLogBO;
+
+    @Autowired
+    protected ICPasswordBO cPasswordBO;
 
     @Override
     public void doCheckMobile(String mobile, String kind, String systemCode) {
@@ -1057,5 +1068,119 @@ public class UserAOImpl implements IUserAO {
             accountType = EAccountType.Plat.getCode();
         }
         return accountType;
+    }
+
+    public static final String WX_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
+
+    public static final String WX_OPENID_URL = "https://graph.qq.com/oauth2.0/me";
+
+    public static final String WX_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
+
+    @Override
+    public String doLoginWeChat(String code, String companyCode,
+            String systemCode) {
+        String userId = "";
+        String appId = "";
+        String appSecret = "";
+        CPassword condition = new CPassword();
+        condition.setAccount("ACCESS_KEY");
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<CPassword> result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信公众号appId配置获取失败，请检查配置");
+        }
+        appId = result.get(0).getPassword();
+        condition.setAccount("SECRET_KEY");
+        result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信公众号appSecret配置获取失败，请检查配置");
+        }
+        appSecret = result.get(0).getPassword();
+
+        // Step2：通过Authorization Code获取Access Token
+        String accessToken = "";
+        Map<String, String> res = new HashMap<>();
+        Properties formProperties = new Properties();
+        formProperties.put("grant_type", "authorization_code");
+        formProperties.put("appid", appId);
+        formProperties.put("secret", appSecret);
+        formProperties.put("code", code);
+        String response;
+        try {
+            response = PostSimulater.requestPostForm(WX_TOKEN_URL,
+                formProperties);
+            res = getMapFromResponse(response);
+            accessToken = (String) res.get("access_token");
+            if (res.get("error") != null || StringUtils.isBlank(accessToken)) {
+                throw new BizException("XN000000", "获取accessToken失败");
+            }
+            // Step3：使用Access Token来获取用户的OpenID
+            String openId = (String) res.get("openid");
+            // 获取unionid
+            Map<String, String> wxRes = new HashMap<>();
+            Properties queryParas = new Properties();
+            queryParas.put("access_token", accessToken);
+            queryParas.put("openid", openId);
+            queryParas.put("lang", "zh_CN");
+            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
+                WX_USER_INFO_URL, queryParas));
+            String unionid = (String) wxRes.get("unionid");
+            if (StringUtils.isEmpty(unionid)) {
+                unionid = (String) wxRes.get("openid");
+            }
+            // Step4：根据openId从数据库中查询用户信息（user）
+            User userCondition = new User();
+            userCondition.setOpenId(unionid);
+            List<User> users = userBO.queryUserList(userCondition);
+
+            if (!CollectionUtils.isEmpty(users)) {
+                // Step4-1：如果user存在，说明用户授权登录过，直接登录
+                User user = users.get(0);
+                if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                    throw new BizException("10002", "用户被锁定");
+                }
+                userId = user.getUserId();
+            } else {
+                String name = (String) wxRes.get("nickname");
+                String headimgurl = (String) wxRes.get("headimgurl");
+                String sex = (Integer.valueOf(wxRes.get("sex")) == 1) ? "1"
+                        : "0";
+                userId = doThirdRegister(openId, name, headimgurl, sex,
+                    companyCode, systemCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return userId;
+    }
+
+    /**
+     * @param response  可能是Json & Jsonp字符串 & urlParas
+     *          eg：urlParas：access_token=xxx&expires_in=7776000&refresh_token=xxx
+     * @return
+     */
+    public Map<String, String> getMapFromResponse(String response) {
+        if (StringUtils.isBlank(response)) {
+            return new HashMap<>();
+        }
+
+        Map<String, String> result = new HashMap<>();
+        int begin = response.indexOf("{");
+        int end = response.lastIndexOf("}") + 1;
+
+        if (begin >= 0 && end > 0) {
+            result = new Gson().fromJson(response.substring(begin, end),
+                new TypeToken<Map<String, Object>>() {
+                }.getType());
+        } else {
+            String[] paras = response.split("&");
+            for (String para : paras) {
+                result.put(para.split("=")[0], para.split("=")[1]);
+            }
+        }
+
+        return result;
     }
 }
