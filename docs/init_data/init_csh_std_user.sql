@@ -34,6 +34,9 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CSHSM2016101719132278227','详情','2','/detail','4','admin',now(),'','CSHSM2016101716271123590','CD-CSH000002');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CSHSM2016101719140087629','修改','2','/edit','1','admin',now(),'','CSHSM2016101716290657836','CD-CSH000002');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CSHSM2016101719143965297','修改','2','/edit','1','admin',now(),'','CSHSM2016101716295904680','CD-CSH000002');
+
+
+
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CSHSM2016101719284086819','菜单管理','1','/std/menu.htm','2','admin',now(),'','CSHSM2016102516555766535','CD-CSH000002');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CSHSM201610171939350218','Banner管理','1','/std/banner.htm','3','admin',now(),'','CSHSM2016102516555766535','CD-CSH000002');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CSHSM2016101719441184314','新增','2','/add','1','admin',now(),'','CSHSM2016101719284086819','CD-CSH000002');

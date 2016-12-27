@@ -42,11 +42,9 @@ import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
-import com.std.user.dto.res.XN802001Res;
-import com.std.user.dto.res.XN802013Res;
-import com.std.user.dto.res.XN802317Res;
 import com.std.user.dto.res.XN805154Res;
 import com.std.user.dto.res.XN805155Res;
+import com.std.user.enums.EAccountType;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECurrency;
@@ -57,6 +55,7 @@ import com.std.user.enums.ELoginType;
 import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
+import com.std.user.enums.ESystemCode;
 import com.std.user.enums.EUser;
 import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserLevel;
@@ -153,13 +152,28 @@ public class UserAOImpl implements IUserAO {
             null, null, null, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
-        // 分配账号(人民币和虚拟币)
-        // accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
-        // accountBO.distributeAccount(userId, mobile, ECurrency.XNB.getCode());
         if (EBoolean.YES.getCode().equals(isRegHx)) {
             // 注册环信
             instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd.getCode(),
                 systemCode);
+        }
+        // 分配账号(人民币和虚拟币)
+        if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.GXB.getCode());
+            currencyList.add(ECurrency.QBB.getCode());
+            currencyList.add(ECurrency.GWB.getCode());
+            currencyList.add(ECurrency.HBB.getCode());
+            currencyList.add(ECurrency.HBYJ.getCode());
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
+        } else {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.XNB.getCode());
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
         }
         return userId;
     }
@@ -176,20 +190,24 @@ public class UserAOImpl implements IUserAO {
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
         // 插入用户信息
+        String kind = EUserKind.F1.getCode();
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, EUserKind.F1.getCode(), "0", 0L,
-            null, null, null, systemCode);
+            loginPwdStrength, userReferee, kind, "0", 0L, null, null, null,
+            systemCode);
         // 分配账号(人民币和虚拟币)
-        accountBO.distributeAccount(userId, mobile, ECurrency.CNY.getCode());
-        XN802001Res accountRes = accountBO.distributeAccountTwo(userId, mobile,
-            ECurrency.XNB.getCode(), userReferee);
+        accountBO.distributeAccount(userId, mobile, getAccountType(kind),
+            ECurrency.CNY.getCode(), systemCode);
+        // XN802001Res accountRes = accountBO.distributeAccountTwo(userId,
+        // mobile,
+        // ECurrency.XNB.getCode(), userReferee);
         // 设置用户关系
         if (StringUtils.isNotBlank(userReferee)) {
             userRelationBO.saveUserRelation(userReferee, userId, systemCode);
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
-        return new XN805154Res(userId, accountRes.getAmount());
+        // return new XN805154Res(userId, accountRes.getAmount());
+        return new XN805154Res(userId, "0");
     }
 
     @Override
@@ -291,9 +309,9 @@ public class UserAOImpl implements IUserAO {
             // dentifyBO.doIdentify(userId, realName, idKind, idNo);
             // 分配账号(人民币和虚拟币)
             accountBO.distributeAccount(userId, realName,
-                ECurrency.CNY.getCode());
+                this.getAccountType(kind), ECurrency.CNY.getCode(), systemCode);
             accountBO.distributeAccount(userId, realName,
-                ECurrency.XNB.getCode());
+                this.getAccountType(kind), ECurrency.XNB.getCode(), systemCode);
             if (EUserKind.F1.getCode().equals(kind)) {
                 userRelationBO
                     .saveUserRelation(userReferee, userId, systemCode);
@@ -352,11 +370,11 @@ public class UserAOImpl implements IUserAO {
                 realName, idKind, idNo, loginPsd, kind, level + "", remark,
                 updater, pdf, cxRoleCode, systemCode);
             // 分配人民币账号
-            accountBO.distributeAccount(userId, realName,
-                ECurrency.CNY.getCode());
+            accountBO.distributeAccount(userId, realName, null,
+                ECurrency.CNY.getCode(), systemCode);
             // 分配积分账号
-            accountBO.distributeAccount(userId, realName,
-                ECurrency.XNB.getCode());
+            accountBO.distributeAccount(userId, realName, null,
+                ECurrency.XNB.getCode(), systemCode);
         }
         return userId;
     }
@@ -374,7 +392,8 @@ public class UserAOImpl implements IUserAO {
             realName, null, null, tradePsd, kind, "0", remark, updater, null,
             null, systemCode);
         // 分配账号
-        accountBO.distributeAccount(userId, realName, ECurrency.CNY.getCode());
+        accountBO.distributeAccount(userId, realName, getAccountType(kind),
+            ECurrency.CNY.getCode(), systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，您已成功注册。您的登录密码为" + loginPsd + ";交易密码为" + tradePsd
@@ -476,8 +495,8 @@ public class UserAOImpl implements IUserAO {
         if (!result) {
             signLogBO.saveSignLog(userId, "", systemCode);
             // 加积分
-            XN802317Res res = accountBO.loginAddJf(userId);
-            amount = res.getAmount();
+            // XN802317Res res = accountBO.loginAddJf(userId);
+            amount = "0";// res.getAmount();
         }
         return new XN805155Res(userId, amount);
     }
@@ -849,13 +868,14 @@ public class UserAOImpl implements IUserAO {
             UserExt userExt = userExtBO.getUserExt(user.getUserId());
             user.setUserExt(userExt);
             if (EBoolean.YES.getCode().equals(condition.getIsGetAmount())) {
-                XN802013Res res = accountBO.getAccountDetail(user.getUserId(),
-                    ECurrency.XNB.getCode());
-                if (res != null) {
-                    user.setAmount(res.getAmount());
-                } else {
-                    user.setAmount(0L);
-                }
+                // XN802013Res res =
+                // accountBO.getAccountDetail(user.getUserId(),
+                // ECurrency.XNB.getCode());
+                // if (res != null) {
+                // user.setAmount(res.getAmount());
+                // } else {
+                // user.setAmount(0L);
+                // }
             }
         }
         return page;
@@ -1025,5 +1045,17 @@ public class UserAOImpl implements IUserAO {
             // 来方资金变动
             userBO.refreshAmount(toUser, transAmount, refNo, toBizType, remark);
         }
+    }
+
+    private String getAccountType(String kind) {
+        String accountType = null;
+        if (EUserKind.F1.getCode().equals(kind)) {
+            accountType = EAccountType.Customer.getCode();
+        } else if (EUserKind.F2.getCode().equals(kind)) {
+            accountType = EAccountType.Business.getCode();
+        } else if (EUserKind.Operator.getCode().equals(kind)) {
+            accountType = EAccountType.Plat.getCode();
+        }
+        return accountType;
     }
 }

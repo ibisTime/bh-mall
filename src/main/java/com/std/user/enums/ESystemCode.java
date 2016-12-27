@@ -16,19 +16,18 @@ import java.util.Map;
  * @since: 2016年12月24日 下午1:51:38 
  * @history:
  */
-public enum ECurrency {
-    CNY("CNY", "人民币"), XNB("XNB", "虚拟币"), GXB("GXB", "贡献币"), QBB("QBB", "钱包币"), GWB(
-            "GWB", "购物币"), HBB("HBB", "红包币"), HBYJ("HBYJ", "红包业绩");
+public enum ESystemCode {
+    ZH_QB("CD-CZH000001", "正汇钱包");
 
-    public static Map<String, ECurrency> getCurrencyMap() {
-        Map<String, ECurrency> map = new HashMap<String, ECurrency>();
-        for (ECurrency currency : ECurrency.values()) {
+    public static Map<String, ESystemCode> getCurrencyMap() {
+        Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();
+        for (ESystemCode currency : ESystemCode.values()) {
             map.put(currency.getCode(), currency);
         }
         return map;
     }
 
-    ECurrency(String code, String value) {
+    ESystemCode(String code, String value) {
         this.code = code;
         this.value = value;
     }

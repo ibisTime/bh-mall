@@ -20,9 +20,6 @@ import com.std.user.bo.IUserRelationBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
 import com.std.user.domain.UserRelation;
-import com.std.user.dto.res.XN802013Res;
-import com.std.user.enums.EBoolean;
-import com.std.user.enums.ECurrency;
 import com.std.user.exception.BizException;
 
 /** 
@@ -58,18 +55,18 @@ public class UserRelationAOImpl implements IUserRelationAO {
             UserRelation condition) {
         Paginable<User> page = userRelationBO.queryUserPage(start, limit,
             condition);
-        List<User> list = page.getList();
-        for (User user : list) {
-            if (EBoolean.YES.getCode().equals(condition.getIsGetAmount())) {
-                XN802013Res res = accountBO.getAccountDetail(user.getUserId(),
-                    ECurrency.XNB.getCode());
-                if (res != null) {
-                    user.setAmount(res.getAmount());
-                } else {
-                    user.setAmount(0L);
-                }
-            }
-        }
+        // List<User> list = page.getList();
+        // for (User user : list) {
+        // if (EBoolean.YES.getCode().equals(condition.getIsGetAmount())) {
+        // XN802013Res res = accountBO.getAccountDetail(user.getUserId(),
+        // ECurrency.XNB.getCode());
+        // if (res != null) {
+        // user.setAmount(res.getAmount());
+        // } else {
+        // user.setAmount(0L);
+        // }
+        // }
+        // }
         return page;
     }
 
