@@ -129,6 +129,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public User getUser(String userId);
 
+    public User getUser(String userId, String systemCode);
+
     public User getUserByMobile(String mobile, String systemCode);
 
     public User getUserByMobileAndKind(String mobile, String kind,
@@ -146,6 +148,8 @@ public interface IUserBO extends IPaginableBO<User> {
             String tradePsd, String kind, String level, String remark,
             String updater, String pdf, String roleCode, String systemCode);
 
+    public String doAddUser(User data);
+
     public void refreshStatus(String userId, EUserStatus normal,
             String updater, String remark);
 
@@ -161,4 +165,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshAmount(String accountNumber, Long transAmount,
             String refNo, EBizType bizType, String remark);
+
+    public void refreshUser(User data);
 }

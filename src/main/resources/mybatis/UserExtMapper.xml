@@ -49,6 +49,9 @@
 			<if test="areaForQuery != null and areaForQuery != '' ">
 				AND t.area like "%"#{areaForQuery}"%"
 			</if>
+			<if test="kind != null and kind != '' ">
+				AND ta.kind = #{kind}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -72,14 +75,14 @@
 		,t.introduce
 		,t.system_code
 		FROM
-		tstd_user_ext t
+		tstd_user_ext t inner join tstd_user ta on t.user_id = ta.user_id
 		<include refid="where_condition" />
 		ORDER BY t.user_id DESC
 	</select>
 
 	<select id="select_userExt_count" parameterType="userExt"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_user_ext t
+		SELECT count(1) FROM tstd_user_ext t inner join tstd_user ta on t.user_id = ta.user_id
 		<include refid="where_condition" />
 	</select>
 	

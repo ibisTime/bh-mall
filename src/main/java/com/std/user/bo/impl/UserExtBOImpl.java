@@ -1,5 +1,7 @@
 package com.std.user.bo.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -120,5 +122,13 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
             count = userExtDAO.updateUserExtLngLat(data);
         }
         return count;
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserExtBO#queryUserExtList(com.std.user.domain.UserExt)
+     */
+    @Override
+    public List<UserExt> queryUserExtList(UserExt condition) {
+        return userExtDAO.selectList(condition);
     }
 }

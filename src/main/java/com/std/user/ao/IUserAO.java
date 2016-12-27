@@ -1,5 +1,4 @@
 /**
- * @Title IUserAO.java 
  * @Package com.ibis.pz.user 
  * @Description 
  * @author miyb  
@@ -149,6 +148,31 @@ public interface IUserAO {
      */
     public String doThirdRegister(String openId, String nickName, String photo,
             String gender, String companyCode, String systemCode);
+
+    /**
+     * 新增合伙人(正汇)
+     * @param user
+     * @param province
+     * @param city
+     * @param area
+     * @return 
+     * @create: 2016年12月27日 下午4:28:14 xieyj
+     * @history:
+     */
+    public String doAddPartner(User user, String province, String city,
+            String area);
+
+    /**
+     * 修改合伙人(正汇)
+     * @param user
+     * @param province
+     * @param city
+     * @param area 
+     * @create: 2016年12月27日 下午4:28:33 xieyj
+     * @history:
+     */
+    public void doEditPartner(User user, String province, String city,
+            String area);
 
     /**
      * 用户登录
