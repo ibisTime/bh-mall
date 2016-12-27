@@ -1,5 +1,7 @@
 package com.std.user.bo;
 
+import java.util.List;
+
 import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.UserExt;
 
@@ -77,4 +79,14 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
      * @history:
      */
     public UserExt getUserExt(String userId);
+
+    /**
+     * 列表查询该辖区是否已经存在用户
+     * @param condition
+     * @return 
+     * @create: 2016年12月27日 下午4:16:41 xieyj
+     * @history:
+     */
+    public List<UserExt> queryUserExtList(UserExt condition);
+
 }

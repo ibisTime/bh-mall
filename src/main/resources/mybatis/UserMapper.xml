@@ -337,7 +337,7 @@
 	<update id="update_status" parameterType="user">
 		UPDATE tstd_user
 		SET
-		 status = #{status}
+		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
@@ -348,7 +348,7 @@
 	<update id="update_role" parameterType="user">
 		UPDATE tstd_user
 		SET
-		 role_code = #{roleCode}
+		role_code = #{roleCode}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
@@ -389,6 +389,19 @@
 		level = #{level}
         ,amount = #{amount}
 		,lj_amount = #{ljAmount}	
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user" parameterType="user">
+		UPDATE tstd_user
+		SET
+		real_name = #{realName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		,mobile = #{mobile}
+		,login_name = #{loginName}
+		,remark = #{remark}
 		WHERE
 		user_id = #{userId}	
 	</update>

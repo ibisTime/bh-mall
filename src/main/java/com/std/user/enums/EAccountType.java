@@ -9,7 +9,8 @@ import java.util.Map;
  * @history:
  */
 public enum EAccountType {
-    Business("B", "B端账号"), Customer("C", "C端账号"), Plat("P", "平台账号");
+    Business("B", "B端账号"), Partner("PA", "合伙人账号"), Customer("C", "C端账号"), Plat(
+            "P", "平台账号");
 
     public static Map<String, EAccountType> getAccountTypeResultMap() {
         Map<String, EAccountType> map = new HashMap<String, EAccountType>();

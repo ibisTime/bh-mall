@@ -161,6 +161,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return data;
     }
 
+    @Override
+    public User getUser(String userId, String systemCode) {
+        User data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            User condition = new User();
+            condition.setUserId(userId);
+            condition.setSystemCode(systemCode);
+            data = userDAO.select(condition);
+        }
+        return data;
+    }
+
     /** 
      * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
      */
@@ -303,6 +315,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             User condition = new User();
             condition.setLoginName(loginName);
             condition.setKind(kind);
+            condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "登录名已经存在");
@@ -501,6 +514,25 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userId;
     }
 
+    /** 
+     * @see com.std.user.bo.IUserBO#doAddUser(com.std.user.domain.User)
+     */
+    @Override
+    public String doAddUser(User data) {
+        String userId = null;
+        if (null != data) {
+            userId = OrderNoGenerater.generate("U");
+            data.setUserId(userId);
+            data.setLoginPwd(MD5Util.md5(data.getLoginPwd()));
+            data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(data
+                .getLoginPwd()));
+            data.setLevel(EUserLevel.ZERO.getCode());
+            data.setStatus(EUserStatus.NORMAL.getCode());
+            userDAO.insertRen(data);
+        }
+        return userId;
+    }
+
     @Override
     public void refreshStatus(String userId, EUserStatus status,
             String updater, String remark) {
@@ -615,6 +647,16 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             accountJour.setWorkDate(DateUtil
                 .getToday(DateUtil.DB_DATE_FORMAT_STRING));
             aJourDAO.insert(accountJour);
+        }
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#refreshUser(com.std.user.domain.User)
+     */
+    @Override
+    public void refreshUser(User data) {
+        if (data != null) {
+            userDAO.update(data);
         }
     }
 }

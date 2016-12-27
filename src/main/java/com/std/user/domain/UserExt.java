@@ -80,6 +80,17 @@ public class UserExt extends ABaseDO {
     // 县区
     private String areaForQuery;
 
+    // 用户分类
+    private String kind;
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
     public String getSystemCode() {
         return systemCode;
     }

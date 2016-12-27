@@ -60,5 +60,8 @@ public class PropertiesUtil {
 
         public static String APNS_PRODUCTION = props
             .getProperty("APNS_PRODUCTION");
+
+        public static String PARTNER_ROLECODE = props
+            .getProperty("PARTNER_ROLECODE");
     }
 }
