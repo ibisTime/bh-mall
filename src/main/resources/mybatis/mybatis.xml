@@ -2,7 +2,6 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>		
-		<typeAlias alias="bankCard" type="com.std.user.domain.BankCard" />
 		<typeAlias alias="user" type="com.std.user.domain.User" />
 		<typeAlias alias="address" type="com.std.user.domain.Address" />
 		<typeAlias alias="sysMenu" type="com.std.user.domain.SYSMenu" />
