@@ -1,4 +1,4 @@
-package com.xnjr.account.base;
+package com.std.user.base;
 
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

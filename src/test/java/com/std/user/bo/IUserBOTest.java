@@ -6,13 +6,13 @@
  * @date 2015-3-7 下午9:23:30 
  * @version V1.0   
  */
-package com.xnjr.account.bo;
+package com.std.user.bo;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.std.user.base.ABizTest;
 import com.std.user.bo.IUserBO;
-import com.xnjr.account.base.ABizTest;
 
 /** 
  * @author: miyb 

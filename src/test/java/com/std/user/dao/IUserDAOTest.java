@@ -6,7 +6,7 @@
  * @date 2015-2-6 下午2:13:30 
  * @version V1.0   
  */
-package com.xnjr.account.dao;
+package com.std.user.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.List;
 import org.junit.Test;
 import org.unitils.spring.annotation.SpringBeanByType;
 
+import com.std.user.base.ADAOTest;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PwdUtil;
 import com.std.user.core.OrderNoGenerater;
@@ -21,7 +22,6 @@ import com.std.user.dao.IUserDAO;
 import com.std.user.domain.User;
 import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserStatus;
-import com.xnjr.account.base.ADAOTest;
 
 /** 
  * @author: miyb 
