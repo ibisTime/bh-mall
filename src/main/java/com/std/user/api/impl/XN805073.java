@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /** 
- * 更改用户头像
+ * 更改用户头像，加积分
  * @author: zuixian 
  * @since: 2016年9月19日 下午1:32:41 
  * @history:

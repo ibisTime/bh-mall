@@ -1,11 +1,11 @@
-package com.xnjr.account.bo;
+package com.std.user.bo;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.std.user.base.ABizTest;
 import com.std.user.bo.IUserExtBO;
 import com.std.user.domain.UserExt;
-import com.xnjr.account.base.ABizTest;
 
 public class IUserExtBOTest extends ABizTest {
     @Autowired

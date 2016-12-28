@@ -1,18 +1,13 @@
 package com.std.user.api.impl;
 
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.std.user.ao.IBankCardAO;
 import com.std.user.ao.ICompanyAO;
 import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.common.PropertiesUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.domain.BankCard;
 import com.std.user.domain.Company;
 import com.std.user.domain.User;
 import com.std.user.dto.req.XN805901Req;
@@ -33,9 +28,6 @@ public class XN805901 extends AProcessor {
 
     private ICompanyAO companyAO = SpringContextHolder
         .getBean(ICompanyAO.class);
-
-    private IBankCardAO bankCardAO = SpringContextHolder
-        .getBean(IBankCardAO.class);
 
     private XN805901Req req = null;
 
@@ -69,12 +61,6 @@ public class XN805901 extends AProcessor {
                 res.setIdentityFlag(EBoolean.YES.getCode());
             } else {
                 res.setIdentityFlag(EBoolean.NO.getCode());
-            }
-            List<BankCard> bankcardList = bankCardAO.queryBankCardList(userId);
-            if (CollectionUtils.isNotEmpty(bankcardList)) {
-                res.setBankcardFlag(EBoolean.YES.getCode());
-            } else {
-                res.setBankcardFlag(EBoolean.NO.getCode());
             }
             res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
             res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));

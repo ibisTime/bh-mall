@@ -1,4 +1,4 @@
-package com.xnjr.account.dao;
+package com.std.user.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import org.junit.Test;
 import org.unitils.spring.annotation.SpringBeanByType;
 
+import com.std.user.base.ADAOTest;
 import com.std.user.dao.ISYSMenuDAO;
 import com.std.user.domain.SYSMenu;
-import com.xnjr.account.base.ADAOTest;
 
 /**
  * 

@@ -12,9 +12,6 @@
 
 	
 	<!-- 分页BO层注入paginableDao -->
-	<bean id="bankCardBO" class="com.std.user.bo.impl.BankCardBOImpl">
-		<property name="paginableDAO" ref="bankCardDAOImpl" />
-	</bean>
 	<bean id="userBO" class="com.std.user.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl" />
 	</bean>
