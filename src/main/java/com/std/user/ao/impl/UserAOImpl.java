@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.std.user.ao.IUserAO;
 import com.std.user.bo.IAJourBO;
 import com.std.user.bo.IAccountBO;
-import com.std.user.bo.IBankCardBO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
@@ -92,9 +91,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     IIdentifyBO dentifyBO;
-
-    @Autowired
-    protected IBankCardBO bankCardBO;
 
     @Autowired
     ISmsOutBO smsOutBO;
