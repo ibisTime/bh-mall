@@ -167,4 +167,6 @@ public interface IUserBO extends IPaginableBO<User> {
             String refNo, EBizType bizType, String remark);
 
     public void refreshUser(User data);
+
+    public void refreshUserSupple(User data);
 }

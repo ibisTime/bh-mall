@@ -659,4 +659,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             userDAO.update(data);
         }
     }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#refreshUserSupple(com.std.user.domain.User)
+     */
+    @Override
+    public void refreshUserSupple(User data) {
+        if (null != data) {
+            userDAO.updateSupple(data);
+        }
+    }
 }

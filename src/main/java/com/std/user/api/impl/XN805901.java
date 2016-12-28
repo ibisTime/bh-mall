@@ -38,7 +38,12 @@ public class XN805901 extends AProcessor {
         XN805901Res res = new XN805901Res();
         if (user != null) {
             res.setUserId(userId);
-            res.setLoginName(user.getMobile());
+            if (StringUtils.isNotBlank(user.getLoginName())) {
+                res.setLoginName(user.getLoginName());
+            } else {
+                res.setLoginName(user.getMobile());
+            }
+            res.setMobile(user.getMobile());
             res.setPhoto(PropertiesUtil.getProperty("PHOTO_URL"));
             res.setStatus(user.getStatus());
             res.setLevel(user.getLevel());
@@ -46,7 +51,6 @@ public class XN805901 extends AProcessor {
             res.setUserReferee(user.getUserReferee());
             res.setRealName(user.getRealName());
 
-            res.setMobileFlag(EBoolean.YES.getCode());
             if (StringUtils.isNotBlank(user.getIdNo())) {
                 res.setIdentityFlag(EBoolean.YES.getCode());
             } else {
@@ -81,5 +85,4 @@ public class XN805901 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805901Req.class);
         StringValidater.validateBlank(req.getTokenId(), req.getUserId());
     }
-
 }
