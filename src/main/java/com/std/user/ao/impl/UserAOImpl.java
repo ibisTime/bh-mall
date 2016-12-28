@@ -318,6 +318,28 @@ public class UserAOImpl implements IUserAO {
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender, systemCode);
+
+        // 分配账号(人民币和虚拟币)
+        if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.GXB.getCode());
+            currencyList.add(ECurrency.QBB.getCode());
+            currencyList.add(ECurrency.GWB.getCode());
+            currencyList.add(ECurrency.HBB.getCode());
+            currencyList.add(ECurrency.HBYJ.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        } else {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.XNB.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        }
+
         return userId;
     }
 

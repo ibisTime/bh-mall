@@ -38,6 +38,7 @@ public class XN805901 extends AProcessor {
         XN805901Res res = new XN805901Res();
         if (user != null) {
             res.setUserId(userId);
+            res.setOpenId(user.getOpenId());
             res.setLoginName(user.getMobile());
             res.setPhoto(PropertiesUtil.getProperty("PHOTO_URL"));
             res.setStatus(user.getStatus());
