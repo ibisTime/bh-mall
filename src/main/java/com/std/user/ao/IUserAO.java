@@ -149,6 +149,9 @@ public interface IUserAO {
     public String doThirdRegister(String openId, String nickName, String photo,
             String gender, String companyCode, String systemCode);
 
+    public String doThirdRegisterWechat(String openId, String nickName,
+            String photo, String gender, String companyCode, String systemCode);
+
     /**
      * 新增合伙人(正汇)
      * @param user

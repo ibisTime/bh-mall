@@ -62,6 +62,7 @@ import com.std.user.enums.ELoginType;
 import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
+import com.std.user.enums.ESex;
 import com.std.user.enums.ESystemCode;
 import com.std.user.enums.EUser;
 import com.std.user.enums.EUserKind;
@@ -279,6 +280,33 @@ public class UserAOImpl implements IUserAO {
             if (result != null) {
                 companyCode = result.getCode();
             }
+        }
+        // 注册送钱
+        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
+            EBoolean.NO.getCode());
+        // 插入用户信息
+        String loginPwd = EUserPwd.InitPwd.getCode();
+        String userId = userBO.doRegister(openId, nickname, null, loginPwd,
+            "1", null, EUserKind.F1.getCode(), "0", amount, companyCode,
+            openId, null, systemCode);
+        if (amount != null && amount > 0) {
+            aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
+                ERuleType.ZC.getValue(), systemCode);
+        }
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, photo, gender, systemCode);
+        return userId;
+    }
+
+    @Override
+    @Transactional
+    public String doThirdRegisterWechat(String openId, String nickname,
+            String photo, String gender, String companyCode, String systemCode) {
+        User condition = new User();
+        condition.setOpenId(openId);
+        long count = userBO.getTotalCount(condition);
+        if (count > 0) {
+            throw new BizException("xn702002", "第三方开放编号已存在");
         }
         // 注册送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
@@ -1204,11 +1232,13 @@ public class UserAOImpl implements IUserAO {
         formProperties.put("appid", appId);
         formProperties.put("secret", appSecret);
         formProperties.put("code", code);
+        System.out.println(appId + " " + appSecret + " " + code);
         String response;
         try {
             response = PostSimulater.requestPostForm(WX_TOKEN_URL,
                 formProperties);
             res = getMapFromResponse(response);
+            System.out.println(res);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null || StringUtils.isBlank(accessToken)) {
                 throw new BizException("XN000000", "获取accessToken失败");
@@ -1223,6 +1253,7 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("lang", "zh_CN");
             wxRes = getMapFromResponse(PostSimulater.requestPostForm(
                 WX_USER_INFO_URL, queryParas));
+            System.out.println(wxRes);
             String unionid = (String) wxRes.get("unionid");
             if (StringUtils.isEmpty(unionid)) {
                 unionid = (String) wxRes.get("openid");
@@ -1242,9 +1273,14 @@ public class UserAOImpl implements IUserAO {
             } else {
                 String name = (String) wxRes.get("nickname");
                 String headimgurl = (String) wxRes.get("headimgurl");
-                String sex = (Integer.valueOf(wxRes.get("sex")) == 1) ? "1"
-                        : "0";
-                userId = doThirdRegister(openId, name, headimgurl, sex,
+                String sex = ESex.UNKNOWN.getCode();
+                System.out.println("***性别=" + String.valueOf(wxRes.get("sex")));
+                if (String.valueOf(wxRes.get("sex")).equals("1.0")) {
+                    sex = ESex.MEN.getCode();
+                } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
+                    sex = ESex.WOMEN.getCode();
+                }
+                userId = doThirdRegisterWechat(openId, name, headimgurl, sex,
                     companyCode, systemCode);
             }
         } catch (Exception e) {
