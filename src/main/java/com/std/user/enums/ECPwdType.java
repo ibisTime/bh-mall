@@ -6,7 +6,7 @@ package com.std.user.enums;
  * @history:
  */
 public enum ECPwdType {
-    HX("1", "环信"), QINIU("2", "七牛");
+    HX("1", "环信"), QINIU("2", "七牛"), WEIXIN("3", "微信");
 
     ECPwdType(String code, String value) {
         this.code = code;
