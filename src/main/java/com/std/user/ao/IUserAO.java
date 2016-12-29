@@ -476,6 +476,19 @@ public interface IUserAO {
     public User doGetUser(String userId);
 
     /**
+     * 根据手机号，种类，公司编号，系统编号获取用户编号
+     * @param mobile
+     * @param kind
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2016年12月28日 上午10:38:08 xieyj
+     * @history:
+     */
+    public String doGetUserIdByCondition(String mobile, String kind,
+            String companyCode, String systemCode);
+
+    /**
      * 根据loginName获取手机号，发送找回登录密码短信验证码
      * @param loginName 
      * @create: 2016年8月16日 下午3:47:12 xieyj
@@ -557,4 +570,12 @@ public interface IUserAO {
      */
     public void doTransferAdd(String fromUser, String toUser, Long amount,
             String remark, String refNo);
+
+    /**
+     * 补充用户信息
+     * @param data 
+     * @create: 2016年12月28日 下午5:00:58 xieyj
+     * @history:
+     */
+    public void doSuppleUser(User data);
 }

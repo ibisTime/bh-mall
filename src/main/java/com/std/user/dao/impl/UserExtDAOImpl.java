@@ -64,8 +64,8 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
      */
     @Override
     public List<UserExt> selectList(UserExt condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_userExt"), condition,
+            UserExt.class);
     }
 
     /** 

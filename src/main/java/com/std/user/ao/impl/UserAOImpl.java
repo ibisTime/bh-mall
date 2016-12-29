@@ -169,6 +169,7 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.FRB.getCode());
             currencyList.add(ECurrency.GXB.getCode());
             currencyList.add(ECurrency.QBB.getCode());
             currencyList.add(ECurrency.GWB.getCode());
@@ -323,6 +324,7 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.FRB.getCode());
             currencyList.add(ECurrency.GXB.getCode());
             currencyList.add(ECurrency.QBB.getCode());
             currencyList.add(ECurrency.GWB.getCode());
@@ -358,9 +360,8 @@ public class UserAOImpl implements IUserAO {
             userBO.isMobileExist(mobile, kind, systemCode);
             // 插入用户信息
             loginPsd = RandomUtil.generate6();
-            String tradePsd = EUserPwd.InitPwd.getCode();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
-                realName, idKind, idNo, tradePsd, kind, "0", remark, updater,
+                realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
                 pdf, null, systemCode);
             // 三方认证
             // dentifyBO.doIdentify(userId, realName, idKind, idNo);
@@ -371,6 +372,7 @@ public class UserAOImpl implements IUserAO {
             if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
+                currencyList.add(ECurrency.FRB.getCode());
                 currencyList.add(ECurrency.GXB.getCode());
                 currencyList.add(ECurrency.QBB.getCode());
                 currencyList.add(ECurrency.GWB.getCode());
@@ -393,12 +395,11 @@ public class UserAOImpl implements IUserAO {
             userExtBO.saveUserExt(userId, systemCode);
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。您的登录密码为" + loginPsd
-                    + "，请及时登录网站修改密码。如有疑问，请联系客服："
-                    + PropertiesUtil.Config.COMPANY_MOBILE + "。", "805042");
+                    + "用户，您已成功注册。您的登录密码为" + loginPsd + "。", "805042");
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             // 验证登录名
             userBO.isLoginNameExist(loginName, kind, systemCode);
+            loginPsd = EUserPwd.InitPwd.getCode();
             // 插入用户信息
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind,
@@ -1098,6 +1099,25 @@ public class UserAOImpl implements IUserAO {
         return user;
     }
 
+    /** 
+     * @see com.std.user.ao.IUserAO#doGetUserIdByCondition(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public String doGetUserIdByCondition(String mobile, String kind,
+            String companyCode, String systemCode) {
+        String userId = null;
+        User condition = new User();
+        condition.setMobile(mobile);
+        condition.setKind(kind);
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<User> userList = userBO.queryUserList(condition);
+        if (CollectionUtils.isNotEmpty(userList)) {
+            userId = userList.get(0).getUserId();
+        }
+        return userId;
+    }
+
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
         userBO.checkTradePwd(userId, tradePwd);
@@ -1335,5 +1355,17 @@ public class UserAOImpl implements IUserAO {
         }
 
         return result;
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#doSuppleUser(com.std.user.domain.User)
+     */
+    @Override
+    public void doSuppleUser(User data) {
+        User user = userBO.getUser(data.getUserId());
+        if (user != null) {
+            throw new BizException("xn0110", "用户不存在");
+        }
+        userBO.refreshUserSupple(data);
     }
 }

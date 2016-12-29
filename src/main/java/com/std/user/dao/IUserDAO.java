@@ -144,4 +144,13 @@ public interface IUserDAO extends IBaseDAO<User> {
      * @history:
      */
     public int update(User data);
+
+    /**
+     * 更新用户手机号和真实信息
+     * @param data
+     * @return 
+     * @create: 2016年12月28日 下午4:57:18 xieyj
+     * @history:
+     */
+    public int updateSupple(User data);
 }

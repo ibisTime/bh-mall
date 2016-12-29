@@ -289,6 +289,17 @@
 		user_id = #{userId}	
 	</update>
 	
+	<update id="update_user_supple" parameterType="user">
+		UPDATE tstd_user
+		SET
+		mobile= #{mobile}
+		,real_name= #{realName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
 	<update id="update_real_name" parameterType="user">
 		UPDATE tstd_user
 		SET

@@ -95,7 +95,7 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CSHSM2016112510081552530','下载二维码','2','/qrcode','4','admin',now(),'','CSHSM201611242031218743','CD-CSH000002');
 
 /*
--- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`kind` FROM tsys_role
+-- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`kind` FROM tsys_role 
 LIMIT 0, 50000
 
 -- Date: 2016-10-21 10:58
