@@ -489,7 +489,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setUserId(userId);
             user.setLoginName(loginName);
             user.setLoginPwd(MD5Util.md5(loginPsd));
-            user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPsd));
+            if (StringUtils.isNotBlank(loginPsd)) {
+                user.setLoginPwdStrength(PwdUtil
+                    .calculateSecurityLevel(loginPsd));
+            }
             user.setKind(kind);
 
             user.setLevel(level);
@@ -500,7 +503,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
             user.setRealName(realName);
             user.setTradePwd(MD5Util.md5(tradePsd));
-            user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));
+            if (StringUtils.isNotBlank(tradePsd)) {
+                user.setTradePwdStrength(PwdUtil
+                    .calculateSecurityLevel(tradePsd));
+            }
             user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
             user.setUpdater(updater);
 

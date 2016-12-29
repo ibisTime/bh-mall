@@ -358,9 +358,8 @@ public class UserAOImpl implements IUserAO {
             userBO.isMobileExist(mobile, kind, systemCode);
             // 插入用户信息
             loginPsd = RandomUtil.generate6();
-            String tradePsd = EUserPwd.InitPwd.getCode();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
-                realName, idKind, idNo, tradePsd, kind, "0", remark, updater,
+                realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
                 pdf, null, systemCode);
             // 三方认证
             // dentifyBO.doIdentify(userId, realName, idKind, idNo);
@@ -397,6 +396,7 @@ public class UserAOImpl implements IUserAO {
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             // 验证登录名
             userBO.isLoginNameExist(loginName, kind, systemCode);
+            loginPsd = EUserPwd.InitPwd.getCode();
             // 插入用户信息
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind,
