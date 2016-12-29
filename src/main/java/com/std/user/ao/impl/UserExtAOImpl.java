@@ -1,5 +1,7 @@
 package com.std.user.ao.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,5 +86,13 @@ public class UserExtAOImpl implements IUserExtAO {
             String latitude) {
         userBO.getUser(userId);
         return userExtBO.refreshUserExtLngLat(userId, longitude, latitude);
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserExtAO#queryUserExtList(com.std.user.domain.UserExt)
+     */
+    @Override
+    public List<UserExt> queryUserExtList(UserExt condition) {
+        return userExtBO.queryUserExtList(condition);
     }
 }

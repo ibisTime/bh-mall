@@ -169,6 +169,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setUserId(userId);
             condition.setSystemCode(systemCode);
             data = userDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn000000", "该用户编号[" + userId + "]不存在!");
+            }
         }
         return data;
     }

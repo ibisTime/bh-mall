@@ -83,6 +83,28 @@ public class UserExt extends ABaseDO {
     // 用户分类
     private String kind;
 
+    // 登录名
+    private String loginName;
+
+    // 手机号
+    private String mobile;
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public String getKind() {
         return kind;
     }

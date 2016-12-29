@@ -1,5 +1,7 @@
 package com.std.user.ao;
 
+import java.util.List;
+
 import com.std.user.domain.UserExt;
 
 public interface IUserExtAO {
@@ -53,4 +55,13 @@ public interface IUserExtAO {
      */
     public int editUserExtLngLat(String userId, String longitude,
             String latitude);
+
+    /**
+     * 查询用户信息
+     * @param condition
+     * @return 
+     * @create: 2016年12月29日 下午5:20:45 xieyj
+     * @history:
+     */
+    public List<UserExt> queryUserExtList(UserExt condition);
 }
