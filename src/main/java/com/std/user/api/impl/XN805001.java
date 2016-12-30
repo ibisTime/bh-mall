@@ -28,7 +28,7 @@ public class XN805001 extends AProcessor {
         condition.setNameForQuery(req.getName());
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
-        condition.setUpdater(req.getUpdater());
+        // condition.setUpdater(req.getUpdater());
         condition.setSystemCode(req.getSystemCode());
         return sysMenuAO.querySYSMenuList(condition);
     }

@@ -27,7 +27,7 @@ public class XN805021 extends AProcessor {
         SYSRole condition = new SYSRole();
         condition.setName(req.getName());
         condition.setLevel(req.getLevel());
-        condition.setUpdater(req.getUpdater());
+        // condition.setUpdater(req.getUpdater());
         condition.setSystemCode(req.getSystemCode());
         return sysRoleAO.querySYSRoleList(condition);
     }

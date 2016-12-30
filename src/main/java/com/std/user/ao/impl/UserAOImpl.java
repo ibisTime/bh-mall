@@ -1324,6 +1324,7 @@ public class UserAOImpl implements IUserAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new BizException("xn000000", e.getMessage());
         }
 
         return userId;
@@ -1363,9 +1364,11 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doSuppleUser(User data) {
         User user = userBO.getUser(data.getUserId());
-        if (user != null) {
+        if (user == null) {
             throw new BizException("xn0110", "用户不存在");
         }
-        userBO.refreshUserSupple(data);
+        if (StringUtils.isBlank(user.getMobile())) {
+            userBO.refreshUserSupple(data);
+        }
     }
 }
