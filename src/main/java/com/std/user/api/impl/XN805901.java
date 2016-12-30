@@ -51,7 +51,8 @@ public class XN805901 extends AProcessor {
             res.setKind(user.getKind());
             res.setUserReferee(user.getUserReferee());
             res.setRealName(user.getRealName());
-
+            res.setSystemCode(user.getSystemCode());
+            res.setMobileFlag(EBoolean.YES.getCode());
             if (StringUtils.isNotBlank(user.getIdNo())) {
                 res.setIdentityFlag(EBoolean.YES.getCode());
             } else {

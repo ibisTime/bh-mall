@@ -1247,6 +1247,7 @@ public class UserAOImpl implements IUserAO {
         String appId = "";
         String appSecret = "";
         CPassword condition = new CPassword();
+        condition.setType("3");
         condition.setAccount("ACCESS_KEY");
         condition.setCompanyCode(companyCode);
         condition.setSystemCode(systemCode);

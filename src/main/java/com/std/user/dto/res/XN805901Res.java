@@ -54,6 +54,9 @@ public class XN805901Res {
     // 粉丝数
     private String totalFansNum;
 
+    // 粉丝数
+    private String systemCode;
+
     private UserExt userExt;
 
     public String getMobile() {
@@ -198,5 +201,13 @@ public class XN805901Res {
 
     public void setUserExt(UserExt userExt) {
         this.userExt = userExt;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }
