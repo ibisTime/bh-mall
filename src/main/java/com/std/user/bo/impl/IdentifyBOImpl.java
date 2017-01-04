@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 import com.std.user.bo.IIdentifyBO;
 import com.std.user.dto.req.XN798001Req;
+import com.std.user.dto.req.XN798006Req;
 import com.std.user.dto.res.XN798001Res;
+import com.std.user.dto.res.XN798006Res;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
 
@@ -32,5 +34,31 @@ public class IdentifyBOImpl implements IIdentifyBO {
             // logger.error("调用实名认证服务异常");
             // }
         }
+    }
+
+    /** 
+     * @see com.std.user.bo.IIdentifyBO#doFourIdentify(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doFourIdentify(String userId, String realName, String idKind,
+            String idNo, String cardNo, String bindMobile) {
+        if (StringUtils.isNotBlank(realName)) {
+            // try {
+            XN798006Req req = new XN798006Req();
+            req.setSystemId("3");
+            req.setUserId(userId);
+            req.setRealName(realName);
+            req.setIdKind(idKind);
+            req.setIdNo(idNo);
+            req.setCardNo(cardNo);
+            req.setBindMobile(bindMobile);
+            req.setRemark("来自正汇钱包实名认证");
+            BizConnecter.getBizData("798006", JsonUtils.object2Json(req),
+                XN798006Res.class);
+            // } catch (Exception e) {
+            // logger.error("调用实名认证服务异常");
+            // }
+        }
+
     }
 }

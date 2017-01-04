@@ -13,4 +13,19 @@ public interface IIdentifyBO {
      */
     public void doIdentify(String userId, String realName, String idKind,
             String idNo);
+
+    /**
+     * 四要素三方实名认证
+     * @param userId
+     * @param realName
+     * @param idKind
+     * @param idNo
+     * @param cardNo
+     * @param bindMobile 
+     * @create: 2017年1月4日 上午10:48:03 xieyj
+     * @history:
+     */
+    public void doFourIdentify(String userId, String realName, String idKind,
+            String idNo, String cardNo, String bindMobile);
+
 }

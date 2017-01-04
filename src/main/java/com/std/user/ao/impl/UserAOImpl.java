@@ -670,6 +670,21 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public void doFourIdentify(String userId, String idKind, String idNo,
+            String realName, String cardNo, String bindMobile) {
+        User user = userBO.getUser(userId, null);
+        // 三方认证
+        dentifyBO.doFourIdentify(userId, realName, idKind, idNo, cardNo,
+            bindMobile);
+        // 更新用户表
+        userBO
+            .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
+        // 回写Account表realName;
+        accountBO.refreshRealName(user.getUserId(), realName,
+            user.getSystemCode());
+    }
+
+    @Override
     public void doEditRealName(String userId, String realName) {
         User user = userBO.getUser(userId);
         if (user == null) {
@@ -704,7 +719,7 @@ public class UserAOImpl implements IUserAO {
         userBO
             .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
         // 回写Account表realName;
-        accountBO.refreshRealName(userId, realName);
+        // accountBO.refreshRealName(userId, realName);
 
         // 开始交易密码设置
         // 判断是否和登录密码重复

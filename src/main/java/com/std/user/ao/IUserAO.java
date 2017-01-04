@@ -229,6 +229,20 @@ public interface IUserAO {
             String realName);
 
     /**
+     * 四要素实名认证
+     * @param userId
+     * @param idKind
+     * @param idNo
+     * @param realName
+     * @param cardNo
+     * @param bindMobile 
+     * @create: 2017年1月4日 上午10:56:27 xieyj
+     * @history:
+     */
+    public void doFourIdentify(String userId, String idKind, String idNo,
+            String realName, String cardNo, String bindMobile);
+
+    /**
      * 修改真实姓名
      * @param userId
      * @param realName 

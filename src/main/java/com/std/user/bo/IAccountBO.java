@@ -44,11 +44,13 @@ public interface IAccountBO {
             String type, List<String> currencyList, String systemCode);
 
     /**
-     * 更新真实姓名
+     * 更新户名
      * @param userId
-     * @param realName 
-     * @create: 2016年12月24日 下午1:23:37 xieyj
+     * @param realName
+     * @param systemCode 
+     * @create: 2017年1月4日 上午11:46:13 xieyj
      * @history:
      */
-    public void refreshRealName(String userId, String realName);
+    public void refreshRealName(String userId, String realName,
+            String systemCode);
 }

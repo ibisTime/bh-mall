@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.std.user.bo.IAccountBO;
 import com.std.user.dto.req.XN802450Req;
+import com.std.user.dto.req.XN802451Req;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
 
@@ -44,7 +45,13 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public void refreshRealName(String userId, String realName) {
-        // TODO Auto-generated method stub
+    public void refreshRealName(String userId, String realName,
+            String systemCode) {
+        XN802451Req req = new XN802451Req();
+        req.setUserId(userId);
+        req.setRealName(realName);
+        req.setSystemCode(systemCode);
+        BizConnecter.getBizData("802451", JsonUtils.object2Json(req),
+            Object.class);
     }
 }
