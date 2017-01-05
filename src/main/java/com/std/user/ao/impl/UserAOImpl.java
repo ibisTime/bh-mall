@@ -170,7 +170,7 @@ public class UserAOImpl implements IUserAO {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.FRB.getCode());
-            currencyList.add(ECurrency.GXB.getCode());
+            currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
             currencyList.add(ECurrency.GWB.getCode());
             currencyList.add(ECurrency.HBB.getCode());
@@ -325,7 +325,7 @@ public class UserAOImpl implements IUserAO {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.FRB.getCode());
-            currencyList.add(ECurrency.GXB.getCode());
+            currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
             currencyList.add(ECurrency.GWB.getCode());
             currencyList.add(ECurrency.HBB.getCode());
@@ -373,7 +373,7 @@ public class UserAOImpl implements IUserAO {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
                 currencyList.add(ECurrency.FRB.getCode());
-                currencyList.add(ECurrency.GXB.getCode());
+                currencyList.add(ECurrency.GXJL.getCode());
                 currencyList.add(ECurrency.QBB.getCode());
                 currencyList.add(ECurrency.GWB.getCode());
                 currencyList.add(ECurrency.HBB.getCode());
