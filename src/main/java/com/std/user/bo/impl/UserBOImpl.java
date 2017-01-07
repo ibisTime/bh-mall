@@ -8,6 +8,7 @@
  */
 package com.std.user.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -159,6 +160,17 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data = userDAO.select(condition);
         }
         return data;
+    }
+
+    @Override
+    public List<User> getUsersByUserReferee(String userReferee) {
+        List<User> userList = new ArrayList<User>();
+        if (StringUtils.isNotBlank(userReferee)) {
+            User condition = new User();
+            condition.setUserReferee(userReferee);
+            userList = userDAO.selectList(condition);
+        }
+        return userList;
     }
 
     @Override

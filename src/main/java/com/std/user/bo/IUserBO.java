@@ -131,6 +131,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public User getUser(String userId, String systemCode);
 
+    public List<User> getUsersByUserReferee(String userReferee);
+
     public User getUserByMobile(String mobile, String systemCode);
 
     public User getUserByMobileAndKind(String mobile, String kind,

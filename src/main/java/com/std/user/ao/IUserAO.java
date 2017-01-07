@@ -45,22 +45,26 @@ public interface IUserAO {
             String systemCode);
 
     /**
-     *  注册
+     * 注册
      * @param mobile
      * @param loginPwd
      * @param loginPwdStrength
      * @param userReferee
      * @param smsCaptcha
      * @param kind
-     * @param isRegHx 1 注册环信，0 不注册
+     * @param isRegHx
+     * @param province
+     * @param city
+     * @param area
      * @param systemCode
      * @return 
-     * @create: 2016年12月16日 上午11:40:16 xieyj
+     * @create: 2017年1月7日 下午12:57:42 xieyj
      * @history:
      */
     public String doRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String kind, String isRegHx, String systemCode);
+            String kind, String isRegHx, String province, String city,
+            String area, String systemCode);
 
     /**
      * 注册分配账户送积分
@@ -108,15 +112,17 @@ public interface IUserAO {
      * @param kind
      * @param pdf
      * @param roleCode
-     * @param systemCode
+     * @param province
+     * @param city
+     * @param area
      * @return 
-     * @create: 2016年12月14日 下午5:56:35 xieyj
+     * @create: 2017年1月7日 下午1:03:56 xieyj
      * @history:
      */
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
             String remark, String kind, String pdf, String roleCode,
-            String systemCode);
+            String province, String city, String area, String systemCode);
 
     public String doAddUser(String mobile, String realName, String userReferee,
             String updater, String remark, String kind, String systemCode);

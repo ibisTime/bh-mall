@@ -140,7 +140,8 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String kind, String isRegHx, String systemCode) {
+            String kind, String isRegHx, String province, String city,
+            String area, String systemCode) {
         // 验证手机号
         userBO.isMobileExist(mobile, kind, systemCode);
         // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
@@ -153,13 +154,13 @@ public class UserAOImpl implements IUserAO {
             userReferee = refereeUser.getUserId();
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
             loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(), 0L,
             null, null, null, systemCode);
         // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
+        userExtBO.saveUserExt(userId, province, city, area, systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
             // 注册环信
             instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd.getCode(),
@@ -341,7 +342,6 @@ public class UserAOImpl implements IUserAO {
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
         }
-
         return userId;
     }
 
@@ -350,7 +350,7 @@ public class UserAOImpl implements IUserAO {
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
             String remark, String kind, String pdf, String roleCode,
-            String systemCode) {
+            String province, String city, String area, String systemCode) {
         String userId = null;
         // 插入用户信息
         String loginPsd = null;
@@ -392,7 +392,7 @@ public class UserAOImpl implements IUserAO {
                 }
             }
             // 新增扩展信息
-            userExtBO.saveUserExt(userId, systemCode);
+            userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册。您的登录密码为" + loginPsd + "。", "805042");
@@ -537,6 +537,11 @@ public class UserAOImpl implements IUserAO {
             user.getSystemCode());
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.FRB.getCode());
+        currencyList.add(ECurrency.GXJL.getCode());
+        currencyList.add(ECurrency.QBB.getCode());
+        currencyList.add(ECurrency.GWB.getCode());
+        currencyList.add(ECurrency.HBB.getCode());
         currencyList.add(ECurrency.HBYJ.getCode());
         accountBO.distributeAccountList(userId, user.getRealName(),
             EAccountType.Partner.getCode(), currencyList, user.getSystemCode());
@@ -1067,21 +1072,47 @@ public class UserAOImpl implements IUserAO {
         List<User> list = new ArrayList<User>();
         User user = userBO.getUser(userId);
         String refeere = user.getUserReferee();
-        Integer refeereLevel = 0;
-        while (true) {
-            User userRefeere = userBO.getUser(refeere);
-            if (userRefeere == null) {
-                break;
+        // 获取上级，上上级
+        User userRefeereTop1 = getTopUserRefeere(refeere, -1);
+        if (userRefeereTop1 != null) {
+            list.add(userRefeereTop1);
+            User userRefeereTop2 = getTopUserRefeere(
+                userRefeereTop1.getUserReferee(), -2);
+            if (userRefeereTop2 != null) {
+                list.add(userRefeereTop2);
             }
-            userRefeere.setRefeereLevel(refeereLevel + 1);
-            list.add(userRefeere);
-            refeereLevel++;
-            refeere = userRefeere.getUserReferee();
-            if (StringUtils.isBlank(refeere)) {
-                break;
+        }
+
+        List<User> refeeresNext1 = getNextUserRefeere(userId, 1);
+        if (CollectionUtils.isNotEmpty(refeeresNext1)) {
+            list.addAll(refeeresNext1);
+            for (User userNext2 : refeeresNext1) {
+                List<User> refeeresNext2 = getNextUserRefeere(
+                    userNext2.getUserId(), 2);
+                if (CollectionUtils.isNotEmpty(refeeresNext2)) {
+                    list.addAll(refeeresNext2);
+                }
             }
         }
         return list;
+    }
+
+    private User getTopUserRefeere(String userId, int refeereLevel) {
+        User userRefeere = userBO.getUser(userId);
+        if (userRefeere != null) {
+            userRefeere.setRefeereLevel(refeereLevel);
+        }
+        return userRefeere;
+    }
+
+    private List<User> getNextUserRefeere(String userId, int refeereLevel) {
+        List<User> userList = userBO.getUsersByUserReferee(userId);
+        if (CollectionUtils.isNotEmpty(userList)) {
+            for (User user : userList) {
+                user.setRefeereLevel(refeereLevel);
+            }
+        }
+        return userList;
     }
 
     @Override
