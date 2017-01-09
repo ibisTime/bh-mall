@@ -1071,6 +1071,9 @@ public class UserAOImpl implements IUserAO {
     public List<User> getUserRefereeList(String userId) {
         List<User> list = new ArrayList<User>();
         User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("li01004", userId + "用户不存在");
+        }
         String refeere = user.getUserReferee();
         // 获取上级，上上级
         User userRefeereTop1 = getTopUserRefeere(refeere, -1);

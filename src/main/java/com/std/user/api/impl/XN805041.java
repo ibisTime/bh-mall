@@ -36,7 +36,7 @@ public class XN805041 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805041Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getLoginPwd(),
             req.getLoginPwdStrength(), req.getSmsCaptcha(), req.getKind(),
-            req.getProvince(), req.getCity(), req.getArea(),
+            // req.getProvince(), req.getCity(), req.getArea(),
             req.getSystemCode());
         PhoneUtil.checkMobile(req.getMobile());// 判断格式
     }
