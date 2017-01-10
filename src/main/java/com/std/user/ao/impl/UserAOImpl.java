@@ -405,6 +405,8 @@ public class UserAOImpl implements IUserAO {
                 realName, idKind, idNo, loginPsd, kind,
                 EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
                 systemCode);
+            // 新增扩展信息
+            userExtBO.saveUserExt(userId, province, city, area, systemCode);
         } else if (EUserKind.Integral.getCode().equals(kind)
                 || EUserKind.Goods.getCode().equals(kind)
                 || EUserKind.CaiGo.getCode().equals(kind)
