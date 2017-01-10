@@ -89,6 +89,17 @@ public class UserExt extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 角色编号
+    private String roleCode;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
     public String getLoginName() {
         return loginName;
     }

@@ -13,6 +13,17 @@ public class XN805060Req {
     // kind
     private String kind;
 
+    // 角色编号
+    private String roleCode;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
     public String getKind() {
         return kind;
     }

@@ -57,6 +57,9 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
+			<if test="roleCode != null and roleCode != '' ">
+				AND tu.role_code = #{roleCode}
+			</if>
 		</trim>
 	</sql>
 	
