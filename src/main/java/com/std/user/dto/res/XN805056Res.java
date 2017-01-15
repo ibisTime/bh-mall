@@ -41,7 +41,7 @@ public class XN805056Res {
     // 真实姓名
     private String realName;
 
-    // 交易密码强度
+    // 支付密码强度
     private String tradePwdStrength;
 
     // 角色编号

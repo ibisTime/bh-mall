@@ -25,9 +25,9 @@ public class XN805060 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         UserExt condition = new UserExt();
-        condition.setProvince(req.getProvince());
-        condition.setCity(req.getCity());
-        condition.setArea(req.getArea());
+        condition.setProvinceForQuery(req.getProvince());
+        condition.setCityForQuery(req.getCity());
+        condition.setAreaForQuery(req.getArea());
         condition.setKind(req.getKind());
         condition.setRoleCode(req.getRoleCode());
         return userExtAO.queryUserExtList(condition);

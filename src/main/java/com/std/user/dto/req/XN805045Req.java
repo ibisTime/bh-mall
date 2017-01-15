@@ -4,10 +4,10 @@ public class XN805045Req {
     // userId（必填）
     private String userId;
 
-    // 交易密码（必填）
+    // 支付密码（必填）
     private String tradePwd;
 
-    // 交易密码（必填）
+    // 支付密码（必填）
     private String tradePwdStrength;
 
     // 手机验证码（必填）

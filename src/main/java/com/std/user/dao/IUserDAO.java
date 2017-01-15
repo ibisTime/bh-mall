@@ -47,7 +47,7 @@ public interface IUserDAO extends IBaseDAO<User> {
     public int updateIdentity(User data);
 
     /** 
-     * 设置交易密码
+     * 设置支付密码
      * @param data
      * @return 
      * @create: 2015-2-23 下午4:28:41 miyb

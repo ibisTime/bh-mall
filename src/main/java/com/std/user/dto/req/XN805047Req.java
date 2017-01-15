@@ -10,7 +10,7 @@ public class XN805047Req {
     // 验证码
     private String smsCaptcha;
 
-    // 交易密码
+    // 支付密码
     private String tradePwd;
 
     // 是否区分不同商户（选填 1 区分，其他不区分）

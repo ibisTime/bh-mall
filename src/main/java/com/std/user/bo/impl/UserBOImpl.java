@@ -454,10 +454,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setTradePwd(MD5Util.md5(tradePwd));
             long count = this.getTotalCount(condition);
             if (count != 1) {
-                throw new BizException("jd00001", "交易密码错误");
+                throw new BizException("jd00001", "支付密码错误");
             }
         } else {
-            throw new BizException("jd00001", "交易密码错误");
+            throw new BizException("jd00001", "支付密码错误");
         }
     }
 

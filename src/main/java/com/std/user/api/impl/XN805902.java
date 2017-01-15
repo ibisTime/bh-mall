@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 交易密码正确性与否
+ * 支付密码正确性与否
  * @author: myb858 
  * @since: 2015年11月1日 下午3:45:58 
  * @history:

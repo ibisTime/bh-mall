@@ -258,7 +258,7 @@ public interface IUserAO {
     public void doEditRealName(String userId, String realName);
 
     /**
-     * 设置交易密码
+     * 设置支付密码
      * @param userId
      * @param tradePwd
      * @param tradePwdStrength
@@ -270,7 +270,7 @@ public interface IUserAO {
             String tradePwdStrength, String smsCaptcha);
 
     /**
-     * 实名认证+交易密码设置
+     * 实名认证+支付密码设置
      * @param userId
      * @param idKind
      * @param idNo
@@ -379,7 +379,7 @@ public interface IUserAO {
             String newLoginPwd, String loginPwdStrength);
 
     /**
-     * 找回交易密码
+     * 找回支付密码
      * @param userId
      * @param newTradePwd
      * @param tradePwdStrength
@@ -395,7 +395,7 @@ public interface IUserAO {
             String idNo);
 
     /**
-     * 找回交易密码(无需实名认证)
+     * 找回支付密码(无需实名认证)
      * @param userId
      * @param newTradePwd
      * @param tradePwdStrength
@@ -410,7 +410,7 @@ public interface IUserAO {
             String tradePwdStrength, String smsCaptcha);
 
     /**
-     * 重置交易密码
+     * 重置支付密码
      * @param userId
      * @param oldTradePwd
      * @param newTradePwd
@@ -517,7 +517,7 @@ public interface IUserAO {
     public void doSendLoginPwdSms(String loginName, String systemCode);
 
     /**
-     * 校验交易密码
+     * 校验支付密码
      * @param userId
      * @param tradePwd
      * @return 

@@ -210,12 +210,27 @@ public class DateUtil {
         return arrayDate;
     }
 
-    public static void main(String[] args) {
-        List<Date> arrayDate = getDatesArray("2014-01-01", "2014-03-01", 2);
+    /**
+     * 当月最后一天
+     * @return
+     */
+    private static String getLastDay() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        Date theDate = calendar.getTime();
+        String s = df.format(theDate);
+        StringBuffer str = new StringBuffer().append(s).append(" 23:59:59");
+        return str.toString();
 
-        for (int i = 0; i < arrayDate.size(); i++) {
-            System.out.println(dateToStr(arrayDate.get(i),
-                FRONT_DATE_FORMAT_STRING));
-        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getLastDay());
+        // List<Date> arrayDate = getDatesArray("2014-01-01", "2014-03-01", 2);
+        //
+        // for (int i = 0; i < arrayDate.size(); i++) {
+        // System.out.println(dateToStr(arrayDate.get(i),
+        // FRONT_DATE_FORMAT_STRING));
+        // }
     }
 }

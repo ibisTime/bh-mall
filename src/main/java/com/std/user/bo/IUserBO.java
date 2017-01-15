@@ -54,7 +54,7 @@ public interface IUserBO extends IPaginableBO<User> {
             String systemCode);
 
     /**
-     * 验证交易密码:拿tradePwd进行MD5后与数据库中userId得数据库交易密码比对
+     * 验证支付密码:拿tradePwd进行MD5后与数据库中userId得数据库支付密码比对
      * @param userId
      * @param tradePwd 
      * @create: 2015年11月1日 下午4:47:48 myb858
@@ -63,7 +63,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void checkTradePwd(String userId, String tradePwd);
 
     /**
-     * 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库交易密码比对
+     * 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
      * @param userId
      * @param loginPwd 
      * @create: 2015年11月2日 下午1:18:57 myb858
@@ -72,7 +72,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void checkLoginPwd(String userId, String loginPwd);
 
     /**
-     * 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库交易密码比对
+     * 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
      * @param userId
      * @param loginPwd
      * @param alertStr 

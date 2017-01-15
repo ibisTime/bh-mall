@@ -154,7 +154,7 @@ public class UserAOImpl implements IUserAO {
             userReferee = refereeUser.getUserId();
         }
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
             loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(), 0L,
@@ -475,7 +475,7 @@ public class UserAOImpl implements IUserAO {
             ECurrency.CNY.getCode(), systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您已成功注册。您的登录密码为" + loginPsd + ";交易密码为" + tradePsd
+                + "用户，您已成功注册。您的登录密码为" + loginPsd + ";支付密码为" + tradePsd
                 + "，请及时登录个金所网站修改密码。如有疑问，请联系客服：400-0008-139。", "805042");
         return userId;
     }
@@ -581,7 +581,7 @@ public class UserAOImpl implements IUserAO {
         List<UserExt> list = userExtBO.queryUserExtList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             UserExt userExt = list.get(0);
-            if (userExt.getUserId().equals(user.getUserId())) {
+            if (!userExt.getUserId().equals(user.getUserId())) {
                 throw new BizException("xn000000", "该辖区已存在合伙人！");
             }
         }
@@ -712,7 +712,7 @@ public class UserAOImpl implements IUserAO {
         // 发送短信
         String mobile = user.getMobile();
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的交易密码设置成功。请妥善保管您的账户相关信息。", "805045");
+                + "用户，您的支付密码设置成功。请妥善保管您的账户相关信息。", "805045");
     }
 
     @Override
@@ -728,7 +728,7 @@ public class UserAOImpl implements IUserAO {
         // 回写Account表realName;
         // accountBO.refreshRealName(userId, realName);
 
-        // 开始交易密码设置
+        // 开始支付密码设置
         // 判断是否和登录密码重复
         User user = this.doGetUser(userId);
         // 短信验证码是否正确
@@ -737,7 +737,7 @@ public class UserAOImpl implements IUserAO {
         // 发送短信
         String mobile = user.getMobile();
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您已通过实名认证，且交易密码设置成功。请妥善保管您的账户相关信息。", "805046");
+                + "用户，您已通过实名认证，且支付密码设置成功。请妥善保管您的账户相关信息。", "805046");
     }
 
     @Override
@@ -760,7 +760,7 @@ public class UserAOImpl implements IUserAO {
         } else {
             userBO.isMobileExist(newMobile, user.getSystemCode());
         }
-        // 验证交易密码
+        // 验证支付密码
         userBO.checkTradePwd(userId, tradePwd);
         // 短信验证码是否正确（往新手机号发送）
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805047");
@@ -930,7 +930,7 @@ public class UserAOImpl implements IUserAO {
                 || EUserKind.F2.getCode().equals(userKind)) {
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您的交易密码找回成功。请妥善保管您的账户相关信息。", "805050");
+                    + "用户，您的支付密码找回成功。请妥善保管您的账户相关信息。", "805050");
         }
     }
 
@@ -950,7 +950,7 @@ public class UserAOImpl implements IUserAO {
         if (EUserKind.F1.getCode().equals(userKind)
                 || EUserKind.F2.getCode().equals(userKind)) {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您的交易密码找回成功。请妥善保管您的账户相关信息。", "805057");
+                    + "用户，您的支付密码找回成功。请妥善保管您的账户相关信息。", "805057");
         }
     }
 
@@ -959,7 +959,7 @@ public class UserAOImpl implements IUserAO {
     public void doResetTradePwd(String userId, String oldTradePwd,
             String newTradePwd, String tradePwdStrength) {
         if (oldTradePwd.equals(newTradePwd)) {
-            throw new BizException("li01008", "新交易密码与原有交易密码重复");
+            throw new BizException("li01008", "新支付密码与原有支付密码重复");
         }
         User conditon = new User();
         conditon.setUserId(userId);
@@ -969,7 +969,7 @@ public class UserAOImpl implements IUserAO {
         if (CollectionUtils.isNotEmpty(list)) {
             user = list.get(0);
         } else {
-            throw new BizException("li01008", "旧交易密码不正确");
+            throw new BizException("li01008", "旧支付密码不正确");
         }
         userBO.refreshTradePwd(userId, newTradePwd, tradePwdStrength);
         // 发送短信
@@ -978,7 +978,7 @@ public class UserAOImpl implements IUserAO {
                 || EUserKind.F2.getCode().equals(userKind)) {
             String mobile = user.getMobile();
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您的交易密码修改成功。请妥善保管您的账户相关信息。", "805051");
+                    + "用户，您的支付密码修改成功。请妥善保管您的账户相关信息。", "805051");
         }
     }
 

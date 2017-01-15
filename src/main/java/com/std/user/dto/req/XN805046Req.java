@@ -13,10 +13,10 @@ public class XN805046Req {
     // 证件号码（必填）
     private String idNo;
 
-    // 交易密码（必填）
+    // 支付密码（必填）
     private String tradePwd;
 
-    // 交易密码强度（必填）
+    // 支付密码强度（必填）
     private String tradePwdStrength;
 
     // 手机验证码（必填）

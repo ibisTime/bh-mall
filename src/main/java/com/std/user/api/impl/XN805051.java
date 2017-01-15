@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 重置交易密码
+ * 重置支付密码
  * @author: myb858 
  * @since: 2015年9月15日 下午2:30:11 
  * @history:
