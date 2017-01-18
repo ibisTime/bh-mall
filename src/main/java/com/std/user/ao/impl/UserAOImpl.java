@@ -169,13 +169,18 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.FRB.getCode());
-            currencyList.add(ECurrency.GXJL.getCode());
-            currencyList.add(ECurrency.QBB.getCode());
-            currencyList.add(ECurrency.GWB.getCode());
-            currencyList.add(ECurrency.HBB.getCode());
-            currencyList.add(ECurrency.HBYJ.getCode());
+            if (EUserKind.F2.getCode().equals(kind)) {
+                currencyList.add(ECurrency.FRB.getCode());
+                currencyList.add(ECurrency.CNY.getCode());
+            } else {
+                currencyList.add(ECurrency.CNY.getCode());
+                currencyList.add(ECurrency.FRB.getCode());
+                currencyList.add(ECurrency.GXJL.getCode());
+                currencyList.add(ECurrency.QBB.getCode());
+                currencyList.add(ECurrency.GWB.getCode());
+                currencyList.add(ECurrency.HBB.getCode());
+                currencyList.add(ECurrency.HBYJ.getCode());
+            }
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         } else {
@@ -371,15 +376,23 @@ public class UserAOImpl implements IUserAO {
             // 分配账号(人民币和虚拟币)
             if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
-                currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.FRB.getCode());
-                currencyList.add(ECurrency.GXJL.getCode());
-                currencyList.add(ECurrency.QBB.getCode());
-                currencyList.add(ECurrency.GWB.getCode());
-                currencyList.add(ECurrency.HBB.getCode());
-                currencyList.add(ECurrency.HBYJ.getCode());
+                if (EUserKind.F2.getCode().equals(kind)) {
+                    currencyList.add(ECurrency.CNY.getCode());
+                    currencyList.add(ECurrency.FRB.getCode());
+                } else {
+                    currencyList.add(ECurrency.CNY.getCode());
+                    currencyList.add(ECurrency.FRB.getCode());
+                    currencyList.add(ECurrency.GXJL.getCode());
+                    currencyList.add(ECurrency.QBB.getCode());
+                    currencyList.add(ECurrency.GWB.getCode());
+                    currencyList.add(ECurrency.HBB.getCode());
+                    currencyList.add(ECurrency.HBYJ.getCode());
+                }
                 accountBO.distributeAccountList(userId, mobile,
                     getAccountType(kind), currencyList, systemCode);
+                // 注册环信
+                instantMsgImpl.doRegisterUser(userId,
+                    EUserPwd.InitPwd.getCode(), systemCode);
             } else {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
@@ -756,9 +769,10 @@ public class UserAOImpl implements IUserAO {
         if (StringUtils.isNotBlank(isMall)
                 && EBoolean.YES.getCode().equals(isMall)) {
             userBO.isMobileExist(newMobile, user.getKind(),
-                user.getCompanyCode());
+                user.getCompanyCode(), user.getSystemCode());
         } else {
-            userBO.isMobileExist(newMobile, user.getSystemCode());
+            userBO.isMobileExist(newMobile, user.getKind(),
+                user.getSystemCode());
         }
         // 验证支付密码
         userBO.checkTradePwd(userId, tradePwd);

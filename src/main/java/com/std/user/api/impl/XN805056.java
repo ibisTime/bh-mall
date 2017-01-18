@@ -1,5 +1,7 @@
 package com.std.user.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
@@ -7,6 +9,7 @@ import com.std.user.core.StringValidater;
 import com.std.user.domain.User;
 import com.std.user.dto.req.XN805056Req;
 import com.std.user.dto.res.XN805056Res;
+import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -42,6 +45,16 @@ public class XN805056 extends AProcessor {
             res.setRealName(user.getRealName());
 
             res.setTradePwdStrength(user.getTradePwdStrength());
+            if (StringUtils.isNotBlank(user.getIdNo())) {
+                res.setIdentityFlag(EBoolean.YES.getCode());
+            } else {
+                res.setIdentityFlag(EBoolean.NO.getCode());
+            }
+            if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
+                res.setTradepwdFlag(EBoolean.YES.getCode());
+            } else {
+                res.setTradepwdFlag(EBoolean.NO.getCode());
+            }
             res.setRoleCode(user.getRoleCode());
             res.setStatus(user.getStatus());
             res.setUpdater(user.getUpdater());

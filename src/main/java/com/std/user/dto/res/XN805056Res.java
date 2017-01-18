@@ -75,11 +75,34 @@ public class XN805056Res {
     private UserExt userExt;
 
     // ************* db properties ************
+
+    // 是否实名认证
+    private String identityFlag;
+
+    // 是否设置支付密码
+    private String tradepwdFlag;
+
     // 关注数
     private String totalFollowNum;
 
     // 粉丝数
     private String totalFansNum;
+
+    public String getIdentityFlag() {
+        return identityFlag;
+    }
+
+    public void setIdentityFlag(String identityFlag) {
+        this.identityFlag = identityFlag;
+    }
+
+    public String getTradepwdFlag() {
+        return tradepwdFlag;
+    }
+
+    public void setTradepwdFlag(String tradepwdFlag) {
+        this.tradepwdFlag = tradepwdFlag;
+    }
 
     public String getUserId() {
         return userId;
