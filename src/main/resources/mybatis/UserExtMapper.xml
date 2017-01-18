@@ -60,6 +60,9 @@
 			<if test="roleCode != null and roleCode != '' ">
 				AND tu.role_code = #{roleCode}
 			</if>
+			<if test="status != null and status != '' ">
+				AND tu.status = #{status}
+			</if>
 		</trim>
 	</sql>
 	

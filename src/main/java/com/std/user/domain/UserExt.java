@@ -92,6 +92,17 @@ public class UserExt extends ABaseDO {
     // 角色编号
     private String roleCode;
 
+    // 状态
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getRoleCode() {
         return roleCode;
     }

@@ -30,6 +30,7 @@ public class XN805060 extends AProcessor {
         condition.setAreaForQuery(req.getArea());
         condition.setKind(req.getKind());
         condition.setRoleCode(req.getRoleCode());
+        condition.setStatus(req.getStatus());
         return userExtAO.queryUserExtList(condition);
     }
 
