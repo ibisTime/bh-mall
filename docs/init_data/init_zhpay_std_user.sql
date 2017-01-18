@@ -6,6 +6,13 @@ LIMIT 0, 50000
 */
 INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH2017011817533415517','1','2','','OSS_1484733221336_1080_360.png','1','1',1,'3','0','',NULL,'0','CD-CZH000001');
 
+/*
+-- Query: SELECT * FROM zhpay_std_user.tsys_config
+LIMIT 0, 50000
+
+-- Date: 2017-01-18 20:52
+*/
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('aboutus','关于我们','<p style=\"text-indent: 2em;\">正汇钱包，自2015年5月1日试运行起受到广大用户的关注，今日全新形象的正汇钱包上线，欢迎大家继续使用。本软件由义乌市正汇信息科技有限公司运行制作，（简称正汇科技）正汇科技成立于2015年初，创始团队至今已有5年历程。正汇科技是一家集程序开发、市场运营为一体的移动互联网企业，并集新型创业、提供就业、提高生活质量的全新经济体系的高新技术公司。</p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
 
 /*
 -- Query: SELECT * FROM zhpay_std_user.tstd_user where login_name = 'admin' and system_code  = 'CD-CZH000001'
@@ -409,12 +416,6 @@ INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`compa
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CZH000001-003','2','ACCESS_KEY','M0atdzBYOQ-oloFpRJFtX7HDDU1NTBBvRUu3MS1T',NULL,'CD-CZH000001','CD-CZH000001');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CZH000001-004','2','SECRET_KEY','F8eJ94o1WoFIB7VxTwtI5rB8RLi7IHC7cY47Bnwh',NULL,'CD-CZH000001','CD-CZH000001');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CZH000001-005','2','bucket','tianleidb',NULL,'CD-CZH000001','CD-CZH000001');
-
-/*
--- Query: SELECT * FROM zhpay_std_user.tsys_config
--- Date: 2017-01-03 10:57
-*/
-INSERT INTO `tsys_config` (`id`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (1,'aboutus','关于我们','<p>我们的故事爱就爱的值得</p><p>错也错的值得</p>','admin',now(),NULL,'CD-CZH000001');
 
 /*
 -- Query: select `type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as update_datetime,`remark`,`system_code` from tsys_dict where system_code = 'CD-CZH000001'
