@@ -146,11 +146,15 @@ INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`upda
 INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CQQ000004','1','lock_direction','2','解锁','admin',now(),'');
 
 /*
--- Query: SELECT code,type,account,password,remark,company_code,system_code FROM tstd_cpassword WHERE system_code = 'CD-CQQ000004'
--- Date: 2016-12-30 19:44
+-- Query: SELECT * FROM game_std_user.tstd_cpassword
+LIMIT 0, 50000
+
+-- Date: 2017-01-19 15:45
 */
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CQQ000004-006','3','ACCESS_KEY','wx8bc03dd744895352',NULL,'CD-CQQ000004','CD-CQQ000004');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CQQ000004-007','3','SECRET_KEY','44ebf0ef908dc54656573625a579ea82',NULL,'CD-CQQ000004','CD-CQQ000004');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CQQ000004-001','2','ACCESS_KEY','s5Md3xx8VBqdRRRWTqDH6mQkdfi6kP_9ZZ3sVlnP',NULL,'CD-CQQ000004','CD-CQQ000004');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CQQ000004-002','2','SECRET_KEY','-snUkWaeBDytAs22WWLylaidADfZqtqJrHDR6qA8',NULL,'CD-CQQ000004','CD-CQQ000004');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CQQ000004-003','2','bucket','weride',NULL,'CD-CQQ000004','CD-CQQ000004');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('001','2','ACCESS_KEY','Dc0pMP8ImFm78-uk4iGsOPpB2-vHc64D07OsOQVi',NULL,'CD-CHD000002','CD-CHD000002');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('002','2','SECRET_KEY','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq',NULL,'CD-CHD000002','CD-CHD000002');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('003','2','bucket','b2coss',NULL,'CD-CHD000002','CD-CHD000002');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CHD000002-001','4','ACCESS_KEY','wx0bf01798e93cb2f9',NULL,'CD-CHD000002','CD-CHD000002');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CHD000002-002','4','SECRET_KEY','e788266236ab5295a0ddbc6a5d356ca4',NULL,'CD-CHD000002','CD-CHD000002');
+
+

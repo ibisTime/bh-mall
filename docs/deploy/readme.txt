@@ -166,3 +166,20 @@ http://121.43.101.148:6505/std-user/api
   
   http://121.43.101.148:5805/std-user/api
   
+       --------------------game
+  cd /home/wwwroot/game/tomcat_std_user/webapps
+  cp ./std-user/WEB-INF/classes/application.properties .
+  cp ./std-user/WEB-INF/classes/config.properties .
+  
+  rm -rf std-user.war
+  rm -rf std-user
+  mv /home/std-user.war .
+  
+  mv -f application.properties ./std-user/WEB-INF/classes/
+  mv -f config.properties ./std-user/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh
+  
+  http://121.43.101.148:6605/std-user/api
+  

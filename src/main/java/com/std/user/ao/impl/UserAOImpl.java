@@ -42,6 +42,8 @@ import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PropertiesUtil;
+import com.std.user.common.SysConstant;
+import com.std.user.common.WechatConstant;
 import com.std.user.domain.CPassword;
 import com.std.user.domain.Company;
 import com.std.user.domain.SYSRole;
@@ -53,6 +55,7 @@ import com.std.user.dto.res.XN805155Res;
 import com.std.user.enums.EAccountType;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
+import com.std.user.enums.ECPwdType;
 import com.std.user.enums.ECurrency;
 import com.std.user.enums.EDirection;
 import com.std.user.enums.EFieldType;
@@ -1299,12 +1302,6 @@ public class UserAOImpl implements IUserAO {
         return accountType;
     }
 
-    public static final String WX_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
-
-    public static final String WX_OPENID_URL = "https://graph.qq.com/oauth2.0/me";
-
-    public static final String WX_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
-
     @Override
     public String doLoginWeChat(String code, String companyCode,
             String systemCode) {
@@ -1339,8 +1336,8 @@ public class UserAOImpl implements IUserAO {
         System.out.println(appId + " " + appSecret + " " + code);
         String response;
         try {
-            response = PostSimulater.requestPostForm(WX_TOKEN_URL,
-                formProperties);
+            response = PostSimulater.requestPostForm(
+                WechatConstant.WX_TOKEN_URL, formProperties);
             res = getMapFromResponse(response);
             System.out.println(res);
             accessToken = (String) res.get("access_token");
@@ -1356,7 +1353,7 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("openid", openId);
             queryParas.put("lang", "zh_CN");
             wxRes = getMapFromResponse(PostSimulater.requestPostForm(
-                WX_USER_INFO_URL, queryParas));
+                WechatConstant.WX_USER_INFO_URL, queryParas));
             System.out.println(wxRes);
             String unionid = (String) wxRes.get("unionid");
             if (StringUtils.isEmpty(unionid)) {
@@ -1386,6 +1383,85 @@ public class UserAOImpl implements IUserAO {
                 }
                 userId = doThirdRegisterWechat(openId, name, headimgurl, sex,
                     companyCode, systemCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BizException("xn000000", e.getMessage());
+        }
+
+        return userId;
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#doLoginSmallWeChat(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public String doLoginSmallWeChat(String jsCode, String nickname,
+            String sex, String headimgurl, String companyCode, String systemCode) {
+        String userId = "";
+        String appId = "";
+        String appSecret = "";
+        CPassword condition = new CPassword();
+        condition.setType(ECPwdType.XIAOCX.getCode());
+        condition.setAccount("ACCESS_KEY");
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<CPassword> result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信小程序appId配置获取失败，请检查配置");
+        }
+        appId = result.get(0).getPassword();
+        condition.setAccount("SECRET_KEY");
+        result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信小程序appSecret配置获取失败，请检查配置");
+        }
+        appSecret = result.get(0).getPassword();
+
+        // Step2：通过Authorization Code获取Access Token
+        String sessionKey = "";
+        Map<String, String> res = new HashMap<>();
+        Properties formProperties = new Properties();
+        formProperties.put("appid", appId);
+        formProperties.put("secret", appSecret);
+        formProperties.put("js_code", jsCode);
+        formProperties.put("grant_type", "authorization_code");
+        String response;
+        try {
+            response = PostSimulater.requestPostForm(
+                WechatConstant.WX_JSCODE_SESSION_URL, formProperties);
+            res = getMapFromResponse(response);
+            sessionKey = (String) res.get("session_key");
+            if (res.get("error") != null || StringUtils.isBlank(sessionKey)) {
+                throw new BizException("XN000000", "获取sessionKey失败");
+            }
+            String openId = (String) res.get("openid");
+            if (StringUtils.isBlank(openId)) {
+                throw new BizException("XN000000", "获取openId失败");
+            }
+            SysConstant.JS_SESSIONKEY = sessionKey;
+            // Step4：根据openId从数据库中查询用户信息（user）
+            User userCondition = new User();
+            userCondition.setOpenId(openId);
+            List<User> users = userBO.queryUserList(userCondition);
+            if (!CollectionUtils.isEmpty(users)) {
+                // Step4-1：如果user存在，说明用户授权登录过，直接登录
+                User user = users.get(0);
+                if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                    throw new BizException("10002", "用户被锁定");
+                }
+                userId = user.getUserId();
+            } else {
+                System.out.println("***性别=" + String.valueOf(sex));
+                if (String.valueOf(sex).equals("1.0")) {
+                    sex = ESex.MEN.getCode();
+                } else if (String.valueOf(sex).equals("2.0")) {
+                    sex = ESex.WOMEN.getCode();
+                } else {
+                    sex = ESex.UNKNOWN.getCode();
+                }
+                userId = doThirdRegisterWechat(openId, nickname, headimgurl,
+                    sex, companyCode, systemCode);
             }
         } catch (Exception e) {
             e.printStackTrace();

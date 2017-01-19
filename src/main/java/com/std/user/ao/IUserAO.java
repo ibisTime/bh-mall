@@ -210,6 +210,21 @@ public interface IUserAO {
             String systemCode);
 
     /**
+     * 小程序登录
+     * @param jsCode
+     * @param nickname
+     * @param sex
+     * @param headimgurl
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年1月19日 下午4:46:06 xieyj
+     * @history:
+     */
+    public String doLoginSmallWeChat(String jsCode, String nickname,
+            String sex, String headimgurl, String companyCode, String systemCode);
+
+    /**
      * 用户登录送积分
      * @param loginName
      * @param loginPwd
