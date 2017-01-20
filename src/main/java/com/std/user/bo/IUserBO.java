@@ -171,4 +171,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshUser(User data);
 
     public void refreshUserSupple(User data);
+
+    public String saveUser(User user);
 }

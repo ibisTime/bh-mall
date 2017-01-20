@@ -641,6 +641,27 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public String doCaptchaLoginReg(String mobile, String kind,
+            String smsCaptcha, String companyCode, String systemCode) {
+        String userId = null;
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805183");
+        User user = userBO.getUserByMobileAndKind(mobile, kind, companyCode,
+            systemCode);
+        if (user == null) {
+            User data = new User();
+            data.setMobile(mobile);
+            data.setKind(kind);
+            data.setCompanyCode(companyCode);
+            data.setSystemCode(systemCode);
+            userId = userBO.saveUser(data);
+        } else {
+            userId = user.getUserId();
+        }
+        return userId;
+    }
+
+    @Override
     @Transactional
     public XN805155Res doLoginAddJf(String loginName, String loginPwd,
             String kind, String systemCode) {

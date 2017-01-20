@@ -690,4 +690,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             userDAO.updateSupple(data);
         }
     }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#saveUser(com.std.user.domain.User)
+     */
+    @Override
+    public String saveUser(User data) {
+        String userId = null;
+        if (data != null) {
+            userId = OrderNoGenerater.generate("U");
+            data.setUserId(userId);
+            userDAO.insert(data);
+        }
+        return userId;
+    }
 }

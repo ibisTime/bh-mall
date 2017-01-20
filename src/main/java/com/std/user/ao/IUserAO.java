@@ -613,4 +613,18 @@ public interface IUserAO {
      * @history:
      */
     public void doSuppleUser(User data);
+
+    /**
+     * 验证码登录注册
+     * @param mobile
+     * @param kind
+     * @param smsCaptcha
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年1月19日 下午5:48:21 xieyj
+     * @history:
+     */
+    public String doCaptchaLoginReg(String mobile, String kind,
+            String smsCaptcha, String companyCode, String systemCode);
 }
