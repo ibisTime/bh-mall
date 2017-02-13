@@ -4,10 +4,9 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.std.user.bo.ISmsOutBO;
-import com.std.user.common.PropertiesUtil;
-import com.std.user.dto.req.XN799001Req;
-import com.std.user.dto.req.XN799003Req;
-import com.std.user.dto.req.XN799007Req;
+import com.std.user.dto.req.XN804080Req;
+import com.std.user.dto.req.XN804081Req;
+import com.std.user.dto.req.XN804082Req;
 import com.std.user.dto.res.BooleanRes;
 import com.std.user.dto.res.PKCodeRes;
 import com.std.user.http.BizConnecter;
@@ -24,14 +23,13 @@ public class SmsOutBOImpl implements ISmsOutBO {
     static Logger logger = Logger.getLogger(SmsOutBOImpl.class);
 
     @Override
-    public void sendCaptcha(String mobile, String bizType, String kind,
-            String systemCode) {
+    public void sendCaptcha(String mobile, String bizType, String systemCode) {
         try {
-            XN799003Req req = new XN799003Req();
-            req.setChannel(PropertiesUtil.Config.SMS_CHANNEL + "-K");
+            XN804081Req req = new XN804081Req();
             req.setMobile(mobile);
             req.setBizType(bizType);
-            BizConnecter.getBizData("799003", JsonUtils.object2Json(req),
+            req.setSystemCode(systemCode);
+            BizConnecter.getBizData("804081", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
             logger.error("调用短信发送服务异常");
@@ -39,25 +37,56 @@ public class SmsOutBOImpl implements ISmsOutBO {
     }
 
     @Override
-    public void checkCaptcha(String mobile, String captcha, String bizType) {
-        XN799007Req req = new XN799007Req();
-        String[] channels = PropertiesUtil.Config.SMS_CHANNEL.split("-");
-        req.setCompanyCode(channels[0]);
+    public void sendCaptcha(String mobile, String bizType, String companyCode,
+            String systemCode) {
+        try {
+            XN804081Req req = new XN804081Req();
+            req.setMobile(mobile);
+            req.setBizType(bizType);
+            req.setCompanyCode(companyCode);
+            req.setSystemCode(systemCode);
+            BizConnecter.getBizData("804081", JsonUtils.object2Json(req),
+                PKCodeRes.class);
+        } catch (Exception e) {
+            logger.error("调用短信发送服务异常");
+        }
+    }
+
+    @Override
+    public void checkCaptcha(String mobile, String captcha, String bizType,
+            String systemCode) {
+        XN804082Req req = new XN804082Req();
         req.setMobile(mobile);
         req.setCaptcha(captcha);
         req.setBizType(bizType);
-        BizConnecter.getBizData("799007", JsonUtils.object2Json(req),
+        req.setSystemCode(systemCode);
+        BizConnecter.getBizData("804082", JsonUtils.object2Json(req),
             BooleanRes.class);
     }
 
     @Override
-    public void sendSmsOut(String mobile, String content, String bizType) {
+    public void checkCaptcha(String mobile, String captcha, String bizType,
+            String companyCode, String systemCode) {
+        XN804082Req req = new XN804082Req();
+        req.setMobile(mobile);
+        req.setCaptcha(captcha);
+        req.setBizType(bizType);
+        req.setCompanyCode(companyCode);
+        req.setSystemCode(systemCode);
+        BizConnecter.getBizData("804082", JsonUtils.object2Json(req),
+            BooleanRes.class);
+    }
+
+    @Override
+    public void sendSmsOut(String mobile, String content, String bizType,
+            String systemCode) {
         try {
-            XN799001Req req = new XN799001Req();
-            req.setChannel(PropertiesUtil.Config.SMS_CHANNEL + "-M");
+            XN804080Req req = new XN804080Req();
             req.setMobile(mobile);
             req.setContent(content);
-            BizConnecter.getBizData("799001", JsonUtils.object2Json(req),
+            req.setType("M");
+            req.setSystemCode(systemCode);
+            BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
             logger.error("调用短信发送服务异常");
@@ -66,14 +95,15 @@ public class SmsOutBOImpl implements ISmsOutBO {
 
     @Override
     public void sendSmsOut(String mobile, String content, String bizType,
-            String companyCode) {
+            String companyCode, String systemCode) {
         try {
-            XN799001Req req = new XN799001Req();
-            req.setChannel(PropertiesUtil.Config.SMS_CHANNEL + "-M");
+            XN804080Req req = new XN804080Req();
             req.setMobile(mobile);
             req.setContent(content);
+            req.setType("M");
             req.setCompanyCode(companyCode);
-            BizConnecter.getBizData("799001", JsonUtils.object2Json(req),
+            req.setSystemCode(systemCode);
+            BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
             logger.error("调用短信发送服务异常");

@@ -148,7 +148,7 @@ public class UserAOImpl implements IUserAO {
         condition.setUserId(userId);
         List<User> userList1 = userBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "不存在");
+            throw new BizException("xn702002", "用户不存在");
         }
         condition.setLoginPwd(MD5Util.md5(loginPwd));
         List<User> userList2 = userBO.queryUserList(condition);
@@ -176,7 +176,7 @@ public class UserAOImpl implements IUserAO {
             userReferee = refereeUser.getUserId();
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041", systemCode);
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
             loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(), 0L,
@@ -225,7 +225,7 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee, systemCode);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154", systemCode);
         // 插入用户信息
         String kind = EUserKind.F1.getCode();
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
@@ -262,7 +262,8 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee, systemCode);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076", companyCode,
+            systemCode);
         // 设置公司
         Company company = companyBO.getCompany(companyCode);
         if (company == null) {
@@ -430,7 +431,8 @@ public class UserAOImpl implements IUserAO {
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。您的登录密码为" + loginPsd + "。", "805042");
+                    + "用户，您已成功注册。您的登录密码为" + loginPsd + "。", "805042",
+                systemCode);
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             // 验证登录名
             userBO.isLoginNameExist(loginName, kind, systemCode);
@@ -461,7 +463,7 @@ public class UserAOImpl implements IUserAO {
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册。您的登录名[" + loginName + "],登录密码[" + loginPsd
-                    + "]。请及时登录修改密码", "805042");
+                    + "]。请及时登录修改密码", "805042", systemCode);
         } else if (EUserKind.Integral.getCode().equals(kind)
                 || EUserKind.Goods.getCode().equals(kind)
                 || EUserKind.CaiGo.getCode().equals(kind)
@@ -531,7 +533,8 @@ public class UserAOImpl implements IUserAO {
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，您已成功注册。您的登录密码为" + loginPsd + ";支付密码为" + tradePsd
-                + "，请及时登录个金所网站修改密码。如有疑问，请联系客服：400-0008-139。", "805042");
+                + "，请及时登录个金所网站修改密码。如有疑问，请联系客服：400-0008-139。", "805042",
+            systemCode);
         return userId;
     }
 
@@ -561,7 +564,8 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId, systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，恭喜您成功注册。初始化密码为" + loginPwd + "，请及时登录网站更改密码。", "805079");
+                + "用户，恭喜您成功注册。初始化密码为" + loginPwd + "，请及时登录网站更改密码。", "805079",
+            systemCode);
         return userId;
     }
 
@@ -606,7 +610,7 @@ public class UserAOImpl implements IUserAO {
         if (StringUtils.isNotBlank(mobile)) {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册合伙人。您的登录密码为" + loginPwd + "，请及时管理端网站进行密码修改!",
-                "805180");
+                "805180", user.getSystemCode());
         }
         return userId;
     }
@@ -684,7 +688,8 @@ public class UserAOImpl implements IUserAO {
             String smsCaptcha, String companyCode, String systemCode) {
         String userId = null;
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805183");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805183", companyCode,
+            systemCode);
         User user = userBO.getUserByMobileAndKind(mobile, kind, companyCode,
             systemCode);
         if (user == null) {
@@ -783,12 +788,14 @@ public class UserAOImpl implements IUserAO {
         // 判断是否和登录密码重复
         User user = this.doGetUser(userId);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805045");
+        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805045",
+            user.getSystemCode());
         userBO.refreshTradePwd(userId, tradePwd, tradePwdStrength);
         // 发送短信
         String mobile = user.getMobile();
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的支付密码设置成功。请妥善保管您的账户相关信息。", "805045");
+                + "用户，您的支付密码设置成功。请妥善保管您的账户相关信息。", "805045",
+            user.getSystemCode());
     }
 
     @Override
@@ -808,12 +815,14 @@ public class UserAOImpl implements IUserAO {
         // 判断是否和登录密码重复
         User user = this.doGetUser(userId);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805046");
+        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805046",
+            user.getSystemCode());
         userBO.refreshTradePwd(userId, tradePwd, tradePwdStrength);
         // 发送短信
         String mobile = user.getMobile();
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您已通过实名认证，且支付密码设置成功。请妥善保管您的账户相关信息。", "805046");
+                + "用户，您已通过实名认证，且支付密码设置成功。请妥善保管您的账户相关信息。", "805046",
+            user.getSystemCode());
     }
 
     @Override
@@ -840,7 +849,8 @@ public class UserAOImpl implements IUserAO {
         // 验证支付密码
         userBO.checkTradePwd(userId, tradePwd);
         // 短信验证码是否正确（往新手机号发送）
-        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805047");
+        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805047",
+            user.getSystemCode());
         userBO.refreshMobile(userId, newMobile);
         // 发送短信
         smsOutBO.sendSmsOut(
@@ -851,7 +861,7 @@ public class UserAOImpl implements IUserAO {
                     + DateUtil.dateToStr(new Date(),
                         DateUtil.DATA_TIME_PATTERN_1)
                     + "提交的更改绑定手机号码服务已审核通过，现绑定手机号码为" + newMobile
-                    + "，请妥善保管您的账户相关信息。", "805047");
+                    + "，请妥善保管您的账户相关信息。", "805047", user.getSystemCode());
     }
 
     @Override
@@ -867,14 +877,16 @@ public class UserAOImpl implements IUserAO {
         // 验证手机号
         userBO.isMobileExist(mobile, null, companyCode);
         // 短信验证码是否正确（往手机号发送）
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805153");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805153", companyCode,
+            user.getSystemCode());
         // 插入用户信息
         String loginPwd = RandomUtil.generate6();
         userBO.refreshBindMobile(userId, EPrefixCode.CSW.getCode() + mobile,
             mobile, loginPwd, "1");
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805153");
+                + "用户，登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805153",
+            user.getSystemCode());
     }
 
     @Override
@@ -887,12 +899,12 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "用户不存在,请先注册");
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805048");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805048", systemCode);
         userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
             loginPwdStrength);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805048");
+                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805048", systemCode);
     }
 
     @Override
@@ -906,12 +918,13 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "用户不存在,请先注册");
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805171");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805171", companyCode,
+            systemCode);
         userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
             loginPwdStrength);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805171");
+                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805171", systemCode);
     }
 
     @Override
@@ -926,8 +939,7 @@ public class UserAOImpl implements IUserAO {
         } else {
             data = userList.get(0);
         }
-        smsOutBO.sendCaptcha(data.getMobile(), "805059",
-            EUserKind.Operator.getCode(), systemCode);
+        smsOutBO.sendCaptcha(data.getMobile(), "805059", systemCode);
     }
 
     @Override
@@ -940,12 +952,13 @@ public class UserAOImpl implements IUserAO {
         }
         String mobile = user.getMobile();
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805059");
+        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805059",
+            systemCode);
         userBO.refreshLoginPwd(user.getUserId(), MD5Util.md5(newLoginPwd),
             loginPwdStrength);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805059");
+                + "用户，您的登录密码找回成功。请妥善保管您的账户相关信息。", "805059", systemCode);
     }
 
     @Override
@@ -977,7 +990,8 @@ public class UserAOImpl implements IUserAO {
         if (EUserKind.F1.getCode().equals(userKind)
                 || EUserKind.F2.getCode().equals(userKind)) {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您的登录密码修改成功。请妥善保管您的账户相关信息。", "805049");
+                    + "用户，您的登录密码修改成功。请妥善保管您的账户相关信息。", "805049",
+                user.getSystemCode());
         }
     }
 
@@ -1000,14 +1014,16 @@ public class UserAOImpl implements IUserAO {
         }
         // 短信验证码是否正确
         String mobile = user.getMobile();
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805050");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805050",
+            user.getSystemCode());
         userBO.refreshTradePwd(userId, newTradePwd, tradePwdStrength);
         String userKind = user.getKind();
         if (EUserKind.F1.getCode().equals(userKind)
                 || EUserKind.F2.getCode().equals(userKind)) {
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您的支付密码找回成功。请妥善保管您的账户相关信息。", "805050");
+                    + "用户，您的支付密码找回成功。请妥善保管您的账户相关信息。", "805050",
+                user.getSystemCode());
         }
     }
 
@@ -1020,14 +1036,16 @@ public class UserAOImpl implements IUserAO {
         }
         // 短信验证码是否正确
         String mobile = user.getMobile();
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805057");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805057",
+            user.getSystemCode());
         userBO.refreshTradePwd(userId, newTradePwd, tradePwdStrength);
         // 发送短信
         String userKind = user.getKind();
         if (EUserKind.F1.getCode().equals(userKind)
                 || EUserKind.F2.getCode().equals(userKind)) {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您的支付密码找回成功。请妥善保管您的账户相关信息。", "805057");
+                    + "用户，您的支付密码找回成功。请妥善保管您的账户相关信息。", "805057",
+                user.getSystemCode());
         }
     }
 
@@ -1055,7 +1073,8 @@ public class UserAOImpl implements IUserAO {
                 || EUserKind.F2.getCode().equals(userKind)) {
             String mobile = user.getMobile();
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您的支付密码修改成功。请妥善保管您的账户相关信息。", "805051");
+                    + "用户，您的支付密码修改成功。请妥善保管您的账户相关信息。", "805051",
+                user.getSystemCode());
         }
     }
 
@@ -1084,7 +1103,7 @@ public class UserAOImpl implements IUserAO {
         if (!EUserKind.Operator.getCode().equals(user.getKind())) {
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + smsContent, "805052");
+                    + smsContent, "805052", user.getSystemCode());
         }
     }
 
@@ -1257,7 +1276,8 @@ public class UserAOImpl implements IUserAO {
         if (user == null) {
             throw new BizException("xn000000", "用户不存在");
         }
-        smsOutBO.sendSmsOut(user.getMobile(), content, "805903");
+        smsOutBO.sendSmsOut(user.getMobile(), content, "805903",
+            user.getSystemCode());
     }
 
     /** 

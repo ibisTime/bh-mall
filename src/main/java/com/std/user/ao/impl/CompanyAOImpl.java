@@ -326,7 +326,7 @@ public class CompanyAOImpl implements ICompanyAO {
             }
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "806009");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "806009", systemCode);
         companyBO.refreshCompanyPsw(company.getCode(), newPassword);
     }
 

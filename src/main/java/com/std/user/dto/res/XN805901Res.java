@@ -12,6 +12,9 @@ public class XN805901Res {
     // 最好不是手机号，就是一般的登录名。目前第一版版本先用手机号，因为用一般登录名，注册流程以及手机验证就要变
     private String loginName;
 
+    // nickname 昵称
+    private String nickname;
+
     // 手机号
     private String mobile;
 
@@ -59,6 +62,14 @@ public class XN805901Res {
 
     // 用户扩展信息
     private UserExt userExt;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public String getIdKind() {
         return idKind;
