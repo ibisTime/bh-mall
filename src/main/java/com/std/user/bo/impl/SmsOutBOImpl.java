@@ -13,6 +13,12 @@ import com.std.user.dto.res.PKCodeRes;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
 
+/**
+ * 对接短信机
+ * @author: xieyj 
+ * @since: 2017年2月1日 下午3:24:12 
+ * @history:
+ */
 @Component
 public class SmsOutBOImpl implements ISmsOutBO {
     static Logger logger = Logger.getLogger(SmsOutBOImpl.class);

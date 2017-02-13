@@ -33,11 +33,11 @@ public class XN805901Res {
     // 推荐人
     private String userReferee;
 
-    // 是否手机绑定
-    private String mobileFlag;
+    // 证件类型
+    private String idKind;
 
-    // 是否实名认证
-    private String identityFlag;
+    // 证件号码
+    private String idNo;
 
     // 是否设置支付密码
     private String tradepwdFlag;
@@ -54,10 +54,27 @@ public class XN805901Res {
     // 粉丝数
     private String totalFansNum;
 
-    // 粉丝数
+    // 系统编号
     private String systemCode;
 
+    // 用户扩展信息
     private UserExt userExt;
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
 
     public String getMobile() {
         return mobile;
@@ -113,22 +130,6 @@ public class XN805901Res {
 
     public void setLevel(String level) {
         this.level = level;
-    }
-
-    public String getMobileFlag() {
-        return mobileFlag;
-    }
-
-    public void setMobileFlag(String mobileFlag) {
-        this.mobileFlag = mobileFlag;
-    }
-
-    public String getIdentityFlag() {
-        return identityFlag;
-    }
-
-    public void setIdentityFlag(String identityFlag) {
-        this.identityFlag = identityFlag;
     }
 
     public String getTradepwdFlag() {

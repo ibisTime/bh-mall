@@ -139,6 +139,25 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(mobile, kind, companyCode, systemCode);
     }
 
+    /** 
+     * @see com.std.user.ao.IUserAO#doCheckLoginPwd(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doCheckLoginPwd(String userId, String loginPwd) {
+        User condition = new User();
+        condition.setUserId(userId);
+        List<User> userList1 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList1)) {
+            throw new BizException("xn702002", "不存在");
+        }
+        condition.setLoginPwd(MD5Util.md5(loginPwd));
+        List<User> userList2 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList2)) {
+            throw new BizException("xn702002", "登录密码错误");
+        }
+
+    }
+
     @Override
     @Transactional
     public String doRegister(String mobile, String loginPwd,
@@ -423,6 +442,26 @@ public class UserAOImpl implements IUserAO {
                 systemCode);
             // 新增扩展信息
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
+            // 民宿主
+        } else if (EUserKind.Partner.getCode().equals(kind)) {
+            // 验证登录名
+            userBO.isLoginNameExist(loginName, kind, systemCode);
+            loginPsd = RandomUtil.generate6();
+            // 插入用户信息
+            userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
+                realName, idKind, idNo, loginPsd, kind,
+                EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
+                systemCode);
+            // 新增扩展信息
+            userExtBO.saveUserExt(userId, province, city, area, systemCode);
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
+            // 发送短信
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + "用户，您已成功注册。您的登录名[" + loginName + "],登录密码[" + loginPsd
+                    + "]。请及时登录修改密码", "805042");
         } else if (EUserKind.Integral.getCode().equals(kind)
                 || EUserKind.Goods.getCode().equals(kind)
                 || EUserKind.CaiGo.getCode().equals(kind)
@@ -464,11 +503,11 @@ public class UserAOImpl implements IUserAO {
                 updater, pdf, cxRoleCode, systemCode);
             // 分配人民币账号
             accountBO.distributeAccount(userId, realName,
-                EAccountType.Partner.getCode(), ECurrency.CNY.getCode(),
+                EAccountType.Business.getCode(), ECurrency.CNY.getCode(),
                 systemCode);
             // 分配积分账号
             accountBO.distributeAccount(userId, realName,
-                EAccountType.Partner.getCode(), ECurrency.XNB.getCode(),
+                EAccountType.Business.getCode(), ECurrency.XNB.getCode(),
                 systemCode);
         }
         return userId;
@@ -1317,6 +1356,8 @@ public class UserAOImpl implements IUserAO {
             accountType = EAccountType.Customer.getCode();
         } else if (EUserKind.F2.getCode().equals(kind)) {
             accountType = EAccountType.Business.getCode();
+        } else if (EUserKind.Partner.getCode().equals(kind)) {
+            accountType = EAccountType.Partner.getCode();
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             accountType = EAccountType.Plat.getCode();
         }
