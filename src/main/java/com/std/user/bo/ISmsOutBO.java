@@ -5,12 +5,22 @@ public interface ISmsOutBO {
      * 发送验证码
      * @param mobile
      * @param bizType
-     * @param kind
      * @param systemCode 
-     * @create: 2016年12月15日 上午7:29:42 xieyj
+     * @create: 2017年2月13日 下午3:02:02 xieyj
      * @history:
      */
-    public void sendCaptcha(String mobile, String bizType, String kind,
+    public void sendCaptcha(String mobile, String bizType, String systemCode);
+
+    /**
+     * 发送验证码
+     * @param mobile
+     * @param bizType
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2017年2月13日 下午3:02:02 xieyj
+     * @history:
+     */
+    public void sendCaptcha(String mobile, String bizType, String companyCode,
             String systemCode);
 
     /**
@@ -18,33 +28,49 @@ public interface ISmsOutBO {
      * @param mobile
      * @param captcha
      * @param bizType
-     * @return 
-     * @create: 2016年10月17日 下午5:47:21 xieyj
+     * @param systemCode 
+     * @create: 2017年2月13日 下午3:02:30 xieyj
      * @history:
      */
-    public void checkCaptcha(String mobile, String captcha, String bizType);
+    public void checkCaptcha(String mobile, String captcha, String bizType,
+            String systemCode);
 
     /**
-     * 发送指定内容短信
+     * 验证用户验证码是否正确
+     * @param mobile
+     * @param captcha
+     * @param bizType
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2017年2月13日 下午3:02:30 xieyj
+     * @history:
+     */
+    public void checkCaptcha(String mobile, String captcha, String bizType,
+            String companyCode, String systemCode);
+
+    /**
+     * 发送指定内容短信(系统)
      * @param mobile
      * @param content
      * @param bizType
-     * @return 
-     * @create: 2016年10月17日 下午5:47:45 xieyj
-     * @history:
-     */
-    public void sendSmsOut(String mobile, String content, String bizType);
-
-    /**
-     * @param mobile
-     * @param content
-     * @param bizType
-     * @param companyCode 
-     * @create: 2016年11月25日 上午9:25:54 xieyj
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2017年2月13日 下午3:03:24 xieyj
      * @history:
      */
     public void sendSmsOut(String mobile, String content, String bizType,
-            String companyCode);
+            String systemCode);
 
-    // public void sendSms(String systemCode,String )
+    /**
+     * 发送指定内容短信(系统和公司)
+     * @param mobile
+     * @param content
+     * @param bizType
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2017年2月13日 下午3:03:50 xieyj
+     * @history:
+     */
+    public void sendSmsOut(String mobile, String content, String bizType,
+            String companyCode, String systemCode);
 }

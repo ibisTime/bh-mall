@@ -470,16 +470,16 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','pro_location','2','热门','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'banner_location',' 广告图位置','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','banner_location','1','用户首页','admin',now(),'','CD-CZH000001');
+
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'merchant_kind','商家类型','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','1','美食','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','2','KTV','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','3','电影','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','4','酒店','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','5','休闲娱乐','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','6','汽车','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','8','足疗按摩','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','9','生活服务','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','10','旅游','admin',now(),'','CD-CZH000001');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','3','美发','admin',now(),'','CD-CZH000001');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','4','便利店','admin',now(),'','CD-CZH000001');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','5','足浴','admin',now(),'','CD-CZH000001');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','6','酒店','admin',now(),'','CD-CZH000001');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','7','亲子','admin',now(),'','CD-CZH000001');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_kind','8','蔬果','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'merchant_status','商户状态','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_status','0','待审核','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','merchant_status','1','已上架，关店','admin',now(),'','CD-CZH000001');

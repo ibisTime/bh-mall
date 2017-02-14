@@ -6,7 +6,6 @@ import com.std.user.ao.ICompanyAO;
 import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
-import com.std.user.common.PropertiesUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.Company;
 import com.std.user.domain.User;
@@ -44,20 +43,17 @@ public class XN805901 extends AProcessor {
                 res.setLoginName(user.getMobile());
             }
             res.setMobile(user.getMobile());
+            res.setNickname(user.getNickname());
             res.setOpenId(user.getOpenId());
-            res.setPhoto(PropertiesUtil.getProperty("PHOTO_URL"));
+            res.setPhoto(user.getPhoto());
             res.setStatus(user.getStatus());
             res.setLevel(user.getLevel());
             res.setKind(user.getKind());
             res.setUserReferee(user.getUserReferee());
             res.setRealName(user.getRealName());
             res.setSystemCode(user.getSystemCode());
-            res.setMobileFlag(EBoolean.YES.getCode());
-            if (StringUtils.isNotBlank(user.getIdNo())) {
-                res.setIdentityFlag(EBoolean.YES.getCode());
-            } else {
-                res.setIdentityFlag(EBoolean.NO.getCode());
-            }
+            res.setIdKind(user.getIdKind());
+            res.setIdNo(user.getIdNo());
             if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
                 res.setTradepwdFlag(EBoolean.YES.getCode());
             } else {

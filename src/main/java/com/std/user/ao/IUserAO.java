@@ -45,6 +45,15 @@ public interface IUserAO {
             String systemCode);
 
     /**
+     * 检查登录密码是否正确
+     * @param userId
+     * @param password 
+     * @create: 2017年2月12日 下午10:00:14 xieyj
+     * @history:
+     */
+    public void doCheckLoginPwd(String userId, String password);
+
+    /**
      * 注册
      * @param mobile
      * @param loginPwd
@@ -128,7 +137,7 @@ public interface IUserAO {
             String updater, String remark, String kind, String systemCode);
 
     /**
-     *  城市网代注册
+     * 城市网代注册
      * @param mobile
      * @param companyCode
      * @param userReferee

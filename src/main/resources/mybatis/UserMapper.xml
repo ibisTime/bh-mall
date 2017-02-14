@@ -329,7 +329,8 @@
 	<update id="update_mobile" parameterType="user">
 		UPDATE tstd_user
 		SET
-		 mobile = #{mobile}
+		login_name = #{mobile}
+		,mobile = #{mobile}
 		WHERE
 		user_id = #{userId}	
 	</update>
