@@ -1203,6 +1203,8 @@ public class UserAOImpl implements IUserAO {
         if (userRefeere != null) {
             userRefeere.setRefeereLevel(refeereLevel);
         }
+        UserExt userExt = userExtBO.getUserExt(userId);
+        userRefeere.setUserExt(userExt);
         return userRefeere;
     }
 
@@ -1211,6 +1213,8 @@ public class UserAOImpl implements IUserAO {
         if (CollectionUtils.isNotEmpty(userList)) {
             for (User user : userList) {
                 user.setRefeereLevel(refeereLevel);
+                UserExt userExt = userExtBO.getUserExt(user.getUserId());
+                user.setUserExt(userExt);
             }
         }
         return userList;

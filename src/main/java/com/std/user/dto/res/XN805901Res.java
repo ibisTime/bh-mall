@@ -63,6 +63,17 @@ public class XN805901Res {
     // 用户扩展信息
     private UserExt userExt;
 
+    // 实名认证
+    private String identityFlag;
+
+    public String getIdentityFlag() {
+        return identityFlag;
+    }
+
+    public void setIdentityFlag(String identityFlag) {
+        this.identityFlag = identityFlag;
+    }
+
     public String getNickname() {
         return nickname;
     }
