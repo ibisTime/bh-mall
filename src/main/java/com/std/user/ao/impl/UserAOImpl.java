@@ -1270,7 +1270,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void checkTradePwd(String userId, String tradePwd) {
+    public void doCheckTradePwd(String userId, String tradePwd) {
         userBO.checkTradePwd(userId, tradePwd);
     }
 

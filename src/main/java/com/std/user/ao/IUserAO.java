@@ -47,8 +47,8 @@ public interface IUserAO {
     /**
      * 检查登录密码是否正确
      * @param userId
-     * @param password 
-     * @create: 2017年2月12日 下午10:00:14 xieyj
+     * @param password
+     * @create: 2017年2月16日 下午2:09:08 xieyj
      * @history:
      */
     public void doCheckLoginPwd(String userId, String password);
@@ -548,7 +548,7 @@ public interface IUserAO {
      * @create: 2015年11月10日 上午9:16:42 myb858
      * @history:
      */
-    public void checkTradePwd(String userId, String tradePwd);
+    public void doCheckTradePwd(String userId, String tradePwd);
 
     /**
      * 发送短信
