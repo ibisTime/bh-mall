@@ -25,7 +25,7 @@ public class XN805151 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new XN805151Res(userAO.doThirdRegister(req.getOpenId(),
             req.getNickname(), req.getPhoto(), req.getGender(),
-            req.getCompanyCode()));
+            req.getCompanyCode(), req.getIsRegHx()));
     }
 
     @Override

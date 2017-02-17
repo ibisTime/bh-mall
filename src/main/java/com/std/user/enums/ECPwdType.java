@@ -5,10 +5,11 @@ package com.std.user.enums;
  * @since: 2015-3-7 上午8:41:50 
  * @history:
  */
-public enum EUserPwd {
-    InitPwd("888888", "初始化密码1"), InitPwd16("123456", "初始化密码2");
+public enum ECPwdType {
+    HX("1", "环信"), HX_FRONT("11", "环信前端"), QINIU("2", "七牛"), WEIXIN("3", "微信"), XIAOCX(
+            "4", "微信小程序");
 
-    EUserPwd(String code, String value) {
+    ECPwdType(String code, String value) {
         this.code = code;
         this.value = value;
     }

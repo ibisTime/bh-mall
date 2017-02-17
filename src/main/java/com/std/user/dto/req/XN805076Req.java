@@ -22,6 +22,17 @@ public class XN805076Req {
     // 是否区分不同商户（选填 1 区分，其他不区分）
     private String isMall;
 
+    // 是否注册环信 0或不传 否 1是(选填)
+    private String isRegHx;
+
+    public String getIsRegHx() {
+        return isRegHx;
+    }
+
+    public void setIsRegHx(String isRegHx) {
+        this.isRegHx = isRegHx;
+    }
+
     public String getMobile() {
         return mobile;
     }

@@ -60,6 +60,7 @@ import com.std.user.enums.EUserKind;
 import com.std.user.enums.EUserPwd;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
+import com.std.user.third.hx.impl.InstantMsgImpl;
 import com.std.user.util.RandomUtil;
 
 /** 
@@ -107,6 +108,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected ISignLogBO signLogBO;
+
+    @Autowired
+    protected InstantMsgImpl instantMsgImpl;
 
     @Override
     public void doCheckMobile(String mobile) {
@@ -176,7 +180,7 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode, String isMall) {
+            String companyCode, String isMall, String isRegHx) {
         // 验证手机号
         if (StringUtils.isNotBlank(isMall)
                 && EBoolean.YES.getCode().equals(isMall)) {
@@ -209,13 +213,16 @@ public class UserAOImpl implements IUserAO {
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode());
+        }
         return userId;
     }
 
     @Override
     @Transactional
     public String doThirdRegister(String openId, String nickname, String photo,
-            String gender, String companyCode) {
+            String gender, String companyCode, String isRegHx) {
         User condition = new User();
         condition.setOpenId(openId);
         long count = userBO.getTotalCount(condition);
@@ -243,6 +250,9 @@ public class UserAOImpl implements IUserAO {
         }
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender);
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode());
+        }
         return userId;
     }
 
@@ -403,7 +413,6 @@ public class UserAOImpl implements IUserAO {
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn702002", "登录名不存在");
         }
-
         condition.setLoginPwd(MD5Util.md5(loginPwd));
         List<User> userList2 = userBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {

@@ -78,13 +78,14 @@ public interface IUserAO {
      * @param smsCaptcha
      * @param companyCode
      * @param isMall 1 区分商户手机号
+     * @param isRegHx 是否注册环信 0或不传 否 1是
      * @return 
      * @create: 2016年11月24日 上午11:07:45 xieyj
      * @history:
      */
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode, String isMall);
+            String companyCode, String isMall, String isRegHx);
 
     /**
      * 代注册
@@ -141,12 +142,13 @@ public interface IUserAO {
      * @param photo
      * @param gender
      * @param companyCode
+     * @param isRegHx
      * @return 
-     * @create: 2016年11月22日 下午9:01:52 xieyj
+     * @create: 2017年2月16日 下午6:08:45 xieyj
      * @history:
      */
     public String doThirdRegister(String openId, String nickName, String photo,
-            String gender, String companyCode);
+            String gender, String companyCode, String isRegHx);
 
     /**
      * 用户登陆
