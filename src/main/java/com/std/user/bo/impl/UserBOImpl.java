@@ -338,6 +338,17 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
     }
 
+    @Override
+    public boolean isUserExist(String userId, String systemCode) {
+        User condition = new User();
+        condition.setUserId(userId);
+        condition.setSystemCode(systemCode);
+        if (userDAO.selectTotalCount(condition) > 0) {
+            return true;
+        }
+        return false;
+    }
+
     /** 
      * @see com.std.user.bo.IUserBO#checkUserReferee(java.lang.String)
      */
@@ -704,4 +715,5 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         return userId;
     }
+
 }

@@ -32,5 +32,6 @@
 	    <typeAlias alias="fieldTimes" type="com.std.user.domain.FieldTimes" />
 	    
 	    <typeAlias alias="coupon" type="com.std.user.domain.Coupon" />
+	    <typeAlias alias="blacklist" type="com.std.user.domain.Blacklist" />
 	</typeAliases>
 </configuration>	

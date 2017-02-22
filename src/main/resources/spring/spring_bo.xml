@@ -84,4 +84,8 @@
 	<bean id="couponBO" class="com.std.user.bo.impl.CouponBOImpl">
 		<property name="paginableDAO" ref="couponDAOImpl"/>
 	</bean>	
+	
+	<bean id="blacklistBO" class="com.std.user.bo.impl.BlacklistBOImpl">
+		<property name="paginableDAO" ref="blacklistDAOImpl"/>
+	</bean>	
 </beans>
