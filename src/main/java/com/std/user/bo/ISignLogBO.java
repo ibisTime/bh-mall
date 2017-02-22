@@ -34,4 +34,13 @@ public interface ISignLogBO extends IPaginableBO<SignLog> {
      * @history: 
      */
     public List<SignLog> querySignLogList(SignLog condition);
+
+    /**
+     * 获取连续签到天数
+     * @param userId
+     * @return 
+     * @create: 2017年2月21日 下午9:38:47 xieyj
+     * @history:
+     */
+    public Long getSerialsSignDays(String userId);
 }

@@ -70,4 +70,11 @@ public class SignLogAOImpl implements ISignLogAO {
         return signLogBO.getPaginable(start, limit, condition);
     }
 
+    /** 
+     * @see com.std.user.ao.ISignLogAO#getSerialsSignDays(java.lang.String)
+     */
+    @Override
+    public Long getSerialsSignDays(String userId) {
+        return signLogBO.getSerialsSignDays(userId);
+    }
 }

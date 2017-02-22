@@ -32,7 +32,19 @@ public class DateUtil {
 
     public static final String TIME_BEGIN = " 00:00:00";
 
-    public static final String TIME_END = " 23:59:59";;
+    public static final String TIME_END = " 23:59:59";
+
+    public static Date getStartDatetime(String startDate) {
+        Date repayDatetime = DateUtil.strToDate(
+            startDate + DateUtil.TIME_BEGIN, DateUtil.DATA_TIME_PATTERN_1);
+        return repayDatetime;
+    }
+
+    public static Date getEndDatetime(String endDate) {
+        Date repayDatetime = DateUtil.strToDate(endDate + DateUtil.TIME_END,
+            DateUtil.DATA_TIME_PATTERN_1);
+        return repayDatetime;
+    }
 
     public static Date getRelativeDate(Date startDate, int second) {
         Calendar calendar = Calendar.getInstance();
@@ -89,6 +101,17 @@ public class DateUtil {
         currentDate.set(Calendar.MINUTE, 59);
         currentDate.set(Calendar.SECOND, 59);
         return (Date) currentDate.getTime().clone();
+    }
+
+    public static Date getRelativeDateOfDays(Date startDate, int days) {
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(startDate);
+            calendar.add(Calendar.SECOND, days * 3600 * 24);
+            return calendar.getTime();
+        } catch (Exception e) {
+            return startDate;
+        }
     }
 
     /** 

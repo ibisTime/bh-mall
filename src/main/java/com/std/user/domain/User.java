@@ -139,6 +139,17 @@ public class User extends ABaseDO {
     // 推荐人等级
     private Integer refeereLevel;
 
+    // 连续天数
+    private Integer serialSignDays;
+
+    public Integer getSerialSignDays() {
+        return serialSignDays;
+    }
+
+    public void setSerialSignDays(Integer serialSignDays) {
+        this.serialSignDays = serialSignDays;
+    }
+
     public Integer getRefeereLevel() {
         return refeereLevel;
     }

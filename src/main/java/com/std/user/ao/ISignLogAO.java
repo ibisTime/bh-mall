@@ -45,4 +45,9 @@ public interface ISignLogAO {
      */
     public Paginable<SignLog> querySignLogPage(SignLog condition, int start,
             int limit);
+
+    /**
+     * 
+     */
+    public Long getSerialsSignDays(String userId);
 }
