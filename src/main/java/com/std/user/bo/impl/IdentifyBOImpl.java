@@ -7,8 +7,12 @@ import org.springframework.stereotype.Component;
 import com.std.user.bo.IIdentifyBO;
 import com.std.user.dto.req.XN798001Req;
 import com.std.user.dto.req.XN798006Req;
+import com.std.user.dto.req.XN798011Req;
+import com.std.user.dto.req.XN798012Req;
 import com.std.user.dto.res.XN798001Res;
 import com.std.user.dto.res.XN798006Res;
+import com.std.user.dto.res.XN798011Res;
+import com.std.user.dto.res.XN798012Res;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
 
@@ -60,5 +64,31 @@ public class IdentifyBOImpl implements IIdentifyBO {
             // }
         }
 
+    }
+
+    @Override
+    public XN798011Res doZhimaVerify(String systemCode, String companyCode,
+            String userId, String idKind, String idNo, String realName) {
+        XN798011Req req = new XN798011Req();
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(companyCode);
+        req.setUserId(userId);
+        req.setRealName(realName);
+        req.setIdKind(idKind);
+        req.setIdNo(idNo);
+        req.setRemark("芝麻人脸识别认证");
+        return BizConnecter.getBizData("798011", JsonUtils.object2Json(req),
+            XN798011Res.class);
+    }
+
+    @Override
+    public XN798012Res doZhimaQuery(String systemCode, String companyCode,
+            String bizNo) {
+        XN798012Req req = new XN798012Req();
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(companyCode);
+        req.setBizNo(bizNo);
+        return BizConnecter.getBizData("798012", JsonUtils.object2Json(req),
+            XN798012Res.class);
     }
 }

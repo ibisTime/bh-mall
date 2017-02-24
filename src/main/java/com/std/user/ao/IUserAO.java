@@ -273,6 +273,28 @@ public interface IUserAO {
             String realName, String cardNo, String bindMobile);
 
     /**
+     * 芝麻认证
+     * @param userId
+     * @param idKind
+     * @param idNo
+     * @param realName 
+     * @create: 2017年2月24日 下午4:46:14 haiqingzheng
+     * @history:
+     */
+    public Object doZhimaIdentify(String userId, String idKind, String idNo,
+            String realName);
+
+    /**
+     * 芝麻认证查询
+     * @param userId
+     * @param bizNo
+     * @return 
+     * @create: 2017年2月24日 下午4:54:35 haiqingzheng
+     * @history:
+     */
+    public Object doZhimaQuery(String userId, String bizNo);
+
+    /**
      * 修改真实姓名
      * @param userId
      * @param realName 

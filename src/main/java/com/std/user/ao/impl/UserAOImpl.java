@@ -50,6 +50,8 @@ import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
+import com.std.user.dto.res.XN798011Res;
+import com.std.user.dto.res.XN798012Res;
 import com.std.user.dto.res.XN805154Res;
 import com.std.user.dto.res.XN805155Res;
 import com.std.user.enums.EAccountType;
@@ -770,6 +772,41 @@ public class UserAOImpl implements IUserAO {
         // 回写Account表realName;
         accountBO.refreshRealName(user.getUserId(), realName,
             user.getSystemCode());
+    }
+
+    @Override
+    public Object doZhimaIdentify(String userId, String idKind, String idNo,
+            String realName) {
+        User user = userBO.getUser(userId, null);
+        // 芝麻认证 有两种结果：如果本地有记录，返回成功；如果本地无记录，返货芝麻认证所需信息
+        XN798011Res res = dentifyBO.doZhimaVerify(user.getSystemCode(),
+            user.getSystemCode(), userId, idKind, idNo, realName);
+        // 如果直接返回成功
+        if (res.isSuccess()) {
+            // 更新用户表
+            userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+                idNo);
+            // 回写Account表realName;
+            accountBO.refreshRealName(user.getUserId(), realName,
+                user.getSystemCode());
+        }
+        return res;
+    }
+
+    @Override
+    public Object doZhimaQuery(String userId, String bizNo) {
+        User user = userBO.getUser(userId, null);
+        XN798012Res res = dentifyBO.doZhimaQuery(user.getSystemCode(),
+            user.getSystemCode(), bizNo);
+        if (res.isSuccess()) {
+            // 更新用户表
+            userBO.refreshIdentity(userId, res.getRealName(), res.getIdKind(),
+                res.getIdNo());
+            // 回写Account表realName;
+            accountBO.refreshRealName(user.getUserId(), res.getRealName(),
+                user.getSystemCode());
+        }
+        return res;
     }
 
     @Override
@@ -1598,4 +1635,5 @@ public class UserAOImpl implements IUserAO {
             userBO.refreshUserSupple(data);
         }
     }
+
 }
