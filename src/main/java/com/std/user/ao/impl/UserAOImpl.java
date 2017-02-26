@@ -190,14 +190,12 @@ public class UserAOImpl implements IUserAO {
             instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd.getCode(),
                 systemCode);
         }
-        // 分配账号(人民币和虚拟币)
+        // 分配账号
         if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
                 currencyList.add(ECurrency.FRB.getCode());
-                currencyList.add(ECurrency.CNY.getCode());
             } else {
-                currencyList.add(ECurrency.CNY.getCode());
                 currencyList.add(ECurrency.FRB.getCode());
                 currencyList.add(ECurrency.GXJL.getCode());
                 currencyList.add(ECurrency.QBB.getCode());
@@ -354,7 +352,6 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.FRB.getCode());
             currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
@@ -1239,9 +1236,9 @@ public class UserAOImpl implements IUserAO {
         User userRefeere = userBO.getUser(userId);
         if (userRefeere != null) {
             userRefeere.setRefeereLevel(refeereLevel);
+            UserExt userExt = userExtBO.getUserExt(userId);
+            userRefeere.setUserExt(userExt);
         }
-        UserExt userExt = userExtBO.getUserExt(userId);
-        userRefeere.setUserExt(userExt);
         return userRefeere;
     }
 

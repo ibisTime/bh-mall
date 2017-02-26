@@ -68,21 +68,38 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog> implements
     @Override
     public Long getSerialsSignDays(String userId) {
         Date today = DateUtil.getTodayStart();
+        Date yesterday = DateUtil.getRelativeDateOfDays(today, -1);
         Long serialsDays = 0L;
         while (true) {
-            SignLog condition = new SignLog();
-            condition.setUserId(userId);
-            condition.setSignDatetimeStart(today);
-            condition.setSignDatetimeEnd(DateUtil.getRelativeDateOfDays(today,
-                1));
-            List<SignLog> list = signLogDAO.selectList(condition);
-            if (!CollectionUtils.sizeIsEmpty(list)) {
+            if (querySignLogList(userId, yesterday)) {
                 serialsDays++;
             } else {
                 break;
             }
-            today = DateUtil.getRelativeDateOfDays(today, -1);
+            yesterday = DateUtil.getRelativeDateOfDays(yesterday, -1);
+        }
+        if (querySignLogList(userId, today)) {
+            serialsDays++;
         }
         return serialsDays;
+    }
+
+    /** 
+     * @param userId
+     * @param today
+     * @return 
+     * @create: 2017年2月23日 下午4:37:08 xieyj
+     * @history: 
+     */
+    private boolean querySignLogList(String userId, Date today) {
+        SignLog condition = new SignLog();
+        condition.setUserId(userId);
+        condition.setSignDatetimeStart(today);
+        condition.setSignDatetimeEnd(DateUtil.getRelativeDateOfDays(today, 1));
+        List<SignLog> list = signLogDAO.selectList(condition);
+        if (!CollectionUtils.sizeIsEmpty(list)) {
+            return true;
+        }
+        return false;
     }
 }

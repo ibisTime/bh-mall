@@ -22,3 +22,4 @@ truncate tsys_dict;
 truncate tsys_menu;
 truncate tsys_menu_role;
 truncate tsys_role;
+truncate tstd_blacklist;

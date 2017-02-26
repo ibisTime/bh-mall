@@ -383,8 +383,6 @@ CREATE TABLE `tstd_user` (
   `jpush_id` varchar(255) DEFAULT NULL COMMENT '极光ID',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
-  `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
-  `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`user_id`)
@@ -507,6 +505,19 @@ CREATE TABLE `tsys_role` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tstd_blacklist` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '拉黑类型',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态 0-已删除 1-已生效',
+  `create_datetime` datetime DEFAULT NULL COMMENT '拉黑时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` varchar(45) DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
