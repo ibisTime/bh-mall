@@ -194,8 +194,10 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
+                currencyList.add(ECurrency.CNY.getCode());
                 currencyList.add(ECurrency.FRB.getCode());
             } else {
+                currencyList.add(ECurrency.CNY.getCode());
                 currencyList.add(ECurrency.FRB.getCode());
                 currencyList.add(ECurrency.GXJL.getCode());
                 currencyList.add(ECurrency.QBB.getCode());
@@ -352,6 +354,7 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.FRB.getCode());
             currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
