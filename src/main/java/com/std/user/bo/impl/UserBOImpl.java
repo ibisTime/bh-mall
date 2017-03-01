@@ -563,4 +563,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             .getToday(DateUtil.DB_DATE_FORMAT_STRING));
         aJourDAO.insert(accountJour);
     }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#refreshCompany(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void refreshCompany(String userId, String companyCode) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setCompanyCode(companyCode);
+        userDAO.updateCompany(data);
+    }
 }

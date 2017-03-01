@@ -137,4 +137,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshAmount(String accountNumber, Long transAmount,
             String refNo, EBizType bizType, String remark);
+
+    public void refreshCompany(String userId, String companyCode);
 }

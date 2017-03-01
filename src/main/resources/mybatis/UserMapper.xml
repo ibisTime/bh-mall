@@ -374,4 +374,12 @@
 		WHERE
 		user_id = #{userId}		
 	</update>
+	
+	<update id="update_user_company" parameterType="user">
+		UPDATE tstd_user
+		SET
+		company_code = #{companyCode}
+		WHERE
+		user_id = #{userId}		
+	</update>
 </mapper>

@@ -985,4 +985,12 @@ public class UserAOImpl implements IUserAO {
             userBO.refreshAmount(toUser, transAmount, refNo, toBizType, remark);
         }
     }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#changeCompany(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void changeCompany(String userId, String companyCode) {
+        userBO.refreshCompany(userId, companyCode);
+    }
 }

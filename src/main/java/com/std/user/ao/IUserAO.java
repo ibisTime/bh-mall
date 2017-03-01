@@ -501,4 +501,13 @@ public interface IUserAO {
      */
     public void doTransferAdd(String fromUser, String toUser, Long amount,
             String remark, String refNo);
+
+    /**
+     * 更改公司编号
+     * @param userId
+     * @param companyCode 
+     * @create: 2017年3月1日 下午4:55:10 xieyj
+     * @history:
+     */
+    public void changeCompany(String userId, String companyCode);
 }
