@@ -502,6 +502,23 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
     }
 
+    /** 
+     * @see com.std.user.bo.IUserBO#checkIdentify(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void checkIdentify(String idKind, String idNo, String realName) {
+        User condition = new User();
+        condition.setIdKind(idKind);
+        condition.setIdNo(idNo);
+        condition.setRealName(realName);
+        List<User> userList = userDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(userList)) {
+            User user = userList.get(0);
+            throw new BizException("xn000001", "用户[" + user.getMobile()
+                    + "]已使用该身份信息，请重新填写");
+        }
+    }
+
     @Override
     public String doAddUser(String loginName, String mobile, String loginPsd,
             String userReferee, String realName, String idKind, String idNo,
@@ -514,6 +531,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
             user.setUserId(userId);
             user.setLoginName(loginName);
+            user.setNickname(userId.substring(userId.length() - 8,
+                userId.length()));
             user.setLoginPwd(MD5Util.md5(loginPsd));
             if (StringUtils.isNotBlank(loginPsd)) {
                 user.setLoginPwdStrength(PwdUtil
@@ -715,5 +734,4 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         return userId;
     }
-
 }

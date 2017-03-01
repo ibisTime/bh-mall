@@ -413,7 +413,7 @@ public class UserAOImpl implements IUserAO {
                     currencyList.add(ECurrency.HBB.getCode());
                     currencyList.add(ECurrency.HBYJ.getCode());
                 }
-                accountBO.distributeAccountList(userId, mobile,
+                accountBO.distributeAccountList(userId, realName,
                     getAccountType(kind), currencyList, systemCode);
                 // 注册环信
                 instantMsgImpl.doRegisterUser(userId,
@@ -778,6 +778,8 @@ public class UserAOImpl implements IUserAO {
     public Object doZhimaIdentify(String userId, String idKind, String idNo,
             String realName) {
         User user = userBO.getUser(userId, null);
+        // 判断库中是否有该记录
+        userBO.checkIdentify(idKind, idNo, realName);
         // 芝麻认证 有两种结果：如果本地有记录，返回成功；如果本地无记录，返货芝麻认证所需信息
         XN798011Res res = dentifyBO.doZhimaVerify(user.getSystemCode(),
             user.getSystemCode(), userId, idKind, idNo, realName);

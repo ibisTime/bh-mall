@@ -93,7 +93,7 @@
 				AND t.id_no = #{idNo}
 			</if>
 			<if test="realName != null and realName != '' ">
-				AND t.real_name like "%"#{realName}"%"
+				AND t.real_name = #{realName}
 			</if>
 			<if test="realNameForLikeQuery != null and realNameForLikeQuery != '' ">
 				AND t.real_name like "%"#{realNameForLikeQuery}"%"

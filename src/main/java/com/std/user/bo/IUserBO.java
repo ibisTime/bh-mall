@@ -91,6 +91,16 @@ public interface IUserBO extends IPaginableBO<User> {
     public void checkLoginPwd(String userId, String loginPwd, String alertStr);
 
     /**
+     * 校验是否已经有人实名认证
+     * @param idKind
+     * @param idNo
+     * @param realName 
+     * @create: 2017年2月28日 下午6:32:18 xieyj
+     * @history:
+     */
+    public void checkIdentify(String idKind, String idNo, String realName);
+
+    /**
      * 判断登录名是否存在
      * @param loginName
      * @param kind
