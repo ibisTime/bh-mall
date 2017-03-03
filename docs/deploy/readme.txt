@@ -11,11 +11,11 @@
 
 部署步骤：
 1、包上传
-scp -P57652 ./std-user.war root@121.43.101.148:/home
+scp -P22 ./std-user.war root@121.43.101.148:/home
 T6dh%$%$ss1
   
 2，部署
-  ssh root@121.43.101.148 -p 57652
+  ssh root@121.43.101.148 -p 22
   
   cd /home/wwwroot/caigo/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .

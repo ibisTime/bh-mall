@@ -260,7 +260,8 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf, String roleCode) {
+            String remark, String kind, String pdf, String roleCode,
+            String isRegHx) {
         String userId = null;
         // 插入用户信息
         String loginPsd = EUserPwd.InitPwd.getCode();
@@ -344,6 +345,10 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccount(userId, realName,
                 ECurrency.XNB.getCode());
         }
+        // 是则注册环信用户
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode());
+        }
         return userId;
     }
 
@@ -389,6 +394,8 @@ public class UserAOImpl implements IUserAO {
             aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
                 ERuleType.ZC.getValue());
         }
+        // 环信代注册
+        instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode());
         // 新增扩展信息
         userExtBO.saveUserExt(userId);
         // 发送短信
@@ -404,7 +411,7 @@ public class UserAOImpl implements IUserAO {
         if (EUserKind.F1.getCode().equals(kind)) {
             condition.setLoginName(loginName);
             condition.setLoginType(ELoginType.ALL.getCode());
-            condition.setKind(kind);
+            // condition.setKind(kind);
             condition.setCompanyCode(companyCode);
         } else {
             condition.setLoginName(loginName);
@@ -987,10 +994,10 @@ public class UserAOImpl implements IUserAO {
     }
 
     /** 
-     * @see com.std.user.ao.IUserAO#changeCompany(java.lang.String, java.lang.String)
+     * @see com.std.user.ao.IUserAO#doChangeCompany(java.lang.String, java.lang.String)
      */
     @Override
-    public void changeCompany(String userId, String companyCode) {
+    public void doChangeCompany(String userId, String companyCode) {
         userBO.refreshCompany(userId, companyCode);
     }
 }

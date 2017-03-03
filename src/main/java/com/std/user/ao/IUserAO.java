@@ -100,13 +100,15 @@ public interface IUserAO {
      * @param kind
      * @param pdf
      * @param roleCode
+     * @param isRegHx
      * @return 
-     * @create: 2016年11月30日 下午8:19:03 xieyj
+     * @create: 2017年3月2日 下午5:42:19 xieyj
      * @history:
      */
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf, String roleCode);
+            String remark, String kind, String pdf, String roleCode,
+            String isRegHx);
 
     /**
      * 代注册
@@ -509,5 +511,5 @@ public interface IUserAO {
      * @create: 2017年3月1日 下午4:55:10 xieyj
      * @history:
      */
-    public void changeCompany(String userId, String companyCode);
+    public void doChangeCompany(String userId, String companyCode);
 }

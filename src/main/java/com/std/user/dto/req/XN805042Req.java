@@ -34,6 +34,17 @@ public class XN805042Req {
     // 角色编号(选填)
     private String roleCode;
 
+    // 是否注册环信(选填)
+    private String isRegHx;
+
+    public String getIsRegHx() {
+        return isRegHx;
+    }
+
+    public void setIsRegHx(String isRegHx) {
+        this.isRegHx = isRegHx;
+    }
+
     public String getRoleCode() {
         return roleCode;
     }
