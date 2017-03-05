@@ -21,17 +21,18 @@ public class IdentifyBOImpl implements IIdentifyBO {
     static Logger logger = Logger.getLogger(IdentifyBOImpl.class);
 
     @Override
-    public void doIdentify(String userId, String realName, String idKind,
-            String idNo) {
+    public void doIdentify(String systemCode, String companyCode,
+            String userId, String realName, String idKind, String idNo) {
         if (StringUtils.isNotBlank(realName)) {
             // try {
             XN798001Req req = new XN798001Req();
-            req.setSystemId("1");
+            req.setSystemCode(systemCode);
+            req.setCompanyCode(companyCode);
             req.setUserId(userId);
             req.setRealName(realName);
             req.setIdKind(idKind);
             req.setIdNo(idNo);
-            req.setRemark("来自雄牛账户体系的实名认证");
+            req.setRemark("二要素实名认证");
             BizConnecter.getBizData("798001", JsonUtils.object2Json(req),
                 XN798001Res.class);
             // } catch (Exception e) {
