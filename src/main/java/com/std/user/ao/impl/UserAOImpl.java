@@ -750,8 +750,10 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doIdentify(String userId, String idKind, String idNo,
             String realName) {
+        User user = userBO.getUser(userId, null);
         // 三方认证
-        dentifyBO.doIdentify(userId, realName, idKind, idNo);
+        dentifyBO.doIdentify(user.getSystemCode(), user.getCompanyCode(),
+            userId, realName, idKind, idNo);
         // 更新用户表
         userBO
             .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
@@ -842,8 +844,10 @@ public class UserAOImpl implements IUserAO {
     public void doIdentifySetTradePwd(String userId, String idKind,
             String idNo, String realName, String tradePwd,
             String tradePwdStrength, String smsCaptcha) {
+        User user = userBO.getUser(userId, null);
         // 三方认证
-        dentifyBO.doIdentify(userId, realName, idKind, idNo);
+        dentifyBO.doIdentify(user.getSystemCode(), user.getCompanyCode(),
+            userId, realName, idKind, idNo);
         // 更新用户表
         userBO
             .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
@@ -852,7 +856,7 @@ public class UserAOImpl implements IUserAO {
 
         // 开始支付密码设置
         // 判断是否和登录密码重复
-        User user = this.doGetUser(userId);
+        user = this.doGetUser(userId);
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805046",
             user.getSystemCode());
