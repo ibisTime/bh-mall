@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ISignLogAO;
+import com.std.user.bo.IAccountBO;
 import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.IUserBO;
@@ -15,6 +16,7 @@ import com.std.user.common.DateUtil;
 import com.std.user.domain.SignLog;
 import com.std.user.domain.User;
 import com.std.user.dto.res.XN805100Res;
+import com.std.user.dto.res.XN805104Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
@@ -31,6 +33,9 @@ public class SignLogAOImpl implements ISignLogAO {
 
     @Autowired
     private IRuleBO ruleBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
     @Transactional
@@ -76,5 +81,29 @@ public class SignLogAOImpl implements ISignLogAO {
     @Override
     public Long getSerialsSignDays(String userId) {
         return signLogBO.getSerialsSignDays(userId);
+    }
+
+    /** 
+     * @see com.std.user.ao.ISignLogAO#sign(java.lang.String, java.lang.String)
+     */
+    @Override
+    public XN805104Res sign(String userId, String location) {
+        return null;
+        // User user = userBO.getUser(userId);
+        // // 判断是否已经签到
+        // Boolean result = signLogBO.isSignToday(userId);
+        // if (result) {
+        // throw new BizException("XN000000", "今日已签到，请明日再来哦");
+        // }
+        // // 添加签到记录
+        // String code = signLogBO.saveSignLog(userId, location,
+        // user.getSystemCode());
+        // // 签到送钱
+        // Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
+        // user.getLevel());
+        // accountBO.
+        // userBO.refreshAmount(userId, amount, code, EBizType.AJ_SR,
+        // ERuleType.MRQD.getValue());
+        // return new XN805100Res(code, amount);
     }
 }
