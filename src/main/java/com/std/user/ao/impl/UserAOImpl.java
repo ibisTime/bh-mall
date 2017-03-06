@@ -908,6 +908,37 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
+    public void doChangeMoblie(String userId, String newMobile,
+            String smsCaptcha) {
+        User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("xn000000", "用户不存在");
+        }
+        String oldMobile = user.getMobile();
+        if (newMobile.equals(oldMobile)) {
+            throw new BizException("xn000000", "新手机与原手机一致");
+        }
+        // 验证手机号
+        userBO.isMobileExist(newMobile, user.getKind(), user.getCompanyCode(),
+            user.getSystemCode());
+        // 短信验证码是否正确（往新手机号发送）
+        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805047",
+            user.getSystemCode());
+        userBO.refreshMobile(userId, newMobile);
+        // 发送短信
+        smsOutBO.sendSmsOut(
+            oldMobile,
+            "尊敬的"
+                    + PhoneUtil.hideMobile(oldMobile)
+                    + "用户，您于"
+                    + DateUtil.dateToStr(new Date(),
+                        DateUtil.DATA_TIME_PATTERN_1)
+                    + "提交的更改绑定手机号码服务已审核通过，现绑定手机号码为" + newMobile
+                    + "，请妥善保管您的账户相关信息。", "805047", user.getSystemCode());
+    }
+
+    @Override
     public void doBindMoblie(String userId, String mobile, String smsCaptcha,
             String companyCode) {
         User user = userBO.getUser(userId);
@@ -918,7 +949,7 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "手机号已经绑定，无需再次操作");
         }
         // 验证手机号
-        userBO.isMobileExist(mobile, null, companyCode);
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode);
         // 短信验证码是否正确（往手机号发送）
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805153", companyCode,
             user.getSystemCode());
