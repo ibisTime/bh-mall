@@ -1,7 +1,9 @@
 package com.std.user.ao.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -142,6 +144,37 @@ public class CompanyAOImpl implements ICompanyAO {
         List<Company> list = companyBO.queryCompanyList(condition);
         // 将结果按首字母排序
         return sortByFirstLetter(list);
+    }
+
+    @Override
+    public Map<String, List<Company>> queryCompanyGroupList(Company condition) {
+        List<Company> list = companyBO.queryCompanyList(condition);
+        return orderName(list);
+    }
+
+    /** 
+     * @param list
+     * @return 
+     * @create: 2017年3月6日 下午7:24:04 xieyj
+     * @history: 
+     */
+    private Map<String, List<Company>> orderName(List<Company> list) {
+        Map<String, List<Company>> resultMap = new LinkedHashMap<String, List<Company>>();
+        char[] alphatableb = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                'V', 'W', 'X', 'Y', 'Z' };
+        for (int i = 0; i < alphatableb.length; i++) {
+            List<Company> groupList = new ArrayList<Company>();
+            for (Company company : list) {
+                if (PinYin.cn2py(company.getName()).charAt(0) == alphatableb[i] + 32) {
+                    groupList.add(company);
+                }
+            }
+            if (groupList.size() != 0) {
+                resultMap.put(alphatableb[i] + "", groupList);
+            }
+        }
+        return resultMap;
     }
 
     // 将结果按首字母排序
@@ -328,5 +361,4 @@ public class CompanyAOImpl implements ICompanyAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "806009");
         companyBO.refreshCompanyPsw(company.getCode(), newPassword);
     }
-
 }

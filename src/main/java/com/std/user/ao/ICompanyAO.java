@@ -1,6 +1,7 @@
 package com.std.user.ao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Company;
@@ -37,6 +38,8 @@ public interface ICompanyAO {
             Company condition);
 
     public List<Company> queryCompanyList(Company condition);
+
+    public Map<String, List<Company>> queryCompanyGroupList(Company condition);
 
     // 通过省市区来查询公司信息
     public Company getCompanyByPCA(String province, String city, String area);

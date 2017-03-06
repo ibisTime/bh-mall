@@ -7,6 +7,7 @@ import com.std.user.dto.req.XN806004Req;
 import com.std.user.dto.req.XN806005Req;
 import com.std.user.dto.req.XN806013Req;
 import com.std.user.dto.req.XN806014Req;
+import com.std.user.dto.req.XN806017Req;
 
 public class CompanyConverter {
 
@@ -125,6 +126,23 @@ public class CompanyConverter {
 
     // 列表查询公司信息
     public static Company converter(XN806013Req req) {
+        Company result = new Company();
+        result.setCode(req.getCode());
+        result.setType(req.getType());
+        result.setNameForQuery(req.getName());
+        result.setAbbrNameForQuery(req.getAbbrName());
+        result.setProvinceForQuery(req.getProvince());
+        result.setCityForQuery(req.getCity());
+        result.setAreaForQuery(req.getArea());
+        result.setUserId(req.getUserId());
+        result.setLocation(req.getLocation());
+        result.setIsDefault(req.getIsDefault());
+        result.setIsHot(req.getIsHot());
+        return result;
+    }
+
+    // 列表查询公司信息
+    public static Company converter(XN806017Req req) {
         Company result = new Company();
         result.setCode(req.getCode());
         result.setType(req.getType());
