@@ -344,6 +344,9 @@ public interface IUserAO {
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha, String tradePwd, String isMall);
 
+    public void doChangeMoblie(String userId, String newMobile,
+            String smsCaptcha);
+
     /**
      * 绑定手机号
      * @param userId
