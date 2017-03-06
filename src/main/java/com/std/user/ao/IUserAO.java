@@ -542,6 +542,16 @@ public interface IUserAO {
     public User doGetUser(String userId);
 
     /**
+     * 查询用户详情(对外开放)
+     * @param userId
+     * @param systemCode
+     * @return 
+     * @create: 2017年3月6日 上午11:53:51 xieyj
+     * @history:
+     */
+    public User doGetDetailUser(String userId, String systemCode);
+
+    /**
      * 根据手机号，种类，公司编号，系统编号获取用户编号
      * @param mobile
      * @param kind

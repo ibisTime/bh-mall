@@ -1184,16 +1184,6 @@ public class UserAOImpl implements IUserAO {
         for (User user : list) {
             UserExt userExt = userExtBO.getUserExt(user.getUserId());
             user.setUserExt(userExt);
-            if (EBoolean.YES.getCode().equals(condition.getIsGetAmount())) {
-                // XN802013Res res =
-                // accountBO.getAccountDetail(user.getUserId(),
-                // ECurrency.XNB.getCode());
-                // if (res != null) {
-                // user.setAmount(res.getAmount());
-                // } else {
-                // user.setAmount(0L);
-                // }
-            }
         }
         return page;
     }
@@ -1642,4 +1632,23 @@ public class UserAOImpl implements IUserAO {
         }
     }
 
+    /** 
+     * @see com.std.user.ao.IUserAO#doGetDetailUser(java.lang.String, java.lang.String)
+     */
+    @Override
+    public User doGetDetailUser(String userId, String systemCode) {
+        User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("li01004", userId + "用户不存在");
+        } else {
+            User userReferee = userBO.getUser(user.getUserReferee());
+            if (userReferee != null) {
+                user.setUserRefereeName(userReferee.getLoginName());
+            }
+            // 获取用户扩展信息
+            UserExt userExt = userExtBO.getUserExt(userId);
+            user.setUserExt(userExt);
+        }
+        return user;
+    }
 }
