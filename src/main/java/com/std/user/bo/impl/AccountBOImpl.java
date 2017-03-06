@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import com.std.user.bo.IAccountBO;
 import com.std.user.dto.req.XN802450Req;
 import com.std.user.dto.req.XN802451Req;
+import com.std.user.dto.req.XN802517Req;
+import com.std.user.enums.EBizType;
+import com.std.user.enums.ECurrency;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
 
@@ -54,4 +57,23 @@ public class AccountBOImpl implements IAccountBO {
         BizConnecter.getBizData("802451", JsonUtils.object2Json(req),
             Object.class);
     }
+
+    @Override
+    public void doTransferAmount(String systemCode, String fromUserId,
+            String toUserId, Long amount, ECurrency currency, EBizType bizType) {
+        if (amount != null && amount != 0) {
+            XN802517Req req = new XN802517Req();
+            req.setSystemCode(systemCode);
+            req.setFromUserId(fromUserId);
+            req.setToUserId(toUserId);
+            req.setTransAmount(String.valueOf(amount));
+
+            req.setCurrency(currency.getCode());
+            req.setBizType(bizType.getCode());
+            req.setBizNote(bizType.getValue());
+            BizConnecter.getBizData("802517", JsonUtils.object2Json(req),
+                Object.class);
+        }
+    }
+
 }

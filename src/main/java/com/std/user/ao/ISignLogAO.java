@@ -5,7 +5,7 @@ import java.util.List;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.SignLog;
 import com.std.user.dto.res.XN805100Res;
-import com.std.user.dto.res.XN805104Res;
+import com.std.user.dto.res.XN805931Res;
 
 /** 
  * 签到AO
@@ -35,7 +35,7 @@ public interface ISignLogAO {
      * @create: 2016年10月22日 上午12:14:56 xieyj
      * @history:
      */
-    public XN805104Res sign(String userId, String location);
+    public XN805931Res signToday(String userId, String location, Long amount);
 
     /** 
      * 列表查询签到记录

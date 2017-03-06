@@ -16,10 +16,12 @@ import com.std.user.common.DateUtil;
 import com.std.user.domain.SignLog;
 import com.std.user.domain.User;
 import com.std.user.dto.res.XN805100Res;
-import com.std.user.dto.res.XN805104Res;
+import com.std.user.dto.res.XN805931Res;
 import com.std.user.enums.EBizType;
+import com.std.user.enums.ECurrency;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
+import com.std.user.enums.ESysUser;
 import com.std.user.exception.BizException;
 
 @Service
@@ -83,27 +85,21 @@ public class SignLogAOImpl implements ISignLogAO {
         return signLogBO.getSerialsSignDays(userId);
     }
 
-    /** 
-     * @see com.std.user.ao.ISignLogAO#sign(java.lang.String, java.lang.String)
-     */
     @Override
-    public XN805104Res sign(String userId, String location) {
-        return null;
-        // User user = userBO.getUser(userId);
-        // // 判断是否已经签到
-        // Boolean result = signLogBO.isSignToday(userId);
-        // if (result) {
-        // throw new BizException("XN000000", "今日已签到，请明日再来哦");
-        // }
-        // // 添加签到记录
-        // String code = signLogBO.saveSignLog(userId, location,
-        // user.getSystemCode());
-        // // 签到送钱
-        // Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
-        // user.getLevel());
-        // accountBO.
-        // userBO.refreshAmount(userId, amount, code, EBizType.AJ_SR,
-        // ERuleType.MRQD.getValue());
-        // return new XN805100Res(code, amount);
+    public XN805931Res signToday(String userId, String location, Long amount) {
+        User user = userBO.getUser(userId);
+        // 判断是否已经签到
+        Boolean result = signLogBO.isSignToday(userId);
+        if (result) {
+            throw new BizException("XN000000", "今日已签到，请明日再来哦");
+        }
+        // 添加签到记录
+        String code = signLogBO.saveSignLog(userId, location,
+            user.getSystemCode());
+        // 账户资金划拨
+        accountBO.doTransferAmount(user.getSystemCode(), userId,
+            ESysUser.SYS_USER.getCode(), amount, ECurrency.XNB,
+            EBizType.AJ_SIGN);
+        return new XN805931Res(code, amount);
     }
 }

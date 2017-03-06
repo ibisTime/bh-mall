@@ -10,6 +10,9 @@ package com.std.user.bo;
 
 import java.util.List;
 
+import com.std.user.enums.EBizType;
+import com.std.user.enums.ECurrency;
+
 /**
  * @author: xieyj 
  * @since: 2016年12月24日 下午1:24:08 
@@ -53,4 +56,18 @@ public interface IAccountBO {
      */
     public void refreshRealName(String userId, String realName,
             String systemCode);
+
+    /**
+     * 账户之间转账
+     * @param fromUserId 从谁
+     * @param toUserId 到谁
+     * @param amount 支付多少钱
+     * @param currency 什么币种
+     * @param bizType 因为什么
+     * @return 
+     * @create: 2017年2月26日 下午2:11:24 myb858
+     * @history:
+     */
+    public void doTransferAmount(String systemCode, String fromUserId,
+            String toUserId, Long amount, ECurrency currency, EBizType bizType);
 }

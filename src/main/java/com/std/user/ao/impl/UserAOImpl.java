@@ -1511,6 +1511,96 @@ public class UserAOImpl implements IUserAO {
         return userId;
     }
 
+    @Override
+    public String doLoginWeChat(String code, Long amount, String companyCode,
+            String systemCode) {
+        String userId = "";
+        String appId = "";
+        String appSecret = "";
+        CPassword condition = new CPassword();
+        condition.setType("3");
+        condition.setAccount("ACCESS_KEY");
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<CPassword> result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信公众号appId配置获取失败，请检查配置");
+        }
+        appId = result.get(0).getPassword();
+        condition.setAccount("SECRET_KEY");
+        result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信公众号appSecret配置获取失败，请检查配置");
+        }
+        appSecret = result.get(0).getPassword();
+
+        // Step2：通过Authorization Code获取Access Token
+        String accessToken = "";
+        Map<String, String> res = new HashMap<>();
+        Properties formProperties = new Properties();
+        formProperties.put("grant_type", "authorization_code");
+        formProperties.put("appid", appId);
+        formProperties.put("secret", appSecret);
+        formProperties.put("code", code);
+        System.out.println(appId + " " + appSecret + " " + code);
+        String response;
+        try {
+            response = PostSimulater.requestPostForm(
+                WechatConstant.WX_TOKEN_URL, formProperties);
+            res = getMapFromResponse(response);
+            System.out.println(res);
+            accessToken = (String) res.get("access_token");
+            if (res.get("error") != null || StringUtils.isBlank(accessToken)) {
+                throw new BizException("XN000000", "获取accessToken失败");
+            }
+            // Step3：使用Access Token来获取用户的OpenID
+            String openId = (String) res.get("openid");
+            // 获取unionid
+            Map<String, String> wxRes = new HashMap<>();
+            Properties queryParas = new Properties();
+            queryParas.put("access_token", accessToken);
+            queryParas.put("openid", openId);
+            queryParas.put("lang", "zh_CN");
+            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WX_USER_INFO_URL, queryParas));
+            System.out.println(wxRes);
+            String unionid = (String) wxRes.get("unionid");
+            if (StringUtils.isEmpty(unionid)) {
+                unionid = (String) wxRes.get("openid");
+            }
+            // Step4：根据openId从数据库中查询用户信息（user）
+            User userCondition = new User();
+            userCondition.setOpenId(unionid);
+            List<User> users = userBO.queryUserList(userCondition);
+
+            if (!CollectionUtils.isEmpty(users)) {
+                // Step4-1：如果user存在，说明用户授权登录过，直接登录
+                User user = users.get(0);
+                if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                    throw new BizException("10002", "用户被锁定");
+                }
+                userId = user.getUserId();
+            } else {
+                String name = (String) wxRes.get("nickname");
+                String headimgurl = (String) wxRes.get("headimgurl");
+                String sex = ESex.UNKNOWN.getCode();
+                System.out.println("***性别=" + String.valueOf(wxRes.get("sex")));
+                if (String.valueOf(wxRes.get("sex")).equals("1.0")) {
+                    sex = ESex.MEN.getCode();
+                } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
+                    sex = ESex.WOMEN.getCode();
+                }
+                userId = doThirdRegisterWechat(openId, name, headimgurl, sex,
+                    companyCode, systemCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BizException("xn000000", e.getMessage());
+        }
+
+        return userId;
+    }
+
     /** 
      * @see com.std.user.ao.IUserAO#doLoginSmallWeChat(java.lang.String, java.lang.String, java.lang.String)
      */

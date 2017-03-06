@@ -218,6 +218,9 @@ public interface IUserAO {
     public String doLoginWeChat(String code, String companyCode,
             String systemCode);
 
+    public String doLoginWeChat(String code, Long amount, String companyCode,
+            String systemCode);
+
     /**
      * 小程序登录
      * @param jsCode
