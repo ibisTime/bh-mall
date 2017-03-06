@@ -918,7 +918,7 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "手机号已经绑定，无需再次操作");
         }
         // 验证手机号
-        userBO.isMobileExist(mobile, null, companyCode);
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode);
         // 短信验证码是否正确（往手机号发送）
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805153", companyCode,
             user.getSystemCode());
