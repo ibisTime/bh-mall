@@ -810,5 +810,5 @@ LIMIT 0, 10000
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('001','2','ACCESS_KEY','Dc0pMP8ImFm78-uk4iGsOPpB2-vHc64D07OsOQVi','','CD-CLW000005','CD-CLW000005');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('002','2','SECRET_KEY','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq','','CD-CLW000005','CD-CLW000005');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('003','2','bucket','b2coss','','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('004','3','ACCESS_KEY','wx8bc03dd744895352','','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('005','3','SECRET_KEY','44ebf0ef908dc54656573625a579ea82','','CD-CLW000005','CD-CLW000005');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('004','3','ACCESS_KEY','wx69a5f10912c97d87','','CD-CLW000005','CD-CLW000005');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('005','3','SECRET_KEY','08de579b53cf0617854e6ec621daa870','','CD-CLW000005','CD-CLW000005');
