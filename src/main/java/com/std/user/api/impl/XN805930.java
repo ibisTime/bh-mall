@@ -13,6 +13,7 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805930Req;
+import com.std.user.dto.res.XN805930Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -31,8 +32,8 @@ public class XN805930 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getAmount());
-        return userAO.doLoginWeChat(req.getCode(), amount,
-            req.getCompanyCode(), req.getSystemCode());
+        return new XN805930Res(userAO.doLoginWeChat(req.getCode(), amount,
+            req.getCompanyCode(), req.getSystemCode()));
     }
 
     @Override

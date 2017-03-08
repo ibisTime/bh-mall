@@ -86,6 +86,7 @@ public class SignLogAOImpl implements ISignLogAO {
     }
 
     @Override
+    @Transactional
     public XN805931Res signToday(String userId, String location, Long amount) {
         User user = userBO.getUser(userId);
         // 判断是否已经签到
@@ -97,8 +98,8 @@ public class SignLogAOImpl implements ISignLogAO {
         String code = signLogBO.saveSignLog(userId, location,
             user.getSystemCode());
         // 账户资金划拨
-        accountBO.doTransferAmount(user.getSystemCode(), userId,
-            ESysUser.SYS_USER.getCode(), amount, ECurrency.XNB,
+        accountBO.doTransferAmount(user.getSystemCode(),
+            ESysUser.SYS_USER.getCode(), userId, amount, ECurrency.XNB,
             EBizType.AJ_SIGN);
         return new XN805931Res(code, amount);
     }

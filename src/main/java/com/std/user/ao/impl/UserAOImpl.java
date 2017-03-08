@@ -67,6 +67,7 @@ import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
 import com.std.user.enums.ESex;
+import com.std.user.enums.ESysUser;
 import com.std.user.enums.ESystemCode;
 import com.std.user.enums.EUser;
 import com.std.user.enums.EUserKind;
@@ -433,8 +434,8 @@ public class UserAOImpl implements IUserAO {
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。您的登录密码为" + loginPsd + "。", "805042",
-                systemCode);
+                    + "用户，恭喜您成功注册。初始化登录密码为" + loginPsd + "，请及时登录网站更改密码。",
+                "805042", systemCode);
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             // 验证登录名
             userBO.isLoginNameExist(loginName, kind, systemCode);
@@ -566,7 +567,7 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId, systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，恭喜您成功注册。初始化密码为" + loginPwd + "，请及时登录网站更改密码。", "805079",
+                + "用户，恭喜您成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805079",
             systemCode);
         return userId;
     }
@@ -959,7 +960,7 @@ public class UserAOImpl implements IUserAO {
             mobile, loginPwd, "1");
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805153",
+                + "用户，您的登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805153",
             user.getSystemCode());
     }
 
@@ -1579,7 +1580,6 @@ public class UserAOImpl implements IUserAO {
             response = PostSimulater.requestPostForm(
                 WechatConstant.WX_TOKEN_URL, formProperties);
             res = getMapFromResponse(response);
-            System.out.println(res);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null || StringUtils.isBlank(accessToken)) {
                 throw new BizException("XN000000", "获取accessToken失败");
@@ -1623,6 +1623,12 @@ public class UserAOImpl implements IUserAO {
                 }
                 userId = doThirdRegisterWechat(openId, name, headimgurl, sex,
                     companyCode, systemCode);
+                // 账户资金划拨
+                accountBO.doTransferAmount(systemCode,
+                    ESysUser.SYS_USER.getCode(), userId, amount, ECurrency.XNB,
+                    EBizType.AJ_REG);
+                // 注册对其编号进行标注
+                userId = userId + "&reg";
             }
         } catch (Exception e) {
             e.printStackTrace();
