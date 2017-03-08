@@ -10,6 +10,7 @@
 		<result column="to_company" property="toCompany" />
 		<result column="to_level" property="toLevel" />
 		<result column="to_user" property="toUser" />
+		<result column="mobile" property="mobile" />
 		<result column="status" property="status" />
 		<result column="company_code" property="companyCode" />
 		<result column="updater" property="updater" />
@@ -56,13 +57,14 @@
 		,t.to_company
 		,t.to_level
 		,t.to_user
+		,tu.mobile
 		,t.status
 		,t.company_code
 		,t.updater
 		,t.update_datetime
 		,t.remark
 		FROM
-		tstd_b2c_sms t
+		tstd_b2c_sms t left join tstd_user tu on t.to_user = tu.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -73,7 +75,7 @@
 
 	<select id="select_b2cSms_count" parameterType="b2cSms"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_b2c_sms t
+		SELECT count(1) FROM tstd_b2c_sms t left join tstd_user tu on t.to_user = tu.user_id
 		<include refid="where_condition" />
 	</select>
 

@@ -29,6 +29,9 @@ public class B2cSms extends ABaseDO {
     // 作用用户
     private String toUser;
 
+    // 手机号
+    private String mobile;
+
     // 状态
     private String status;
 
@@ -43,6 +46,14 @@ public class B2cSms extends ABaseDO {
 
     // 备注
     private String remark;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getCode() {
         return code;
