@@ -254,12 +254,13 @@ public interface IUserAO {
      * @param userId
      * @param idKind
      * @param idNo
-     * @param realName 
-     * @create: 2016年5月24日 下午5:10:00 myb858
+     * @param realName
+     * @param isReal 
+     * @create: 2017年3月8日 下午10:17:07 xieyj
      * @history:
      */
     public void doIdentify(String userId, String idKind, String idNo,
-            String realName);
+            String realName, String isReal);
 
     /**
      * 四要素实名认证

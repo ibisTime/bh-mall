@@ -7,13 +7,14 @@ import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805044Req;
 import com.std.user.dto.res.XN805044Res;
+import com.std.user.enums.EBoolean;
 import com.std.user.enums.EIDKind;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 三方实名认证
+ * 实名认证(调用三方)
  * @author: myb858 
  * @since: 2015年8月23日 下午2:00:12 
  * @history:
@@ -26,7 +27,7 @@ public class XN805044 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doIdentify(req.getUserId(), req.getIdKind(), req.getIdNo(),
-            req.getRealName());
+            req.getRealName(), EBoolean.YES.getCode());
         return new XN805044Res(true);
     }
 

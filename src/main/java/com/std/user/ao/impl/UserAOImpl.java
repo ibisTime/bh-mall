@@ -750,16 +750,19 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void doIdentify(String userId, String idKind, String idNo,
-            String realName) {
+            String realName, String isReal) {
         User user = userBO.getUser(userId, null);
-        // 三方认证
-        dentifyBO.doIdentify(user.getSystemCode(), user.getCompanyCode(),
-            userId, realName, idKind, idNo);
+        if (EBoolean.YES.getCode().equals(isReal)) {
+            // 三方认证
+            dentifyBO.doIdentify(user.getSystemCode(), user.getCompanyCode(),
+                userId, realName, idKind, idNo);
+        }
         // 更新用户表
         userBO
             .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
         // 回写Account表realName;
-        // accountBO.refreshRealName(userId, realName);
+        accountBO.refreshRealName(user.getUserId(), realName,
+            user.getSystemCode());
     }
 
     @Override
