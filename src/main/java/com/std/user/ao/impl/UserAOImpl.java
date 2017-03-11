@@ -434,7 +434,7 @@ public class UserAOImpl implements IUserAO {
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，恭喜您成功注册。初始化登录密码为" + loginPsd + "，请及时登录网站更改密码。",
+                    + "用户，您已成功注册。初始化登录密码为" + loginPsd + "，请及时登录网站更改密码。",
                 "805042", systemCode);
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             // 验证登录名
@@ -567,7 +567,7 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId, systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，恭喜您成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805079",
+                + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805079",
             systemCode);
         return userId;
     }
@@ -944,7 +944,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void doBindMoblie(String userId, String mobile, String smsCaptcha,
-            String companyCode) {
+            String companyCode, String isSendSms) {
         User user = userBO.getUser(userId);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
@@ -959,12 +959,13 @@ public class UserAOImpl implements IUserAO {
             user.getSystemCode());
         // 插入用户信息
         String loginPwd = RandomUtil.generate6();
-        userBO.refreshBindMobile(userId, EPrefixCode.CSW.getCode() + mobile,
-            mobile, loginPwd, "1");
+        userBO.refreshBindMobile(userId, mobile, mobile, loginPwd, "1");
         // 发送短信
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您的登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805153",
-            user.getSystemCode());
+        if (EBoolean.YES.getCode().equals(isSendSms)) {
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + "用户，您的登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805153",
+                user.getSystemCode());
+        }
     }
 
     @Override

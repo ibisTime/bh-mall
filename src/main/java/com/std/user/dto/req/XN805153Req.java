@@ -14,6 +14,17 @@ public class XN805153Req {
     // 公司编号（选填）兼容橙商户和城市网
     private String companyCode;
 
+    // 是否发送短信(1 是 0 否)
+    private String isSendSms;
+
+    public String getIsSendSms() {
+        return isSendSms;
+    }
+
+    public void setIsSendSms(String isSendSms) {
+        this.isSendSms = isSendSms;
+    }
+
     public String getUserId() {
         return userId;
     }

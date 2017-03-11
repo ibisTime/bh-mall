@@ -357,11 +357,12 @@ public interface IUserAO {
      * @param mobile
      * @param smsCaptcha
      * @param companyCode
-     * @create: 2016年12月14日 下午5:58:51 xieyj
+     * @param isSendSms 
+     * @create: 2017年3月11日 下午1:18:28 xieyj
      * @history:
      */
     public void doBindMoblie(String userId, String mobile, String smsCaptcha,
-            String companyCode);
+            String companyCode, String isSendSms);
 
     /**
      * 找回登录密码

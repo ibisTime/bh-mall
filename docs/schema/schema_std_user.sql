@@ -507,6 +507,10 @@ CREATE TABLE `tsys_role` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+--  Table structure for `tsys_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_blacklist`;
 CREATE TABLE `tstd_blacklist` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',

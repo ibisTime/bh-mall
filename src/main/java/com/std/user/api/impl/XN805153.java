@@ -24,7 +24,7 @@ public class XN805153 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doBindMoblie(req.getUserId(), req.getMobile(),
-            req.getSmsCaptcha(), req.getCompanyCode());
+            req.getSmsCaptcha(), req.getCompanyCode(), req.getIsSendSms());
         return new BooleanRes(true);
     }
 
