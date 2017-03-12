@@ -519,6 +519,24 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public String doAddUser(String loginName, String kind, String roleCode,
+            String updater, String systemCode) {
+        // 验证登录名
+        userBO.isLoginNameExist(loginName, kind, systemCode);
+        // 插入用户信息
+        String loginPsd = EUserPwd.InitPwd.getCode();
+        String userId = userBO.doAddUser(loginName, null, loginPsd, null, null,
+            null, null, loginPsd, kind, null, null, updater, null, roleCode,
+            systemCode);
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.XNB.getCode());
+        accountBO.distributeAccountList(userId, loginName,
+            getAccountType(kind), currencyList, systemCode);
+        return userId;
+    }
+
+    @Override
     @Transactional
     public String doAddUser(String mobile, String realName, String userReferee,
             String updater, String remark, String kind, String systemCode) {

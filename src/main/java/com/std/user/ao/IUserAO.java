@@ -137,6 +137,20 @@ public interface IUserAO {
             String updater, String remark, String kind, String systemCode);
 
     /**
+     * 代注册分配角色
+     * @param loginName
+     * @param kind
+     * @param roleCode
+     * @param updater
+     * @param systemCode
+     * @return 
+     * @create: 2017年3月12日 下午8:11:20 xieyj
+     * @history:
+     */
+    public String doAddUser(String loginName, String kind, String roleCode,
+            String updater, String systemCode);
+
+    /**
      * 城市网代注册
      * @param mobile
      * @param companyCode
