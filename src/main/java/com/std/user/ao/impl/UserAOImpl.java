@@ -1476,6 +1476,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
     public String doLoginWeChat(String code, String companyCode,
             String systemCode) {
         String userId = "";
@@ -1566,6 +1567,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
     public String doLoginWeChat(String code, Long amount, String companyCode,
             String systemCode) {
         String userId = "";
