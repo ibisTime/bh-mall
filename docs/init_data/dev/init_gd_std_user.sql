@@ -267,6 +267,15 @@ INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`upda
 INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','1','find_content','5','开关安装','admin',now(),NULL);
 
 /*
+-- Query: SELECT ckey,cvalue,note,updater,now() as update_datetime,remark,system_code FROM tsys_config where system_code = 'CD-CGD000006'
+LIMIT 0, 10000
+
+-- Date: 2017-03-14 16:17
+*/
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('aboutus','关于我们','<p>关于我们</p>','admin',now(),NULL,'CD-CGD000006');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('license','软件许可协议','<p>软件许可协议</p>','admin',now(),NULL,'CD-CGD000006');
+
+/*
 -- Query: SELECT code,type,account,password,remark,company_code,system_code FROM tstd_cpassword WHERE system_code = 'CD-CGD000006'
 LIMIT 0, 10000
 
@@ -277,79 +286,3 @@ INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`compa
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('GD003','2','bucket','b2coss','','CD-CGD000006','CD-CGD000006');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('GD004','3','ACCESS_KEY','wx9b874d991d7e50d5','','CD-CGD000006','CD-CGD000006');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('GD005','3','SECRET_KEY','aa1832cf32722e0fb977a6c9f6aafa20','','CD-CGD000006','CD-CGD000006');
-
-/*
--- Query: SELECT `code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code` FROM tstd_cnavigate
-LIMIT 0, 10000
-
--- Date: 2017-03-12 14:49
-*/
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('1','豪华酒店','3','page:go/hotel-list?category=1','豪华酒店@2x_1486966881319.png','1','depart_hotel',0,'1','0','ee','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('10','甜点饮品','3','page:go/food-list?category=10','甜点饮品@2x_1487051112494.png','1','depart_deli',1,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('11','小吃快餐','3','page:go/food-list?category=11','小吃快餐@2x_1487051086724.png','1','depart_deli',2,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('12','日韩料理','3','page:go/food-list?category=12','日韩料理@2x_1487050943265.png','1','depart_deli',3,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('13','火锅','3','page:go/food-list?category=13','火锅@2x_1487050887091.png','1','depart_deli',4,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('14','烧烤烤肉','3','page:go/food-list?category=14','烧烤烤肉@2x_1487050986362.png','1','depart_deli',5,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('15','外卖','3','page:go/food-list?category=15','外卖@2x_1487051018211.png','1','depart_deli',6,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('16','西餐','3','page:go/food-list?category=16','西餐@2x_1487051058437.png','1','depart_deli',7,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('17','春游','3','page:travel/travel-list?category=17','春游@2x_1487051930612.png','1','travel',0,'1','0','eeee','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('18','秋游','3','page:travel/travel-list?category=18','秋游@2x_1487051961172.png','1','travel',1,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('19','国内游','3','page:travel/travel-list?category=19','国内游@2x_1487051987151.png','1','travel',2,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('2','舒适酒店','3','page:go/hotel-list?category=2','舒适酒店@2x_1486967090368.png','1','depart_hotel',1,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('20','境外游','3','page:travel/travel-list?category=20','境外游@2x_1487052019153.png','1','travel',3,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('21','亲子游','3','page:travel/travel-list?category=21','亲子游@2x_1487052055654.png','1','travel',4,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('22','摄影游','3','page:travel/travel-list?category=22','摄影游@2x_1487052080443.png','1','travel',5,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('23','周边游','3','page:travel/travel-list?category=23','周边游@2x_1487052110117.png','1','travel',6,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('24','主题游','3','page:travel/travel-list?category=24','主题游@2x_1487052135727.png','1','travel',7,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('3','经济酒店','3','page:go/hotel-list?category=3','经济酒店@2x_1486967023709.png','1','depart_hotel',2,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('31','机场专线','3','page:go/special-line?category=31','机场专线@2x_1487312065213.png','1','goout',1,'1','0','2','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('32','快客专线','3','page:go/special-line?category=32','快客专线@2x_1487312100112.png','1','goout',2,'1','0','2','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('33','长途班车','3','page:go/special-line?category=33','长途班车@2x_1487312523054.png','1','goout',3,'1','0','2','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('34','发布拼车','3','page:go/carpool','发布拼车@2x_1487312034903.png','1','goout',4,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('35','预订大巴','3','page:go/due-bus','预订大巴@2x_1487312435350.png','1','goout',5,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('36','预约出租','3','http://m.ctrip.com/webapp/cars/isd/isd?Allianceid=435442&sid=931218&popup=close','预约出租@2x_1487312489546.png','1','goout',6,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('37','查询','3','page:go/theQuery?category=37','查询@2x_1487311996284.png','1','goout',7,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('38','旅游专线','3','page:go/special-line?category=38','旅游专线@2x_1487312349842.png','1','goout',0,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('39','火车','3','http://m.ctrip.com/html5/Trains/?Allianceid=435442&sid=931218&popup=close','','1','go_query',7,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('4','民宿','3','page:go/hotel-list?category=4','民宿@2x_1486967388611.png','1','depart_hotel',3,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('40','飞机','3','http://m.ctrip.com/html5/flight/matrix.html?Allianceid=435442&sid=931218&popup=close','','1','go_query',7,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('41','公交','3','http://m.ctrip.com/html5/','','1','go_query',7,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('44','每日签到','3','page:home/signIn?category=44','每日签到@2x_1487394422707.png','1','home_page',0,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('45','今日潮汐','3','http://c.flzhan.com/wx/info?mid=19031&seq=0&winzoom=1.25','今日潮汛@2x_1487338034981.png','1','home_page',1,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('46','积分商城','3','page:mall/mall-list','积分商城@2x_1487338008959.png','1','home_page',2,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('47','热门活动','3','page:home/activity?category=47','热门活动@2x_1487394495564.png','1','home_page',3,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('48','天气','3','page:home/weather?category=48','天气@2x_1487394548872.png','1','home_page',4,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('49','美食','3','page:go/go?idx=2','美食@2x_1487394562837.png','1','home_page',5,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('5','主题酒店','3','page:go/hotel-list?category=5','主题酒店@2x_1486967311806.png','1','depart_hotel',4,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('50','酒店','3','page:go/go?idx=1','酒店@2x_1487338059643.png','1','home_page',6,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('51','出行','3','page:go/go','出行@2_1487817930905.png','1','home_page',7,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('6','三星酒店','3','page:go/hotel-list?category=6','三星酒店@2x_1486967146934.png','1','depart_hotel',5,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('7','四星酒店','3','page:go/hotel-list?category=7','四星酒店@2x_1486967205007.png','1','depart_hotel',6,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('70','我的积分','3','page:user/integral?category=70','我的积分@2x.png','1','home_page',0,'1','0','','1','CD-CGD000006','CD-CGD000006');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('8','五星酒店','3','page:go/hotel-list?category=8','五星酒店@2x_1486967262804.png','1','depart_hotel',7,'1','0',NULL,'1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('9','自助餐','3','page:go/food-list?category=9','自助餐@2x_1487052943683.png','1','depart_deli',0,'1','0','77','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH2017030617381951540','苏堤春晓','2','https://sanwen8.cn/p/1a3tpfT.html','66305477_9_1489217405545.jpg','1','index_banner',2,'1','0','','1','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH2017031115254683919','西湖美景','2','0','蒙版@2x_1488793203866_1489217018473.png','1','index_banner',0,'1','0','','1','CD-CLW000005','CD-CLW000005');
-
-/*
--- Query: SELECT `code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code` FROM tstd_cpassword
-LIMIT 0, 10000
-
--- Date: 2017-03-12 14:52
-*/
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('001','2','ACCESS_KEY','Dc0pMP8ImFm78-uk4iGsOPpB2-vHc64D07OsOQVi','','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('002','2','SECRET_KEY','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq','','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('003','2','bucket','b2coss','','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('004','3','ACCESS_KEY','wx8bc03dd744895352','','CD-CLW000005','CD-CLW000005');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('005','3','SECRET_KEY','44ebf0ef908dc54656573625a579ea82','','CD-CLW000005','CD-CLW000005');
-
-/*
--- Query: SELECT ckey,cvalue,note,updater,now() as update_datetime,remark,system_code FROM std_user.tsys_config
-LIMIT 0, 10000
-
--- Date: 2017-03-12 14:38
-*/
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('aboutus','关于我们','<p>&nbsp; &nbsp; &nbsp; &nbsp;浙江来来旺旺旅游信息有限公司成立于2016年9月，隶属于海宁大元控股集团有限公司。公司致力于为游客及旅行社提供代办票务、代订旅游车辆、订房订餐等旅游信息咨询服务。</p>','admin',now(),'','CD-CLW000005');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('inte','积分规则','<p></p><p>&nbsp; &nbsp; &nbsp; &nbsp;积分业务是海宁市大元控股集团为答谢广大客户对公司业务的长期支持与厚爱而推出的一项客户回馈服务。凡在集团旗下公司消费的注册会员都将产生对应积分。累计积分可以抵扣产品费用等……</p><p><br></p>','admin',now(),'','CD-CLW000005');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('soft','软件许可协议','<p>软件许可协议</p>','admin',now(),'','CD-CLW000005');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('telephone','服务热线','400-832-0989','admin',now(),'','CD-CLW000005');
