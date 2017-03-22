@@ -25,14 +25,16 @@ public class XN805154 extends AProcessor {
     public Object doBusiness() throws BizException {
         return userAO.doRegisterAddJf(req.getMobile(), req.getLoginPwd(),
             req.getLoginPwdStrength(), req.getUserReferee(),
-            req.getSmsCaptcha());
+            req.getSmsCaptcha(), req.getSystemCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805154Req.class);
-        StringValidater.validateBlank(req.getMobile(), req.getLoginPwd(),
-            req.getLoginPwdStrength(), req.getSmsCaptcha());
+        StringValidater
+            .validateBlank(req.getMobile(), req.getLoginPwd(),
+                req.getLoginPwdStrength(), req.getSmsCaptcha(),
+                req.getSystemCode());
         PhoneUtil.checkMobile(req.getMobile());// 判断格式
     }
 }

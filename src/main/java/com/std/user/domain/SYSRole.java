@@ -32,8 +32,16 @@ public class SYSRole extends ABaseDO {
     // 备注
     private String remark;
 
-    // 六方
-    private String kind;
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getCode() {
         return code;
@@ -82,13 +90,4 @@ public class SYSRole extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
 }

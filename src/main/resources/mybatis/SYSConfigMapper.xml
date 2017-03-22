@@ -4,22 +4,19 @@
 <mapper namespace="com.std.user.dao.ISYSConfigDAO">
 	<resultMap id="sysConfig_DB_Result" type="sysConfig">
 		<result column="id" property="id" />
-		<result column="to_system" property="toSystem" />
 		<result column="ckey" property="ckey" />
 		<result column="cvalue" property="cvalue" />
 		<result column="note" property="note" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="id != null">
 				AND t.id = #{id}
 			</if>	
-			<if test="toSystem != null and toSystem != '' ">
-				AND t.to_system = #{toSystem}
-			</if>
 			<if test="ckey != null and ckey != '' ">
 				AND t.ckey = #{ckey}
 			</if>	
@@ -37,18 +34,21 @@
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_sysConfig" parameterType="sysConfig" resultMap="sysConfig_DB_Result">
 		SELECT
 		id
-		,to_system
 		,ckey
 		,cvalue
 		,note
 		,updater
 		,update_datetime
 		,remark
+		,system_code
 		FROM
 		tsys_config t 
 		<include refid="where_condition" />
@@ -66,22 +66,22 @@
 	
 	<insert id="insert_sysConfig" parameterType="sysConfig" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tsys_config(
-		to_system
-		,ckey
+		ckey
 		,cvalue
 		,note
 		,updater
 		,update_datetime
 		,remark
+		,system_code
 		)
 		VALUES(
-		#{toSystem}
-		,#{ckey}
+		#{ckey}
 		,#{cvalue}
 		,#{note}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		,#{systemCode}
 		)
 	</insert>
 	

@@ -60,10 +60,10 @@ public class User extends ABaseDO {
     // 真实姓名
     private String realName;
 
-    // 交易密码
+    // 支付密码
     private String tradePwd;
 
-    // 交易密码强度
+    // 支付密码强度
     private String tradePwdStrength;
 
     // 角色编号
@@ -96,6 +96,15 @@ public class User extends ABaseDO {
     // 公司名称
     private String companyName;
 
+    // 第三方登录开放编号
+    private String openId;
+
+    // 极光编号
+    private String jpushId;
+
+    // 系统编号
+    private String systemCode;
+
     /***** 模糊查询使用字段 ******/
     private String loginNameForLikeQuery;
 
@@ -124,11 +133,46 @@ public class User extends ABaseDO {
     // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
     private String loginType;
 
-    // 第三方登录开放编号
-    private String openId;
-
     // 是否查询金额 1 是
     private String isGetAmount;
+
+    // 推荐人等级
+    private Integer refeereLevel;
+
+    // 连续天数
+    private Integer serialSignDays;
+
+    public Integer getSerialSignDays() {
+        return serialSignDays;
+    }
+
+    public void setSerialSignDays(Integer serialSignDays) {
+        this.serialSignDays = serialSignDays;
+    }
+
+    public Integer getRefeereLevel() {
+        return refeereLevel;
+    }
+
+    public void setRefeereLevel(Integer refeereLevel) {
+        this.refeereLevel = refeereLevel;
+    }
+
+    public String getJpushId() {
+        return jpushId;
+    }
+
+    public void setJpushId(String jpushId) {
+        this.jpushId = jpushId;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getIsGetAmount() {
         return isGetAmount;

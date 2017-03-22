@@ -51,6 +51,17 @@ public class XN805054Req extends APageReq {
     // 是否查询金额 1 是
     private String isGetAmount;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getIsGetAmount() {
         return isGetAmount;
     }

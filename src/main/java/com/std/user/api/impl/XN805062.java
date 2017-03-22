@@ -1,6 +1,5 @@
 package com.std.user.api.impl;
 
-import com.std.user.ao.IBankCardAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
@@ -8,7 +7,6 @@ import com.std.user.dto.req.XN805062Req;
 import com.std.user.dto.res.XN805062Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
-import com.std.user.spring.SpringContextHolder;
 
 /**
  * 修改银行卡
@@ -18,16 +16,10 @@ import com.std.user.spring.SpringContextHolder;
  */
 public class XN805062 extends AProcessor {
 
-    private IBankCardAO bankCardAO = SpringContextHolder
-        .getBean(IBankCardAO.class);
-
     private XN805062Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        bankCardAO.doRebindBankCard(req.getCode(), req.getBankCode(),
-            req.getBankName(), req.getSubbranch(), req.getBankCardNo(),
-            req.getBindMobile(), req.getUpdater(), req.getRemark());
         return new XN805062Res(true);
     }
 

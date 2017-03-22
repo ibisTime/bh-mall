@@ -11,6 +11,17 @@ public class XN807726Req {
     // 作用等级(选填)
     private String level;
 
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getLevel() {
         return level;
     }

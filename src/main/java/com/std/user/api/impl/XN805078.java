@@ -23,13 +23,15 @@ public class XN805078 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doFindLoginPwdByOss(req.getUserId(), req.getAdminPwd());
+        userAO.doFindLoginPwdByOss(req.getUserId(), req.getAdminUserId(),
+            req.getAdminPwd());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805078Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getAdminPwd());
+        StringValidater.validateBlank(req.getUserId(), req.getAdminUserId(),
+            req.getAdminPwd(), req.getSystemCode());
     }
 }

@@ -10,6 +10,17 @@ public class XN805155Req {
     // 类型（选填）
     private String kind;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getLoginName() {
         return loginName;
     }

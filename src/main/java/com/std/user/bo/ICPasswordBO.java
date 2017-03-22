@@ -11,7 +11,7 @@ public interface ICPasswordBO extends IPaginableBO<CPassword> {
     public boolean isCPasswordExist(String code);
 
     public String saveCPassword(String type, String account, String password,
-            String remark, String companyCode);
+            String remark, String companyCode, String systemCode);
 
     public int removeCPassword(String code);
 
@@ -19,8 +19,8 @@ public interface ICPasswordBO extends IPaginableBO<CPassword> {
 
     public List<CPassword> queryCPasswordList(CPassword condition);
 
-    public Map<String, String> queryCPassword(String type);
-
     public CPassword getCPassword(String code);
 
+    public Map<String, String> queryCPasswordList(String type, String account,
+            String companyCode, String systemCode);
 }

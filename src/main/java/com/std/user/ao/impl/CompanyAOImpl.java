@@ -50,15 +50,15 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         String code = companyBO.saveCompany(data);
         if (EBoolean.YES.getCode().equals(data.getIsNeedInitPwd())) {
-            cPasswordBO
-                .saveCPassword(EPasswordType.company.getCode(),
-                    EXiaoMi.APPKEY.getCode(), null, EXiaoMi.APPKEY.getValue(),
-                    code);
             cPasswordBO.saveCPassword(EPasswordType.company.getCode(),
-                EXiaoMi.TO.getCode(), null, EXiaoMi.TO.getValue(), code);
+                EXiaoMi.APPKEY.getCode(), null, EXiaoMi.APPKEY.getValue(),
+                code, data.getSystemCode());
+            cPasswordBO.saveCPassword(EPasswordType.company.getCode(),
+                EXiaoMi.TO.getCode(), null, EXiaoMi.TO.getValue(), code,
+                data.getSystemCode());
             cPasswordBO.saveCPassword(EPasswordType.company.getCode(),
                 EXiaoMi.TENANTID.getCode(), null, EXiaoMi.TENANTID.getValue(),
-                code);
+                code, data.getSystemCode());
         }
         return code;
     }
@@ -234,10 +234,8 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public int editCompanyDefault(String code) {
-        if (!companyBO.isCompanyExist(code)) {
-            throw new BizException("xn0000", "该编号不存在");
-        }
-        return companyBO.refreshCompanyDefault(code);
+        Company company = companyBO.getCompany(code);
+        return companyBO.refreshCompanyDefault(code, company.getSystemCode());
     }
 
     @Override
@@ -282,15 +280,17 @@ public class CompanyAOImpl implements ICompanyAO {
     }
 
     @Override
-    public Company getCompanyByPCA(String province, String city, String area) {
+    public Company getCompanyByPCA(String province, String city, String area,
+            String systemCode) {
         Company condition = new Company();
         condition.setProvinceForQuery(province);
         condition.setCityForQuery(city);
         condition.setAreaForQuery(area);
+        condition.setSystemCode(systemCode);
         List<Company> list = companyBO.queryCompanyList(condition);
         Company result = new Company();
         if (CollectionUtils.sizeIsEmpty(list)) {
-            result = companyBO.getDefaultCompany();
+            result = companyBO.getDefaultCompany(systemCode);
         } else {
             result = list.get(0);
         }
@@ -298,11 +298,11 @@ public class CompanyAOImpl implements ICompanyAO {
     }
 
     @Override
-    public Company getCompanyByDomain(String domain) {
+    public Company getCompanyByDomain(String domain, String systemCode) {
         if ("".equals(domain) || null == domain) {
             throw new BizException("xn0000", "请输入合法域名");
         }
-        Company company = companyBO.getCompanyByDomain(domain);
+        Company company = companyBO.getCompanyByDomain(domain, systemCode);
         if (null == company) {
             throw new BizException("xn0000", "域名地址不存在，请检查");
         }
@@ -326,7 +326,7 @@ public class CompanyAOImpl implements ICompanyAO {
     }
 
     @Override
-    public String doLogin(String loginName, String password) {
+    public String doLogin(String loginName, String password, String systemCode) {
         Company condition = new Company();
         condition.setLoginName(loginName);
         List<Company> companyList1 = companyBO.queryCompanyList(condition);
@@ -344,10 +344,11 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public void doFindLoginPwd(String loginName, String mobile,
-            String smsCaptcha, String newPassword) {
+            String smsCaptcha, String newPassword, String systemCode) {
         Company company = null;
         Company condition = new Company();
         condition.setLoginName(loginName);
+        condition.setSystemCode(systemCode);
         List<Company> companyList = companyBO.queryCompanyList(condition);
         if (CollectionUtils.isEmpty(companyList)) {
             throw new BizException("xn000000", "该登录名不存在");
@@ -358,7 +359,7 @@ public class CompanyAOImpl implements ICompanyAO {
             }
         }
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "806009");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "806009", systemCode);
         companyBO.refreshCompanyPsw(company.getCode(), newPassword);
     }
 }

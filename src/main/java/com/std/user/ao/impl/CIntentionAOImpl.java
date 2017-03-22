@@ -41,7 +41,7 @@ public class CIntentionAOImpl implements ICIntentionAO {
             .append(",请尽快联系处理，谢谢！");
         String content = sb.toString();
         // 发送短信
-        smsOutBO.sendSmsOut(mobile, content, "806060");
+        smsOutBO.sendSmsOut(mobile, content, "806060", data.getSystemCode());
         return code;
     }
 

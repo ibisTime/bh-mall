@@ -40,12 +40,20 @@ public class SYSMenu extends ABaseDO {
     // 备注
     private String remark;
 
-    // 六方
-    private String kind;
+    // 系统编号（必填）
+    private String systemCode;
 
     // ************* 模糊查询 *****************
     // 名称模糊查询
     private String nameForQuery;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getCode() {
         return code;
@@ -117,14 +125,6 @@ public class SYSMenu extends ABaseDO {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
     }
 
     public String getNameForQuery() {

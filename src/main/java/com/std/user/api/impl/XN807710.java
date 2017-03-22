@@ -27,12 +27,12 @@ public class XN807710 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SYSConfig data = new SYSConfig();
-        data.setToSystem("8");// 8 代表生意家 作为服务时启用该字段
         data.setCkey(req.getCkey());
         data.setCvalue(req.getCvalue());
         data.setNote(req.getNote());
         data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
+        data.setSystemCode(req.getSystemCode());
         return new PKIdRes(sysConfigAO.addSYSConfig(data));
     }
 
@@ -40,6 +40,6 @@ public class XN807710 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN807710Req.class);
         StringValidater.validateBlank(req.getCkey(), req.getCvalue(),
-            req.getNote(), req.getUpdater());
+            req.getNote(), req.getUpdater(), req.getSystemCode());
     }
 }

@@ -38,6 +38,17 @@ public class XN806040Req {
     // 备注(选填)
     private String remark;
 
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getName() {
         return name;
     }

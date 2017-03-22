@@ -10,18 +10,15 @@ public class XN805001Req {
     // 父菜单编号(选填)
     private String parentCode;
 
-    // 更新人(选填)
-    private String updater;
+    // 系统编号（必填）
+    private String systemCode;
 
-    // 六方(选填)
-    private String kind;
-
-    public String getKind() {
-        return kind;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
     public String getName() {
@@ -46,14 +43,6 @@ public class XN805001Req {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
     }
 
 }

@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /** 
- * 更改用户头像
+ * 更改用户头像，加积分
  * @author: zuixian 
  * @since: 2016年9月19日 下午1:32:41 
  * @history:
@@ -25,7 +25,7 @@ public class XN805073 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userExtAO.editUserExtPhoto(req.getUserId(), req.getPhoto());
+        userExtAO.editUserExtPhotoAddJf(req.getUserId(), req.getPhoto());
         return new BooleanRes(true);
     }
 

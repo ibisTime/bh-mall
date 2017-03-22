@@ -95,14 +95,10 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     public Paginable<Company> getPaginableJJ(int start, int pageSize,
             Company condition) {
         prepare(condition);
-
         long totalCount = companyDAO.selectTotalCountJJ(condition);
-
         Paginable<Company> page = new Page<Company>(start, pageSize, totalCount);
-
         List<Company> dataList = companyDAO.selectListJJ(condition,
             page.getStart(), page.getPageSize());
-
         page.setList(dataList);
         return page;
     }
@@ -133,13 +129,13 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     }
 
     @Override
-    public int refreshCompanyDefault(String code) {
+    public int refreshCompanyDefault(String code, String systemCode) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Company data = new Company();
             data.setCode(code);
             // 先找出默认的公司
-            Company defCompany = this.getDefaultCompany();
+            Company defCompany = this.getDefaultCompany(systemCode);
             // 若原本就有默认公司
             if (defCompany != null) {
                 // 如果默认公司与目的公司相同，则将取消其默认
@@ -187,17 +183,19 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
      * @see com.std.user.bo.ICompanyBO#getDefaultCompany()
      */
     @Override
-    public Company getDefaultCompany() {
+    public Company getDefaultCompany(String systemCode) {
         Company condition = new Company();
         condition.setIsDefault(EBoolean.YES.getCode());
+        condition.setSystemCode(systemCode);
         return companyDAO.select(condition);
     }
 
     @Override
-    public Company getCompanyByDomain(String domain) {
+    public Company getCompanyByDomain(String domain, String systemCode) {
         Company result = null;
         Company condition = new Company();
         condition.setDomain(domain);
+        condition.setSystemCode(systemCode);
         List<Company> list = companyDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             result = list.get(0);

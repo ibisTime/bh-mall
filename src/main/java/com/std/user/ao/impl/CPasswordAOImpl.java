@@ -21,29 +21,28 @@ public class CPasswordAOImpl implements ICPasswordAO {
 
     @Override
     public String addCPassword(String type, String account, String password,
-            String remark, String companyCode) {
-        checkCPassword(null, type, account, companyCode);
+            String remark, String companyCode, String systemCode) {
+        checkCPassword(null, type, account, companyCode, systemCode);
         return cPasswordBO.saveCPassword(type, account, password, remark,
-            companyCode);
+            companyCode, systemCode);
     }
 
     @Override
     public int editCPassword(CPassword data) {
         String code = data.getCode();
-        if (!cPasswordBO.isCPasswordExist(code)) {
-            throw new BizException("xn0000", "该编号不存在");
-        }
+        CPassword cPassword = cPasswordBO.getCPassword(code);
         checkCPassword(code, data.getType(), data.getAccount(),
-            data.getCompanyCode());
+            data.getCompanyCode(), cPassword.getSystemCode());
         return cPasswordBO.refreshCPassword(data);
     }
 
     private void checkCPassword(String code, String type, String account,
-            String companyCode) {
+            String companyCode, String systemCode) {
         CPassword condition = new CPassword();
         condition.setType(type);
         condition.setAccount(account);
         condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
         List<CPassword> list = cPasswordBO.queryCPasswordList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             if (list.size() > 0) {

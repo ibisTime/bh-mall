@@ -26,9 +26,6 @@ public class SYSConfig extends ABaseDO {
     // 编号（自增长）
     private Long id;
 
-    // 针对系统
-    private String toSystem;
-
     // key值
     private String ckey;
 
@@ -47,6 +44,17 @@ public class SYSConfig extends ABaseDO {
     // 备注
     private String remark;
 
+    // 系统编号（必填）
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     // ************* 模糊查询 *****************
     private String ckeyForQuery;
 
@@ -58,14 +66,6 @@ public class SYSConfig extends ABaseDO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getToSystem() {
-        return toSystem;
-    }
-
-    public void setToSystem(String toSystem) {
-        this.toSystem = toSystem;
     }
 
     public String getCkey() {

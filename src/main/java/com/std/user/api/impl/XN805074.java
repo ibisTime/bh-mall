@@ -27,7 +27,7 @@ public class XN805074 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         UserExt data = UserExtConverter.converter(req);
-        userExtAO.editUserExt(data);
+        userExtAO.editUserExtAddJf(data);
         return new BooleanRes(true);
     }
 

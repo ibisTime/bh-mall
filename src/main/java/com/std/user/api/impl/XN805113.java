@@ -30,6 +30,7 @@ public class XN805113 extends AProcessor {
         LevelRule condition = new LevelRule();
         condition.setName(req.getName());
         condition.setEffect(req.getEffect());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ICompanyAO.DEFAULT_ORDER_COLUMN;
@@ -44,5 +45,6 @@ public class XN805113 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805113Req.class);
         StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 }

@@ -36,4 +36,13 @@ public interface IUserExtDAO extends IBaseDAO<UserExt> {
      * @history: 
      */
     public int updateUserExt(UserExt data);
+
+    /**
+     * 更新用户位置
+     * @param data
+     * @return 
+     * @create: 2016年9月18日 上午11:12:02 xieyj
+     * @history:
+     */
+    public int updateUserExtLngLat(UserExt data);
 }

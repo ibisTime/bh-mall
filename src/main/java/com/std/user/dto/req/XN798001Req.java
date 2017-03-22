@@ -2,29 +2,40 @@ package com.std.user.dto.req;
 
 public class XN798001Req {
     // 系统编号(必填)
-    private String systemId;
+    private String systemCode;
 
-    // 用户编号(必填)
+    // 公司编号(必填)
+    private String companyCode;
+
+    // userId(必填)
     private String userId;
-
-    // 真实姓名(必填)
-    private String realName;
 
     // 证件类型(必填)
     private String idKind;
 
-    // 证件编号(必填)
+    // 身份号(必填)
     private String idNo;
 
-    // 备注（选填）
+    // 真实姓名(必填)
+    private String realName;
+
+    // 备注(选填)
     private String remark;
 
-    public String getSystemId() {
-        return systemId;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setSystemId(String systemId) {
-        this.systemId = systemId;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getUserId() {

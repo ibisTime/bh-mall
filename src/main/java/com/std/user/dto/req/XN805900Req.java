@@ -6,6 +6,17 @@ public class XN805900Req {
 
     private String loginPwd;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getLoginName() {
         return loginName;
     }

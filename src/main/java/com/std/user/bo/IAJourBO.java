@@ -39,17 +39,18 @@ public interface IAJourBO extends IPaginableBO<AccountJour> {
     public void doCheckAccount(Long aJNo, String checkUser, EBoolean checkResult);
 
     /**
-     * 单独新增流水
+     * 新增流水
      * @param accountNumber
      * @param preAmount
      * @param amount
      * @param bizType
      * @param refNo
-     * @param remark 
-     * @create: 2016年7月6日 下午8:32:54 xieyj
+     * @param remark
+     * @param systemCode 
+     * @create: 2016年12月23日 上午8:11:33 xieyj
      * @history:
      */
     public void addJour(String accountNumber, Long preAmount, Long amount,
-            String bizType, String refNo, String remark);
+            String bizType, String refNo, String remark, String systemCode);
 
 }

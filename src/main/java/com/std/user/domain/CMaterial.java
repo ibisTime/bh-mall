@@ -35,6 +35,17 @@ public class CMaterial extends ABaseDO {
     // 公司编号
     private String companyCode;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     /*********db data*********/
 
     public String getCode() {

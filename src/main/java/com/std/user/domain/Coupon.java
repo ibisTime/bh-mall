@@ -47,6 +47,9 @@ public class Coupon extends ABaseDO {
     // 公司编号
     private String companyCode;
 
+    // 系统编号(必填)
+    private String systemCode;
+
     // ****************db properties***********
     private String creatorName;
 
@@ -54,6 +57,14 @@ public class Coupon extends ABaseDO {
 
     // 域名
     private String domain;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getCreatorName() {
         return creatorName;

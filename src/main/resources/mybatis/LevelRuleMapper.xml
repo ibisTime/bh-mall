@@ -12,6 +12,7 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -23,6 +24,9 @@
 			</if>
 			<if test="effect != null and effect != '' ">
 				AND t.effect = #{effect}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
 			</if>
 		</trim>
 	</sql>
@@ -36,6 +40,7 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.system_code
 		FROM
 		tstd_level_rule t
 		<include refid="where_condition" />
@@ -63,6 +68,7 @@
 		,updater
 		,update_datetime
 		,remark
+		,system_code
 		)
 		VALUES(
 		#{code}
@@ -73,6 +79,7 @@
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		,#{systemCode}
 		)
 	</insert>
 

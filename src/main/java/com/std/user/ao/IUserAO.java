@@ -1,5 +1,4 @@
 /**
- * @Title IUserAO.java 
  * @Package com.ibis.pz.user 
  * @Description 
  * @author miyb  
@@ -25,21 +24,34 @@ public interface IUserAO {
 
     /**
      * 检查手机号是否存在
-     * @param mobile 
-     * @create: 2016年1月21日 下午1:36:39 myb858
+     * @param mobile
+     * @param kind
+     * @param systemCode 
+     * @create: 2016年12月14日 下午7:25:30 xieyj
      * @history:
      */
-    public void doCheckMobile(String mobile);
+    public void doCheckMobile(String mobile, String kind, String systemCode);
 
     /**
      * 检查手机号是否存在
      * @param mobile
      * @param kind
-     * @param companyCode 
-     * @create: 2016年11月24日 上午10:03:45 xieyj
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2016年12月14日 下午5:45:18 xieyj
      * @history:
      */
-    public void doCheckMobile(String mobile, String kind, String companyCode);
+    public void doCheckMobile(String mobile, String kind, String companyCode,
+            String systemCode);
+
+    /**
+     * 检查登录密码是否正确
+     * @param userId
+     * @param password
+     * @create: 2017年2月16日 下午2:09:08 xieyj
+     * @history:
+     */
+    public void doCheckLoginPwd(String userId, String password);
 
     /**
      * 注册
@@ -48,12 +60,20 @@ public interface IUserAO {
      * @param loginPwdStrength
      * @param userReferee
      * @param smsCaptcha
+     * @param kind
+     * @param isRegHx
+     * @param province
+     * @param city
+     * @param area
+     * @param systemCode
      * @return 
-     * @create: 2016年5月24日 下午5:05:26 myb858
+     * @create: 2017年1月7日 下午12:57:42 xieyj
      * @history:
      */
     public String doRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha);
+            String loginPwdStrength, String userReferee, String smsCaptcha,
+            String kind, String isRegHx, String province, String city,
+            String area, String systemCode);
 
     /**
      * 注册分配账户送积分
@@ -62,12 +82,14 @@ public interface IUserAO {
      * @param loginPwdStrength
      * @param userReferee
      * @param smsCaptcha
+     * @param systemCode
      * @return 
-     * @create: 2016年12月9日 上午8:36:08 xieyj
+     * @create: 2016年12月14日 下午5:54:26 xieyj
      * @history:
      */
     public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha);
+            String loginPwdStrength, String userReferee, String smsCaptcha,
+            String systemCode);
 
     /**
      * 注册送积分，不分配账户
@@ -85,7 +107,7 @@ public interface IUserAO {
      */
     public String doRegisterSingle(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode, String isMall, String isRegHx);
+            String companyCode, String isMall, String isRegHx, String systemCode);
 
     /**
      * 代注册
@@ -100,94 +122,180 @@ public interface IUserAO {
      * @param kind
      * @param pdf
      * @param roleCode
-     * @param isRegHx
-     * @return 
-     * @create: 2017年3月2日 下午5:42:19 xieyj
-     * @history:
-     */
-    public String doAddUser(String loginName, String mobile, String idKind,
-            String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf, String roleCode,
-            String isRegHx);
-
-    /**
-     * 代注册
-     * @param mobile
-     * @param realName
-     * @param userReferee
-     * @param updater
-     * @param remark
-     * @param kind
-     * @return 
-     * @create: 2016年6月1日 上午11:38:40 xieyj
      * @history:
      */
     public String doAddUser(String mobile, String realName, String userReferee,
-            String updater, String remark, String kind);
+            String updater, String remark, String kind, String systemCode);
+
+    /**
+     * 代注册分配角色
+     * @param loginName
+     * @param kind
+     * @param roleCode
+     * @param updater
+     * @param systemCode
+     * @return 
+     * @create: 2017年3月12日 下午8:11:20 xieyj
+     * @history:
+     */
+    public String doAddUser(String loginName, String kind, String roleCode,
+            String updater, String systemCode);
 
     /**
      * 城市网代注册
      * @param mobile
      * @param companyCode
      * @param userReferee
+     * @param systemCode
      * @return 
-     * @create: 2016年10月21日 下午4:18:19 xieyj
+     * @create: 2016年12月14日 下午5:57:03 xieyj
      * @history:
      */
     public String doAddUser(String mobile, String companyCode,
-            String userReferee);
+            String userReferee, String systemCode);
+
+    public String doAddUser(String loginName, String mobile, String idKind,
+            String idNo, String realName, String userReferee, String updater,
+            String remark, String kind, String pdf, String roleCode,
+            String isRegHx, String province, String city, String area,
+            String systemCode);
+
+    public String doThirdRegister(String openId, String nickname, String photo,
+            String gender, String isRegHx, String companyCode, String systemCode);
+
+    public String doThirdRegisterWechat(String openId, String nickName,
+            String photo, String gender, String companyCode, String systemCode);
 
     /**
-     * 微信等第三方注册
-     * @param openId
-     * @param nickName
-     * @param photo
-     * @param gender
-     * @param companyCode
-     * @param isRegHx
+     * 新增合伙人(正汇)
+     * @param user
+     * @param province
+     * @param city
+     * @param area
      * @return 
-     * @create: 2017年2月16日 下午6:08:45 xieyj
+     * @create: 2016年12月27日 下午4:28:14 xieyj
      * @history:
      */
-    public String doThirdRegister(String openId, String nickName, String photo,
-            String gender, String companyCode, String isRegHx);
+    public String doAddPartner(User user, String province, String city,
+            String area);
 
     /**
-     * 用户登陆
-     * @param loginName 
+     * 修改合伙人(正汇)
+     * @param user
+     * @param province
+     * @param city
+     * @param area 
+     * @create: 2016年12月27日 下午4:28:33 xieyj
+     * @history:
+     */
+    public void doEditPartner(User user, String province, String city,
+            String area);
+
+    /**
+     * 用户登录
+     * @param loginName
      * @param loginPwd
-     * @param kind 
-     * @param companyCode (选填)
+     * @param kind
+     * @param companyCode
+     * @param systemCode
      * @return 
-     * @create: 2016年11月22日 下午3:27:08 xieyj
+     * @create: 2016年12月14日 下午5:57:42 xieyj
      * @history:
      */
     public String doLogin(String loginName, String loginPwd, String kind,
-            String companyCode);
+            String companyCode, String systemCode);
 
     /**
-     * 用户登陆送积分
-     * @param loginName 
-     * @param loginPwd
-     * @param kind 
+     * 微信登录
+     * @param code 微信提供
+     * @param companyCode
+     * @param systemCode
      * @return 
-     * @create: 2016年11月22日 下午3:27:08 xieyj
+     * @create: 2016年12月27日 下午5:38:18 haiqingzheng
+     * @history:
+     */
+    public String doLoginWeChat(String code, String companyCode,
+            String systemCode);
+
+    public String doLoginWeChat(String code, Long amount, String companyCode,
+            String systemCode);
+
+    /**
+     * 小程序登录
+     * @param jsCode
+     * @param nickname
+     * @param sex
+     * @param headimgurl
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年1月19日 下午4:46:06 xieyj
+     * @history:
+     */
+    public String doLoginSmallWeChat(String jsCode, String nickname,
+            String sex, String headimgurl, String companyCode, String systemCode);
+
+    /**
+     * 用户登录送积分
+     * @param loginName
+     * @param loginPwd
+     * @param kind
+     * @param systemCode
+     * @return 
+     * @create: 2016年12月14日 下午5:58:16 xieyj
      * @history:
      */
     public XN805155Res doLoginAddJf(String loginName, String loginPwd,
-            String kind);
+            String kind, String systemCode);
 
     /**
      * 实名认证
      * @param userId
      * @param idKind
      * @param idNo
-     * @param realName 
-     * @create: 2016年5月24日 下午5:10:00 myb858
+     * @param realName
+     * @param isReal 
+     * @create: 2017年3月8日 下午10:17:07 xieyj
      * @history:
      */
     public void doIdentify(String userId, String idKind, String idNo,
+            String realName, String isReal);
+
+    /**
+     * 四要素实名认证
+     * @param userId
+     * @param idKind
+     * @param idNo
+     * @param realName
+     * @param cardNo
+     * @param bindMobile 
+     * @create: 2017年1月4日 上午10:56:27 xieyj
+     * @history:
+     */
+    public void doFourIdentify(String userId, String idKind, String idNo,
+            String realName, String cardNo, String bindMobile);
+
+    /**
+     * 芝麻认证
+     * @param userId
+     * @param idKind
+     * @param idNo
+     * @param realName 
+     * @create: 2017年2月24日 下午4:46:14 haiqingzheng
+     * @history:
+     */
+    public Object doZhimaIdentify(String userId, String idKind, String idNo,
             String realName);
+
+    /**
+     * 芝麻认证查询
+     * @param userId
+     * @param bizNo
+     * @return 
+     * @create: 2017年2月24日 下午4:54:35 haiqingzheng
+     * @history:
+     */
+    public Object doZhimaQuery(String userId, String bizNo);
 
     /**
      * 修改真实姓名
@@ -199,7 +307,7 @@ public interface IUserAO {
     public void doEditRealName(String userId, String realName);
 
     /**
-     * 设置交易密码
+     * 设置支付密码
      * @param userId
      * @param tradePwd
      * @param tradePwdStrength
@@ -211,7 +319,7 @@ public interface IUserAO {
             String tradePwdStrength, String smsCaptcha);
 
     /**
-     * 实名认证+交易密码设置
+     * 实名认证+支付密码设置
      * @param userId
      * @param idKind
      * @param idNo
@@ -239,17 +347,21 @@ public interface IUserAO {
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha, String tradePwd, String isMall);
 
+    public void doChangeMoblie(String userId, String newMobile,
+            String smsCaptcha);
+
     /**
      * 绑定手机号
      * @param userId
      * @param mobile
      * @param smsCaptcha
-     * @param companyCode 
-     * @create: 2016年11月30日 下午4:06:12 xieyj
+     * @param companyCode
+     * @param isSendSms 
+     * @create: 2017年3月11日 下午1:18:28 xieyj
      * @history:
      */
     public void doBindMoblie(String userId, String mobile, String smsCaptcha,
-            String companyCode);
+            String companyCode, String isSendSms);
 
     /**
      * 找回登录密码
@@ -257,12 +369,14 @@ public interface IUserAO {
      * @param smsCaptcha
      * @param newLoginPwd
      * @param loginPwdStrength
-     * @return 
-     * @create: 2016年5月24日 下午5:25:44 myb858
+     * @param kind
+     * @param systemCode 
+     * @create: 2016年12月14日 下午9:05:18 xieyj
      * @history:
      */
     public void doFindLoginPwd(String mobile, String smsCaptcha,
-            String newLoginPwd, String loginPwdStrength);
+            String newLoginPwd, String loginPwdStrength, String kind,
+            String systemCode);
 
     /**
      * 找回登录密码
@@ -270,12 +384,15 @@ public interface IUserAO {
      * @param smsCaptcha
      * @param newLoginPwd
      * @param loginPwdStrength
-     * @param companyCode 
-     * @create: 2016年11月24日 上午10:11:13 xieyj
+     * @param kind
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2016年12月14日 下午9:05:24 xieyj
      * @history:
      */
     public void doFindLoginPwd(String mobile, String smsCaptcha,
-            String newLoginPwd, String loginPwdStrength, String companyCode);
+            String newLoginPwd, String loginPwdStrength, String kind,
+            String companyCode, String systemCode);
 
     /**
      * 管理端找回登录密码
@@ -283,21 +400,23 @@ public interface IUserAO {
      * @param smsCaptcha
      * @param newLoginPwd
      * @param loginPwdStrength
-     * @return 
-     * @create: 2016年5月24日 下午5:25:44 myb858
+     * @param systemCode 
+     * @create: 2016年12月14日 下午5:59:58 xieyj
      * @history:
      */
     public void doFindLoginPwdByOss(String loginName, String smsCaptcha,
-            String newLoginPwd, String loginPwdStrength);
+            String newLoginPwd, String loginPwdStrength, String systemCode);
 
-    /** 
+    /**
      * admin管理员重置密码
      * @param userId
+     * @param adminUserId
      * @param adminPwd 
-     * @create: 2016年10月18日 下午2:21:27 zuixian
-     * @history: 
+     * @create: 2016年12月14日 下午9:51:15 xieyj
+     * @history:
      */
-    public void doFindLoginPwdByOss(String userId, String adminPwd);
+    public void doFindLoginPwdByOss(String userId, String adminUserId,
+            String adminPwd);
 
     /**
      * 重置登录密码
@@ -313,7 +432,7 @@ public interface IUserAO {
             String newLoginPwd, String loginPwdStrength);
 
     /**
-     * 找回交易密码
+     * 找回支付密码
      * @param userId
      * @param newTradePwd
      * @param tradePwdStrength
@@ -329,7 +448,7 @@ public interface IUserAO {
             String idNo);
 
     /**
-     * 找回交易密码(无需实名认证)
+     * 找回支付密码(无需实名认证)
      * @param userId
      * @param newTradePwd
      * @param tradePwdStrength
@@ -344,7 +463,7 @@ public interface IUserAO {
             String tradePwdStrength, String smsCaptcha);
 
     /**
-     * 重置交易密码
+     * 重置支付密码
      * @param userId
      * @param oldTradePwd
      * @param newTradePwd
@@ -414,6 +533,14 @@ public interface IUserAO {
     public List<User> queryUserList(User condition);
 
     /**
+     * @param userId
+     * @return 
+     * @create: 2016年12月15日 下午8:52:16 xieyj
+     * @history:
+     */
+    public List<User> getUserRefereeList(String userId);
+
+    /**
      * 查询用户的详细信息
      * @param userId
      * @create: 2014-12-10 下午7:37:18 miyb
@@ -422,22 +549,45 @@ public interface IUserAO {
     public User doGetUser(String userId);
 
     /**
+     * 查询用户详情(对外开放)
+     * @param userId
+     * @param systemCode
+     * @return 
+     * @create: 2017年3月6日 上午11:53:51 xieyj
+     * @history:
+     */
+    public User doGetDetailUser(String userId, String systemCode);
+
+    /**
+     * 根据手机号，种类，公司编号，系统编号获取用户编号
+     * @param mobile
+     * @param kind
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2016年12月28日 上午10:38:08 xieyj
+     * @history:
+     */
+    public String doGetUserIdByCondition(String mobile, String kind,
+            String companyCode, String systemCode);
+
+    /**
      * 根据loginName获取手机号，发送找回登录密码短信验证码
      * @param loginName 
      * @create: 2016年8月16日 下午3:47:12 xieyj
      * @history:
      */
-    public void doSendLoginPwdSms(String loginName);
+    public void doSendLoginPwdSms(String loginName, String systemCode);
 
     /**
-     * 校验交易密码
+     * 校验支付密码
      * @param userId
      * @param tradePwd
      * @return 
      * @create: 2015年11月10日 上午9:16:42 myb858
      * @history:
      */
-    public void checkTradePwd(String userId, String tradePwd);
+    public void doCheckTradePwd(String userId, String tradePwd);
 
     /**
      * 发送短信
@@ -512,4 +662,25 @@ public interface IUserAO {
      * @history:
      */
     public void doChangeCompany(String userId, String companyCode);
+
+    /**
+     * @param data 
+     * @create: 2017年3月22日 下午1:27:23 xieyj
+     * @history:
+     */
+    public void doSuppleUser(User data);
+
+    /**
+     * 验证码登录注册
+     * @param mobile
+     * @param kind
+     * @param smsCaptcha
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年1月19日 下午5:48:21 xieyj
+     * @history:
+     */
+    public String doCaptchaLoginReg(String mobile, String kind,
+            String smsCaptcha, String companyCode, String systemCode);
 }

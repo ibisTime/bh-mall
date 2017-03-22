@@ -1,11 +1,3 @@
-/**
- * @Title EBizType.java 
- * @Package com.ibis.account.enums 
- * @Description 
- * @author miyb  
- * @date 2015-2-26 下午2:15:22 
- * @version V1.0   
- */
 package com.std.user.enums;
 
 import java.util.HashMap;
@@ -17,7 +9,8 @@ import java.util.Map;
  * @history:
  */
 public enum EBizType {
-    AJ_SR("5", "收入"), AJ_ZC("-5", "支出");
+    AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_SR("5", "收入"), AJ_ZC("-5",
+            "支出");
 
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();

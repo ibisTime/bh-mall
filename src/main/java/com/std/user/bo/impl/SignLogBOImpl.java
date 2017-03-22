@@ -42,7 +42,7 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog> implements
     }
 
     @Override
-    public String saveSignLog(String userId, String location) {
+    public String saveSignLog(String userId, String location, String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId)) {
             SignLog data = new SignLog();
@@ -51,6 +51,7 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog> implements
             data.setUserId(userId);
             data.setLocation(location);
             data.setSignDatetime(new Date());
+            data.setSystemCode(systemCode);
             signLogDAO.insert(data);
         }
         return code;
@@ -59,5 +60,46 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog> implements
     @Override
     public List<SignLog> querySignLogList(SignLog condition) {
         return signLogDAO.selectList(condition);
+    }
+
+    /** 
+     * @see com.std.user.bo.ISignLogBO#getSerialsSignDays(java.lang.String)
+     */
+    @Override
+    public Long getSerialsSignDays(String userId) {
+        Date today = DateUtil.getTodayStart();
+        Date yesterday = DateUtil.getRelativeDateOfDays(today, -1);
+        Long serialsDays = 0L;
+        while (true) {
+            if (querySignLogList(userId, yesterday)) {
+                serialsDays++;
+            } else {
+                break;
+            }
+            yesterday = DateUtil.getRelativeDateOfDays(yesterday, -1);
+        }
+        if (querySignLogList(userId, today)) {
+            serialsDays++;
+        }
+        return serialsDays;
+    }
+
+    /** 
+     * @param userId
+     * @param today
+     * @return 
+     * @create: 2017年2月23日 下午4:37:08 xieyj
+     * @history: 
+     */
+    private boolean querySignLogList(String userId, Date today) {
+        SignLog condition = new SignLog();
+        condition.setUserId(userId);
+        condition.setSignDatetimeStart(today);
+        condition.setSignDatetimeEnd(DateUtil.getRelativeDateOfDays(today, 1));
+        List<SignLog> list = signLogDAO.selectList(condition);
+        if (!CollectionUtils.sizeIsEmpty(list)) {
+            return true;
+        }
+        return false;
     }
 }

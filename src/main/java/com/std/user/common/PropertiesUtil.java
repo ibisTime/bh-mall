@@ -33,6 +33,8 @@ public class PropertiesUtil {
     }
 
     public static final class Config {
+        public static String IDENTIFY_URL = props.getProperty("IDENTIFY_URL");
+
         public static String SMS_URL = props.getProperty("SMS_URL");
 
         public static String COMPANY_MOBILE = props
@@ -60,5 +62,8 @@ public class PropertiesUtil {
 
         public static String APNS_PRODUCTION = props
             .getProperty("APNS_PRODUCTION");
+
+        public static String PARTNER_ROLECODE = props
+            .getProperty("PARTNER_ROLECODE");
     }
 }

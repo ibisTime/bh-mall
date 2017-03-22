@@ -42,7 +42,8 @@ public interface ICompanyAO {
     public Map<String, List<Company>> queryCompanyGroupList(Company condition);
 
     // 通过省市区来查询公司信息
-    public Company getCompanyByPCA(String province, String city, String area);
+    public Company getCompanyByPCA(String province, String city, String area,
+            String systemCode);
 
     // 通过公司编号来查询公司信息
     public Company getCompany(String code);
@@ -51,12 +52,12 @@ public interface ICompanyAO {
     public Company getCompanyByUserId(String userId);
 
     // 通过域名来查询公司信息
-    public Company getCompanyByDomain(String domain);
+    public Company getCompanyByDomain(String domain, String systemCode);
 
     // 登录
-    public String doLogin(String loginName, String password);
+    public String doLogin(String loginName, String password, String systemCode);
 
     // 找回密码
     public void doFindLoginPwd(String loginName, String mobile,
-            String smsCaptcha, String newPassword);
+            String smsCaptcha, String newPassword, String systemCode);
 }

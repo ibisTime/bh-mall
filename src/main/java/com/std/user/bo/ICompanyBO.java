@@ -21,7 +21,7 @@ public interface ICompanyBO extends IPaginableBO<Company> {
     public int refreshCompanyLocation(String code, String location,
             String updater);
 
-    public int refreshCompanyDefault(String code);
+    public int refreshCompanyDefault(String code, String systemCode);
 
     public int refreshCompanyHot(Company data);
 
@@ -36,8 +36,8 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public Company getCompanyByUserId(String userId);
 
-    public Company getCompanyByDomain(String domain);
+    public Company getCompanyByDomain(String domain, String systemCode);
 
-    public Company getDefaultCompany();
+    public Company getDefaultCompany(String systemCode);
 
 }

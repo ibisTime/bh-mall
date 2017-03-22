@@ -70,6 +70,9 @@ public class AccountJour extends ABaseDO {
     // 对账时间
     private Date checkDatetime;
 
+    // 系统编号
+    private String systemCode;
+
     // ---------db properties end--------------------------
     // 币种
     private String currency;
@@ -79,6 +82,14 @@ public class AccountJour extends ABaseDO {
 
     // 手机号
     private String mobileForLikeQuery;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public Date getCreateDatetimeStart() {
         return createDatetimeStart;

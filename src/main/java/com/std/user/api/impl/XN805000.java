@@ -31,7 +31,7 @@ public class XN805000 extends AProcessor {
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
         condition.setUpdater(req.getUpdater());
-        condition.setKind(req.getKind());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ISYSMenuAO.DEFAULT_ORDER_COLUMN;
@@ -41,11 +41,12 @@ public class XN805000 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return sysMenuAO.querySYSMenuPage(start, limit, condition);
-
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805000Req.class);
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 }

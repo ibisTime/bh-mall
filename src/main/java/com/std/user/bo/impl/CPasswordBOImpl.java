@@ -35,7 +35,7 @@ public class CPasswordBOImpl extends PaginableBOImpl<CPassword> implements
 
     @Override
     public String saveCPassword(String type, String account, String password,
-            String remark, String companyCode) {
+            String remark, String companyCode, String systemCode) {
         String code = OrderNoGenerater.generate(EGeneratePrefix.PW.getCode());
         CPassword data = new CPassword();
         data.setCode(code);
@@ -73,11 +73,14 @@ public class CPasswordBOImpl extends PaginableBOImpl<CPassword> implements
         return cPasswordDAO.selectList(condition);
     }
 
-    @Override
-    public Map<String, String> queryCPassword(String type) {
+    public Map<String, String> queryCPasswordList(String type, String account,
+            String companyCode, String systemCode) {
         Map<String, String> resultMap = new HashMap<String, String>();
         CPassword condition = new CPassword();
         condition.setType(type);
+        condition.setAccount(account);
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
         List<CPassword> list = cPasswordDAO.selectList(condition);
         for (CPassword cPassword : list) {
             resultMap.put(cPassword.getAccount(), cPassword.getPassword());

@@ -34,6 +34,7 @@ public class XN805101 extends AProcessor {
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setSignDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
             DateUtil.DATA_TIME_PATTERN_1));
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ISignLogAO.DEFAULT_ORDER_COLUMN;
@@ -47,7 +48,7 @@ public class XN805101 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805101Req.class);
+        StringValidater.validateBlank(req.getUserId());
         StringValidater.validateBlank(req.getStart(), req.getLimit());
     }
-
 }

@@ -1,18 +1,12 @@
 package com.std.user.api.impl;
 
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.std.user.ao.IBankCardAO;
 import com.std.user.ao.ICompanyAO;
 import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
-import com.std.user.common.PropertiesUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.domain.BankCard;
 import com.std.user.domain.Company;
 import com.std.user.domain.User;
 import com.std.user.dto.req.XN805901Req;
@@ -34,9 +28,6 @@ public class XN805901 extends AProcessor {
     private ICompanyAO companyAO = SpringContextHolder
         .getBean(ICompanyAO.class);
 
-    private IBankCardAO bankCardAO = SpringContextHolder
-        .getBean(IBankCardAO.class);
-
     private XN805901Req req = null;
 
     @Override
@@ -46,15 +37,23 @@ public class XN805901 extends AProcessor {
         XN805901Res res = new XN805901Res();
         if (user != null) {
             res.setUserId(userId);
-            res.setLoginName(user.getMobile());
-            res.setPhoto(PropertiesUtil.getProperty("PHOTO_URL"));
+            if (StringUtils.isNotBlank(user.getLoginName())) {
+                res.setLoginName(user.getLoginName());
+            } else {
+                res.setLoginName(user.getMobile());
+            }
+            res.setMobile(user.getMobile());
+            res.setNickname(user.getNickname());
+            res.setOpenId(user.getOpenId());
+            res.setPhoto(user.getPhoto());
             res.setStatus(user.getStatus());
             res.setLevel(user.getLevel());
             res.setKind(user.getKind());
             res.setUserReferee(user.getUserReferee());
             res.setRealName(user.getRealName());
-
-            res.setMobileFlag(EBoolean.YES.getCode());
+            res.setSystemCode(user.getSystemCode());
+            res.setIdKind(user.getIdKind());
+            res.setIdNo(user.getIdNo());
             if (StringUtils.isNotBlank(user.getIdNo())) {
                 res.setIdentityFlag(EBoolean.YES.getCode());
             } else {
@@ -64,17 +63,6 @@ public class XN805901 extends AProcessor {
                 res.setTradepwdFlag(EBoolean.YES.getCode());
             } else {
                 res.setTradepwdFlag(EBoolean.NO.getCode());
-            }
-            if (StringUtils.isNotBlank(user.getIdNo())) {
-                res.setIdentityFlag(EBoolean.YES.getCode());
-            } else {
-                res.setIdentityFlag(EBoolean.NO.getCode());
-            }
-            List<BankCard> bankcardList = bankCardAO.queryBankCardList(userId);
-            if (CollectionUtils.isNotEmpty(bankcardList)) {
-                res.setBankcardFlag(EBoolean.YES.getCode());
-            } else {
-                res.setBankcardFlag(EBoolean.NO.getCode());
             }
             res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
             res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));
@@ -95,5 +83,4 @@ public class XN805901 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805901Req.class);
         StringValidater.validateBlank(req.getTokenId(), req.getUserId());
     }
-
 }

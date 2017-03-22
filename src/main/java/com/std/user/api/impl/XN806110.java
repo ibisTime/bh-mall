@@ -31,6 +31,7 @@ public class XN806110 extends AProcessor {
         condition.setTitle(req.getTitle());
         condition.setMenuCode(req.getMenuCode());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ICMaterialAO.DEFAULT_ORDER_COLUMN;
@@ -44,6 +45,7 @@ public class XN806110 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806110Req.class);
-        StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
 }

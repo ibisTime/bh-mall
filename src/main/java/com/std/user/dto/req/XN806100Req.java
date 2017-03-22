@@ -35,6 +35,17 @@ public class XN806100Req {
     // 公司编号
     private String companyCode;
 
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getKind() {
         return kind;
     }

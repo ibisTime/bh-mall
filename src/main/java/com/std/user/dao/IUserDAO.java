@@ -47,7 +47,7 @@ public interface IUserDAO extends IBaseDAO<User> {
     public int updateIdentity(User data);
 
     /** 
-     * 设置交易密码
+     * 设置支付密码
      * @param data
      * @return 
      * @create: 2015-2-23 下午4:28:41 miyb
@@ -144,4 +144,15 @@ public interface IUserDAO extends IBaseDAO<User> {
      * @history:
      */
     public int updateCompany(User data);
+
+    public int update(User data);
+
+    /**
+     * 更新用户手机号和真实信息
+     * @param data
+     * @return 
+     * @create: 2016年12月28日 下午4:57:18 xieyj
+     * @history:
+     */
+    public int updateSupple(User data);
 }

@@ -65,7 +65,7 @@ public class AJourBOImpl extends PaginableBOImpl<AccountJour> implements
      */
     @Override
     public void addJour(String accountNumber, Long preAmount, Long amount,
-            String bizType, String refNo, String remark) {
+            String bizType, String refNo, String remark, String systemCode) {
         Long postAmount = preAmount + amount;
         AccountJour accountJour = new AccountJour();
         accountJour.setStatus(EAccountJourStatus.todoCheck.getCode());
@@ -80,6 +80,7 @@ public class AJourBOImpl extends PaginableBOImpl<AccountJour> implements
         accountJour.setWorkDate(DateUtil
             .getToday(DateUtil.DB_DATE_FORMAT_STRING));
         accountJour.setAccountNumber(accountNumber);
+        accountJour.setSystemCode(systemCode);
         aJourDAO.insert(accountJour);
     }
 

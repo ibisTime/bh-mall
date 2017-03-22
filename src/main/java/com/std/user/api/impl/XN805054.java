@@ -43,6 +43,7 @@ public class XN805054 extends AProcessor {
         condition.setCompanyCode(req.getCompanyCode());
         condition.setOpenId(req.getOpenId());
         condition.setIsGetAmount(req.getIsGetAmount());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IUserAO.DEFAULT_ORDER_COLUMN;
@@ -57,6 +58,6 @@ public class XN805054 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805054Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getSystemCode());
     }
-
 }

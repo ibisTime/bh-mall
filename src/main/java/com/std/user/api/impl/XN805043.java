@@ -24,13 +24,14 @@ public class XN805043 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new XN805043Res(userAO.doLogin(req.getLoginName(),
-            req.getLoginPwd(), req.getKind(), req.getCompanyCode()));
+            req.getLoginPwd(), req.getKind(), req.getCompanyCode(),
+            req.getSystemCode()));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805043Req.class);
         StringValidater.validateBlank(req.getLoginName(), req.getLoginPwd(),
-            req.getKind());
+            req.getKind(), req.getSystemCode());
     }
 }

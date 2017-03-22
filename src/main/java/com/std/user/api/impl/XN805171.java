@@ -24,8 +24,8 @@ public class XN805171 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doFindLoginPwd(req.getMobile(), req.getSmsCaptcha(),
-            req.getNewLoginPwd(), req.getLoginPwdStrength(),
-            req.getCompanyCode());
+            req.getNewLoginPwd(), req.getLoginPwdStrength(), req.getKind(),
+            req.getCompanyCode(), req.getSystemCode());
         return new BooleanRes(true);
     }
 
@@ -33,8 +33,8 @@ public class XN805171 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805171Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getSmsCaptcha(),
-            req.getNewLoginPwd(), req.getLoginPwdStrength(),
-            req.getCompanyCode());
+            req.getNewLoginPwd(), req.getLoginPwdStrength(), req.getKind(),
+            req.getCompanyCode(), req.getSystemCode());
 
     }
 }

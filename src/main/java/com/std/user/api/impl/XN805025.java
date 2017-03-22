@@ -31,7 +31,6 @@ public class XN805025 extends AProcessor {
         data.setLevel(req.getLevel());
         data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
-        data.setKind(req.getKind());
         return new BooleanRes(sysRoleAO.editSYSRole(data));
     }
 
@@ -39,6 +38,6 @@ public class XN805025 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805025Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getLevel(), req.getUpdater(), req.getKind());
+            req.getLevel(), req.getUpdater());
     }
 }

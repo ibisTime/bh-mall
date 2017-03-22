@@ -25,7 +25,8 @@ public class XN806020 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         String code = cPasswordAO.addCPassword(req.getType(), req.getAccount(),
-            req.getPassword(), req.getRemark(), req.getCompanyCode());
+            req.getPassword(), req.getRemark(), req.getCompanyCode(),
+            req.getSystemCode());
         return new PKCodeRes(code);
     }
 
@@ -33,6 +34,6 @@ public class XN806020 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806020Req.class);
         StringValidater.validateBlank(req.getType(), req.getAccount(),
-            req.getPassword(), req.getCompanyCode());
+            req.getPassword(), req.getCompanyCode(), req.getSystemCode());
     }
 }

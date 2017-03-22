@@ -22,6 +22,17 @@ public class XN806013Req {
 
     // 是否热门（选填）
     private String isHot;
+    
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     // UI位置（选填）
     private String location;

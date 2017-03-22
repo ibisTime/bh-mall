@@ -8,9 +8,6 @@
  */
 package com.std.user.core;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.std.user.exception.BizException;
@@ -32,19 +29,8 @@ public class StringValidater {
         for (String param : params) {
             if (StringUtils.isBlank(param)) {
                 throw new BizException("xn702000", "必填型入参，请按要求填写完整");
-            }
-        }
-    }
-
-    public static void validEmoji(String... params) {
-        Pattern pattern = Pattern
-            .compile("[^(\u2E80-\u9FFF\\w\\s`~!@#\\$%\\^&\\*\\(\\)_+-？（）——=\\[\\]{}\\|;。，、《》”：；“！……’:‘\"<,>\\.?/\\\\*)]");
-        for (String param : params) {
-            if (StringUtils.isNotBlank(param)) {
-                Matcher matcher = pattern.matcher(param);
-                if (matcher.find()) {
-                    throw new BizException("xn000000", "包含非法字符，请删除带有表情");
-                }
+            } else {
+                validateEmoji(param);
             }
         }
     }

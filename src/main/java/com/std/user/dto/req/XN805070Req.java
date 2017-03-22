@@ -17,8 +17,19 @@ public class XN805070Req {
     // 备注(选填)
     private String remark;
 
-    // 六方(必填)
+    // 类别(必填)
     private String kind;
+
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getMobile() {
         return mobile;

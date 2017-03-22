@@ -53,10 +53,21 @@ public class CNavigate extends ABaseDO {
     // 是否公司修改
     private String isCompanyEdit;
 
+    // 系统编号(必填)
+    private String systemCode;
+
     /******************db data******************/
 
     // 是否前端查询
     private String isFront;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getCode() {
         return code;

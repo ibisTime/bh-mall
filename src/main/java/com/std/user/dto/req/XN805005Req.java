@@ -4,9 +4,6 @@ public class XN805005Req {
     // 编号(必填)
     private String code;
 
-    // 六方(必填)
-    private String kind;
-
     // 菜单名称(必填)
     private String name;
 
@@ -28,20 +25,23 @@ public class XN805005Req {
     // 备注(选填)
     private String remark;
 
+    // 系统编号（必填）
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
     }
 
     public String getName() {

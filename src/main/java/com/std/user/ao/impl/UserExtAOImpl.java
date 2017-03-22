@@ -1,5 +1,7 @@
 package com.std.user.ao.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class UserExtAOImpl implements IUserExtAO {
     protected IAJourBO aJourBO;
 
     @Override
-    public int editUserExt(UserExt data) {
+    public int editUserExtAddJf(UserExt data) {
         User user = userBO.getUser(data.getUserId());
         UserExt userExt = userExtBO.getUserExt(data.getUserId());
         if (StringUtils.isBlank(userExt.getGender())
@@ -49,7 +51,19 @@ public class UserExtAOImpl implements IUserExtAO {
     }
 
     @Override
+    public int editUserExt(UserExt data) {
+        userBO.getUser(data.getUserId());
+        return userExtBO.refreshUserExt(data);
+    }
+
+    @Override
     public int editUserExtPhoto(String userId, String photo) {
+        userBO.getUser(userId);
+        return userExtBO.refreshUserPhoto(userId, photo);
+    }
+
+    @Override
+    public int editUserExtPhotoAddJf(String userId, String photo) {
         User user = userBO.getUser(userId);
         UserExt userExt = userExtBO.getUserExt(userId);
         if (StringUtils.isBlank(userExt.getPhoto())) {
@@ -62,5 +76,23 @@ public class UserExtAOImpl implements IUserExtAO {
             }
         }
         return userExtBO.refreshUserPhoto(userId, photo);
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserExtAO#editUserExtLngLat(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public int editUserExtLngLat(String userId, String longitude,
+            String latitude) {
+        userBO.getUser(userId);
+        return userExtBO.refreshUserExtLngLat(userId, longitude, latitude);
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserExtAO#queryUserExtList(com.std.user.domain.UserExt)
+     */
+    @Override
+    public List<UserExt> queryUserExtList(UserExt condition) {
+        return userExtBO.queryUserExtList(condition);
     }
 }

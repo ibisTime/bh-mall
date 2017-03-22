@@ -16,8 +16,16 @@ public class XN805000Req extends APageReq {
     // 更新人(选填)
     private String updater;
 
-    // 六方(选填)
-    private String kind;
+    // 系统编号（必填）
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getName() {
         return name;
@@ -50,13 +58,4 @@ public class XN805000Req extends APageReq {
     public void setUpdater(String updater) {
         this.updater = updater;
     }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
 }

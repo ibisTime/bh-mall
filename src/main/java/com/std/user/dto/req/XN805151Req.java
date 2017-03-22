@@ -20,12 +20,23 @@ public class XN805151Req {
     // 是否注册环信 0或不传 否 1是(选填)
     private String isRegHx;
 
+    // 系统编号(必填)
+    private String systemCode;
+
     public String getIsRegHx() {
         return isRegHx;
     }
 
     public void setIsRegHx(String isRegHx) {
         this.isRegHx = isRegHx;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
     public String getOpenId() {

@@ -18,7 +18,8 @@
 		<result column="check_user" property="checkUser" />			
 		<result column="check_datetime" property="checkDatetime" />	
 		<result column="account_number" property="accountNumber" />	
-		<result column="mobile" property="mobile" />	
+		<result column="mobile" property="mobile" />
+		<result column="system_code" property="systemCode" />	
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">	
@@ -52,6 +53,9 @@
 			<if test="mobileForLikeQuery != null and mobileForLikeQuery != '' ">
 				AND tu.mobile like "%"#{mobileForLikeQuery}"%"
 			</if>	
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_accountJour" parameterType="accountJour" resultMap="accountJour_DB_Result">
@@ -72,6 +76,7 @@
 		,t.check_datetime
 		,t.account_number
 		,tu.mobile
+		,t.system_code
 		FROM
 		tstd_account_jour t INNER JOIN tstd_user tu ON t.account_number = tu.user_id
 		<include refid="where_condition"/>
@@ -98,7 +103,8 @@
 		,create_datetime
 		,work_date
 				
-		,account_number		
+		,account_number	
+		,system_code	
 		)
 		VALUES(
 		#{ajNo}
@@ -113,7 +119,8 @@
 		,#{createDatetime}	
 		,#{workDate}	
 		
-		,#{accountNumber}		
+		,#{accountNumber}	
+		,#{systemCode}			
 		)
 	</insert>
 	

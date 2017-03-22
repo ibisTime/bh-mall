@@ -23,17 +23,21 @@ public class XN805041 extends AProcessor {
     private XN805041Req req = null;
 
     @Override
-    public Object doBusiness() throws BizException {
+    public synchronized Object doBusiness() throws BizException {
         return new XN805041Res(userAO.doRegister(req.getMobile(),
             req.getLoginPwd(), req.getLoginPwdStrength(), req.getUserReferee(),
-            req.getSmsCaptcha()));
+            req.getSmsCaptcha(), req.getKind(), req.getIsRegHx(),
+            req.getProvince(), req.getCity(), req.getArea(),
+            req.getSystemCode()));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805041Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getLoginPwd(),
-            req.getLoginPwdStrength(), req.getSmsCaptcha());
+            req.getLoginPwdStrength(), req.getSmsCaptcha(), req.getKind(),
+            // req.getProvince(), req.getCity(), req.getArea(),
+            req.getSystemCode());
         PhoneUtil.checkMobile(req.getMobile());// 判断格式
     }
 }

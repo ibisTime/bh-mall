@@ -31,6 +31,7 @@ public class XN805330 extends AProcessor {
         condition.setScanner(req.getScanner());
         condition.setScannerMobile(req.getScannerMobile());
         condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ICouponAO.DEFAULT_ORDER_COLUMN;
@@ -45,6 +46,7 @@ public class XN805330 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805330Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getCompanyCode());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }

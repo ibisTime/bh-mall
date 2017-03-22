@@ -36,6 +36,6 @@ public class XN806060 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN806060Req.class);
         StringValidater.validateBlank(req.getFromCompany(),
             req.getFromPerson(), req.getFromContact(), req.getContent(),
-            req.getCompanyCode());
+            req.getCompanyCode(), req.getSystemCode());
     }
 }

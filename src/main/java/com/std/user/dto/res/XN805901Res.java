@@ -6,8 +6,17 @@ public class XN805901Res {
     // 用户ID
     private String userId;
 
+    // openID
+    private String openId;
+
     // 最好不是手机号，就是一般的登录名。目前第一版版本先用手机号，因为用一般登录名，注册流程以及手机验证就要变
     private String loginName;
+
+    // nickname 昵称
+    private String nickname;
+
+    // 手机号
+    private String mobile;
 
     // 头像
     private String photo;
@@ -27,13 +36,13 @@ public class XN805901Res {
     // 推荐人
     private String userReferee;
 
-    // 是否手机绑定
-    private String mobileFlag;
+    // 证件类型
+    private String idKind;
 
-    // 是否实名认证
-    private String identityFlag;
+    // 证件号码
+    private String idNo;
 
-    // 是否设置交易密码
+    // 是否设置支付密码
     private String tradepwdFlag;
 
     // 是否绑定银行卡
@@ -48,7 +57,54 @@ public class XN805901Res {
     // 粉丝数
     private String totalFansNum;
 
+    // 系统编号
+    private String systemCode;
+
+    // 用户扩展信息
     private UserExt userExt;
+
+    // 实名认证
+    private String identityFlag;
+
+    public String getIdentityFlag() {
+        return identityFlag;
+    }
+
+    public void setIdentityFlag(String identityFlag) {
+        this.identityFlag = identityFlag;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getUserId() {
         return userId;
@@ -56,6 +112,14 @@ public class XN805901Res {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public String getLoginName() {
@@ -88,22 +152,6 @@ public class XN805901Res {
 
     public void setLevel(String level) {
         this.level = level;
-    }
-
-    public String getMobileFlag() {
-        return mobileFlag;
-    }
-
-    public void setMobileFlag(String mobileFlag) {
-        this.mobileFlag = mobileFlag;
-    }
-
-    public String getIdentityFlag() {
-        return identityFlag;
-    }
-
-    public void setIdentityFlag(String identityFlag) {
-        this.identityFlag = identityFlag;
     }
 
     public String getTradepwdFlag() {
@@ -176,5 +224,13 @@ public class XN805901Res {
 
     public void setUserExt(UserExt userExt) {
         this.userExt = userExt;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

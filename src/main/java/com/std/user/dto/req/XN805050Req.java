@@ -4,7 +4,7 @@ public class XN805050Req {
     // userId
     private String userId;
 
-    // 新交易密码
+    // 新支付密码
     private String newTradePwd;
 
     // 安全密码强度

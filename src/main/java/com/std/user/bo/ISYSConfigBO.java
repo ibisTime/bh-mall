@@ -39,9 +39,10 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     /**
      * 根据key获取value
      * @param ckey
+     * @param systemCode
      * @return 
-     * @create: 2016年4月20日 下午3:04:47 xieyj
+     * @create: 2016年12月15日 下午12:38:46 xieyj
      * @history:
      */
-    public SYSConfig getConfigValue(String ckey);
+    public SYSConfig getConfigValue(String ckey, String systemCode);
 }

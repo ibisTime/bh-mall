@@ -8,6 +8,7 @@ public class CPassword extends ABaseDO {
 
     private String code;
 
+    // 1 环信；2 七牛；3 微信
     private String type;
 
     private String account;
@@ -17,6 +18,17 @@ public class CPassword extends ABaseDO {
     private String remark;
 
     private String companyCode;
+
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getCode() {
         return code;

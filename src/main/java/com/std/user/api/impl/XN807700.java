@@ -29,7 +29,7 @@ public class XN807700 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new PKIdRes(sysDictAO.addSYSDict(req.getType(),
             req.getParentKey(), req.getDkey(), req.getDvalue(),
-            req.getUpdater(), req.getRemark()));
+            req.getUpdater(), req.getRemark(), req.getSystemCode()));
     }
 
     /** 
@@ -39,6 +39,6 @@ public class XN807700 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN807700Req.class);
         StringValidater.validateBlank(req.getType(), req.getDkey(),
-            req.getDvalue(), req.getUpdater());
+            req.getDvalue(), req.getUpdater(), req.getSystemCode());
     }
 }

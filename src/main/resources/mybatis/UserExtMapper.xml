@@ -4,20 +4,26 @@
 <mapper namespace="com.std.user.dao.IUserExtDAO">
 	<resultMap id="userExt_DB_Result" type="userExt">
 		<result column="user_id" property="userId" />
+		<result column="login_name" property="loginName" />
+		<result column="mobile" property="mobile" />
 		<result column="gender" property="gender" />
+		
 		<result column="birthday" property="birthday" />
 		<result column="photo" property="photo" />
 		<result column="email" property="email" />
-		
 		<result column="diploma" property="diploma" />
 		<result column="occupation" property="occupation" />
+		
 		<result column="work_time" property="workTime" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
-		
 		<result column="area" property="area" />
 		<result column="address" property="address" />
+		
 		<result column="introduce" property="introduce" />
+		<result column="longitude" property="longitude" />
+		<result column="latitude" property="latitude" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -45,12 +51,26 @@
 			<if test="areaForQuery != null and areaForQuery != '' ">
 				AND t.area like "%"#{areaForQuery}"%"
 			</if>
+			<if test="kind != null and kind != '' ">
+				AND tu.kind = #{kind}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="roleCode != null and roleCode != '' ">
+				AND tu.role_code = #{roleCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND tu.status = #{status}
+			</if>
 		</trim>
 	</sql>
 	
 	<select id="select_userExt" parameterType="userExt" resultMap="userExt_DB_Result">
 		SELECT
 		t.user_id
+		,tu.mobile
+		,tu.login_name
 		,t.gender
 		,t.birthday
 		,t.photo
@@ -63,15 +83,16 @@
 		,t.area
 		,t.address
 		,t.introduce
+		,t.system_code
 		FROM
-		tstd_user_ext t
+		tstd_user_ext t inner join tstd_user tu on t.user_id = tu.user_id
 		<include refid="where_condition" />
 		ORDER BY t.user_id DESC
 	</select>
 
 	<select id="select_userExt_count" parameterType="userExt"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_user_ext t
+		SELECT count(1) FROM tstd_user_ext t inner join tstd_user tu on t.user_id = tu.user_id
 		<include refid="where_condition" />
 	</select>
 	
@@ -91,6 +112,7 @@
 		,area
 		,address
 		,introduce
+		,system_code
 		)
 		VALUES(
 		#{userId}
@@ -106,6 +128,7 @@
 		,#{area}
 		,#{address}
 		,#{introduce}
+		,#{systemCode}
 		)
 	</insert>
 	
@@ -130,6 +153,14 @@
 		UPDATE tstd_user_ext
 		SET
 		photo = #{photo}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_userExtLngLat" parameterType="userExt">
+		UPDATE tstd_user_ext
+		SET
+		longitude = #{longitude}
+		,latitude = #{latitude}
 		WHERE user_id = #{userId}
 	</update>
 </mapper>

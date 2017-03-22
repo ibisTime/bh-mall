@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- *找回交易密码
+ *找回支付密码
  * @author: myb858 
  * @since: 2015年9月15日 下午2:14:13 
  * @history:

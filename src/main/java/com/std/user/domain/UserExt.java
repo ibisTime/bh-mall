@@ -61,6 +61,15 @@ public class UserExt extends ABaseDO {
     // 介绍
     private String introduce;
 
+    // 经度
+    private String longitude;
+
+    // 维度
+    private String latitude;
+
+    // 系统编号
+    private String systemCode;
+
     // ******************db properties *******************
     // 省份
     private String provinceForQuery;
@@ -70,6 +79,69 @@ public class UserExt extends ABaseDO {
 
     // 县区
     private String areaForQuery;
+
+    // 用户分类
+    private String kind;
+
+    // 登录名
+    private String loginName;
+
+    // 手机号
+    private String mobile;
+
+    // 角色编号
+    private String roleCode;
+
+    // 状态
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getUserId() {
         return userId;
@@ -197,5 +269,21 @@ public class UserExt extends ABaseDO {
 
     public void setAreaForQuery(String areaForQuery) {
         this.areaForQuery = areaForQuery;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 }

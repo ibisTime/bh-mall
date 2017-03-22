@@ -64,8 +64,8 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
      */
     @Override
     public List<UserExt> selectList(UserExt condition) {
-        // TODO Auto-generated method stub
-        return null;
+        return super.selectList(NAMESPACE.concat("select_userExt"), condition,
+            UserExt.class);
     }
 
     /** 
@@ -88,6 +88,14 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
     @Override
     public int updateUserExt(UserExt data) {
         return super.update(NAMESPACE.concat("update_userExt"), data);
+    }
+
+    /** 
+     * @see com.std.user.dao.IUserExtDAO#updateUserExtLonLat(com.std.user.domain.UserExt)
+     */
+    @Override
+    public int updateUserExtLngLat(UserExt data) {
+        return super.update(NAMESPACE.concat("update_userExtLngLat"), data);
     }
 
 }

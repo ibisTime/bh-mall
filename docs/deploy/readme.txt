@@ -17,6 +17,22 @@ T6dh%$%$ss1
 2，部署
   ssh root@121.43.101.148 -p 22
   
+   --------------------common
+  cd /home/wwwroot/common/tomcat_std_user/webapps
+  cp ./std-user/WEB-INF/classes/application.properties .
+  cp ./std-user/WEB-INF/classes/config.properties .
+  
+  rm -rf std-user.war
+  rm -rf std-user
+  mv /home/std-user.war .
+  
+  mv -f application.properties ./std-user/WEB-INF/classes/
+  mv -f config.properties ./std-user/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh
+  http://121.43.101.148:8905/std-user/api
+ 
   cd /home/wwwroot/caigo/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
   cp ./std-user/WEB-INF/classes/config.properties .
@@ -132,6 +148,8 @@ http://121.43.101.148:6505/std-user/api
   ../bin/shutdown.sh
   ../bin/startup.sh
   
+  http://121.43.101.148:5605/std-user/api
+  
    --------------------qlqq
   cd /home/wwwroot/ride/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
@@ -147,5 +165,36 @@ http://121.43.101.148:6505/std-user/api
   ../bin/shutdown.sh
   ../bin/startup.sh
   
-  http://121.43.101.148:5705/std-user/api
+     --------------------loan
+  cd /home/wwwroot/loan/tomcat_std_user/webapps
+  cp ./std-user/WEB-INF/classes/application.properties .
+  cp ./std-user/WEB-INF/classes/config.properties .
+  
+  rm -rf std-user.war
+  rm -rf std-user
+  mv /home/std-user.war .
+  
+  mv -f application.properties ./std-user/WEB-INF/classes/
+  mv -f config.properties ./std-user/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh
+  
+  http://121.43.101.148:5805/std-user/api
+  
+       --------------------game
+  cd /home/wwwroot/game/tomcat_std_user/webapps
+  cp ./std-user/WEB-INF/classes/application.properties .
+  cp ./std-user/WEB-INF/classes/config.properties .
+  
+  rm -rf std-user.war
+  rm -rf std-user
+  mv /home/std-user.war .
+  
+  mv -f application.properties ./std-user/WEB-INF/classes/
+  mv -f config.properties ./std-user/WEB-INF/classes/
+  
+  ../bin/shutdown.sh
+  ../bin/startup.sh
+  http://118.178.124.16:8905/std-user/api
   

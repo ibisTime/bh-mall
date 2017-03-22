@@ -48,6 +48,6 @@ public class MD5Util {
     }
 
     public static void main(String[] args) {
-        System.out.print(md5(null));
+        System.out.print(md5("123456q"));
     }
 }

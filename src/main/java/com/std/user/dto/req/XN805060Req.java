@@ -1,93 +1,69 @@
 package com.std.user.dto.req;
 
 public class XN805060Req {
+    // 省
+    private String province;
 
-    // userId（必填）
-    private String userId;
+    // 市
+    private String city;
 
-    // 银行代号（选填）
-    private String bankCode;
+    // 县
+    private String area;
 
-    // 银行名字（选填）
-    private String bankName;
+    // kind
+    private String kind;
 
-    // 开卡支行（选填）
-    private String subbranch;
+    // 角色编号
+    private String roleCode;
 
-    // 卡号（必填）
-    private String bankCardNo;
+    // 状态
+    private String status;
 
-    // 银行预留手机号（选填）
-    private String bindMobile;
-
-    // 更新人（必填）
-    private String updater;
-
-    // 备注（选填）
-    private String remark;
-
-    public String getUserId() {
-        return userId;
+    public String getStatus() {
+        return status;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getBankCode() {
-        return bankCode;
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setBankCode(String bankCode) {
-        this.bankCode = bankCode;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
-    public String getBankName() {
-        return bankName;
+    public String getKind() {
+        return kind;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
-    public String getSubbranch() {
-        return subbranch;
+    public String getProvince() {
+        return province;
     }
 
-    public void setSubbranch(String subbranch) {
-        this.subbranch = subbranch;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getBankCardNo() {
-        return bankCardNo;
+    public String getCity() {
+        return city;
     }
 
-    public void setBankCardNo(String bankCardNo) {
-        this.bankCardNo = bankCardNo;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getBindMobile() {
-        return bindMobile;
+    public String getArea() {
+        return area;
     }
 
-    public void setBindMobile(String bindMobile) {
-        this.bindMobile = bindMobile;
+    public void setArea(String area) {
+        this.area = area;
     }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
 }

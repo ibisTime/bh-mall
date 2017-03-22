@@ -34,5 +34,4 @@ public class XN805047 extends AProcessor {
         StringValidater.validateBlank(req.getUserId(), req.getNewMobile(),
             req.getSmsCaptcha(), req.getTradePwd());
     }
-
 }

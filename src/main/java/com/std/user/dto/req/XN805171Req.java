@@ -13,8 +13,30 @@ public class XN805171Req {
     // 新登录密码强度
     private String loginPwdStrength;
 
+    // 种类
+    private String kind;
+
     // 公司编号(必填)
     private String companyCode;
+
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getMobile() {
         return mobile;

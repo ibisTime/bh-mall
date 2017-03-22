@@ -1,17 +1,39 @@
 package com.std.user.dto.req;
 
 public class XN805048Req {
-    // mobile(没有就注册，所以可用手机号)
+    // 手机号(必填)
     private String mobile;
 
-    // 手机验证码
+    // 手机验证码(必填)
     private String smsCaptcha;
 
-    // 新登录密码
+    // 新登录密码(必填)
     private String newLoginPwd;
 
-    // 新登录密码强度
+    // 新登录密码强度(必填)
     private String loginPwdStrength;
+
+    // 类别(必填)
+    private String kind;
+
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getMobile() {
         return mobile;

@@ -23,12 +23,13 @@ public class XN806015 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return companyAO.getCompanyByDomain(req.getDomain());
+        return companyAO.getCompanyByDomain(req.getDomain(),
+            req.getSystemCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN806015Req.class);
-        StringValidater.validateBlank(req.getDomain());
+        StringValidater.validateBlank(req.getDomain(), req.getSystemCode());
     }
 }
