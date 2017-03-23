@@ -4,15 +4,11 @@ import java.util.List;
 
 import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.Blacklist;
+import com.std.user.domain.User;
 
 public interface IBlacklistBO extends IPaginableBO<Blacklist> {
 
-    public boolean isBlacklistExist(Long id);
-
-    public boolean isAdded(String userId, String type, String systemCode);
-
-    public Long saveBlacklist(String userId, String type, String remark,
-            String systemCode);
+    public Long saveBlacklist(User user, String type, String remark);
 
     public int removeBlacklist(Long id, String updater, String remark);
 

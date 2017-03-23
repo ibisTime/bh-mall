@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
+import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN805154Res;
 import com.std.user.dto.res.XN805155Res;
 
@@ -556,7 +557,7 @@ public interface IUserAO {
      * @create: 2017年3月6日 上午11:53:51 xieyj
      * @history:
      */
-    public User doGetDetailUser(String userId, String systemCode);
+    public XN001400Res doGetDetailUser(String userId);
 
     /**
      * 根据手机号，种类，公司编号，系统编号获取用户编号

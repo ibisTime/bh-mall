@@ -50,6 +50,7 @@ import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
+import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
 import com.std.user.dto.res.XN805154Res;
@@ -1806,11 +1807,8 @@ public class UserAOImpl implements IUserAO {
         }
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doGetDetailUser(java.lang.String, java.lang.String)
-     */
     @Override
-    public User doGetDetailUser(String userId, String systemCode) {
+    public XN001400Res doGetDetailUser(String userId) {
         User user = userBO.getUser(userId);
         if (user == null) {
             throw new BizException("li01004", userId + "用户不存在");
@@ -1823,6 +1821,47 @@ public class UserAOImpl implements IUserAO {
             UserExt userExt = userExtBO.getUserExt(userId);
             user.setUserExt(userExt);
         }
-        return user;
+
+        XN001400Res res = new XN001400Res();
+        if (user != null) {
+            res.setUserId(userId);
+            if (StringUtils.isNotBlank(user.getLoginName())) {
+                res.setLoginName(user.getLoginName());
+            } else {
+                res.setLoginName(user.getMobile());
+            }
+            res.setMobile(user.getMobile());
+            res.setNickname(user.getNickname());
+            res.setOpenId(user.getOpenId());
+            res.setPhoto(user.getPhoto());
+            res.setStatus(user.getStatus());
+            res.setLevel(user.getLevel());
+            res.setKind(user.getKind());
+            res.setUserReferee(user.getUserReferee());
+            res.setRealName(user.getRealName());
+            res.setSystemCode(user.getSystemCode());
+            res.setIdKind(user.getIdKind());
+            res.setIdNo(user.getIdNo());
+            if (StringUtils.isNotBlank(user.getIdNo())) {
+                res.setIdentityFlag(EBoolean.YES.getCode());
+            } else {
+                res.setIdentityFlag(EBoolean.NO.getCode());
+            }
+            if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
+                res.setTradepwdFlag(EBoolean.YES.getCode());
+            } else {
+                res.setTradepwdFlag(EBoolean.NO.getCode());
+            }
+            res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
+            res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));
+            if (user.getCompanyCode() == null) {
+                Company company = companyBO.getCompanyByUserId(res.getUserId());
+                if (company != null) {
+                    user.setCompanyCode(company.getCode());
+                }
+            }
+            res.setCompanyCode(user.getCompanyCode());
+        }
+        return res;
     }
 }

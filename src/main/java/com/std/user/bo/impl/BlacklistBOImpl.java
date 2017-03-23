@@ -11,6 +11,7 @@ import com.std.user.bo.IBlacklistBO;
 import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.dao.IBlacklistDAO;
 import com.std.user.domain.Blacklist;
+import com.std.user.domain.User;
 import com.std.user.enums.EBlacklistStatus;
 import com.std.user.exception.BizException;
 
@@ -22,39 +23,16 @@ public class BlacklistBOImpl extends PaginableBOImpl<Blacklist> implements
     private IBlacklistDAO blacklistDAO;
 
     @Override
-    public boolean isBlacklistExist(Long id) {
-        Blacklist condition = new Blacklist();
-        condition.setId(id);
-        if (blacklistDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isAdded(String userId, String type, String systemCode) {
-        Blacklist condition = new Blacklist();
-        condition.setUserId(userId);
-        condition.setType(type);
-        condition.setSystemCode(systemCode);
-        if (blacklistDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Long saveBlacklist(String userId, String type, String remark,
-            String systemCode) {
+    public Long saveBlacklist(User user, String type, String remark) {
         Long id = null;
-        if (StringUtils.isNotBlank(userId)) {
+        if (user != null && StringUtils.isNotBlank(user.getUserId())) {
             Blacklist data = new Blacklist();
-            data.setUserId(userId);
+            data.setUserId(user.getUserId());
             data.setType(type);
             data.setStatus(EBlacklistStatus.VALID.getCode());
             data.setCreateDatetime(new Date());
             data.setRemark(remark);
-            data.setSystemCode(systemCode);
+            data.setSystemCode(user.getSystemCode());
             blacklistDAO.insert(data);
             // 对应 mapper insert方法中必须配置 useGeneratedKeys="true" keyProperty="id"
             id = data.getId();

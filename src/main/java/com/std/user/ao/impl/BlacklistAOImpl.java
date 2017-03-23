@@ -10,6 +10,7 @@ import com.std.user.bo.IBlacklistBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Blacklist;
+import com.std.user.domain.User;
 import com.std.user.enums.EBlacklistStatus;
 import com.std.user.exception.BizException;
 
@@ -23,18 +24,13 @@ public class BlacklistAOImpl implements IBlacklistAO {
     private IUserBO userBO;
 
     @Override
-    public Long addBlacklist(String userId, String type, String remark,
-            String systemCode) {
-        Long id = null;
-        if (userBO.isUserExist(userId, systemCode)) {
-            if (blacklistBO.isAdded(userId, type, systemCode)) {
-                throw new BizException("xn000000", "该用户已经在黑名单中");
-            }
-            id = blacklistBO.saveBlacklist(userId, type, remark, systemCode);
-        } else {
+    public void addBlacklist(String userId, String type, String remark) {
+        User user = userBO.getUser(userId);
+        if (user == null) {
             throw new BizException("xn000000", "用户编号不存在");
         }
-        return id;
+        blacklistBO.saveBlacklist(user, type, remark);
+
     }
 
     @Override
@@ -47,11 +43,6 @@ public class BlacklistAOImpl implements IBlacklistAO {
             throw new BizException("xn000000", "记录不存在");
         }
         return count;
-    }
-
-    @Override
-    public boolean isAdded(String userId, String type, String systemCode) {
-        return blacklistBO.isAdded(userId, type, systemCode);
     }
 
     @Override
