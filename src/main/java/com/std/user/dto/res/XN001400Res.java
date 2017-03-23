@@ -1,6 +1,5 @@
 package com.std.user.dto.res;
 
-
 public class XN001400Res {
     // 用户ID
     private String userId;
@@ -41,26 +40,17 @@ public class XN001400Res {
     // 证件号码
     private String idNo;
 
+    // 实名认证
+    private String identityFlag;
+
     // 是否设置支付密码
     private String tradepwdFlag;
-
-    // 是否绑定银行卡
-    private String bankcardFlag;
-
-    // 公司编号
-    private String companyCode;
 
     // 关注数
     private String totalFollowNum;
 
     // 粉丝数
     private String totalFansNum;
-
-    // 系统编号
-    private String systemCode;
-
-    // 实名认证
-    private String identityFlag;
 
     // 省
     private String province;
@@ -70,6 +60,12 @@ public class XN001400Res {
 
     // 区(县)
     private String area;
+
+    // 公司编号
+    private String companyCode;
+
+    // 系统编号
+    private String systemCode;
 
     public String getIdentityFlag() {
         return identityFlag;
@@ -165,14 +161,6 @@ public class XN001400Res {
 
     public void setTradepwdFlag(String tradepwdFlag) {
         this.tradepwdFlag = tradepwdFlag;
-    }
-
-    public String getBankcardFlag() {
-        return bankcardFlag;
-    }
-
-    public void setBankcardFlag(String bankcardFlag) {
-        this.bankcardFlag = bankcardFlag;
     }
 
     public String getKind() {

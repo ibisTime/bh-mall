@@ -32,15 +32,10 @@ public class XN001401 extends AProcessor {
         condition.setUserReferee(req.getUserReferee());
 
         condition.setMobileForLikeQuery(req.getMobile());
-        condition.setIdKind(req.getIdKind());
-        condition.setIdNo(req.getIdNo());
         condition.setRealName(req.getRealName());
-        condition.setRoleCode(req.getRoleCode());
 
         condition.setStatus(req.getStatus());
-        condition.setUpdater(req.getUpdater());
         condition.setCompanyCode(req.getCompanyCode());
-        condition.setOpenId(req.getOpenId());
         condition.setSystemCode(req.getSystemCode());
         return userAO.queryUserList(condition);
     }
@@ -48,6 +43,7 @@ public class XN001401 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN001401Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

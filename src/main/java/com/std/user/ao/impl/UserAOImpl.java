@@ -1812,56 +1812,47 @@ public class UserAOImpl implements IUserAO {
         User user = userBO.getUser(userId);
         if (user == null) {
             throw new BizException("li01004", userId + "用户不存在");
+        }
+        XN001400Res res = new XN001400Res();
+
+        res.setUserId(userId);
+        res.setOpenId(user.getOpenId());
+        res.setLoginName(user.getLoginName());
+        res.setNickname(user.getNickname());
+        res.setMobile(user.getMobile());
+
+        res.setPhoto(user.getPhoto());
+        res.setStatus(user.getStatus());
+        res.setLevel(user.getLevel());
+        res.setKind(user.getKind());
+        res.setRealName(user.getRealName());
+
+        res.setUserReferee(user.getUserReferee());
+        res.setIdKind(user.getIdKind());
+        res.setIdNo(user.getIdNo());
+
+        if (StringUtils.isNotBlank(user.getIdNo())) {
+            res.setIdentityFlag(EBoolean.YES.getCode());
         } else {
-            User userReferee = userBO.getUser(user.getUserReferee());
-            if (userReferee != null) {
-                user.setUserRefereeName(userReferee.getLoginName());
-            }
-            // 获取用户扩展信息
-            UserExt userExt = userExtBO.getUserExt(userId);
-            user.setUserExt(userExt);
+            res.setIdentityFlag(EBoolean.NO.getCode());
+        }
+        if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
+            res.setTradepwdFlag(EBoolean.YES.getCode());
+        } else {
+            res.setTradepwdFlag(EBoolean.NO.getCode());
+        }
+        res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));
+        res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
+        res.setSystemCode(user.getSystemCode());
+        res.setCompanyCode(user.getCompanyCode());
+        // 获取用户扩展信息
+        UserExt userExt = userExtBO.getUserExt(userId);
+        if (userExt != null) {
+            res.setProvince(userExt.getProvince());
+            res.setCity(userExt.getCity());
+            res.setArea(userExt.getArea());
         }
 
-        XN001400Res res = new XN001400Res();
-        if (user != null) {
-            res.setUserId(userId);
-            if (StringUtils.isNotBlank(user.getLoginName())) {
-                res.setLoginName(user.getLoginName());
-            } else {
-                res.setLoginName(user.getMobile());
-            }
-            res.setMobile(user.getMobile());
-            res.setNickname(user.getNickname());
-            res.setOpenId(user.getOpenId());
-            res.setPhoto(user.getPhoto());
-            res.setStatus(user.getStatus());
-            res.setLevel(user.getLevel());
-            res.setKind(user.getKind());
-            res.setUserReferee(user.getUserReferee());
-            res.setRealName(user.getRealName());
-            res.setSystemCode(user.getSystemCode());
-            res.setIdKind(user.getIdKind());
-            res.setIdNo(user.getIdNo());
-            if (StringUtils.isNotBlank(user.getIdNo())) {
-                res.setIdentityFlag(EBoolean.YES.getCode());
-            } else {
-                res.setIdentityFlag(EBoolean.NO.getCode());
-            }
-            if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
-                res.setTradepwdFlag(EBoolean.YES.getCode());
-            } else {
-                res.setTradepwdFlag(EBoolean.NO.getCode());
-            }
-            res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
-            res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));
-            if (user.getCompanyCode() == null) {
-                Company company = companyBO.getCompanyByUserId(res.getUserId());
-                if (company != null) {
-                    user.setCompanyCode(company.getCode());
-                }
-            }
-            res.setCompanyCode(user.getCompanyCode());
-        }
         return res;
     }
 }

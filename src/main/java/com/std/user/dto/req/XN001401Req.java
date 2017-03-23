@@ -1,6 +1,12 @@
 package com.std.user.dto.req;
 
 public class XN001401Req {
+    // 系统编号(必填)
+    private String systemCode;
+
+    // 公司编号(必填)
+    private String companyCode;
+
     // 登录名
     private String loginName;
 
@@ -19,32 +25,20 @@ public class XN001401Req {
     // 手机号
     private String mobile;
 
-    // 证件类型
-    private String idKind;
-
-    // 证件号码
-    private String idNo;
-
     // 真实姓名
     private String realName;
-
-    // 角色编号
-    private String roleCode;
 
     // 状态
     private String status;
 
-    // 修改人
-    private String updater;
+    // 省
+    private String province;
 
-    // 公司编号
-    private String companyCode;
+    // 市
+    private String city;
 
-    // 第三方登录开放编号
-    private String openId;
-
-    // 系统编号
-    private String systemCode;
+    // 县
+    private String area;
 
     public String getSystemCode() {
         return systemCode;
@@ -54,12 +48,28 @@ public class XN001401Req {
         this.systemCode = systemCode;
     }
 
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getLoginName() {
         return loginName;
     }
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getKind() {
@@ -94,36 +104,12 @@ public class XN001401Req {
         this.mobile = mobile;
     }
 
-    public String getIdKind() {
-        return idKind;
-    }
-
-    public void setIdKind(String idKind) {
-        this.idKind = idKind;
-    }
-
-    public String getIdNo() {
-        return idNo;
-    }
-
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
-    }
-
     public String getRealName() {
         return realName;
     }
 
     public void setRealName(String realName) {
         this.realName = realName;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
     }
 
     public String getStatus() {
@@ -134,35 +120,28 @@ public class XN001401Req {
         this.status = status;
     }
 
-    public String getUpdater() {
-        return updater;
+    public String getProvince() {
+        return province;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getCity() {
+        return city;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
+    public String getArea() {
+        return area;
     }
 
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
+    public void setArea(String area) {
+        this.area = area;
     }
 
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
 }
