@@ -19,12 +19,6 @@ public class XN805041Req {
     // 类别（必填）
     private String kind;
 
-    // 是否注册环信（必填）
-    private String isRegHx;
-
-    // 系统编号(必填)
-    private String systemCode;
-
     // 省(选填)
     private String province;
 
@@ -33,6 +27,12 @@ public class XN805041Req {
 
     // 区(选填)
     private String area;
+
+    // 是否注册环信（必填）
+    private String isRegHx;
+
+    // 系统编号(必填)
+    private String systemCode;
 
     public String getProvince() {
         return province;

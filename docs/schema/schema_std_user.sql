@@ -4,7 +4,7 @@
  Source Server         : 148
  Source Server Version : 50545
  Source Host           : 121.43.101.148
- Source Database       : zhpay_std_user
+ Source Database       : std_user
 
  Target Server Version : 50545
  File Encoding         : utf-8

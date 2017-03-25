@@ -193,7 +193,7 @@ public class UserAOImpl implements IUserAO {
                 systemCode);
         }
         // 分配账号
-        if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
+        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
                 currencyList.add(ECurrency.CNY.getCode());
@@ -207,6 +207,13 @@ public class UserAOImpl implements IUserAO {
                 currencyList.add(ECurrency.HBB.getCode());
                 currencyList.add(ECurrency.HBYJ.getCode());
             }
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
+        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.XNB.getCode());
+            currencyList.add(ECurrency.CGB.getCode());
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         } else {
@@ -361,7 +368,7 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId, photo, gender, systemCode);
 
         // 分配账号(人民币和虚拟币)
-        if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
+        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.FRB.getCode());
@@ -409,7 +416,7 @@ public class UserAOImpl implements IUserAO {
                 realName = mobile;
             }
             // 分配账号(人民币和虚拟币)
-            if (ESystemCode.ZH_QB.getCode().equals(systemCode)) {
+            if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
                 if (EUserKind.F2.getCode().equals(kind)) {
                     currencyList.add(ECurrency.CNY.getCode());
@@ -425,9 +432,6 @@ public class UserAOImpl implements IUserAO {
                 }
                 accountBO.distributeAccountList(userId, realName,
                     getAccountType(kind), currencyList, systemCode);
-                // 注册环信
-                instantMsgImpl.doRegisterUser(userId,
-                    EUserPwd.InitPwd.getCode(), systemCode);
             } else {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
