@@ -250,6 +250,7 @@
 		,remark
 		,pdf
 		,role_code
+		,company_code
 		,system_code
 		)
 		VALUES(
@@ -275,6 +276,7 @@
 		,#{remark}
 		,#{pdf}
 		,#{roleCode}
+		,#{companyCode}
 		,#{systemCode}
 		)
 	</insert>

@@ -559,6 +559,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setRemark(remark);
             user.setPdf(pdf);
             user.setRoleCode(roleCode);
+            user.setCompanyCode(systemCode);
             user.setSystemCode(systemCode);
             userDAO.insertRen(user);
         }
