@@ -981,7 +981,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void doBindMoblie(String userId, String mobile, String smsCaptcha,
-            String companyCode, String isSendSms) {
+            String isSendSms) {
         User user = userBO.getUser(userId);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
@@ -990,10 +990,11 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "手机号已经绑定，无需再次操作");
         }
         // 验证手机号
-        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode);
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(),
+            user.getCompanyCode(), user.getSystemCode());
         // 短信验证码是否正确（往手机号发送）
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805153", companyCode,
-            user.getSystemCode());
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805153",
+            user.getCompanyCode(), user.getSystemCode());
         // 插入用户信息
         String loginPwd = RandomUtil.generate6();
         userBO.refreshBindMobile(userId, mobile, mobile, loginPwd, "1");

@@ -356,13 +356,12 @@ public interface IUserAO {
      * @param userId
      * @param mobile
      * @param smsCaptcha
-     * @param companyCode
      * @param isSendSms 
      * @create: 2017年3月11日 下午1:18:28 xieyj
      * @history:
      */
     public void doBindMoblie(String userId, String mobile, String smsCaptcha,
-            String companyCode, String isSendSms);
+            String isSendSms);
 
     /**
      * 找回登录密码

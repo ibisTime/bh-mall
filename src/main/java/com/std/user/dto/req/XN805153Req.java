@@ -11,9 +11,6 @@ public class XN805153Req {
     // 短信验证码（必填）
     private String smsCaptcha;
 
-    // 公司编号（选填）兼容橙商户和城市网
-    private String companyCode;
-
     // 是否发送短信(1 是 0 否)
     private String isSendSms;
 
@@ -47,13 +44,5 @@ public class XN805153Req {
 
     public void setSmsCaptcha(String smsCaptcha) {
         this.smsCaptcha = smsCaptcha;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 }
