@@ -99,7 +99,7 @@ public class SignLogAOImpl implements ISignLogAO {
             user.getSystemCode());
         // 账户资金划拨
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_LLWW.getCode(),
-            userId, ECurrency.XNB, amount, EBizType.AJ_SIGN, "每日签到", "每日签到");
+            userId, ECurrency.JF, amount, EBizType.AJ_SIGN, "每日签到", "每日签到");
         return new XN805931Res(code, amount);
     }
 }

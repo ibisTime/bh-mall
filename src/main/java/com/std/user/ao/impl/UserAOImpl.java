@@ -212,14 +212,14 @@ public class UserAOImpl implements IUserAO {
         } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.XNB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
             currencyList.add(ECurrency.CGB.getCode());
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.XNB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         }
@@ -245,7 +245,7 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.XNB.getCode());
+        currencyList.add(ECurrency.JF.getCode());
         accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
             currencyList, systemCode);
         // 设置用户关系
@@ -286,12 +286,12 @@ public class UserAOImpl implements IUserAO {
             EBoolean.NO.getCode());
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.XNB.getCode());
+        currencyList.add(ECurrency.JF.getCode());
         accountBO.distributeAccountList(userId, mobile,
             EAccountType.Customer.getCode(), currencyList, systemCode);
         // 注册送积分
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-            userId, ECurrency.XNB, amount, EBizType.AJ_REG, "注册送积分", "注册送积分");
+            userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分", "注册送积分");
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
@@ -381,7 +381,7 @@ public class UserAOImpl implements IUserAO {
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.XNB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
@@ -433,7 +433,7 @@ public class UserAOImpl implements IUserAO {
             } else {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.XNB.getCode());
+                currencyList.add(ECurrency.JF.getCode());
                 accountBO.distributeAccountList(userId, mobile,
                     getAccountType(kind), currencyList, systemCode);
                 if (EUserKind.F1.getCode().equals(kind)) {
@@ -520,7 +520,7 @@ public class UserAOImpl implements IUserAO {
             // 分配账号(人民币和虚拟币)
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.XNB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         }
@@ -544,7 +544,7 @@ public class UserAOImpl implements IUserAO {
             systemCode);
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.XNB.getCode());
+        currencyList.add(ECurrency.JF.getCode());
         accountBO.distributeAccountList(userId, loginName,
             getAccountType(kind), currencyList, systemCode);
         return userId;
@@ -1675,7 +1675,7 @@ public class UserAOImpl implements IUserAO {
                     companyCode, systemCode);
                 // 账户资金划拨
                 accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_LLWW.getCode(), userId, ECurrency.XNB,
+                    ESysUser.SYS_USER_LLWW.getCode(), userId, ECurrency.JF,
                     amount, EBizType.AJ_REG, "注册送积分", "注册送积分");
                 // 注册对其编号进行标注
                 userId = userId + "&reg";
