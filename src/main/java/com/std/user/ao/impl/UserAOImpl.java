@@ -243,11 +243,11 @@ public class UserAOImpl implements IUserAO {
             loginPwdStrength, userReferee, kind, "0", 0L, null, null, null,
             systemCode);
         // 分配账号(人民币和虚拟币)
-        accountBO.distributeAccount(userId, mobile, getAccountType(kind),
-            ECurrency.CNY.getCode(), systemCode);
-        // XN802001Res accountRes = accountBO.distributeAccountTwo(userId,
-        // mobile,
-        // ECurrency.XNB.getCode(), userReferee);
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.XNB.getCode());
+        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
+            currencyList, systemCode);
         // 设置用户关系
         if (StringUtils.isNotBlank(userReferee)) {
             userRelationBO.saveUserRelation(userReferee, userId, systemCode);
@@ -259,21 +259,15 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doRegisterSingle(String mobile, String loginPwd,
+    public String doCSWRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode, String isMall, String isRegHx, String systemCode) {
-        // 验证手机号
-        if (StringUtils.isNotBlank(isMall)
-                && EBoolean.YES.getCode().equals(isMall)) {
-            userBO.isMobileExist(mobile, null, companyCode);
-        } else {
-            userBO.isMobileExist(mobile, systemCode);
-        }
+            String isRegHx, String companyCode, String systemCode) {
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode,
+            systemCode);
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee, systemCode);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076", companyCode,
-            systemCode);
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076", systemCode);
         // 设置公司
         Company company = companyBO.getCompany(companyCode);
         if (company == null) {
@@ -282,18 +276,22 @@ public class UserAOImpl implements IUserAO {
                 companyCode = result.getCode();
             }
         }
-        // 注册送钱
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
-            EBoolean.NO.getCode());
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             null, mobile, loginPwd, loginPwdStrength, userReferee,
-            EUserKind.F1.getCode(), null, amount, companyCode, null, null,
-            systemCode);
-        if (amount != null && amount > 0) {
-            aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
-                ERuleType.ZC.getValue(), systemCode);
-        }
+            EUserKind.F1.getCode(), EUserLevel.ONE.getCode(), 0L, companyCode,
+            null, null, systemCode);
+        // 注册
+        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
+            EBoolean.NO.getCode());
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.XNB.getCode());
+        accountBO.distributeAccountList(userId, mobile,
+            EAccountType.Customer.getCode(), currencyList, systemCode);
+        // 注册送积分
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
+            userId, ECurrency.XNB, amount, EBizType.AJ_REG, "注册送积分", "注册送积分");
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
@@ -519,14 +517,12 @@ public class UserAOImpl implements IUserAO {
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, level + "", remark,
                 updater, pdf, cxRoleCode, systemCode);
-            // 分配人民币账号
-            accountBO.distributeAccount(userId, realName,
-                EAccountType.Business.getCode(), ECurrency.CNY.getCode(),
-                systemCode);
-            // 分配积分账号
-            accountBO.distributeAccount(userId, realName,
-                EAccountType.Business.getCode(), ECurrency.XNB.getCode(),
-                systemCode);
+            // 分配账号(人民币和虚拟币)
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.XNB.getCode());
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
         }
         // 是则注册环信用户
         if (EBoolean.YES.getCode().equals(isRegHx)) {
@@ -567,8 +563,10 @@ public class UserAOImpl implements IUserAO {
             realName, null, null, tradePsd, kind, "0", remark, updater, null,
             null, systemCode);
         // 分配账号
-        accountBO.distributeAccount(userId, realName, getAccountType(kind),
-            ECurrency.CNY.getCode(), systemCode);
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        accountBO.distributeAccountList(userId, realName, getAccountType(kind),
+            currencyList, systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，您已成功注册。您的登录密码为" + loginPsd + ";支付密码为" + tradePsd
@@ -1676,9 +1674,9 @@ public class UserAOImpl implements IUserAO {
                 userId = doThirdRegisterWechat(openId, name, headimgurl, sex,
                     companyCode, systemCode);
                 // 账户资金划拨
-                accountBO.doTransferAmount(systemCode,
-                    ESysUser.SYS_USER.getCode(), userId, amount, ECurrency.XNB,
-                    EBizType.AJ_REG);
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_LLWW.getCode(), userId, ECurrency.XNB,
+                    amount, EBizType.AJ_REG, "注册送积分", "注册送积分");
                 // 注册对其编号进行标注
                 userId = userId + "&reg";
             }

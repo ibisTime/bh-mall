@@ -21,19 +21,6 @@ import com.std.user.enums.ECurrency;
 public interface IAccountBO {
 
     /**
-     * 分配单个账户
-     * @param userId
-     * @param realName
-     * @param currency
-     * @param systemCode
-     * @return 
-     * @create: 2016年12月24日 下午1:26:55 xieyj
-     * @history:
-     */
-    public void distributeAccount(String userId, String realName, String type,
-            String currency, String systemCode);
-
-    /**
      * 分配多个账户
      * @param userId
      * @param realName
@@ -58,16 +45,18 @@ public interface IAccountBO {
             String systemCode);
 
     /**
-     * 账户之间转账
-     * @param fromUserId 从谁
-     * @param toUserId 到谁
-     * @param amount 支付多少钱
-     * @param currency 什么币种
-     * @param bizType 因为什么
-     * @return 
-     * @create: 2017年2月26日 下午2:11:24 myb858
+     * 根据用户编号进行账户资金划转
+     * @param fromUserId
+     * @param toUserId
+     * @param currency
+     * @param amount
+     * @param bizType
+     * @param fromBizNote
+     * @param toBizNote 
+     * @create: 2017年3月26日 下午8:42:38 xieyj
      * @history:
      */
-    public void doTransferAmount(String systemCode, String fromUserId,
-            String toUserId, Long amount, ECurrency currency, EBizType bizType);
+    public void doTransferAmountRemote(String fromUserId, String toUserId,
+            ECurrency currency, Long amount, EBizType bizType,
+            String fromBizNote, String toBizNote);
 }

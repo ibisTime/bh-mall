@@ -5,7 +5,7 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.common.PhoneUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.dto.req.XN00120Req;
+import com.std.user.dto.req.XN805904Req;
 import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
@@ -17,10 +17,10 @@ import com.std.user.spring.SpringContextHolder;
  * @since: 2016年10月17日 下午7:23:10 
  * @history:
  */
-public class XN001201 extends AProcessor {
+public class XN805904 extends AProcessor {
     private ISmsOutAO smsOutAO = SpringContextHolder.getBean(ISmsOutAO.class);
 
-    private XN00120Req req = null;
+    private XN805904Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -31,7 +31,7 @@ public class XN001201 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN00120Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN805904Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getBizType(),
             req.getKind(), req.getSystemCode());
         PhoneUtil.checkMobile(req.getMobile(), "请输入正确的手机号码");

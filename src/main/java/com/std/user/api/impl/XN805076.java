@@ -12,9 +12,9 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 注册送积分，不产生大账户，用户名为"C"+手机号
+ * 城市网前端注册接口(登录名CSW+mobile)
  * @author: xieyj 
- * @since: 2016年10月11日 下午11:14:11 
+ * @since: 2017年3月27日 上午10:59:33 
  * @history:
  */
 public class XN805076 extends AProcessor {
@@ -24,10 +24,10 @@ public class XN805076 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805076Res(userAO.doRegisterSingle(req.getMobile(),
+        return new XN805076Res(userAO.doCSWRegister(req.getMobile(),
             req.getLoginPwd(), req.getLoginPwdStrength(), req.getUserReferee(),
-            req.getSmsCaptcha(), req.getCompanyCode(), req.getIsMall(),
-            req.getIsRegHx(), req.getSystemCode()));
+            req.getSmsCaptcha(), req.getIsRegHx(), req.getCompanyCode(),
+            req.getSystemCode()));
     }
 
     @Override

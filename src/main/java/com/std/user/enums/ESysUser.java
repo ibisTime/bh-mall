@@ -17,7 +17,8 @@ import java.util.Map;
  * @history:
  */
 public enum ESysUser {
-    SYS_USER("SYS_ACCOUNT", "系统用户编号");
+    SYS_USER("SYS_USER", "系统用户"), SYS_USER_CSW("SYS_USER_CSW", "系统用户城市网"), SYS_USER_LLWW(
+            "SYS_USER_LLWW", "系统用户来来旺旺");
 
     public static Map<String, ESysUser> getMap() {
         Map<String, ESysUser> map = new HashMap<String, ESysUser>();

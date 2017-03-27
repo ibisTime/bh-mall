@@ -99,16 +99,16 @@ public interface IUserAO {
      * @param loginPwdStrength
      * @param userReferee
      * @param smsCaptcha
-     * @param companyCode
-     * @param isMall 1 区分商户手机号
      * @param isRegHx 是否注册环信 0或不传 否 1是
+     * @param companyCode
+     * @param systemCode
      * @return 
-     * @create: 2016年11月24日 上午11:07:45 xieyj
+     * @create: 2017年3月27日 上午10:01:32 xieyj
      * @history:
      */
-    public String doRegisterSingle(String mobile, String loginPwd,
+    public String doCSWRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
-            String companyCode, String isMall, String isRegHx, String systemCode);
+            String isRegHx, String companyCode, String systemCode);
 
     /**
      * 代注册

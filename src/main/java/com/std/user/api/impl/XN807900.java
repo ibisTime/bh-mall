@@ -3,7 +3,7 @@ package com.std.user.api.impl;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.dto.req.XN001700Req;
+import com.std.user.dto.req.XN807900Req;
 import com.std.user.dto.res.XN001700Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
@@ -16,11 +16,11 @@ import com.std.user.third.qiniu.impl.QnTokenImpl;
  * @since: 2016年10月11日 上午9:45:51 
  * @history:
  */
-public class XN001700 extends AProcessor {
+public class XN807900 extends AProcessor {
     private QnTokenImpl qnTokenImpl = SpringContextHolder
         .getBean(QnTokenImpl.class);
 
-    private XN001700Req req = null;
+    private XN807900Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -29,7 +29,7 @@ public class XN001700 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN001700Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN807900Req.class);
         StringValidater.validateBlank(req.getSystemCode());
     }
 }

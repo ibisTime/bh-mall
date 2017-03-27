@@ -30,9 +30,6 @@ public class XN805076Req {
         this.systemCode = systemCode;
     }
 
-    // 是否区分不同商户（选填 1 区分，其他不区分）
-    private String isMall;
-
     // 是否注册环信 0或不传 否 1是(选填)
     private String isRegHx;
 
@@ -90,13 +87,5 @@ public class XN805076Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getIsMall() {
-        return isMall;
-    }
-
-    public void setIsMall(String isMall) {
-        this.isMall = isMall;
     }
 }
