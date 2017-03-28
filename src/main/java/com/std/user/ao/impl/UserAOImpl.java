@@ -398,7 +398,7 @@ public class UserAOImpl implements IUserAO {
             String systemCode) {
         String userId = null;
         // 插入用户信息
-        String loginPsd = null;
+        String loginPsd = EUserPwd.InitPwd.getCode();
         if (EUserKind.F1.getCode().equals(kind)
                 || EUserKind.F2.getCode().equals(kind)) {
             // 验证手机号
@@ -430,6 +430,17 @@ public class UserAOImpl implements IUserAO {
                 }
                 accountBO.distributeAccountList(userId, realName,
                     getAccountType(kind), currencyList, systemCode);
+            } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+                List<String> currencyList = new ArrayList<String>();
+                currencyList.add(ECurrency.CNY.getCode());
+                currencyList.add(ECurrency.JF.getCode());
+                currencyList.add(ECurrency.CGB.getCode());
+                accountBO.distributeAccountList(userId, mobile,
+                    getAccountType(kind), currencyList, systemCode);
+                if (EUserKind.F1.getCode().equals(kind)) {
+                    userRelationBO.saveUserRelation(userReferee, userId,
+                        systemCode);
+                }
             } else {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
@@ -478,57 +489,58 @@ public class UserAOImpl implements IUserAO {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册。您的登录名[" + loginName + "],登录密码[" + loginPsd
                     + "]。请及时登录修改密码", "805042", systemCode);
-        } else if (EUserKind.Integral.getCode().equals(kind)
-                || EUserKind.Goods.getCode().equals(kind)
-                || EUserKind.CaiGo.getCode().equals(kind)
-                || EUserKind.Merchant.getCode().equals(kind)) {
-            // 验证登录名
-            userBO.isLoginNameExist(loginName, kind, systemCode);
-            int level = 1;
-            if (StringUtils.isNotBlank(userReferee)) {
-                String preUserId = userReferee;
-                while (true) {
-                    User data = userBO.getUser(preUserId);
-                    if (data != null) {
-                        preUserId = data.getUserReferee();
-                        level++;
-                        // 超过3级，按3级处理
-                        if (level > 3) {
-                            level = 3;
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-            String cxRoleCode = null;
-            if (EUserKind.Integral.getCode().equals(kind)) {
-                cxRoleCode = PropertiesUtil.Config.NOTOP_JFROLECODE;
-            } else if (EUserKind.Goods.getCode().equals(kind)) {
-                cxRoleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
-            } else if (EUserKind.CaiGo.getCode().equals(kind)) {
-                cxRoleCode = PropertiesUtil.Config.NOTOP_HPJFROLECODE;
-            } else if (EUserKind.Merchant.getCode().equals(kind)) {
-                cxRoleCode = PropertiesUtil.Config.SJROLECODE;
-            }
-            // 插入用户信息
-            userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
-                realName, idKind, idNo, loginPsd, kind, level + "", remark,
-                updater, pdf, cxRoleCode, systemCode);
-            // 分配账号(人民币和虚拟币)
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
+        } else if (EUserKind.JMS.getCode().equals(kind)) {
+            userId = doAddCaigoOss(loginName, mobile, idKind, idNo, realName,
+                userReferee, updater, remark, kind, pdf, systemCode, loginPsd);
         }
         // 是则注册环信用户
         if (EBoolean.YES.getCode().equals(isRegHx)) {
             instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode(),
                 systemCode);
         }
+        return userId;
+    }
+
+    private String doAddCaigoOss(String loginName, String mobile,
+            String idKind, String idNo, String realName, String userReferee,
+            String updater, String remark, String kind, String pdf,
+            String systemCode, String loginPsd) {
+        String userId;
+        // 验证登录名
+        userBO.isLoginNameExist(loginName, kind, systemCode);
+        int level = 1;
+        if (StringUtils.isNotBlank(userReferee)) {
+            String preUserId = userReferee;
+            while (true) {
+                User data = userBO.getUser(preUserId);
+                if (data != null) {
+                    preUserId = data.getUserReferee();
+                    level++;
+                    // 超过3级，按3级处理
+                    if (level > 3) {
+                        level = 3;
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        String cxRoleCode = null;
+        if (EUserKind.JMS.getCode().equals(kind)) {
+            cxRoleCode = PropertiesUtil.Config.JMS_ROLECODE;
+        }
+        // 插入用户信息
+        userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
+            realName, idKind, idNo, loginPsd, kind, level + "", remark,
+            updater, pdf, cxRoleCode, systemCode);
+        // 分配账号(人民币,积分币和菜狗币)
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.JF.getCode());
+        currencyList.add(ECurrency.CGB.getCode());
+        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
+            currencyList, systemCode);
         return userId;
     }
 
@@ -1498,6 +1510,8 @@ public class UserAOImpl implements IUserAO {
             accountType = EAccountType.Partner.getCode();
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             accountType = EAccountType.Plat.getCode();
+        } else if (EUserKind.JMS.getCode().equals(kind)) {
+            accountType = EAccountType.Business.getCode();
         }
         return accountType;
     }

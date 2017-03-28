@@ -40,21 +40,9 @@ public class PropertiesUtil {
         public static String COMPANY_MOBILE = props
             .getProperty("COMPANY_MOBILE");
 
-        public static String USER_URL = props.getProperty("USER_URL");
-
         public static String ACCOUNT_URL = props.getProperty("ACCOUNT_URL");
 
-        public static String FORUM_URL = props.getProperty("FORUM_URL");
-
-        public static String NOTOP_HPJFROLECODE = props
-            .getProperty("NOTOP_HPJFROLECODE");
-
-        public static String NOTOP_JFROLECODE = props
-            .getProperty("NOTOP_JFROLECODE");
-
-        public static String SJROLECODE = props.getProperty("SJROLECODE");
-
-        public static String SMS_CHANNEL = props.getProperty("SMS_CHANNEL");
+        public static String JMS_ROLECODE = props.getProperty("JMS_ROLECODE");
 
         public static String APP_KEY = props.getProperty("APP_KEY");
 

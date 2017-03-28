@@ -403,9 +403,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
             user.setAmount(amount);
             user.setLjAmount(amount);
-            user.setCompanyCode(companyCode);
             user.setOpenId(openId);
             user.setJpushId(jpushId);
+            if (StringUtils.isBlank(companyCode)) {
+                companyCode = systemCode;
+            }
+            user.setCompanyCode(companyCode);
             user.setSystemCode(systemCode);
             userDAO.insert(user);
         }
