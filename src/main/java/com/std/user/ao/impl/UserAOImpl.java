@@ -617,24 +617,48 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public String doAddUserCaigoHB(String mobile, String loginPwd,
-            String userReferee, String updater, String systemCode) {
-        // 验证手机号
-        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), systemCode,
-            systemCode);
-        // 插入用户信息
+    public String doAddUserWithPwd(String mobile, String loginPwd,
+            String userReferee, String updater, String remark, String isRegHx,
+            String companyCode, String systemCode) {
         String kind = EUserKind.F1.getCode();
-        String userId = userBO.doRegister(EPrefixCode.CD.getCode() + mobile,
-            null, mobile, loginPwd, "1", userReferee, kind,
-            EUserLevel.ZERO.getCode(), 0L, systemCode, null, null, systemCode);
+        // 验证手机号
+        userBO.isMobileExist(mobile, kind, systemCode, systemCode);
+        // 插入用户信息
+        String isSendSms = EBoolean.NO.getCode();
+        String loginPwdMw = RandomUtil.generate6();
+        if (StringUtils.isBlank(loginPwd)) {
+            loginPwd = MD5Util.md5(loginPwdMw);
+            isSendSms = EBoolean.YES.getCode();
+        }
+        String userId = userBO.doAddUser(mobile, loginPwd, userReferee, kind,
+            remark, updater, companyCode, systemCode);
+        // 设置用户关系
+        if (StringUtils.isNotBlank(userReferee)) {
+            userRelationBO.saveUserRelation(userReferee, userId, systemCode);
+        }
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
         List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.JF.getCode());
-        currencyList.add(ECurrency.CGB.getCode());
+        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+            currencyList.add(ECurrency.CGB.getCode());
+        } else {
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+        }
         accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
             currencyList, systemCode);
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            // 注册环信
+            instantMsgImpl.doRegisterUser(userId, systemCode);
+        }
+        // 发送短信
+        if (EBoolean.YES.getCode().equals(isSendSms)) {
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + "用户，您已成功注册。您的登录密码为" + loginPwdMw + "，请及时登录网站修改!",
+                "001301", systemCode);
+        }
         return userId;
     }
 

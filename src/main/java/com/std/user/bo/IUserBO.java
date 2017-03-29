@@ -169,6 +169,10 @@ public interface IUserBO extends IPaginableBO<User> {
             String tradePsd, String kind, String level, String remark,
             String updater, String pdf, String roleCode, String systemCode);
 
+    public String doAddUser(String mobile, String loginPsd, String userReferee,
+            String kind, String remark, String updater, String companyCode,
+            String systemCode);
+
     public String doAddUser(User data);
 
     public void refreshStatus(String userId, EUserStatus normal,

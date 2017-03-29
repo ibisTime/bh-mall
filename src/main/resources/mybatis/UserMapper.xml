@@ -113,14 +113,14 @@
 			<if test="tradePwd != null and tradePwd != '' ">
 				AND t.trade_pwd = #{tradePwd}
 			</if>	
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
 			<if test="openId != null and openId != '' ">
 				AND t.open_id = #{openId}
 			</if>
 			<if test="jpushId != null and jpushId != '' ">
 				AND t.jpush_id = #{jpushId}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
@@ -229,6 +229,7 @@
     <insert id="insert_ren" parameterType="user">
 		INSERT INTO tstd_user(
 		user_id
+		,nickname
 		,login_name
 		,login_pwd
 		,login_pwd_strength
@@ -255,6 +256,7 @@
 		)
 		VALUES(
 		#{userId}
+		,#{nickname}
 		,#{loginName}
 		,#{loginPwd}
 		,#{loginPwdStrength}
