@@ -189,8 +189,7 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId, province, city, area, systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
             // 注册环信
-            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd.getCode(),
-                systemCode);
+            instantMsgImpl.doRegisterUser(userId, systemCode);
         }
         // 分配账号
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
@@ -295,8 +294,7 @@ public class UserAOImpl implements IUserAO {
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode(),
-                systemCode);
+            instantMsgImpl.doRegisterUser(userId, systemCode);
         }
         return userId;
     }
@@ -334,8 +332,7 @@ public class UserAOImpl implements IUserAO {
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender, systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode(),
-                systemCode);
+            instantMsgImpl.doRegisterUser(userId, systemCode);
         }
         return userId;
     }
@@ -495,8 +492,7 @@ public class UserAOImpl implements IUserAO {
         }
         // 是则注册环信用户
         if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode(),
-                systemCode);
+            instantMsgImpl.doRegisterUser(userId, systemCode);
         }
         return userId;
     }
@@ -610,8 +606,7 @@ public class UserAOImpl implements IUserAO {
                 ERuleType.ZC.getValue(), systemCode);
         }
         // 环信代注册
-        instantMsgImpl.doRegisterUser(userId, EUserPwd.InitPwd16.getCode(),
-            systemCode);
+        instantMsgImpl.doRegisterUser(userId, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
         // 发送短信

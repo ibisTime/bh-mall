@@ -17,7 +17,8 @@ import java.util.Map;
  * @history:
  */
 public enum ESystemCode {
-    ZHPAY("CD-CZH000001", "正汇钱包"), CAIGO("CD-CCG000007", "菜狗商城");
+    ZHPAY("CD-CZH000001", "正汇钱包"), CAIGO("CD-CCG000007", "菜狗商城"), CSW(
+            "CD-CCSW000008", "城市网");
 
     public static Map<String, ESystemCode> getCurrencyMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();
