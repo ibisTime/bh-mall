@@ -162,18 +162,22 @@ public interface IUserAO {
             String systemCode);
 
     /**
-     * 代注册嗨币
+     * 连同用户密码代注册
      * @param mobile
      * @param loginPwd
      * @param userReferee
      * @param updater
+     * @param remark
+     * @param isRegHx
+     * @param companyCode
      * @param systemCode
      * @return 
-     * @create: 2017年3月29日 下午12:00:52 xieyj
+     * @create: 2017年3月29日 下午2:42:29 xieyj
      * @history:
      */
-    public String doAddUserCaigoHB(String mobile, String loginPwd,
-            String userReferee, String updater, String systemCode);
+    public String doAddUserWithPwd(String mobile, String loginPwd,
+            String userReferee, String updater, String remark, String isRegHx,
+            String companyCode, String systemCode);
 
     public String doThirdRegister(String openId, String nickname, String photo,
             String gender, String isRegHx, String companyCode, String systemCode);

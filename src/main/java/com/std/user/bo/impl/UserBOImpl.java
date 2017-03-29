@@ -569,6 +569,44 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userId;
     }
 
+    @Override
+    public String doAddUser(String mobile, String loginPsd, String userReferee,
+            String kind, String remark, String updater, String companyCode,
+            String systemCode) {
+        String userId = null;
+        if (StringUtils.isNotBlank(mobile)) {
+            User user = new User();
+            userId = OrderNoGenerater.generate("U");
+
+            user.setUserId(userId);
+            user.setLoginName(mobile);
+            user.setNickname(userId.substring(userId.length() - 8,
+                userId.length()));
+            user.setLoginPwd(loginPsd);
+            if (StringUtils.isNotBlank(loginPsd)) {
+                user.setLoginPwdStrength(PwdUtil
+                    .calculateSecurityLevel(loginPsd));
+            }
+            user.setKind(kind);
+
+            user.setLevel(EUserLevel.ZERO.getCode());
+            user.setUserReferee(userReferee);
+            user.setMobile(mobile);
+            user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
+            user.setUpdater(updater);
+
+            user.setUpdateDatetime(new Date());
+            user.setRemark(remark);
+            if (StringUtils.isBlank(companyCode)) {
+                companyCode = systemCode;
+            }
+            user.setCompanyCode(systemCode);
+            user.setSystemCode(systemCode);
+            userDAO.insertRen(user);
+        }
+        return userId;
+    }
+
     /** 
      * @see com.std.user.bo.IUserBO#doAddUser(com.std.user.domain.User)
      */
