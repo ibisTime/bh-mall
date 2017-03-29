@@ -622,6 +622,28 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public String doAddUserCaigoHB(String mobile, String loginPwd,
+            String userReferee, String updater, String systemCode) {
+        // 验证手机号
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), systemCode,
+            systemCode);
+        // 插入用户信息
+        String kind = EUserKind.F1.getCode();
+        String userId = userBO.doRegister(EPrefixCode.CD.getCode() + mobile,
+            null, mobile, loginPwd, "1", userReferee, kind,
+            EUserLevel.ZERO.getCode(), 0L, systemCode, null, null, systemCode);
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, systemCode);
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.JF.getCode());
+        currencyList.add(ECurrency.CGB.getCode());
+        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
+            currencyList, systemCode);
+        return userId;
+    }
+
+    @Override
     @Transactional
     public String doAddPartner(User user, String province, String city,
             String area) {

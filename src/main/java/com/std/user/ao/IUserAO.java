@@ -161,6 +161,20 @@ public interface IUserAO {
             String isRegHx, String province, String city, String area,
             String systemCode);
 
+    /**
+     * 代注册嗨币
+     * @param mobile
+     * @param loginPwd
+     * @param userReferee
+     * @param updater
+     * @param systemCode
+     * @return 
+     * @create: 2017年3月29日 下午12:00:52 xieyj
+     * @history:
+     */
+    public String doAddUserCaigoHB(String mobile, String loginPwd,
+            String userReferee, String updater, String systemCode);
+
     public String doThirdRegister(String openId, String nickname, String photo,
             String gender, String isRegHx, String companyCode, String systemCode);
 

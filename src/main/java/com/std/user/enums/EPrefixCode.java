@@ -7,7 +7,7 @@ package com.std.user.enums;
  * @history:
  */
 public enum EPrefixCode {
-    CSW("CSW", "城市网"), RULE("GZ", "规则");
+    CD("C", "橙袋"), CSW("CSW", "城市网"), RULE("GZ", "规则");
 
     EPrefixCode(String code, String value) {
         this.code = code;
