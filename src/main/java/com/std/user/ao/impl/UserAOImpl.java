@@ -1879,7 +1879,6 @@ public class UserAOImpl implements IUserAO {
         res.setNickname(user.getNickname());
         res.setMobile(user.getMobile());
 
-        res.setPhoto(user.getPhoto());
         res.setStatus(user.getStatus());
         res.setLevel(user.getLevel());
         res.setKind(user.getKind());
@@ -1909,6 +1908,7 @@ public class UserAOImpl implements IUserAO {
             res.setProvince(userExt.getProvince());
             res.setCity(userExt.getCity());
             res.setArea(userExt.getArea());
+            res.setPhoto(userExt.getPhoto());
         }
 
         return res;

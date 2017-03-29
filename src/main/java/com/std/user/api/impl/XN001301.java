@@ -5,7 +5,7 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN001301Req;
-import com.std.user.dto.res.XN001351Res;
+import com.std.user.dto.res.XN001301Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -23,7 +23,7 @@ public class XN001301 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN001351Res(userAO.doAddUserWithPwd(req.getMobile(),
+        return new XN001301Res(userAO.doAddUserWithPwd(req.getMobile(),
             req.getLoginPwd(), req.getUserReferee(), req.getUpdater(),
             req.getRemark(), req.getIsRegHx(), req.getCompanyCode(),
             req.getSystemCode()));

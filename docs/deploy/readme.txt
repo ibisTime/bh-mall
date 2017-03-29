@@ -198,3 +198,6 @@ http://121.43.101.148:6505/std-user/api
   ../bin/startup.sh
   http://118.178.124.16:8905/std-user/api
   
+    http://121.43.101.148:8905/std-user/api
+  
+  
