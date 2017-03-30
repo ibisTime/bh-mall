@@ -9,7 +9,8 @@ import com.std.user.dto.req.XN807910Req;
 import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
-import com.std.user.third.wechat.impl.TokenSingleton;
+import com.std.user.spring.SpringContextHolder;
+import com.std.user.third.wechat.impl.WechatTokenUtil;
 
 /**
  * 微信JS-SDK使用权限签名
@@ -18,13 +19,14 @@ import com.std.user.third.wechat.impl.TokenSingleton;
  * @history:
  */
 public class XN807910 extends AProcessor {
+    private WechatTokenUtil wechatTokenUtil = SpringContextHolder
+        .getBean(WechatTokenUtil.class);
 
     private XN807910Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        TokenSingleton tokenSingleton = TokenSingleton.getInstance();
-        Map<String, String> map = tokenSingleton.getMap(req.getSystemCode(),
+        Map<String, String> map = wechatTokenUtil.getMap(req.getSystemCode(),
             req.getCompanyCode());
         System.out.println(map);
         return new BooleanRes(true);
