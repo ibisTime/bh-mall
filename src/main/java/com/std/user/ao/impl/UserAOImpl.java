@@ -984,7 +984,9 @@ public class UserAOImpl implements IUserAO {
                 user.getSystemCode());
         }
         // 验证支付密码
-        userBO.checkTradePwd(userId, tradePwd);
+        if (StringUtils.isNotBlank(tradePwd)) {
+            userBO.checkTradePwd(userId, tradePwd);
+        }
         // 短信验证码是否正确（往新手机号发送）
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805047",
             user.getSystemCode());
