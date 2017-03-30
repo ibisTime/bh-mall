@@ -32,6 +32,6 @@ public class XN805047 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805047Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getNewMobile(),
-            req.getSmsCaptcha(), req.getTradePwd());
+            req.getSmsCaptcha());
     }
 }
