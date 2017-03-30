@@ -17,6 +17,7 @@ import com.std.user.bo.ICPasswordBO;
 import com.std.user.domain.CPassword;
 import com.std.user.exception.BizException;
 import com.std.user.util.HttpsUtil;
+import com.std.user.util.SignUtil;
 
 @Component
 public class WechatTokenUtil {
@@ -27,6 +28,14 @@ public class WechatTokenUtil {
     public final static String weixin_jssdk_ticket_url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
     private Map<String, String> map = new HashMap<>();
+
+    public String getSign(String systemCode, String companyCode, String url) {
+        getMap(systemCode, companyCode);
+        String prefixStr = systemCode + "." + companyCode;
+        String jsapiTicket = map.get(prefixStr + ".jsapi_token");
+        String timestamp = map.get(prefixStr + ".time");
+        return SignUtil.getSignature(jsapiTicket, timestamp, url);
+    }
 
     public Map<String, String> getMap(String systemCode, String companyCode) {
 

@@ -7,6 +7,17 @@ public class XN807910Req {
     // 系统编号(必填)
     private String systemCode;
 
+    // url(必填)
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getCompanyCode() {
         return companyCode;
     }

@@ -1,12 +1,9 @@
 package com.std.user.api.impl;
 
-import java.util.Map;
-
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN807910Req;
-import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -26,10 +23,8 @@ public class XN807910 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Map<String, String> map = wechatTokenUtil.getMap(req.getSystemCode(),
-            req.getCompanyCode());
-        System.out.println(map);
-        return new BooleanRes(true);
+        return wechatTokenUtil.getSign(req.getSystemCode(),
+            req.getCompanyCode(), req.getUrl());
     }
 
     @Override
