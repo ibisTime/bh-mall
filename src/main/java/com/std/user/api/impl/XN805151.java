@@ -5,13 +5,12 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805151Req;
-import com.std.user.dto.res.XN805151Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 微信第三方注册，绑定手机号
+ * 微信登录——判断产生的openId是否已存在；若存在就直接登录，否则需绑定手机号注册
  * @author: xieyj 
  * @since: 2016年11月17日 下午1:02:03 
  * @history:
@@ -23,15 +22,14 @@ public class XN805151 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805151Res(userAO.doThirdRegister(req.getOpenId(),
-            req.getNickname(), req.getPhoto(), req.getGender(),
-            req.getIsRegHx(), req.getCompanyCode(), req.getSystemCode()));
+        return userAO.doLoginWeChat(req.getCode(), req.getMobile(),
+            req.getIsRegHx(), req.getCompanyCode(), req.getSystemCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805151Req.class);
-        StringValidater.validateBlank(req.getOpenId(), req.getNickname(),
-            req.getPhoto(), req.getGender(), req.getSystemCode());
+        StringValidater.validateBlank(req.getCode(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 }

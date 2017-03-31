@@ -12,6 +12,7 @@ import java.util.List;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
 import com.std.user.dto.res.XN001400Res;
+import com.std.user.dto.res.XN805151Res;
 import com.std.user.dto.res.XN805154Res;
 import com.std.user.dto.res.XN805155Res;
 
@@ -179,12 +180,6 @@ public interface IUserAO {
             String userReferee, String updater, String remark, String isRegHx,
             String companyCode, String systemCode);
 
-    public String doThirdRegister(String openId, String nickname, String photo,
-            String gender, String isRegHx, String companyCode, String systemCode);
-
-    public String doThirdRegisterWechat(String openId, String nickName,
-            String photo, String gender, String companyCode, String systemCode);
-
     /**
      * 新增合伙人(正汇)
      * @param user
@@ -223,6 +218,20 @@ public interface IUserAO {
      */
     public String doLogin(String loginName, String loginPwd, String kind,
             String companyCode, String systemCode);
+
+    /**
+     * 微信登录（新用户登录需绑定手机号）
+     * @param code
+     * @param mobile
+     * @param isRegHx
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年3月31日 下午12:55:17 xieyj
+     * @history:
+     */
+    public XN805151Res doLoginWeChat(String code, String mobile,
+            String isRegHx, String companyCode, String systemCode);
 
     /**
      * 微信登录

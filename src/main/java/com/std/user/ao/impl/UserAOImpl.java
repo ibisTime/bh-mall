@@ -53,6 +53,7 @@ import com.std.user.domain.UserRelation;
 import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
+import com.std.user.dto.res.XN805151Res;
 import com.std.user.dto.res.XN805154Res;
 import com.std.user.dto.res.XN805155Res;
 import com.std.user.enums.EAccountType;
@@ -299,47 +300,7 @@ public class UserAOImpl implements IUserAO {
         return userId;
     }
 
-    @Override
-    @Transactional
-    public String doThirdRegister(String openId, String nickname, String photo,
-            String gender, String isRegHx, String companyCode, String systemCode) {
-        User condition = new User();
-        condition.setOpenId(openId);
-        long count = userBO.getTotalCount(condition);
-        if (count > 0) {
-            throw new BizException("xn702002", "第三方开放编号已存在");
-        }
-        // 设置公司
-        Company company = companyBO.getCompany(companyCode);
-        if (company == null) {
-            Company result = companyBO.getDefaultCompany(systemCode);
-            if (result != null) {
-                companyCode = result.getCode();
-            }
-        }
-        // 注册送钱
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
-            EBoolean.NO.getCode());
-        // 插入用户信息
-        String loginPwd = EUserPwd.InitPwd.getCode();
-        String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, EUserKind.F1.getCode(), "0", amount, companyCode,
-            openId, null, systemCode);
-        if (amount != null && amount > 0) {
-            aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
-                ERuleType.ZC.getValue(), systemCode);
-        }
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, photo, gender, systemCode);
-        if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, systemCode);
-        }
-        return userId;
-    }
-
-    @Override
-    @Transactional
-    public String doThirdRegisterWechat(String openId, String nickname,
+    private String doThirdRegisterWechat(String openId, String nickname,
             String photo, String gender, String companyCode, String systemCode) {
         User condition = new User();
         condition.setOpenId(openId);
@@ -382,6 +343,59 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
+        }
+        return userId;
+    }
+
+    private String doThirdRegisterWechat(String openId, String mobile,
+            String isRegHx, String nickname, String photo, String gender,
+            String companyCode, String systemCode) {
+        User condition = new User();
+        condition.setOpenId(openId);
+        long count = userBO.getTotalCount(condition);
+        if (count > 0) {
+            throw new BizException("xn702002", "第三方开放编号已存在");
+        }
+        // 插入用户信息
+        String loginPwd = EUserPwd.InitPwd.getCode();
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode,
+            systemCode);
+        String loginName = mobile;
+        if (ESystemCode.CSW.getCode().equals(systemCode)) {
+            loginName += EPrefixCode.CSW + loginName;
+        } else {
+            loginName += EPrefixCode.CD + loginName;
+        }
+        String userId = userBO.doRegister(loginName, nickname, mobile,
+            loginPwd, "1", null, EUserKind.F1.getCode(), "0", 0L, companyCode,
+            openId, null, systemCode);
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, photo, gender, systemCode);
+
+        // 分配账号(人民币和虚拟币)
+        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.FRB.getCode());
+            currencyList.add(ECurrency.GXJL.getCode());
+            currencyList.add(ECurrency.QBB.getCode());
+            currencyList.add(ECurrency.GWB.getCode());
+            currencyList.add(ECurrency.HBB.getCode());
+            currencyList.add(ECurrency.HBYJ.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        } else {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        }
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            // 注册环信
+            instantMsgImpl.doRegisterUser(userId, systemCode);
         }
         return userId;
     }
@@ -1561,9 +1575,104 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
+    public XN805151Res doLoginWeChat(String code, String mobile,
+            String isRegHx, String companyCode, String systemCode) {
+        String userId = null;
+        String isNeedMobile = "";
+        String appId = "";
+        String appSecret = "";
+        CPassword condition = new CPassword();
+        condition.setType("3");
+        condition.setAccount("ACCESS_KEY");
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<CPassword> result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信公众号appId配置获取失败，请检查配置");
+        }
+        appId = result.get(0).getPassword();
+        condition.setAccount("SECRET_KEY");
+        result = cPasswordBO.queryCPasswordList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "微信公众号appSecret配置获取失败，请检查配置");
+        }
+        appSecret = result.get(0).getPassword();
+
+        // Step2：通过Authorization Code获取Access Token
+        String accessToken = "";
+        Map<String, String> res = new HashMap<>();
+        Properties formProperties = new Properties();
+        formProperties.put("grant_type", "authorization_code");
+        formProperties.put("appid", appId);
+        formProperties.put("secret", appSecret);
+        formProperties.put("code", code);
+        System.out.println(appId + " " + appSecret + " " + code);
+        String response;
+        try {
+            response = PostSimulater.requestPostForm(
+                WechatConstant.WX_TOKEN_URL, formProperties);
+            res = getMapFromResponse(response);
+            System.out.println(res);
+            accessToken = (String) res.get("access_token");
+            if (res.get("error") != null || StringUtils.isBlank(accessToken)) {
+                throw new BizException("XN000000", "获取accessToken失败");
+            }
+            // Step3：使用Access Token来获取用户的OpenID
+            String openId = (String) res.get("openid");
+            // 获取unionid
+            Map<String, String> wxRes = new HashMap<>();
+            Properties queryParas = new Properties();
+            queryParas.put("access_token", accessToken);
+            queryParas.put("openid", openId);
+            queryParas.put("lang", "zh_CN");
+            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WX_USER_INFO_URL, queryParas));
+            System.out.println(wxRes);
+            String unionid = (String) wxRes.get("unionid");
+            if (StringUtils.isEmpty(unionid)) {
+                unionid = (String) wxRes.get("openid");
+            }
+            // Step4：根据openId从数据库中查询用户信息（user）
+            User userCondition = new User();
+            userCondition.setOpenId(unionid);
+            List<User> users = userBO.queryUserList(userCondition);
+
+            if (!CollectionUtils.isEmpty(users)) {
+                // Step4-1：如果user存在，说明用户授权登录过，直接登录
+                User user = users.get(0);
+                if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                    throw new BizException("10002", "用户被锁定");
+                }
+                userId = user.getUserId();
+            } else {
+                String name = (String) wxRes.get("nickname");
+                String headimgurl = (String) wxRes.get("headimgurl");
+                String sex = ESex.UNKNOWN.getCode();
+                System.out.println("***性别=" + String.valueOf(wxRes.get("sex")));
+                if (String.valueOf(wxRes.get("sex")).equals("1.0")) {
+                    sex = ESex.MEN.getCode();
+                } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
+                    sex = ESex.WOMEN.getCode();
+                }
+                if (StringUtils.isBlank(mobile)) {
+                    isNeedMobile = EBoolean.YES.getCode();
+                } else {
+                    userId = doThirdRegisterWechat(openId, name, mobile,
+                        isRegHx, headimgurl, sex, companyCode, systemCode);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BizException("xn000000", e.getMessage());
+        }
+        return new XN805151Res(userId, isNeedMobile);
+    }
+
+    @Override
+    @Transactional
     public String doLoginWeChat(String code, String companyCode,
             String systemCode) {
-        String userId = "";
+        String userId = null;
         String appId = "";
         String appSecret = "";
         CPassword condition = new CPassword();
