@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.std.user.bo.ICPasswordBO;
+import com.std.user.common.MD5Util;
 import com.std.user.domain.CPassword;
+import com.std.user.dto.res.XN807910Res;
 import com.std.user.exception.BizException;
 import com.std.user.util.HttpsUtil;
 import com.std.user.util.SignUtil;
@@ -29,12 +32,15 @@ public class WechatTokenUtil {
 
     private Map<String, String> map = new HashMap<>();
 
-    public String getSign(String systemCode, String companyCode, String url) {
+    public XN807910Res getSign(String systemCode, String companyCode, String url) {
         getMap(systemCode, companyCode);
         String prefixStr = systemCode + "." + companyCode;
         String jsapiTicket = map.get(prefixStr + ".jsapi_token");
         String timestamp = map.get(prefixStr + ".time");
-        return SignUtil.getSignature(jsapiTicket, timestamp, url);
+        String nonceStr = createNonceStr();
+        String sign = SignUtil.getSignature(jsapiTicket, timestamp, nonceStr,
+            url);
+        return new XN807910Res(map.get("appId"), timestamp, nonceStr, sign);
     }
 
     public Map<String, String> getMap(String systemCode, String companyCode) {
@@ -63,6 +69,11 @@ public class WechatTokenUtil {
         String accessToken = null;
 
         return accessToken;
+    }
+
+    public static String createNonceStr() {
+        Random random = new Random();
+        return MD5Util.md5(String.valueOf(random.nextInt(10000)));
     }
 
     public Map<String, String> getJsapiToken(String systemCode,
@@ -104,7 +115,7 @@ public class WechatTokenUtil {
                 access_token);
             map.put(systemCode + "." + companyCode + ".jsapi_token",
                 jsapi_ticket);
-
+            map.put("appId", appId);
         } catch (KeyManagementException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {

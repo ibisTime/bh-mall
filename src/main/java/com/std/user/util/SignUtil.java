@@ -10,9 +10,6 @@ package com.std.user.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
-
-import com.std.user.common.MD5Util;
 
 /** 
  * @author: xieyj 
@@ -28,8 +25,7 @@ public class SignUtil {
      * @return
      */
     public static String getSignature(String jsapiTicket, String timestamp,
-            String url) {
-        String noncestr = createNonceStr();
+            String noncestr, String url) {
         String[] arr = new String[] { jsapiTicket, timestamp, noncestr, url };
         // 字典序排序
         sort(arr);
@@ -49,11 +45,6 @@ public class SignUtil {
             e.printStackTrace();
         }
         return result;
-    }
-
-    public static String createNonceStr() {
-        Random random = new Random();
-        return MD5Util.md5(String.valueOf(random.nextInt(10000)));
     }
 
     /**

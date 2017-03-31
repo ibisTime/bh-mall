@@ -17,6 +17,7 @@ import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +89,8 @@ import com.std.user.util.RandomUtil;
  */
 @Service
 public class UserAOImpl implements IUserAO {
+    private static Logger logger = Logger.getLogger(UserAOImpl.class);
+
     @Autowired
     protected IUserBO userBO;
 
