@@ -9,6 +9,7 @@ import com.std.user.core.StringValidater;
 import com.std.user.domain.User;
 import com.std.user.dto.req.XN805255Req;
 import com.std.user.enums.EUserKind;
+import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -28,10 +29,11 @@ public class XN805255 extends AProcessor {
     public Object doBusiness() throws BizException {
         User condition = new User();
         condition.setMobile(req.getMobile());
-        condition.setNicknameForLikeQuery(req.getNickname());
+        condition.setNickname(req.getNickname());
         condition.setKind(EUserKind.F1.getCode());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
+        condition.setStatus(EUserStatus.NORMAL.getCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IUserAO.DEFAULT_ORDER_COLUMN;
