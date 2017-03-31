@@ -17,7 +17,6 @@ import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,8 +88,6 @@ import com.std.user.util.RandomUtil;
  */
 @Service
 public class UserAOImpl implements IUserAO {
-    private static Logger logger = Logger.getLogger(UserAOImpl.class);
-
     @Autowired
     protected IUserBO userBO;
 
@@ -307,9 +304,10 @@ public class UserAOImpl implements IUserAO {
             String photo, String gender, String companyCode, String systemCode) {
         User condition = new User();
         condition.setOpenId(openId);
+        condition.setSystemCode(systemCode);
         long count = userBO.getTotalCount(condition);
         if (count > 0) {
-            throw new BizException("xn702002", "第三方开放编号已存在");
+            throw new BizException("xn702002", openId + "第三方开放编号已存在");
         }
         // 注册送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
@@ -351,13 +349,14 @@ public class UserAOImpl implements IUserAO {
     }
 
     private String doThirdRegisterWechat(String openId, String mobile,
-            String isRegHx, String nickname, String photo, String gender,
+            String nickname, String isRegHx, String photo, String gender,
             String companyCode, String systemCode) {
         User condition = new User();
         condition.setOpenId(openId);
+        condition.setSystemCode(systemCode);
         long count = userBO.getTotalCount(condition);
         if (count > 0) {
-            throw new BizException("xn702002", "第三方开放编号已存在");
+            throw new BizException("xn702002", openId + "第三方开放编号已存在");
         }
         // 插入用户信息
         String loginPwd = EUserPwd.InitPwd.getCode();
@@ -1620,8 +1619,12 @@ public class UserAOImpl implements IUserAO {
             res = getMapFromResponse(response);
             System.out.println(res);
             accessToken = (String) res.get("access_token");
-            if (res.get("error") != null || StringUtils.isBlank(accessToken)) {
-                throw new BizException("XN000000", "获取accessToken失败");
+            if (res.get("error") != null) {
+                throw new BizException("XN000000", "微信登录失败，失原因："
+                        + res.get("error"));
+            }
+            if (StringUtils.isBlank(accessToken)) {
+                throw new BizException("XN000000", "accessToken不能为空");
             }
             // Step3：使用Access Token来获取用户的OpenID
             String openId = (String) res.get("openid");
@@ -1664,7 +1667,7 @@ public class UserAOImpl implements IUserAO {
                 if (StringUtils.isBlank(mobile)) {
                     isNeedMobile = EBoolean.YES.getCode();
                 } else {
-                    userId = doThirdRegisterWechat(openId, name, mobile,
+                    userId = doThirdRegisterWechat(openId, mobile, name,
                         isRegHx, headimgurl, sex, companyCode, systemCode);
                 }
             }

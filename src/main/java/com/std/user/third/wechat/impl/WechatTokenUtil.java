@@ -49,7 +49,6 @@ public class WechatTokenUtil {
         String accessToken = map.get(systemCode + "." + companyCode
                 + ".access_token");
         Long nowDate = new Date().getTime();
-
         if (accessToken != null && time != null
                 && nowDate - Long.parseLong(time) < 3000 * 1000) {
             System.out.println("accessToken存在，且没有超时，返回单例");
@@ -73,7 +72,7 @@ public class WechatTokenUtil {
 
     public static String createNonceStr() {
         Random random = new Random();
-        return MD5Util.md5(String.valueOf(random.nextInt(10000)));
+        return MD5Util.md5(String.valueOf(random.nextInt(1000)));
     }
 
     public Map<String, String> getJsapiToken(String systemCode,
