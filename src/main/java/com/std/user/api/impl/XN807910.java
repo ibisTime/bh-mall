@@ -10,7 +10,7 @@ import com.std.user.spring.SpringContextHolder;
 import com.std.user.third.wechat.impl.WechatTokenUtil;
 
 /**
- * 微信JS-SDK使用权限签名
+ * 获取微信JS-SDK使用权限签名等信息
  * @author: xieyj 
  * @since: 2017年3月29日 下午7:57:16 
  * @history:
