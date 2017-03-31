@@ -1584,7 +1584,10 @@ public class UserAOImpl implements IUserAO {
         CPassword condition = new CPassword();
         condition.setType("3");
         condition.setAccount("ACCESS_KEY");
-        condition.setCompanyCode(companyCode);
+        // 橙商户系统的系统，配置多个系统微信
+        if (ESystemCode.CSH.getCode().equals(companyCode)) {
+            condition.setCompanyCode(companyCode);
+        }
         condition.setSystemCode(systemCode);
         List<CPassword> result = cPasswordBO.queryCPasswordList(condition);
         if (CollectionUtils.isEmpty(result)) {
