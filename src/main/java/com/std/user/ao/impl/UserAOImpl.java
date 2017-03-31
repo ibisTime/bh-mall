@@ -1635,6 +1635,7 @@ public class UserAOImpl implements IUserAO {
             // Step4：根据openId从数据库中查询用户信息（user）
             User userCondition = new User();
             userCondition.setOpenId(unionid);
+            userCondition.setSystemCode(systemCode);
             List<User> users = userBO.queryUserList(userCondition);
 
             if (!CollectionUtils.isEmpty(users)) {

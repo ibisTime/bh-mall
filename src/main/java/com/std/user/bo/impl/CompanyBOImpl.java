@@ -184,10 +184,15 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
      */
     @Override
     public Company getDefaultCompany(String systemCode) {
+        Company result = null;
         Company condition = new Company();
         condition.setIsDefault(EBoolean.YES.getCode());
         condition.setSystemCode(systemCode);
-        return companyDAO.select(condition);
+        List<Company> companyList = companyDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(companyList)) {
+            result = companyList.get(0);
+        }
+        return result;
     }
 
     @Override
