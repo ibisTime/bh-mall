@@ -710,4 +710,6 @@ public interface IUserAO {
      */
     public String doCaptchaLoginReg(String mobile, String kind,
             String smsCaptcha, String companyCode, String systemCode);
+
+    public void upgradeLevel(String userId, String level);
 }

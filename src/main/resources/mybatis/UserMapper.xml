@@ -429,4 +429,12 @@
 		WHERE
 		user_id = #{userId}		
 	</update>
+	
+	<update id="update_level" parameterType="user">
+		UPDATE tstd_user
+		SET
+		level = #{level}
+		WHERE
+		user_id = #{userId}		
+	</update>
 </mapper>

@@ -787,4 +787,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setCompanyCode(companyCode);
         userDAO.updateCompany(data);
     }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#refreshLevel(com.std.user.domain.User)
+     */
+    @Override
+    public void refreshLevel(User data) {
+        userDAO.updateLevel(data);
+    }
 }

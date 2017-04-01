@@ -147,6 +147,8 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     public int update(User data);
 
+    public int updateLevel(User data);
+
     /**
      * 更新用户手机号和真实信息
      * @param data

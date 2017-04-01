@@ -1351,17 +1351,18 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", userId + "用户不存在");
         }
         String refeere = user.getUserReferee();
-        // 获取上级，上上级
+        // 获取上级
         User userRefeereTop1 = getTopUserRefeere(refeere, -1);
         if (userRefeereTop1 != null) {
             list.add(userRefeereTop1);
-            User userRefeereTop2 = getTopUserRefeere(
-                userRefeereTop1.getUserReferee(), -2);
-            if (userRefeereTop2 != null) {
-                list.add(userRefeereTop2);
-            }
+            // User userRefeereTop2 = getTopUserRefeere(
+            // userRefeereTop1.getUserReferee(), -2);
+            // if (userRefeereTop2 != null) {
+            // list.add(userRefeereTop2);
+            // }
         }
 
+        // 获取下级，下下级，下下下级
         List<User> refeeresNext1 = getNextUserRefeere(userId, 1);
         if (CollectionUtils.isNotEmpty(refeeresNext1)) {
             list.addAll(refeeresNext1);
@@ -1370,6 +1371,13 @@ public class UserAOImpl implements IUserAO {
                     userNext2.getUserId(), 2);
                 if (CollectionUtils.isNotEmpty(refeeresNext2)) {
                     list.addAll(refeeresNext2);
+                }
+                for (User userNext3 : refeeresNext2) {
+                    List<User> refeeresNext3 = getNextUserRefeere(
+                        userNext3.getUserId(), 3);
+                    if (CollectionUtils.isNotEmpty(refeeresNext3)) {
+                        list.addAll(refeeresNext3);
+                    }
                 }
             }
         }
@@ -2033,5 +2041,16 @@ public class UserAOImpl implements IUserAO {
         }
 
         return res;
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#upgradeLevel(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void upgradeLevel(String userId, String level) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setLevel(level);
+        userBO.refreshLevel(data);
     }
 }
