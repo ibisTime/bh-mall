@@ -196,10 +196,8 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
-                currencyList.add(ECurrency.CNY.getCode());
                 currencyList.add(ECurrency.FRB.getCode());
             } else {
-                currencyList.add(ECurrency.CNY.getCode());
                 currencyList.add(ECurrency.FRB.getCode());
                 currencyList.add(ECurrency.GXJL.getCode());
                 currencyList.add(ECurrency.QBB.getCode());
@@ -327,7 +325,6 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.FRB.getCode());
             currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
@@ -377,7 +374,6 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.FRB.getCode());
             currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
@@ -430,10 +426,8 @@ public class UserAOImpl implements IUserAO {
             if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
                 if (EUserKind.F2.getCode().equals(kind)) {
-                    currencyList.add(ECurrency.CNY.getCode());
                     currencyList.add(ECurrency.FRB.getCode());
                 } else {
-                    currencyList.add(ECurrency.CNY.getCode());
                     currencyList.add(ECurrency.FRB.getCode());
                     currencyList.add(ECurrency.GXJL.getCode());
                     currencyList.add(ECurrency.QBB.getCode());
@@ -706,7 +700,6 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId, province, city, area,
             user.getSystemCode());
         List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
         currencyList.add(ECurrency.FRB.getCode());
         currencyList.add(ECurrency.GXJL.getCode());
         currencyList.add(ECurrency.QBB.getCode());
@@ -1450,7 +1443,10 @@ public class UserAOImpl implements IUserAO {
         condition.setSystemCode(systemCode);
         List<User> userList = userBO.queryUserList(condition);
         if (CollectionUtils.isNotEmpty(userList)) {
-            userId = userList.get(0).getUserId();
+            User user = userList.get(0);
+            if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                throw new BizException("li01004", "手机号为" + mobile + "的用户状态被锁定");
+            }
         }
         return userId;
     }
