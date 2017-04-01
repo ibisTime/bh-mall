@@ -197,8 +197,10 @@ public class UserAOImpl implements IUserAO {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
                 currencyList.add(ECurrency.FRB.getCode());
+                currencyList.add(ECurrency.CNY.getCode());
             } else {
                 currencyList.add(ECurrency.FRB.getCode());
+                currencyList.add(ECurrency.CNY.getCode());
                 currencyList.add(ECurrency.GXJL.getCode());
                 currencyList.add(ECurrency.QBB.getCode());
                 currencyList.add(ECurrency.GWB.getCode());
@@ -326,6 +328,7 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.FRB.getCode());
+            currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
             currencyList.add(ECurrency.GWB.getCode());
@@ -375,6 +378,7 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.FRB.getCode());
+            currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.GXJL.getCode());
             currencyList.add(ECurrency.QBB.getCode());
             currencyList.add(ECurrency.GWB.getCode());
@@ -427,8 +431,10 @@ public class UserAOImpl implements IUserAO {
                 List<String> currencyList = new ArrayList<String>();
                 if (EUserKind.F2.getCode().equals(kind)) {
                     currencyList.add(ECurrency.FRB.getCode());
+                    currencyList.add(ECurrency.CNY.getCode());
                 } else {
                     currencyList.add(ECurrency.FRB.getCode());
+                    currencyList.add(ECurrency.CNY.getCode());
                     currencyList.add(ECurrency.GXJL.getCode());
                     currencyList.add(ECurrency.QBB.getCode());
                     currencyList.add(ECurrency.GWB.getCode());
@@ -701,6 +707,7 @@ public class UserAOImpl implements IUserAO {
             user.getSystemCode());
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.FRB.getCode());
+        currencyList.add(ECurrency.CNY.getCode());
         currencyList.add(ECurrency.GXJL.getCode());
         currencyList.add(ECurrency.QBB.getCode());
         currencyList.add(ECurrency.GWB.getCode());
