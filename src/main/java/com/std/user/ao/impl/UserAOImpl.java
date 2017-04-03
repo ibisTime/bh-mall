@@ -1451,8 +1451,8 @@ public class UserAOImpl implements IUserAO {
         List<User> userList = userBO.queryUserList(condition);
         if (CollectionUtils.isNotEmpty(userList)) {
             User user = userList.get(0);
-            if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-                throw new BizException("li01004", "手机号为" + mobile + "的用户状态被锁定");
+            if (EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                userId = user.getUserId();
             }
         }
         return userId;
