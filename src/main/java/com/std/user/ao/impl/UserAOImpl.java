@@ -199,7 +199,6 @@ public class UserAOImpl implements IUserAO {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
                 currencyList.add(ECurrency.FRB.getCode());
-                currencyList.add(ECurrency.CNY.getCode());
             } else {
                 currencyList.add(ECurrency.FRB.getCode());
                 currencyList.add(ECurrency.CNY.getCode());
@@ -433,7 +432,6 @@ public class UserAOImpl implements IUserAO {
                 List<String> currencyList = new ArrayList<String>();
                 if (EUserKind.F2.getCode().equals(kind)) {
                     currencyList.add(ECurrency.FRB.getCode());
-                    currencyList.add(ECurrency.CNY.getCode());
                 } else {
                     currencyList.add(ECurrency.FRB.getCode());
                     currencyList.add(ECurrency.CNY.getCode());
