@@ -611,19 +611,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.std.user.bo.IUserBO#doAddUser(com.std.user.domain.User)
      */
     @Override
-    public String doAddUser(User data) {
-        String userId = null;
-        if (null != data) {
-            userId = OrderNoGenerater.generate("U");
-            data.setUserId(userId);
-            data.setLoginPwd(MD5Util.md5(data.getLoginPwd()));
-            data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(data
-                .getLoginPwd()));
-            data.setLevel(EUserLevel.ZERO.getCode());
-            data.setStatus(EUserStatus.NORMAL.getCode());
+    public void doAddUser(User data) {
+        if (null != data && StringUtils.isNotBlank(data.getUserId())) {
             userDAO.insertRen(data);
         }
-        return userId;
     }
 
     @Override

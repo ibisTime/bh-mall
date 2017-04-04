@@ -5,6 +5,7 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.domain.UserExt;
 import com.std.user.dto.req.XN001403Req;
+import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -29,8 +30,7 @@ public class XN001403 extends AProcessor {
         condition.setCityForQuery(req.getCity());
         condition.setAreaForQuery(req.getArea());
         condition.setKind(req.getKind());
-        condition.setRoleCode(req.getRoleCode());
-        condition.setStatus(req.getStatus());
+        condition.setStatus(EUserStatus.NORMAL.getCode());
         condition.setSystemCode(req.getSystemCode());
         return userExtAO.queryUserExtList(condition);
     }

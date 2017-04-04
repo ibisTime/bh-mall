@@ -42,8 +42,10 @@ import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PropertiesUtil;
+import com.std.user.common.PwdUtil;
 import com.std.user.common.SysConstant;
 import com.std.user.common.WechatConstant;
+import com.std.user.core.OrderNoGenerater;
 import com.std.user.domain.CPassword;
 import com.std.user.domain.Company;
 import com.std.user.domain.SYSRole;
@@ -702,7 +704,18 @@ public class UserAOImpl implements IUserAO {
         user.setLoginPwd(loginPwd);
         user.setKind(kind);
         user.setRoleCode(PropertiesUtil.Config.PARTNER_ROLECODE);
-        String userId = userBO.doAddUser(user);
+
+        String userId = OrderNoGenerater.generate("U");
+        user.setUserId(userId);
+        user.setLoginPwd(MD5Util.md5(user.getLoginPwd()));
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(user
+            .getLoginPwd()));
+        user.setLevel(EUserLevel.ZERO.getCode());
+        user.setStatus(EUserStatus.NORMAL.getCode());
+        if (StringUtils.isBlank(user.getCompanyCode())) {
+            user.setCompanyCode(user.getSystemCode());
+        }
+        userBO.doAddUser(user);
         userExtBO.saveUserExt(userId, province, city, area,
             user.getSystemCode());
         List<String> currencyList = new ArrayList<String>();

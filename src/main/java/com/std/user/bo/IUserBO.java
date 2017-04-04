@@ -173,7 +173,7 @@ public interface IUserBO extends IPaginableBO<User> {
             String kind, String remark, String updater, String companyCode,
             String systemCode);
 
-    public String doAddUser(User data);
+    public void doAddUser(User data);
 
     public void refreshStatus(String userId, EUserStatus normal,
             String updater, String remark);

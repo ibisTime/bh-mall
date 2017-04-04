@@ -13,12 +13,6 @@ public class XN001403Req {
     // kind
     private String kind;
 
-    // 角色编号
-    private String roleCode;
-
-    // 状态
-    private String status;
-
     // 系统编号
     private String systemCode;
 
@@ -28,30 +22,6 @@ public class XN001403Req {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
     }
 
     public String getProvince() {
@@ -76,5 +46,13 @@ public class XN001403Req {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 }
