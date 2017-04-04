@@ -1,4 +1,12 @@
 /*
+-- Query: SELECT * FROM std_user.tstd_cnavigate where name = 'banner2'
+LIMIT 0, 10000
+
+-- Date: 2017-04-04 21:09
+*/
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH20170000000000001','导航','2','','banner.png','1','index_banner',2,'1','0','','1','CD-CZH000001','CD-CZH000001');
+
+/*
 -- Query: SELECT ckey,cvalue,note,updater, now() as update_datetime,remark,system_code FROM tsys_config where system_code = 'CD-CZH000001'
 LIMIT 0, 10000
 
