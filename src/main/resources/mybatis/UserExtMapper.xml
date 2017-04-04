@@ -63,6 +63,9 @@
 			<if test="status != null and status != '' ">
 				AND tu.status = #{status}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	

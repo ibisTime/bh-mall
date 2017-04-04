@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 查询用户详情：是否黑名单
+ * 查询用户详情
  * @author: xieyj 
  * @since: 2017年3月6日 上午11:49:24 
  * @history:

@@ -4,7 +4,7 @@ import com.std.user.ao.IUserExtAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.domain.UserExt;
-import com.std.user.dto.req.XN805060Req;
+import com.std.user.dto.req.XN001403Req;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -15,12 +15,12 @@ import com.std.user.spring.SpringContextHolder;
  * @since: 2016年12月27日 下午9:01:00 
  * @history:
  */
-public class XN805060 extends AProcessor {
+public class XN001403 extends AProcessor {
 
     private IUserExtAO userExtAO = SpringContextHolder
         .getBean(IUserExtAO.class);
 
-    private XN805060Req req = null;
+    private XN001403Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -31,11 +31,12 @@ public class XN805060 extends AProcessor {
         condition.setKind(req.getKind());
         condition.setRoleCode(req.getRoleCode());
         condition.setStatus(req.getStatus());
+        condition.setSystemCode(req.getSystemCode());
         return userExtAO.queryUserExtList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN805060Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN001403Req.class);
     }
 }

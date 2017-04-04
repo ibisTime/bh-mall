@@ -15,7 +15,7 @@ import java.util.List;
  * @since: 2016年12月23日 下午7:48:53 
  * @history:
  */
-public class XN802450Req {
+public class XN002000Req {
     // 用户编号(必填)
     private String userId;
 

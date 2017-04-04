@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.std.user.bo.IAccountBO;
+import com.std.user.dto.req.XN002000Req;
+import com.std.user.dto.req.XN002001Req;
 import com.std.user.dto.req.XN002100Req;
-import com.std.user.dto.req.XN802450Req;
-import com.std.user.dto.req.XN802451Req;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.ECurrency;
 import com.std.user.http.BizConnecter;
@@ -21,24 +21,24 @@ public class AccountBOImpl implements IAccountBO {
     @Override
     public void distributeAccountList(String userId, String realName,
             String type, List<String> currencyList, String systemCode) {
-        XN802450Req req = new XN802450Req();
+        XN002000Req req = new XN002000Req();
         req.setUserId(userId);
         req.setRealName(realName);
         req.setType(type);
         req.setCurrencyList(currencyList);
         req.setSystemCode(systemCode);
-        BizConnecter.getBizData("802450", JsonUtils.object2Json(req),
+        BizConnecter.getBizData("002000", JsonUtils.object2Json(req),
             Object.class);
     }
 
     @Override
     public void refreshRealName(String userId, String realName,
             String systemCode) {
-        XN802451Req req = new XN802451Req();
+        XN002001Req req = new XN002001Req();
         req.setUserId(userId);
         req.setRealName(realName);
         req.setSystemCode(systemCode);
-        BizConnecter.getBizData("802451", JsonUtils.object2Json(req),
+        BizConnecter.getBizData("002001", JsonUtils.object2Json(req),
             Object.class);
     }
 
