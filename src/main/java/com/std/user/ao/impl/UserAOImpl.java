@@ -697,17 +697,15 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn000000", "该辖区已存在合伙人！");
         }
         // 2、新增用户，分配角色，增加账户
-        String loginPwd = RandomUtil.generate6();
-        String mobile = user.getMobile();
+        String loginPwd = EUserPwd.InitPwd.getCode();
         user.setLoginPwd(loginPwd);
         user.setKind(kind);
         user.setRoleCode(PropertiesUtil.Config.PARTNER_ROLECODE);
 
         String userId = OrderNoGenerater.generate("U");
         user.setUserId(userId);
-        user.setLoginPwd(MD5Util.md5(user.getLoginPwd()));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(user
-            .getLoginPwd()));
+        user.setLoginPwd(MD5Util.md5(loginPwd));
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         user.setLevel(EUserLevel.ZERO.getCode());
         user.setStatus(EUserStatus.NORMAL.getCode());
         if (StringUtils.isBlank(user.getCompanyCode())) {
@@ -726,12 +724,6 @@ public class UserAOImpl implements IUserAO {
         currencyList.add(ECurrency.HBYJ.getCode());
         accountBO.distributeAccountList(userId, user.getRealName(),
             EAccountType.Partner.getCode(), currencyList, user.getSystemCode());
-        // 发送短信
-        if (StringUtils.isNotBlank(mobile)) {
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册合伙人。您的登录密码为" + loginPwd + "，请及时管理端网站进行密码修改!",
-                "805180", user.getSystemCode());
-        }
         return userId;
     }
 
