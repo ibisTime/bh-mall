@@ -198,23 +198,23 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
-                currencyList.add(ECurrency.FRB.getCode());
+                currencyList.add(ECurrency.ZH_FRB.getCode());
             } else {
-                currencyList.add(ECurrency.FRB.getCode());
+                currencyList.add(ECurrency.ZH_FRB.getCode());
                 currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.GXJL.getCode());
-                currencyList.add(ECurrency.QBB.getCode());
-                currencyList.add(ECurrency.GWB.getCode());
-                currencyList.add(ECurrency.HBB.getCode());
-                currencyList.add(ECurrency.HBYJ.getCode());
+                currencyList.add(ECurrency.ZH_GXZ.getCode());
+                currencyList.add(ECurrency.ZH_QBB.getCode());
+                currencyList.add(ECurrency.ZH_GWB.getCode());
+                currencyList.add(ECurrency.ZH_HBB.getCode());
+                currencyList.add(ECurrency.ZH_HBYJ.getCode());
             }
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            currencyList.add(ECurrency.CGB.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         } else {
@@ -243,10 +243,19 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
             loginPwdStrength, userReferee, kind, "0", 0L, null, null, null,
             systemCode);
-        // 分配账号(人民币和虚拟币)
         List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.JF.getCode());
+        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
+        } else {
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
+        }
         accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
             currencyList, systemCode);
         // 设置用户关系
@@ -328,13 +337,13 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.FRB.getCode());
+            currencyList.add(ECurrency.ZH_FRB.getCode());
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.GXJL.getCode());
-            currencyList.add(ECurrency.QBB.getCode());
-            currencyList.add(ECurrency.GWB.getCode());
-            currencyList.add(ECurrency.HBB.getCode());
-            currencyList.add(ECurrency.HBYJ.getCode());
+            currencyList.add(ECurrency.ZH_GXZ.getCode());
+            currencyList.add(ECurrency.ZH_QBB.getCode());
+            currencyList.add(ECurrency.ZH_GWB.getCode());
+            currencyList.add(ECurrency.ZH_HBB.getCode());
+            currencyList.add(ECurrency.ZH_HBYJ.getCode());
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
@@ -378,13 +387,13 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币和虚拟币)
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.FRB.getCode());
+            currencyList.add(ECurrency.ZH_FRB.getCode());
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.GXJL.getCode());
-            currencyList.add(ECurrency.QBB.getCode());
-            currencyList.add(ECurrency.GWB.getCode());
-            currencyList.add(ECurrency.HBB.getCode());
-            currencyList.add(ECurrency.HBYJ.getCode());
+            currencyList.add(ECurrency.ZH_GXZ.getCode());
+            currencyList.add(ECurrency.ZH_QBB.getCode());
+            currencyList.add(ECurrency.ZH_GWB.getCode());
+            currencyList.add(ECurrency.ZH_HBB.getCode());
+            currencyList.add(ECurrency.ZH_HBYJ.getCode());
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
@@ -431,23 +440,23 @@ public class UserAOImpl implements IUserAO {
             if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
                 if (EUserKind.F2.getCode().equals(kind)) {
-                    currencyList.add(ECurrency.FRB.getCode());
+                    currencyList.add(ECurrency.ZH_FRB.getCode());
                 } else {
-                    currencyList.add(ECurrency.FRB.getCode());
+                    currencyList.add(ECurrency.ZH_FRB.getCode());
                     currencyList.add(ECurrency.CNY.getCode());
-                    currencyList.add(ECurrency.GXJL.getCode());
-                    currencyList.add(ECurrency.QBB.getCode());
-                    currencyList.add(ECurrency.GWB.getCode());
-                    currencyList.add(ECurrency.HBB.getCode());
-                    currencyList.add(ECurrency.HBYJ.getCode());
+                    currencyList.add(ECurrency.ZH_GXZ.getCode());
+                    currencyList.add(ECurrency.ZH_QBB.getCode());
+                    currencyList.add(ECurrency.ZH_GWB.getCode());
+                    currencyList.add(ECurrency.ZH_HBB.getCode());
+                    currencyList.add(ECurrency.ZH_HBYJ.getCode());
                 }
                 accountBO.distributeAccountList(userId, realName,
                     getAccountType(kind), currencyList, systemCode);
             } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.JF.getCode());
-                currencyList.add(ECurrency.CGB.getCode());
+                currencyList.add(ECurrency.CG_JF.getCode());
+                currencyList.add(ECurrency.CG_CGB.getCode());
                 accountBO.distributeAccountList(userId, mobile,
                     getAccountType(kind), currencyList, systemCode);
                 if (EUserKind.F1.getCode().equals(kind)) {
@@ -460,10 +469,6 @@ public class UserAOImpl implements IUserAO {
                 currencyList.add(ECurrency.JF.getCode());
                 accountBO.distributeAccountList(userId, mobile,
                     getAccountType(kind), currencyList, systemCode);
-                if (EUserKind.F1.getCode().equals(kind)) {
-                    userRelationBO.saveUserRelation(userReferee, userId,
-                        systemCode);
-                }
             }
             // 新增扩展信息
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
@@ -549,8 +554,8 @@ public class UserAOImpl implements IUserAO {
         // 分配账号(人民币,积分币和菜狗币)
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.JF.getCode());
-        currencyList.add(ECurrency.CGB.getCode());
+        currencyList.add(ECurrency.CG_JF.getCode());
+        currencyList.add(ECurrency.CG_CGB.getCode());
         accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
             currencyList, systemCode);
         return userId;
@@ -657,8 +662,8 @@ public class UserAOImpl implements IUserAO {
         List<String> currencyList = new ArrayList<String>();
         if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            currencyList.add(ECurrency.CGB.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
         } else {
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.JF.getCode());
@@ -715,13 +720,13 @@ public class UserAOImpl implements IUserAO {
         userExtBO.saveUserExt(userId, province, city, area,
             user.getSystemCode());
         List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.FRB.getCode());
+        currencyList.add(ECurrency.ZH_FRB.getCode());
         currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.GXJL.getCode());
-        currencyList.add(ECurrency.QBB.getCode());
-        currencyList.add(ECurrency.GWB.getCode());
-        currencyList.add(ECurrency.HBB.getCode());
-        currencyList.add(ECurrency.HBYJ.getCode());
+        currencyList.add(ECurrency.ZH_GXZ.getCode());
+        currencyList.add(ECurrency.ZH_QBB.getCode());
+        currencyList.add(ECurrency.ZH_GWB.getCode());
+        currencyList.add(ECurrency.ZH_HBB.getCode());
+        currencyList.add(ECurrency.ZH_HBYJ.getCode());
         accountBO.distributeAccountList(userId, user.getRealName(),
             EAccountType.Partner.getCode(), currencyList, user.getSystemCode());
         return userId;
