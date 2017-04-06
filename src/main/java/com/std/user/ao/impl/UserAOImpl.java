@@ -2044,6 +2044,15 @@ public class UserAOImpl implements IUserAO {
             res.setCity(userExt.getCity());
             res.setArea(userExt.getArea());
             res.setPhoto(userExt.getPhoto());
+            res.setGender(userExt.getGender());
+            res.setBirthday(userExt.getBirthday());
+            res.setEmail(userExt.getEmail());
+            res.setDiploma(userExt.getDiploma());
+            res.setOccupation(userExt.getOccupation());
+            res.setWorkTime(userExt.getWorkTime());
+            res.setIntroduce(userExt.getIntroduce());
+            res.setLatitude(userExt.getLatitude());
+            res.setLongitude(userExt.getLongitude());
         }
 
         return res;
