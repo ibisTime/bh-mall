@@ -61,6 +61,33 @@ public class XN001400Res {
     // 区(县)
     private String area;
 
+    // 经度
+    private String longitude;
+
+    // 维度
+    private String latitude;
+
+    // 性别(1 男 0 女)
+    private String gender;
+
+    // 生日
+    private String birthday;
+
+    // 邮箱
+    private String email;
+
+    // 学位
+    private String diploma;
+
+    // 职业
+    private String occupation;
+
+    // 工作年限
+    private String workTime;
+
+    // 介绍
+    private String introduce;
+
     // 公司编号
     private String companyCode;
 
@@ -233,6 +260,78 @@ public class XN001400Res {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDiploma() {
+        return diploma;
+    }
+
+    public void setDiploma(String diploma) {
+        this.diploma = diploma;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 
     public String getSystemCode() {
