@@ -727,7 +727,7 @@ public class UserAOImpl implements IUserAO {
         currencyList.add(ECurrency.ZH_GWB.getCode());
         currencyList.add(ECurrency.ZH_HBB.getCode());
         currencyList.add(ECurrency.ZH_HBYJ.getCode());
-        accountBO.distributeAccountList(userId, user.getRealName(),
+        accountBO.distributeAccountList(userId, user.getLoginName(),
             EAccountType.Partner.getCode(), currencyList, user.getSystemCode());
         return userId;
     }
@@ -736,6 +736,7 @@ public class UserAOImpl implements IUserAO {
      * @see com.std.user.ao.IUserAO#doEditPartner(com.std.user.domain.User, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
+    @Transactional
     public void doEditPartner(User user, String province, String city,
             String area) {
         String kind = EUserKind.Partner.getCode();
@@ -899,7 +900,7 @@ public class UserAOImpl implements IUserAO {
             String realName) {
         User user = userBO.getUser(userId, null);
         // 判断库中是否有该记录
-        userBO.checkIdentify(idKind, idNo, realName);
+        userBO.checkIdentify(user.getKind(), idKind, idNo, realName);
         // 芝麻认证 有两种结果：如果本地有记录，返回成功；如果本地无记录，返货芝麻认证所需信息
         XN798011Res res = dentifyBO.doZhimaVerify(user.getSystemCode(),
             user.getSystemCode(), userId, idKind, idNo, realName);

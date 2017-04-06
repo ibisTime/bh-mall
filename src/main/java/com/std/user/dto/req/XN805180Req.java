@@ -26,12 +26,6 @@ public class XN805180Req {
     // 备注(选填)
     private String remark;
 
-    // 类别(必填)
-    private String kind;
-
-    // 角色编号(选填)
-    private String roleCode;
-
     // 省
     private String province;
 
@@ -44,44 +38,12 @@ public class XN805180Req {
     // 系统编号(必填)
     private String systemCode;
 
-    public String getProvince() {
-        return province;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getMobile() {
@@ -140,19 +102,35 @@ public class XN805180Req {
         this.remark = remark;
     }
 
-    public String getKind() {
-        return kind;
+    public String getProvince() {
+        return province;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getCity() {
+        return city;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

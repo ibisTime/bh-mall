@@ -19,7 +19,7 @@ INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('fyf_rule','汇赚宝玩法介绍','<p>凡拥有了“汇赚宝”的用户（包括前摇钱树用户）只要打开app，周围的正汇钱包用户都可在摇一摇的界面中找到您的红包。（无需硬件打开设备）</p><p>规则</p><p>一个汇赚宝单日最多可被摇900次</p><p>一个正汇钱包用户单日最多可以摇3次（每次摇的金额和代币种类皆为随机）</p><p></p><p>一个手机（或pad）单日最多可以摇3次（每次摇的金额和代币种类皆为随机）</p><p><br></p><p>凡拥有“摇钱树”的用户每天会有5个红包链接，用户可将该红包链接分享到微信，由好友打开后领取奖励，好友领取后分享着的账号会获得一定数值的红包业绩。</p><p>规则</p><p>一个正汇钱包账号单日最多领取1个红包链接</p><p>一个正汇钱包账号单日最多可发送5个红包链接</p><p>红包链接有效期：红包链接发送后可以转发，每日<span style=\"display: inline !important;\">0</span><span style=\"display: inline !important;\">点，前日的红包链接失效</span></p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('fyf_statement','汇赚宝免责申明','<p>本公司绝对禁止任何用户使用发一发服务进行变相牟利或者其他违反法律法规的自发组织行为，对此造成的任何形式的纠纷或者严重后果本公司不予承担，并且在未违反国家相关法律法规及部门规章规定，却对本公司在声誉，市场，财产的相关方面造成损失的行为，本公司将保留诉讼权利（包括但不限于通过本公司的产品或服务从事类似金字塔或矩阵型的高额返利业务模式。变相博彩模式。）</p><p>凡使用小目标服务的所有用户都已在使用前认真阅读并深刻了解该服务的所有相关信息</p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('store_up_statement','升级理财店铺说明','升级理财店铺说明','admin',now(),NULL,'CD-CZH000001');
-
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('new_start','新手入门','新手入门','admin',now(),NULL,'CD-CZH000001');
 /*
 -- Query: SELECT * FROM zhpay_std_user.tstd_user where login_name = 'admin' and system_code  = 'CD-CZH000001'
 -- Date: 2017-01-08 19:52
