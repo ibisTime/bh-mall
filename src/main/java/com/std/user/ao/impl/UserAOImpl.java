@@ -450,7 +450,7 @@ public class UserAOImpl implements IUserAO {
                     currencyList.add(ECurrency.ZH_HBB.getCode());
                     currencyList.add(ECurrency.ZH_HBYJ.getCode());
                 }
-                accountBO.distributeAccountList(userId, realName,
+                accountBO.distributeAccountList(userId, mobile,
                     getAccountType(kind), currencyList, systemCode);
             } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
