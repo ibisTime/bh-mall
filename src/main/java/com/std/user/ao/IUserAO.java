@@ -617,15 +617,6 @@ public interface IUserAO {
     public void doCheckTradePwd(String userId, String tradePwd);
 
     /**
-     * 发送短信
-     * @param userId
-     * @param content 
-     * @create: 2016年5月24日 下午6:46:07 myb858
-     * @history:
-     */
-    public void sendAppSms(String userId, String content);
-
-    /**
      * 更改用户名
      * @param userId
      * @param loginName 

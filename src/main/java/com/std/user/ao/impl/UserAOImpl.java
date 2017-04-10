@@ -90,6 +90,7 @@ import com.std.user.util.RandomUtil;
  */
 @Service
 public class UserAOImpl implements IUserAO {
+
     @Autowired
     protected IUserBO userBO;
 
@@ -1470,16 +1471,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doCheckTradePwd(String userId, String tradePwd) {
         userBO.checkTradePwd(userId, tradePwd);
-    }
-
-    @Override
-    public void sendAppSms(String userId, String content) {
-        User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
-        smsOutBO.sendSmsOut(user.getMobile(), content, "805903",
-            user.getSystemCode());
     }
 
     /** 
