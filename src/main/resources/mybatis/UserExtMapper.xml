@@ -166,4 +166,12 @@
 		,latitude = #{latitude}
 		WHERE user_id = #{userId}
 	</update>
+	
+	<update id="update_wx_info" parameterType="userExt">
+		UPDATE tstd_user_ext
+		SET
+		gender = #{gender}
+		,photo = #{photo}
+		WHERE user_id = #{userId}
+	</update>
 </mapper>

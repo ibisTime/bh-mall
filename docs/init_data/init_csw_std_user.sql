@@ -504,7 +504,7 @@ LIMIT 0, 50000
 
 -- Date: 2016-10-31 13:47
 */
-INSERT INTO `tsys_config` (`to_system`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('8','cswDescription','城市网介绍','<p>关于城市网</p><p>城市网是一款城市生活服务产品，具有民生、情感、美食、亲子、活动、情感生活话题，是本地老百姓交流生活资讯、消费娱乐、民生信息的平台。其中，城市小蜜为三四五线城市居民提供更为便捷快捷的生活信息服务。</p>','admin',now(),NULL);
+INSERT INTO `tsys_config` (`system_code`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CCSW000008','cswDescription','城市网介绍','<p>关于城市网</p><p>城市网是一款城市生活服务产品，具有民生、情感、美食、亲子、活动、情感生活话题，是本地老百姓交流生活资讯、消费娱乐、民生信息的平台。其中，城市小蜜为三四五线城市居民提供更为便捷快捷的生活信息服务。</p>','admin',now(),NULL);
 
 INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000001','0','1','招聘',NULL,1,'1','0');
 INSERT INTO `tforum_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`) VALUES ('FL2016000000000000002','0','1','出租',NULL,1,'1','0');
