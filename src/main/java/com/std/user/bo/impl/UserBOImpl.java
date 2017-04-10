@@ -786,4 +786,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public void refreshLevel(User data) {
         userDAO.updateLevel(data);
     }
+
+    @Override
+    public void refreshWxInfor(String userId, String openId, String name) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setOpenId(openId);
+        data.setNickname(name);
+        userDAO.updateWxInfor(data);
+    }
 }

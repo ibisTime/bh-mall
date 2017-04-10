@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ISignLogAO;
 import com.std.user.bo.IAccountBO;
+import com.std.user.bo.ILevelRuleBO;
 import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.common.DateUtil;
+import com.std.user.domain.LevelRule;
 import com.std.user.domain.SignLog;
 import com.std.user.domain.User;
 import com.std.user.dto.res.XN805100Res;
@@ -22,6 +24,7 @@ import com.std.user.enums.ECurrency;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
 import com.std.user.enums.ESysUser;
+import com.std.user.enums.ESystemCode;
 import com.std.user.exception.BizException;
 
 @Service
@@ -39,6 +42,9 @@ public class SignLogAOImpl implements ISignLogAO {
     @Autowired
     private IAccountBO accountBO;
 
+    @Autowired
+    private ILevelRuleBO levelRuleBO;
+
     @Override
     @Transactional
     public XN805100Res addSignLog(String userId, String location) {
@@ -54,9 +60,27 @@ public class SignLogAOImpl implements ISignLogAO {
         // 签到送钱
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
             user.getLevel());
-        userBO.refreshAmount(userId, amount, code, EBizType.AJ_SR,
-            ERuleType.MRQD.getValue());
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
+            userId, ECurrency.JF, amount, EBizType.AJ_SR, "签到送积分", "签到送积分");
+        Long totalAmount = accountBO.getAccountByUserId(userId, ECurrency.JF);
+        List<LevelRule> LevelRuleList = queryLevelRuleList();
+        for (LevelRule res : LevelRuleList) {
+            if (totalAmount >= res.getAmountMin()
+                    && totalAmount <= res.getAmountMax()) {
+                User udata = new User();
+                udata.setUserId(userId);
+                udata.setLevel(res.getCode());
+                userBO.refreshLevel(udata);
+                break;
+            }
+        }
         return new XN805100Res(code, amount);
+    }
+
+    private List<LevelRule> queryLevelRuleList() {
+        LevelRule condition = new LevelRule();
+        condition.setSystemCode(ESystemCode.CSW.getCode());
+        return levelRuleBO.queryLevelRuleList(condition);
     }
 
     @Override
