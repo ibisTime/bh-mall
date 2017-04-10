@@ -85,6 +85,8 @@
 		,t.city
 		,t.area
 		,t.address
+		,t.longitude
+		,t.latitude
 		,t.introduce
 		,t.system_code
 		FROM
