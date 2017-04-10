@@ -98,4 +98,9 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
         return super.update(NAMESPACE.concat("update_userExtLngLat"), data);
     }
 
+    @Override
+    public int updateWxInfo(UserExt data) {
+        return super.update(NAMESPACE.concat("update_wx_info"), data);
+    }
+
 }

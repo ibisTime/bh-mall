@@ -89,4 +89,14 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
      */
     public List<UserExt> queryUserExtList(UserExt condition);
 
+    /**
+     * 根据用户userId更新用户信息
+     * @param userId
+     * @param headimgurl
+     * @param sex
+     * @create: 2017年4月7日 下午6:15:55 asus
+     * @history:
+     */
+    public void refreshUserExt(String userId, String headimgurl, String sex);
+
 }

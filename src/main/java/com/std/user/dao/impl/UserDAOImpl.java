@@ -158,4 +158,9 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public int updateLevel(User data) {
         return super.update(NAMESPACE.concat("update_level"), data);
     }
+
+    @Override
+    public int updateWxInfor(User data) {
+        return super.update(NAMESPACE.concat("update_wx_infor"), data);
+    }
 }

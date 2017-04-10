@@ -202,4 +202,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshLevel(User data);
 
     public String saveUser(User user);
+
+    public void refreshWxInfor(String userId, String openId, String name);
 }

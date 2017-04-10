@@ -406,6 +406,20 @@ public class UserAOImpl implements IUserAO {
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
         }
+        if (systemCode.equals(ESystemCode.CSW.getCode())) {
+            // 注册
+            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
+                EBoolean.NO.getCode());
+            // 注册送积分
+            accountBO
+                .doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
+                    userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分",
+                    "注册送积分");
+        }
+        // 发送初始化密码
+        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805042",
+            systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
             // 注册环信
             instantMsgImpl.doRegisterUser(userId, systemCode);
@@ -1678,8 +1692,21 @@ public class UserAOImpl implements IUserAO {
                 if (StringUtils.isBlank(mobile)) {
                     isNeedMobile = EBoolean.YES.getCode();
                 } else {
-                    userId = doThirdRegisterWechat(openId, mobile, name,
-                        isRegHx, headimgurl, sex, companyCode, systemCode);
+                    // 查找该手机号是否有过注册
+                    User user = new User();
+                    user.setMobile(mobile);
+                    user.setKind(EUserKind.F1.getCode());
+                    user.setSystemCode(systemCode);
+                    List<User> userList = userBO.queryUserList(user);
+                    if (CollectionUtils.isEmpty(userList)) {
+                        userId = doThirdRegisterWechat(openId, mobile, name,
+                            isRegHx, headimgurl, sex, companyCode, systemCode);
+                    } else {
+                        // 根据该手机号更新用户信息
+                        userId = userList.get(0).getUserId();
+                        userBO.refreshWxInfor(userId, openId, name);
+                        userExtBO.refreshUserExt(userId, headimgurl, sex);
+                    }
                 }
             }
         } catch (Exception e) {

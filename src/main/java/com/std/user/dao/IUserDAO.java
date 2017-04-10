@@ -157,4 +157,13 @@ public interface IUserDAO extends IBaseDAO<User> {
      * @history:
      */
     public int updateSupple(User data);
+
+    /**
+     * 微信登录更新用户信息
+     * @param data
+     * @return 
+     * @create: 2017年4月7日 下午6:00:25 asus
+     * @history:
+     */
+    public int updateWxInfor(User data);
 }

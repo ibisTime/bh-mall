@@ -45,4 +45,12 @@ public interface IUserExtDAO extends IBaseDAO<UserExt> {
      * @history:
      */
     public int updateUserExtLngLat(UserExt data);
+
+    /**
+     * 更新用户信息
+     * @param data 
+     * @create: 2017年4月7日 下午6:18:49 asus
+     * @history:
+     */
+    public int updateWxInfo(UserExt data);
 }

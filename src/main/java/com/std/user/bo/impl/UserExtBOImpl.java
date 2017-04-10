@@ -131,4 +131,13 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt> implements
     public List<UserExt> queryUserExtList(UserExt condition) {
         return userExtDAO.selectList(condition);
     }
+
+    @Override
+    public void refreshUserExt(String userId, String headimgurl, String sex) {
+        UserExt data = new UserExt();
+        data.setUserId(userId);
+        data.setPhoto(headimgurl);
+        data.setGender(sex);
+        userExtDAO.updateWxInfo(data);
+    }
 }
