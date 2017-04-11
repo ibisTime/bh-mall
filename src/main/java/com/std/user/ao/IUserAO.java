@@ -635,44 +635,6 @@ public interface IUserAO {
     public void editNickname(String userId, String nickname);
 
     /**
-     * 单人划转加积分
-     * @param userId
-     * @param direction
-     * @param amount
-     * @param remark
-     * @param refNo 
-     * @create: 2016年10月11日 下午8:07:17 xieyj
-     * @history:
-     */
-    public void doTransfer(String userId, String direction, Long amount,
-            String remark, String refNo);
-
-    /**
-     * 活动加积分
-     * @param userId
-     * @param direction
-     * @param ruleType
-     * @param refNo 
-     * @create: 2016年10月23日 下午8:48:34 xieyj
-     * @history:
-     */
-    public void doTransfer(String userId, String direction, String ruleType,
-            String refNo);
-
-    /**
-     * 单向划转加钱
-     * @param fromUser
-     * @param toUser
-     * @param amount
-     * @param remark
-     * @param refNo 
-     * @create: 2016年10月24日 下午11:06:02 xieyj
-     * @history:
-     */
-    public void doTransferAdd(String fromUser, String toUser, Long amount,
-            String remark, String refNo);
-
-    /**
      * 更改公司编号
      * @param userId
      * @param companyCode 

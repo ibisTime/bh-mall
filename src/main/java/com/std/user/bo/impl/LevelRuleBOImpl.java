@@ -13,7 +13,6 @@ import com.std.user.core.EGeneratePrefix;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.dao.ILevelRuleDAO;
 import com.std.user.domain.LevelRule;
-import com.std.user.enums.ESystemCode;
 import com.std.user.exception.BizException;
 
 @Component
@@ -74,7 +73,7 @@ public class LevelRuleBOImpl extends PaginableBOImpl<LevelRule> implements
     @Override
     public List<LevelRule> queryLevelRuleList(String systemCode) {
         LevelRule condition = new LevelRule();
-        condition.setSystemCode(ESystemCode.CSW.getCode());
+        condition.setSystemCode(systemCode);
         return levelRuleDAO.selectList(condition);
     }
 

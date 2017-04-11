@@ -11,7 +11,6 @@ import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Coupon;
 import com.std.user.domain.User;
-import com.std.user.enums.EBizType;
 import com.std.user.enums.ECouponStatus;
 import com.std.user.exception.BizException;
 
@@ -40,9 +39,10 @@ public class CouponAOImpl implements ICouponAO {
         if (ECouponStatus.USED.getCode().equals(coupon.getStatus())) {
             throw new BizException("xn0000", "该卡券已使用，不能二次扫描");
         }
-        // 资金变动
-        userBO.refreshAmount(userId, coupon.getAmount(), code, EBizType.AJ_SR,
-            "扫描卡券加积分");
+        // // 资金变动
+        // userBO.refreshAmount(userId, coupon.getAmount(), code,
+        // EBizType.AJ_SR,
+        // "扫描卡券加积分");
         couponBO.refreshCouponStatus(code, ECouponStatus.USED, userId);
     }
 
