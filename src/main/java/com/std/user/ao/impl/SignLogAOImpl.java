@@ -24,7 +24,6 @@ import com.std.user.enums.ECurrency;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
 import com.std.user.enums.ESysUser;
-import com.std.user.enums.ESystemCode;
 import com.std.user.exception.BizException;
 
 @Service
@@ -61,9 +60,10 @@ public class SignLogAOImpl implements ISignLogAO {
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
             user.getLevel());
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-            userId, ECurrency.JF, amount, EBizType.AJ_SR, "签到送积分", "签到送积分");
+            userId, ECurrency.JF, amount, EBizType.AJ_SIGN, "签到送积分", "签到送积分");
         Long totalAmount = accountBO.getAccountByUserId(userId, ECurrency.JF);
-        List<LevelRule> LevelRuleList = queryLevelRuleList();
+        List<LevelRule> LevelRuleList = levelRuleBO.queryLevelRuleList(user
+            .getSystemCode());
         for (LevelRule res : LevelRuleList) {
             if (totalAmount >= res.getAmountMin()
                     && totalAmount <= res.getAmountMax()) {
@@ -75,12 +75,6 @@ public class SignLogAOImpl implements ISignLogAO {
             }
         }
         return new XN805100Res(code, amount);
-    }
-
-    private List<LevelRule> queryLevelRuleList() {
-        LevelRule condition = new LevelRule();
-        condition.setSystemCode(ESystemCode.CSW.getCode());
-        return levelRuleBO.queryLevelRuleList(condition);
     }
 
     @Override
