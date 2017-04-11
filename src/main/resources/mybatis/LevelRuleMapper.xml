@@ -87,6 +87,8 @@
 		UPDATE tstd_level_rule
 		SET
 		name = #{name}
+		,amount_min = #{amountMin}
+		,amount_max = #{amountMax}
 		,effect = #{effect}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
