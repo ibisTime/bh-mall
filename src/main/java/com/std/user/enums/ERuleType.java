@@ -17,7 +17,7 @@ import java.util.Map;
  * @history:
  */
 public enum ERuleType {
-    ZC("A", "注册"), MRQD("B", "每日签到"), SCTX("C1", "上传头像"), ZLWS("C2", "资料完善"), FT(
+    ZC("A", "注册"), MRQD("B", "每日签到"), SCTX_FRIST("C1", "首次上传头像"), ZLWS_FIRST("C2", "首次资料完善"), FT(
             "D", "发布帖子"), PL("E", "发布评论"), JH("F", "设置精华帖"), TZWG("G", "帖子违规"), PLWG(
             "H", "评论违规");
     public static Map<String, ERuleType> getRuleTypeMap() {

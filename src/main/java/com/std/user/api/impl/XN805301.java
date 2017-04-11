@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 用户间单向加钱
+ * 用户间单向加钱(作废)
  * @author: xieyj 
  * @since: 2016年10月11日 下午8:45:42 
  * @history:
@@ -24,8 +24,8 @@ public class XN805301 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getAmount());
-        userAO.doTransferAdd(req.getFromUser(), req.getToUser(), amount,
-            req.getRemark(), req.getRefNo());
+        // userAO.doTransferAdd(req.getFromUser(), req.getToUser(), amount,
+        // req.getRemark(), req.getRefNo());
         return new BooleanRes(true);
     }
 

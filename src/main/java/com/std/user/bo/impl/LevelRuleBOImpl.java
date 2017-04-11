@@ -71,6 +71,13 @@ public class LevelRuleBOImpl extends PaginableBOImpl<LevelRule> implements
     }
 
     @Override
+    public List<LevelRule> queryLevelRuleList(String systemCode) {
+        LevelRule condition = new LevelRule();
+        condition.setSystemCode(systemCode);
+        return levelRuleDAO.selectList(condition);
+    }
+
+    @Override
     public LevelRule getLevelRule(String code) {
         LevelRule data = null;
         if (StringUtils.isNotBlank(code)) {

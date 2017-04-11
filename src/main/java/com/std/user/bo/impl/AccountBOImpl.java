@@ -17,6 +17,7 @@ import com.std.user.dto.req.XN002100Req;
 import com.std.user.dto.res.XN001303Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.ECurrency;
+import com.std.user.enums.ESystemCode;
 import com.std.user.exception.BizException;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
@@ -41,12 +42,15 @@ public class AccountBOImpl implements IAccountBO {
     @Override
     public void refreshRealName(String userId, String realName,
             String systemCode) {
-        XN002001Req req = new XN002001Req();
-        req.setUserId(userId);
-        req.setRealName(realName);
-        req.setSystemCode(systemCode);
-        BizConnecter.getBizData("002001", JsonUtils.object2Json(req),
-            Object.class);
+        // 正汇不处理
+        if (!ESystemCode.ZHPAY.getCode().equals(systemCode)) {
+            XN002001Req req = new XN002001Req();
+            req.setUserId(userId);
+            req.setRealName(realName);
+            req.setSystemCode(systemCode);
+            BizConnecter.getBizData("002001", JsonUtils.object2Json(req),
+                Object.class);
+        }
     }
 
     /** 

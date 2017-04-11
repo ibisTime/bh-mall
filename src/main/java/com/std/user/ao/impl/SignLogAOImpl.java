@@ -57,30 +57,43 @@ public class SignLogAOImpl implements ISignLogAO {
         // 添加签到记录
         String code = signLogBO.saveSignLog(userId, location,
             user.getSystemCode());
-        // 签到送钱
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
-            user.getLevel());
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-            userId, ECurrency.JF, amount, EBizType.AJ_SR, "签到送积分", "签到送积分");
-        Long totalAmount = accountBO.getAccountByUserId(userId, ECurrency.JF);
-        List<LevelRule> LevelRuleList = queryLevelRuleList();
-        for (LevelRule res : LevelRuleList) {
-            if (totalAmount >= res.getAmountMin()
-                    && totalAmount <= res.getAmountMax()) {
-                User udata = new User();
-                udata.setUserId(userId);
-                udata.setLevel(res.getCode());
-                userBO.refreshLevel(udata);
-                break;
-            }
-        }
+        Long amount = addAccountAmount(user);
         return new XN805100Res(code, amount);
     }
 
-    private List<LevelRule> queryLevelRuleList() {
-        LevelRule condition = new LevelRule();
-        condition.setSystemCode(ESystemCode.CSW.getCode());
-        return levelRuleBO.queryLevelRuleList(condition);
+    /** 
+     * 赠送账户金额
+     * @param userId
+     * @param user
+     * @return 
+     * @create: 2017年4月11日 上午10:58:05 xieyj
+     * @history: 
+     */
+    private Long addAccountAmount(User user) {
+        Long amount = 0L;
+        if (ESystemCode.CSW.getCode().equals(user.getSystemCode())) {
+            // 签到送钱
+            amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
+                user.getLevel());
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
+                user.getUserId(), ECurrency.JF, amount, EBizType.AJ_SIGN,
+                "签到送积分", "签到送积分");
+            Long totalAmount = accountBO.getAccountByUserId(user.getUserId(),
+                ECurrency.JF);
+            List<LevelRule> LevelRuleList = levelRuleBO.queryLevelRuleList(user
+                .getSystemCode());
+            for (LevelRule res : LevelRuleList) {
+                if (totalAmount >= res.getAmountMin()
+                        && totalAmount <= res.getAmountMax()) {
+                    User udata = new User();
+                    udata.setUserId(user.getUserId());
+                    udata.setLevel(res.getCode());
+                    userBO.refreshLevel(udata);
+                    break;
+                }
+            }
+        }
+        return amount;
     }
 
     @Override
@@ -122,8 +135,8 @@ public class SignLogAOImpl implements ISignLogAO {
         String code = signLogBO.saveSignLog(userId, location,
             user.getSystemCode());
         // 账户资金划拨
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_LLWW.getCode(),
-            userId, ECurrency.JF, amount, EBizType.AJ_SIGN, "每日签到", "每日签到");
+        accountBO.doTransferAmountRemote(user.getSystemCode(), userId,
+            ECurrency.JF, amount, EBizType.AJ_SIGN, "每日签到", "每日签到");
         return new XN805931Res(code, amount);
     }
 }

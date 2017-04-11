@@ -63,7 +63,6 @@ import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECPwdType;
 import com.std.user.enums.ECurrency;
-import com.std.user.enums.EDirection;
 import com.std.user.enums.EFieldType;
 import com.std.user.enums.EIDKind;
 import com.std.user.enums.ELoginType;
@@ -90,6 +89,7 @@ import com.std.user.util.RandomUtil;
  */
 @Service
 public class UserAOImpl implements IUserAO {
+
     @Autowired
     protected IUserBO userBO;
 
@@ -319,18 +319,11 @@ public class UserAOImpl implements IUserAO {
         if (count > 0) {
             throw new BizException("xn702002", openId + "第三方开放编号已存在");
         }
-        // 注册送钱
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
-            EBoolean.NO.getCode());
         // 插入用户信息
         String loginPwd = EUserPwd.InitPwd.getCode();
         String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, EUserKind.F1.getCode(), "0", amount, companyCode,
-            openId, null, systemCode);
-        if (amount != null && amount > 0) {
-            aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
-                ERuleType.ZC.getValue(), systemCode);
-        }
+            "1", null, EUserKind.F1.getCode(), "0", 0L, companyCode, openId,
+            null, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender, systemCode);
 
@@ -464,7 +457,7 @@ public class UserAOImpl implements IUserAO {
                     currencyList.add(ECurrency.ZH_HBB.getCode());
                     currencyList.add(ECurrency.ZH_HBYJ.getCode());
                 }
-                accountBO.distributeAccountList(userId, realName,
+                accountBO.distributeAccountList(userId, mobile,
                     getAccountType(kind), currencyList, systemCode);
             } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
@@ -627,19 +620,11 @@ public class UserAOImpl implements IUserAO {
         // 验证手机号
         userBO.isMobileExist(mobile, systemCode);
         companyBO.isCompanyExist(companyCode);
-        // 注册送钱
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
-            EBoolean.NO.getCode());
         // 插入用户信息
         String loginPwd = RandomUtil.generate6();
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             null, mobile, loginPwd, "1", userReferee, EUserKind.F1.getCode(),
-            EUserLevel.ZERO.getCode(), amount, companyCode, null, null,
-            systemCode);
-        if (amount != null && amount > 0) {
-            aJourBO.addJour(userId, 0L, amount, EBizType.AJ_SR.getCode(), null,
-                ERuleType.ZC.getValue(), systemCode);
-        }
+            EUserLevel.ZERO.getCode(), 0L, companyCode, null, null, systemCode);
         // 环信代注册
         instantMsgImpl.doRegisterUser(userId, systemCode);
         // 新增扩展信息
@@ -741,7 +726,7 @@ public class UserAOImpl implements IUserAO {
         currencyList.add(ECurrency.ZH_GWB.getCode());
         currencyList.add(ECurrency.ZH_HBB.getCode());
         currencyList.add(ECurrency.ZH_HBYJ.getCode());
-        accountBO.distributeAccountList(userId, user.getRealName(),
+        accountBO.distributeAccountList(userId, user.getLoginName(),
             EAccountType.Partner.getCode(), currencyList, user.getSystemCode());
         return userId;
     }
@@ -750,6 +735,7 @@ public class UserAOImpl implements IUserAO {
      * @see com.std.user.ao.IUserAO#doEditPartner(com.std.user.domain.User, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
+    @Transactional
     public void doEditPartner(User user, String province, String city,
             String area) {
         String kind = EUserKind.Partner.getCode();
@@ -913,7 +899,7 @@ public class UserAOImpl implements IUserAO {
             String realName) {
         User user = userBO.getUser(userId, null);
         // 判断库中是否有该记录
-        userBO.checkIdentify(idKind, idNo, realName);
+        userBO.checkIdentify(user.getKind(), idKind, idNo, realName);
         // 芝麻认证 有两种结果：如果本地有记录，返回成功；如果本地无记录，返货芝麻认证所需信息
         XN798011Res res = dentifyBO.doZhimaVerify(user.getSystemCode(),
             user.getSystemCode(), userId, idKind, idNo, realName);
@@ -1485,16 +1471,6 @@ public class UserAOImpl implements IUserAO {
         userBO.checkTradePwd(userId, tradePwd);
     }
 
-    @Override
-    public void sendAppSms(String userId, String content) {
-        User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
-        smsOutBO.sendSmsOut(user.getMobile(), content, "805903",
-            user.getSystemCode());
-    }
-
     /** 
      * @see com.std.user.ao.IUserAO#editLoginName(java.lang.String, java.lang.String)
      */
@@ -1525,63 +1501,6 @@ public class UserAOImpl implements IUserAO {
             fieldTimesBO.saveFieldTimes(EFieldType.NICKNAME, userId);
         } else {
             throw new BizException("xn000000", "用户ID不存在");
-        }
-    }
-
-    /** 
-     * @see com.std.user.ao.IUserAO#doTransfer(java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.String)
-     */
-    @Override
-    public void doTransfer(String userId, String direction, Long amount,
-            String remark, String refNo) {
-        EBizType bizType = null;
-        Long transAmount = null;
-        if (EDirection.PLUS.getCode().equalsIgnoreCase(direction)) {
-            bizType = EBizType.AJ_SR;
-            transAmount = amount;
-        }
-        if (EDirection.MINUS.getCode().equalsIgnoreCase(direction)) {
-            bizType = EBizType.AJ_ZC;
-            transAmount = -amount;
-        }
-        // 资金变动
-        userBO.refreshAmount(userId, transAmount, refNo, bizType, remark);
-    }
-
-    /** 
-     * @see com.std.user.ao.IUserAO#doTransfer(java.lang.String, java.lang.String, com.std.user.enums.ERuleKind, com.std.user.enums.ERuleType, java.lang.String)
-     */
-    @Override
-    public void doTransfer(String userId, String direction, String ruleType,
-            String refNo) {
-        User user = userBO.getUser(userId);
-        ERuleType eRuleType = ERuleType.getRuleTypeMap().get(ruleType);
-        if (null == eRuleType) {
-            throw new BizException("xn000000", "产生规则项不存在");
-        }
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, eRuleType,
-            user.getLevel());
-        if (amount != 0) {
-            doTransfer(userId, direction, amount, eRuleType.getValue(), refNo);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void doTransferAdd(String fromUser, String toUser, Long amount,
-            String remark, String refNo) {
-        Long transAmount = null;
-        if (amount != null && amount != 0L) {
-            EBizType fromBizType = null;
-            EBizType toBizType = null;
-            transAmount = amount;
-            fromBizType = EBizType.AJ_ZC;
-            toBizType = EBizType.AJ_SR;
-            // 来方资金变动
-            userBO.refreshAmount(fromUser, -transAmount, refNo, fromBizType,
-                remark);
-            // 来方资金变动
-            userBO.refreshAmount(toUser, transAmount, refNo, toBizType, remark);
         }
     }
 
@@ -2076,6 +1995,15 @@ public class UserAOImpl implements IUserAO {
             res.setCity(userExt.getCity());
             res.setArea(userExt.getArea());
             res.setPhoto(userExt.getPhoto());
+            res.setGender(userExt.getGender());
+            res.setBirthday(userExt.getBirthday());
+            res.setEmail(userExt.getEmail());
+            res.setDiploma(userExt.getDiploma());
+            res.setOccupation(userExt.getOccupation());
+            res.setWorkTime(userExt.getWorkTime());
+            res.setIntroduce(userExt.getIntroduce());
+            res.setLatitude(userExt.getLatitude());
+            res.setLongitude(userExt.getLongitude());
         }
 
         return res;

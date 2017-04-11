@@ -1,6 +1,6 @@
 package com.std.user.api.impl;
 
-import com.std.user.ao.IUserAO;
+import com.std.user.ao.ISmsOutAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
@@ -11,19 +11,20 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 应用委托发送短信（因为应用本身只能拿到登录名，其他信息如手机号理论上拿不到的）
- * @author: myb858 
- * @since: 2015年11月10日 上午9:18:50 
+ * 业务biz委托发送短信
+ * @author: xieyj 
+ * @since: 2017年4月10日 下午9:10:07 
  * @history:
  */
 public class XN001200 extends AProcessor {
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private ISmsOutAO smsOutAO = SpringContextHolder.getBean(ISmsOutAO.class);
 
     private XN001200Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.sendAppSms(req.getUserId(), req.getContent());
+        smsOutAO.sendContent(req.getTokenId(), req.getUserId(),
+            req.getContent());
         return new BooleanRes(true);
     }
 
@@ -32,7 +33,5 @@ public class XN001200 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN001200Req.class);
         StringValidater.validateBlank(req.getTokenId(), req.getUserId(),
             req.getContent());
-
     }
-
 }

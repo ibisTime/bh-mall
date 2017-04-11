@@ -253,6 +253,10 @@ INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`upda
 INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','1','hear_status','1','听单中','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','1','hear_status','2','已派单','admin',now(),NULL);
 
+INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','0',NULL,'occupation','职业','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','1','occupation','0','水电工','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','1','occupation','1','设计师','admin',now(),NULL);
+
 INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','0',NULL,'assign_status','派单状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','1','assign_status','0','待接单','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`system_code`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CD-CGD000006','1','assign_status','1','已接单','admin',now(),NULL);
@@ -274,6 +278,7 @@ LIMIT 0, 10000
 */
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('aboutus','关于我们','<p>关于我们</p>','admin',now(),NULL,'CD-CGD000006');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('license','软件许可协议','<p>软件许可协议</p>','admin',now(),NULL,'CD-CGD000006');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('telephone','服务热线','400-832-0989','admin',now(),NULL,'CD-CGD000006');
 
 /*
 -- Query: SELECT code,type,account,password,remark,company_code,system_code FROM tstd_cpassword WHERE system_code = 'CD-CGD000006'
