@@ -13,7 +13,7 @@ public interface IUserExtAO {
      * @create: 2016年10月21日 下午6:53:13 xieyj
      * @history:
      */
-    public int editUserExtAddJf(UserExt data);
+    public void editUserExtAddJf(UserExt data);
 
     /**
      * 更改用户信息

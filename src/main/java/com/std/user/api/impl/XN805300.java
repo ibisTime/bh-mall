@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 单用户划账
+ * 单用户划账(作废)
  * @author: xieyj 
  * @since: 2016年10月11日 下午8:45:42 
  * @history:
@@ -24,8 +24,8 @@ public class XN805300 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getAmount());
-        userAO.doTransfer(req.getUserId(), req.getDirection(), amount,
-            req.getRemark(), req.getRefNo());
+        // userAO.doTransfer(req.getUserId(), req.getDirection(), amount,
+        // req.getRemark(), req.getRefNo());
         return new BooleanRes(true);
     }
 

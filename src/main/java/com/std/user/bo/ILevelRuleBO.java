@@ -17,6 +17,8 @@ public interface ILevelRuleBO extends IPaginableBO<LevelRule> {
 
     public List<LevelRule> queryLevelRuleList(LevelRule condition);
 
+    public List<LevelRule> queryLevelRuleList(String systemCode);
+
     public LevelRule getLevelRule(String code);
 
 }

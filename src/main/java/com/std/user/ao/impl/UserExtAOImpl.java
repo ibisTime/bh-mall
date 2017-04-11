@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.IUserExtAO;
 import com.std.user.bo.IAJourBO;
@@ -21,7 +22,6 @@ import com.std.user.enums.ECurrency;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
 import com.std.user.enums.ESysUser;
-import com.std.user.enums.ESystemCode;
 
 @Service
 public class UserExtAOImpl implements IUserExtAO {
@@ -45,50 +45,16 @@ public class UserExtAOImpl implements IUserExtAO {
     private ILevelRuleBO levelRuleBO;
 
     @Override
-    public int editUserExtAddJf(UserExt data) {
+    @Transactional
+    public void editUserExtAddJf(UserExt data) {
         User user = userBO.getUser(data.getUserId());
         UserExt userExt = userExtBO.getUserExt(data.getUserId());
         if (StringUtils.isBlank(userExt.getGender())
                 && StringUtils.isBlank(userExt.getBirthday())
                 && StringUtils.isBlank(userExt.getEmail())) {
-            // 完善信息送积分
-            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF,
-                ERuleType.ZLWS, user.getLevel());
-            if (ESystemCode.CSW.getCode().equals(user.getSystemCode())) {
-                this.editUserExt(user, amount, ERuleType.ZLWS.getValue());
-            } else {
-                if (amount != null && amount > 0) {
-                    userBO.refreshAmount(data.getUserId(), amount, null,
-                        EBizType.AJ_SR, ERuleType.ZLWS.getValue());
-                }
-            }
+            doAddAmount(user, ERuleType.ZLWS_FIRST);
         }
-        return userExtBO.refreshUserExt(data);
-    }
-
-    public void editUserExt(User user, Long amount, String bizNote) {
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-            user.getUserId(), ECurrency.JF, amount, EBizType.AJ_SR, bizNote,
-            bizNote);
-        Long totalAmount = accountBO.getAccountByUserId(user.getUserId(),
-            ECurrency.JF);
-        List<LevelRule> LevelRuleList = queryLevelRuleList();
-        for (LevelRule res : LevelRuleList) {
-            if (totalAmount >= res.getAmountMin()
-                    && totalAmount <= res.getAmountMax()) {
-                User udata = new User();
-                udata.setUserId(user.getUserId());
-                udata.setLevel(res.getCode());
-                userBO.refreshLevel(udata);
-                break;
-            }
-        }
-    }
-
-    private List<LevelRule> queryLevelRuleList() {
-        LevelRule condition = new LevelRule();
-        condition.setSystemCode(ESystemCode.CSW.getCode());
-        return levelRuleBO.queryLevelRuleList(condition);
+        userExtBO.refreshUserExt(data);
     }
 
     @Override
@@ -108,19 +74,41 @@ public class UserExtAOImpl implements IUserExtAO {
         User user = userBO.getUser(userId);
         UserExt userExt = userExtBO.getUserExt(userId);
         if (StringUtils.isBlank(userExt.getPhoto())) {
-            // 首次上传头像送积分
-            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF,
-                ERuleType.SCTX, user.getLevel());
-            if (ESystemCode.CSW.getCode().equals(user.getSystemCode())) {
-                this.editUserExt(user, amount, ERuleType.SCTX.getValue());
-            } else {
-                if (amount != null && amount > 0) {
-                    userBO.refreshAmount(userId, amount, null, EBizType.AJ_SR,
-                        ERuleType.SCTX.getValue());
+            doAddAmount(user, ERuleType.SCTX_FRIST);
+        }
+        return userExtBO.refreshUserPhoto(userId, photo);
+    }
+
+    private void doAddAmount(User user, ERuleType ruleType) {
+        // 完善信息送积分
+        if (ESysUser.SYS_USER_CSW.getCode().equals(user.getSystemCode())) {
+            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ruleType,
+                user.getLevel());
+            EBizType bizType = null;
+            if (ERuleType.SCTX_FRIST.getCode().equals(ruleType.getCode())) {
+                bizType = EBizType.AJ_SCTX_FIRST;
+            } else if (ERuleType.ZLWS_FIRST.getCode()
+                .equals(ruleType.getCode())) {
+                bizType = EBizType.AJ_ZLWS_FIRST;
+            }
+            accountBO.doTransferAmountRemote(user.getSystemCode(),
+                user.getUserId(), ECurrency.JF, amount, bizType,
+                bizType.getValue(), bizType.getValue());
+            Long totalAmount = accountBO.getAccountByUserId(user.getUserId(),
+                ECurrency.JF);
+            List<LevelRule> levelRuleList = levelRuleBO.queryLevelRuleList(user
+                .getSystemCode());
+            for (LevelRule res : levelRuleList) {
+                if (totalAmount >= res.getAmountMin()
+                        && totalAmount <= res.getAmountMax()) {
+                    User udata = new User();
+                    udata.setUserId(user.getUserId());
+                    udata.setLevel(res.getCode());
+                    userBO.refreshLevel(udata);
+                    break;
                 }
             }
         }
-        return userExtBO.refreshUserPhoto(userId, photo);
     }
 
     /** 
