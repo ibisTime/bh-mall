@@ -2076,6 +2076,7 @@ public class UserAOImpl implements IUserAO {
             res.setProvince(userExt.getProvince());
             res.setCity(userExt.getCity());
             res.setArea(userExt.getArea());
+            res.setAddress(userExt.getAddress());
             res.setPhoto(userExt.getPhoto());
             res.setGender(userExt.getGender());
             res.setBirthday(userExt.getBirthday());

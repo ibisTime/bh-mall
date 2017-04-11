@@ -61,6 +61,9 @@ public class XN001400Res {
     // 区(县)
     private String area;
 
+    // 具体地址
+    private String address;
+
     // 经度
     private String longitude;
 
@@ -340,5 +343,13 @@ public class XN001400Res {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
