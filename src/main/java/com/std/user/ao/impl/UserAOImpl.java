@@ -398,11 +398,10 @@ public class UserAOImpl implements IUserAO {
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
         }
+        // 城市网注册送积分
         if (systemCode.equals(ESystemCode.CSW.getCode())) {
-            // 注册
             Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
                 EBoolean.NO.getCode());
-            // 注册送积分
             accountBO
                 .doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
                     userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分",
@@ -412,8 +411,8 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805042",
             systemCode);
+        // 注册环信
         if (EBoolean.YES.getCode().equals(isRegHx)) {
-            // 注册环信
             instantMsgImpl.doRegisterUser(userId, systemCode);
         }
         return userId;
