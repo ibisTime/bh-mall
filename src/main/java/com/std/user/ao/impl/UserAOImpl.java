@@ -30,6 +30,7 @@ import com.std.user.bo.ICPasswordBO;
 import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
+import com.std.user.bo.ILevelRuleBO;
 import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISYSRoleBO;
 import com.std.user.bo.ISignLogBO;
@@ -48,6 +49,7 @@ import com.std.user.common.WechatConstant;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.domain.CPassword;
 import com.std.user.domain.Company;
+import com.std.user.domain.LevelRule;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
@@ -131,6 +133,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected ICPasswordBO cPasswordBO;
+
+    @Autowired
+    protected ILevelRuleBO levelRuleBO;
 
     @Override
     public void doCheckMobile(String mobile, String kind, String systemCode) {
@@ -272,8 +277,7 @@ public class UserAOImpl implements IUserAO {
     public String doCSWRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
             String isRegHx, String companyCode, String systemCode) {
-        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode,
-            systemCode);
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), systemCode);
         // 验证推荐人是否是平台的已注册用户
         userBO.checkUserReferee(userReferee, systemCode);
         // 短信验证码是否正确
@@ -406,6 +410,18 @@ public class UserAOImpl implements IUserAO {
                 .doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
                     userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分",
                     "注册送积分");
+            Long allAmount = accountBO.getAccountByUserId(userId, ECurrency.JF);
+            LevelRule levelRule = new LevelRule();
+            levelRule.setSystemCode(ESystemCode.CSW.getCode());
+            List<LevelRule> LevelRuleList = levelRuleBO
+                .queryLevelRuleList(levelRule);
+            for (LevelRule res : LevelRuleList) {
+                if (allAmount >= res.getAmountMin()
+                        && allAmount <= res.getAmountMax()) {
+                    upgradeLevel(userId, res.getCode());
+                    break;
+                }
+            }
         }
         // 发送初始化密码
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
@@ -623,11 +639,16 @@ public class UserAOImpl implements IUserAO {
         String loginPwd = RandomUtil.generate6();
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             null, mobile, loginPwd, "1", userReferee, EUserKind.F1.getCode(),
-            EUserLevel.ZERO.getCode(), 0L, companyCode, null, null, systemCode);
+            EUserLevel.ONE.getCode(), 0L, companyCode, null, null, systemCode);
         // 环信代注册
         instantMsgImpl.doRegisterUser(userId, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.JF.getCode());
+        accountBO.distributeAccountList(userId, mobile,
+            EAccountType.Customer.getCode(), currencyList, systemCode);
         // 发送短信
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805079",

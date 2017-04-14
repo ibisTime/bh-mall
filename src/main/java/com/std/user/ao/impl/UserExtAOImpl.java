@@ -59,13 +59,22 @@ public class UserExtAOImpl implements IUserExtAO {
 
     @Override
     public int editUserExt(UserExt data) {
-        userBO.getUser(data.getUserId());
+        User user = userBO.getUser(data.getUserId());
+        if (StringUtils.isBlank(data.getGender())
+                && StringUtils.isBlank(data.getBirthday())
+                && StringUtils.isBlank(data.getEmail())) {
+            doAddAmount(user, ERuleType.ZLWS_FIRST);
+        }
         return userExtBO.refreshUserExt(data);
     }
 
     @Override
     public int editUserExtPhoto(String userId, String photo) {
-        userBO.getUser(userId);
+        User user = userBO.getUser(userId);
+        UserExt userExt = userExtBO.getUserExt(userId);
+        if (StringUtils.isBlank(userExt.getPhoto())) {
+            doAddAmount(user, ERuleType.SCTX_FRIST);
+        }
         return userExtBO.refreshUserPhoto(userId, photo);
     }
 
