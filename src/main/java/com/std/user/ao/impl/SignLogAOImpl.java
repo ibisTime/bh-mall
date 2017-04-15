@@ -77,7 +77,7 @@ public class SignLogAOImpl implements ISignLogAO {
                 user.getLevel());
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
                 user.getUserId(), ECurrency.JF, amount, EBizType.AJ_SIGN,
-                "签到送积分", "签到送积分");
+                "签到送赏金", "签到送赏金");
             Long totalAmount = accountBO.getAccountByUserId(user.getUserId(),
                 ECurrency.JF);
             List<LevelRule> LevelRuleList = levelRuleBO.queryLevelRuleList(user

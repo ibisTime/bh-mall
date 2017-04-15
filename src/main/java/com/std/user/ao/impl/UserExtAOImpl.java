@@ -22,6 +22,7 @@ import com.std.user.enums.ECurrency;
 import com.std.user.enums.ERuleKind;
 import com.std.user.enums.ERuleType;
 import com.std.user.enums.ESysUser;
+import com.std.user.enums.ESystemCode;
 
 @Service
 public class UserExtAOImpl implements IUserExtAO {
@@ -60,9 +61,10 @@ public class UserExtAOImpl implements IUserExtAO {
     @Override
     public int editUserExt(UserExt data) {
         User user = userBO.getUser(data.getUserId());
-        if (StringUtils.isBlank(data.getGender())
-                && StringUtils.isBlank(data.getBirthday())
-                && StringUtils.isBlank(data.getEmail())) {
+        UserExt userExt = userExtBO.getUserExt(data.getUserId());
+        if (StringUtils.isBlank(userExt.getGender())
+                && StringUtils.isBlank(userExt.getBirthday())
+                && StringUtils.isBlank(userExt.getEmail())) {
             doAddAmount(user, ERuleType.ZLWS_FIRST);
         }
         return userExtBO.refreshUserExt(data);
@@ -90,7 +92,7 @@ public class UserExtAOImpl implements IUserExtAO {
 
     private void doAddAmount(User user, ERuleType ruleType) {
         // 完善信息送积分
-        if (ESysUser.SYS_USER_CSW.getCode().equals(user.getSystemCode())) {
+        if (ESystemCode.CSW.getCode().equals(user.getSystemCode())) {
             Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ruleType,
                 user.getLevel());
             EBizType bizType = null;
@@ -100,7 +102,7 @@ public class UserExtAOImpl implements IUserExtAO {
                 .equals(ruleType.getCode())) {
                 bizType = EBizType.AJ_ZLWS_FIRST;
             }
-            accountBO.doTransferAmountRemote(user.getSystemCode(),
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
                 user.getUserId(), ECurrency.JF, amount, bizType,
                 bizType.getValue(), bizType.getValue());
             Long totalAmount = accountBO.getAccountByUserId(user.getUserId(),
