@@ -305,7 +305,7 @@ public class UserAOImpl implements IUserAO {
             EAccountType.Customer.getCode(), currencyList, systemCode);
         // 注册送积分
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-            userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分", "注册送积分");
+            userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送赏金", "注册送赏金");
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
         if (EBoolean.YES.getCode().equals(isRegHx)) {
