@@ -207,12 +207,10 @@ public interface IUserBO extends IPaginableBO<User> {
 
     /** 
      * @param unionid
-     * @param openId
      * @param systemCode
      * @return 
      * @create: 2017年4月15日 下午9:28:07 xieyj
      * @history: 
      */
-    public List<User> queryUserList(String unionid, String openId,
-            String systemCode);
+    public List<User> queryUserList(String unionid, String systemCode);
 }

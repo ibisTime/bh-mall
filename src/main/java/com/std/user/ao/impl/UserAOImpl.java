@@ -1613,10 +1613,8 @@ public class UserAOImpl implements IUserAO {
             if (StringUtils.isEmpty(unionId)) {
                 unionId = (String) wxRes.get("openid");
             }
-            // Step4：根据openId从数据库中查询用户信息（user）
-            // 兼容城市网之前存储的openId是unionId，故两者都查询
-            List<User> users = userBO
-                .queryUserList(unionId, openId, systemCode);
+            // Step4：根据openId从数据库中查询用户信息（user） 存储的openId是unionId,兼容网页和APP
+            List<User> users = userBO.queryUserList(unionId, systemCode);
 
             if (!CollectionUtils.isEmpty(users)) {
                 // Step4-1：如果user存在，说明用户授权登录过，直接登录
@@ -1645,12 +1643,12 @@ public class UserAOImpl implements IUserAO {
                     user.setSystemCode(systemCode);
                     List<User> userList = userBO.queryUserList(user);
                     if (CollectionUtils.isEmpty(userList)) {
-                        userId = doThirdRegisterWechat(openId, mobile, name,
+                        userId = doThirdRegisterWechat(unionId, mobile, name,
                             isRegHx, headimgurl, sex, companyCode, systemCode);
                     } else {
                         // 根据该手机号更新用户信息
                         userId = userList.get(0).getUserId();
-                        userBO.refreshWxInfor(userId, openId, name);
+                        userBO.refreshWxInfor(userId, unionId, name);
                         userExtBO.refreshUserExt(userId, headimgurl, sex);
                     }
                 }

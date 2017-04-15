@@ -802,16 +802,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.std.user.bo.IUserBO#queryUserList(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public List<User> queryUserList(String unionid, String openId,
-            String systemCode) {
+    public List<User> queryUserList(String unionid, String systemCode) {
         User condition = new User();
         condition.setOpenId(unionid);
         condition.setSystemCode(systemCode);
-        List<User> results = userDAO.selectList(condition);
-        if (CollectionUtils.isEmpty(results)) {
-            condition.setOpenId(openId);
-            results = userDAO.selectList(condition);
-        }
-        return results;
+        return userDAO.selectList(condition);
     }
 }
