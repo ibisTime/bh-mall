@@ -359,9 +359,9 @@ CREATE TABLE `tstd_uread` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_user`;
 CREATE TABLE `tstd_user` (
-  `user_id` varchar(32) NOT NULL COMMENT 'userId',
+  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
-  `nickname` varchar(32) DEFAULT NULL COMMENT '昵称',
+  `nickname` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
   `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
   `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
   `kind` varchar(4) DEFAULT NULL COMMENT '标识',

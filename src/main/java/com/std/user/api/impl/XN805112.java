@@ -29,9 +29,11 @@ public class XN805112 extends AProcessor {
         LevelRule data = new LevelRule();
         data.setCode(req.getCode());
         data.setName(req.getName());
+        data.setAmountMin(StringValidater.toLong(req.getAmountMin()));
+        data.setAmountMax(StringValidater.toLong(req.getAmountMax()));
         data.setEffect(req.getEffect());
-        data.setUpdater(req.getUpdater());
 
+        data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
         int count = levelRuleAO.editLevelRule(data);
         return new BooleanRes(count > 0 ? true : false);
@@ -42,5 +44,6 @@ public class XN805112 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN805112Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
             req.getEffect(), req.getUpdater());
+        StringValidater.validateNumber(req.getAmountMin(), req.getAmountMax());
     }
 }

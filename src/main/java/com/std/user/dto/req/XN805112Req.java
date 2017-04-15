@@ -8,6 +8,12 @@ public class XN805112Req {
     // 等级名称（必填）
     private String name;
 
+    // 数量最小值（必填）
+    private String amountMin;
+
+    // 数量最大值（必填）
+    private String amountMax;
+
     // 作用（必填）
     private String effect;
 
@@ -55,5 +61,21 @@ public class XN805112Req {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getAmountMin() {
+        return amountMin;
+    }
+
+    public void setAmountMin(String amountMin) {
+        this.amountMin = amountMin;
+    }
+
+    public String getAmountMax() {
+        return amountMax;
+    }
+
+    public void setAmountMax(String amountMax) {
+        this.amountMax = amountMax;
     }
 }
