@@ -204,4 +204,15 @@ public interface IUserBO extends IPaginableBO<User> {
     public String saveUser(User user);
 
     public void refreshWxInfor(String userId, String openId, String name);
+
+    /** 
+     * @param unionid
+     * @param openId
+     * @param systemCode
+     * @return 
+     * @create: 2017年4月15日 下午9:28:07 xieyj
+     * @history: 
+     */
+    public List<User> queryUserList(String unionid, String openId,
+            String systemCode);
 }

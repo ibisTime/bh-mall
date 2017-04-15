@@ -1609,15 +1609,14 @@ public class UserAOImpl implements IUserAO {
             wxRes = getMapFromResponse(PostSimulater.requestPostForm(
                 WechatConstant.WX_USER_INFO_URL, queryParas));
             System.out.println(wxRes);
-            String unionid = (String) wxRes.get("unionid");
-            if (StringUtils.isEmpty(unionid)) {
-                unionid = (String) wxRes.get("openid");
+            String unionId = (String) wxRes.get("unionid");
+            if (StringUtils.isEmpty(unionId)) {
+                unionId = (String) wxRes.get("openid");
             }
             // Step4：根据openId从数据库中查询用户信息（user）
-            User userCondition = new User();
-            userCondition.setOpenId(unionid);
-            userCondition.setSystemCode(systemCode);
-            List<User> users = userBO.queryUserList(userCondition);
+            // 兼容城市网之前存储的openId是unionId，故两者都查询
+            List<User> users = userBO
+                .queryUserList(unionId, openId, systemCode);
 
             if (!CollectionUtils.isEmpty(users)) {
                 // Step4-1：如果user存在，说明用户授权登录过，直接登录
