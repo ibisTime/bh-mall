@@ -42,7 +42,7 @@ public class InstantMsgImpl {
             req.setPassword(EUserPwd.InitPwd.getCode());
         }
         Map<String, String> resultMap = cPasswordBO.queryCPasswordList(
-            ECPwdType.HX.getCode(), null, null, systemCode);
+            ECPwdType.HX.getCode(), null, systemCode);
         String org_name = resultMap.get("org_name");
         String app_name = resultMap.get("app_name");
         String postUrl = "https://a1.easemob.com/" + org_name + "/" + app_name

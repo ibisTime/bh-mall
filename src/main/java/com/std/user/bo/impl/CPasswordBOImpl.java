@@ -73,12 +73,12 @@ public class CPasswordBOImpl extends PaginableBOImpl<CPassword> implements
         return cPasswordDAO.selectList(condition);
     }
 
-    public Map<String, String> queryCPasswordList(String type, String account,
+    @Override
+    public Map<String, String> queryCPasswordList(String type,
             String companyCode, String systemCode) {
         Map<String, String> resultMap = new HashMap<String, String>();
         CPassword condition = new CPassword();
         condition.setType(type);
-        condition.setAccount(account);
         condition.setCompanyCode(companyCode);
         condition.setSystemCode(systemCode);
         List<CPassword> list = cPasswordDAO.selectList(condition);

@@ -203,14 +203,27 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public String saveUser(User user);
 
-    public void refreshWxInfor(String userId, String openId, String name);
+    public void refreshWxInfo(String userId, String openId, String name);
 
-    /** 
+    /**
+     * 判断unionId第一次存在，将openId更新成unionId,并返回用户userId
      * @param unionId
+     * @param openId
      * @param systemCode
      * @return 
-     * @create: 2017年4月15日 下午9:28:07 xieyj
+     * @create: 2017年4月17日 下午5:27:05 xieyj
+     * @history:
+     */
+    public User doGetUserId(String unionId, String openId, String systemCode);
+
+    /** 
+     * @param mobile
+     * @param kind
+     * @param systemCode
+     * @return 
+     * @create: 2017年4月17日 下午5:11:57 xieyj
      * @history: 
      */
-    public List<User> queryUserList(String unionId, String systemCode);
+    public List<User> queryUserList(String mobile, String kind,
+            String systemCode);
 }

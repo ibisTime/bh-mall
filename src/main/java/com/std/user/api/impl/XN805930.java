@@ -19,7 +19,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 注册送积分(微信登录——已注册，直接返回userId，未注册先落地，再返回userId)
+ * 微信登录注册送积分
  * @author: xieyj 
  * @since: 2017年3月6日 下午9:05:02 
  * @history:
@@ -32,8 +32,8 @@ public class XN805930 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getAmount());
-        return new XN805930Res(userAO.doLoginWeChat(req.getCode(), amount,
-            req.getCompanyCode(), req.getSystemCode()));
+        return new XN805930Res(userAO.doLoginWeChat(req.getCode(), null,
+            amount, req.getCompanyCode(), req.getSystemCode()));
     }
 
     @Override

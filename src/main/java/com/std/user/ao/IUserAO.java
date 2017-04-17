@@ -233,18 +233,19 @@ public interface IUserAO {
 
     /**
      * 微信登录
-     * @param code 微信提供
+     * @param code
+     * @param isApp
      * @param companyCode
      * @param systemCode
      * @return 
-     * @create: 2016年12月27日 下午5:38:18 haiqingzheng
+     * @create: 2017年4月17日 下午6:06:48 xieyj
      * @history:
      */
-    public String doLoginWeChat(String code, String companyCode,
+    public String doLoginWeChat(String code, String type, String companyCode,
             String systemCode);
 
-    public String doLoginWeChat(String code, Long amount, String companyCode,
-            String systemCode);
+    public String doLoginWeChat(String code, String type, Long amount,
+            String companyCode, String systemCode);
 
     /**
      * 用户登录送积分

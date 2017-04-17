@@ -33,7 +33,7 @@ public class QnTokenImpl {
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     public String getUploadToken(String systemCode) {
         Map<String, String> resultMap = cPasswordBO.queryCPasswordList(
-            ECPwdType.QINIU.getCode(), null, null, systemCode);
+            ECPwdType.QINIU.getCode(), null, systemCode);
         if (resultMap == null) {
             throw new BizException("xn000000", "七牛云图片参数异常");
         }

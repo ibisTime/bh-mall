@@ -5,6 +5,9 @@ public class XN805152Req {
     // 开放编号（必填）
     private String code;
 
+    // 类型(选填)
+    private String type;
+
     // 公司编号（必填）
     private String companyCode;
 
@@ -17,6 +20,14 @@ public class XN805152Req {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getCompanyCode() {

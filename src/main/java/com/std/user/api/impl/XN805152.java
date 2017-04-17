@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 微信登录
+ * 微信登录，首次不绑定手机号;
  * @author: haiqingzheng 
  * @since: 2016年12月27日 下午5:24:04 
  * @history:
@@ -24,7 +24,7 @@ public class XN805152 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new XN805152Res(userAO.doLoginWeChat(req.getCode(),
-            req.getCompanyCode(), req.getSystemCode()));
+            req.getType(), req.getCompanyCode(), req.getSystemCode()));
     }
 
     @Override

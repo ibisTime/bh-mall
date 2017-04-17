@@ -21,6 +21,6 @@ public interface ICPasswordBO extends IPaginableBO<CPassword> {
 
     public CPassword getCPassword(String code);
 
-    public Map<String, String> queryCPasswordList(String type, String account,
+    public Map<String, String> queryCPasswordList(String type,
             String companyCode, String systemCode);
 }

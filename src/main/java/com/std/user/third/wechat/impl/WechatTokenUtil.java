@@ -28,8 +28,6 @@ public class WechatTokenUtil {
     @Autowired
     protected ICPasswordBO cPasswordBO;
 
-    public final static String weixin_jssdk_ticket_url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
-
     private Map<String, String> map = new HashMap<>();
 
     public XN807910Res getSign(String systemCode, String companyCode, String url) {

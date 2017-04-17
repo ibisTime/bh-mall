@@ -790,21 +790,52 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshWxInfor(String userId, String openId, String name) {
+    public void refreshWxInfo(String userId, String openId, String name) {
         User data = new User();
         data.setUserId(userId);
         data.setOpenId(openId);
         data.setNickname(name);
-        userDAO.updateWxInfor(data);
+        userDAO.updateWxInfo(data);
     }
 
     /** 
      * @see com.std.user.bo.IUserBO#queryUserList(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public List<User> queryUserList(String unionId, String systemCode) {
+    public User doGetUserId(String unionId, String openId, String systemCode) {
+        User user = null;
         User condition = new User();
-        condition.setOpenId(unionId);
+        // 判断是否两者是否相等，相等用openId查询
+        if (openId.equals(unionId)) {
+            condition.setOpenId(openId);
+        } else {
+            condition.setOpenId(unionId);
+        }
+        condition.setSystemCode(systemCode);
+        List<User> userList = userDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(userList)) {
+            user = userList.get(0);
+            if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                throw new BizException("10002", "用户被锁定");
+            }
+            // 当unionId第一次出现时，更新数据库openId为unionId
+            if (unionId != openId && openId.equals(user.getOpenId())) {
+                user.setOpenId(unionId);
+                userDAO.updateWxOpenId(user);
+            }
+        }
+        return user;
+    }
+
+    /** 
+     * @see com.std.user.bo.IUserBO#queryUserList(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public List<User> queryUserList(String mobile, String kind,
+            String systemCode) {
+        User condition = new User();
+        condition.setMobile(mobile);
+        condition.setKind(kind);
         condition.setSystemCode(systemCode);
         return userDAO.selectList(condition);
     }

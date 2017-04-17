@@ -11,8 +11,8 @@ public class XN805151Req {
     // 手机号（必填）
     private String mobile;
 
-    // 是否app 1=是，0=否(选填)
-    private String isApp;
+    // 类型(选填)
+    private String type;
 
     // 公司编号（必填）
     private String companyCode;
@@ -44,12 +44,12 @@ public class XN805151Req {
         this.mobile = mobile;
     }
 
-    public String getIsApp() {
-        return isApp;
+    public String getType() {
+        return type;
     }
 
-    public void setIsApp(String isApp) {
-        this.isApp = isApp;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getCompanyCode() {
