@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 微信登录——已注册，直接返回userId，未注册先落地，再返回userId
+ * 微信登录
  * @author: haiqingzheng 
  * @since: 2016年12月27日 下午5:24:04 
  * @history:

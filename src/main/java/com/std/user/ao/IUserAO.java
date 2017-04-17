@@ -223,14 +223,12 @@ public interface IUserAO {
      * 微信登录（新用户登录需绑定手机号）
      * @param code
      * @param mobile
-     * @param isRegHx
-     * @param companyCode
-     * @param systemCode
+     * @param isApp
      * @return 
-     * @create: 2017年3月31日 下午12:55:17 xieyj
+     * @create: 2017年4月17日 下午4:11:52 xieyj
      * @history:
      */
-    public XN805151Res doLoginWeChat(String code, String mobile,
+    public XN805151Res doLoginWeChat(String code, String mobile, String isApp,
             String isRegHx, String companyCode, String systemCode);
 
     /**
@@ -247,21 +245,6 @@ public interface IUserAO {
 
     public String doLoginWeChat(String code, Long amount, String companyCode,
             String systemCode);
-
-    /**
-     * 小程序登录
-     * @param jsCode
-     * @param nickname
-     * @param sex
-     * @param headimgurl
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年1月19日 下午4:46:06 xieyj
-     * @history:
-     */
-    public String doLoginSmallWeChat(String jsCode, String nickname,
-            String sex, String headimgurl, String companyCode, String systemCode);
 
     /**
      * 用户登录送积分

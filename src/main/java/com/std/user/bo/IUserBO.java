@@ -206,11 +206,11 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshWxInfor(String userId, String openId, String name);
 
     /** 
-     * @param unionid
+     * @param unionId
      * @param systemCode
      * @return 
      * @create: 2017年4月15日 下午9:28:07 xieyj
      * @history: 
      */
-    public List<User> queryUserList(String unionid, String systemCode);
+    public List<User> queryUserList(String unionId, String systemCode);
 }

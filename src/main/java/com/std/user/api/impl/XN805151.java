@@ -10,7 +10,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 微信登录——判断产生的openId是否已存在；若存在就直接登录，否则需绑定手机号注册
+ * 微信登录(微信登录，首次绑定手机号；第二次直接登录)
  * @author: xieyj 
  * @since: 2016年11月17日 下午1:02:03 
  * @history:
@@ -23,7 +23,8 @@ public class XN805151 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return userAO.doLoginWeChat(req.getCode(), req.getMobile(),
-            req.getIsRegHx(), req.getCompanyCode(), req.getSystemCode());
+            req.getIsApp(), req.getIsRegHx(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 
     @Override
