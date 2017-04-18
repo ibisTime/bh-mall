@@ -1598,11 +1598,11 @@ public class UserAOImpl implements IUserAO {
         Map<String, String> mapCPwd = cPasswordBO.queryCPasswordList(type,
             companyCode, systemCode);
         String appId = mapCPwd.get("ACCESS_KEY");
-        if (StringUtils.isNotBlank(appId)) {
+        if (StringUtils.isBlank(appId)) {
             throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
         }
         String appSecret = mapCPwd.get("SECRET_KEY");
-        if (StringUtils.isNotBlank(appSecret)) {
+        if (StringUtils.isBlank(appSecret)) {
             throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
         }
 
@@ -1760,11 +1760,11 @@ public class UserAOImpl implements IUserAO {
         Map<String, String> mapCPwd = cPasswordBO.queryCPasswordList(type,
             companyCode, systemCode);
         String appId = mapCPwd.get("ACCESS_KEY");
-        if (StringUtils.isNotBlank(appId)) {
+        if (StringUtils.isBlank(appId)) {
             throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
         }
         String appSecret = mapCPwd.get("SECRET_KEY");
-        if (StringUtils.isNotBlank(appSecret)) {
+        if (StringUtils.isBlank(appSecret)) {
             throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
         }
 
