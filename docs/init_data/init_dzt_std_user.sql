@@ -44,6 +44,7 @@ LIMIT 0, 10000
 -- Date: 2017-03-05 22:53
 */
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('DZTSR2017041310190267791','超级管理员','1','admin',now(),NULL,'CD-CDZT000009');
+INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('DZTSR20170000000000hhr','合伙人','1','admin',now(),NULL,'CD-CDZT000009');
 
 delete from tsys_menu_role where system_code = 'CD-CDZT000009';
 
