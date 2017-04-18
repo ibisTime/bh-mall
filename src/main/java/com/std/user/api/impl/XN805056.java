@@ -62,18 +62,10 @@ public class XN805056 extends AProcessor {
 
             res.setRemark(user.getRemark());
             res.setPdf(user.getPdf());
-            if (null == user.getAmount()) {
-                user.setAmount(0L);
-            }
-            res.setAmount(String.valueOf(user.getAmount()));
-            if (null == user.getLjAmount()) {
-                user.setLjAmount(0L);
-            }
-            res.setLjAmount(String.valueOf(user.getLjAmount()));
             res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
-
             res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));
             res.setCompanyCode(user.getCompanyCode());
+
             res.setUserExt(user.getUserExt());
         }
         return res;

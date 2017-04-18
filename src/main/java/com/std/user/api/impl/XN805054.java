@@ -42,7 +42,6 @@ public class XN805054 extends AProcessor {
         condition.setUpdater(req.getUpdater());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setOpenId(req.getOpenId());
-        condition.setIsGetAmount(req.getIsGetAmount());
         condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

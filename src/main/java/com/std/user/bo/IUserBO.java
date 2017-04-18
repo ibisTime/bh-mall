@@ -12,7 +12,6 @@ import java.util.List;
 
 import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.User;
-import com.std.user.enums.EBizType;
 import com.std.user.enums.EUserStatus;
 
 /** 
@@ -124,13 +123,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public String doRegister(String loginName, String nickname, String mobile,
             String loginPwd, String loginPwdStrength, String userReferee,
-            String kind, String level, Long amount, String companyCode,
-            String openId, String jpushId, String systemCode);
-
-    public String doRegister(String userId, String loginName, String nickname,
-            String mobile, String loginPwd, String loginPwdStrength,
-            String userReferee, String kind, String level, Long amount,
-            String companyCode, String openId, String jpushId, String systemCode);
+            String kind, String level, String companyCode, String openId,
+            String jpushId, String systemCode);
 
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
@@ -189,9 +183,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshLoginName(String userId, String loginName);
 
     public void refreshNickname(String userId, String nickname);
-
-    public void refreshAmount(String accountNumber, Long transAmount,
-            String refNo, EBizType bizType, String remark);
 
     public void refreshCompany(String userId, String companyCode);
 

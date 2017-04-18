@@ -84,12 +84,6 @@ public class User extends ABaseDO {
     // 附件
     private String pdf;
 
-    // 现有金额
-    private Long amount;
-
-    // 累计金额
-    private Long ljAmount;
-
     // 所属公司
     private String companyCode;
 
@@ -133,9 +127,6 @@ public class User extends ABaseDO {
     // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
     private String loginType;
 
-    // 是否查询金额 1 是
-    private String isGetAmount;
-
     // 推荐人等级
     private Integer refeereLevel;
 
@@ -172,14 +163,6 @@ public class User extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public String getIsGetAmount() {
-        return isGetAmount;
-    }
-
-    public void setIsGetAmount(String isGetAmount) {
-        this.isGetAmount = isGetAmount;
     }
 
     public String getLoginNameForLikeQuery() {
@@ -380,22 +363,6 @@ public class User extends ABaseDO {
 
     public void setUserExt(UserExt userExt) {
         this.userExt = userExt;
-    }
-
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
-
-    public Long getLjAmount() {
-        return ljAmount;
-    }
-
-    public void setLjAmount(Long ljAmount) {
-        this.ljAmount = ljAmount;
     }
 
     public String getNicknameForLikeQuery() {

@@ -19,15 +19,14 @@
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="role_code" property="roleCode" />
 		<result column="status" property="status" />
-		<result column="updater" property="updater" />
+		<result column="create_datetime" property="createDatetime" />
 		
+		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 		<result column="pdf" property="pdf" />
-		<result column="amount" property="amount" />
-		<result column="lj_amount" property="ljAmount" />
-		
 		<result column="company_code" property="companyCode" />
+		
 		<result column="company_name" property="companyName" />
 		<result column="open_id" property="openId" />
 		<result column="jpush_id" property="jpushId" />
@@ -145,14 +144,14 @@
 		,t.trade_pwd_strength
 		,t.role_code
 		,t.status
-		,t.updater
+		,t.create_datetime
 		
+		,t.updater
 		,t.update_datetime
 		,t.remark
 		,t.pdf
-		,t.amount
-		,t.lj_amount
 		,t.company_code
+		
 		,tc.name as company_name
 		,t.open_id
 		,t.jpush_id
@@ -188,11 +187,11 @@
 		
 		,mobile
 		,status
+		,create_datetime
 		,updater
 		,update_datetime
+		
 		,remark
-		,amount
-		,lj_amount
 		,company_code
 		,open_id
 		,jpush_id
@@ -213,12 +212,11 @@
 		
 		,#{mobile}
 		,#{status}
+		,#{createDatetime}
 		,#{updater}
 		,#{updateDatetime}
-		,#{remark}
 		
-		,#{amount}
-		,#{ljAmount}
+		,#{remark}
 		,#{companyCode}
 		,#{openId}
 		,#{jpushId}
@@ -233,23 +231,25 @@
 		,login_name
 		,login_pwd
 		,login_pwd_strength
-		,kind
 		
+		,kind
 		,level
 		,user_referee
 		,mobile
 		,id_kind
-		,id_no
 		
+		,id_no
 		,real_name
 		,trade_pwd
 		,trade_pwd_strength
 		,status
-		,updater
 		
+		,create_datetime
+		,updater
 		,update_datetime
 		,remark
 		,pdf
+		
 		,role_code
 		,company_code
 		,system_code
@@ -260,23 +260,25 @@
 		,#{loginName}
 		,#{loginPwd}
 		,#{loginPwdStrength}
-		,#{kind}
 		
+		,#{kind}
 		,#{level}
 		,#{userReferee}
 		,#{mobile}
 		,#{idKind}
-		,#{idNo}
 		
+		,#{idNo}
 		,#{realName}
 		,#{tradePwd}
 		,#{tradePwdStrength}
 		,#{status}
-		,#{updater}
 		
+		,#{createDatetime}
+		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
 		,#{pdf}
+		
 		,#{roleCode}
 		,#{companyCode}
 		,#{systemCode}
@@ -307,7 +309,7 @@
 	<update id="update_real_name" parameterType="user">
 		UPDATE tstd_user
 		SET
-		 real_name= #{realName}
+		real_name= #{realName}
 		WHERE
 		user_id = #{userId}
 	</update>
@@ -395,16 +397,6 @@
 		UPDATE tstd_user
 		SET
 		 nickname = #{nickname}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_user_amount" parameterType="user">
-		UPDATE tstd_user
-		SET
-		level = #{level}
-        ,amount = #{amount}
-		,lj_amount = #{ljAmount}	
 		WHERE
 		user_id = #{userId}	
 	</update>

@@ -189,7 +189,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041", systemCode);
         // 插入用户信息
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(), 0L,
+            loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(),
             null, null, null, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, province, city, area, systemCode);
@@ -244,7 +244,7 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String kind = EUserKind.F1.getCode();
         String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, kind, "0", 0L, null, null, null,
+            loginPwdStrength, userReferee, kind, "0", null, null, null,
             systemCode);
         List<String> currencyList = new ArrayList<String>();
         if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
@@ -291,7 +291,7 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             null, mobile, loginPwd, loginPwdStrength, userReferee,
-            EUserKind.F1.getCode(), EUserLevel.ONE.getCode(), 0L, companyCode,
+            EUserKind.F1.getCode(), EUserLevel.ONE.getCode(), companyCode,
             null, null, systemCode);
         // 注册
         Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
@@ -324,8 +324,8 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String loginPwd = EUserPwd.InitPwd.getCode();
         String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, EUserKind.F1.getCode(), "0", 0L, companyCode, openId,
-            null, systemCode);
+            "1", null, EUserKind.F1.getCode(), "0", companyCode, openId, null,
+            systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender, systemCode);
 
@@ -374,7 +374,7 @@ public class UserAOImpl implements IUserAO {
             loginName = EPrefixCode.CD + loginName;
         }
         String userId = userBO.doRegister(loginName, nickname, mobile,
-            loginPwd, "1", null, EUserKind.F1.getCode(), "0", 0L, companyCode,
+            loginPwd, "1", null, EUserKind.F1.getCode(), "0", companyCode,
             openId, null, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender, systemCode);
@@ -637,7 +637,7 @@ public class UserAOImpl implements IUserAO {
         String loginPwd = RandomUtil.generate6();
         String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
             null, mobile, loginPwd, "1", userReferee, EUserKind.F1.getCode(),
-            EUserLevel.ONE.getCode(), 0L, companyCode, null, null, systemCode);
+            EUserLevel.ONE.getCode(), companyCode, null, null, systemCode);
         // 环信代注册
         instantMsgImpl.doRegisterUser(userId, systemCode);
         // 新增扩展信息
@@ -1790,7 +1790,6 @@ public class UserAOImpl implements IUserAO {
                 resultMap.put("isReg", "1");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new BizException("xn000000", e.getMessage());
         }
         resultMap.put("userId", userId);
