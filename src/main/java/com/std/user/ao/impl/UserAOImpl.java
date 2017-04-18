@@ -1906,6 +1906,7 @@ public class UserAOImpl implements IUserAO {
         } else {
             res.setTradepwdFlag(EBoolean.NO.getCode());
         }
+        res.setDivRate(String.valueOf(user.getDivRate()));
         res.setTotalFollowNum(String.valueOf(user.getTotalFollowNum()));
         res.setTotalFansNum(String.valueOf(user.getTotalFansNum()));
         res.setSystemCode(user.getSystemCode());

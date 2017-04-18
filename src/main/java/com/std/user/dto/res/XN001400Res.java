@@ -46,6 +46,9 @@ public class XN001400Res {
     // 是否设置支付密码
     private String tradepwdFlag;
 
+    // 分成比例
+    private String divRate;
+
     // 关注数
     private String totalFollowNum;
 
@@ -351,5 +354,13 @@ public class XN001400Res {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
     }
 }
