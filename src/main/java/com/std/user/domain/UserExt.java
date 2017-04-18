@@ -95,6 +95,17 @@ public class UserExt extends ABaseDO {
     // 状态
     private String status;
 
+    // 推荐人
+    private String userReferee;
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
     public String getStatus() {
         return status;
     }

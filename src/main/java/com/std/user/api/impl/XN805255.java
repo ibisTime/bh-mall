@@ -15,7 +15,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 按昵称分页查询用户列表(城市网前端)
+ * 按昵称分页查询用户列表(城市网前端_无需登录)
  * @author: xieyj 
  * @since: 2017年1月10日 下午8:29:26 
  * @history:

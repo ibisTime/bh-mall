@@ -6,6 +6,7 @@
 		<result column="user_id" property="userId" />
 		<result column="login_name" property="loginName" />
 		<result column="mobile" property="mobile" />
+		<result column="user_referee" property="userReferee" />
 		<result column="gender" property="gender" />
 		
 		<result column="birthday" property="birthday" />
@@ -60,6 +61,9 @@
 			<if test="roleCode != null and roleCode != '' ">
 				AND tu.role_code = #{roleCode}
 			</if>
+			<if test="userReferee != null and userReferee != '' ">
+				AND tu.user_referee = #{userReferee}
+			</if>
 			<if test="status != null and status != '' ">
 				AND tu.status = #{status}
 			</if>
@@ -74,6 +78,7 @@
 		t.user_id
 		,tu.mobile
 		,tu.login_name
+		,tu.user_referee
 		,t.gender
 		,t.birthday
 		,t.photo
