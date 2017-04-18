@@ -41,9 +41,6 @@
 		<property name="paginableDAO" ref="levelRuleDAOImpl"/>
 	</bean>
 	
-	<bean id="aJourBO" class="com.std.user.bo.impl.AJourBOImpl">
-		<property name="paginableDAO" ref="aJourDAOImpl"/>
-	</bean>
 	<bean id="cMaterialBO" class="com.std.user.bo.impl.CMaterialBOImpl">
 		<property name="paginableDAO" ref="cMaterialDAOImpl"/>
 	</bean>

@@ -4,32 +4,33 @@ import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.dto.req.XN805180Req;
-import com.std.user.dto.res.XN805180Res;
+import com.std.user.dto.req.XN805182Req;
+import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 合伙人代注册，适用于正汇，定制通
+ * 修改用户信息，使用对象：定制通
  * @author: xieyj 
- * @since: 2016年12月27日 下午3:16:40 
+ * @since: 2017年4月18日 上午11:21:51 
  * @history:
  */
-public class XN805180 extends AProcessor {
+public class XN805182 extends AProcessor {
     private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
-    private XN805180Req req = null;
+    private XN805182Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805180Res(userAO.doAddPartner(req));
+        userAO.doEditUser(req);
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN805180Req.class);
-        StringValidater.validateBlank(req.getLoginName(), req.getProvince(),
-            req.getUpdater(), req.getSystemCode());
+        req = JsonUtil.json2Bean(inputparams, XN805182Req.class);
+        StringValidater.validateBlank(req.getUserId(), req.getProvince(),
+            req.getUpdater());
     }
 }

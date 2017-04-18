@@ -39,10 +39,7 @@ public class CouponAOImpl implements ICouponAO {
         if (ECouponStatus.USED.getCode().equals(coupon.getStatus())) {
             throw new BizException("xn0000", "该卡券已使用，不能二次扫描");
         }
-        // // 资金变动
-        // userBO.refreshAmount(userId, coupon.getAmount(), code,
-        // EBizType.AJ_SR,
-        // "扫描卡券加积分");
+        // todo:缺划账接口
         couponBO.refreshCouponStatus(code, ECouponStatus.USED, userId);
     }
 

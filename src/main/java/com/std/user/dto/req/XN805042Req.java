@@ -34,6 +34,9 @@ public class XN805042Req {
     // 角色编号(选填)
     private String roleCode;
 
+    // 分成比例(选填)
+    private String divRate;
+
     // 是否注册环信(选填)
     private String isRegHx;
 
@@ -48,6 +51,14 @@ public class XN805042Req {
 
     // 系统编号(必填)
     private String systemCode;
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
+    }
 
     public String getIsRegHx() {
         return isRegHx;

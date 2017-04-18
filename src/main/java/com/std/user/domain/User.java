@@ -69,8 +69,14 @@ public class User extends ABaseDO {
     // 角色编号
     private String roleCode;
 
+    // 分成比例
+    private Double divRate;
+
     // 状态
     private String status;
+
+    // 注册时间
+    private Date createDatetime;
 
     // 更新人
     private String updater;
@@ -435,5 +441,21 @@ public class User extends ABaseDO {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public Double getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(Double divRate) {
+        this.divRate = divRate;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 }

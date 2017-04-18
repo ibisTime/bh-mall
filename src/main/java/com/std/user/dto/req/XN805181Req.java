@@ -19,8 +19,8 @@ public class XN805181Req {
     // 真实姓名（选填）
     private String realName;
 
-    // 推荐人（选填）
-    private String userReferee;
+    // 分成比例（选填）
+    private String divRate;
 
     // 更新人(必填)
     private String updater;
@@ -28,23 +28,14 @@ public class XN805181Req {
     // 备注(选填)
     private String remark;
 
-    // 类别(必填)
-    private String kind;
-
-    // 角色编号(选填)
-    private String roleCode;
-
-    // 省
+    // 省(选填)
     private String province;
 
-    // 市区
+    // 市区(选填)
     private String city;
 
-    // 区(县)
+    // 区(县)(选填)
     private String area;
-
-    // 系统编号(必填)
-    private String systemCode;
 
     public String getUserId() {
         return userId;
@@ -54,44 +45,12 @@ public class XN805181Req {
         this.userId = userId;
     }
 
-    public String getProvince() {
-        return province;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getMobile() {
@@ -126,12 +85,12 @@ public class XN805181Req {
         this.realName = realName;
     }
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getDivRate() {
+        return divRate;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
     }
 
     public String getUpdater() {
@@ -150,19 +109,27 @@ public class XN805181Req {
         this.remark = remark;
     }
 
-    public String getKind() {
-        return kind;
+    public String getProvince() {
+        return province;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getCity() {
+        return city;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

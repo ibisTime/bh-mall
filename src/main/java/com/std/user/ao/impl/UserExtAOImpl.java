@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.IUserExtAO;
-import com.std.user.bo.IAJourBO;
 import com.std.user.bo.IAccountBO;
 import com.std.user.bo.ILevelRuleBO;
 import com.std.user.bo.IRuleBO;
@@ -38,9 +37,6 @@ public class UserExtAOImpl implements IUserExtAO {
 
     @Autowired
     private IAccountBO accountBO;
-
-    @Autowired
-    protected IAJourBO aJourBO;
 
     @Autowired
     private ILevelRuleBO levelRuleBO;

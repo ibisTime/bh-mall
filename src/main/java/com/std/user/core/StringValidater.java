@@ -122,6 +122,25 @@ public class StringValidater {
         return num;
     }
 
+    /**
+     * string转化成Long
+     * @param string
+     * @return 
+     * @create: 2015-5-7 下午3:47:13 miyb
+     * @history:
+     */
+    public static Double toDouble(String string) {
+        Double d = null;
+        try {
+            if (StringUtils.isNotBlank(string)) {
+                d = (new Double(string)).doubleValue();
+            }
+        } catch (Exception e) {
+            throw new BizException("xn702000", "数字型入参，请按要求填写数字");
+        }
+        return d;
+    }
+
     public static void main(String[] args) {
         String params = "1212《》";
         StringValidater.validateEmoji(params);

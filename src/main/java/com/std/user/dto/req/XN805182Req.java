@@ -1,11 +1,10 @@
 package com.std.user.dto.req;
 
-public class XN805180Req {
+public class XN805182Req {
+    // 用户编号（必填）
+    private String userId;
 
-    // 登录名（必填）
-    private String loginName;
-
-    // 手机号（选填）
+    // 手机号(必填)
     private String mobile;
 
     // 证件类型（选填）
@@ -23,6 +22,9 @@ public class XN805180Req {
     // 更新人(必填)
     private String updater;
 
+    // 推荐人(必填)
+    private String userReferee;
+
     // 备注(选填)
     private String remark;
 
@@ -35,23 +37,20 @@ public class XN805180Req {
     // 区(县)（选填）
     private String area;
 
-    // 系统编号(必填)
-    private String systemCode;
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
     public String getMobile() {
         return mobile;
     }
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getIdKind() {
@@ -76,6 +75,14 @@ public class XN805180Req {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
     }
 
     public String getUpdater() {
@@ -118,19 +125,11 @@ public class XN805180Req {
         this.area = area;
     }
 
-    public String getDivRate() {
-        return divRate;
+    public String getUserReferee() {
+        return userReferee;
     }
 
-    public void setDivRate(String divRate) {
-        this.divRate = divRate;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 }

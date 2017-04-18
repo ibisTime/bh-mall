@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.std.user.ao.IUserAO;
-import com.std.user.bo.IAJourBO;
 import com.std.user.bo.IAccountBO;
 import com.std.user.bo.ICPasswordBO;
 import com.std.user.bo.ICompanyBO;
@@ -46,12 +45,16 @@ import com.std.user.common.PropertiesUtil;
 import com.std.user.common.PwdUtil;
 import com.std.user.common.WechatConstant;
 import com.std.user.core.OrderNoGenerater;
+import com.std.user.core.StringValidater;
 import com.std.user.domain.Company;
 import com.std.user.domain.LevelRule;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
+import com.std.user.dto.req.XN805180Req;
+import com.std.user.dto.req.XN805181Req;
+import com.std.user.dto.req.XN805182Req;
 import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
@@ -113,9 +116,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     ISmsOutBO smsOutBO;
-
-    @Autowired
-    protected IAJourBO aJourBO;
 
     @Autowired
     protected ICompanyBO companyBO;
@@ -437,8 +437,8 @@ public class UserAOImpl implements IUserAO {
     public String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
             String remark, String kind, String pdf, String roleCode,
-            String isRegHx, String province, String city, String area,
-            String systemCode) {
+            Double divRate, String isRegHx, String province, String city,
+            String area, String systemCode) {
         String userId = null;
         // 插入用户信息
         String loginPsd = EUserPwd.InitPwd.getCode();
@@ -450,9 +450,7 @@ public class UserAOImpl implements IUserAO {
             loginPsd = RandomUtil.generate6();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
-                pdf, null, systemCode);
-            // 三方认证
-            // dentifyBO.doIdentify(userId, realName, idKind, idNo);
+                pdf, null, divRate, systemCode);
             if (StringUtils.isBlank(realName)) {
                 realName = mobile;
             }
@@ -504,7 +502,7 @@ public class UserAOImpl implements IUserAO {
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind,
                 EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
-                systemCode);
+                divRate, systemCode);
             // 新增扩展信息
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 民宿主
@@ -516,7 +514,7 @@ public class UserAOImpl implements IUserAO {
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind,
                 EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
-                systemCode);
+                divRate, systemCode);
             // 新增扩展信息
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             List<String> currencyList = new ArrayList<String>();
@@ -570,7 +568,7 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
             realName, idKind, idNo, loginPsd, kind, level + "", remark,
-            updater, pdf, cxRoleCode, systemCode);
+            updater, pdf, cxRoleCode, 0.0D, systemCode);
         // 分配账号(人民币,积分币和菜狗币)
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
@@ -590,37 +588,12 @@ public class UserAOImpl implements IUserAO {
         String loginPsd = EUserPwd.InitPwd.getCode();
         String userId = userBO.doAddUser(loginName, null, loginPsd, null, null,
             null, null, loginPsd, kind, null, null, updater, null, roleCode,
-            systemCode);
+            0.0D, systemCode);
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
         currencyList.add(ECurrency.JF.getCode());
         accountBO.distributeAccountList(userId, loginName,
             getAccountType(kind), currencyList, systemCode);
-        return userId;
-    }
-
-    @Override
-    @Transactional
-    public String doAddUser(String mobile, String realName, String userReferee,
-            String updater, String remark, String kind, String systemCode) {
-        // 验证手机号
-        userBO.isMobileExist(mobile, kind, systemCode);
-        // 插入用户信息
-        String loginPsd = RandomUtil.generate6();
-        String tradePsd = RandomUtil.generate6();
-        String userId = userBO.doAddUser(null, mobile, loginPsd, null,
-            realName, null, null, tradePsd, kind, "0", remark, updater, null,
-            null, systemCode);
-        // 分配账号
-        List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        accountBO.distributeAccountList(userId, realName, getAccountType(kind),
-            currencyList, systemCode);
-        // 发送短信
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您已成功注册。您的登录密码为" + loginPsd + ";支付密码为" + tradePsd
-                + "，请及时登录个金所网站修改密码。如有疑问，请联系客服：400-0008-139。", "805042",
-            systemCode);
         return userId;
     }
 
@@ -702,89 +675,151 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doAddPartner(User user, String province, String city,
-            String area) {
-        String kind = EUserKind.Partner.getCode();
+    public String doAddPartner(XN805180Req req) {
         // 合伙人新增业务逻辑：
         // 1、校验登录是否全系统唯一，校验辖区是否已经存在合伙人
-        userBO.isLoginNameExist(user.getLoginName(),
-            EUserKind.Partner.getCode(), user.getSystemCode());
+        userBO.isLoginNameExist(req.getLoginName(),
+            EUserKind.Partner.getCode(), req.getSystemCode());
+        String kind = EUserKind.Partner.getCode();
         UserExt condition = new UserExt();
         condition.setKind(kind);
-        condition.setProvince(province);
-        condition.setCity(city);
-        condition.setArea(area);
+        condition.setProvince(req.getProvince());
+        condition.setCity(req.getCity());
+        condition.setArea(req.getArea());
         List<UserExt> list = userExtBO.queryUserExtList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn000000", "该辖区已存在合伙人！");
         }
-        // 2、新增用户，分配角色，增加账户
-        String loginPwd = EUserPwd.InitPwd.getCode();
-        user.setLoginPwd(loginPwd);
-        user.setKind(kind);
-        user.setRoleCode(PropertiesUtil.Config.PARTNER_ROLECODE);
 
+        // 2、新增用户，分配角色，增加账户
         String userId = OrderNoGenerater.generate("U");
-        user.setUserId(userId);
-        user.setLoginPwd(MD5Util.md5(loginPwd));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        user.setLevel(EUserLevel.ZERO.getCode());
-        user.setStatus(EUserStatus.NORMAL.getCode());
-        if (StringUtils.isBlank(user.getCompanyCode())) {
-            user.setCompanyCode(user.getSystemCode());
+        User data = new User();
+        data.setUserId(userId);
+        data.setLoginName(req.getLoginName());
+        String loginPwd = EUserPwd.InitPwd.getCode();
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        data.setNickname(userId.substring(userId.length() - 8, userId.length()));
+
+        data.setKind(kind);
+        data.setLevel(EUserLevel.ZERO.getCode());
+        data.setMobile(req.getMobile());
+        data.setIdKind(req.getIdKind());
+
+        data.setIdNo(req.getIdNo());
+        data.setRealName(req.getRealName());
+        if (ESystemCode.ZHPAY.getCode().equals(req.getSystemCode())) {
+            data.setRoleCode(PropertiesUtil.Config.PARTNER_ROLECODE);
+        } else if (ESystemCode.DZT.getCode().equals(req.getSystemCode())) {
+            data.setRoleCode(PropertiesUtil.Config.DZT_PARTNER_ROLECODE);
         }
-        userBO.doAddUser(user);
-        userExtBO.saveUserExt(userId, province, city, area,
-            user.getSystemCode());
+        data.setDivRate(StringValidater.toDouble(req.getDivRate()));
+        data.setStatus(EUserStatus.NORMAL.getCode());
+
+        Date date = new Date();
+        data.setCreateDatetime(date);
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(date);
+        data.setRemark(req.getRemark());
+
+        data.setCompanyCode(req.getSystemCode());
+        data.setSystemCode(req.getSystemCode());
+        userBO.doAddUser(data);
+        userExtBO.saveUserExt(userId, req.getProvince(), req.getCity(),
+            req.getArea(), req.getSystemCode());
+
         List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.ZH_FRB.getCode());
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.ZH_GXZ.getCode());
-        currencyList.add(ECurrency.ZH_QBB.getCode());
-        currencyList.add(ECurrency.ZH_GWB.getCode());
-        currencyList.add(ECurrency.ZH_HBB.getCode());
-        currencyList.add(ECurrency.ZH_HBYJ.getCode());
-        accountBO.distributeAccountList(userId, user.getLoginName(),
-            EAccountType.Partner.getCode(), currencyList, user.getSystemCode());
+        if (ESystemCode.ZHPAY.getCode().equals(data.getSystemCode())) {
+            currencyList.add(ECurrency.ZH_FRB.getCode());
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.ZH_GXZ.getCode());
+            currencyList.add(ECurrency.ZH_QBB.getCode());
+            currencyList.add(ECurrency.ZH_GWB.getCode());
+            currencyList.add(ECurrency.ZH_HBB.getCode());
+            currencyList.add(ECurrency.ZH_HBYJ.getCode());
+        } else {
+            currencyList.add(ECurrency.CNY.getCode());
+        }
+        accountBO.distributeAccountList(userId, data.getLoginName(),
+            EAccountType.Partner.getCode(), currencyList, data.getSystemCode());
         return userId;
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doEditPartner(com.std.user.domain.User, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     @Transactional
-    public void doEditPartner(User user, String province, String city,
-            String area) {
-        String kind = EUserKind.Partner.getCode();
+    public void doEditPartner(XN805181Req req) {
         // 合伙人修改业务逻辑：
         // 1、校验登录是否全系统唯一，校验辖区是否已存在合伙人
-        User dbUser = userBO.getUser(user.getUserId(), user.getSystemCode());
+        User dbUser = userBO.getUser(req.getUserId());
         if (dbUser == null) {
             throw new BizException("xn000000", "该用户编号不存在！");
         }
-        if (!dbUser.getLoginName().equals(user.getLoginName())) {
-            userBO.isLoginNameExist(user.getLoginName(),
-                EUserKind.Partner.getCode(), user.getSystemCode());
+        if (!dbUser.getLoginName().equals(req.getLoginName())) {
+            userBO.isLoginNameExist(req.getLoginName(),
+                EUserKind.Partner.getCode(), dbUser.getSystemCode());
         }
+
         UserExt condition = new UserExt();
-        condition.setKind(kind);
-        condition.setProvince(province);
-        condition.setCity(city);
-        condition.setArea(area);
+        condition.setKind(dbUser.getKind());
+        condition.setProvince(req.getProvince());
+        condition.setCity(req.getCity());
+        condition.setArea(req.getArea());
         List<UserExt> list = userExtBO.queryUserExtList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             UserExt userExt = list.get(0);
-            if (!userExt.getUserId().equals(user.getUserId())) {
+            if (!userExt.getUserId().equals(req.getUserId())) {
                 throw new BizException("xn000000", "该辖区已存在合伙人！");
             }
         }
+
+        User data = new User();
+        data.setUserId(req.getUserId());
+        data.setLoginName(req.getLoginName());
+        data.setMobile(req.getMobile());
+        data.setIdKind(req.getIdKind());
+        data.setIdNo(req.getIdNo());
+
+        data.setRealName(req.getRealName());
+        data.setDivRate(StringValidater.toDouble(req.getDivRate()));
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+
+        userBO.refreshUser(data);
         // 2、修改用户扩展信息
-        userBO.refreshUser(user);
-        UserExt userExt = userExtBO.getUserExt(user.getUserId());
-        userExt.setProvince(province);
-        userExt.setCity(city);
-        userExt.setArea(area);
+        UserExt userExt = userExtBO.getUserExt(req.getUserId());
+        userExt.setProvince(req.getProvince());
+        userExt.setCity(req.getCity());
+        userExt.setArea(req.getArea());
+        userExtBO.refreshUserExt(userExt);
+    }
+
+    @Override
+    public void doEditUser(XN805182Req req) {
+        User dbUser = userBO.getUser(req.getUserId());
+        if (dbUser == null) {
+            throw new BizException("xn000000", "该用户编号不存在！");
+        }
+        if (!dbUser.getMobile().equals(req.getMobile())) {
+            userBO.isMobileExist(req.getMobile(), dbUser.getKind(),
+                dbUser.getSystemCode());
+        }
+        dbUser.setUserId(req.getUserId());
+        dbUser.setIdKind(req.getIdKind());
+        dbUser.setIdNo(req.getIdNo());
+        dbUser.setRealName(req.getRealName());
+
+        dbUser.setDivRate(StringValidater.toDouble(req.getDivRate()));
+        dbUser.setUpdater(req.getUpdater());
+        dbUser.setUpdateDatetime(new Date());
+        dbUser.setRemark(req.getRemark());
+        userBO.refreshUser(dbUser);
+        // 2、修改用户扩展信息
+        UserExt userExt = userExtBO.getUserExt(req.getUserId());
+        userExt.setProvince(req.getProvince());
+        userExt.setCity(req.getCity());
+        userExt.setArea(req.getArea());
         userExtBO.refreshUserExt(userExt);
     }
 
@@ -816,28 +851,6 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn702002", "账户已被锁定，请联系工作人员");
         }
         return user.getUserId();
-    }
-
-    @Override
-    public String doCaptchaLoginReg(String mobile, String kind,
-            String smsCaptcha, String companyCode, String systemCode) {
-        String userId = null;
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805183", companyCode,
-            systemCode);
-        User user = userBO.getUserByMobileAndKind(mobile, kind, companyCode,
-            systemCode);
-        if (user == null) {
-            User data = new User();
-            data.setMobile(mobile);
-            data.setKind(kind);
-            data.setCompanyCode(companyCode);
-            data.setSystemCode(systemCode);
-            userId = userBO.saveUser(data);
-        } else {
-            userId = user.getUserId();
-        }
-        return userId;
     }
 
     @Override
@@ -878,6 +891,28 @@ public class UserAOImpl implements IUserAO {
             amount = "0";// res.getAmount();
         }
         return new XN805155Res(userId, amount);
+    }
+
+    @Override
+    public String doCaptchaLoginReg(String mobile, String kind,
+            String smsCaptcha, String companyCode, String systemCode) {
+        String userId = null;
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805183", companyCode,
+            systemCode);
+        User user = userBO.getUserByMobileAndKind(mobile, kind, companyCode,
+            systemCode);
+        if (user == null) {
+            User data = new User();
+            data.setMobile(mobile);
+            data.setKind(kind);
+            data.setCompanyCode(companyCode);
+            data.setSystemCode(systemCode);
+            userId = userBO.saveUser(data);
+        } else {
+            userId = user.getUserId();
+        }
+        return userId;
     }
 
     @Override

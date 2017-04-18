@@ -1,6 +1,6 @@
 package com.std.user.dto.req;
 
-public class XN805183Req {
+public class XN805173Req {
     // 手机号（必填）
     private String mobile;
 

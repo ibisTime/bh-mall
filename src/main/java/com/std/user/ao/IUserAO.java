@@ -11,6 +11,9 @@ import java.util.List;
 
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
+import com.std.user.dto.req.XN805180Req;
+import com.std.user.dto.req.XN805181Req;
+import com.std.user.dto.req.XN805182Req;
 import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN805151Res;
 import com.std.user.dto.res.XN805154Res;
@@ -94,7 +97,7 @@ public interface IUserAO {
             String systemCode);
 
     /**
-     * 注册送积分，不分配账户
+     * 注册送积分
      * @param mobile
      * @param loginPwd
      * @param loginPwdStrength
@@ -110,24 +113,6 @@ public interface IUserAO {
     public String doCSWRegister(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
             String isRegHx, String companyCode, String systemCode);
-
-    /**
-     * 代注册
-     * @param loginName
-     * @param mobile
-     * @param idKind
-     * @param idNo
-     * @param realName
-     * @param userReferee
-     * @param updater
-     * @param remark
-     * @param kind
-     * @param pdf
-     * @param roleCode
-     * @history:
-     */
-    public String doAddUser(String mobile, String realName, String userReferee,
-            String updater, String remark, String kind, String systemCode);
 
     /**
      * 代注册分配角色
@@ -156,14 +141,14 @@ public interface IUserAO {
     public String doAddUser(String mobile, String companyCode,
             String userReferee, String systemCode);
 
-    public String doAddUser(String loginName, String mobile, String idKind,
+    String doAddUser(String loginName, String mobile, String idKind,
             String idNo, String realName, String userReferee, String updater,
             String remark, String kind, String pdf, String roleCode,
-            String isRegHx, String province, String city, String area,
-            String systemCode);
+            Double divRate, String isRegHx, String province, String city,
+            String area, String systemCode);
 
     /**
-     * 连同用户密码代注册
+     * 连同用户密码代注册(引入第三方用户)
      * @param mobile
      * @param loginPwd
      * @param userReferee
@@ -181,29 +166,30 @@ public interface IUserAO {
             String companyCode, String systemCode);
 
     /**
-     * 新增合伙人(正汇)
-     * @param user
-     * @param province
-     * @param city
-     * @param area
+     * 新增合伙人(正汇、定制通)
+     * @param req
      * @return 
-     * @create: 2016年12月27日 下午4:28:14 xieyj
+     * @create: 2017年4月18日 上午9:03:02 xieyj
      * @history:
      */
-    public String doAddPartner(User user, String province, String city,
-            String area);
+    public String doAddPartner(XN805180Req req);
 
     /**
-     * 修改合伙人(正汇)
-     * @param user
-     * @param province
-     * @param city
-     * @param area 
-     * @create: 2016年12月27日 下午4:28:33 xieyj
+     * 修改合伙人(正汇、定制通)
+     * @param req 
+     * @create: 2017年4月18日 上午9:03:47 xieyj
      * @history:
      */
-    public void doEditPartner(User user, String province, String city,
-            String area);
+    public void doEditPartner(XN805181Req req);
+
+    /**
+     * 代注册B端用户,量体师(正汇、定制通)
+     * @param req
+     * @return 
+     * @create: 2017年4月18日 上午9:03:02 xieyj
+     * @history:
+     */
+    public void doEditUser(XN805182Req req);
 
     /**
      * 用户登录
@@ -259,6 +245,20 @@ public interface IUserAO {
      */
     public XN805155Res doLoginAddJf(String loginName, String loginPwd,
             String kind, String systemCode);
+
+    /**
+     * 验证码登录注册
+     * @param mobile
+     * @param kind
+     * @param smsCaptcha
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年1月19日 下午5:48:21 xieyj
+     * @history:
+     */
+    public String doCaptchaLoginReg(String mobile, String kind,
+            String smsCaptcha, String companyCode, String systemCode);
 
     /**
      * 实名认证
@@ -635,18 +635,11 @@ public interface IUserAO {
     public void doSuppleUser(User data);
 
     /**
-     * 验证码登录注册
-     * @param mobile
-     * @param kind
-     * @param smsCaptcha
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年1月19日 下午5:48:21 xieyj
+     * 更新用户等级
+     * @param userId
+     * @param level 
+     * @create: 2017年4月18日 上午11:07:00 xieyj
      * @history:
      */
-    public String doCaptchaLoginReg(String mobile, String kind,
-            String smsCaptcha, String companyCode, String systemCode);
-
     public void upgradeLevel(String userId, String level);
 }

@@ -23,7 +23,6 @@ import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PwdUtil;
 import com.std.user.core.OrderNoGenerater;
-import com.std.user.dao.IAJourDAO;
 import com.std.user.dao.ILevelRuleDAO;
 import com.std.user.dao.IUserDAO;
 import com.std.user.domain.User;
@@ -40,9 +39,6 @@ import com.std.user.exception.BizException;
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Autowired
     private IUserDAO userDAO;
-
-    @Autowired
-    private IAJourDAO aJourDAO;
 
     @Autowired
     private ILevelRuleDAO levelRuleDAO;
@@ -391,8 +387,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             // user.setTradePwd(MD5Util.md5(tradePsd));
             // user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));
             user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
+            Date date = new Date();
+            user.setCreateDatetime(date);
             user.setUpdater(userId);
-            user.setUpdateDatetime(new Date());
+            user.setUpdateDatetime(date);
             user.setOpenId(openId);
             user.setJpushId(jpushId);
             if (StringUtils.isBlank(companyCode)) {
@@ -473,7 +471,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public String doAddUser(String loginName, String mobile, String loginPsd,
             String userReferee, String realName, String idKind, String idNo,
             String tradePsd, String kind, String level, String remark,
-            String updater, String pdf, String roleCode, String systemCode) {
+            String updater, String pdf, String roleCode, Double divRate,
+            String systemCode) {
         String userId = null;
         if (StringUtils.isNotBlank(loginName) || StringUtils.isNotBlank(mobile)) {
             User user = new User();
@@ -503,12 +502,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                     .calculateSecurityLevel(tradePsd));
             }
             user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
+            Date date = new Date();
+            user.setCreateDatetime(date);
             user.setUpdater(updater);
 
-            user.setUpdateDatetime(new Date());
+            user.setUpdateDatetime(date);
             user.setRemark(remark);
             user.setPdf(pdf);
             user.setRoleCode(roleCode);
+            user.setDivRate(divRate);
             user.setCompanyCode(systemCode);
             user.setSystemCode(systemCode);
             userDAO.insertRen(user);
@@ -540,9 +542,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setUserReferee(userReferee);
             user.setMobile(mobile);
             user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
-            user.setUpdater(updater);
+            Date date = new Date();
 
-            user.setUpdateDatetime(new Date());
+            user.setCreateDatetime(date);
+            user.setUpdater(updater);
+            user.setUpdateDatetime(date);
             user.setRemark(remark);
             if (StringUtils.isBlank(companyCode)) {
                 companyCode = systemCode;

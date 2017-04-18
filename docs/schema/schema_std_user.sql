@@ -16,28 +16,6 @@ SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
---  Table structure for `tstd_account_jour`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_account_jour`;
-CREATE TABLE `tstd_account_jour` (
-  `aj_no` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `biz_type` varchar(4) DEFAULT NULL COMMENT '业务类型',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
-  `trans_amount` bigint(32) DEFAULT NULL COMMENT '发送金额',
-  `pre_amount` bigint(32) DEFAULT NULL COMMENT '发生前金额',
-  `post_amount` bigint(32) DEFAULT NULL COMMENT '发生后金额',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `account_number` varchar(32) DEFAULT NULL COMMENT '账户',
-  `status` char(1) DEFAULT NULL COMMENT '状态',
-  `work_date` varchar(8) DEFAULT NULL COMMENT '对账时间',
-  `check_user` varchar(32) DEFAULT NULL COMMENT '对账人',
-  `check_datetime` datetime DEFAULT NULL COMMENT '对账时间',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`aj_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
 --  Table structure for `tstd_address`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_address`;
@@ -52,26 +30,6 @@ CREATE TABLE `tstd_address` (
   `is_default` char(1) DEFAULT NULL COMMENT '是否默认地址',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `tstd_b2c_sms`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_b2c_sms`;
-CREATE TABLE `tstd_b2c_sms` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `type` varchar(4) DEFAULT NULL COMMENT '类别',
-  `title` varchar(64) DEFAULT NULL COMMENT '标题',
-  `content` text COMMENT '内容',
-  `to_company` varchar(32) DEFAULT NULL COMMENT 'to公司',
-  `to_level` varchar(4) DEFAULT NULL COMMENT 'to等级',
-  `to_user` varchar(32) DEFAULT NULL COMMENT '针对用户',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态(0 待发布，1 已发布)',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `updater` varchar(32) DEFAULT NULL COMMENT '最后修改人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '最后修改时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -341,6 +299,26 @@ CREATE TABLE `tstd_system` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `tstd_b2c_sms`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_b2c_sms`;
+CREATE TABLE `tstd_b2c_sms` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '类别',
+  `title` varchar(64) DEFAULT NULL COMMENT '标题',
+  `content` text COMMENT '内容',
+  `to_company` varchar(32) DEFAULT NULL COMMENT 'to公司',
+  `to_level` varchar(4) DEFAULT NULL COMMENT 'to等级',
+  `to_user` varchar(32) DEFAULT NULL COMMENT '针对用户',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态(0 待发布，1 已发布)',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `updater` varchar(32) DEFAULT NULL COMMENT '最后修改人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '最后修改时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `tstd_uread`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_uread`;
@@ -374,15 +352,13 @@ CREATE TABLE `tstd_user` (
   `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
   `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
   `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',
+  `div_rate` decimal(18,8) DEFAULT NULL COMMENT '分成比例',
   `status` varchar(2) DEFAULT NULL COMMENT '状态',
   `pdf` varchar(255) DEFAULT NULL COMMENT '附件',
-  `amount` bigint(20) DEFAULT '0' COMMENT '现有积分',
-  `lj_amount` bigint(20) DEFAULT '0' COMMENT '累计积分',
-  `div_rate` decimal(18,8) DEFAULT NULL COMMENT '分成比例',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `open_id` varchar(255) DEFAULT NULL COMMENT '开放编号(存union_id)',
   `jpush_id` varchar(255) DEFAULT NULL COMMENT '极光ID',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',

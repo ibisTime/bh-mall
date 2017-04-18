@@ -53,5 +53,8 @@ public class PropertiesUtil {
 
         public static String PARTNER_ROLECODE = props
             .getProperty("PARTNER_ROLECODE");
+
+        public static String DZT_PARTNER_ROLECODE = props
+            .getProperty("DZT_PARTNER_ROLECODE");
     }
 }

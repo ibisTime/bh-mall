@@ -27,7 +27,7 @@ public class XN001350 extends AProcessor {
         return new XN001350Res(userAO.doAddUser(req.getLoginName(),
             req.getMobile(), req.getIdKind(), req.getIdNo(), req.getRealName(),
             req.getUserReferee(), req.getUpdater(), req.getRemark(),
-            EUserKind.F2.getCode(), req.getPdf(), req.getRoleCode(),
+            EUserKind.F2.getCode(), req.getPdf(), req.getRoleCode(), 0.0D,
             req.getIsRegHx(), req.getProvince(), req.getCity(), req.getArea(),
             req.getSystemCode()));
     }

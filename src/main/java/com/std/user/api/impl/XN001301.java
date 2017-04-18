@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 前端用户代注册(连同密码一起保存，不加密)
+ * 前端用户代注册(连同密码一起保存，不加密)，适用范围：菜狗
  * @author: myb858 
  * @since: 2015年11月1日 下午2:56:28 
  * @history:
