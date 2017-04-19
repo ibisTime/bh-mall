@@ -342,6 +342,14 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
+        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
@@ -389,6 +397,14 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.ZH_GWB.getCode());
             currencyList.add(ECurrency.ZH_HBB.getCode());
             currencyList.add(ECurrency.ZH_HBYJ.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
