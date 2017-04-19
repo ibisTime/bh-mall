@@ -526,8 +526,9 @@ public class UserAOImpl implements IUserAO {
                     + "用户，您已成功注册。您的登录名[" + loginName + "],登录密码[" + loginPsd
                     + "]。请及时登录修改密码", "805042", systemCode);
         } else if (EUserKind.JMS.getCode().equals(kind)) {
-            userId = doAddCaigoOss(loginName, mobile, idKind, idNo, realName,
-                userReferee, updater, remark, kind, pdf, systemCode, loginPsd);
+            userId = doAddCaigoOss(loginName, mobile, loginPsd, kind, idKind,
+                idNo, realName, userReferee, divRate, updater, pdf, remark,
+                systemCode);
         }
         // 是则注册环信用户
         if (EBoolean.YES.getCode().equals(isRegHx)) {
@@ -537,9 +538,9 @@ public class UserAOImpl implements IUserAO {
     }
 
     private String doAddCaigoOss(String loginName, String mobile,
-            String idKind, String idNo, String realName, String userReferee,
-            String updater, String remark, String kind, String pdf,
-            String systemCode, String loginPsd) {
+            String loginPsd, String kind, String idKind, String idNo,
+            String realName, String userReferee, Double divRate,
+            String updater, String pdf, String remark, String systemCode) {
         String userId;
         // 验证登录名
         userBO.isLoginNameExist(loginName, kind, systemCode);
@@ -561,14 +562,14 @@ public class UserAOImpl implements IUserAO {
                 }
             }
         }
-        String cxRoleCode = null;
-        if (EUserKind.JMS.getCode().equals(kind)) {
-            cxRoleCode = PropertiesUtil.Config.JMS_ROLECODE;
-        }
+        String roleCode = PropertiesUtil.Config.JMS_ROLECODE;
         // 插入用户信息
         userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
             realName, idKind, idNo, loginPsd, kind, level + "", remark,
-            updater, pdf, cxRoleCode, 0.0D, systemCode);
+            updater, pdf, roleCode, divRate, systemCode);
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, systemCode);
+
         // 分配账号(人民币,积分币和菜狗币)
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
@@ -796,6 +797,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
     public void doEditUser(XN805182Req req) {
         User dbUser = userBO.getUser(req.getUserId());
         if (dbUser == null) {
@@ -817,10 +819,12 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshUser(dbUser);
         // 2、修改用户扩展信息
         UserExt userExt = userExtBO.getUserExt(req.getUserId());
-        userExt.setProvince(req.getProvince());
-        userExt.setCity(req.getCity());
-        userExt.setArea(req.getArea());
-        userExtBO.refreshUserExt(userExt);
+        if (null != userExt) {
+            userExt.setProvince(req.getProvince());
+            userExt.setCity(req.getCity());
+            userExt.setArea(req.getArea());
+            userExtBO.refreshUserExt(userExt);
+        }
     }
 
     @Override
@@ -1388,6 +1392,12 @@ public class UserAOImpl implements IUserAO {
         Paginable<User> page = userBO.getPaginable(start, limit, condition);
         List<User> list = page.getList();
         for (User user : list) {
+            // 推荐人转义
+            User userReferee = userBO.getUser(user.getUserReferee());
+            if (userReferee != null) {
+                user.setUserRefereeName(userReferee.getLoginName());
+            }
+            // 扩展信息
             UserExt userExt = userExtBO.getUserExt(user.getUserId());
             user.setUserExt(userExt);
         }

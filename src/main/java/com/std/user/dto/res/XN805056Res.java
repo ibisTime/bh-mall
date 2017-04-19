@@ -47,8 +47,14 @@ public class XN805056Res {
     // 角色编号
     private String roleCode;
 
+    // 分成比例
+    private String divRate;
+
     // 状态
     private String status;
+
+    // 注册时间
+    private Date createDatetime;
 
     // 更新人
     private String updater;
@@ -61,12 +67,6 @@ public class XN805056Res {
 
     // pdf
     private String pdf;
-
-    // 现有金额
-    private String amount;
-
-    // 累计金额
-    private String ljAmount;
 
     // 公司编号
     private String companyCode;
@@ -208,6 +208,14 @@ public class XN805056Res {
         this.status = status;
     }
 
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
     public String getUpdater() {
         return updater;
     }
@@ -264,22 +272,6 @@ public class XN805056Res {
         this.nickname = nickname;
     }
 
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getLjAmount() {
-        return ljAmount;
-    }
-
-    public void setLjAmount(String ljAmount) {
-        this.ljAmount = ljAmount;
-    }
-
     public String getCompanyCode() {
         return companyCode;
     }
@@ -302,5 +294,13 @@ public class XN805056Res {
 
     public void setTotalFansNum(String totalFansNum) {
         this.totalFansNum = totalFansNum;
+    }
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
     }
 }

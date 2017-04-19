@@ -42,8 +42,11 @@ public class XN805056 extends AProcessor {
             res.setMobile(user.getMobile());
             res.setIdKind(user.getIdKind());
             res.setIdNo(user.getIdNo());
-            res.setRealName(user.getRealName());
 
+            res.setRealName(user.getRealName());
+            if (null != user.getDivRate()) {
+                res.setDivRate(String.valueOf(user.getDivRate()));
+            }
             res.setTradePwdStrength(user.getTradePwdStrength());
             if (StringUtils.isNotBlank(user.getIdNo())) {
                 res.setIdentityFlag(EBoolean.YES.getCode());
@@ -57,6 +60,7 @@ public class XN805056 extends AProcessor {
             }
             res.setRoleCode(user.getRoleCode());
             res.setStatus(user.getStatus());
+            res.setCreateDatetime(user.getCreateDatetime());
             res.setUpdater(user.getUpdater());
             res.setUpdateDatetime(user.getUpdateDatetime());
 
