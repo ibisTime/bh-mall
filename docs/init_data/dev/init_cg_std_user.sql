@@ -382,8 +382,9 @@ LIMIT 0, 10000
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CCG000007-001','2','ACCESS_KEY','2I9KZz4u7hy5U6UgnHsVNhNGNRql1BS9sFT38BeS','','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CCG000007-002','2','SECRET_KEY','qsDzsCD0D3DdLb7Y9tZ_COnSJBpxYJ4Z28RsdR4o','','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CCG000007-003','2','bucket','caigo','','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CCG000007-004','3','ACCESS_KEY','wx5b7c0f77fd657fee','','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CCG000007-005','3','SECRET_KEY','10e1b1dccee7da4ae2efc1c500108a95','','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CCG000007-004','3','ACCESS_KEY','wx8bc03dd744895352','','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tstd_cpassword` (`code`,`type`,`account`,`password`,`remark`,`company_code`,`system_code`) VALUES ('CD-CCG000007-005','3','SECRET_KEY','44ebf0ef908dc54656573625a579ea82','','CD-CCG000007','CD-CCG000007');
+
 /*
 -- Query: select `type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as update_datetime,`remark`,`system_code` from tsys_dict where system_code = 'CD-CCG000007'
 LIMIT 0, 10000
