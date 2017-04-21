@@ -7,6 +7,7 @@
 		<result column="login_name" property="loginName" />
 		<result column="mobile" property="mobile" />
 		<result column="user_referee" property="userReferee" />
+		<result column="real_name" property="realName" />
 		<result column="gender" property="gender" />
 		
 		<result column="birthday" property="birthday" />
@@ -79,6 +80,7 @@
 		,tu.mobile
 		,tu.login_name
 		,tu.user_referee
+		,tu.real_name
 		,t.gender
 		,t.birthday
 		,t.photo
