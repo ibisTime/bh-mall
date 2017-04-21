@@ -98,6 +98,9 @@ public class UserExt extends ABaseDO {
     // 推荐人
     private String userReferee;
 
+    // 真实姓名
+    private String realName;
+
     public String getUserReferee() {
         return userReferee;
     }
@@ -296,5 +299,13 @@ public class UserExt extends ABaseDO {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 }
