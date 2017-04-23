@@ -4,12 +4,15 @@
 <mapper namespace="com.std.user.dao.ISYSConfigDAO">
 	<resultMap id="sysConfig_DB_Result" type="sysConfig">
 		<result column="id" property="id" />
+		<result column="type" property="type" />
 		<result column="ckey" property="ckey" />
 		<result column="cvalue" property="cvalue" />
 		<result column="note" property="note" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -17,22 +20,20 @@
 			<if test="id != null">
 				AND t.id = #{id}
 			</if>	
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>	
 			<if test="ckey != null and ckey != '' ">
 				AND t.ckey = #{ckey}
 			</if>	
-			<choose>
-				 <when test="dhhlFlag == 'notIn'">
-				 	AND t.ckey not in('TOP_TWO_DHHL','TWO_THREE_DHHL','GOODS_TOP_DHHL')
-				 </when>
-				 <when test="dhhlFlag == 'in'">
-				 	AND t.ckey in('TOP_TWO_DHHL','TWO_THREE_DHHL','GOODS_TOP_DHHL')
-				 </when>
-			</choose>
 			<if test="ckeyForQuery != null and ckeyForQuery != '' ">
 				AND t.ckey like "%"#{ckeyForQuery}"%"
 			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
@@ -42,12 +43,15 @@
 	<select id="select_sysConfig" parameterType="sysConfig" resultMap="sysConfig_DB_Result">
 		SELECT
 		id
+		,type
 		,ckey
 		,cvalue
 		,note
+		
 		,updater
 		,update_datetime
 		,remark
+		,company_code
 		,system_code
 		FROM
 		tsys_config t 
@@ -66,21 +70,27 @@
 	
 	<insert id="insert_sysConfig" parameterType="sysConfig" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tsys_config(
-		ckey
+		type
+		,ckey
 		,cvalue
 		,note
 		,updater
+		
 		,update_datetime
 		,remark
+		,company_code
 		,system_code
 		)
 		VALUES(
-		#{ckey}
+		#{type}
+		,#{ckey}
 		,#{cvalue}
 		,#{note}
 		,#{updater}
+		
 		,#{updateDatetime}
 		,#{remark}
+		,#{companyCode}
 		,#{systemCode}
 		)
 	</insert>

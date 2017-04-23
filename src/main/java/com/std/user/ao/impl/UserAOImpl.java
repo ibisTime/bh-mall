@@ -1601,7 +1601,7 @@ public class UserAOImpl implements IUserAO {
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             accountType = EAccountType.Plat.getCode();
         } else if (EUserKind.JMS.getCode().equals(kind)) {
-            accountType = EAccountType.Business.getCode();
+            accountType = EAccountType.Partner.getCode();
         }
         return accountType;
     }
@@ -1751,7 +1751,7 @@ public class UserAOImpl implements IUserAO {
         Map<String, String> resultMap = doWeChatLogin(code, type, companyCode,
             systemCode);
         String userId = resultMap.get("userId");
-        if (resultMap.get("isReg").equals("1")) {
+        if (resultMap.get("isReg").equals(EBoolean.YES.getCode())) {
             // 账户资金划拨
             accountBO
                 .doTransferAmountRemote(ESysUser.SYS_USER_LLWW.getCode(),

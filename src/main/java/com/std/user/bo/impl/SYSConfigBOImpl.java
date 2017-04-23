@@ -11,38 +11,15 @@ import com.std.user.dao.ISYSConfigDAO;
 import com.std.user.domain.SYSConfig;
 
 /**
- * 
- * @author: Gejin 
- * @since: 2016年4月17日 下午7:56:03 
+ * @author: xieyj 
+ * @since: 2017年4月23日 下午6:19:30 
  * @history:
  */
-
 @Component
 public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
         ISYSConfigBO {
     @Autowired
     private ISYSConfigDAO sysConfigDAO;
-
-    @Override
-    public boolean isSYSConfigExist(Long Id) {
-        SYSConfig sysConfig = new SYSConfig();
-        sysConfig.setId(Id);
-        if (sysConfigDAO.selectTotalCount(sysConfig) == 1) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public int saveSYSConfig(SYSConfig data) {
-        int count = 0;
-        if (data != null) {
-            data.setId(data.getId());
-            data.setUpdateDatetime(new Date());
-            count = sysConfigDAO.insert(data);
-        }
-        return count;
-    }
 
     @Override
     public int refreshSYSConfig(SYSConfig data) {
@@ -69,11 +46,13 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
      * @see com.xnjr.base.bo.ISYSConfigBO#getConfigValue(java.lang.String)
      */
     @Override
-    public SYSConfig getConfigValue(String ckey, String systemCode) {
+    public SYSConfig getConfigValue(String ckey, String companyCode,
+            String systemCode) {
         SYSConfig result = null;
         if (ckey != null) {
             SYSConfig condition = new SYSConfig();
             condition.setCkey(ckey);
+            condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
             result = sysConfigDAO.select(condition);
         }
