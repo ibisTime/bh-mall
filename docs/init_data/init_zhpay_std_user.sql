@@ -12,14 +12,14 @@ LIMIT 0, 10000
 
 -- Date: 2017-02-27 16:59
 */
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('aboutus','关于我们','<p style=\"text-indent: 2em;\">正汇钱包，自2015年5月1日试运行起受到广大用户的关注，今日全新形象的正汇钱包上线，欢迎大家继续使用。本软件由义乌市正汇信息科技有限公司运行制作，（简称正汇科技）正汇科技成立于2015年初，创始团队至今已有5年历程。正汇科技是一家集程序开发、市场运营为一体的移动互联网企业，并集新型创业、提供就业、提高生活质量的全新经济体系的高新技术公司。</p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('reg_protocol','注册协议','注册协议','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('treasure_rule','夺宝玩法介绍','<p>用户阅读并了解该功能的所有相关信息后，选择心仪的奖品，进行购买幸运号码（幸运号码=原始值10000000+购买次序：第一个购买者购买次序是1，第二个购买者购买次序是2….）当所有号码都被分配完毕后，系统根据规则计算出1个幸运号码，持有该号码的支持者，直接获得该商品</p><p>中奖号码的计算规则：</p><p>1.&nbsp;&nbsp; 奖品的最后一个号码分配完毕后，将最后5个号码的分配时间的数值进行求和（得出数值A）（每个分配时间按时、分、秒、毫秒的顺序组合，如21.15.27.368则为211527368）；</p><p>2.&nbsp;&nbsp; 数值A除以该商品总需人次得到的余数+原始值10000001，得到最终幸运号码，拥有该幸运号码者，直接获得该奖品。</p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('treasure_statement','夺宝免责申明','<p>小目标服务: 是指将代币分作为奖励的多人次参与福利活动的服务。本公司提示您注意: 该项服务适用于贡献值，分润，快捷支付的付款方式但未经实名的正汇钱包账户可能会受到参与次数的限制。基于此项服务可能存在的风险, 在使用小目标服务时, 您理解并接受:</p><p>&nbsp;</p><p>a)为控制可能存在的风险, 本公司对所有用户使用小目标服务时的单日单次消费总额进行了限制, 并保留对限制种类和限制限额进行无需预告进行调整的权利。</p><p>&nbsp;b)使用小目标服务是基于您对小目标服务的充分了解, 一旦您使用小目标服, 您应当自行承担因您指示错误(失误)而导致的风险。本公司依照您参与的时间判断号码并根据本协议的约定完成派奖计算后, 即完成了当次服务的所有义务, 对于当次服务参与所有人次方之间产生的关于当次服务的任何纠纷不承担任何责任, 也不提供任何形式的纠纷解决途径, 您应当自行处理相关的纠纷。</p><p>C）本公司绝对禁止任何用户使用小目标服务进行变相牟利或者其他违反法律法规的自发组织行为，对此造成的任何形式的纠纷或者严重后果本公司不予承担，请所有使用小目标服务的用户合理参与。并且在未违反国家相关法律法规及部门规章规定，却对本公司在声誉，市场，财产的相关方面造成损失的行为，本公司将保留诉讼权利（包括但不限于通过本公司的产品或服务从事类似金字塔或矩阵型的高额返利业务模式，变相博彩模式。）</p><p>凡使用小目标服务的所有用户都已在使用前认真阅读并深刻了解该服务的所有相关信息</p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('fyf_rule','汇赚宝玩法介绍','<p>凡拥有了“汇赚宝”的用户（包括前摇钱树用户）只要打开app，周围的正汇钱包用户都可在摇一摇的界面中找到您的红包。（无需硬件打开设备）</p><p>规则</p><p>一个汇赚宝单日最多可被摇900次</p><p>一个正汇钱包用户单日最多可以摇3次（每次摇的金额和代币种类皆为随机）</p><p></p><p>一个手机（或pad）单日最多可以摇3次（每次摇的金额和代币种类皆为随机）</p><p><br></p><p>凡拥有“摇钱树”的用户每天会有5个红包链接，用户可将该红包链接分享到微信，由好友打开后领取奖励，好友领取后分享着的账号会获得一定数值的红包业绩。</p><p>规则</p><p>一个正汇钱包账号单日最多领取1个红包链接</p><p>一个正汇钱包账号单日最多可发送5个红包链接</p><p>红包链接有效期：红包链接发送后可以转发，每日<span style=\"display: inline !important;\">0</span><span style=\"display: inline !important;\">点，前日的红包链接失效</span></p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('fyf_statement','汇赚宝免责申明','<p>本公司绝对禁止任何用户使用发一发服务进行变相牟利或者其他违反法律法规的自发组织行为，对此造成的任何形式的纠纷或者严重后果本公司不予承担，并且在未违反国家相关法律法规及部门规章规定，却对本公司在声誉，市场，财产的相关方面造成损失的行为，本公司将保留诉讼权利（包括但不限于通过本公司的产品或服务从事类似金字塔或矩阵型的高额返利业务模式。变相博彩模式。）</p><p>凡使用小目标服务的所有用户都已在使用前认真阅读并深刻了解该服务的所有相关信息</p><p><br></p>','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('store_up_statement','升级公益店铺说明','升级公益店铺说明','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('new_start','新手入门','新手入门','admin',now(),NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('aboutus','关于我们','<p style=\"text-indent: 2em;\">正汇钱包，自2015年5月1日试运行起受到广大用户的关注，今日全新形象的正汇钱包上线，欢迎大家继续使用。本软件由义乌市正汇信息科技有限公司运行制作，（简称正汇科技）正汇科技成立于2015年初，创始团队至今已有5年历程。正汇科技是一家集程序开发、市场运营为一体的移动互联网企业，并集新型创业、提供就业、提高生活质量的全新经济体系的高新技术公司。</p><p><br></p>','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('reg_protocol','注册协议','注册协议','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('treasure_rule','夺宝玩法介绍','<p>用户阅读并了解该功能的所有相关信息后，选择心仪的奖品，进行购买幸运号码（幸运号码=原始值10000000+购买次序：第一个购买者购买次序是1，第二个购买者购买次序是2….）当所有号码都被分配完毕后，系统根据规则计算出1个幸运号码，持有该号码的支持者，直接获得该商品</p><p>中奖号码的计算规则：</p><p>1.&nbsp;&nbsp; 奖品的最后一个号码分配完毕后，将最后5个号码的分配时间的数值进行求和（得出数值A）（每个分配时间按时、分、秒、毫秒的顺序组合，如21.15.27.368则为211527368）；</p><p>2.&nbsp;&nbsp; 数值A除以该商品总需人次得到的余数+原始值10000001，得到最终幸运号码，拥有该幸运号码者，直接获得该奖品。</p><p><br></p>','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('treasure_statement','夺宝免责申明','<p>小目标服务: 是指将代币分作为奖励的多人次参与福利活动的服务。本公司提示您注意: 该项服务适用于贡献值，分润，快捷支付的付款方式但未经实名的正汇钱包账户可能会受到参与次数的限制。基于此项服务可能存在的风险, 在使用小目标服务时, 您理解并接受:</p><p>&nbsp;</p><p>a)为控制可能存在的风险, 本公司对所有用户使用小目标服务时的单日单次消费总额进行了限制, 并保留对限制种类和限制限额进行无需预告进行调整的权利。</p><p>&nbsp;b)使用小目标服务是基于您对小目标服务的充分了解, 一旦您使用小目标服, 您应当自行承担因您指示错误(失误)而导致的风险。本公司依照您参与的时间判断号码并根据本协议的约定完成派奖计算后, 即完成了当次服务的所有义务, 对于当次服务参与所有人次方之间产生的关于当次服务的任何纠纷不承担任何责任, 也不提供任何形式的纠纷解决途径, 您应当自行处理相关的纠纷。</p><p>C）本公司绝对禁止任何用户使用小目标服务进行变相牟利或者其他违反法律法规的自发组织行为，对此造成的任何形式的纠纷或者严重后果本公司不予承担，请所有使用小目标服务的用户合理参与。并且在未违反国家相关法律法规及部门规章规定，却对本公司在声誉，市场，财产的相关方面造成损失的行为，本公司将保留诉讼权利（包括但不限于通过本公司的产品或服务从事类似金字塔或矩阵型的高额返利业务模式，变相博彩模式。）</p><p>凡使用小目标服务的所有用户都已在使用前认真阅读并深刻了解该服务的所有相关信息</p><p><br></p>','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('fyf_rule','汇赚宝玩法介绍','<p>凡拥有了“汇赚宝”的用户（包括前摇钱树用户）只要打开app，周围的正汇钱包用户都可在摇一摇的界面中找到您的红包。（无需硬件打开设备）</p><p>规则</p><p>一个汇赚宝单日最多可被摇900次</p><p>一个正汇钱包用户单日最多可以摇3次（每次摇的金额和代币种类皆为随机）</p><p></p><p>一个手机（或pad）单日最多可以摇3次（每次摇的金额和代币种类皆为随机）</p><p><br></p><p>凡拥有“摇钱树”的用户每天会有5个红包链接，用户可将该红包链接分享到微信，由好友打开后领取奖励，好友领取后分享着的账号会获得一定数值的红包业绩。</p><p>规则</p><p>一个正汇钱包账号单日最多领取1个红包链接</p><p>一个正汇钱包账号单日最多可发送5个红包链接</p><p>红包链接有效期：红包链接发送后可以转发，每日<span style=\"display: inline !important;\">0</span><span style=\"display: inline !important;\">点，前日的红包链接失效</span></p><p><br></p>','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('fyf_statement','汇赚宝免责申明','<p>本公司绝对禁止任何用户使用发一发服务进行变相牟利或者其他违反法律法规的自发组织行为，对此造成的任何形式的纠纷或者严重后果本公司不予承担，并且在未违反国家相关法律法规及部门规章规定，却对本公司在声誉，市场，财产的相关方面造成损失的行为，本公司将保留诉讼权利（包括但不限于通过本公司的产品或服务从事类似金字塔或矩阵型的高额返利业务模式。变相博彩模式。）</p><p>凡使用小目标服务的所有用户都已在使用前认真阅读并深刻了解该服务的所有相关信息</p><p><br></p>','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('store_up_statement','升级公益店铺说明','升级公益店铺说明','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('new_start','新手入门','新手入门','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
 /*
 -- Query: SELECT * FROM zhpay_std_user.tstd_user where login_name = 'admin' and system_code  = 'CD-CZH000001'
 -- Date: 2017-01-08 19:52
@@ -28,9 +28,9 @@ INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pw
 
 /*
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,system_code FROM tsys_menu where system_code = 'CD-CZH000001'
-LIMIT 0, 10000
+LIMIT 0, 400
 
--- Date: 2017-04-07 20:09
+-- Date: 2017-04-24 16:06
 */
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017032911200961325','修改','2','/edit','2','admin',now(),'','ZHSM201600001000000003','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201703291131586305','商户审批','1','/biz/store.htm','91','admin',now(),'','ZHSM2017022413213453454','CD-CZH000001');
@@ -80,6 +80,7 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017040616443747740','详情','2','/detail1','3','admin',now(),'','ZHSM2016120711034365344','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017040621255637076','新手入门介绍','1','/biz/xs_rule.htm','7','admin',now(),'','ZHSM2016121215543215610','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201704160014348539','产品参数','2','/productParam','7','admin',now(),'','SM2017032915061745533','CD-CZH000001');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042414292839361','赠送','2','/give','5','admin',now(),'','ZHSM2016121215243785360','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM201600000000000000','根目录','1','#','1','admin',now(),'','','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM201600001000000001','系统管理','1','#','1','admin',now(),'','ZHSM201600000000000000','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM201600001000000002','运维管理','1','#','2','admin',now(),NULL,'ZHSM201600001000000001','CD-CZH000001');
@@ -142,15 +143,12 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016120911293120195','审核','2','check','1','admin',now(),'','ZHSM2016120710484209132','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016120911301231346','详情','2','/detail','2','admin',now(),'','ZHSM2016120710484209132','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM201612121417489854','业务管理','1','#','2','admin',now(),'','ZHSM201600000000000000','CD-CZH000001');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121214481743755','取现审批','1','/biz/withdraw.htm','4','admin',now(),'','ZHSM2017022413213453454','CD-CZH000001');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121214490617928','代申请','2','add','1','admin',now(),'','ZHSM2016121214481743755','CD-CZH000001');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121214495421331','审批','2','/check','2','admin',now(),'','ZHSM2016121214481743755','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215243785360','汇赚宝管理','1','/biz/moneytree.htm','6','admin',now(),'','ZHSM2017022413213453454','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215255452846','解冻/冻结','2','/upDown','2','admin',now(),'','ZHSM2016121215243785360','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215304545522','红包审批','1','/biz/luckymoney.htm','8','admin',now(),'','ZHSM2017022413213453454','CD-CZH000001');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215310612145','审批','2','/check','1','admin',now(),'','ZHSM2016121215304545522','CD-CZH000001');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215310612145','审批','2','/examine','1','admin',now(),'','ZHSM2016121215304545522','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215323620971','红包业绩审批','1','/biz/performance.htm','9','admin',now(),'','ZHSM2017022413213453454','CD-CZH000001');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215325117652','审批','2','/check','1','admin',now(),'','ZHSM2016121215323620971','CD-CZH000001');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215325117652','审批','2','/examine','1','admin',now(),'','ZHSM2016121215323620971','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215332251046','业务规则','1','#','2','admin',now(),'','ZHSM201612121417489854','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215342898771','汇赚宝规则','1','/biz/distribution.htm','1','admin',now(),'','ZHSM2016121215332251046','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2016121215345041790','修改','2','/edit','1','admin',now(),'','ZHSM2016121215342898771','CD-CZH000001');
@@ -213,7 +211,6 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2017022416304538172','汇赚宝玩法介绍','1','/biz/fyf_rule.htm','3','admin',now(),'','ZHSM2016121215543215610','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2017022416314144419','汇赚宝免责申明','1','/biz/fyf_statement.htm','4','admin',now(),'','ZHSM2016121215543215610','CD-CZH000001');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2017022713464525823','详情','2','/detail1','2','admin',now(),'','ZHSM2016121215304545522','CD-CZH000001');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('ZHSM2017022714144175214','详情','2','/detail1','3','admin',now(),'','ZHSM2016121214481743755','CD-CZH000001');
 
 /*
 -- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`system_code` FROM tsys_role where system_code = 'CD-CZH000001'
@@ -226,9 +223,9 @@ INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`rema
 
 /*
 -- Query: SELECT `role_code`,`menu_code`,`updater`,now() as `update_datetime`,`remark`,`system_code` FROM tsys_menu_role where role_code in('ZHSR201600000000000000','ZHSR20160000000000hhr1')
-LIMIT 0, 10000
+LIMIT 0, 400
 
--- Date: 2017-04-07 20:11
+-- Date: 2017-04-24 16:07
 */
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR20160000000000hhr1','ZHSM201600000000000000','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR20160000000000hhr1','ZHSM201612121417489854','admin',now(),NULL,'CD-CZH000001');
@@ -308,7 +305,6 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215332251046','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017032919045430058','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017032919051672760','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017040621255637076','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215342898771','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215345041790','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215411661735','admin',now(),NULL,'CD-CZH000001');
@@ -339,6 +335,7 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017033020022649991','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017033020024827112','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017040416090141663','admin',now(),NULL,'CD-CZH000001');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017040621255637076','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121216045274832','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2017022416243474533','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2017022416261359445','admin',now(),NULL,'CD-CZH000001');
@@ -380,12 +377,9 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017033110574633580','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017033110580344414','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM201703311058216242','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121214481743755','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121214490617928','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121214495421331','admin',now(),NULL,'CD-CZH000001');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2017022714144175214','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215243785360','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017040316473686737','admin',now(),NULL,'CD-CZH000001');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','SM2017042414292839361','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215255452846','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215304545522','admin',now(),NULL,'CD-CZH000001');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('ZHSR201600000000000000','ZHSM2016121215310612145','admin',now(),NULL,'CD-CZH000001');
