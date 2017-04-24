@@ -37,9 +37,6 @@ public class PropertiesUtil {
 
         public static String SMS_URL = props.getProperty("SMS_URL");
 
-        public static String COMPANY_MOBILE = props
-            .getProperty("COMPANY_MOBILE");
-
         public static String ACCOUNT_URL = props.getProperty("ACCOUNT_URL");
 
         public static String JMS_ROLECODE = props.getProperty("JMS_ROLECODE");
