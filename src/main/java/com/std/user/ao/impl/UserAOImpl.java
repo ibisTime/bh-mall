@@ -460,13 +460,16 @@ public class UserAOImpl implements IUserAO {
         String loginPsd = EUserPwd.InitPwd.getCode();
         if (EUserKind.F1.getCode().equals(kind)
                 || EUserKind.F2.getCode().equals(kind)) {
+            if (ESystemCode.DZT.getCode().equals(systemCode)) {
+                roleCode = PropertiesUtil.Config.DZT_LTS_ROLECODE;
+            }
             // 验证手机号
             userBO.isMobileExist(mobile, kind, systemCode);
             // 插入用户信息
             loginPsd = RandomUtil.generate6();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
-                pdf, null, divRate, systemCode);
+                pdf, roleCode, divRate, systemCode);
             if (StringUtils.isBlank(realName)) {
                 realName = mobile;
             }
