@@ -10,9 +10,12 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 微信登录，首次绑定手机号，后面直接登录；
+ * 微信登录
+ * 1、首次登录，输入手机号，短信验证码；
+ * 2、之前用户首次登录，输入手机号进行绑定
+ * 3、二次登录直接登录
  * @author: xieyj 
- * @since: 2016年11月17日 下午1:02:03 
+ * @since: 2017年4月25日 下午4:40:40 
  * @history:
  */
 public class XN805151 extends AProcessor {
@@ -22,9 +25,9 @@ public class XN805151 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return userAO.doLoginWeChat(req.getCode(), req.getMobile(),
-            req.getType(), req.getIsRegHx(), req.getCompanyCode(),
-            req.getSystemCode());
+        return userAO.doLoginWeChat(req.getCode(), req.getType(),
+            req.getMobile(), req.getSmsCaptcha(), req.getUserReferee(),
+            req.getIsRegHx(), req.getCompanyCode(), req.getSystemCode());
     }
 
     @Override

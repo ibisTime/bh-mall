@@ -5,14 +5,20 @@ public class XN805151Req {
     // 开放编号（必填）
     private String code;
 
+    // 类型(选填，默认h5 3=微信h5 4=微信APP)
+    private String type;
+
+    // 手机号（选填）
+    private String mobile;
+
+    // 短信验证码（选填）
+    private String smsCaptcha;
+
     // 是否注册环信（必填）
     private String isRegHx;
 
-    // 手机号（必填）
-    private String mobile;
-
-    // 类型(选填)
-    private String type;
+    // 推荐人（选填）
+    private String userReferee;
 
     // 公司编号（必填）
     private String companyCode;
@@ -28,12 +34,12 @@ public class XN805151Req {
         this.code = code;
     }
 
-    public String getIsRegHx() {
-        return isRegHx;
+    public String getType() {
+        return type;
     }
 
-    public void setIsRegHx(String isRegHx) {
-        this.isRegHx = isRegHx;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getMobile() {
@@ -44,12 +50,28 @@ public class XN805151Req {
         this.mobile = mobile;
     }
 
-    public String getType() {
-        return type;
+    public String getSmsCaptcha() {
+        return smsCaptcha;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
+    }
+
+    public String getIsRegHx() {
+        return isRegHx;
+    }
+
+    public void setIsRegHx(String isRegHx) {
+        this.isRegHx = isRegHx;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 
     public String getCompanyCode() {
