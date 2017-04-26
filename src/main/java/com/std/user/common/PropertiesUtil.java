@@ -33,13 +33,23 @@ public class PropertiesUtil {
     }
 
     public static final class Config {
-        public static String IDENTIFY_URL = props.getProperty("IDENTIFY_URL");
-
-        public static String SMS_URL = props.getProperty("SMS_URL");
 
         public static String ACCOUNT_URL = props.getProperty("ACCOUNT_URL");
 
+        public static String SMS_URL = props.getProperty("SMS_URL");
+
+        public static String IDENTIFY_URL = props.getProperty("IDENTIFY_URL");
+
         public static String JMS_ROLECODE = props.getProperty("JMS_ROLECODE");
+
+        public static String PARTNER_ROLECODE = props
+            .getProperty("PARTNER_ROLECODE");
+
+        public static String DZT_PARTNER_ROLECODE = props
+            .getProperty("DZT_PARTNER_ROLECODE");
+
+        public static String DZT_LTS_ROLECODE = props
+            .getProperty("DZT_LTS_ROLECODE");
 
         public static String APP_KEY = props.getProperty("APP_KEY");
 
@@ -48,10 +58,5 @@ public class PropertiesUtil {
         public static String APNS_PRODUCTION = props
             .getProperty("APNS_PRODUCTION");
 
-        public static String PARTNER_ROLECODE = props
-            .getProperty("PARTNER_ROLECODE");
-
-        public static String DZT_PARTNER_ROLECODE = props
-            .getProperty("DZT_PARTNER_ROLECODE");
     }
 }
