@@ -498,8 +498,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setIdNo(idNo);
 
             user.setRealName(realName);
-            user.setTradePwd(MD5Util.md5(tradePsd));
             if (StringUtils.isNotBlank(tradePsd)) {
+                user.setTradePwd(MD5Util.md5(tradePsd));
                 user.setTradePwdStrength(PwdUtil
                     .calculateSecurityLevel(tradePsd));
             }

@@ -26,6 +26,7 @@ public class XN805091 extends AProcessor {
     public Object doBusiness() throws BizException {
         UserRelation condition = new UserRelation();
         condition.setMobileForLikeQuery(req.getMobile());
+        condition.setNickname(req.getNickname());
         condition.setUserId(req.getUserId());
         condition.setToUser(req.getToUser());
         condition.setSystemCode(req.getSystemCode());

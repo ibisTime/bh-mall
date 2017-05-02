@@ -51,6 +51,9 @@ public class UserRelation extends ABaseDO {
     // 是否查询金额 1 是
     private String isGetAmount;
 
+    // 昵称
+    private String nickname;
+
     public String getSystemCode() {
         return systemCode;
     }
@@ -121,5 +124,13 @@ public class UserRelation extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

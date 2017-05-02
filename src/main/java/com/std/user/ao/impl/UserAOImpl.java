@@ -323,8 +323,8 @@ public class UserAOImpl implements IUserAO {
             // 插入用户信息
             loginPsd = RandomUtil.generate6();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
-                realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
-                pdf, roleCode, divRate, systemCode);
+                realName, idKind, idNo, null, kind, "0", remark, updater, pdf,
+                roleCode, divRate, systemCode);
             if (StringUtils.isBlank(realName)) {
                 realName = mobile;
             }

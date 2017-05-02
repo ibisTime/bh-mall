@@ -63,6 +63,9 @@
 			<if test="mobileForLikeQuery != null and mobileForLikeQuery != '' ">
 				AND tu.mobile like "%"#{mobileForLikeQuery}"%"
 			</if>
+			<if test="nickname != null and nickname != '' ">
+				AND tu.nickname like "%"#{nickname}"%"
+			</if>
 		</trim>
 	</sql>
 	
