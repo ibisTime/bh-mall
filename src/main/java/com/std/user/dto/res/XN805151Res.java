@@ -1,6 +1,7 @@
 package com.std.user.dto.res;
 
 public class XN805151Res {
+    // 用户编号
     private String userId;
 
     // 是否绑定手机号

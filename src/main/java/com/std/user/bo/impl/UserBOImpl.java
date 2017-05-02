@@ -188,6 +188,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (StringUtils.isNotBlank(mobile)) {
             User condition = new User();
             condition.setMobile(mobile);
+            condition.setSystemCode(systemCode);
             List<User> list = userDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {
                 data = list.get(0);
@@ -228,6 +229,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setMobile(mobile);
             condition.setKind(kind);
             condition.setCompanyCode(companyCode);
+            condition.setSystemCode(systemCode);
             List<User> list = userDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {
                 data = list.get(0);

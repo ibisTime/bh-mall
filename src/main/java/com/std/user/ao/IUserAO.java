@@ -208,14 +208,20 @@ public interface IUserAO {
     /**
      * 微信登录（新用户登录需绑定手机号）
      * @param code
+     * @param type
      * @param mobile
-     * @param isApp
+     * @param smsCaptcha
+     * @param userReferee
+     * @param isRegHx
+     * @param companyCode
+     * @param systemCode
      * @return 
-     * @create: 2017年4月17日 下午4:11:52 xieyj
+     * @create: 2017年4月25日 下午7:28:57 xieyj
      * @history:
      */
-    public XN805151Res doLoginWeChat(String code, String mobile, String isApp,
-            String isRegHx, String companyCode, String systemCode);
+    public XN805151Res doLoginWeChat(String code, String type, String mobile,
+            String smsCaptcha, String userReferee, String isRegHx,
+            String companyCode, String systemCode);
 
     /**
      * 微信登录

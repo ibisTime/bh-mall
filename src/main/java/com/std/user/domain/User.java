@@ -96,6 +96,9 @@ public class User extends ABaseDO {
     // 公司名称
     private String companyName;
 
+    // 开放平台和公众平台唯一号
+    private String unionId;
+
     // 第三方登录开放编号
     private String openId;
 
@@ -136,57 +139,6 @@ public class User extends ABaseDO {
     // 推荐人等级
     private Integer refeereLevel;
 
-    // 连续天数
-    private Integer serialSignDays;
-
-    public Integer getSerialSignDays() {
-        return serialSignDays;
-    }
-
-    public void setSerialSignDays(Integer serialSignDays) {
-        this.serialSignDays = serialSignDays;
-    }
-
-    public Integer getRefeereLevel() {
-        return refeereLevel;
-    }
-
-    public void setRefeereLevel(Integer refeereLevel) {
-        this.refeereLevel = refeereLevel;
-    }
-
-    public String getJpushId() {
-        return jpushId;
-    }
-
-    public void setJpushId(String jpushId) {
-        this.jpushId = jpushId;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getLoginNameForLikeQuery() {
-        return loginNameForLikeQuery;
-    }
-
-    public void setLoginNameForLikeQuery(String loginNameForLikeQuery) {
-        this.loginNameForLikeQuery = loginNameForLikeQuery;
-    }
-
-    public String getMobileForLikeQuery() {
-        return mobileForLikeQuery;
-    }
-
-    public void setMobileForLikeQuery(String mobileForLikeQuery) {
-        this.mobileForLikeQuery = mobileForLikeQuery;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -201,6 +153,14 @@ public class User extends ABaseDO {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getLoginPwd() {
@@ -299,12 +259,28 @@ public class User extends ABaseDO {
         this.roleCode = roleCode;
     }
 
+    public Double getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(Double divRate) {
+        this.divRate = divRate;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
     public String getUpdater() {
@@ -331,14 +307,6 @@ public class User extends ABaseDO {
         this.remark = remark;
     }
 
-    public String getRealNameForLikeQuery() {
-        return realNameForLikeQuery;
-    }
-
-    public void setRealNameForLikeQuery(String realNameForLikeQuery) {
-        this.realNameForLikeQuery = realNameForLikeQuery;
-    }
-
     public String getPdf() {
         return pdf;
     }
@@ -347,28 +315,60 @@ public class User extends ABaseDO {
         this.pdf = pdf;
     }
 
-    public String getUserRefereeName() {
-        return userRefereeName;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setUserRefereeName(String userRefereeName) {
-        this.userRefereeName = userRefereeName;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public UserExt getUserExt() {
-        return userExt;
+    public String getUnionId() {
+        return unionId;
     }
 
-    public void setUserExt(UserExt userExt) {
-        this.userExt = userExt;
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getJpushId() {
+        return jpushId;
+    }
+
+    public void setJpushId(String jpushId) {
+        this.jpushId = jpushId;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getLoginNameForLikeQuery() {
+        return loginNameForLikeQuery;
+    }
+
+    public void setLoginNameForLikeQuery(String loginNameForLikeQuery) {
+        this.loginNameForLikeQuery = loginNameForLikeQuery;
     }
 
     public String getNicknameForLikeQuery() {
@@ -379,20 +379,44 @@ public class User extends ABaseDO {
         this.nicknameForLikeQuery = nicknameForLikeQuery;
     }
 
+    public String getMobileForLikeQuery() {
+        return mobileForLikeQuery;
+    }
+
+    public void setMobileForLikeQuery(String mobileForLikeQuery) {
+        this.mobileForLikeQuery = mobileForLikeQuery;
+    }
+
+    public String getRealNameForLikeQuery() {
+        return realNameForLikeQuery;
+    }
+
+    public void setRealNameForLikeQuery(String realNameForLikeQuery) {
+        this.realNameForLikeQuery = realNameForLikeQuery;
+    }
+
+    public String getUserRefereeName() {
+        return userRefereeName;
+    }
+
+    public void setUserRefereeName(String userRefereeName) {
+        this.userRefereeName = userRefereeName;
+    }
+
+    public UserExt getUserExt() {
+        return userExt;
+    }
+
+    public void setUserExt(UserExt userExt) {
+        this.userExt = userExt;
+    }
+
     public String getOssUserId() {
         return ossUserId;
     }
 
     public void setOssUserId(String ossUserId) {
         this.ossUserId = ossUserId;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public Long getTotalFollowNum() {
@@ -419,14 +443,6 @@ public class User extends ABaseDO {
         this.photo = photo;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
     public String getLoginType() {
         return loginType;
     }
@@ -435,27 +451,15 @@ public class User extends ABaseDO {
         this.loginType = loginType;
     }
 
-    public String getOpenId() {
-        return openId;
+    public Integer getRefeereLevel() {
+        return refeereLevel;
     }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
+    public void setRefeereLevel(Integer refeereLevel) {
+        this.refeereLevel = refeereLevel;
     }
 
-    public Double getDivRate() {
-        return divRate;
-    }
-
-    public void setDivRate(Double divRate) {
-        this.divRate = divRate;
-    }
-
-    public Date getCreateDatetime() {
-        return createDatetime;
-    }
-
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 }

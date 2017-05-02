@@ -363,7 +363,7 @@ public class UserAOImpl implements IUserAO {
 
     private String doThirdRegisterWechat(String openId, String mobile,
             String nickname, String isRegHx, String photo, String gender,
-            String companyCode, String systemCode) {
+            String userReferee, String companyCode, String systemCode) {
         User condition = new User();
         condition.setOpenId(openId);
         condition.setSystemCode(systemCode);
@@ -372,7 +372,7 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn702002", openId + "第三方开放编号已存在");
         }
         // 插入用户信息
-        String loginPwd = EUserPwd.InitPwd.getCode();
+        String loginPwd = RandomUtil.generate6();
         userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode,
             systemCode);
         String loginName = mobile;
@@ -382,8 +382,8 @@ public class UserAOImpl implements IUserAO {
             loginName = EPrefixCode.CD + loginName;
         }
         String userId = userBO.doRegister(loginName, nickname, mobile,
-            loginPwd, "1", null, EUserKind.F1.getCode(), "0", companyCode,
-            openId, null, systemCode);
+            loginPwd, "1", userReferee, EUserKind.F1.getCode(), "0",
+            companyCode, openId, null, systemCode);
         // 新增扩展信息
         userExtBO.saveUserExt(userId, photo, gender, systemCode);
 
@@ -437,10 +437,12 @@ public class UserAOImpl implements IUserAO {
                 }
             }
         }
-        // 发送初始化密码
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805042",
-            systemCode);
+        // 发送初始化密码(菜狗不发短信)
+        if (!ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。",
+                "805042", systemCode);
+        }
         // 注册环信
         if (EBoolean.YES.getCode().equals(isRegHx)) {
             instantMsgImpl.doRegisterUser(userId, systemCode);
@@ -460,13 +462,16 @@ public class UserAOImpl implements IUserAO {
         String loginPsd = EUserPwd.InitPwd.getCode();
         if (EUserKind.F1.getCode().equals(kind)
                 || EUserKind.F2.getCode().equals(kind)) {
+            if (ESystemCode.DZT.getCode().equals(systemCode)) {
+                roleCode = PropertiesUtil.Config.DZT_LTS_ROLECODE;
+            }
             // 验证手机号
             userBO.isMobileExist(mobile, kind, systemCode);
             // 插入用户信息
             loginPsd = RandomUtil.generate6();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind, "0", remark, updater,
-                pdf, null, divRate, systemCode);
+                pdf, roleCode, divRate, systemCode);
             if (StringUtils.isBlank(realName)) {
                 realName = mobile;
             }
@@ -1607,24 +1612,20 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    @Transactional
-    public XN805151Res doLoginWeChat(String code, String mobile, String type,
-            String isRegHx, String companyCode, String systemCode) {
+    public XN805151Res doLoginWeChat(String code, String type, String mobile,
+            String smsCaptcha, String userReferee, String isRegHx,
+            String companyCode, String systemCode) {
         // 返回结果值
         String userId = null;
-        String isNeedMobile = "";
+        String isNeedMobile = EBoolean.NO.getCode();
 
         // Step1：获取密码参数信息
         if (StringUtils.isBlank(type)) {
             type = ECPwdType.WEIXIN_H5.getCode();// 默认获取微信h5参数
         }
 
-        String cpwdCompanyCode = companyCode;
-        if (!ESystemCode.CSH.getCode().equals(systemCode)) { // 不是橙商户，公司编号不要
-            cpwdCompanyCode = null;
-        }
         Map<String, String> mapCPwd = cPasswordBO.queryCPasswordList(type,
-            cpwdCompanyCode, systemCode);
+            companyCode, systemCode);
         String appId = mapCPwd.get("ACCESS_KEY");
         if (StringUtils.isBlank(appId)) {
             throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
@@ -1637,16 +1638,16 @@ public class UserAOImpl implements IUserAO {
         // Step2：通过Authorization Code获取Access Token
         String accessToken = "";
         Map<String, String> res = new HashMap<>();
-        Properties formProperties = new Properties();
-        formProperties.put("grant_type", "authorization_code");
-        formProperties.put("appid", appId);
-        formProperties.put("secret", appSecret);
-        formProperties.put("code", code);
+        Properties fromProperties = new Properties();
+        fromProperties.put("grant_type", "authorization_code");
+        fromProperties.put("appid", appId);
+        fromProperties.put("secret", appSecret);
+        fromProperties.put("code", code);
         System.out.println(appId + " " + appSecret + " " + code);
         String response;
         try {
             response = PostSimulater.requestPostForm(
-                WechatConstant.WX_TOKEN_URL, formProperties);
+                WechatConstant.WX_TOKEN_URL, fromProperties);
             res = getMapFromResponse(response);
             System.out.println(res);
             accessToken = (String) res.get("access_token");
@@ -1675,10 +1676,10 @@ public class UserAOImpl implements IUserAO {
                     .println("**********没有关联微信开放平台，没有unionid，unionid=openid。**********");
             }
             // Step4：根据openId，unionId从数据库中查询用户信息,如果第一次unionId有值，但数据库保存的是openId，需更新成unionId
-            User user = userBO.doGetUserId(unionId, openId, systemCode);
-            if (null != user) {
+            User dbUser = userBO.doGetUserId(unionId, openId, systemCode);
+            if (null != dbUser) {
                 // 如果user存在，说明用户授权登录过，直接登录
-                userId = user.getUserId();
+                userId = dbUser.getUserId();
             } else {
                 String name = (String) wxRes.get("nickname");
                 String headimgurl = (String) wxRes.get("headimgurl");
@@ -1693,48 +1694,39 @@ public class UserAOImpl implements IUserAO {
                 if (StringUtils.isBlank(mobile)) {
                     isNeedMobile = EBoolean.YES.getCode();
                 } else {
-                    // 绑定微信登录和手机号登录成同一个账号
-                    userId = doBindMobile(mobile, isRegHx, companyCode,
-                        systemCode, unionId, name, headimgurl, sex);
+                    if (StringUtils.isBlank(smsCaptcha)) {
+                        throw new BizException("xn702002", "请输入短信验证码");
+                    }
+                    // 短信验证码是否正确
+                    smsOutBO.checkCaptcha(mobile, smsCaptcha, "805151",
+                        systemCode);
+                    // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
+                    if (PhoneUtil.isMobile(userReferee)) {
+                        User refereeUser = userBO.getUserByMobileAndKind(
+                            userReferee, EUserKind.F1.getCode(), systemCode);
+                        if (null == refereeUser) {
+                            throw new BizException("xn702002", "推荐人不存在");
+                        }
+                        userReferee = refereeUser.getUserId();
+                    }
+                    User mobileUser = userBO.getUserByMobileAndKind(mobile,
+                        EUserKind.F1.getCode(), companyCode, systemCode);
+                    if (null == mobileUser) {
+                        userId = doThirdRegisterWechat(unionId, mobile, name,
+                            isRegHx, headimgurl, sex, userReferee, companyCode,
+                            systemCode);
+                    } else {
+                        // 根据该手机号更新用户信息
+                        userId = mobileUser.getUserId();
+                        userBO.refreshWxInfo(userId, unionId, name);
+                        userExtBO.refreshUserExt(userId, headimgurl, sex);
+                    }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new BizException("xn000000", e.getMessage());
         }
         return new XN805151Res(userId, isNeedMobile);
-    }
-
-    /** 
-     * 首次注册，绑定手机号，或者微信登录
-     * @param mobile
-     * @param isRegHx
-     * @param companyCode
-     * @param systemCode
-     * @param unionId
-     * @param name
-     * @param headimgurl
-     * @param sex
-     * @return 
-     * @create: 2017年4月17日 下午5:52:30 xieyj
-     * @history: 
-     */
-    private String doBindMobile(String mobile, String isRegHx,
-            String companyCode, String systemCode, String unionId, String name,
-            String headimgurl, String sex) {
-        String userId;
-        List<User> userList = userBO.queryUserList(mobile,
-            EUserKind.F1.getCode(), systemCode);
-        if (CollectionUtils.isEmpty(userList)) {
-            userId = doThirdRegisterWechat(unionId, mobile, name, isRegHx,
-                headimgurl, sex, companyCode, systemCode);
-        } else {
-            // 根据该手机号更新用户信息
-            userId = userList.get(0).getUserId();
-            userBO.refreshWxInfo(userId, unionId, name);
-            userExtBO.refreshUserExt(userId, headimgurl, sex);
-        }
-        return userId;
     }
 
     @Override
