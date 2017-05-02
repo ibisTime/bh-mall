@@ -24,6 +24,9 @@ public class XN805091Req {
     // 手机号(选填)
     private String mobile;
 
+    // 昵称(选填)
+    private String nickname;
+
     // 系统编号(必填)
     private String systemCode;
 
@@ -57,6 +60,14 @@ public class XN805091Req {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
 }
