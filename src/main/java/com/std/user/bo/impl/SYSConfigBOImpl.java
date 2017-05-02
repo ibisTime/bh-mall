@@ -9,6 +9,7 @@ import com.std.user.bo.ISYSConfigBO;
 import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.dao.ISYSConfigDAO;
 import com.std.user.domain.SYSConfig;
+import com.std.user.exception.BizException;
 
 /**
  * @author: xieyj 
@@ -55,6 +56,9 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
             condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
             result = sysConfigDAO.select(condition);
+            if (null == result) {
+                throw new BizException("xn000000", "id记录不存在");
+            }
         }
         return result;
     }

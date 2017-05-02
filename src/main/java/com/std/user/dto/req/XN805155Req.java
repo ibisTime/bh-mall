@@ -10,16 +10,11 @@ public class XN805155Req {
     // 类型（选填）
     private String kind;
 
+    // 公司编号
+    private String companyCode;
+
     // 系统编号
     private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getLoginName() {
         return loginName;
@@ -43,5 +38,21 @@ public class XN805155Req {
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

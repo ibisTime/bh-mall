@@ -12,7 +12,16 @@ INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('fyf_statement','发一发免责申明','发一发免责申明','admin',now(),NULL,'CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('yyy_rule','摇一摇玩法介绍','摇一摇玩法介绍','admin',now(),NULL,'CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('yyy_statement','摇一摇免责申明','摇一摇免责申明','admin',now(),NULL,'CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('telephone','服务热线','400-832-0989','caigo',now(),NULL,'CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('telephone','服务热线','400-832-0989','admin',now(),NULL,'CD-CCG000007','CD-CCG000007');
+
+/*
+-- Query: SELECT `type`,`ckey`,`cvalue`,`note`,`updater`,now() as `update_datetime`,`remark`,`company_code`,`system_code` FROM std_user.tsys_config where type= '1'
+LIMIT 0, 400
+
+-- Date: 2017-05-02 21:14
+*/
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','regAddJf','2','','admin',now(),'注册送积分','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','loginAddJf','1','','admin',now(),'登录送积分','CD-CCG000007','CD-CCG000007');
 
 /*
 -- Query: SELECT `user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`pdf`,`company_code`,`open_id`,`jpush_id`,`updater`,`update_datetime`,`remark`,`system_code` FROM std_user.tstd_user where system_code = 'CD-CCG000007'

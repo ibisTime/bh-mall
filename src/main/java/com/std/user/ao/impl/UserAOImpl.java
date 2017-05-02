@@ -31,6 +31,7 @@ import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
 import com.std.user.bo.ILevelRuleBO;
 import com.std.user.bo.IRuleBO;
+import com.std.user.bo.ISYSConfigBO;
 import com.std.user.bo.ISYSRoleBO;
 import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.ISmsOutBO;
@@ -38,16 +39,19 @@ import com.std.user.bo.IUserBO;
 import com.std.user.bo.IUserExtBO;
 import com.std.user.bo.IUserRelationBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.common.AmountUtil;
 import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PropertiesUtil;
 import com.std.user.common.PwdUtil;
+import com.std.user.common.SysConstant;
 import com.std.user.common.WechatConstant;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.Company;
 import com.std.user.domain.LevelRule;
+import com.std.user.domain.SYSConfig;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
@@ -134,6 +138,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected ILevelRuleBO levelRuleBO;
+
+    @Autowired
+    protected ISYSConfigBO sysConfigBO;
 
     @Override
     public void doCheckMobile(String mobile, String kind, String systemCode) {
@@ -234,40 +241,24 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
+            String isRegHx, String province, String city, String area,
             String systemCode) {
-        // 验证手机号
-        userBO.isMobileExist(mobile, systemCode);
-        // 验证推荐人是否是平台的已注册用户
-        userBO.checkUserReferee(userReferee, systemCode);
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805154", systemCode);
-        // 插入用户信息
-        String kind = EUserKind.F1.getCode();
-        String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, kind, "0", null, null, null,
-            systemCode);
-        List<String> currencyList = new ArrayList<String>();
+        String userId = doRegister(mobile, loginPwdStrength, loginPwdStrength,
+            userReferee, smsCaptcha, EUserKind.F1.getCode(), isRegHx, province,
+            city, area, systemCode);
+        SYSConfig sysConfig = sysConfigBO.getConfigValue(SysConstant.REGADDJF,
+            systemCode, systemCode);
+        Long amount = AmountUtil.mul(1000L,
+            Double.valueOf(sysConfig.getCvalue()));
+        // 注册送积分
         if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
+                userId, ECurrency.CG_JF, amount, EBizType.AJ_REG, "用户["
+                        + mobile + "]注册送积分", "注册送积分");
         } else {
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
+            throw new BizException("xn702002", "该系统暂不支持注册送积分");
         }
-        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
-            currencyList, systemCode);
-        // 设置用户关系
-        if (StringUtils.isNotBlank(userReferee)) {
-            userRelationBO.saveUserRelation(userReferee, userId, systemCode);
-        }
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
-        return new XN805154Res(userId, "0");
+        return new XN805154Res(userId, amount);
     }
 
     @Override
@@ -306,144 +297,6 @@ public class UserAOImpl implements IUserAO {
             userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送赏金", "注册送赏金");
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
-        if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, systemCode);
-        }
-        return userId;
-    }
-
-    private String doThirdRegisterWechat(String openId, String nickname,
-            String photo, String gender, String companyCode, String systemCode) {
-        User condition = new User();
-        condition.setOpenId(openId);
-        condition.setSystemCode(systemCode);
-        long count = userBO.getTotalCount(condition);
-        if (count > 0) {
-            throw new BizException("xn702002", openId + "第三方开放编号已存在");
-        }
-        // 插入用户信息
-        String loginPwd = EUserPwd.InitPwd.getCode();
-        String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, EUserKind.F1.getCode(), "0", companyCode, openId, null,
-            systemCode);
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, photo, gender, systemCode);
-
-        // 分配账号(人民币和虚拟币)
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.ZH_FRB.getCode());
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.ZH_GXZ.getCode());
-            currencyList.add(ECurrency.ZH_QBB.getCode());
-            currencyList.add(ECurrency.ZH_GWB.getCode());
-            currencyList.add(ECurrency.ZH_HBB.getCode());
-            currencyList.add(ECurrency.ZH_HBYJ.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        }
-        return userId;
-    }
-
-    private String doThirdRegisterWechat(String openId, String mobile,
-            String nickname, String isRegHx, String photo, String gender,
-            String userReferee, String companyCode, String systemCode) {
-        User condition = new User();
-        condition.setOpenId(openId);
-        condition.setSystemCode(systemCode);
-        long count = userBO.getTotalCount(condition);
-        if (count > 0) {
-            throw new BizException("xn702002", openId + "第三方开放编号已存在");
-        }
-        // 插入用户信息
-        String loginPwd = RandomUtil.generate6();
-        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode,
-            systemCode);
-        String loginName = mobile;
-        if (ESystemCode.CSW.getCode().equals(systemCode)) {
-            loginName = EPrefixCode.CSW + loginName;
-        } else {
-            loginName = EPrefixCode.CD + loginName;
-        }
-        String userId = userBO.doRegister(loginName, nickname, mobile,
-            loginPwd, "1", userReferee, EUserKind.F1.getCode(), "0",
-            companyCode, openId, null, systemCode);
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, photo, gender, systemCode);
-
-        // 分配账号(人民币和虚拟币)
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.ZH_FRB.getCode());
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.ZH_GXZ.getCode());
-            currencyList.add(ECurrency.ZH_QBB.getCode());
-            currencyList.add(ECurrency.ZH_GWB.getCode());
-            currencyList.add(ECurrency.ZH_HBB.getCode());
-            currencyList.add(ECurrency.ZH_HBYJ.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        }
-        // 城市网注册送积分
-        if (systemCode.equals(ESystemCode.CSW.getCode())) {
-            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
-                EBoolean.NO.getCode());
-            accountBO
-                .doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-                    userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分",
-                    "注册送积分");
-            Long allAmount = accountBO.getAccountByUserId(userId, ECurrency.JF);
-            LevelRule levelRule = new LevelRule();
-            levelRule.setSystemCode(ESystemCode.CSW.getCode());
-            List<LevelRule> LevelRuleList = levelRuleBO
-                .queryLevelRuleList(levelRule);
-            for (LevelRule res : LevelRuleList) {
-                if (allAmount >= res.getAmountMin()
-                        && allAmount <= res.getAmountMax()) {
-                    upgradeLevel(userId, res.getCode());
-                    break;
-                }
-            }
-        }
-        // 发送初始化密码(菜狗不发短信)
-        if (!ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。",
-                "805042", systemCode);
-        }
-        // 注册环信
         if (EBoolean.YES.getCode().equals(isRegHx)) {
             instantMsgImpl.doRegisterUser(userId, systemCode);
         }
@@ -881,39 +734,21 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public XN805155Res doLoginAddJf(String loginName, String loginPwd,
-            String kind, String systemCode) {
-        User condition = new User();
-        if (EUserKind.F1.getCode().equals(kind)) {
-            condition.setLoginName(loginName);
-            condition.setLoginType(ELoginType.ALL.getCode());
-            condition.setKind(kind);
-        } else {
-            condition.setLoginName(loginName);
-        }
-        List<User> userList1 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "登录名不存在");
-        }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<User> userList2 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn702002", "登录密码错误");
-        }
-        User user = userList2.get(0);
-
-        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-            throw new BizException("xn702002", "当前用户已被锁定，请联系工作人员");
-        }
-        // 签到日志
-        String userId = user.getUserId();
-        String amount = null;
+            String kind, String companyCode, String systemCode) {
+        String userId = doLogin(loginName, loginPwd, kind, companyCode,
+            systemCode);
         // 判断是否已经签到
+        Long amount = 0L;
         Boolean result = signLogBO.isSignToday(userId);
         if (!result) {
             signLogBO.saveSignLog(userId, "", systemCode);
-            // 加积分
-            // XN802317Res res = accountBO.loginAddJf(userId);
-            amount = "0";// res.getAmount();
+            if (ESystemCode.CAIGO.getCode().equals(systemCode)
+                    && EUserKind.F1.getCode().equals(kind)) {
+                accountBO.doTransferAmountRemote(
+                    ESysUser.SYS_USER_CAIGO.getCode(), userId, ECurrency.CG_JF,
+                    amount, EBizType.AJ_SIGN, "用户[" + loginName + "]登录送积分",
+                    "登录送积分");
+            }
         }
         return new XN805155Res(userId, amount);
     }
@@ -1612,6 +1447,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
     public XN805151Res doLoginWeChat(String code, String type, String mobile,
             String smsCaptcha, String userReferee, String isRegHx,
             String companyCode, String systemCode) {
@@ -1680,6 +1516,21 @@ public class UserAOImpl implements IUserAO {
             if (null != dbUser) {
                 // 如果user存在，说明用户授权登录过，直接登录
                 userId = dbUser.getUserId();
+                // 登录送积分
+                if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+                    Boolean result = signLogBO.isSignToday(userId);
+                    if (!result) {
+                        signLogBO.saveSignLog(userId, "", systemCode);
+                        SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                            SysConstant.LOGINADDJF, systemCode, systemCode);
+                        Long amount = AmountUtil.mul(1000L,
+                            Double.valueOf(sysConfig.getCvalue()));
+                        accountBO.doTransferAmountRemote(
+                            ESysUser.SYS_USER_CAIGO.getCode(), userId,
+                            ECurrency.CG_JF, amount, EBizType.AJ_SIGN, "登录送积分",
+                            "登录送积分");
+                    }
+                }
             } else {
                 String name = (String) wxRes.get("nickname");
                 String headimgurl = (String) wxRes.get("headimgurl");
@@ -1849,6 +1700,153 @@ public class UserAOImpl implements IUserAO {
         }
         resultMap.put("userId", userId);
         return resultMap;
+    }
+
+    private String doThirdRegisterWechat(String openId, String nickname,
+            String photo, String gender, String companyCode, String systemCode) {
+        User condition = new User();
+        condition.setOpenId(openId);
+        condition.setSystemCode(systemCode);
+        long count = userBO.getTotalCount(condition);
+        if (count > 0) {
+            throw new BizException("xn702002", openId + "第三方开放编号已存在");
+        }
+        // 插入用户信息
+        String loginPwd = EUserPwd.InitPwd.getCode();
+        String userId = userBO.doRegister(openId, nickname, null, loginPwd,
+            "1", null, EUserKind.F1.getCode(), "0", companyCode, openId, null,
+            systemCode);
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, photo, gender, systemCode);
+
+        // 分配账号(人民币和虚拟币)
+        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.ZH_FRB.getCode());
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.ZH_GXZ.getCode());
+            currencyList.add(ECurrency.ZH_QBB.getCode());
+            currencyList.add(ECurrency.ZH_GWB.getCode());
+            currencyList.add(ECurrency.ZH_HBB.getCode());
+            currencyList.add(ECurrency.ZH_HBYJ.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        } else {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        }
+        return userId;
+    }
+
+    private String doThirdRegisterWechat(String openId, String mobile,
+            String nickname, String isRegHx, String photo, String gender,
+            String userReferee, String companyCode, String systemCode) {
+        User condition = new User();
+        condition.setOpenId(openId);
+        condition.setSystemCode(systemCode);
+        long count = userBO.getTotalCount(condition);
+        if (count > 0) {
+            throw new BizException("xn702002", openId + "第三方开放编号已存在");
+        }
+        // 插入用户信息
+        String loginPwd = RandomUtil.generate6();
+        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode,
+            systemCode);
+        String loginName = mobile;
+        if (ESystemCode.CSW.getCode().equals(systemCode)) {
+            loginName = EPrefixCode.CSW + loginName;
+        } else {
+            loginName = EPrefixCode.CD + loginName;
+        }
+        String userId = userBO.doRegister(loginName, nickname, mobile,
+            loginPwd, "1", userReferee, EUserKind.F1.getCode(), "0",
+            companyCode, openId, null, systemCode);
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, photo, gender, systemCode);
+
+        // 分配账号(人民币和虚拟币)
+        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.ZH_FRB.getCode());
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.ZH_GXZ.getCode());
+            currencyList.add(ECurrency.ZH_QBB.getCode());
+            currencyList.add(ECurrency.ZH_GWB.getCode());
+            currencyList.add(ECurrency.ZH_HBB.getCode());
+            currencyList.add(ECurrency.ZH_HBYJ.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        } else {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
+        }
+        // 城市网注册送积分
+        if (ESystemCode.CSW.getCode().equals(systemCode)) {
+            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
+                EBoolean.NO.getCode());
+            accountBO
+                .doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
+                    userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分",
+                    "注册送积分");
+            Long allAmount = accountBO.getAccountByUserId(userId, ECurrency.JF);
+            LevelRule levelRule = new LevelRule();
+            levelRule.setSystemCode(ESystemCode.CSW.getCode());
+            List<LevelRule> LevelRuleList = levelRuleBO
+                .queryLevelRuleList(levelRule);
+            for (LevelRule res : LevelRuleList) {
+                if (allAmount >= res.getAmountMin()
+                        && allAmount <= res.getAmountMax()) {
+                    upgradeLevel(userId, res.getCode());
+                    break;
+                }
+            }
+        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            SYSConfig sysConfig = sysConfigBO.getConfigValue(
+                SysConstant.REGADDJF, systemCode, systemCode);
+            Long amount = AmountUtil.mul(1000L,
+                Double.valueOf(sysConfig.getCvalue()));
+            // 注册送积分
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
+                userId, ECurrency.CG_JF, amount, EBizType.AJ_REG, "用户["
+                        + mobile + "]注册送积分", "注册送积分");
+        }
+        // 发送初始化密码(菜狗不发短信)
+        if (!ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。",
+                "805042", systemCode);
+        }
+        // 注册环信
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            instantMsgImpl.doRegisterUser(userId, systemCode);
+        }
+        return userId;
     }
 
     /**
