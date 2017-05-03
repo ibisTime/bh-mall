@@ -1516,7 +1516,7 @@ public class UserAOImpl implements IUserAO {
             if (null != dbUser) {
                 // 如果user存在，说明用户授权登录过，直接登录
                 userId = dbUser.getUserId();
-                // 登录送积分
+                // 每天登录送积分
                 if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
                     Boolean result = signLogBO.isSignToday(userId);
                     if (!result) {
@@ -1787,7 +1787,7 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.ZH_GWB.getCode());
             currencyList.add(ECurrency.ZH_HBB.getCode());
             currencyList.add(ECurrency.ZH_HBYJ.getCode());
-            accountBO.distributeAccountList(userId, nickname,
+            accountBO.distributeAccountList(userId, mobile,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
         } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
@@ -1795,14 +1795,14 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.CG_JF.getCode());
             currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, nickname,
+            accountBO.distributeAccountList(userId, mobile,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, nickname,
+            accountBO.distributeAccountList(userId, mobile,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
         }
@@ -1826,7 +1826,7 @@ public class UserAOImpl implements IUserAO {
                     break;
                 }
             }
-        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {// 菜狗注册送积分
             SYSConfig sysConfig = sysConfigBO.getConfigValue(
                 SysConstant.REGADDJF, systemCode, systemCode);
             Long amount = AmountUtil.mul(1000L,
@@ -1836,6 +1836,7 @@ public class UserAOImpl implements IUserAO {
                 userId, ECurrency.CG_JF, amount, EBizType.AJ_REG, "用户["
                         + mobile + "]注册送积分", "注册送积分");
         }
+
         // 发送初始化密码(菜狗不发短信)
         if (!ESystemCode.CAIGO.getCode().equals(systemCode)) {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)

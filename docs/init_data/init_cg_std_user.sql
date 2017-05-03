@@ -36,7 +36,7 @@ INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pw
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,system_code FROM tsys_menu where system_code = 'CD-CCG000007'
 LIMIT 0, 400
 
--- Date: 2017-04-26 19:52
+-- Date: 2017-05-02 21:57
 */
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CCGSM201600000000000000','根目录','1','#','1','admin',now(),'','','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CCGSM201600001000000001','系统管理','1','#','1','admin',now(),'','CCGSM201600000000000000','CD-CCG000007');
@@ -191,7 +191,6 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201704191046584135','修改','2','/edit2','10','admin',now(),'','SM2017032716104252541','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201704191658403636','详情','2','/detail1','3','admin',now(),'','SM2017032817101406466','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017041916585392724','详情','2','/detail1','3','admin',now(),'','SM2017032817104102180','CD-CCG000007');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042016122030448','注册协议','1','/public/regProtocol_addedit.htm','4','admin',now(),'','SM2017033118080150917','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042016164296284','夺宝玩法介绍','1','/public/treasureRule_addedit.htm','5','admin',now(),'','SM2017033118080150917','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042016171944264','夺宝免责申明','1','/public/treasureStatement_addedit.htm','51','admin',now(),'','SM2017033118080150917','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042016182942251','发一发玩法介绍','1','/public/fyfRule_addedit.htm','6','admin',now(),'','SM2017033118080150917','CD-CCG000007');
@@ -213,6 +212,8 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042316410397430','取消','2','/cannel','1','admin',now(),'','SM2017042316372961065','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042316413193265','兑换','2','/exchange','2','admin',now(),'','SM2017042316372961065','CD-CCG000007');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017042316414802760','详情','2','/detail2','3','admin',now(),'','SM2017042316372961065','CD-CCG000007');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017050215483017927','取现规则','1','/rule/enchashmentRule.htm','4','admin',now(),'','SM2017033115104850917','CD-CCG000007');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201705021549048393','修改','2','/edit','1','admin',now(),'','SM2017050215483017927','CD-CCG000007');
 
 /*
 -- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`system_code` FROM tsys_role where system_code = 'CD-CCG000007'
@@ -228,7 +229,7 @@ INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`rema
 -- Query: SELECT `role_code`,`menu_code`,`updater`,now() as `update_datetime`,`remark`,`system_code` FROM tsys_menu_role where role_code in('CCGR201600000000000001','CGSR201600000000000002','SR2017032821443420391')
 LIMIT 0, 400
 
--- Date: 2017-04-23 21:22
+-- Date: 2017-05-02 21:58
 */
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR2017032821443420391','CCGSM201600000000000000','admin',now(),NULL,'CD-CCG000007');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR2017032821443420391','CCGSM201600001000000001','admin',now(),NULL,'CD-CCG000007');
@@ -371,6 +372,8 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM2017040116043257469','admin',now(),NULL,'CD-CCG000007');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM2017042116284496966','admin',now(),NULL,'CD-CCG000007');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM2017042116290614925','admin',now(),NULL,'CD-CCG000007');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM2017050215483017927','admin',now(),NULL,'CD-CCG000007');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM201705021549048393','admin',now(),NULL,'CD-CCG000007');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM2017033118080150917','admin',now(),NULL,'CD-CCG000007');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM2017033118095013031','admin',now(),NULL,'CD-CCG000007');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CCGR201600000000000001','SM2017033118103738281','admin',now(),NULL,'CD-CCG000007');
