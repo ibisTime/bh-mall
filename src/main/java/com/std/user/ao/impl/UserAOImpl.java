@@ -524,6 +524,13 @@ public class UserAOImpl implements IUserAO {
                 realName, idKind, idNo, loginPsd, kind,
                 EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
                 divRate, systemCode);
+            if (ESystemCode.CSW.getCode().equals(systemCode)) {
+                List<String> currencyList = new ArrayList<String>();
+                currencyList.add(ECurrency.CNY.getCode());
+                currencyList.add(ECurrency.JF.getCode());
+                accountBO.distributeAccountList(userId, loginName,
+                    getAccountType(kind), currencyList, systemCode);
+            }
             // 新增扩展信息
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 民宿主
