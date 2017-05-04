@@ -26,18 +26,18 @@ public class XN807715 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        SYSConfig data = new SYSConfig();
-        data.setType(req.getType());
-        data.setCkeyForQuery(req.getCkey());
-        data.setSystemCode(req.getSystemCode());
+        SYSConfig condition = new SYSConfig();
+        condition.setType(req.getType());
+        condition.setCkeyForQuery(req.getCkey());
+        condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISYSConfigAO.DEFAULT_ORDER_COLUMN;
         }
-        data.setOrder(orderColumn, req.getOrderDir());
+        condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return sysConfigAO.querySYSConfigPage(start, limit, data);
+        return sysConfigAO.querySYSConfigPage(start, limit, condition);
     }
 
     @Override
