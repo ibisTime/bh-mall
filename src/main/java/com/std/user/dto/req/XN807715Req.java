@@ -12,11 +12,22 @@ public class XN807715Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
+    // 类型
+    private String type;
+
     // key值(选填)
     private String ckey;
 
     // 系统编号（必填）
     private String systemCode;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getSystemCode() {
         return systemCode;

@@ -27,6 +27,7 @@ public class XN807715 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SYSConfig data = new SYSConfig();
+        data.setType(req.getType());
         data.setCkeyForQuery(req.getCkey());
         data.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();

@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 注册分配账户送积分(菜狗)
+ * 注册送积分,现在适用：菜狗
  * @author: xieyj 
  * @since: 2016年12月9日 上午8:37:39 
  * @history:
@@ -25,7 +25,8 @@ public class XN805154 extends AProcessor {
     public Object doBusiness() throws BizException {
         return userAO.doRegisterAddJf(req.getMobile(), req.getLoginPwd(),
             req.getLoginPwdStrength(), req.getUserReferee(),
-            req.getSmsCaptcha(), req.getSystemCode());
+            req.getSmsCaptcha(), req.getIsRegHx(), req.getProvince(),
+            req.getCity(), req.getArea(), req.getSystemCode());
     }
 
     @Override

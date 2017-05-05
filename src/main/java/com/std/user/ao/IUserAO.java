@@ -81,19 +81,24 @@ public interface IUserAO {
             String area, String systemCode);
 
     /**
-     * 注册分配账户送积分
+     * 注册送积分
      * @param mobile
      * @param loginPwd
      * @param loginPwdStrength
      * @param userReferee
      * @param smsCaptcha
+     * @param isRegHx
+     * @param province
+     * @param city
+     * @param area
      * @param systemCode
      * @return 
-     * @create: 2016年12月14日 下午5:54:26 xieyj
+     * @create: 2017年5月2日 下午7:02:23 xieyj
      * @history:
      */
     public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
             String loginPwdStrength, String userReferee, String smsCaptcha,
+            String isRegHx, String province, String city, String area,
             String systemCode);
 
     /**
@@ -244,13 +249,14 @@ public interface IUserAO {
      * @param loginName
      * @param loginPwd
      * @param kind
+     * @param companyCode
      * @param systemCode
      * @return 
-     * @create: 2016年12月14日 下午5:58:16 xieyj
+     * @create: 2017年5月2日 下午7:56:57 xieyj
      * @history:
      */
     public XN805155Res doLoginAddJf(String loginName, String loginPwd,
-            String kind, String systemCode);
+            String kind, String companyCode, String systemCode);
 
     /**
      * 验证码登录注册
