@@ -151,6 +151,7 @@ CREATE TABLE `tstd_company` (
   `is_hot` varchar(4) DEFAULT NULL COMMENT '是否热门',
   `login_name` varchar(32) DEFAULT NULL COMMENT '登录名',
   `pass_word` varchar(32) DEFAULT NULL COMMENT '密码',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态(0 待上架 1 已上架 2已下架)',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注/报价区间',
