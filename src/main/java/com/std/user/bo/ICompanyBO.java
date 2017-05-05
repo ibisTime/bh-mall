@@ -40,4 +40,6 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public Company getDefaultCompany(String systemCode);
 
+    public void updateShelve(Company company, String status, String updater);
+
 }

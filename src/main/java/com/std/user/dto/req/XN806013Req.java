@@ -22,7 +22,10 @@ public class XN806013Req {
 
     // 是否热门（选填）
     private String isHot;
-    
+
+    // 状态（选填）
+    private String status;
+
     // 系统编号(必填)
     private String systemCode;
 
@@ -132,5 +135,13 @@ public class XN806013Req {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -23,4 +23,6 @@ public interface ICompanyDAO extends IBaseDAO<Company> {
     public int updateHot(Company data);
 
     public int updatePsw(Company data);
+
+    public int updateShelve(Company data);
 }

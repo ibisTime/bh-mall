@@ -228,4 +228,12 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
             throw new BizException("xn702002", "登录名已存在");
         }
     }
+
+    @Override
+    public void updateShelve(Company company, String status, String updater) {
+        company.setStatus(status);
+        company.setUpdater(updater);
+        company.setUpdateDatetime(new Date());
+        companyDAO.updateShelve(company);
+    }
 }

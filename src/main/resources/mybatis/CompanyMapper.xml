@@ -35,6 +35,7 @@
 		<result column="is_default" property="isDefault" />
 		<result column="is_hot" property="isHot" />
 		<result column="login_name" property="loginName" />
+		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -74,6 +75,9 @@
 			</if>
 			<if test="password != null and password != '' ">
 				AND t.pass_word = #{password} 
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status} 
 			</if>
 			<choose>
 				 <when test='location == "12"'>
@@ -149,6 +153,7 @@
 		,t.is_default
 		,t.is_hot
 		,t.login_name
+		,t.status
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -203,6 +208,7 @@
 		,t.is_default
 		,t.is_hot
 		,t.login_name
+		,t.status
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -261,6 +267,7 @@
 		,is_hot
 		,login_name
 		,pass_word
+		,status
 		,updater
 		,update_datetime
 		,remark
@@ -300,6 +307,7 @@
 		,#{isHot}
 		,#{loginName}
 		,#{password}
+		,#{status}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
@@ -385,4 +393,13 @@
 		code = #{code}
 	</delete>
 
+	<update id="update_company_shelve">
+	    UPDATE tstd_company
+		SET
+		status = #{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		WHERE code = #{code}
+	</update>
+	
 </mapper>
