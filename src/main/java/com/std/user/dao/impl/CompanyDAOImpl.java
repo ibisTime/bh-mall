@@ -87,4 +87,9 @@ public class CompanyDAOImpl extends AMybatisTemplate implements ICompanyDAO {
     public int updatePsw(Company data) {
         return super.update(NAMESPACE.concat("update_company_psw"), data);
     }
+
+    @Override
+    public int updateShelve(Company data) {
+        return super.update(NAMESPACE.concat("update_company_shelve"), data);
+    }
 }

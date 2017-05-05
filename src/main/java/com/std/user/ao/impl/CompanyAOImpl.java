@@ -20,7 +20,9 @@ import com.std.user.bo.base.Paginable;
 import com.std.user.common.MD5Util;
 import com.std.user.domain.Company;
 import com.std.user.enums.EBoolean;
+import com.std.user.enums.ECompanyStatus;
 import com.std.user.enums.EPasswordType;
+import com.std.user.enums.ESystemCode;
 import com.std.user.enums.EXiaoMi;
 import com.std.user.exception.BizException;
 import com.std.user.util.PinYin;
@@ -47,6 +49,10 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         if (StringUtils.isNotBlank(data.getLoginName())) {
             companyBO.checkLoginName(data.getLoginName());
+        }
+        data.setStatus(ECompanyStatus.PUBLIC.getCode());
+        if (data.getSystemCode().equals(ESystemCode.CSW.getCode())) {
+            data.setStatus(ECompanyStatus.NO_PUBLIC.getCode());
         }
         String code = companyBO.saveCompany(data);
         if (EBoolean.YES.getCode().equals(data.getIsNeedInitPwd())) {
@@ -91,8 +97,10 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public int editCompany(Company data) {
-        if (!companyBO.isCompanyExist(data.getCode())) {
-            throw new BizException("xn0000", "该编号不存在");
+        Company company = companyBO.getCompany(data.getCode());
+        if (ECompanyStatus.PUBLIC.getCode().equals(company.getStatus())
+                && data.getSystemCode().equals(ESystemCode.CSW.getCode())) {
+            throw new BizException("xn0000", "该站点以上架，不可编辑");
         }
         if (StringUtils.isNotBlank(data.getUserId())) {
             checkCompanyUserId(data.getCode(), data.getUserId());
@@ -121,8 +129,13 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public int dropCompany(String code) {
-        if (!companyBO.isCompanyExist(code)) {
-            throw new BizException("xn0000", "该编号不存在");
+        Company company = companyBO.getCompany(code);
+        if (company.getSystemCode().equals(ESystemCode.CSW.getCode())) {
+            if (ECompanyStatus.PUBLIC.getCode().equals(company.getStatus())
+                    || ECompanyStatus.PUBLICED.getCode().equals(
+                        company.getStatus())) {
+                throw new BizException("xn0000", "该站点正在使用/已被使用,不能删除");
+            }
         }
         return companyBO.removeCompany(code);
     }
@@ -222,6 +235,10 @@ public class CompanyAOImpl implements ICompanyAO {
             throw new BizException("xn0000", "该编号不存在");
         }
         Company company = companyBO.getCompany(code);
+        if (ECompanyStatus.PUBLIC.getCode().equals(company.getStatus())
+                && company.getSystemCode().equals(ESystemCode.CSW.getCode())) {
+            throw new BizException("xn0000", "该站点以上架，不可编辑");
+        }
         if (company.getLocation().equals(EBoolean.NO.getCode())) {
             count = companyBO.refreshCompanyLocation(code,
                 EBoolean.YES.getCode(), updater);
@@ -235,6 +252,10 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public int editCompanyDefault(String code) {
         Company company = companyBO.getCompany(code);
+        if (ECompanyStatus.PUBLIC.getCode().equals(company.getStatus())
+                && company.getSystemCode().equals(ESystemCode.CSW.getCode())) {
+            throw new BizException("xn0000", "该站点以上架，不可编辑");
+        }
         return companyBO.refreshCompanyDefault(code, company.getSystemCode());
     }
 
@@ -245,6 +266,10 @@ public class CompanyAOImpl implements ICompanyAO {
             throw new BizException("xn0000", "该编号不存在");
         }
         Company data = companyBO.getCompany(code);
+        if (ECompanyStatus.PUBLIC.getCode().equals(data.getStatus())
+                && data.getSystemCode().equals(ESystemCode.CSW.getCode())) {
+            throw new BizException("xn0000", "该站点以上架，不可编辑");
+        }
         data.setIsHot(isHot);
         if (StringUtils.isBlank(orderNo)) {
             orderNo = "0";
@@ -257,6 +282,10 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public int editCompanyHotLocation(String code, String action) {
         Company data = companyBO.getCompany(code);
+        if (ECompanyStatus.PUBLIC.getCode().equals(data.getStatus())
+                && data.getSystemCode().equals(ESystemCode.CSW.getCode())) {
+            throw new BizException("xn0000", "该站点以上架，不可编辑");
+        }
         Integer location = data.getOrderNo();
         if (null == location) {
             location = 2;
@@ -287,6 +316,9 @@ public class CompanyAOImpl implements ICompanyAO {
         condition.setCityForQuery(city);
         condition.setAreaForQuery(area);
         condition.setSystemCode(systemCode);
+        if (ESystemCode.CSW.getCode().equals(systemCode)) {
+            condition.setStatus(ECompanyStatus.PUBLIC.getCode());
+        }
         List<Company> list = companyBO.queryCompanyList(condition);
         Company result = new Company();
         if (CollectionUtils.sizeIsEmpty(list)) {
@@ -361,5 +393,19 @@ public class CompanyAOImpl implements ICompanyAO {
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "806009", systemCode);
         companyBO.refreshCompanyPsw(company.getCode(), newPassword);
+    }
+
+    @Override
+    public void updateShelve(String code, String updater) {
+        Company company = companyBO.getCompany(code);
+        String status = null;
+        if (company.getStatus().equals(ECompanyStatus.NO_PUBLIC.getCode())
+                || company.getStatus()
+                    .equals(ECompanyStatus.PUBLICED.getCode())) {
+            status = ECompanyStatus.PUBLIC.getCode();
+        } else {
+            status = ECompanyStatus.PUBLICED.getCode();
+        }
+        companyBO.updateShelve(company, status, updater);
     }
 }

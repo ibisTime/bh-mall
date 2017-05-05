@@ -60,4 +60,7 @@ public interface ICompanyAO {
     // 找回密码
     public void doFindLoginPwd(String loginName, String mobile,
             String smsCaptcha, String newPassword, String systemCode);
+
+    // 上下架
+    public void updateShelve(String code, String updater);
 }
