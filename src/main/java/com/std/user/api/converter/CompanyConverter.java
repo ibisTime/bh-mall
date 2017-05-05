@@ -123,6 +123,7 @@ public class CompanyConverter {
         result.setIsDefault(req.getIsDefault());
         result.setUpdater(req.getUpdater());
         result.setRemark(req.getRemark());
+        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -140,6 +141,7 @@ public class CompanyConverter {
         result.setLocation(req.getLocation());
         result.setIsDefault(req.getIsDefault());
         result.setIsHot(req.getIsHot());
+        result.setStatus(req.getStatus());
         result.setSystemCode(req.getSystemCode());
         return result;
     }
@@ -158,6 +160,7 @@ public class CompanyConverter {
         result.setLocation(req.getLocation());
         result.setIsDefault(req.getIsDefault());
         result.setIsHot(req.getIsHot());
+        result.setStatus(req.getStatus());
         return result;
     }
 
@@ -175,6 +178,7 @@ public class CompanyConverter {
         result.setLocation(req.getLocation());
         result.setIsDefault(req.getIsDefault());
         result.setIsHot(req.getIsHot());
+        result.setStatus(req.getStatus());
         result.setSystemCode(req.getSystemCode());
         return result;
     }

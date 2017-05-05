@@ -12,5 +12,5 @@ ALTER TABLE `tsys_config`
 ADD COLUMN `type` VARCHAR(4) NULL COMMENT '类型' AFTER `id`,
 ADD COLUMN `company_code` VARCHAR(32) NULL COMMENT '公司编号' AFTER `remark`;
 
-ALTER TABLE `tsys_company` 
+ALTER TABLE `tstd_company` 
 ADD COLUMN `status` VARCHAR(4) NULL COMMENT '状态' AFTER `pass_word`;

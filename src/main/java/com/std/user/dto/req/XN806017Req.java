@@ -23,6 +23,9 @@ public class XN806017Req {
     // 是否热门（选填）
     private String isHot;
 
+    // 状态（选填）
+    private String status;
+
     // UI位置（选填）
     private String location;
 
@@ -121,5 +124,13 @@ public class XN806017Req {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -70,6 +70,8 @@ public class Company extends ABaseDO {
 
     private String isHot;
 
+    private String status;
+
     private String updater;
 
     private Date updateDatetime;
@@ -454,5 +456,13 @@ public class Company extends ABaseDO {
 
     public void setIsNeedInitPwd(String isNeedInitPwd) {
         this.isNeedInitPwd = isNeedInitPwd;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

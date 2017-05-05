@@ -101,6 +101,8 @@ public class XN806004Req {
     // 备注（选填）
     private String remark;
 
+    private String systemCode;
+
     public String getType() {
         return type;
     }
@@ -363,5 +365,13 @@ public class XN806004Req {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

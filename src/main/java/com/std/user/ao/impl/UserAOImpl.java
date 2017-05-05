@@ -1473,9 +1473,14 @@ public class UserAOImpl implements IUserAO {
         if (StringUtils.isBlank(type)) {
             type = ECPwdType.WEIXIN_H5.getCode();// 默认获取微信h5参数
         }
-
-        Map<String, String> mapCPwd = cPasswordBO.queryCPasswordList(type,
-            companyCode, systemCode);
+        Map<String, String> mapCPwd = null;
+        if (ESystemCode.CSW.getCode().equals(systemCode)) {
+            mapCPwd = cPasswordBO.queryCPasswordList(type, systemCode,
+                systemCode);
+        } else {
+            mapCPwd = cPasswordBO.queryCPasswordList(type, companyCode,
+                systemCode);
+        }
         String appId = mapCPwd.get("ACCESS_KEY");
         if (StringUtils.isBlank(appId)) {
             throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
