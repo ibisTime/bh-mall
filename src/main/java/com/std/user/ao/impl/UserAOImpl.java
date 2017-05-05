@@ -997,6 +997,13 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         String loginPwd = RandomUtil.generate6();
         userBO.refreshBindMobile(userId, mobile, mobile, loginPwd, "1");
+        // 如果用户还未实名认证过，更新Account表realName;
+        if (StringUtils.isNotBlank(user.getIdNo())
+                && StringUtils.isNotBlank(user.getIdKind())
+                && StringUtils.isNotBlank(user.getRealName())) {
+            accountBO.refreshRealName(user.getUserId(), mobile,
+                user.getSystemCode());
+        }
         // 发送短信
         if (EBoolean.YES.getCode().equals(isSendSms)) {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
