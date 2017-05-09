@@ -1,6 +1,7 @@
 package com.std.user.ao.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -321,10 +322,42 @@ public class CompanyAOImpl implements ICompanyAO {
         }
         List<Company> list = companyBO.queryCompanyList(condition);
         Company result = new Company();
+        if (ESystemCode.CSW.getCode().equals(systemCode)) {
+            result = getCompany(list, systemCode);
+        } else {
+            if (CollectionUtils.sizeIsEmpty(list)) {
+                result = companyBO.getDefaultCompany(systemCode);
+            } else {
+                result = list.get(0);
+            }
+        }
+        return result;
+    }
+
+    // 城市网获取城市优先级
+    public Company getCompany(List<Company> list, String systemCode) {
+        Company result = new Company();
+        Integer minOrderNo = 0;
+        Map<Integer, Company> map = new HashMap<Integer, Company>();
         if (CollectionUtils.sizeIsEmpty(list)) {
+            // 若是没有城市就获取默认城市
             result = companyBO.getDefaultCompany(systemCode);
         } else {
-            result = list.get(0);
+            if (list.size() == 1) {
+                // 若是只有一个城市就取第一个
+                minOrderNo = list.get(0).getOrderNo();
+                map.put(minOrderNo, list.get(0));
+            } else {
+                // 获取orderNo最小的城市
+                minOrderNo = list.get(0).getOrderNo();
+                for (Company company : list) {
+                    if (minOrderNo >= company.getOrderNo()) {
+                        minOrderNo = company.getOrderNo();
+                        map.put(minOrderNo, company);
+                    }
+                }
+            }
+            result = map.get(minOrderNo);
         }
         return result;
     }
