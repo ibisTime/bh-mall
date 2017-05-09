@@ -1573,8 +1573,15 @@ public class UserAOImpl implements IUserAO {
                         }
                         userReferee = refereeUser.getUserId();
                     }
-                    User mobileUser = userBO.getUserByMobileAndKind(mobile,
-                        EUserKind.F1.getCode(), companyCode, systemCode);
+                    User mobileUser = null;
+                    if (ESystemCode.CSW.getCode().equals(systemCode)) {
+                        mobileUser = userBO.getUserByMobileAndKind(mobile,
+                            EUserKind.F1.getCode(), null, systemCode);
+                    } else {
+                        mobileUser = userBO.getUserByMobileAndKind(mobile,
+                            EUserKind.F1.getCode(), companyCode, systemCode);
+                    }
+
                     if (null == mobileUser) {
                         userId = doThirdRegisterWechat(unionId, mobile, name,
                             isRegHx, headimgurl, sex, userReferee, companyCode,

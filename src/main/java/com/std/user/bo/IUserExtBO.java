@@ -6,7 +6,6 @@ import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.UserExt;
 
 public interface IUserExtBO extends IPaginableBO<UserExt> {
-
     /**
      * 新增用户扩展
      * @param userId
