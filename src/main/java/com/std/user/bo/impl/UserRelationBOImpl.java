@@ -125,4 +125,12 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
         page.setList(dataList);
         return page;
     }
+
+    @Override
+    public List<UserRelation> queryUserRelationList(String userId, String toUser) {
+        UserRelation condition = new UserRelation();
+        condition.setUserId(userId);
+        condition.setToUser(toUser);
+        return userRelationDAO.selectList(condition);
+    }
 }

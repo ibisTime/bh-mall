@@ -52,4 +52,14 @@ public interface IUserRelationAO {
      * @history:
      */
     public void firstSetRelation(String userId, String toUser);
+
+    /**
+     * 用户关系
+     * @param userId
+     * @param toUser
+     * @return 
+     * @create: 2017年5月11日 上午11:08:50 asus
+     * @history:
+     */
+    public boolean isExistUserRelation(String userId, String toUser);
 }

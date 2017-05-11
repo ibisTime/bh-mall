@@ -23,7 +23,8 @@ public class XN805092 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return null;
+        return userRelationAO.isExistUserRelation(req.getUserId(),
+            req.getToUser());
     }
 
     @Override

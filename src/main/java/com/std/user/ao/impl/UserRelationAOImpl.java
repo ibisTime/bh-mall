@@ -10,6 +10,7 @@ package com.std.user.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -128,5 +129,16 @@ public class UserRelationAOImpl implements IUserRelationAO {
             userRelationBO.saveUserRelation(userId, toUserId,
                 user.getSystemCode());
         }
+    }
+
+    @Override
+    public boolean isExistUserRelation(String userId, String toUser) {
+        List<UserRelation> userRelationList = userRelationBO
+            .queryUserRelationList(userId, toUser);
+        boolean flag = false;
+        if (CollectionUtils.isNotEmpty(userRelationList)) {
+            flag = true;
+        }
+        return flag;
     }
 }

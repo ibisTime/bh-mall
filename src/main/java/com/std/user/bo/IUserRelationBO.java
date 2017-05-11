@@ -35,4 +35,6 @@ public interface IUserRelationBO extends IPaginableBO<UserRelation> {
 
     public Paginable<User> queryUserPage(int start, int pageSize,
             UserRelation condition);
+
+    public List<UserRelation> queryUserRelationList(String userId, String toUser);
 }
