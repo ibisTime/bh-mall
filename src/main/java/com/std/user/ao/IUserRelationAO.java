@@ -52,5 +52,4 @@ public interface IUserRelationAO {
      * @history:
      */
     public void firstSetRelation(String userId, String toUser);
-
 }
