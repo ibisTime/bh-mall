@@ -1465,7 +1465,6 @@ public class UserAOImpl implements IUserAO {
     public XN805151Res doLoginWeChat(String code, String type, String mobile,
             String smsCaptcha, String userReferee, String isRegHx,
             String companyCode, String systemCode) {
-        System.out.println(mobile + "用户登录" + smsCaptcha);
         // 返回结果值
         String userId = null;
         String isNeedMobile = EBoolean.NO.getCode();
