@@ -119,6 +119,12 @@
 			<if test="jpushId != null and jpushId != '' ">
 				AND t.jpush_id = #{jpushId}
 			</if>
+			<if test="createBeginDatetime != null and createBeginDatetime != '' ">
+				<![CDATA[AND t.create_datetime >= #{createBeginDatetime}]]>
+			</if>
+			<if test="createEndDatetime != null and createEndDatetime != '' ">
+				<![CDATA[AND t.create_datetime <= #{createEndDatetime}]]>
+			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>

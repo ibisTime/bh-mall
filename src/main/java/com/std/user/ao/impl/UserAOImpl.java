@@ -60,6 +60,7 @@ import com.std.user.dto.req.XN805180Req;
 import com.std.user.dto.req.XN805181Req;
 import com.std.user.dto.req.XN805182Req;
 import com.std.user.dto.res.XN001400Res;
+import com.std.user.dto.res.XN001404Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
 import com.std.user.dto.res.XN805151Res;
@@ -1989,5 +1990,20 @@ public class UserAOImpl implements IUserAO {
         data.setUserId(userId);
         data.setLevel(level);
         userBO.refreshLevel(data);
+    }
+
+    @Override
+    public XN001404Res totalUser(String dateStart, String dateEnd,
+            String companyCode, String systemCode) {
+        User condition = new User();
+        condition.setCreateBeginDatetime(DateUtil
+            .getFrontDate(dateStart, false));
+        condition.setCreateEndDatetime(DateUtil.getFrontDate(dateEnd, false));
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        long totalUserNum = userBO.totalUser(condition);
+        XN001404Res res = new XN001404Res();
+        res.setTotalUserNum(totalUserNum);
+        return res;
     }
 }

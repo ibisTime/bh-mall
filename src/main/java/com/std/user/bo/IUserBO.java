@@ -218,4 +218,12 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
+
+    /**
+     * @param condition
+     * @return 
+     * @create: 2017年5月16日 下午5:52:25 asus
+     * @history:
+     */
+    public Long totalUser(User condition);
 }

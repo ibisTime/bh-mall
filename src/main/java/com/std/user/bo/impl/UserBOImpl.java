@@ -738,4 +738,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         condition.setSystemCode(systemCode);
         return userDAO.selectList(condition);
     }
+
+    @Override
+    public Long totalUser(User condition) {
+        return userDAO.selectTotalCount(condition);
+    }
 }

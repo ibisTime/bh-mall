@@ -139,6 +139,12 @@ public class User extends ABaseDO {
     // 推荐人等级
     private Integer refeereLevel;
 
+    // 开始注册时间
+    private Date createBeginDatetime;
+
+    // 结束注册时间
+    private Date createEndDatetime;
+
     public String getUserId() {
         return userId;
     }
@@ -461,5 +467,21 @@ public class User extends ABaseDO {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public Date getCreateBeginDatetime() {
+        return createBeginDatetime;
+    }
+
+    public void setCreateBeginDatetime(Date createBeginDatetime) {
+        this.createBeginDatetime = createBeginDatetime;
+    }
+
+    public Date getCreateEndDatetime() {
+        return createEndDatetime;
+    }
+
+    public void setCreateEndDatetime(Date createEndDatetime) {
+        this.createEndDatetime = createEndDatetime;
     }
 }
