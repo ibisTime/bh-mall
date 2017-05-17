@@ -35,6 +35,7 @@ public class AccountBOImpl implements IAccountBO {
         req.setType(type);
         req.setCurrencyList(currencyList);
         req.setSystemCode(systemCode);
+        req.setCompanyCode(systemCode);
         BizConnecter.getBizData("002000", JsonUtils.object2Json(req),
             Object.class);
     }
@@ -47,7 +48,6 @@ public class AccountBOImpl implements IAccountBO {
             XN002001Req req = new XN002001Req();
             req.setUserId(userId);
             req.setRealName(realName);
-            req.setSystemCode(systemCode);
             BizConnecter.getBizData("002001", JsonUtils.object2Json(req),
                 Object.class);
         }
@@ -64,11 +64,13 @@ public class AccountBOImpl implements IAccountBO {
             XN002100Req req = new XN002100Req();
             req.setFromUserId(fromUserId);
             req.setToUserId(toUserId);
-            req.setCurrency(currency.getCode());
+            req.setFromCurrency(currency.getCode());
+            req.setToCurrency(currency.getCode());
             req.setTransAmount(String.valueOf(amount));
             req.setBizType(bizType.getCode());
             req.setFromBizNote(fromBizNote);
             req.setToBizNote(toBizNote);
+            req.setRefNo("refNo");
             BizConnecter.getBizData("002100", JsonUtils.object2Json(req),
                 Object.class);
         }
