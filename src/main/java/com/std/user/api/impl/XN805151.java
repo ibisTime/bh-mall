@@ -26,8 +26,9 @@ public class XN805151 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return userAO.doLoginWeChat(req.getCode(), req.getType(),
-            req.getMobile(), req.getSmsCaptcha(), req.getUserReferee(),
-            req.getIsRegHx(), req.getCompanyCode(), req.getSystemCode());
+            req.getMobile(), req.getIsLoginCaptcha(), req.getSmsCaptcha(),
+            req.getUserReferee(), req.getIsRegHx(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 
     @Override

@@ -215,18 +215,19 @@ public interface IUserAO {
      * @param code
      * @param type
      * @param mobile
+     * @param isLoginCaptcha 非微信登录后绑定微信，不传验证码 1 是登录后，0或不传 首次登录注册
      * @param smsCaptcha
      * @param userReferee
      * @param isRegHx
      * @param companyCode
      * @param systemCode
      * @return 
-     * @create: 2017年4月25日 下午7:28:57 xieyj
+     * @create: 2017年5月12日 上午11:34:21 xieyj
      * @history:
      */
     public XN805151Res doLoginWeChat(String code, String type, String mobile,
-            String smsCaptcha, String userReferee, String isRegHx,
-            String companyCode, String systemCode);
+            String isLoginCaptcha, String smsCaptcha, String userReferee,
+            String isRegHx, String companyCode, String systemCode);
 
     /**
      * 微信登录

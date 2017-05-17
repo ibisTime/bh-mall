@@ -209,6 +209,7 @@ public class UserAOImpl implements IUserAO {
             List<String> currencyList = new ArrayList<String>();
             if (EUserKind.F2.getCode().equals(kind)) {
                 currencyList.add(ECurrency.ZH_FRB.getCode());
+                currencyList.add(ECurrency.CNY.getCode());
             } else {
                 currencyList.add(ECurrency.ZH_FRB.getCode());
                 currencyList.add(ECurrency.CNY.getCode());
@@ -335,6 +336,7 @@ public class UserAOImpl implements IUserAO {
                 List<String> currencyList = new ArrayList<String>();
                 if (EUserKind.F2.getCode().equals(kind)) {
                     currencyList.add(ECurrency.ZH_FRB.getCode());
+                    currencyList.add(ECurrency.CNY.getCode());
                 } else {
                     currencyList.add(ECurrency.ZH_FRB.getCode());
                     currencyList.add(ECurrency.CNY.getCode());
@@ -1471,8 +1473,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public XN805151Res doLoginWeChat(String code, String type, String mobile,
-            String smsCaptcha, String userReferee, String isRegHx,
-            String companyCode, String systemCode) {
+            String isLoginCaptcha, String smsCaptcha, String userReferee,
+            String isRegHx, String companyCode, String systemCode) {
         // 返回结果值
         String userId = null;
         String isNeedMobile = EBoolean.NO.getCode();
@@ -1572,12 +1574,16 @@ public class UserAOImpl implements IUserAO {
                 if (StringUtils.isBlank(mobile)) {
                     isNeedMobile = EBoolean.YES.getCode();
                 } else {
-                    if (StringUtils.isBlank(smsCaptcha)) {
-                        throw new BizException("xn702002", "请输入短信验证码");
+                    // 判断是否需要验证码验证码,登录前一定要验证
+                    if (!EBoolean.YES.getCode().equals(isLoginCaptcha)) {
+                        if (StringUtils.isBlank(smsCaptcha)) {
+                            throw new BizException("xn702002", "请输入短信验证码");
+                        }
+                        // 短信验证码是否正确
+                        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805151",
+                            systemCode);
                     }
-                    // 短信验证码是否正确
-                    smsOutBO.checkCaptcha(mobile, smsCaptcha, "805151",
-                        systemCode);
+
                     // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
                     if (PhoneUtil.isMobile(userReferee)) {
                         User refereeUser = userBO.getUserByMobileAndKind(
