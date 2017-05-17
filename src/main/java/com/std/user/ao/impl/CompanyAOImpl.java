@@ -99,10 +99,6 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public int editCompany(Company data) {
         Company company = companyBO.getCompany(data.getCode());
-        if (ECompanyStatus.PUBLIC.getCode().equals(company.getStatus())
-                && data.getSystemCode().equals(ESystemCode.CSW.getCode())) {
-            throw new BizException("xn0000", "该站点以上架，不可编辑");
-        }
         if (StringUtils.isNotBlank(data.getUserId())) {
             checkCompanyUserId(data.getCode(), data.getUserId());
         }
@@ -232,14 +228,7 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public int editCompanyLocation(String code, String updater) {
         int count = 0;
-        if (!companyBO.isCompanyExist(code)) {
-            throw new BizException("xn0000", "该编号不存在");
-        }
         Company company = companyBO.getCompany(code);
-        if (ECompanyStatus.PUBLIC.getCode().equals(company.getStatus())
-                && company.getSystemCode().equals(ESystemCode.CSW.getCode())) {
-            throw new BizException("xn0000", "该站点以上架，不可编辑");
-        }
         if (company.getLocation().equals(EBoolean.NO.getCode())) {
             count = companyBO.refreshCompanyLocation(code,
                 EBoolean.YES.getCode(), updater);
@@ -253,10 +242,6 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public int editCompanyDefault(String code) {
         Company company = companyBO.getCompany(code);
-        if (ECompanyStatus.PUBLIC.getCode().equals(company.getStatus())
-                && company.getSystemCode().equals(ESystemCode.CSW.getCode())) {
-            throw new BizException("xn0000", "该站点以上架，不可编辑");
-        }
         return companyBO.refreshCompanyDefault(code, company.getSystemCode());
     }
 
@@ -267,10 +252,6 @@ public class CompanyAOImpl implements ICompanyAO {
             throw new BizException("xn0000", "该编号不存在");
         }
         Company data = companyBO.getCompany(code);
-        if (ECompanyStatus.PUBLIC.getCode().equals(data.getStatus())
-                && data.getSystemCode().equals(ESystemCode.CSW.getCode())) {
-            throw new BizException("xn0000", "该站点以上架，不可编辑");
-        }
         data.setIsHot(isHot);
         if (StringUtils.isBlank(orderNo)) {
             orderNo = "0";
@@ -283,10 +264,6 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public int editCompanyHotLocation(String code, String action) {
         Company data = companyBO.getCompany(code);
-        if (ECompanyStatus.PUBLIC.getCode().equals(data.getStatus())
-                && data.getSystemCode().equals(ESystemCode.CSW.getCode())) {
-            throw new BizException("xn0000", "该站点以上架，不可编辑");
-        }
         Integer location = data.getOrderNo();
         if (null == location) {
             location = 2;
@@ -431,6 +408,9 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public void updateShelve(String code, String updater) {
         Company company = companyBO.getCompany(code);
+        if (EBoolean.YES.getCode().equals(company.getIsDefault())) {
+            throw new BizException("xn000000", "该站点为默认城市,不可以下架");
+        }
         String status = null;
         if (company.getStatus().equals(ECompanyStatus.NO_PUBLIC.getCode())
                 || company.getStatus()
