@@ -311,12 +311,14 @@ public class UserAOImpl implements IUserAO {
             Double divRate, String isRegHx, String province, String city,
             String area, String systemCode) {
         String userId = null;
+        String userStatus = EUserStatus.NORMAL.getCode();
         // 插入用户信息
         String loginPsd = EUserPwd.InitPwd.getCode();
         if (EUserKind.F1.getCode().equals(kind)
                 || EUserKind.F2.getCode().equals(kind)) {
             if (ESystemCode.DZT.getCode().equals(systemCode)) {
                 roleCode = PropertiesUtil.Config.DZT_LTS_ROLECODE;
+                userStatus = EUserStatus.toApprove.getCode();
             }
             // 验证手机号
             userBO.isMobileExist(mobile, kind, systemCode);
@@ -324,7 +326,7 @@ public class UserAOImpl implements IUserAO {
             loginPsd = RandomUtil.generate6();
             userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, null, kind, "0", remark, updater, pdf,
-                roleCode, divRate, systemCode);
+                roleCode, divRate, systemCode, userStatus);
             if (StringUtils.isBlank(realName)) {
                 realName = mobile;
             }
@@ -368,6 +370,7 @@ public class UserAOImpl implements IUserAO {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册。初始化登录密码为" + loginPsd + "，请及时登录网站更改密码。",
                 "805042", systemCode);
+
         } else if (EUserKind.Operator.getCode().equals(kind)) {
             // 验证登录名
             userBO.isLoginNameExist(loginName, kind, systemCode);
@@ -376,7 +379,7 @@ public class UserAOImpl implements IUserAO {
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind,
                 EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
-                divRate, systemCode);
+                divRate, systemCode, userStatus);
             if (ESystemCode.CSW.getCode().equals(systemCode)) {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
@@ -395,7 +398,7 @@ public class UserAOImpl implements IUserAO {
             userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
                 realName, idKind, idNo, loginPsd, kind,
                 EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
-                divRate, systemCode);
+                divRate, systemCode, userStatus);
             // 新增扩展信息
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             List<String> currencyList = new ArrayList<String>();
@@ -447,7 +450,8 @@ public class UserAOImpl implements IUserAO {
         // 插入用户信息
         userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
             realName, idKind, idNo, loginPsd, kind, level + "", remark,
-            updater, pdf, roleCode, divRate, systemCode);
+            updater, pdf, roleCode, divRate, systemCode,
+            EUserStatus.NORMAL.getCode());
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
 
@@ -470,7 +474,7 @@ public class UserAOImpl implements IUserAO {
         String loginPsd = EUserPwd.InitPwd.getCode();
         String userId = userBO.doAddUser(loginName, null, loginPsd, null, null,
             null, null, loginPsd, kind, null, null, updater, null, roleCode,
-            0.0D, systemCode);
+            0.0D, systemCode, EUserStatus.NORMAL.getCode());
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
         currencyList.add(ECurrency.JF.getCode());
@@ -732,8 +736,12 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn702002", "登录密码错误");
         }
         User user = userList2.get(0);
-        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+        if (EUserStatus.Ren_Locked.getCode().equals(user.getStatus())
+                || EUserStatus.Li_Locked.getCode().equals(user.getStatus())) {
             throw new BizException("xn702002", "账户已被锁定，请联系工作人员");
+        }
+        if (EUserStatus.toApprove.getCode().equals(user.getStatus())) {
+            throw new BizException("xn702002", "您还未审核通过，请耐心等待");
         }
         return user.getUserId();
     }
@@ -1989,5 +1997,12 @@ public class UserAOImpl implements IUserAO {
         data.setUserId(userId);
         data.setLevel(level);
         userBO.refreshLevel(data);
+    }
+
+    @Override
+    public Object approveUser(String userId, String approver,
+            String approveResult, String divRate, String remark) {
+
+        return null;
     }
 }

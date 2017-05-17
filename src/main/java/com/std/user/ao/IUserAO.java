@@ -654,4 +654,7 @@ public interface IUserAO {
      * @history:
      */
     public void upgradeLevel(String userId, String level);
+
+    public Object approveUser(String userId, String approver,
+            String approveResult, String divRate, String remark);
 }

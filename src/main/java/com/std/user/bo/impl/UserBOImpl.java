@@ -474,7 +474,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             String userReferee, String realName, String idKind, String idNo,
             String tradePsd, String kind, String level, String remark,
             String updater, String pdf, String roleCode, Double divRate,
-            String systemCode) {
+            String systemCode, String status) {
         String userId = null;
         if (StringUtils.isNotBlank(loginName) || StringUtils.isNotBlank(mobile)) {
             User user = new User();
@@ -503,7 +503,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                 user.setTradePwdStrength(PwdUtil
                     .calculateSecurityLevel(tradePsd));
             }
-            user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
+            user.setStatus(status);// 0正常;1程序锁定;2人工锁定
             Date date = new Date();
             user.setCreateDatetime(date);
             user.setUpdater(updater);
