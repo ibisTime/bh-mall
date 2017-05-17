@@ -454,4 +454,16 @@
 		WHERE
 		user_id = #{userId}		
 	</update>
+	
+	<update id="approve_user" parameterType="user">
+		UPDATE tstd_user
+		SET
+		div_rate = #{divRate}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		user_id = #{userId}		
+	</update>
 </mapper>

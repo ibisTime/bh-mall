@@ -318,7 +318,7 @@ public class UserAOImpl implements IUserAO {
                 || EUserKind.F2.getCode().equals(kind)) {
             if (ESystemCode.DZT.getCode().equals(systemCode)) {
                 roleCode = PropertiesUtil.Config.DZT_LTS_ROLECODE;
-                userStatus = EUserStatus.toApprove.getCode();
+                userStatus = EUserStatus.TO_APPROVE.getCode();
             }
             // 验证手机号
             userBO.isMobileExist(mobile, kind, systemCode);
@@ -740,7 +740,7 @@ public class UserAOImpl implements IUserAO {
                 || EUserStatus.Li_Locked.getCode().equals(user.getStatus())) {
             throw new BizException("xn702002", "账户已被锁定，请联系工作人员");
         }
-        if (EUserStatus.toApprove.getCode().equals(user.getStatus())) {
+        if (EUserStatus.TO_APPROVE.getCode().equals(user.getStatus())) {
             throw new BizException("xn702002", "您还未审核通过，请耐心等待");
         }
         return user.getUserId();
@@ -2000,9 +2000,19 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public Object approveUser(String userId, String approver,
+    public void approveUser(String userId, String approver,
             String approveResult, String divRate, String remark) {
-
-        return null;
+        User user = userBO.getUser(userId);
+        Double divRateD = null;
+        if (!EUserStatus.TO_APPROVE.getCode().equals(user.getStatus())
+                || !EUserStatus.APPROVE_NO.getCode().equals(user.getStatus())) {
+            throw new BizException("xn000000", "用户不处于待审核状态");
+        }
+        String userStatus = EUserStatus.APPROVE_NO.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            userStatus = EUserStatus.NORMAL.getCode();
+            divRateD = StringValidater.toDouble(divRate);
+        }
+        userBO.approveUser(userId, approver, userStatus, divRateD, remark);
     }
 }

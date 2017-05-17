@@ -218,4 +218,7 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
+
+    public void approveUser(String userId, String approver, String status,
+            Double divRate, String remark);
 }

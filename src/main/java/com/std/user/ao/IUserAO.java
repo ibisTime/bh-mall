@@ -655,6 +655,6 @@ public interface IUserAO {
      */
     public void upgradeLevel(String userId, String level);
 
-    public Object approveUser(String userId, String approver,
+    public void approveUser(String userId, String approver,
             String approveResult, String divRate, String remark);
 }

@@ -13,6 +13,7 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805183Req;
+import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -34,9 +35,9 @@ public class XN805183 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-
-        return userAO.approveUser(req.getUserId(), req.getApprover(),
+        userAO.approveUser(req.getUserId(), req.getApprover(),
             req.getApproveResult(), req.getDivRate(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     /** 

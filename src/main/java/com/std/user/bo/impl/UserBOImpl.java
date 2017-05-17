@@ -738,4 +738,17 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         condition.setSystemCode(systemCode);
         return userDAO.selectList(condition);
     }
+
+    @Override
+    public void approveUser(String userId, String approver, String status,
+            Double divRate, String remark) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setDivRate(divRate);
+        user.setStatus(status);
+        user.setUpdater(approver);
+        user.setUpdateDatetime(new Date());
+        user.setRemark(remark);
+        userDAO.approveUser(user);
+    }
 }
