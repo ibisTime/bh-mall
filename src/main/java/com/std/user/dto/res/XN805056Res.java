@@ -68,6 +68,12 @@ public class XN805056Res {
     // pdf
     private String pdf;
 
+    // 开放平台和公众平台唯一号
+    private String unionId;
+
+    // 第三方登录开放编号
+    private String openId;
+
     // 公司编号
     private String companyCode;
 
@@ -302,5 +308,21 @@ public class XN805056Res {
 
     public void setDivRate(String divRate) {
         this.divRate = divRate;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }
