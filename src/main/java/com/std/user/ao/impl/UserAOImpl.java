@@ -2011,7 +2011,7 @@ public class UserAOImpl implements IUserAO {
         User user = userBO.getUser(userId);
         Double divRateD = null;
         if (!EUserStatus.TO_APPROVE.getCode().equals(user.getStatus())
-                || !EUserStatus.APPROVE_NO.getCode().equals(user.getStatus())) {
+                && !EUserStatus.APPROVE_NO.getCode().equals(user.getStatus())) {
             throw new BizException("xn000000", "用户不处于待审核状态");
         }
         String userStatus = EUserStatus.APPROVE_NO.getCode();
