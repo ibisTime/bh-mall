@@ -673,6 +673,7 @@ public class UserAOImpl implements IUserAO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
+        data.setStatus(dbUser.getStatus());
 
         userBO.refreshUser(data);
         // 2、修改用户扩展信息
@@ -703,7 +704,12 @@ public class UserAOImpl implements IUserAO {
         dbUser.setUpdater(req.getUpdater());
         dbUser.setUpdateDatetime(new Date());
         dbUser.setRemark(req.getRemark());
-        dbUser.setStatus(EUserStatus.TO_APPROVE.getCode());
+        if (ESystemCode.DZT.getCode().equals(dbUser.getSystemCode())) {
+            dbUser.setStatus(EUserStatus.TO_APPROVE.getCode());
+        } else {
+            dbUser.setStatus(dbUser.getStatus());
+        }
+
         userBO.refreshUser(dbUser);
         // 2、修改用户扩展信息
         UserExt userExt = userExtBO.getUserExt(req.getUserId());

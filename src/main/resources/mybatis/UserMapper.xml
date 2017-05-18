@@ -407,6 +407,7 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		,status = #{status}
 		WHERE
 		user_id = #{userId}	
 	</update>
