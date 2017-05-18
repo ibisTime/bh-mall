@@ -703,6 +703,7 @@ public class UserAOImpl implements IUserAO {
         dbUser.setUpdater(req.getUpdater());
         dbUser.setUpdateDatetime(new Date());
         dbUser.setRemark(req.getRemark());
+        dbUser.setStatus(EUserStatus.TO_APPROVE.getCode());
         userBO.refreshUser(dbUser);
         // 2、修改用户扩展信息
         UserExt userExt = userExtBO.getUserExt(req.getUserId());
