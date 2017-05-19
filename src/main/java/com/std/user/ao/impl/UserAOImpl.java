@@ -673,6 +673,7 @@ public class UserAOImpl implements IUserAO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
+        data.setStatus(dbUser.getStatus());
 
         userBO.refreshUser(data);
         // 2、修改用户扩展信息
@@ -703,6 +704,12 @@ public class UserAOImpl implements IUserAO {
         dbUser.setUpdater(req.getUpdater());
         dbUser.setUpdateDatetime(new Date());
         dbUser.setRemark(req.getRemark());
+        if (ESystemCode.DZT.getCode().equals(dbUser.getSystemCode())) {
+            dbUser.setStatus(EUserStatus.TO_APPROVE.getCode());
+        } else {
+            dbUser.setStatus(dbUser.getStatus());
+        }
+
         userBO.refreshUser(dbUser);
         // 2、修改用户扩展信息
         UserExt userExt = userExtBO.getUserExt(req.getUserId());
@@ -2011,7 +2018,7 @@ public class UserAOImpl implements IUserAO {
         User user = userBO.getUser(userId);
         Double divRateD = null;
         if (!EUserStatus.TO_APPROVE.getCode().equals(user.getStatus())
-                || !EUserStatus.APPROVE_NO.getCode().equals(user.getStatus())) {
+                && !EUserStatus.APPROVE_NO.getCode().equals(user.getStatus())) {
             throw new BizException("xn000000", "用户不处于待审核状态");
         }
         String userStatus = EUserStatus.APPROVE_NO.getCode();
