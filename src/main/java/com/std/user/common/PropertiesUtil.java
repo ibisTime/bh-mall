@@ -42,6 +42,9 @@ public class PropertiesUtil {
 
         public static String JMS_ROLECODE = props.getProperty("JMS_ROLECODE");
 
+        public static String YC_JMS_ROLECODE = props
+            .getProperty("YC_JMS_ROLECODE");
+
         public static String PARTNER_ROLECODE = props
             .getProperty("PARTNER_ROLECODE");
 
