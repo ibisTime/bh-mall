@@ -359,6 +359,16 @@ public class UserAOImpl implements IUserAO {
                     userRelationBO.saveUserRelation(userReferee, userId,
                         systemCode);
                 }
+            } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
+                List<String> currencyList = new ArrayList<String>();
+                currencyList.add(ECurrency.CNY.getCode());
+                currencyList.add(ECurrency.YC_CB.getCode());
+                accountBO.distributeAccountList(userId, mobile,
+                    getAccountType(kind), currencyList, systemCode);
+                if (EUserKind.F1.getCode().equals(kind)) {
+                    userRelationBO.saveUserRelation(userReferee, userId,
+                        systemCode);
+                }
             } else {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
