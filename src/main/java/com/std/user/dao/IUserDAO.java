@@ -161,4 +161,6 @@ public interface IUserDAO extends IBaseDAO<User> {
     public int updateWxOpenId(User data);
 
     public int approveUser(User data);
+
+    public int updateDivRate(User data);
 }

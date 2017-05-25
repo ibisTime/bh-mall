@@ -228,6 +228,12 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.CG_CGB.getCode());
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
+        } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.YC_CB.getCode());
+            accountBO.distributeAccountList(userId, mobile,
+                getAccountType(kind), currencyList, systemCode);
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
@@ -359,6 +365,16 @@ public class UserAOImpl implements IUserAO {
                     userRelationBO.saveUserRelation(userReferee, userId,
                         systemCode);
                 }
+            } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
+                List<String> currencyList = new ArrayList<String>();
+                currencyList.add(ECurrency.CNY.getCode());
+                currencyList.add(ECurrency.YC_CB.getCode());
+                accountBO.distributeAccountList(userId, mobile,
+                    getAccountType(kind), currencyList, systemCode);
+                if (EUserKind.F1.getCode().equals(kind)) {
+                    userRelationBO.saveUserRelation(userReferee, userId,
+                        systemCode);
+                }
             } else {
                 List<String> currencyList = new ArrayList<String>();
                 currencyList.add(ECurrency.CNY.getCode());
@@ -412,9 +428,17 @@ public class UserAOImpl implements IUserAO {
                     + "用户，您已成功注册。您的登录名[" + loginName + "],登录密码[" + loginPsd
                     + "]。请及时登录修改密码", "805042", systemCode);
         } else if (EUserKind.JMS.getCode().equals(kind)) {
-            userId = doAddCaigoOss(loginName, mobile, loginPsd, kind, idKind,
-                idNo, realName, userReferee, divRate, updater, pdf, remark,
-                systemCode);
+            if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+                userId = doAddCaigoOss(loginName, mobile, loginPsd, kind,
+                    idKind, idNo, realName, userReferee, divRate, updater, pdf,
+                    remark, systemCode);
+            }
+            if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
+                userId = doAddYaochengOss(loginName, mobile, loginPsd, kind,
+                    idKind, idNo, realName, userReferee, divRate, updater, pdf,
+                    remark, systemCode);
+            }
+
         }
         // 是则注册环信用户
         if (EBoolean.YES.getCode().equals(isRegHx)) {
@@ -462,6 +486,49 @@ public class UserAOImpl implements IUserAO {
         currencyList.add(ECurrency.CNY.getCode());
         currencyList.add(ECurrency.CG_JF.getCode());
         currencyList.add(ECurrency.CG_CGB.getCode());
+        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
+            currencyList, systemCode);
+        return userId;
+    }
+
+    private String doAddYaochengOss(String loginName, String mobile,
+            String loginPsd, String kind, String idKind, String idNo,
+            String realName, String userReferee, Double divRate,
+            String updater, String pdf, String remark, String systemCode) {
+        String userId;
+        // 验证登录名
+        userBO.isLoginNameExist(loginName, kind, systemCode);
+        int level = 1;
+        if (StringUtils.isNotBlank(userReferee)) {
+            String preUserId = userReferee;
+            while (true) {
+                User data = userBO.getUser(preUserId);
+                if (data != null) {
+                    preUserId = data.getUserReferee();
+                    level++;
+                    // 超过3级，按3级处理
+                    if (level > 3) {
+                        level = 3;
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        String roleCode = PropertiesUtil.Config.YC_JMS_ROLECODE;
+        // 插入用户信息
+        userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
+            realName, idKind, idNo, loginPsd, kind, level + "", remark,
+            updater, pdf, roleCode, divRate, systemCode,
+            EUserStatus.NORMAL.getCode());
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, systemCode);
+
+        // 分配账号(人民币,橙币)
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.YC_CB.getCode());
         accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
             currencyList, systemCode);
         return userId;
@@ -1787,6 +1854,13 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
+        } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.YC_CB.getCode());
+            accountBO.distributeAccountList(userId, nickname,
+                getAccountType(EUserKind.F1.getCode()), currencyList,
+                systemCode);
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
@@ -2027,5 +2101,14 @@ public class UserAOImpl implements IUserAO {
             divRateD = StringValidater.toDouble(divRate);
         }
         userBO.approveUser(userId, approver, userStatus, divRateD, remark);
+    }
+
+    @Override
+    public void doEditDivRate(String userId, Double divRate) {
+        User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("xn000000", "用户不存在");
+        }
+        userBO.refreshDivRate(userId, divRate);
     }
 }

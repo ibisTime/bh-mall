@@ -307,6 +307,14 @@
 		user_id = #{userId}
 	</update>
 	
+	<update id="update_div_rate" parameterType="user">
+		UPDATE tstd_user
+		SET
+		div_rate= #{divRate}
+		WHERE
+		user_id = #{userId}
+	</update>
+	
 	<update id="update_trade_pwd" parameterType="user">
 		UPDATE tstd_user
 		SET
