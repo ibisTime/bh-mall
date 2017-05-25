@@ -111,8 +111,6 @@ public class User extends ABaseDO {
     /***** 模糊查询使用字段 ******/
     private String loginNameForLikeQuery;
 
-    private String nicknameForLikeQuery;
-
     private String mobileForLikeQuery;
 
     private String realNameForLikeQuery;
@@ -375,14 +373,6 @@ public class User extends ABaseDO {
 
     public void setLoginNameForLikeQuery(String loginNameForLikeQuery) {
         this.loginNameForLikeQuery = loginNameForLikeQuery;
-    }
-
-    public String getNicknameForLikeQuery() {
-        return nicknameForLikeQuery;
-    }
-
-    public void setNicknameForLikeQuery(String nicknameForLikeQuery) {
-        this.nicknameForLikeQuery = nicknameForLikeQuery;
     }
 
     public String getMobileForLikeQuery() {

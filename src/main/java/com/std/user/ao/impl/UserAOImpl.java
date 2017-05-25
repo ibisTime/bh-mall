@@ -1996,9 +1996,8 @@ public class UserAOImpl implements IUserAO {
     public XN001404Res totalUser(String dateStart, String dateEnd,
             String companyCode, String systemCode) {
         User condition = new User();
-        condition.setCreateBeginDatetime(DateUtil
-            .getFrontDate(dateStart, false));
-        condition.setCreateEndDatetime(DateUtil.getFrontDate(dateEnd, false));
+        condition.setCreateBeginDatetime(DateUtil.getStartDatetime(dateStart));
+        condition.setCreateEndDatetime(DateUtil.getEndDatetime(dateEnd));
         condition.setCompanyCode(companyCode);
         condition.setSystemCode(systemCode);
         long totalUserNum = userBO.totalUser(condition);

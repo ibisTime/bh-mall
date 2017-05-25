@@ -29,7 +29,7 @@ public class XN805255 extends AProcessor {
     public Object doBusiness() throws BizException {
         User condition = new User();
         condition.setMobile(req.getMobile());
-        condition.setNicknameForLikeQuery(req.getNickname());
+        condition.setNickname(req.getNickname());
         condition.setKind(EUserKind.F1.getCode());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());

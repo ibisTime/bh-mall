@@ -55,10 +55,7 @@
 				AND t.login_name like "%"#{loginNameForLikeQuery}"%"
 			</if>
 			<if test="nickname != null and nickname != '' ">
-				AND t.nickname = #{nickname}
-			</if>
-			<if test="nicknameForLikeQuery != null and nicknameForLikeQuery != '' ">
-				AND t.nickname like "%"#{nicknameForLikeQuery}"%"
+				AND t.nickname like "%"#{nickname}"%"
 			</if>
 			<choose>
 				 <when test="kind == '07'">
