@@ -221,4 +221,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void approveUser(String userId, String approver, String status,
             Double divRate, String remark);
+
+    public int refreshDivRate(String userId, Double divRate);
 }

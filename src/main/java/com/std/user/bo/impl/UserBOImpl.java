@@ -126,6 +126,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public int refreshDivRate(String userId, Double divRate) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setDivRate(divRate);
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getUserId())) {
+            count = userDAO.updateDivRate(data);
+        }
+        return count;
+    }
+
+    @Override
     public int refreshTradePwd(String userId, String tradePwd,
             String tradePwdStrength) {
         int count = 0;

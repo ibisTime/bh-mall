@@ -2102,4 +2102,13 @@ public class UserAOImpl implements IUserAO {
         }
         userBO.approveUser(userId, approver, userStatus, divRateD, remark);
     }
+
+    @Override
+    public void doEditDivRate(String userId, Double divRate) {
+        User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("xn000000", "用户不存在");
+        }
+        userBO.refreshDivRate(userId, divRate);
+    }
 }

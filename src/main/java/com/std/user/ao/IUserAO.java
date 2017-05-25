@@ -331,6 +331,8 @@ public interface IUserAO {
      */
     public void doEditRealName(String userId, String realName);
 
+    public void doEditDivRate(String userId, Double divRate);
+
     /**
      * 设置支付密码
      * @param userId
