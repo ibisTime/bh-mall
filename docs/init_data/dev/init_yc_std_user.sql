@@ -18,11 +18,20 @@ LIMIT 0, 10000
 INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`pdf`,`company_code`,`open_id`,`jpush_id`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYC201600000000000001','admin',NULL,'21218cca77804d2ba1922c33e0151105','1','01','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'SR2015032821443420391','0',NULL,NULL,NULL,NULL,'admin',NULL,'管理端系统方','CD-CYC000009');
 INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`pdf`,`company_code`,`open_id`,`jpush_id`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SYS_USER_YAOCHENG','yaocheng',NULL,'21218cca77804d2ba1922c33e0151105','1','01','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'CYCR201500000000000001','0',NULL,NULL,NULL,NULL,'admin','2017-03-28 21:43:29','','CD-CYC000009');
 
+
+/*
+-- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`system_code` FROM tsys_role where system_code = 'CD-CYC000009'
+LIMIT 0, 10000
+
+-- Date: 2017-03-28 21:57
+*/
+INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','超级管理员','1','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('YCSR201500000000000001','加盟商','2','admin',now(),'','CD-CYC000009');
+INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR2015032821443420391','系统管理员','1','admin',now(),'','CD-CYC000009');
+
 /*
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,system_code FROM tsys_menu where system_code = 'CD-CYC000009'
-LIMIT 0, 400
-
--- Date: 2017-05-04 19:51
+-- Date: 2017-05-25 18:58
 */
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CYCSM201500000000000000','根目录','1','#','1','admin',now(),'','','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('CYCSM201500001000000001','系统管理','1','#','1','admin',now(),'','CYCSM201500000000000000','CD-CYC000009');
@@ -50,30 +59,6 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032115230918954','删除','2','/delete','3','admin',now(),'','CYCSM2015101716295904680','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032115320529046','加盟商','1','#','3','admin',now(),'','CYCSM201500000000000000','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032115462629024','我的账户','1','#','10','admin',now(),'','SM2015032111004908332','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032116515108986','摇钱树管理','1','#','40','admin',now(),'','SM2015032111004908332','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032116580703857','摇钱树管理','1','/platform/cashCow.htm','20','admin',now(),'','SM2015032116515108986','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032117014088035','摇一摇规则','1','/platform/shakeRule.htm','40','admin',now(),'','SM2015032116515108986','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032117153442628','夺宝管理','1','#','50','admin',now(),'','SM2015032111004908332','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032117183616412','修改','2','/edit2','2','admin',now(),'','SM2015032210354305644','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032117282029312','详情','2','/detail','3','admin',now(),'','SM2015032210354305644','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503211728354320','上架','2','/up','4','admin',now(),'','SM2015032210354305644','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503211728518555','下架','2','/down','5','admin',now(),'','SM2015032210354305644','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032210354305644','摇钱树模板','1','/platform/cashCowTp.htm','10','admin',now(),'','SM2015032116515108986','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032210400802828','冻结/解冻','2','/upDown','1','admin',now(),'','SM2015032116580703857','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503221040581383','摇一摇记录','2','/shakeRecord','2','admin',now(),'','SM2015032116580703857','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032210454810734','红包记录','2','/luckMomList','3','admin',now(),'','SM2015032116580703857','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032211194568931','修改','2','/edit','1','admin',now(),'','SM2015032117014088035','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032213223669717','定向红包规则','1','/platform/hbRule.htm','50','admin',now(),'','SM2015032116515108986','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503221322552773','修改','2','/edit','1','admin',now(),'','SM2015032213223669717','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503221336596893','夺宝模板','1','/platform/dbTp.htm','1','admin',now(),'','SM2015032117153442628','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032214114468759','新增','2','/add','1','admin',now(),'','SM201503221336596893','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503221412258772','修改','2','/edit2','2','admin',now(),'','SM201503221336596893','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032214124268017','上架','2','/up','4','admin',now(),'','SM201503221336596893','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032214130632938','下架','2','/down','5','admin',now(),'','SM201503221336596893','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032214142605813','详情','2','/detail','3','admin',now(),'','SM201503221336596893','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032215211295825','期数查询','1','/platform/dbQuery.htm','2','admin',now(),'','SM2015032117153442628','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032215215115350','参与详情','2','/joinDetail','1','admin',now(),'','SM2015032215211295825','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032220464239536','定向红包查询','1','/platform/hbQuery.htm','30','admin',now(),'','SM2015032116515108986','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032517423397534','商城管理','1','#','30','admin',now(),'','SM2015032111004908332','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032517492791638','商品类别管理','1','/product/category.htm','10','admin',now(),'','SM2015032517423397534','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032517495892729','新增','2','/add','1','admin',now(),'','SM2015032517492791638','CD-CYC000009');
@@ -95,7 +80,7 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032716141802593','上架','2','/up2','30','admin',now(),'','SM2015032716104252541','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032716143658792','下架','2','/down','40','admin',now(),'','SM2015032716104252541','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032716153420883','详情','2','/detail2','50','admin',now(),'','SM2015032716104252541','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032718005584448','商家管理','1','#','20','admin',now(),'','SM2015032111004908332','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032718005584448','O2O管理','1','#','20','admin',now(),'','SM2015032111004908332','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032718013959184','商家类别管理','1','/platform/storeCategory.htm','1','admin',now(),'','SM2015032718005584448','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032718020246126','新增','2','/add','1','admin',now(),'','SM2015032718013959184','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032718021506884','修改','2','/edit','2','admin',now(),'','SM2015032718013959184','CD-CYC000009');
@@ -112,31 +97,26 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032814040701331','取消订单','2','/cancelOrder','3','admin',now(),'','SM201503281400585289','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032814045201792','详情','2','/detail','5','admin',now(),'','SM201503281400585289','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032814152244462','商城管理','1','#','20','admin',now(),'','SM2015032115320529046','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032814183568630','摇一摇记录查询','1','/platform/shakeRecord.htm','31','admin',now(),'','SM2015032116515108986','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032814280820460','客户管理','1','#','60','admin',now(),'','SM2015032111004908332','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032814282786586','财务管理','1','#','70','admin',now(),'','SM2015032111004908332','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503281429023268','对接管理','1','#','80','admin',now(),'','SM2015032111004908332','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032815341153189','我的账户','1','/platform/account.htm','10','admin',now(),'','SM2015032115462629024','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032816395662792','加盟商管理','1','/platform/AllianceBusiness.htm','10','admin',now(),'','SM2015032814280820460','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032816453831766','商家查询','1','/platform/business.htm','20','admin',now(),'','SM2015032814280820460','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032816471476911','会员查询','1','/platform/member.htm','30','admin',now(),'','SM2015032814280820460','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817101406466','线下充值','1','/platform/lineRecharge.htm','10','admin',now(),'','SM2015032814282786586','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817104102180','线下取现','1','/platform/lineUnder.htm','20','admin',now(),'','SM2015032814282786586','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817154633256','充取历史查询','1','/platform/historyQuery.htm','30','admin',now(),'','SM2015032814282786586','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817272128240','对接池管理','1','/platform/capitalPool.htm','10','admin',now(),'','SM201503281429023268','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817302022648','出金流水','1','/platform/capitalPoolRecord.htm','20','admin',now(),'','SM201503281429023268','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817154633256','充值查询','1','/platform/historyQuery.htm','30','admin',now(),'','SM2015032814282786586','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817343941744','我的账户','1','#','5','admin',now(),'','SM2015032115320529046','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032817375340722','我的账户','1','/store/account.htm','10','admin',now(),'','SM2015032817343941744','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032819353033392','代注册','2','/add','0','admin',now(),'','SM2015032816395662792','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032819555604844','发货情况','2','/fahuo','2','admin',now(),'','SM2015032816395662792','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032819561324334','代销情况','2','/daixiao','3','admin',now(),'','SM2015032816395662792','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032820182550853','积分情况','2','/jifen','4','admin',now(),'','SM2015032816395662792','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032820190275624','详情','2','/detail2','5','admin',now(),'','SM2015032816395662792','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032821100699155','账户查询','2','/accountQuery','1','admin',now(),'','SM2015032816471476911','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015032821314105573','详情','2','/detail2','10','admin',now(),'','SM2015032816471476911','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503282210346965','完善客户信息','2','/info','0','admin',now(),'','SM2015032816471476911','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033115104850917','营销规则','1','#','90','admin',now(),'','SM2015032111004908332','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033115111510393','送积分规则','1','/rule/rule.htm','1','admin',now(),'','SM2015033115104850917','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033115111510393','送橙币规则','1','/rule/rule.htm','1','admin',now(),'','SM2015033115104850917','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033117394389125','重置密码','2','/reset','2','admin',now(),'','CYCSM2015101716261754674','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033118080150917','文章管理','1','#','91','admin',now(),'','SM2015032111004908332','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033118095013031','banner管理','1','/public/banner.htm','0','admin',now(),'','SM2015033118080150917','CD-CYC000009');
@@ -146,7 +126,6 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033118113511496','详情','2','/detail','4','admin',now(),'','SM2015033118095013031','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033120375148323','营收流水','2','/yy','51','admin',now(),'','SM2015032716104252541','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033120383090825','代销情况','2','/daixiao','53','admin',now(),'','SM2015032716104252541','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033120390124613','积分情况','2','/jifen','55','admin',now(),'','SM2015032716104252541','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503312048586062','商家管理','1','/platform/store.htm','2','admin',now(),'','SM2015032718005584448','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033120501071069','上架','2','/up2','3','admin',now(),'','SM201503312048586062','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033120511886659','下架','2','/down','4','admin',now(),'','SM201503312048586062','CD-CYC000009');
@@ -154,17 +133,14 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033121114642345','导出','2','/export','7','admin',now(),'','SM201503281400585289','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033122324657221','线下充值','2','/add','1','admin',now(),'','SM2015032817101406466','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015033122330444499','线下取现','2','/add','1','admin',now(),'','SM2015032817104102180','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503312233317182','审核','2','check','2','admin',now(),'','SM2015032817101406466','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503312233449950','审核','2','check','2','admin',now(),'','SM2015032817104102180','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503312233317182','审核','2','che','2','admin',now(),'','SM2015032817101406466','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201503312233449950','审核','2','che','2','admin',now(),'','SM2015032817104102180','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040114513582931','公告管理','1','#','92','admin',now(),'','SM2015032111004908332','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040115400265469','公告管理','1','/message/notice.htm','1','admin',now(),'','SM2015040114513582931','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040115434479328','新增','2','/add','1','admin',now(),'','SM2015040115400265469','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040115443032316','发布/撤下','2','/push','2','admin',now(),'','SM2015040115400265469','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040115444938511','修改','2','/edit','3','admin',now(),'','SM2015040115400265469','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040115443032316','发布/撤下','2','/push','3','admin',now(),'','SM2015040115400265469','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040115444938511','修改','2','/edit','2','admin',now(),'','SM2015040115400265469','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040116043257469','修改','2','/edit','1','admin',now(),'','SM2015033115111510393','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040116422423474','入金','2','/enter','1','admin',now(),'','SM2015032817272128240','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040116425093485','调汇','2','/change','2','admin',now(),'','SM2015032817272128240','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040116441308394','出金详情','2','/outDetail','3','admin',now(),'','SM2015032817272128240','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040515030890573','结算情况','2','/balance','0','admin',now(),'','SM2015032816453831766','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040515034112569','回收情况','2','/return','2','admin',now(),'','SM2015032816453831766','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201504051504007317','详情','2','/detail2','3','admin',now(),'','SM2015032816453831766','CD-CYC000009');
@@ -175,20 +151,13 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015040522554348136','服务热线','1','/public/tel_addedit.htm','3','admin',now(),'','SM2015033118080150917','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015041910113586962','修改','2','/edit','1','admin',now(),'','SM2015032816395662792','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201504191046584135','修改','2','/edit2','10','admin',now(),'','SM2015032716104252541','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201504191658403636','详情','2','/detail1','3','admin',now(),'','SM2015032817101406466','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015041916585392724','详情','2','/detail1','3','admin',now(),'','SM2015032817104102180','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042016164296284','夺宝玩法介绍','1','/public/treasureRule_addedit.htm','5','admin',now(),'','SM2015033118080150917','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042016171944264','夺宝免责申明','1','/public/treasureStatement_addedit.htm','51','admin',now(),'','SM2015033118080150917','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042016182942251','发一发玩法介绍','1','/public/fyfRule_addedit.htm','6','admin',now(),'','SM2015033118080150917','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042016190088314','发一发免责申明','1','/public/fyfStatement_addedit.htm','61','admin',now(),'','SM2015033118080150917','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042016194507099','摇一摇玩法介绍','1','/public/yyyRule_addedit.htm','7','admin',now(),'','SM2015033118080150917','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042016202182081','摇一摇免责申明','1','/public/yyyStatement_addedit.htm','71','admin',now(),'','SM2015033118080150917','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201504191658403636','详情','2','/deta','3','admin',now(),'','SM2015032817101406466','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015041916585392724','详情','2','/deta','3','admin',now(),'','SM2015032817104102180','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042116284496966','币种兑换规则','1','/rule/bzRule.htm','2','admin',now(),'','SM2015033115104850917','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042116290614925','修改','2','/edit','1','admin',now(),'','SM2015042116284496966','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042121533440724','营收流水','2','/yy','1','admin',now(),'','SM201503312048586062','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042121541681889','代销情况','2','/daixiao','11','admin',now(),'','SM201503312048586062','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042121543640386','积分情况','2','/jifen','12','admin',now(),'','SM201503312048586062','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316305712363','虚拟兑换','1','#','51','admin',now(),'','SM2015032111004908332','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316305712363','充值专区管理','1','#','51','admin',now(),'','SM2015032111004908332','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316323814062','虚拟产品管理','1','/product/vproduct.htm','1','admin',now(),'','SM2015042316305712363','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316372961065','虚拟订单处理','1','/product/vorder.htm','2','admin',now(),'','SM2015042316305712363','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316382479912','修改','2','/edit2','1','admin',now(),'','SM2015042316323814062','CD-CYC000009');
@@ -198,29 +167,20 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316410397430','取消','2','/cannel','1','admin',now(),'','SM2015042316372961065','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316413193265','兑换','2','/exchange','2','admin',now(),'','SM2015042316372961065','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015042316414802760','详情','2','/detail2','3','admin',now(),'','SM2015042316372961065','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050215483017927','取现规则','1','/rule/enchashmentRule.htm','4','admin',now(),'','SM2015032814282786586','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050215483017927','取现规则','1','/rule/enchashmentRule.htm','50','admin',now(),'','SM2015032814282786586','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201505021549048393','修改','2','/edit','1','admin',now(),'','SM2015050215483017927','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050316194220024','详情','2','/detail2','6','admin',now(),'','SM201503312048586062','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050316481743795','返点规则','1','/rule/o2oRule.htm','3','admin',now(),'','SM2015032718005584448','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050316483632046','修改','2','/edit','1','admin',now(),'','SM2015050316481743795','CD-CYC000009');
-INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050320244030571','详情','2','/detail','1','admin',now(),'','SM2015032817154633256','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050320244030571','详情','2','/deta','1','admin',now(),'','SM2015032817154633256','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2015050419263008518','审核','2','/examine','2','admin',now(),'','SM201503312048586062','CD-CYC000009');
-
-/*
--- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`system_code` FROM tsys_role where system_code = 'CD-CYC000009'
-LIMIT 0, 10000
-
--- Date: 2017-03-28 21:57
-*/
-INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','超级管理员','1','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('YCSR201500000000000001','加盟商','2','admin',now(),'','CD-CYC000009');
-INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR2015032821443420391','系统管理员','1','admin',now(),'','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052218551217919','回录','2','/huilu','2','admin',now(),'','SM2015032817104102180','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052219031320215','取现查询','1','/platform/lineUnderStory.htm','40','admin',now(),'','SM2015032814282786586','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052219084519751','详情','2','/deta','1','admin',now(),'','SM2017052219031320215','CD-CYC000009');
 
 /*
 -- Query: SELECT `role_code`,`menu_code`,`updater`,now() as `update_datetime`,`remark`,`system_code` FROM tsys_menu_role where role_code in('CYCR201500000000000001','YCSR201500000000000001','SR2015032821443420391')
-LIMIT 0, 400
-
--- Date: 2017-05-04 19:52
+-- Date: 2017-05-25 18:59
 */
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR2015032821443420391','CYCSM201500000000000000','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR2015032821443420391','CYCSM201500001000000001','admin',now(),NULL,'CD-CYC000009');
@@ -267,31 +227,6 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032111004908332','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032115462629024','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032815341153189','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032116515108986','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032116580703857','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032210400802828','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503221040581383','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032210454810734','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032117014088035','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032211194568931','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032210354305644','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032117183616412','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032117282029312','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503211728354320','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503211728518555','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032213223669717','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503221322552773','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032220464239536','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032814183568630','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032117153442628','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503221336596893','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214114468759','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503221412258772','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214124268017','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214130632938','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214142605813','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032215211295825','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032215215115350','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032517423397534','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032517492791638','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032517495892729','admin',now(),NULL,'CD-CYC000009');
@@ -324,7 +259,6 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015033120511886659','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015042121533440724','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015042121541681889','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015042121543640386','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015050316194220024','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015050419263008518','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015050316481743795','admin',now(),NULL,'CD-CYC000009');
@@ -334,7 +268,6 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032819353033392','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032819555604844','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032819561324334','admin',now(),NULL,'CD-CYC000009');
-INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032820182550853','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032820190275624','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015040517011442277','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015041910113586962','admin',now(),NULL,'CD-CYC000009');
@@ -357,10 +290,13 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015033122330444499','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503312233449950','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015041916585392724','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2017052218551217919','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032817154633256','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015050320244030571','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015050215483017927','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201505021549048393','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2017052219031320215','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2017052219084519751','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503281429023268','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032817272128240','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015040116422423474','admin',now(),NULL,'CD-CYC000009');
@@ -401,6 +337,22 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015042316410397430','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015042316413193265','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015042316414802760','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032117183616412','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032117282029312','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503211728354320','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503211728518555','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032210400802828','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503221040581383','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032210454810734','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032211194568931','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503221322552773','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214114468759','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201503221412258772','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214124268017','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214130632938','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214142605813','admin',now(),NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032215215115350','admin',now(),NULL,'CD-CYC000009');
+
 
 /*
 -- Query: SELECT * FROM std_user.tstd_cnavigate where system_code = 'CD-CYC000009'
