@@ -223,4 +223,12 @@ public interface IUserBO extends IPaginableBO<User> {
             Double divRate, String remark);
 
     public int refreshDivRate(String userId, Double divRate);
+
+    /**
+     * @param condition
+     * @return 
+     * @create: 2017年5月16日 下午5:52:25 asus
+     * @history:
+     */
+    public Long totalUser(User condition);
 }

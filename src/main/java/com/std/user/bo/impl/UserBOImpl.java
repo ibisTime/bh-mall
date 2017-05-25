@@ -763,4 +763,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setRemark(remark);
         userDAO.approveUser(user);
     }
+
+    public Long totalUser(User condition) {
+        return userDAO.selectTotalCount(condition);
+    }
 }

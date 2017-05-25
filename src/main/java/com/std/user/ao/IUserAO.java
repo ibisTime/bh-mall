@@ -15,6 +15,7 @@ import com.std.user.dto.req.XN805180Req;
 import com.std.user.dto.req.XN805181Req;
 import com.std.user.dto.req.XN805182Req;
 import com.std.user.dto.res.XN001400Res;
+import com.std.user.dto.res.XN001404Res;
 import com.std.user.dto.res.XN805151Res;
 import com.std.user.dto.res.XN805154Res;
 import com.std.user.dto.res.XN805155Res;
@@ -660,4 +661,17 @@ public interface IUserAO {
 
     public void approveUser(String userId, String approver,
             String approveResult, String divRate, String remark);
+
+    /**
+     * 根据公司，系统编号统计用户数
+     * @param dateStart
+     * @param dateEnd
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年5月16日 下午6:33:28 asus
+     * @history:
+     */
+    public XN001404Res totalUser(String dateStart, String dateEnd,
+            String companyCode, String systemCode);
 }

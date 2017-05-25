@@ -55,10 +55,7 @@
 				AND t.login_name like "%"#{loginNameForLikeQuery}"%"
 			</if>
 			<if test="nickname != null and nickname != '' ">
-				AND t.nickname = #{nickname}
-			</if>
-			<if test="nicknameForLikeQuery != null and nicknameForLikeQuery != '' ">
-				AND t.nickname like "%"#{nicknameForLikeQuery}"%"
+				AND t.nickname like "%"#{nickname}"%"
 			</if>
 			<choose>
 				 <when test="kind == '07'">
@@ -118,6 +115,12 @@
 			</if>
 			<if test="jpushId != null and jpushId != '' ">
 				AND t.jpush_id = #{jpushId}
+			</if>
+			<if test="createBeginDatetime != null and createBeginDatetime != '' ">
+				<![CDATA[AND t.create_datetime >= #{createBeginDatetime}]]>
+			</if>
+			<if test="createEndDatetime != null and createEndDatetime != '' ">
+				<![CDATA[AND t.create_datetime <= #{createEndDatetime}]]>
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
