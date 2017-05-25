@@ -111,8 +111,6 @@ public class User extends ABaseDO {
     /***** 模糊查询使用字段 ******/
     private String loginNameForLikeQuery;
 
-    private String nicknameForLikeQuery;
-
     private String mobileForLikeQuery;
 
     private String realNameForLikeQuery;
@@ -138,6 +136,12 @@ public class User extends ABaseDO {
 
     // 推荐人等级
     private Integer refeereLevel;
+
+    // 开始注册时间
+    private Date createBeginDatetime;
+
+    // 结束注册时间
+    private Date createEndDatetime;
 
     public String getUserId() {
         return userId;
@@ -371,14 +375,6 @@ public class User extends ABaseDO {
         this.loginNameForLikeQuery = loginNameForLikeQuery;
     }
 
-    public String getNicknameForLikeQuery() {
-        return nicknameForLikeQuery;
-    }
-
-    public void setNicknameForLikeQuery(String nicknameForLikeQuery) {
-        this.nicknameForLikeQuery = nicknameForLikeQuery;
-    }
-
     public String getMobileForLikeQuery() {
         return mobileForLikeQuery;
     }
@@ -461,5 +457,21 @@ public class User extends ABaseDO {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public Date getCreateBeginDatetime() {
+        return createBeginDatetime;
+    }
+
+    public void setCreateBeginDatetime(Date createBeginDatetime) {
+        this.createBeginDatetime = createBeginDatetime;
+    }
+
+    public Date getCreateEndDatetime() {
+        return createEndDatetime;
+    }
+
+    public void setCreateEndDatetime(Date createEndDatetime) {
+        this.createEndDatetime = createEndDatetime;
     }
 }

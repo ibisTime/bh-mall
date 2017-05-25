@@ -8,14 +8,6 @@ INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('reg_protocol','注册协议','注册协议','admin',now(),NULL,'CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('telephone','服务热线','0571-86162013','admin',now(),NULL,'CD-CYC000009','CD-CYC000009');
 
-/*
--- Query: SELECT `type`,`ckey`,`cvalue`,`note`,`updater`,now() as `update_datetime`,`remark`,`company_code`,`system_code` FROM std_user.tsys_config where type= '1'
-LIMIT 0, 400
-
--- Date: 2017-05-02 21:14
-*/
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','regAddJf','2','','admin',now(),'注册送积分','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('1','loginAddJf','1','','admin',now(),'登录送积分','CD-CYC000009','CD-CYC000009');
 
 /*
 -- Query: SELECT `user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`pdf`,`company_code`,`open_id`,`jpush_id`,`updater`,`update_datetime`,`remark`,`system_code` FROM std_user.tstd_user where system_code = 'CD-CYC000009'
