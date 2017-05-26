@@ -1966,8 +1966,8 @@ public class UserAOImpl implements IUserAO {
                         + mobile + "]注册送积分", "注册送积分");
         }
 
-        // 发送初始化密码(菜狗不发短信)
-        if (!ESystemCode.CAIGO.getCode().equals(systemCode)) {
+        // 发送初始化密码(只有城市网使用)
+        if (ESystemCode.CSW.getCode().equals(systemCode)) {
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。",
                 "805042", systemCode);
