@@ -4,14 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ICouponAO;
+import com.std.user.bo.IAccountBO;
 import com.std.user.bo.ICouponBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.Coupon;
 import com.std.user.domain.User;
+import com.std.user.enums.EBizType;
 import com.std.user.enums.ECouponStatus;
+import com.std.user.enums.ECurrency;
+import com.std.user.enums.ESysUser;
 import com.std.user.exception.BizException;
 
 @Service
@@ -23,12 +28,16 @@ public class CouponAOImpl implements ICouponAO {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private IAccountBO accountBO;
+
     @Override
     public String addCoupon(Coupon data) {
         return couponBO.saveCoupon(data);
     }
 
     @Override
+    @Transactional
     public void scanCoupon(String userId, String code) {
         Coupon coupon = couponBO.getCoupon(code);
         // 判断用户是否属于该公司的
@@ -41,6 +50,10 @@ public class CouponAOImpl implements ICouponAO {
         }
         // todo:缺划账接口
         couponBO.refreshCouponStatus(code, ECouponStatus.USED, userId);
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_YAOCHENG.getCode(),
+            userId, ECurrency.YC_CB, coupon.getAmount(), EBizType.YC_SCB, "用户["
+                    + user.getMobile() + "]" + EBizType.YC_SCB.getValue(),
+            EBizType.YC_SCB.getValue());
     }
 
     @Override
