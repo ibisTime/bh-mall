@@ -184,6 +184,11 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052218551217919','回录','2','/huilu','2','admin',now(),'','SM2015032817104102180','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052219031320215','取现查询','1','/platform/lineUnderStory.htm','40','admin',now(),'','SM2015032814282786586','CD-CYC000009');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052219084519751','详情','2','/deta','1','admin',now(),'','SM2017052219031320215','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052614332372049','卡券管理','1','/rule/card.htm','3','admin','2017-05-26 14:33:23','','SM2015033115104850917','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052614334823153','新增','2','/add','1','admin','2017-05-26 14:33:48','','SM2017052614332372049','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052614341287840','作废','2','/cancel','2','admin','2017-05-26 14:34:12','','SM2017052614332372049','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM2017052614344381469','详情','2','/detail','3','admin','2017-05-26 15:01:00','','SM2017052614332372049','CD-CYC000009');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201705261435124340','下载二维码','2','/download','4','admin','2017-05-26 14:35:12','','SM2017052614332372049','CD-CYC000009');
 
 /*
 -- Query: SELECT `role_code`,`menu_code`,`updater`,now() as `update_datetime`,`remark`,`system_code` FROM tsys_menu_role where role_code in('CYCR201500000000000001','YCSR201500000000000001','SR2015032821443420391')
@@ -359,7 +364,11 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214130632938','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032214142605813','admin',now(),NULL,'CD-CYC000009');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032215215115350','admin',now(),NULL,'CD-CYC000009');
-
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2017052614332372049','admin','2017-05-26 20:21:30',NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2017052614334823153','admin','2017-05-26 20:21:30',NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2017052614341287840','admin','2017-05-26 20:21:30',NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2017052614344381469','admin','2017-05-26 20:21:30',NULL,'CD-CYC000009');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM201705261435124340','admin','2017-05-26 20:21:30',NULL,'CD-CYC000009');
 
 
 /*
