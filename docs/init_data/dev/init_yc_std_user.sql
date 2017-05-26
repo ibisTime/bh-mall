@@ -8,6 +8,13 @@ INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('reg_protocol','注册协议','注册协议','admin',now(),NULL,'CD-CYC000009','CD-CYC000009');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('telephone','服务热线','0571-86162013','admin',now(),NULL,'CD-CYC000009','CD-CYC000009');
 
+/*
+-- Query: SELECT * FROM std_user.tstd_cnavigate where system_code = 'CD-CYC000009'
+-- Date: 2017-05-25 19:06
+*/
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH2017052416405468812','banner','2','http://www.baidu.com','橙币-banner_1495615303157.png','1','index_banner',1,'1','0','','1','CD-CYC000009','CD-CYC000009');
+INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH2017052416411344623','banner橙币','2','','橙币-banner2_1495615337780.jpg','1','index_banner',2,'1','0','','1','CD-CYC000009','CD-CYC000009');
+
 
 /*
 -- Query: SELECT `user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`pdf`,`company_code`,`open_id`,`jpush_id`,`updater`,`update_datetime`,`remark`,`system_code` FROM std_user.tstd_user where system_code = 'CD-CYC000009'
@@ -354,15 +361,6 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CYCR201500000000000001','SM2015032215215115350','admin',now(),NULL,'CD-CYC000009');
 
 
-/*
--- Query: SELECT * FROM std_user.tstd_cnavigate where system_code = 'CD-CYC000009'
-LIMIT 0, 400
-
--- Date: 2017-05-04 17:34
-*/
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH2017050417271630390','banner2','2','','ht2_1493890073695.jpg','1','index_banner',2,'1','0','','1','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH201705041727287596','banner3','2','','ht3_1493890086326.jpg','1','index_banner',3,'1','0','','1','CD-CYC000009','CD-CYC000009');
-INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`belong`,`parent_code`,`remark`,`content_type`,`company_code`,`system_code`) VALUES ('DH2017050417274335836','banner1','2','','ht1_1493890102184.jpg','1','index_banner',1,'1','0','','1','CD-CYC000009','CD-CYC000009');
 
 /*
 -- Query: SELECT code,type,account,password,remark,company_code,system_code FROM std_user.tstd_cpassword where system_code = 'CD-CYC000009'
