@@ -1924,7 +1924,7 @@ public class UserAOImpl implements IUserAO {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.YC_CB.getCode());
-            accountBO.distributeAccountList(userId, nickname,
+            accountBO.distributeAccountList(userId, mobile,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
         } else {
