@@ -526,7 +526,7 @@ public class UserAOImpl implements IUserAO {
         // 新增扩展信息
         userExtBO.saveUserExt(userId, systemCode);
 
-        // 分配账号(人民币,橙币)
+        // 分配账号(人民币,橙券)
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
         currencyList.add(ECurrency.YC_CB.getCode());
