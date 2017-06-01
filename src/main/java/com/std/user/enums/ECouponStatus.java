@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum ECouponStatus {
-    TO_USE("0", "待使用"), USED("1", "支出"), DROP("2", "作废");
+    TO_USE("0", "待使用"), USED("1", "已使用"), DROP("2", "作废");
 
     public static Map<String, ECouponStatus> getBizTypeMap() {
         Map<String, ECouponStatus> map = new HashMap<String, ECouponStatus>();
