@@ -48,6 +48,9 @@ public class CouponAOImpl implements ICouponAO {
         if (ECouponStatus.USED.getCode().equals(coupon.getStatus())) {
             throw new BizException("xn0000", "该卡券已使用，不能二次扫描");
         }
+        if (ECouponStatus.DROP.getCode().equals(coupon.getStatus())) {
+            throw new BizException("xn0000", "该卡券已作废");
+        }
         // todo:缺划账接口
         couponBO.refreshCouponStatus(code, ECouponStatus.USED, userId);
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_YAOCHENG.getCode(),

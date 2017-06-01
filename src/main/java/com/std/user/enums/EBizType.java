@@ -13,7 +13,7 @@ public enum EBizType {
             "04", "首次完善资料"),
 
     // 姚橙系统
-    YC_SCB("YC_SCB", "扫描二维码送橙币");
+    YC_SCB("YC_SCB", "扫描二维码送橙券");
 
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();
