@@ -148,8 +148,12 @@ public class SignLogAOImpl implements ISignLogAO {
             Double.valueOf(sysConfig.getCvalue()));
 
         // 账户资金划拨
-        accountBO.doTransferAmountRemote(user.getSystemCode(), userId,
-            ECurrency.JF, amount, EBizType.AJ_SIGN, "每日签到", "每日签到");
+        String systemUser = null;
+        if (ESystemCode.PIPE.getCode().equals(user.getSystemCode())) {
+            systemUser = ESysUser.SYS_USER_PIPE.getCode();
+        }
+        accountBO.doTransferAmountRemote(systemUser, userId, ECurrency.JF,
+            amount, EBizType.AJ_SIGN, "每日签到", "每日签到");
         return new XN805931Res(code, amount);
     }
 }
