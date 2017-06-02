@@ -8,9 +8,6 @@ public class XN805931Req {
     // 位置（必填）
     private String location;
 
-    // 金额（必填）
-    private String amount;
-
     public String getUserId() {
         return userId;
     }
@@ -27,11 +24,4 @@ public class XN805931Req {
         this.location = location;
     }
 
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
 }

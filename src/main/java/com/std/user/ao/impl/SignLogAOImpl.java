@@ -10,11 +10,15 @@ import com.std.user.ao.ISignLogAO;
 import com.std.user.bo.IAccountBO;
 import com.std.user.bo.ILevelRuleBO;
 import com.std.user.bo.IRuleBO;
+import com.std.user.bo.ISYSConfigBO;
 import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.base.Paginable;
+import com.std.user.common.AmountUtil;
 import com.std.user.common.DateUtil;
+import com.std.user.common.SysConstant;
 import com.std.user.domain.LevelRule;
+import com.std.user.domain.SYSConfig;
 import com.std.user.domain.SignLog;
 import com.std.user.domain.User;
 import com.std.user.dto.res.XN805100Res;
@@ -44,6 +48,9 @@ public class SignLogAOImpl implements ISignLogAO {
 
     @Autowired
     private ILevelRuleBO levelRuleBO;
+
+    @Autowired
+    protected ISYSConfigBO sysConfigBO;
 
     @Override
     @Transactional
@@ -124,7 +131,7 @@ public class SignLogAOImpl implements ISignLogAO {
 
     @Override
     @Transactional
-    public XN805931Res signToday(String userId, String location, Long amount) {
+    public XN805931Res signToday(String userId, String location) {
         User user = userBO.getUser(userId);
         // 判断是否已经签到
         Boolean result = signLogBO.isSignToday(userId);
@@ -134,6 +141,12 @@ public class SignLogAOImpl implements ISignLogAO {
         // 添加签到记录
         String code = signLogBO.saveSignLog(userId, location,
             user.getSystemCode());
+
+        SYSConfig sysConfig = sysConfigBO.getConfigValue(SysConstant.SIGNADDJF,
+            user.getCompanyCode(), user.getSystemCode());
+        Long amount = AmountUtil.mul(1000L,
+            Double.valueOf(sysConfig.getCvalue()));
+
         // 账户资金划拨
         accountBO.doTransferAmountRemote(user.getSystemCode(), userId,
             ECurrency.JF, amount, EBizType.AJ_SIGN, "每日签到", "每日签到");

@@ -26,8 +26,7 @@ public class XN805931 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        Long amount = StringValidater.toLong(req.getAmount());
-        return signLogAO.signToday(req.getUserId(), req.getLocation(), amount);
+        return signLogAO.signToday(req.getUserId(), req.getLocation());
     }
 
     /** 
@@ -37,6 +36,5 @@ public class XN805931 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805931Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getLocation());
-        StringValidater.validateAmount(req.getAmount());
     }
 }
