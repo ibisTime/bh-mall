@@ -43,8 +43,8 @@ LIMIT 0, 10000
 
 -- Date: 2017-03-05 22:53
 */
-INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SRSuperAdmin','系统管理员','1','admin',now(),'','CD-JKEG000011');
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JKEGSR2017041310190267791','超级管理员','1','admin',now(),NULL,'CD-JKEG000011');
+INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SRSuperAdmin','系统管理员','1','admin',now(),'','CD-JKEG000011');
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JKEGSRShangHu','商户','1','admin',now(),NULL,'CD-JKEG000011');
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JKEGSRYunYingShang','运营商','1','admin',now(),NULL,'CD-JKEG000011');
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JKEGSRZhiHuiMingSu','智慧名宿','1','admin',now(),NULL,'CD-JKEG000011');
