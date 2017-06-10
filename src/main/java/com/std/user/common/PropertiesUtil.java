@@ -54,6 +54,9 @@ public class PropertiesUtil {
         public static String DZT_LTS_ROLECODE = props
             .getProperty("DZT_LTS_ROLECODE");
 
+        public static String JKEG_SHANGHU_ROLECODE = props
+            .getProperty("JKEG_SHANGHU_ROLECODE");
+
         public static String APP_KEY = props.getProperty("APP_KEY");
 
         public static String MASTER_SECRET = props.getProperty("MASTER_SECRET");
