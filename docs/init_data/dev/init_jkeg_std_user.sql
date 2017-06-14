@@ -8,6 +8,17 @@ INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pw
 INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pwd_strength`,`kind`,`level`,`user_referee`,`mobile`,`id_kind`,`id_no`,`real_name`,`trade_pwd`,`trade_pwd_strength`,`role_code`,`status`,`pdf`,`company_code`,`open_id`,`jpush_id`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SYS_USER_JKEG','jkeg',NULL,'21218cca77804d2ba1922c33e0151105','1','01','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'JKEGSR2017041310190267791','0',NULL,NULL,NULL,NULL,'admin',now(),'','CD-JKEG000011');
 
 /*
+-- Query: SELECT ckey,cvalue,note,updater, now() as update_datetime,remark,system_code FROM tsys_config where system_code = 'CD-CYC000009'
+LIMIT 0, 10000
+
+-- Date: 2017-04-05 23:16
+*/
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('aboutus','关于我们','关于我们','admin',now(),NULL,'CD-JKEG000011','CD-JKEG000011');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('reg_protocol','注册协议','注册协议','admin',now(),NULL,'CD-JKEG000011','CD-JKEG000011');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('telephone','服务热线','0571-86162013','admin',now(),NULL,'CD-JKEG000011','CD-JKEG000011');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('time','服务时间','09:30:00AM—17:00:00PM','admin',now(),NULL,'CD-JKEG000011','CD-JKEG000011');
+
+/*
 -- Query: select `code`, `name`, `type`, `url`, `order_no`, `updater`,now() as `update_datetime`, `remark`, `parent_code`, `system_code` from tsys_menu where code in (SELECT `menu_code` FROM std_user.tsys_menu_role where role_code= 'JKEGSR2017041310190267791')
 LIMIT 0, 10000
 
