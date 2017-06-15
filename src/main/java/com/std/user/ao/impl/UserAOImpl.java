@@ -328,6 +328,9 @@ public class UserAOImpl implements IUserAO {
                 roleCode = PropertiesUtil.Config.DZT_LTS_ROLECODE;
                 userStatus = EUserStatus.TO_APPROVE.getCode();
             }
+            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
+                roleCode = PropertiesUtil.Config.JKEG_SHANGHU_ROLECODE;
+            }
             // 验证手机号
             userBO.isMobileExist(mobile, kind, systemCode);
             // 插入用户信息
