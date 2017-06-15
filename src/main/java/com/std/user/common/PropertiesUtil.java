@@ -57,6 +57,9 @@ public class PropertiesUtil {
         public static String JKEG_SHANGHU_ROLECODE = props
             .getProperty("JKEG_SHANGHU_ROLECODE");
 
+        public static String JKEG_ZHIHUIMINGSU_ROLECODE = props
+            .getProperty("JKEG_ZHIHUIMINGSU_ROLECODE");
+
         public static String JKEG_YINGYINGSHANG_ROLECODE = props
             .getProperty("JKEG_YINGYINGSHANG_ROLECODE");
 

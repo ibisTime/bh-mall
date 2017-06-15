@@ -410,6 +410,9 @@ public class UserAOImpl implements IUserAO {
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 民宿主
         } else if (EUserKind.Partner.getCode().equals(kind)) {
+            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
+                roleCode = PropertiesUtil.Config.JKEG_ZHIHUIMINGSU_ROLECODE;
+            }
             // 验证登录名
             userBO.isLoginNameExist(loginName, kind, systemCode);
             loginPsd = RandomUtil.generate6();
