@@ -328,6 +328,9 @@ public class UserAOImpl implements IUserAO {
                 roleCode = PropertiesUtil.Config.DZT_LTS_ROLECODE;
                 userStatus = EUserStatus.TO_APPROVE.getCode();
             }
+            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
+                roleCode = PropertiesUtil.Config.JKEG_SHANGHU_ROLECODE;
+            }
             // 验证手机号
             userBO.isMobileExist(mobile, kind, systemCode);
             // 插入用户信息
@@ -410,6 +413,9 @@ public class UserAOImpl implements IUserAO {
             userExtBO.saveUserExt(userId, province, city, area, systemCode);
             // 民宿主
         } else if (EUserKind.Partner.getCode().equals(kind)) {
+            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
+                roleCode = PropertiesUtil.Config.JKEG_ZHIHUIMINGSU_ROLECODE;
+            }
             // 验证登录名
             userBO.isLoginNameExist(loginName, kind, systemCode);
             loginPsd = RandomUtil.generate6();
@@ -436,6 +442,11 @@ public class UserAOImpl implements IUserAO {
             }
             if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
                 userId = doAddYaochengOss(loginName, mobile, loginPsd, kind,
+                    idKind, idNo, realName, userReferee, divRate, updater, pdf,
+                    remark, systemCode);
+            }
+            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
+                userId = doAddJKEGOss(loginName, mobile, loginPsd, kind,
                     idKind, idNo, realName, userReferee, divRate, updater, pdf,
                     remark, systemCode);
             }
@@ -530,6 +541,49 @@ public class UserAOImpl implements IUserAO {
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.CNY.getCode());
         currencyList.add(ECurrency.YC_CB.getCode());
+        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
+            currencyList, systemCode);
+        return userId;
+    }
+
+    private String doAddJKEGOss(String loginName, String mobile,
+            String loginPsd, String kind, String idKind, String idNo,
+            String realName, String userReferee, Double divRate,
+            String updater, String pdf, String remark, String systemCode) {
+        String userId;
+        // 验证登录名
+        userBO.isLoginNameExist(loginName, kind, systemCode);
+        int level = 1;
+        if (StringUtils.isNotBlank(userReferee)) {
+            String preUserId = userReferee;
+            while (true) {
+                User data = userBO.getUser(preUserId);
+                if (data != null) {
+                    preUserId = data.getUserReferee();
+                    level++;
+                    // 超过3级，按3级处理
+                    if (level > 3) {
+                        level = 3;
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        String roleCode = PropertiesUtil.Config.JKEG_YINGYINGSHANG_ROLECODE;
+        // 插入用户信息
+        userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
+            realName, idKind, idNo, loginPsd, kind, level + "", remark,
+            updater, pdf, roleCode, divRate, systemCode,
+            EUserStatus.NORMAL.getCode());
+        // 新增扩展信息
+        userExtBO.saveUserExt(userId, systemCode);
+
+        // 分配账号(人民币,积分)
+        List<String> currencyList = new ArrayList<String>();
+        currencyList.add(ECurrency.CNY.getCode());
+        currencyList.add(ECurrency.JF.getCode());
         accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
             currencyList, systemCode);
         return userId;
