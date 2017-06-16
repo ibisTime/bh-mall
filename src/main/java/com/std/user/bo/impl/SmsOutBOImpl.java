@@ -32,7 +32,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
             BizConnecter.getBizData("804081", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
-            logger.error("调用短信发送服务异常");
+            logger.error("调用短信异常,异常原因：" + e.getMessage());
         }
     }
 
