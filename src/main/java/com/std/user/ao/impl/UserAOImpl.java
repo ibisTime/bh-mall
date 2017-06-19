@@ -235,6 +235,8 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.YC_CB.getCode());
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
+        } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
+            // 公共服务平台不需要账户
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
