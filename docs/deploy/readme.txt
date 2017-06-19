@@ -26,8 +26,8 @@ T6dh%$%$ss1
   rm -rf std-user
   mv /home/std-user.war .
   
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
+  mv -f application.properties ./zh-user/WEB-INF/classes/
+  mv -f config.properties ./zh-user/WEB-INF/classes/
   
   ../bin/shutdown.sh
   ../bin/startup.sh
