@@ -1918,6 +1918,8 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccountList(userId, nickname,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
+        } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
+            // 公共服务平台不需要账户
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
@@ -1983,6 +1985,8 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(EUserKind.F1.getCode()), currencyList,
                 systemCode);
+        } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
+            // 公共服务平台不需要账户
         } else {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());

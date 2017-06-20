@@ -11,12 +11,12 @@
 
 部署步骤：
 1、包上传
-scp -P22 ./std-user.war root@121.43.101.148:/home
-T6dh%$%$ss1
+scp -P22 ./std-user.war root@118.178.124.16:/home
+cdxt123456Q
   
 2，部署
-  ssh root@121.43.101.148 -p 22
-  T6dh%$%$ss1
+  ssh root@118.178.124.16 -p 22
+  cdxt123456Q
    --------------------common
   cd /home/wwwroot/common/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
@@ -196,7 +196,7 @@ http://121.43.101.148:6505/std-user/api
   
   ../bin/shutdown.sh
   ../bin/startup.sh
-  http://118.178.124.16:8905/std-user/api
+  http://118.178.124.16:5505/std-user/api
   
     http://121.43.101.148:8905/std-user/api
   
