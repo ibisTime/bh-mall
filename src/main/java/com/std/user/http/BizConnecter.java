@@ -10,6 +10,8 @@ package com.std.user.http;
 
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import com.std.user.common.PropertiesUtil;
 import com.std.user.exception.BizException;
 import com.std.user.util.RegexUtils;
@@ -20,6 +22,8 @@ import com.std.user.util.RegexUtils;
  * @history:
  */
 public class BizConnecter {
+    private static Logger logger = Logger.getLogger(BizConnecter.class);
+
     public static final String YES = "0";
 
     public static final String ACCOUNT_URL = PropertiesUtil.Config.ACCOUNT_URL;
@@ -51,8 +55,9 @@ public class BizConnecter {
         // 开始解析响应json
         String errorCode = RegexUtils.find(resJson, "errorCode\":\"(.+?)\"", 1);
         String errorInfo = RegexUtils.find(resJson, "errorInfo\":\"(.+?)\"", 1);
-        System.out.println("request:" + code + " with parameters " + json
-                + "\nresponse:" + errorCode + "<" + errorInfo + ">.");
+        logger.info("request:code<" + code + ">  json<" + json
+                + ">\nresponse:errorCode<" + errorCode + ">  errorInfo<"
+                + errorInfo + ">");
         if (YES.equalsIgnoreCase(errorCode)) {
             data = RegexUtils.find(resJson, "data\":(.*)\\}", 1);
         } else {
