@@ -7,7 +7,7 @@ INSERT INTO `tstd_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`locatio
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sysMobile','服务热线','4001001000','admin',now(),NULL,'CD-CJJ000010','CD-CJJ000010');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('serviceTime','服务时间','9:30-21:30','admin',now(),NULL,'CD-CJJ000010','CD-CJJ000010');
 INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('aboutus','关于我们','关于我们','admin',now(),NULL,'CD-CJJ000010','CD-CJJ000010');
-INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('guide','新手指南','新手指南','admin',now(),NULL,'CD-CJJ000010','CD-CJJ000010');
+INSERT INTO `tsys_config` (`ckey`,`cvalue`,`note`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('guide','新手入门','新手入门','admin',now(),NULL,'CD-CJJ000010','CD-CJJ000010');
 
 /*
 -- Query: SELECT * FROM tstd_user where login_name = 'admin' and system_code  = 'CD-CJJ000010'
@@ -326,7 +326,7 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','msg_status','0','未发布','admin',now(),NULL,'CD-CJJ000010');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','msg_status','1','已发布','admin',now(),NULL,'CD-CJJ000010');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','msg_status','2','已下架','admin',now(),NULL,'CD-CJJ000010');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0','','cb_status','cb意向','admin',now(),NULL,'CD-CJJ000010');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','cb_status','1','未查看','admin',now(),NULL,'CD-CJJ000010');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','cb_status','2','已查看/处理通过','admin',now(),NULL,'CD-CJJ000010');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','cb_status','3','不通过','admin',now(),NULL,'CD-CJJ000010');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0','','cb_status','个人对企业服务意向','admin',now(),NULL,'CD-CJJ000010');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','cb_status','1','待处理','admin',now(),NULL,'CD-CJJ000010');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','cb_status','2','处理成功','admin',now(),NULL,'CD-CJJ000010');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','cb_status','3','处理失败','admin',now(),NULL,'CD-CJJ000010');
