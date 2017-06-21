@@ -17,7 +17,7 @@ INSERT INTO `tstd_user` (`user_id`,`login_name`,`nickname`,`login_pwd`,`login_pw
 
 /*
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,system_code FROM tsys_menu where system_code = 'CD-CJJ000010'
--- Date: 2017-06-20 15:04
+-- Date: 2017-06-21 12:56
 */
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201600000000000000','根目录','1','#','1','admin',now(),'','','CD-CJJ000010');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201600001000000000','系统根目录','1','#','1','admin',now(),'','SM201600000000000000','CD-CJJ000010');
@@ -117,9 +117,10 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 -- Date: 2017-06-20 15:08
 */
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR201600000000000000','超级管理员','1','admin',now(),'系统管理员','CD-CJJ000010');
+
 /*
 -- Query: SELECT `role_code`,`menu_code`,`updater`,now() as `update_datetime`,`remark`,`system_code` FROM tsys_menu_role where role_code in('SR201600000000000000')
--- Date: 2017-06-20 15:09
+-- Date: 2017-06-21 12:57
 */
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR201600000000000000','SM201600000000000000','admin',now(),NULL,'CD-CJJ000010');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SR201600000000000000','SM201600001000000000','admin',now(),NULL,'CD-CJJ000010');
