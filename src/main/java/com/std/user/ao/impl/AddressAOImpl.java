@@ -90,10 +90,9 @@ public class AddressAOImpl implements IAddressAO {
 
     @Override
     @Transactional
-    public int setDefaultAddress(String userId, String code) {
+    public int setDefaultAddress(String code) {
         int count = 0;
         Address condition = new Address();
-        condition.setUserId(userId);
         condition.setCode(code);
         if (addressBO.getTotalCount(condition) > 0) {
             Address address = addressBO.getAddress(code);
@@ -101,7 +100,8 @@ public class AddressAOImpl implements IAddressAO {
                 throw new BizException("ZC000001", "该地址已经是该用户的默认地址，不需要重复设置");
             }
             // 将该用户所有地址设置为非默认
-            addressBO.refreshAddressDefByUser(userId, EBoolean.NO.getCode());
+            addressBO.refreshAddressDefByUser(address.getUserId(),
+                EBoolean.NO.getCode());
             // 将该地址设置为默认地址
             count = addressBO.refreshAddressDef(code, EBoolean.YES.getCode());
         } else {

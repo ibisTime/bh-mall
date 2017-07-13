@@ -40,13 +40,12 @@ public interface IAddressAO {
 
     /**
      * 设置默认地址
-     * @param userId
      * @param code
      * @return 
      * @create: 2016年5月23日 下午9:15:44 xieyj
      * @history:
      */
-    public int setDefaultAddress(String userId, String code);
+    public int setDefaultAddress(String code);
 
     /**
      * 修改默认地址

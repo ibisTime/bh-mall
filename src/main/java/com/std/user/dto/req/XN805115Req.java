@@ -1,5 +1,5 @@
 /**
- * @Title XN805091Req.java 
+ * @Title XN805090Req.java 
  * @Package com.std.user.dto.req 
  * @Description 
  * @author xieyj  
@@ -13,7 +13,11 @@ package com.std.user.dto.req;
  * @since: 2016年8月31日 下午12:04:08 
  * @history:
  */
-public class XN805091Req {
+public class XN805115Req extends APageReq {
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = 1L;
 
     // 用户编号(选填)
     private String userId;
@@ -24,8 +28,8 @@ public class XN805091Req {
     // 手机号(选填)
     private String mobile;
 
-    // 昵称(选填)
-    private String nickname;
+    // 是否查询金额 1 是
+    private String isGetAmount;
 
     // 系统编号(必填)
     private String systemCode;
@@ -36,6 +40,14 @@ public class XN805091Req {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getIsGetAmount() {
+        return isGetAmount;
+    }
+
+    public void setIsGetAmount(String isGetAmount) {
+        this.isGetAmount = isGetAmount;
     }
 
     public String getUserId() {
@@ -61,13 +73,4 @@ public class XN805091Req {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
 }

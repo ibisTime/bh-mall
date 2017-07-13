@@ -1,27 +1,20 @@
 package com.std.user.dto.req;
 
-public class XN806040Req {
+public class XN805805Req extends APageReq {
 
-    // 名字（必填）
+    private static final long serialVersionUID = 1L;
+
+    // 名字（选填）
     private String name;
 
-    // 类型（必填）
+    // 类型（选填）
     private String type;
 
-    // 访问Url（必填）
-    private String url;
-
-    // 图片（选填）
-    private String pic;
-
-    // 状态（必填）
+    // 状态（选填）
     private String status;
 
     // 位置（选填）
     private String location;
-
-    // 相对位置编号（必填）
-    private String orderNo;
 
     // 属于（选填）
     private String belong;
@@ -34,9 +27,6 @@ public class XN806040Req {
 
     // 公司编号（必填）
     private String companyCode;
-
-    // 备注(选填)
-    private String remark;
 
     // 系统编号(必填)
     private String systemCode;
@@ -65,22 +55,6 @@ public class XN806040Req {
         this.type = type;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -95,14 +69,6 @@ public class XN806040Req {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
     public String getBelong() {
@@ -135,13 +101,5 @@ public class XN806040Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 }

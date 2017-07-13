@@ -8,7 +8,7 @@ import com.std.user.api.converter.CNavigateConverter;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.CNavigate;
-import com.std.user.dto.req.XN806050Req;
+import com.std.user.dto.req.XN805805Req;
 import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
@@ -20,11 +20,11 @@ import com.std.user.spring.SpringContextHolder;
  * @since: 2016年10月10日 下午3:58:13 
  * @history:
  */
-public class XN806050 extends AProcessor {
+public class XN805805 extends AProcessor {
     private ICNavigateAO cNavigateAO = SpringContextHolder
         .getBean(ICNavigateAO.class);
 
-    private XN806050Req req = null;
+    private XN805805Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -42,8 +42,9 @@ public class XN806050 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN806050Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN805805Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }

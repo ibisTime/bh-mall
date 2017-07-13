@@ -5,7 +5,7 @@ package com.std.user.dto.req;
  * @since: 2016年8月31日 下午12:04:08 
  * @history:
  */
-public class XN805092Req {
+public class XN805116Req {
 
     // 用户编号(必填)
     private String userId;

@@ -1,8 +1,8 @@
 package com.std.user.dto.req;
 
-public class XN806041Req {
+public class XN805807Req {
 
-    // 编号（必填）
+    // 编号（选填）
     private String code;
 
     public String getCode() {

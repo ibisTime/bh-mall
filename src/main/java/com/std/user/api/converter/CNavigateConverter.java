@@ -2,15 +2,15 @@ package com.std.user.api.converter;
 
 import com.std.user.core.StringValidater;
 import com.std.user.domain.CNavigate;
-import com.std.user.dto.req.XN806040Req;
-import com.std.user.dto.req.XN806042Req;
-import com.std.user.dto.req.XN806050Req;
+import com.std.user.dto.req.XN805800Req;
+import com.std.user.dto.req.XN805802Req;
+import com.std.user.dto.req.XN805805Req;
 import com.std.user.dto.req.XN806052Req;
 
 public class CNavigateConverter {
 
     // 新增导航
-    public static CNavigate converter(XN806040Req req) {
+    public static CNavigate converter(XN805800Req req) {
         CNavigate result = new CNavigate();
         result.setName(req.getName());
         result.setType(req.getType());
@@ -29,7 +29,7 @@ public class CNavigateConverter {
     }
 
     // 修改导航
-    public static CNavigate converter(XN806042Req req) {
+    public static CNavigate converter(XN805802Req req) {
         CNavigate result = new CNavigate();
         result.setCode(req.getCode());
         result.setName(req.getName());
@@ -49,7 +49,7 @@ public class CNavigateConverter {
     }
 
     // 分页查询导航
-    public static CNavigate converter(XN806050Req req) {
+    public static CNavigate converter(XN805805Req req) {
         CNavigate result = new CNavigate();
         result.setName(req.getName());
         result.setType(req.getType());

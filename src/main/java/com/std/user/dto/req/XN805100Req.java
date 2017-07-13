@@ -5,7 +5,7 @@ public class XN805100Req {
     // 用户编号（必填）
     private String userId;
 
-    // 地区（必填）
+    // 地区（选填）
     private String location;
 
     public String getUserId() {

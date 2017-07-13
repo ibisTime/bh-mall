@@ -34,7 +34,6 @@ public class XN805101 extends AProcessor {
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setSignDatetimeEnd(DateUtil.strToDate(req.getDateEnd(),
             DateUtil.DATA_TIME_PATTERN_1));
-        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ISignLogAO.DEFAULT_ORDER_COLUMN;

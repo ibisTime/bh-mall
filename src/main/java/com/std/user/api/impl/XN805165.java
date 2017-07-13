@@ -28,7 +28,6 @@ public class XN805165 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Address condition = new Address();
-        condition.setCode(req.getCode());
         condition.setUserId(req.getUserId());
         condition.setIsDefault(req.getIsDefault());
         return addressAO.queryAddressList(condition);

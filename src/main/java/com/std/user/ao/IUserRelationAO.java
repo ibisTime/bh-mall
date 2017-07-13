@@ -8,8 +8,6 @@
  */
 package com.std.user.ao;
 
-import java.util.List;
-
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
 import com.std.user.domain.UserRelation;
@@ -20,8 +18,6 @@ import com.std.user.domain.UserRelation;
  * @history:
  */
 public interface IUserRelationAO {
-
-    public List<User> queryUserList(UserRelation condition);
 
     public Paginable<User> queryUserPage(int start, int limit,
             UserRelation condition);
@@ -43,15 +39,6 @@ public interface IUserRelationAO {
      * @history:
      */
     public void unfollowUser(String userId, String toUser);
-
-    /**
-     * 与上家首次建立关系
-     * @param userId
-     * @param toUser 
-     * @create: 2016年9月2日 下午4:12:48 xieyj
-     * @history:
-     */
-    public void firstSetRelation(String userId, String toUser);
 
     /**
      * 用户关系

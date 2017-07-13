@@ -18,7 +18,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /** 
- * 收件地址-修改默认地址
+ * 设置默认地址
  * @author: xieyj 
  * @since: 2015年8月19日 下午7:48:10 
  * @history:
@@ -34,7 +34,7 @@ public class XN805163 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        int count = addressAO.setDefaultAddress(req.getUserId(), req.getCode());
+        int count = addressAO.setDefaultAddress(req.getCode());
         return new Boolean(count > 0 ? true : false);
     }
 
@@ -44,6 +44,6 @@ public class XN805163 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805163Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getCode());
+        StringValidater.validateBlank(req.getCode());
     }
 }

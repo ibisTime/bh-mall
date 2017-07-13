@@ -1,19 +1,19 @@
 /**
- * @Title XN805080Req.java 
+ * @Title XN805081Req.java 
  * @Package com.std.user.dto.req 
  * @Description 
  * @author xieyj  
- * @date 2016年8月31日 下午12:02:51 
+ * @date 2016年8月31日 下午12:03:31 
  * @version V1.0   
  */
 package com.std.user.dto.req;
 
 /** 
  * @author: xieyj 
- * @since: 2016年8月31日 下午12:02:51 
+ * @since: 2016年8月31日 下午12:03:31 
  * @history:
  */
-public class XN805080Req {
+public class XN805111Req {
     // 用户编号(必填)
     private String userId;
 
@@ -35,4 +35,5 @@ public class XN805080Req {
     public void setToUser(String toUser) {
         this.toUser = toUser;
     }
+
 }

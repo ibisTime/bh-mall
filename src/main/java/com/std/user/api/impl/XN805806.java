@@ -5,7 +5,7 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.CNavigate;
-import com.std.user.dto.req.XN806051Req;
+import com.std.user.dto.req.XN805806Req;
 import com.std.user.enums.EBoolean;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
@@ -17,11 +17,11 @@ import com.std.user.spring.SpringContextHolder;
  * @since: 2016年10月25日 下午4:51:09 
  * @history:
  */
-public class XN806051 extends AProcessor {
+public class XN805806 extends AProcessor {
     private ICNavigateAO cNavigateAO = SpringContextHolder
         .getBean(ICNavigateAO.class);
 
-    private XN806051Req req = null;
+    private XN805806Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -29,16 +29,16 @@ public class XN806051 extends AProcessor {
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
         condition.setLocation(req.getLocation());
-        condition.setCompanyCode(req.getCompanyCode());
         condition.setStatus(EBoolean.YES.getCode());
         condition.setIsFront(EBoolean.YES.getCode());
+        condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
         return cNavigateAO.queryCNavigateList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN806051Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN805806Req.class);
         StringValidater
             .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }

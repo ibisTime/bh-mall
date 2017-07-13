@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.IUserRelationAO;
-import com.std.user.bo.IAccountBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.bo.IUserRelationBO;
 import com.std.user.bo.base.Paginable;
@@ -36,17 +35,6 @@ public class UserRelationAOImpl implements IUserRelationAO {
 
     @Autowired
     IUserBO userBO;
-
-    @Autowired
-    IAccountBO accountBO;
-
-    /** 
-     * @see com.std.user.ao.IUserRelationAO#queryUserList(com.std.user.domain.UserRelation)
-     */
-    @Override
-    public List<User> queryUserList(UserRelation condition) {
-        return userRelationBO.queryUserList(condition);
-    }
 
     /** 
      * @see com.std.user.ao.IUserRelationAO#queryUserPage(int, int, com.std.user.domain.UserRelation)
@@ -109,26 +97,6 @@ public class UserRelationAOImpl implements IUserRelationAO {
             throw new BizException("xn702001", "用户关系未建立，无法解除");
         }
         userRelationBO.removeUserRelation(userId, toUserId);
-    }
-
-    /** 
-     * @see com.std.user.ao.IUserRelationAO#firstSetRelation(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void firstSetRelation(String userId, String toUserId) {
-        User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn702001", "用户不存在");
-        }
-        User toUser = userBO.getUser(toUserId);
-        if (toUser == null) {
-            throw new BizException("xn702001", "上家用户不存在");
-        }
-        // 判断两者关系是否存在
-        if (!userRelationBO.isExistUserRelation(userId, toUserId)) {
-            userRelationBO.saveUserRelation(userId, toUserId,
-                user.getSystemCode());
-        }
     }
 
     @Override
