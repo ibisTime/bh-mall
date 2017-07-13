@@ -12,24 +12,11 @@
  	    <typeAlias alias="signLog" type="com.std.user.domain.SignLog" />
  	    <typeAlias alias="userExt" type="com.std.user.domain.UserExt" />
  	    <typeAlias alias="signLog" type="com.std.user.domain.SignLog" />
- 	    <typeAlias alias="company" type="com.std.user.domain.Company" />
  	    
- 	    <typeAlias alias="levelRule" type="com.std.user.domain.LevelRule" />
- 	    <typeAlias alias="cMaterial" type="com.std.user.domain.CMaterial" />
- 	    <typeAlias alias="cIntention" type="com.std.user.domain.CIntention" />
- 	    <typeAlias alias="cPassword" type="com.std.user.domain.CPassword" />
  	    <typeAlias alias="cNavigate" type="com.std.user.domain.CNavigate" />
- 	    
- 	    <typeAlias alias="b2cSms" type="com.std.user.domain.B2cSms" />
- 	    <typeAlias alias="uRead" type="com.std.user.domain.URead" />
- 	    <typeAlias alias="certificate" type="com.std.user.domain.Certificate" />
- 	    <typeAlias alias="companyCertificate" type="com.std.user.domain.CompanyCertificate" />
 	    <typeAlias alias="sysDict" type="com.std.user.domain.SYSDict" />
-	    
 	    <typeAlias alias="sysConfig" type="com.std.user.domain.SYSConfig" />
-	    <typeAlias alias="rule" type="com.std.user.domain.Rule" />
 	    <typeAlias alias="fieldTimes" type="com.std.user.domain.FieldTimes" />
-	    <typeAlias alias="coupon" type="com.std.user.domain.Coupon" />
 	    <typeAlias alias="invitation" type="com.std.user.domain.Invitation" />
 	    
 	    <typeAlias alias="blacklist" type="com.std.user.domain.Blacklist" />

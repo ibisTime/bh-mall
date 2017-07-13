@@ -34,38 +34,9 @@
 	<bean id="signLogBO" class="com.std.user.bo.impl.SignLogBOImpl">
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
 	</bean>
-	<bean id="companyBO" class="com.std.user.bo.impl.CompanyBOImpl">
-		<property name="paginableDAO" ref="companyDAOImpl"/>
-	</bean>
-	<bean id="levelRuleBO" class="com.std.user.bo.impl.LevelRuleBOImpl">
-		<property name="paginableDAO" ref="levelRuleDAOImpl"/>
-	</bean>
-	
-	<bean id="cMaterialBO" class="com.std.user.bo.impl.CMaterialBOImpl">
-		<property name="paginableDAO" ref="cMaterialDAOImpl"/>
-	</bean>
+
 	<bean id="cNavigateBO" class="com.std.user.bo.impl.CNavigateBOImpl">
 		<property name="paginableDAO" ref="cNavigateDAOImpl"/>
-	</bean>
-	<bean id="cIntentionBO" class="com.std.user.bo.impl.CIntentionBOImpl">
-		<property name="paginableDAO" ref="cIntentionDAOImpl"/>
-	</bean>
-	<bean id="cPasswordBO" class="com.std.user.bo.impl.CPasswordBOImpl">
-		<property name="paginableDAO" ref="cPasswordDAOImpl"/>
-	</bean>
-	
-	<bean id="b2cSmsBO" class="com.std.user.bo.impl.B2cSmsBOImpl">
-		<property name="paginableDAO" ref="b2cSmsDAOImpl"/>
-	</bean>
-	
-	<bean id="uReadBO" class="com.std.user.bo.impl.UReadBOImpl">
-		<property name="paginableDAO" ref="uReadDAOImpl"/>
-	</bean>
-	<bean id="certificateBO" class="com.std.user.bo.impl.CertificateBOImpl">
-		<property name="paginableDAO" ref="certificateDAOImpl"/>
-	</bean>
-	<bean id="companyCertificateBO" class="com.std.user.bo.impl.CompanyCertificateBOImpl">
-		<property name="paginableDAO" ref="companyCertificateDAOImpl"/>
 	</bean>
 	
 	<bean id="sysDictBO" class="com.std.user.bo.impl.SYSDictBOImpl">
@@ -73,13 +44,6 @@
 	</bean>	
 	<bean id="sysConfigBO" class="com.std.user.bo.impl.SYSConfigBOImpl">
 		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
-	</bean>	
-	<bean id="ruleBO" class="com.std.user.bo.impl.RuleBOImpl">
-		<property name="paginableDAO" ref="ruleDAOImpl"/>
-	</bean>	
-	
-	<bean id="couponBO" class="com.std.user.bo.impl.CouponBOImpl">
-		<property name="paginableDAO" ref="couponDAOImpl"/>
 	</bean>	
 	
 	<bean id="invitationBO" class="com.std.user.bo.impl.InvitationBOImpl">
