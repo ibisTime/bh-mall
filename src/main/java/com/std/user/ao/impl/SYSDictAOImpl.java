@@ -28,15 +28,14 @@ import com.std.user.exception.BizException;
  */
 @Service
 public class SYSDictAOImpl implements ISYSDictAO {
+
     @Autowired
     ISYSDictBO sysDictBO;
 
-    /** 
-     * @see com.xnjr.base.ao.ISYSDictAO#addSYSDict(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public Long addSYSDict(String type, String parentKey, String key,
-            String value, String updater, String remark, String systemCode) {
+            String value, String updater, String remark, String companyCode,
+            String systemCode) {
         if (EDictType.SECOND.getCode().equals(type)) {
             if (StringUtils.isBlank(parentKey)) {
                 throw new BizException("xn000000", "第二层字典数据，parentKey不能为空");
@@ -76,6 +75,7 @@ public class SYSDictAOImpl implements ISYSDictAO {
         sysDict.setDvalue(value);
         sysDict.setUpdater(updater);
         sysDict.setRemark(remark);
+        sysDict.setCompanyCode(companyCode);
         sysDict.setSystemCode(systemCode);
         return sysDictBO.saveSYSDict(sysDict);
     }

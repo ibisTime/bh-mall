@@ -5,18 +5,21 @@ package com.std.user.dto.req;
  * @since: 2016年9月17日 下午4:09:39 
  * @history:
  */
-public class XN807715Req extends APageReq {
+public class XN805915Req extends APageReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
     private static final long serialVersionUID = 1L;
 
-    // 类型
+    // 类型(选填)
     private String type;
 
     // key值(选填)
     private String ckey;
+
+    // 公司编号（必填）
+    private String companyCode;
 
     // 系统编号（必填）
     private String systemCode;
@@ -44,4 +47,13 @@ public class XN807715Req extends APageReq {
     public void setCkey(String ckey) {
         this.ckey = ckey;
     }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
 }

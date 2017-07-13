@@ -5,7 +5,7 @@ package com.std.user.dto.req;
  * @since: 2016年9月17日 下午4:09:09 
  * @history:
  */
-public class XN807705Req extends APageReq {
+public class XN805905Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
@@ -20,16 +20,11 @@ public class XN807705Req extends APageReq {
     // key（选填）
     private String dkey;
 
+    // 公司编号（必填）
+    private String companyCode;
+
     // 系统编号（必填）
     private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getType() {
         return type;
@@ -55,4 +50,19 @@ public class XN807705Req extends APageReq {
         this.dkey = dkey;
     }
 
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 }

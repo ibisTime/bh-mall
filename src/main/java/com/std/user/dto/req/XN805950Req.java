@@ -1,8 +1,11 @@
 package com.std.user.dto.req;
 
-public class XN805904Req {
+public class XN805950Req {
     // 系统编号(必填)
     private String systemCode;
+
+    // 公司编号(必填)
+    private String companyCode;
 
     // 手机号(必填)
     private String mobile;
@@ -10,23 +13,20 @@ public class XN805904Req {
     // 业务类型(必填)
     private String bizType;
 
-    // 种类(必填)
-    private String kind;
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
     public String getSystemCode() {
         return systemCode;
     }
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getMobile() {

@@ -1,3 +1,40 @@
+
+-- ----------------------------
+--  Table structure for `tsys_config`
+-- ----------------------------
+DROP TABLE IF EXISTS `tsys_config`;
+CREATE TABLE `tsys_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `type` varchar(32) DEFAULT NULL COMMENT '类型',
+  `ckey` varchar(255) DEFAULT NULL COMMENT 'key',
+  `cvalue` text DEFAULT NULL COMMENT 'value',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tsys_dict`
+-- ----------------------------
+DROP TABLE IF EXISTS `tsys_dict`;
+CREATE TABLE `tsys_dict` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
+  `type` char(1) DEFAULT NULL COMMENT '类型（第一层/第二层）',
+  `parent_key` varchar(32) DEFAULT NULL COMMENT '父key',
+  `dkey` varchar(32) DEFAULT NULL COMMENT 'key',
+  `dvalue` varchar(255) DEFAULT NULL COMMENT '值',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 DROP TABLE IF EXISTS `tstd_address`;
 CREATE TABLE `tstd_address` (
   `code` varchar(32) NOT NULL COMMENT '收件编号',
@@ -173,40 +210,6 @@ CREATE TABLE `tstd_blacklist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Table structure for `tsys_config`
--- ----------------------------
-DROP TABLE IF EXISTS `tsys_config`;
-CREATE TABLE `tsys_config` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `type` varchar(32) DEFAULT NULL COMMENT '类型',
-  `ckey` varchar(32) DEFAULT NULL COMMENT 'key值',
-  `cvalue` varchar(255) DEFAULT NULL COMMENT '值',
-  `note` text COMMENT '配置说明',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `tsys_dict`
--- ----------------------------
-DROP TABLE IF EXISTS `tsys_dict`;
-CREATE TABLE `tsys_dict` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
-  `type` char(1) DEFAULT NULL COMMENT '类型（第一层/第二层）',
-  `parent_key` varchar(32) DEFAULT NULL COMMENT '父key',
-  `dkey` varchar(32) DEFAULT NULL COMMENT 'key',
-  `dvalue` varchar(255) DEFAULT NULL COMMENT '值',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tsys_menu`

@@ -5,12 +5,12 @@ public interface ISmsOutAO {
      * 发送短信验证码
      * @param mobile
      * @param bizType
-     * @param kind
+     * @param companyCode
      * @param systemCode 
      * @create: 2016年12月15日 上午7:28:43 xieyj
      * @history:
      */
-    public void sendCaptcha(String mobile, String bizType, String kind,
+    public void sendCaptcha(String mobile, String bizType, String companyCode,
             String systemCode);
 
     /**

@@ -5,7 +5,7 @@ package com.std.user.dto.req;
  * @since: 2016年9月17日 下午1:39:41 
  * @history:
  */
-public class XN807700Req {
+public class XN805900Req {
 
     // 类型（第一层/第二层）（必填）
     private String type;
@@ -25,16 +25,11 @@ public class XN807700Req {
     // 备注（选填）
     private String remark;
 
+    // 公司编号（必填）
+    private String companyCode;
+
     // 系统编号（必填）
     private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getType() {
         return type;
@@ -82,5 +77,21 @@ public class XN807700Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

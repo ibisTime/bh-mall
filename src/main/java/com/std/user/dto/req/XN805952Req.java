@@ -1,6 +1,6 @@
 package com.std.user.dto.req;
 
-public class XN807910Req {
+public class XN805952Req {
     // 公司编号(必填)
     private String companyCode;
 

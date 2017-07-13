@@ -4,29 +4,30 @@ import com.std.user.ao.ISYSConfigAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.dto.req.XN807716Req;
+import com.std.user.dto.req.XN805917Req;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 详情查询系统参数
+ * 根据key获取value值
  * @author: xieyj 
- * @since: 2016年9月17日 下午1:55:26 
+ * @since: 2016年9月17日 下午1:56:04 
  * @history:
  */
-public class XN807716 extends AProcessor {
+public class XN805917 extends AProcessor {
     private ISYSConfigAO sysConfigAO = SpringContextHolder
         .getBean(ISYSConfigAO.class);
 
-    private XN807716Req req = null;
+    private XN805917Req req = null;
 
     /** 
      * @see com.xnjr.base.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return sysConfigAO.getSYSConfig(StringValidater.toLong(req.getId()));
+        return sysConfigAO.getSYSConfig(req.getCkey(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 
     /** 
@@ -34,8 +35,9 @@ public class XN807716 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN807716Req.class);
-        StringValidater.validateBlank(req.getId());
+        req = JsonUtil.json2Bean(inputparams, XN805917Req.class);
+        StringValidater.validateBlank(req.getCkey(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 
 }

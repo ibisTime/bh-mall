@@ -1,13 +1,13 @@
 package com.std.user.dto.res;
 
-public class XN001700Res {
+public class XN805951Res {
     // 上传凭证
     private String uploadToken;
 
-    public XN001700Res() {
+    public XN805951Res() {
     }
 
-    public XN001700Res(String uploadToken) {
+    public XN805951Res(String uploadToken) {
         this.uploadToken = uploadToken;
     }
 

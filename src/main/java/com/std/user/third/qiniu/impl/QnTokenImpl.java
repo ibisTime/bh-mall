@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.qiniu.util.Auth;
-import com.std.user.bo.ICPasswordBO;
 import com.std.user.enums.ECPwdType;
 import com.std.user.exception.BizException;
 
@@ -31,7 +30,7 @@ public class QnTokenImpl {
     protected ICPasswordBO cPasswordBO;
 
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
-    public String getUploadToken(String systemCode) {
+    public String getUploadToken(String companyCode, String systemCode) {
         Map<String, String> resultMap = cPasswordBO.queryCPasswordList(
             ECPwdType.QINIU.getCode(), null, systemCode);
         if (resultMap == null) {

@@ -5,15 +5,12 @@ package com.std.user.dto.req;
  * @since: 2016年9月17日 下午4:09:34 
  * @history:
  */
-public class XN807711Req {
+public class XN805911Req {
     // 编号
     private Long id;
 
     // 值（必填）
     private String cvalue;
-
-    // 配置说明（必填）
-    private String note;
 
     // 更新人（必填）
     private String updater;
@@ -35,14 +32,6 @@ public class XN807711Req {
 
     public void setCvalue(String cvalue) {
         this.cvalue = cvalue;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public String getUpdater() {

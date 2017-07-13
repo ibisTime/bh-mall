@@ -22,7 +22,8 @@ public interface ISYSDictAO {
     static String DEFAULT_ORDER_COLUMN = "id";
 
     public Long addSYSDict(String type, String parentKey, String key,
-            String value, String updater, String remark, String systemCode);
+            String value, String updater, String remark, String companyCode,
+            String systemCode);
 
     public int dropSYSDict(Long id);
 

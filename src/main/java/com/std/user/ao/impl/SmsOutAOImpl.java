@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.std.user.ao.ISmsOutAO;
-import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.IUserBO;
 import com.std.user.domain.User;
@@ -19,14 +18,8 @@ public class SmsOutAOImpl implements ISmsOutAO {
     @Autowired
     IUserBO userBO;
 
-    @Autowired
-    ICompanyBO companyBO;
-
-    /** 
-     * @see com.std.user.ao.ISmsOutAO#sendCaptcha(java.lang.String, java.lang.String)
-     */
     @Override
-    public void sendCaptcha(String mobile, String bizType, String kind,
+    public void sendCaptcha(String mobile, String bizType, String companyCode,
             String systemCode) {
         smsOutBO.sendCaptcha(mobile, bizType, systemCode);
     }
