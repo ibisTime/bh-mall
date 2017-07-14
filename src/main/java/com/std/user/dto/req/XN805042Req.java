@@ -4,6 +4,9 @@ public class XN805042Req {
     // 登录名（必填）
     private String loginName;
 
+    // 登录密码（选填）
+    private String loginPwd;
+
     // 手机号（选填）
     private String mobile;
 
@@ -19,20 +22,11 @@ public class XN805042Req {
     // 推荐人（选填）
     private String userReferee;
 
-    // 更新人(必填)
-    private String updater;
-
-    // 备注(选填)
-    private String remark;
-
-    // 类别(必填)
+    // 用户类型(必填)
     private String kind;
 
     // 附件(选填)
     private String pdf;
-
-    // 角色编号(选填)
-    private String roleCode;
 
     // 分成比例(选填)
     private String divRate;
@@ -49,63 +43,38 @@ public class XN805042Req {
     // 区(选填)
     private String area;
 
+    // 经度(选填)
+    private String longitude;
+
+    // 维度(选填)
+    private String latitude;
+
+    // 更新人(必填)
+    private String updater;
+
+    // 备注(选填)
+    private String remark;
+
+    // 公司编号(必填)
+    private String companyCode;
+
     // 系统编号(必填)
     private String systemCode;
 
-    public String getDivRate() {
-        return divRate;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setDivRate(String divRate) {
-        this.divRate = divRate;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
-    public String getIsRegHx() {
-        return isRegHx;
+    public String getLoginPwd() {
+        return loginPwd;
     }
 
-    public void setIsRegHx(String isRegHx) {
-        this.isRegHx = isRegHx;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
+    public void setLoginPwd(String loginPwd) {
+        this.loginPwd = loginPwd;
     }
 
     public String getMobile() {
@@ -148,6 +117,78 @@ public class XN805042Req {
         this.userReferee = userReferee;
     }
 
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
+    }
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
+    }
+
+    public String getIsRegHx() {
+        return isRegHx;
+    }
+
+    public void setIsRegHx(String isRegHx) {
+        this.isRegHx = isRegHx;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
     public String getUpdater() {
         return updater;
     }
@@ -164,27 +205,20 @@ public class XN805042Req {
         this.remark = remark;
     }
 
-    public String getKind() {
-        return kind;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
-    public String getLoginName() {
-        return loginName;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
-    }
 }

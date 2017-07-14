@@ -19,19 +19,20 @@ import com.std.user.enums.ECurrency;
  * @history:
  */
 public interface IAccountBO {
-
     /**
      * 分配多个账户
      * @param userId
      * @param realName
+     * @param type
      * @param currencyList
-     * @param systemCode
-     * @return 
-     * @create: 2016年12月24日 下午1:27:55 xieyj
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2017年7月14日 下午5:55:39 xieyj
      * @history:
      */
     public void distributeAccountList(String userId, String realName,
-            String type, List<String> currencyList, String systemCode);
+            String type, List<String> currencyList, String companyCode,
+            String systemCode);
 
     /**
      * 更新户名

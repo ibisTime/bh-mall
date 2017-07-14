@@ -11,14 +11,15 @@ import java.util.List;
 
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
-import com.std.user.dto.req.XN805180Req;
+import com.std.user.dto.req.XN805042Req;
+import com.std.user.dto.req.XN805043Req;
+import com.std.user.dto.req.XN805170Req;
 import com.std.user.dto.req.XN805181Req;
 import com.std.user.dto.req.XN805182Req;
 import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN001404Res;
-import com.std.user.dto.res.XN805151Res;
-import com.std.user.dto.res.XN805154Res;
-import com.std.user.dto.res.XN805155Res;
+import com.std.user.dto.res.XN805041Res;
+import com.std.user.dto.res.XN805170Res;
 
 /** 
  * @author: miyb 
@@ -37,7 +38,7 @@ public interface IUserAO {
      * @create: 2016年12月14日 下午5:45:18 xieyj
      * @history:
      */
-    public void doCheckMobile(String mobile, String kind, String companyCode,
+    void doCheckMobile(String mobile, String kind, String companyCode,
             String systemCode);
 
     /**
@@ -58,10 +59,51 @@ public interface IUserAO {
      * @create: 2017年7月14日 上午11:10:51 xieyj
      * @history:
      */
-    public String doRegister(String mobile, String loginPwd,
+    public XN805041Res doRegister(String mobile, String loginPwd,
             String userReferee, String userRefereeKind, String smsCaptcha,
             String kind, String isRegHx, String province, String city,
             String area, String companyCode, String systemCode);
+
+    public String doAddUser(XN805042Req req);
+
+    public String doApplyRegUser(XN805043Req req);
+
+    /**
+     * 用户登录
+     * @param loginName
+     * @param loginPwd
+     * @param kind
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2016年12月14日 下午5:57:42 xieyj
+     * @history:
+     */
+    public String doLogin(String loginName, String loginPwd, String kind,
+            String companyCode, String systemCode);
+
+    /**
+     * 微信注册/登录
+     * @param req
+     * @return 
+     * @create: 2017年7月14日 下午9:20:26 xieyj
+     * @history:
+     */
+    public XN805170Res doLoginWeChat(XN805170Req req);
+
+    /**
+     * 验证码登录注册
+     * @param mobile
+     * @param kind
+     * @param smsCaptcha
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年1月19日 下午5:48:21 xieyj
+     * @history:
+     */
+    public String doCaptchaLoginReg(String mobile, String kind,
+            String smsCaptcha, String companyCode, String systemCode);
 
     /**
      * 检查登录密码是否正确
@@ -71,105 +113,6 @@ public interface IUserAO {
      * @history:
      */
     public void doCheckLoginPwd(String userId, String password);
-
-    /**
-     * 注册送积分
-     * @param mobile
-     * @param loginPwd
-     * @param loginPwdStrength
-     * @param userReferee
-     * @param smsCaptcha
-     * @param isRegHx
-     * @param province
-     * @param city
-     * @param area
-     * @param systemCode
-     * @return 
-     * @create: 2017年5月2日 下午7:02:23 xieyj
-     * @history:
-     */
-    public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha,
-            String isRegHx, String province, String city, String area,
-            String systemCode);
-
-    /**
-     * 注册送积分
-     * @param mobile
-     * @param loginPwd
-     * @param loginPwdStrength
-     * @param userReferee
-     * @param smsCaptcha
-     * @param isRegHx 是否注册环信 0或不传 否 1是
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年3月27日 上午10:01:32 xieyj
-     * @history:
-     */
-    public String doCSWRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha,
-            String isRegHx, String companyCode, String systemCode);
-
-    /**
-     * 代注册分配角色
-     * @param loginName
-     * @param kind
-     * @param roleCode
-     * @param updater
-     * @param systemCode
-     * @return 
-     * @create: 2017年3月12日 下午8:11:20 xieyj
-     * @history:
-     */
-    public String doAddUser(String loginName, String kind, String roleCode,
-            String updater, String systemCode);
-
-    /**
-     * 城市网代注册
-     * @param mobile
-     * @param companyCode
-     * @param userReferee
-     * @param systemCode
-     * @return 
-     * @create: 2016年12月14日 下午5:57:03 xieyj
-     * @history:
-     */
-    public String doAddUser(String mobile, String companyCode,
-            String userReferee, String systemCode);
-
-    String doAddUser(String loginName, String mobile, String idKind,
-            String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf, String roleCode,
-            Double divRate, String isRegHx, String province, String city,
-            String area, String systemCode);
-
-    /**
-     * 连同用户密码代注册(引入第三方用户)
-     * @param mobile
-     * @param loginPwd
-     * @param userReferee
-     * @param updater
-     * @param remark
-     * @param isRegHx
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年3月29日 下午2:42:29 xieyj
-     * @history:
-     */
-    public String doAddUserWithPwd(String mobile, String loginPwd,
-            String userReferee, String updater, String remark, String isRegHx,
-            String companyCode, String systemCode);
-
-    /**
-     * 新增合伙人(正汇、定制通)
-     * @param req
-     * @return 
-     * @create: 2017年4月18日 上午9:03:02 xieyj
-     * @history:
-     */
-    public String doAddPartner(XN805180Req req);
 
     /**
      * 修改合伙人(正汇、定制通)
@@ -187,83 +130,6 @@ public interface IUserAO {
      * @history:
      */
     public void doEditUser(XN805182Req req);
-
-    /**
-     * 用户登录
-     * @param loginName
-     * @param loginPwd
-     * @param kind
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2016年12月14日 下午5:57:42 xieyj
-     * @history:
-     */
-    public String doLogin(String loginName, String loginPwd, String kind,
-            String companyCode, String systemCode);
-
-    /**
-     * 微信登录（新用户登录需绑定手机号）
-     * @param code
-     * @param type
-     * @param mobile
-     * @param isLoginCaptcha 非微信登录后绑定微信，不传验证码 1 是登录后，0或不传 首次登录注册
-     * @param smsCaptcha
-     * @param userReferee
-     * @param isRegHx
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年5月12日 上午11:34:21 xieyj
-     * @history:
-     */
-    public XN805151Res doLoginWeChat(String code, String type, String mobile,
-            String isLoginCaptcha, String smsCaptcha, String userReferee,
-            String isRegHx, String companyCode, String systemCode);
-
-    /**
-     * 微信登录
-     * @param code
-     * @param isApp
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年4月17日 下午6:06:48 xieyj
-     * @history:
-     */
-    public String doLoginWeChat(String code, String type, String companyCode,
-            String systemCode);
-
-    public String doLoginWeChat(String code, String type, Long amount,
-            String companyCode, String systemCode);
-
-    /**
-     * 用户登录送积分
-     * @param loginName
-     * @param loginPwd
-     * @param kind
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年5月2日 下午7:56:57 xieyj
-     * @history:
-     */
-    public XN805155Res doLoginAddJf(String loginName, String loginPwd,
-            String kind, String companyCode, String systemCode);
-
-    /**
-     * 验证码登录注册
-     * @param mobile
-     * @param kind
-     * @param smsCaptcha
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年1月19日 下午5:48:21 xieyj
-     * @history:
-     */
-    public String doCaptchaLoginReg(String mobile, String kind,
-            String smsCaptcha, String companyCode, String systemCode);
 
     /**
      * 实名认证

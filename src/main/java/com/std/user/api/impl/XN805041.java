@@ -6,7 +6,6 @@ import com.std.user.common.JsonUtil;
 import com.std.user.common.PhoneUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805041Req;
-import com.std.user.dto.res.XN805041Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
@@ -24,19 +23,18 @@ public class XN805041 extends AProcessor {
 
     @Override
     public synchronized Object doBusiness() throws BizException {
-        return new XN805041Res(userAO.doRegister(req.getMobile(),
-            req.getLoginPwd(), req.getLoginPwdStrength(), req.getUserReferee(),
+        return userAO.doRegister(req.getMobile(), req.getLoginPwd(),
+            req.getUserReferee(), req.getUserRefereeKind(),
             req.getSmsCaptcha(), req.getKind(), req.getIsRegHx(),
             req.getProvince(), req.getCity(), req.getArea(),
-            req.getSystemCode()));
+            req.getCompanyCode(), req.getSystemCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805041Req.class);
         StringValidater.validateBlank(req.getMobile(), req.getLoginPwd(),
-            req.getLoginPwdStrength(), req.getSmsCaptcha(), req.getKind(),
-            // req.getProvince(), req.getCity(), req.getArea(),
+            req.getSmsCaptcha(), req.getKind(), req.getCompanyCode(),
             req.getSystemCode());
         PhoneUtil.checkMobile(req.getMobile());// 判断格式
     }

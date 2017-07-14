@@ -17,6 +17,7 @@ import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,35 +33,29 @@ import com.std.user.bo.ISYSRoleBO;
 import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.IUserBO;
-import com.std.user.bo.IUserExtBO;
 import com.std.user.bo.IUserRelationBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.common.AmountUtil;
 import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
-import com.std.user.common.PropertiesUtil;
-import com.std.user.common.PwdUtil;
 import com.std.user.common.SysConstant;
 import com.std.user.common.WechatConstant;
-import com.std.user.core.OrderNoGenerater;
 import com.std.user.core.StringValidater;
 import com.std.user.domain.SYSConfig;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
 import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
-import com.std.user.dto.req.XN805180Req;
+import com.std.user.dto.req.XN805042Req;
+import com.std.user.dto.req.XN805043Req;
 import com.std.user.dto.req.XN805181Req;
 import com.std.user.dto.req.XN805182Req;
 import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN001404Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
-import com.std.user.dto.res.XN805151Res;
-import com.std.user.dto.res.XN805154Res;
-import com.std.user.dto.res.XN805155Res;
-import com.std.user.enums.EAccountType;
+import com.std.user.dto.res.XN805041Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECPwdType;
@@ -68,13 +63,11 @@ import com.std.user.enums.ECurrency;
 import com.std.user.enums.EFieldType;
 import com.std.user.enums.EIDKind;
 import com.std.user.enums.ELoginType;
-import com.std.user.enums.EPrefixCode;
 import com.std.user.enums.ESex;
 import com.std.user.enums.ESysUser;
 import com.std.user.enums.ESystemCode;
 import com.std.user.enums.EUser;
 import com.std.user.enums.EUserKind;
-import com.std.user.enums.EUserLevel;
 import com.std.user.enums.EUserPwd;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
@@ -90,8 +83,13 @@ import com.std.user.util.RandomUtil;
 @Service
 public class UserAOImpl implements IUserAO {
 
+    private static Logger logger = Logger.getLogger(UserAOImpl.class);
+
     @Autowired
     protected IUserBO userBO;
+
+    @Autowired
+    protected IAccountBO accountBO;
 
     @Autowired
     protected InstantMsgImpl instantMsgImpl;
@@ -100,13 +98,7 @@ public class UserAOImpl implements IUserAO {
     protected IUserRelationBO userRelationBO;
 
     @Autowired
-    protected IUserExtBO userExtBO;
-
-    @Autowired
     protected ISYSRoleBO sysRoleBO;
-
-    @Autowired
-    protected IAccountBO accountBO;
 
     @Autowired
     IIdentifyBO dentifyBO;
@@ -115,22 +107,10 @@ public class UserAOImpl implements IUserAO {
     ISmsOutBO smsOutBO;
 
     @Autowired
-    protected ICompanyBO companyBO;
-
-    @Autowired
-    protected IRuleBO ruleBO;
-
-    @Autowired
     protected IFieldTimesBO fieldTimesBO;
 
     @Autowired
     protected ISignLogBO signLogBO;
-
-    @Autowired
-    protected ICPasswordBO cPasswordBO;
-
-    @Autowired
-    protected ILevelRuleBO levelRuleBO;
 
     @Autowired
     protected ISYSConfigBO sysConfigBO;
@@ -146,93 +126,108 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doRegister(String mobile, String loginPwd,
+    public XN805041Res doRegister(String mobile, String loginPwd,
             String userReferee, String userRefereeKind, String smsCaptcha,
             String kind, String isRegHx, String province, String city,
             String area, String companyCode, String systemCode) {
         // 1、参数校验
-        // 验证手机号
-        // 验证推荐人是否存在,并将手机号转化为用户编号
-        // 验证短信验证码
+        // 验证手机号是否存在
         userBO.isMobileExist(mobile, kind, companyCode, systemCode);
+        // 验证推荐人是否存在,并将手机号转化为用户编号
         String userRefereeId = userBO.getUserId(userReferee, userRefereeKind,
             companyCode, systemCode);
+        // 验证短信验证码
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041", companyCode,
             systemCode);
-
         // 2、注册用户
         String userId = userBO.doRegister(mobile, loginPwd, userRefereeId,
             kind, province, city, area, companyCode, systemCode);
         // 3、分配账户
         distributeAccount(userId, mobile, kind, companyCode, systemCode);
-        // 4、第三方账号注册
-        thirdRegist(userId, companyCode, systemCode);
-        return userId;
+        // 4、注册送积分
+        Long amount = addRegAmount(userId, mobile, kind, companyCode,
+            systemCode);
+        // 5、第三方账号注册
+        thirdRegist(userId, isRegHx, companyCode, systemCode);
+        return new XN805041Res(userId, amount);
     }
 
-    /**
-     * 分配账号，并送积分
-     * @param userId
-     * @param mobile
-     * @param kind
-     * @param companyCode
-     * @param systemCode 
-     * @create: 2017年7月14日 上午11:52:23 xieyj
-     * @history:
-     */
-    public void distributeAccount(String userId, String mobile, String kind,
+    // 分配账号
+    private void distributeAccount(String userId, String mobile, String kind,
             String companyCode, String systemCode) {
-        // 分配账号
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            if (EUserKind.F2.getCode().equals(kind)) {
-                currencyList.add(ECurrency.ZH_FRB.getCode());
-                currencyList.add(ECurrency.CNY.getCode());
-            } else {
-                currencyList.add(ECurrency.ZH_FRB.getCode());
-                currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.ZH_GXZ.getCode());
-                currencyList.add(ECurrency.ZH_QBB.getCode());
-                currencyList.add(ECurrency.ZH_GWB.getCode());
-                currencyList.add(ECurrency.ZH_HBB.getCode());
-                currencyList.add(ECurrency.ZH_HBYJ.getCode());
-            }
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
-        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
+        List<String> currencyList = new ArrayList<String>();
+        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.CG_JF.getCode());
             currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
-        } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.YC_CB.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
         } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
             // 公共服务平台不需要账户
         } else {
-            List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
         }
+        accountBO.distributeAccountList(userId, mobile, kind, currencyList,
+            companyCode, systemCode);
     }
 
-    /** 
-     * 第三方账号注册
-     * @param userId 
-     * @create: 2017年7月14日 上午11:54:54 xieyj
-     * @history: 
-     */
-    private void thirdRegist(String userId, String companyCode,
+    // 赠送积分
+    private Long addRegAmount(String userId, String mobile, String kind,
+            String companyCode, String systemCode) {
+        Long amount = 0L;
+        // 注册送积分
+        if (EUserKind.Customer.getCode().equals(kind)) {
+            SYSConfig sysConfig = sysConfigBO.getConfig(
+                SysConstant.CUSER_LOGIN_ADDJF, companyCode, systemCode);
+            if (null != sysConfig) {
+                amount = AmountUtil.mul(1000L,
+                    Double.valueOf(sysConfig.getCvalue()));
+                accountBO.doTransferAmountRemote(getSysUserId(userId), userId,
+                    ECurrency.CG_JF, amount, EBizType.AJ_REG, "用户[" + mobile
+                            + "]注册送积分", "注册送积分");
+            }
+        }
+        return amount;
+    }
+
+    // 每天登录送积分
+    private Long addLoginAmount(User user) {
+        Long amount = 0L;
+        if (EUserKind.Customer.getCode().equals(user.getKind())) {
+            Boolean result = signLogBO.isSignToday(user.getUserId());
+            if (!result) {
+                signLogBO.saveSignLog(user.getUserId(), "",
+                    user.getSystemCode());
+                SYSConfig sysConfig = sysConfigBO.getConfig(
+                    SysConstant.CUSER_LOGIN_ADDJF, user.getCompanyCode(),
+                    user.getSystemCode());
+                if (null != sysConfig) {
+                    amount = AmountUtil.mul(1000L,
+                        Double.valueOf(sysConfig.getCvalue()));
+                    accountBO.doTransferAmountRemote(
+                        getSysUserId(user.getSystemCode()), user.getUserId(),
+                        ECurrency.CG_JF, amount, EBizType.AJ_SIGN,
+                        "用户[" + user.getMobile() + "]登录送积分", "登录送积分");
+                }
+            }
+        }
+        return amount;
+    }
+
+    private String getSysUserId(String systemCode) {
+        String userId = null;
+        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+            userId = ESysUser.SYS_USER_CAIGO.getCode();
+        }
+        return userId;
+    }
+
+    // 第三方注册
+    private void thirdRegist(String userId, String isRegHx, String companyCode,
             String systemCode) {
         // 即时通信注册
-        instantMsgImpl.doRegisterUser(userId, systemCode);
+        if (EBoolean.YES.getCode().equals(isRegHx)) {
+            instantMsgImpl.doRegisterUser(userId, systemCode);
+        }
     }
 
     /** 
@@ -256,512 +251,187 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public XN805154Res doRegisterAddJf(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha,
-            String isRegHx, String province, String city, String area,
-            String systemCode) {
-        String userId = doRegister(mobile, loginPwdStrength, loginPwdStrength,
-            userReferee, smsCaptcha, EUserKind.F1.getCode(), isRegHx, province,
-            city, area, systemCode);
-        SYSConfig sysConfig = sysConfigBO.getConfigValue(SysConstant.REGADDJF,
-            systemCode, systemCode);
-        Long amount = AmountUtil.mul(1000L,
-            Double.valueOf(sysConfig.getCvalue()));
-        // 注册送积分
-        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
-                userId, ECurrency.CG_JF, amount, EBizType.AJ_REG, "用户["
-                        + mobile + "]注册送积分", "注册送积分");
-        } else {
-            throw new BizException("xn702002", "该系统暂不支持注册送积分");
-        }
-        return new XN805154Res(userId, amount);
-    }
-
-    @Override
-    @Transactional
-    public String doCSWRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha,
-            String isRegHx, String companyCode, String systemCode) {
-        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), systemCode);
-        // 验证推荐人是否是平台的已注册用户
-        userBO.checkUserReferee(userReferee, systemCode);
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805076", systemCode);
-        // 设置公司
-        Company company = companyBO.getCompany(companyCode);
-        if (company == null) {
-            Company result = companyBO.getDefaultCompany(systemCode);
-            if (result != null) {
-                companyCode = result.getCode();
-            }
-        }
-        // 插入用户信息
-        String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            null, mobile, loginPwd, loginPwdStrength, userReferee,
-            EUserKind.F1.getCode(), EUserLevel.ONE.getCode(), companyCode,
-            null, null, systemCode);
-        // 注册
-        Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
-            EBoolean.NO.getCode());
-        List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.JF.getCode());
-        accountBO.distributeAccountList(userId, mobile,
-            EAccountType.Customer.getCode(), currencyList, systemCode);
-        // 注册送积分
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-            userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送赏金", "注册送赏金");
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
-        if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, systemCode);
-        }
-        return userId;
-    }
-
-    @Override
-    @Transactional
-    public String doAddUser(String loginName, String mobile, String idKind,
-            String idNo, String realName, String userReferee, String updater,
-            String remark, String kind, String pdf, String roleCode,
-            Double divRate, String isRegHx, String province, String city,
-            String area, String systemCode) {
+    public String doAddUser(XN805042Req req) {
         String userId = null;
-        String userStatus = EUserStatus.NORMAL.getCode();
-        // 插入用户信息
-        String loginPsd = EUserPwd.InitPwd.getCode();
-        if (EUserKind.F1.getCode().equals(kind)
-                || EUserKind.F2.getCode().equals(kind)) {
-            if (ESystemCode.DZT.getCode().equals(systemCode)) {
-                roleCode = PropertiesUtil.Config.DZT_LTS_ROLECODE;
-                userStatus = EUserStatus.TO_APPROVE.getCode();
-            }
-            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
-                roleCode = PropertiesUtil.Config.JKEG_SHANGHU_ROLECODE;
-            }
+        if (ESystemCode.CAIGO.getCode().equals(req.getSystemCode())) {
+            userId = doAddUserCaigo(req);
+        } else {
+        }
+        return userId;
+    }
+
+    private String doAddUserCaigo(XN805042Req req) {
+        String userId = null;
+        if (EUserKind.Customer.getCode().equals(req.getKind())) {
             // 验证手机号
-            userBO.isMobileExist(mobile, kind, systemCode);
-            // 插入用户信息
-            loginPsd = RandomUtil.generate6();
-            userId = userBO.doAddUser(mobile, mobile, loginPsd, userReferee,
-                realName, idKind, idNo, null, kind, "0", remark, updater, pdf,
-                roleCode, divRate, systemCode, userStatus);
-            if (StringUtils.isBlank(realName)) {
-                realName = mobile;
+            userBO.isMobileExist(req.getMobile(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            // 判断登录密码是否为空
+            if (StringUtils.isBlank(req.getLoginPwd())) {
+                req.setLoginPwd(RandomUtil.generate6());
             }
-            // 分配账号(人民币和虚拟币)
-            if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-                List<String> currencyList = new ArrayList<String>();
-                if (EUserKind.F2.getCode().equals(kind)) {
-                    currencyList.add(ECurrency.ZH_FRB.getCode());
-                    currencyList.add(ECurrency.CNY.getCode());
-                } else {
-                    currencyList.add(ECurrency.ZH_FRB.getCode());
-                    currencyList.add(ECurrency.CNY.getCode());
-                    currencyList.add(ECurrency.ZH_GXZ.getCode());
-                    currencyList.add(ECurrency.ZH_QBB.getCode());
-                    currencyList.add(ECurrency.ZH_GWB.getCode());
-                    currencyList.add(ECurrency.ZH_HBB.getCode());
-                    currencyList.add(ECurrency.ZH_HBYJ.getCode());
-                }
-                accountBO.distributeAccountList(userId, mobile,
-                    getAccountType(kind), currencyList, systemCode);
-            } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-                List<String> currencyList = new ArrayList<String>();
-                currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.CG_JF.getCode());
-                currencyList.add(ECurrency.CG_CGB.getCode());
-                accountBO.distributeAccountList(userId, mobile,
-                    getAccountType(kind), currencyList, systemCode);
-                if (EUserKind.F1.getCode().equals(kind)) {
-                    userRelationBO.saveUserRelation(userReferee, userId,
-                        systemCode);
-                }
-            } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
-                List<String> currencyList = new ArrayList<String>();
-                currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.YC_CB.getCode());
-                accountBO.distributeAccountList(userId, mobile,
-                    getAccountType(kind), currencyList, systemCode);
-                if (EUserKind.F1.getCode().equals(kind)) {
-                    userRelationBO.saveUserRelation(userReferee, userId,
-                        systemCode);
-                }
-            } else {
-                List<String> currencyList = new ArrayList<String>();
-                currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.JF.getCode());
-                accountBO.distributeAccountList(userId, mobile,
-                    getAccountType(kind), currencyList, systemCode);
-            }
-            // 新增扩展信息
-            userExtBO.saveUserExt(userId, province, city, area, systemCode);
-            // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。初始化登录密码为" + loginPsd + "，请及时登录网站更改密码。",
-                "805042", systemCode);
+            userId = userBO.doAddUser(req, null);
 
-        } else if (EUserKind.Operator.getCode().equals(kind)) {
-            // 验证登录名
-            userBO.isLoginNameExist(loginName, kind, systemCode);
-            loginPsd = EUserPwd.InitPwd.getCode();
-            // 插入用户信息
-            userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
-                realName, idKind, idNo, loginPsd, kind,
-                EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
-                divRate, systemCode, userStatus);
-            if (ESystemCode.CSW.getCode().equals(systemCode)) {
-                List<String> currencyList = new ArrayList<String>();
-                currencyList.add(ECurrency.CNY.getCode());
-                currencyList.add(ECurrency.JF.getCode());
-                accountBO.distributeAccountList(userId, loginName,
-                    EAccountType.Partner.getCode(), currencyList, systemCode);
-            }
-            // 新增扩展信息
-            userExtBO.saveUserExt(userId, province, city, area, systemCode);
-            // 民宿主
-        } else if (EUserKind.Partner.getCode().equals(kind)) {
-            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
-                roleCode = PropertiesUtil.Config.JKEG_ZHIHUIMINGSU_ROLECODE;
-            }
-            // 验证登录名
-            userBO.isLoginNameExist(loginName, kind, systemCode);
-            loginPsd = RandomUtil.generate6();
-            // 插入用户信息
-            userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
-                realName, idKind, idNo, loginPsd, kind,
-                EUserLevel.ZERO.getCode(), remark, updater, pdf, roleCode,
-                divRate, systemCode, userStatus);
-            // 新增扩展信息
-            userExtBO.saveUserExt(userId, province, city, area, systemCode);
+            // 分配账户
             List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(kind), currencyList, systemCode);
-            // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。您的登录名[" + loginName + "],登录密码[" + loginPsd
-                    + "]。请及时登录修改密码", "805042", systemCode);
-        } else if (EUserKind.JMS.getCode().equals(kind)) {
-            if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-                userId = doAddCaigoOss(loginName, mobile, loginPsd, kind,
-                    idKind, idNo, realName, userReferee, divRate, updater, pdf,
-                    remark, systemCode);
-            }
-            if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
-                userId = doAddYaochengOss(loginName, mobile, loginPsd, kind,
-                    idKind, idNo, realName, userReferee, divRate, updater, pdf,
-                    remark, systemCode);
-            }
-            if (ESystemCode.JKYG.getCode().equals(systemCode)) {
-                userId = doAddJKEGOss(loginName, mobile, loginPsd, kind,
-                    idKind, idNo, realName, userReferee, divRate, updater, pdf,
-                    remark, systemCode);
-            }
-
-        }
-        // 是则注册环信用户
-        if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, systemCode);
-        }
-        return userId;
-    }
-
-    private String doAddCaigoOss(String loginName, String mobile,
-            String loginPsd, String kind, String idKind, String idNo,
-            String realName, String userReferee, Double divRate,
-            String updater, String pdf, String remark, String systemCode) {
-        String userId;
-        // 验证登录名
-        userBO.isLoginNameExist(loginName, kind, systemCode);
-        int level = 1;
-        if (StringUtils.isNotBlank(userReferee)) {
-            String preUserId = userReferee;
-            while (true) {
-                User data = userBO.getUser(preUserId);
-                if (data != null) {
-                    preUserId = data.getUserReferee();
-                    level++;
-                    // 超过3级，按3级处理
-                    if (level > 3) {
-                        level = 3;
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
-        String roleCode = PropertiesUtil.Config.JMS_ROLECODE;
-        // 插入用户信息
-        userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
-            realName, idKind, idNo, loginPsd, kind, level + "", remark,
-            updater, pdf, roleCode, divRate, systemCode,
-            EUserStatus.NORMAL.getCode());
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
-
-        // 分配账号(人民币,积分币和菜狗币)
-        List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.CG_JF.getCode());
-        currencyList.add(ECurrency.CG_CGB.getCode());
-        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
-            currencyList, systemCode);
-        return userId;
-    }
-
-    private String doAddYaochengOss(String loginName, String mobile,
-            String loginPsd, String kind, String idKind, String idNo,
-            String realName, String userReferee, Double divRate,
-            String updater, String pdf, String remark, String systemCode) {
-        String userId;
-        // 验证登录名
-        userBO.isLoginNameExist(loginName, kind, systemCode);
-        int level = 1;
-        if (StringUtils.isNotBlank(userReferee)) {
-            String preUserId = userReferee;
-            while (true) {
-                User data = userBO.getUser(preUserId);
-                if (data != null) {
-                    preUserId = data.getUserReferee();
-                    level++;
-                    // 超过3级，按3级处理
-                    if (level > 3) {
-                        level = 3;
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
-        String roleCode = PropertiesUtil.Config.YC_JMS_ROLECODE;
-        // 插入用户信息
-        userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
-            realName, idKind, idNo, loginPsd, kind, level + "", remark,
-            updater, pdf, roleCode, divRate, systemCode,
-            EUserStatus.NORMAL.getCode());
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
-
-        // 分配账号(人民币,橙券)
-        List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.YC_CB.getCode());
-        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
-            currencyList, systemCode);
-        return userId;
-    }
-
-    private String doAddJKEGOss(String loginName, String mobile,
-            String loginPsd, String kind, String idKind, String idNo,
-            String realName, String userReferee, Double divRate,
-            String updater, String pdf, String remark, String systemCode) {
-        String userId;
-        // 验证登录名
-        userBO.isLoginNameExist(loginName, kind, systemCode);
-        int level = 1;
-        if (StringUtils.isNotBlank(userReferee)) {
-            String preUserId = userReferee;
-            while (true) {
-                User data = userBO.getUser(preUserId);
-                if (data != null) {
-                    preUserId = data.getUserReferee();
-                    level++;
-                    // 超过3级，按3级处理
-                    if (level > 3) {
-                        level = 3;
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
-        String roleCode = PropertiesUtil.Config.JKEG_YINGYINGSHANG_ROLECODE;
-        // 插入用户信息
-        userId = userBO.doAddUser(loginName, mobile, loginPsd, userReferee,
-            realName, idKind, idNo, loginPsd, kind, level + "", remark,
-            updater, pdf, roleCode, divRate, systemCode,
-            EUserStatus.NORMAL.getCode());
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
-
-        // 分配账号(人民币,积分)
-        List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.JF.getCode());
-        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
-            currencyList, systemCode);
-        return userId;
-    }
-
-    @Override
-    public String doAddUser(String loginName, String kind, String roleCode,
-            String updater, String systemCode) {
-        // 验证登录名
-        userBO.isLoginNameExist(loginName, kind, systemCode);
-        // 插入用户信息
-        String loginPsd = EUserPwd.InitPwd.getCode();
-        String userId = userBO.doAddUser(loginName, null, loginPsd, null, null,
-            null, null, loginPsd, kind, null, null, updater, null, roleCode,
-            0.0D, systemCode, EUserStatus.NORMAL.getCode());
-        List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.JF.getCode());
-        accountBO.distributeAccountList(userId, loginName,
-            getAccountType(kind), currencyList, systemCode);
-        return userId;
-    }
-
-    /** 
-     * @see com.std.user.ao.IUserAO#doAddUser(java.lang.String, java.lang.String)
-     */
-    @Override
-    public String doAddUser(String mobile, String companyCode,
-            String userReferee, String systemCode) {
-        // 验证手机号
-        userBO.isMobileExist(mobile, systemCode);
-        companyBO.isCompanyExist(companyCode);
-        // 插入用户信息
-        String loginPwd = RandomUtil.generate6();
-        String userId = userBO.doRegister(EPrefixCode.CSW.getCode() + mobile,
-            null, mobile, loginPwd, "1", userReferee, EUserKind.F1.getCode(),
-            EUserLevel.ONE.getCode(), companyCode, null, null, systemCode);
-        // 环信代注册
-        instantMsgImpl.doRegisterUser(userId, systemCode);
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
-        List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.CNY.getCode());
-        currencyList.add(ECurrency.JF.getCode());
-        accountBO.distributeAccountList(userId, mobile,
-            EAccountType.Customer.getCode(), currencyList, systemCode);
-        // 发送短信
-        smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。", "805079",
-            systemCode);
-        return userId;
-    }
-
-    @Override
-    public String doAddUserWithPwd(String mobile, String loginPwd,
-            String userReferee, String updater, String remark, String isRegHx,
-            String companyCode, String systemCode) {
-        String kind = EUserKind.F1.getCode();
-        // 验证手机号
-        userBO.isMobileExist(mobile, kind, systemCode, systemCode);
-        // 插入用户信息
-        String isSendSms = EBoolean.NO.getCode();
-        String loginPwdMw = RandomUtil.generate6();
-        if (StringUtils.isBlank(loginPwd)) {
-            loginPwd = MD5Util.md5(loginPwdMw);
-            isSendSms = EBoolean.YES.getCode();
-        }
-        String userId = userBO.doAddUser(mobile, loginPwd, userReferee, kind,
-            remark, updater, companyCode, systemCode);
-        // 设置用户关系
-        if (StringUtils.isNotBlank(userReferee)) {
-            userRelationBO.saveUserRelation(userReferee, userId, systemCode);
-        }
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, systemCode);
-        List<String> currencyList = new ArrayList<String>();
-        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.CG_JF.getCode());
             currencyList.add(ECurrency.CG_CGB.getCode());
-        } else {
+            accountBO.distributeAccountList(userId, req.getMobile(),
+                req.getKind(), currencyList, req.getCompanyCode(),
+                req.getSystemCode());
+            // 发送短信
+            smsOutBO.sendSmsOut(req.getMobile(),
+                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
+                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
+                        + "，请及时登录网站更改密码。", "805042", req.getCompanyCode(),
+                req.getSystemCode());
+        } else if (EUserKind.Merchant.getCode().equals(req.getKind())) {
+            // 验证手机号
+            userBO.isMobileExist(req.getMobile(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            // 判断登录密码是否为空
+            if (StringUtils.isBlank(req.getLoginPwd())) {
+                req.setLoginPwd(RandomUtil.generate6());
+            }
+            userId = userBO.doAddUser(req, null);
+
+            // 分配账户
+            List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-        }
-        accountBO.distributeAccountList(userId, mobile, getAccountType(kind),
-            currencyList, systemCode);
-        if (EBoolean.YES.getCode().equals(isRegHx)) {
-            // 注册环信
-            instantMsgImpl.doRegisterUser(userId, systemCode);
-        }
-        // 发送短信
-        if (EBoolean.YES.getCode().equals(isSendSms)) {
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。您的登录密码为" + loginPwdMw + "，请及时登录网站修改!",
-                "001301", systemCode);
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, req.getMobile(),
+                req.getKind(), currencyList, req.getCompanyCode(),
+                req.getSystemCode());
+            // 发送短信
+            smsOutBO.sendSmsOut(req.getMobile(),
+                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
+                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
+                        + "，请及时登录网站更改密码。", "805042", req.getCompanyCode(),
+                req.getSystemCode());
+        } else if (EUserKind.Plat.getCode().equals(req.getKind())) {
+            // 验证登录名
+            userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            userId = userBO.doAddUser(req, null);
         }
         return userId;
     }
 
     @Override
     @Transactional
-    public String doAddPartner(XN805180Req req) {
-        // 合伙人新增业务逻辑：
-        // 1、校验登录是否全系统唯一，校验辖区是否已经存在合伙人
-        userBO.isLoginNameExist(req.getLoginName(),
-            EUserKind.Partner.getCode(), req.getSystemCode());
-        String kind = EUserKind.Partner.getCode();
-        UserExt condition = new UserExt();
-        condition.setKind(kind);
-        condition.setProvince(req.getProvince());
-        condition.setCity(req.getCity());
-        condition.setArea(req.getArea());
-        List<UserExt> list = userExtBO.queryUserExtList(condition);
-        if (CollectionUtils.isNotEmpty(list)) {
-            throw new BizException("xn000000", "该辖区已存在合伙人！");
-        }
-
-        // 2、新增用户，分配角色，增加账户
-        String userId = OrderNoGenerater.generate("U");
-        User data = new User();
-        data.setUserId(userId);
-        data.setLoginName(req.getLoginName());
-        String loginPwd = EUserPwd.InitPwd.getCode();
-        data.setLoginPwd(MD5Util.md5(loginPwd));
-
-        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        data.setNickname(userId.substring(userId.length() - 8, userId.length()));
-
-        data.setKind(kind);
-        data.setLevel(EUserLevel.ZERO.getCode());
-        data.setMobile(req.getMobile());
-        data.setIdKind(req.getIdKind());
-
-        data.setIdNo(req.getIdNo());
-        data.setRealName(req.getRealName());
-        if (ESystemCode.ZHPAY.getCode().equals(req.getSystemCode())) {
-            data.setRoleCode(PropertiesUtil.Config.PARTNER_ROLECODE);
-        } else if (ESystemCode.DZT.getCode().equals(req.getSystemCode())) {
-            data.setRoleCode(PropertiesUtil.Config.DZT_PARTNER_ROLECODE);
-        }
-        data.setDivRate(StringValidater.toDouble(req.getDivRate()));
-        data.setStatus(EUserStatus.NORMAL.getCode());
-
-        Date date = new Date();
-        data.setCreateDatetime(date);
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(date);
-        data.setRemark(req.getRemark());
-
-        data.setCompanyCode(req.getSystemCode());
-        data.setSystemCode(req.getSystemCode());
-        userBO.doAddUser(data);
-        userExtBO.saveUserExt(userId, req.getProvince(), req.getCity(),
-            req.getArea(), req.getSystemCode());
-
-        List<String> currencyList = new ArrayList<String>();
-        if (ESystemCode.ZHPAY.getCode().equals(data.getSystemCode())) {
-            currencyList.add(ECurrency.ZH_FRB.getCode());
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.ZH_GXZ.getCode());
-            currencyList.add(ECurrency.ZH_QBB.getCode());
-            currencyList.add(ECurrency.ZH_GWB.getCode());
-            currencyList.add(ECurrency.ZH_HBB.getCode());
-            currencyList.add(ECurrency.ZH_HBYJ.getCode());
+    public String doApplyRegUser(XN805043Req req) {
+        String userId = null;
+        if (ESystemCode.CAIGO.getCode().equals(req.getSystemCode())) {
+            userId = doApplyRegUserCaigo(req);
         } else {
-            currencyList.add(ECurrency.CNY.getCode());
         }
-        accountBO.distributeAccountList(userId, data.getLoginName(),
-            EAccountType.Partner.getCode(), currencyList, data.getSystemCode());
+        return userId;
+    }
+
+    private String doApplyRegUserCaigo(XN805043Req req) {
+        String userId = null;
+        if (EUserKind.Customer.getCode().equals(req.getKind())) {
+            // 验证手机号
+            userBO.isMobileExist(req.getMobile(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            // 判断登录密码是否为空
+            if (StringUtils.isBlank(req.getLoginPwd())) {
+                req.setLoginPwd(RandomUtil.generate6());
+            }
+            userId = userBO.doApplyRegUser(req, null);
+
+            // 分配账户
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, req.getMobile(),
+                req.getKind(), currencyList, req.getCompanyCode(),
+                req.getSystemCode());
+            // 发送短信
+            smsOutBO.sendSmsOut(req.getMobile(),
+                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
+                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
+                        + "，请及时登录网站更改密码。", "805042", req.getCompanyCode(),
+                req.getSystemCode());
+        } else if (EUserKind.Merchant.getCode().equals(req.getKind())) {
+            // 验证手机号
+            userBO.isMobileExist(req.getMobile(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            // 判断登录密码是否为空
+            if (StringUtils.isBlank(req.getLoginPwd())) {
+                req.setLoginPwd(RandomUtil.generate6());
+            }
+            userId = userBO.doAddUser(req, null);
+
+            // 分配账户
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, req.getMobile(),
+                req.getKind(), currencyList, req.getCompanyCode(),
+                req.getSystemCode());
+            // 发送短信
+            smsOutBO.sendSmsOut(req.getMobile(),
+                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
+                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
+                        + "，请及时登录网站更改密码。", "805042", req.getCompanyCode(),
+                req.getSystemCode());
+        } else if (EUserKind.Plat.getCode().equals(req.getKind())) {
+            // 验证登录名
+            userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            userId = userBO.doAddUser(req, null);
+        }
+        return userId;
+    }
+
+    @Override
+    public String doLogin(String loginName, String loginPwd, String kind,
+            String companyCode, String systemCode) {
+        User condition = new User();
+        if (EUserKind.Customer.getCode().equals(kind)
+                || EUserKind.Merchant.getCode().equals(kind)) {
+            condition.setLoginName(loginName);
+            condition.setLoginType(ELoginType.MOBILE.getCode());
+        } else {
+            condition.setLoginName(loginName);
+        }
+        condition.setKind(kind);
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<User> userList1 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList1)) {
+            throw new BizException("xn702002", "登录名不存在");
+        }
+        condition.setLoginPwd(MD5Util.md5(loginPwd));
+        List<User> userList2 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList2)) {
+            throw new BizException("xn702002", "登录密码错误");
+        }
+        User user = userList2.get(0);
+        if (!EUserStatus.NORMAL.equals(user.getStatus())) {
+            throw new BizException("xn702002", "该账号"
+                    + EUserStatus.getMap().get(user.getStatus()).getValue()
+                    + "，请联系工作人员");
+        }
+        addLoginAmount(user);
+        return user.getUserId();
+    }
+
+    @Override
+    public String doCaptchaLoginReg(String mobile, String kind,
+            String smsCaptcha, String companyCode, String systemCode) {
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805051", companyCode,
+            systemCode);
+        String userId = userBO.getUserId(mobile, kind, companyCode, systemCode);
+        if (StringUtils.isNotBlank(userId)) {
+            userId = userBO.saveUser(mobile, kind, companyCode, systemCode);
+        }
         return userId;
     }
 
@@ -853,87 +523,9 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public String doLogin(String loginName, String loginPwd, String kind,
-            String companyCode, String systemCode) {
-        User condition = new User();
-        if (EUserKind.F1.getCode().equals(kind)
-                || EUserKind.F2.getCode().equals(kind)) {
-            condition.setLoginName(loginName);
-            condition.setLoginType(ELoginType.ALL.getCode());
-            condition.setCompanyCode(companyCode);
-        } else {
-            condition.setLoginName(loginName);
-        }
-        condition.setKind(kind);
-        condition.setSystemCode(systemCode);
-        List<User> userList1 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "登录名不存在");
-        }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<User> userList2 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn702002", "登录密码错误");
-        }
-        User user = userList2.get(0);
-        if (EUserStatus.Ren_Locked.getCode().equals(user.getStatus())
-                || EUserStatus.Li_Locked.getCode().equals(user.getStatus())) {
-            throw new BizException("xn702002", "账户已被锁定，请联系工作人员");
-        }
-        if (EUserStatus.TO_APPROVE.getCode().equals(user.getStatus())) {
-            throw new BizException("xn702002", "您还未审核通过，请耐心等待");
-        }
-        return user.getUserId();
-    }
-
-    @Override
-    @Transactional
-    public XN805155Res doLoginAddJf(String loginName, String loginPwd,
-            String kind, String companyCode, String systemCode) {
-        String userId = doLogin(loginName, loginPwd, kind, companyCode,
-            systemCode);
-        // 判断是否已经签到
-        Long amount = 0L;
-        Boolean result = signLogBO.isSignToday(userId);
-        if (!result) {
-            signLogBO.saveSignLog(userId, "", systemCode);
-            if (ESystemCode.CAIGO.getCode().equals(systemCode)
-                    && EUserKind.F1.getCode().equals(kind)) {
-                accountBO.doTransferAmountRemote(
-                    ESysUser.SYS_USER_CAIGO.getCode(), userId, ECurrency.CG_JF,
-                    amount, EBizType.AJ_SIGN, "用户[" + loginName + "]登录送积分",
-                    "登录送积分");
-            }
-        }
-        return new XN805155Res(userId, amount);
-    }
-
-    @Override
-    public String doCaptchaLoginReg(String mobile, String kind,
-            String smsCaptcha, String companyCode, String systemCode) {
-        String userId = null;
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805183", companyCode,
-            systemCode);
-        User user = userBO.getUserByMobileAndKind(mobile, kind, companyCode,
-            systemCode);
-        if (user == null) {
-            User data = new User();
-            data.setMobile(mobile);
-            data.setKind(kind);
-            data.setCompanyCode(companyCode);
-            data.setSystemCode(systemCode);
-            userId = userBO.saveUser(data);
-        } else {
-            userId = user.getUserId();
-        }
-        return userId;
-    }
-
-    @Override
     public void doIdentify(String userId, String idKind, String idNo,
             String realName, String isReal) {
-        User user = userBO.getUser(userId, null);
+        User user = userBO.getUser(userId);
         if (EBoolean.YES.getCode().equals(isReal)) {
             // 三方认证
             dentifyBO.doIdentify(user.getSystemCode(), user.getCompanyCode(),
@@ -1585,55 +1177,28 @@ public class UserAOImpl implements IUserAO {
         }
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doChangeCompany(java.lang.String, java.lang.String)
-     */
-    public void doChangeCompany(String userId, String companyCode) {
-        userBO.refreshCompany(userId, companyCode);
-    }
-
-    private String getAccountType(String kind) {
-        String accountType = null;
-        if (EUserKind.F1.getCode().equals(kind)) {
-            accountType = EAccountType.Customer.getCode();
-        } else if (EUserKind.F2.getCode().equals(kind)) {
-            accountType = EAccountType.Business.getCode();
-        } else if (EUserKind.Partner.getCode().equals(kind)) {
-            accountType = EAccountType.Partner.getCode();
-        } else if (EUserKind.Operator.getCode().equals(kind)) {
-            accountType = EAccountType.Plat.getCode();
-        } else if (EUserKind.JMS.getCode().equals(kind)) {
-            accountType = EAccountType.Partner.getCode();
-        }
-        return accountType;
-    }
-
     @Override
     @Transactional
-    public XN805151Res doLoginWeChat(String code, String type, String mobile,
-            String isLoginCaptcha, String smsCaptcha, String userReferee,
-            String isRegHx, String companyCode, String systemCode) {
-        // 返回结果值
-        String userId = null;
-        String isNeedMobile = EBoolean.NO.getCode();
-
+    public XN805151Res doLoginWeChat(XN805151Req req) {
+        String companyCode = req.getCompanyCode();
+        String systemCode = req.getSystemCode();
         // Step1：获取密码参数信息
-        if (StringUtils.isBlank(type)) {
-            type = ECPwdType.WEIXIN_H5.getCode();// 默认获取微信h5参数
-        }
-        Map<String, String> mapCPwd = null;
-        if (ESystemCode.CSW.getCode().equals(systemCode)) {
-            mapCPwd = cPasswordBO.queryCPasswordList(type, systemCode,
-                systemCode);
+        Map<String, String> configPwd = sysConfigBO.getConfigsMap(companyCode,
+            systemCode);
+        String appId = null;
+        String appSecret = null;
+        if (ECPwdType.WEIXIN_APP.getCode().equals(req.getType())) {
+            appId = configPwd.get(SysConstant.WX_APP_ACCESS_KEY);
+            appSecret = configPwd.get(SysConstant.WX_APP_SECRET_KEY);
+        } else if (ECPwdType.WEIXIN_H5.getCode().equals(req.getType())) {
+            appId = configPwd.get(SysConstant.WX_H5_ACCESS_KEY);
+            appSecret = configPwd.get(SysConstant.WX_H5_SECRET_KEY);
         } else {
-            mapCPwd = cPasswordBO.queryCPasswordList(type, companyCode,
-                systemCode);
+            throw new BizException("XN000000", "登录类型不支持");
         }
-        String appId = mapCPwd.get("ACCESS_KEY");
         if (StringUtils.isBlank(appId)) {
             throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
         }
-        String appSecret = mapCPwd.get("SECRET_KEY");
         if (StringUtils.isBlank(appSecret)) {
             throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
         }
@@ -1645,14 +1210,14 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("grant_type", "authorization_code");
         fromProperties.put("appid", appId);
         fromProperties.put("secret", appSecret);
-        fromProperties.put("code", code);
-        System.out.println(appId + " " + appSecret + " " + code);
-        String response;
+        fromProperties.put("code", req.getCode());
+        logger.info("appId:" + appId + ",appSecret:" + appSecret + ",code:"
+                + req.getCode());
+        XN805151Res result = null;
         try {
-            response = PostSimulater.requestPostForm(
+            String response = PostSimulater.requestPostForm(
                 WechatConstant.WX_TOKEN_URL, fromProperties);
             res = getMapFromResponse(response);
-            System.out.println(res);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
                 throw new BizException("XN000000", "微信登录失败原因："
@@ -1671,379 +1236,116 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("lang", "zh_CN");
             wxRes = getMapFromResponse(PostSimulater.requestPostForm(
                 WechatConstant.WX_USER_INFO_URL, queryParas));
-            System.out.println(wxRes);
             String unionId = (String) wxRes.get("unionid");
-            if (StringUtils.isEmpty(unionId)) {
-                unionId = (String) wxRes.get("openid");
-                System.out
-                    .println("**********没有关联微信开放平台，没有unionid，unionid=openid。**********");
+            String appOpenId = null;
+            String h5OpenId = null;
+            if (ECPwdType.WEIXIN_APP.getCode().equals(req.getType())) {
+                appOpenId = (String) wxRes.get("openid");
+            } else if (ECPwdType.WEIXIN_H5.getCode().equals(req.getType())) {
+                h5OpenId = (String) wxRes.get("openid");
             }
-            // Step4：根据openId，unionId从数据库中查询用户信息,如果第一次unionId有值，但数据库保存的是openId，需更新成unionId
-            User dbUser = userBO.doGetUserId(unionId, openId, systemCode);
-            if (null != dbUser) {
-                // 如果user存在，说明用户授权登录过，直接登录
-                userId = dbUser.getUserId();
-                // 每天登录送积分
-                if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-                    Boolean result = signLogBO.isSignToday(userId);
-                    if (!result) {
-                        signLogBO.saveSignLog(userId, "", systemCode);
-                        SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                            SysConstant.LOGINADDJF, systemCode, systemCode);
-                        Long amount = AmountUtil.mul(1000L,
-                            Double.valueOf(sysConfig.getCvalue()));
-                        accountBO.doTransferAmountRemote(
-                            ESysUser.SYS_USER_CAIGO.getCode(), userId,
-                            ECurrency.CG_JF, amount, EBizType.AJ_SIGN, "登录送积分",
-                            "登录送积分");
-                    }
-                }
+            // Step4：根据openId，unionId从数据库中查询用户信息
+            User dbUser = userBO.doGetUserByOpenId(appOpenId, h5OpenId,
+                companyCode, systemCode);
+            if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                addLoginAmount(dbUser);// 每天登录送积分
+                result = new XN805151Res(dbUser.getUserId());
             } else {
-                String name = (String) wxRes.get("nickname");
-                String headimgurl = (String) wxRes.get("headimgurl");
-                String sex = ESex.UNKNOWN.getCode();
-                System.out.println("***性别=" + String.valueOf(wxRes.get("sex")));
+                String nickname = (String) wxRes.get("nickname");
+                String photo = (String) wxRes.get("headimgurl");
+                String gender = ESex.UNKNOWN.getCode();
                 if (String.valueOf(wxRes.get("sex")).equals("1.0")) {
-                    sex = ESex.MEN.getCode();
+                    gender = ESex.MEN.getCode();
                 } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
-                    sex = ESex.WOMEN.getCode();
+                    gender = ESex.WOMEN.getCode();
                 }
                 // Step5：判断注册是否传手机号，有则注册，无则反馈
-                if (StringUtils.isBlank(mobile)) {
-                    isNeedMobile = EBoolean.YES.getCode();
+                if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
+                    result = doWxLoginRegMobile(req, companyCode, systemCode,
+                        unionId, appOpenId, h5OpenId, nickname, photo, gender);
                 } else {
-                    // 判断是否需要验证码验证码,登录前一定要验证
-                    if (!EBoolean.YES.getCode().equals(isLoginCaptcha)) {
-                        if (StringUtils.isBlank(smsCaptcha)) {
-                            throw new BizException("xn702002", "请输入短信验证码");
-                        }
-                        // 短信验证码是否正确
-                        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805151",
-                            systemCode);
-                    }
-
-                    // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
-                    if (PhoneUtil.isMobile(userReferee)) {
-                        User refereeUser = userBO.getUserByMobile(userReferee,
-                            EUserKind.F1.getCode(), systemCode);
-                        if (null == refereeUser) {
-                            throw new BizException("xn702002", "推荐人不存在");
-                        }
-                        userReferee = refereeUser.getUserId();
-                    }
-                    User mobileUser = null;
-                    if (ESystemCode.CSW.getCode().equals(systemCode)) {
-                        mobileUser = userBO.getUserByMobileAndKind(mobile,
-                            EUserKind.F1.getCode(), null, systemCode);
-                    } else {
-                        mobileUser = userBO.getUserByMobileAndKind(mobile,
-                            EUserKind.F1.getCode(), companyCode, systemCode);
-                    }
-
-                    if (null == mobileUser) {
-                        userId = doThirdRegisterWechat(unionId, mobile, name,
-                            isRegHx, headimgurl, sex, userReferee, companyCode,
-                            systemCode);
-                    } else {
-                        // 根据该手机号更新用户信息
-                        userId = mobileUser.getUserId();
-                        userBO.refreshWxInfo(userId, unionId, name);
-                        userExtBO.refreshUserExt(userId, headimgurl, sex);
-                    }
+                    result = doWxLoginReg(req, companyCode, systemCode,
+                        unionId, appOpenId, h5OpenId, nickname, photo, gender);
                 }
             }
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
         }
-        return new XN805151Res(userId, isNeedMobile);
+        return result;
     }
 
-    @Override
-    @Transactional
-    public String doLoginWeChat(String code, String type, String companyCode,
-            String systemCode) {
-        Map<String, String> resultMap = doWeChatLogin(code, type, companyCode,
-            systemCode);
-        return resultMap.get("userId");
-    }
-
-    @Override
-    @Transactional
-    public String doLoginWeChat(String code, String type, Long amount,
-            String companyCode, String systemCode) {
-        Map<String, String> resultMap = doWeChatLogin(code, type, companyCode,
-            systemCode);
-        String userId = resultMap.get("userId");
-        if (resultMap.get("isReg").equals(EBoolean.YES.getCode())) {
-            // 账户资金划拨
-            accountBO
-                .doTransferAmountRemote(ESysUser.SYS_USER_LLWW.getCode(),
-                    userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分",
-                    "注册送积分");
-            userId = userId + "&reg";
-        }
-        return userId;
-    }
-
-    /**
-     * 微信注册登录
-     * @param code
-     * @param type
+    /** 
+     * @param req
      * @param companyCode
      * @param systemCode
+     * @param unionId
+     * @param appOpenId
+     * @param h5OpenId
+     * @param nickname
+     * @param photo
+     * @param gender
      * @return 
-     * @create: 2017年4月17日 下午7:45:55 xieyj
-     * @history:
+     * @create: 2017年7月14日 下午9:58:06 xieyj
+     * @history: 
      */
-    private Map<String, String> doWeChatLogin(String code, String type,
-            String companyCode, String systemCode) {
-        Map<String, String> resultMap = new HashMap<String, String>();
-        // 返回结果值
-        // 默认获取微信h5参数
-        if (StringUtils.isBlank(type)) {
-            type = ECPwdType.WEIXIN_H5.getCode();
-        }
-        if (!ESystemCode.CSH.getCode().equals(companyCode)) { // 不是橙商户，公司编号不要
-            companyCode = null;
-        }
-        Map<String, String> mapCPwd = cPasswordBO.queryCPasswordList(type,
-            companyCode, systemCode);
-        String appId = mapCPwd.get("ACCESS_KEY");
-        if (StringUtils.isBlank(appId)) {
-            throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
-        }
-        String appSecret = mapCPwd.get("SECRET_KEY");
-        if (StringUtils.isBlank(appSecret)) {
-            throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
-        }
+    private XN805151Res doWxLoginReg(XN805151Req req, String companyCode,
+            String systemCode, String unionId, String appOpenId,
+            String h5OpenId, String nickname, String photo, String gender) {
+        XN805151Res result;
+        // 验证推荐人,将userReferee手机号转为用户编号
+        String userRefereeId = userBO.getUserId(req.getUserReferee(),
+            req.getUserRefereeKind(), companyCode, systemCode);
+        userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
+            systemCode);
+        // 插入用户信息
+        String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
+            req.getKind(), EUserPwd.InitPwd.getCode(), nickname, photo, gender,
+            userRefereeId, companyCode, systemCode);
+        distributeAccount(userId, nickname, req.getKind(), companyCode,
+            systemCode);
+        result = new XN805151Res(userId, EBoolean.NO.getCode());
+        return result;
+    }
 
-        // Step2：通过Authorization Code获取Access Token
-        String accessToken = "";
-        Map<String, String> res = new HashMap<>();
-        Properties formProperties = new Properties();
-        formProperties.put("grant_type", "authorization_code");
-        formProperties.put("appid", appId);
-        formProperties.put("secret", appSecret);
-        formProperties.put("code", code);
-        System.out.println(appId + " " + appSecret + " " + code);
-        String response;
-        String userId = null;
-        try {
-            response = PostSimulater.requestPostForm(
-                WechatConstant.WX_TOKEN_URL, formProperties);
-            res = getMapFromResponse(response);
-            System.out.println(res);
-            accessToken = (String) res.get("access_token");
-            if (res.get("error") != null || StringUtils.isBlank(accessToken)) {
-                throw new BizException("XN000000", "获取accessToken失败");
-            }
-            // Step3：使用Access Token来获取用户的OpenID
-            String openId = (String) res.get("openid");
-            // 获取unionid
-            Map<String, String> wxRes = new HashMap<>();
-            Properties queryParas = new Properties();
-            queryParas.put("access_token", accessToken);
-            queryParas.put("openid", openId);
-            queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
-                WechatConstant.WX_USER_INFO_URL, queryParas));
-            System.out.println(wxRes);
-            String unionId = (String) wxRes.get("unionid");
-            if (StringUtils.isEmpty(unionId)) {
-                unionId = openId;
-                System.out
-                    .println("**********没有关联微信开放平台，没有unionid，unionid=openid。**********");
-            }
-            // Step4：根据openId，unionId从数据库中查询用户信息,如果第一次unionId有值，但数据库保存的是openId，需更新成unionId
-            User user = userBO.doGetUserId(unionId, openId, systemCode);
-            if (null != user) {
-                // 如果user存在，说明用户授权登录过，直接登录
-                userId = user.getUserId();
-            } else {
-                String name = (String) wxRes.get("nickname");
-                String headimgurl = (String) wxRes.get("headimgurl");
-                String sex = ESex.UNKNOWN.getCode();
-                System.out.println("***性别=" + String.valueOf(wxRes.get("sex")));
-                if (String.valueOf(wxRes.get("sex")).equals("1.0")) {
-                    sex = ESex.MEN.getCode();
-                } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
-                    sex = ESex.WOMEN.getCode();
+    private XN805151Res doWxLoginRegMobile(XN805151Req req, String companyCode,
+            String systemCode, String unionId, String appOpenId,
+            String h5OpenId, String nickname, String photo, String gender) {
+        XN805151Res result;
+        if (StringUtils.isNotBlank(req.getMobile())) {
+            // 判断是否需要验证码验证码,登录前一定要验证
+            if (!EBoolean.YES.getCode().equals(req.getIsLoginCaptcha())) {
+                if (StringUtils.isBlank(req.getSmsCaptcha())) {
+                    throw new BizException("xn702002", "请输入短信验证码");
                 }
-                userId = doThirdRegisterWechat(unionId, name, headimgurl, sex,
+                // 短信验证码是否正确
+                smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
+                    "805151", companyCode, systemCode);
+            }
+            String mobileUserId = userBO.getUserId(req.getMobile(),
+                req.getKind(), companyCode, systemCode);
+            if (StringUtils.isBlank(mobileUserId)) {
+                // 验证推荐人,将userReferee手机号转为用户编号
+                String userRefereeId = userBO.getUserId(req.getUserReferee(),
+                    req.getUserRefereeKind(), companyCode, systemCode);
+                userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
+                    systemCode);
+                // 插入用户信息
+                String userId = userBO.doRegister(unionId, h5OpenId, appOpenId,
+                    req.getMobile(), req.getKind(), EUserPwd.InitPwd.getCode(),
+                    nickname, photo, gender, userRefereeId, companyCode,
+                    systemCode);
+                distributeAccount(userId, req.getMobile(), req.getKind(),
                     companyCode, systemCode);
-                resultMap.put("isReg", "1");
+                result = new XN805151Res(userId);
+            } else {
+                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId,
+                    appOpenId, nickname, photo, gender);
+                result = new XN805151Res(mobileUserId);
             }
-        } catch (Exception e) {
-            throw new BizException("xn000000", e.getMessage());
-        }
-        resultMap.put("userId", userId);
-        return resultMap;
-    }
-
-    private String doThirdRegisterWechat(String openId, String nickname,
-            String photo, String gender, String companyCode, String systemCode) {
-        User condition = new User();
-        condition.setOpenId(openId);
-        condition.setSystemCode(systemCode);
-        long count = userBO.getTotalCount(condition);
-        if (count > 0) {
-            throw new BizException("xn702002", openId + "第三方开放编号已存在");
-        }
-        // 插入用户信息
-        String loginPwd = EUserPwd.InitPwd.getCode();
-        String userId = userBO.doRegister(openId, nickname, null, loginPwd,
-            "1", null, EUserKind.F1.getCode(), "0", companyCode, openId, null,
-            systemCode);
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, photo, gender, systemCode);
-
-        // 分配账号(人民币和虚拟币)
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.ZH_FRB.getCode());
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.ZH_GXZ.getCode());
-            currencyList.add(ECurrency.ZH_QBB.getCode());
-            currencyList.add(ECurrency.ZH_GWB.getCode());
-            currencyList.add(ECurrency.ZH_HBB.getCode());
-            currencyList.add(ECurrency.ZH_HBYJ.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.YC_CB.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
-            // 公共服务平台不需要账户
         } else {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, nickname,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
+            result = new XN805151Res(null, EBoolean.YES.getCode());
         }
-        return userId;
-    }
-
-    private String doThirdRegisterWechat(String openId, String mobile,
-            String nickname, String isRegHx, String photo, String gender,
-            String userReferee, String companyCode, String systemCode) {
-        User condition = new User();
-        condition.setOpenId(openId);
-        condition.setSystemCode(systemCode);
-        long count = userBO.getTotalCount(condition);
-        if (count > 0) {
-            throw new BizException("xn702002", openId + "第三方开放编号已存在");
-        }
-        // 插入用户信息
-        String loginPwd = RandomUtil.generate6();
-        userBO.isMobileExist(mobile, EUserKind.F1.getCode(), companyCode,
-            systemCode);
-        String loginName = mobile;
-        if (ESystemCode.CSW.getCode().equals(systemCode)) {
-            loginName = EPrefixCode.CSW + loginName;
-        } else {
-            loginName = EPrefixCode.CD + loginName;
-        }
-        String userId = userBO.doRegister(loginName, nickname, mobile,
-            loginPwd, "1", userReferee, EUserKind.F1.getCode(), "0",
-            companyCode, openId, null, systemCode);
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, photo, gender, systemCode);
-
-        // 分配账号(人民币和虚拟币)
-        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.ZH_FRB.getCode());
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.ZH_GXZ.getCode());
-            currencyList.add(ECurrency.ZH_QBB.getCode());
-            currencyList.add(ECurrency.ZH_GWB.getCode());
-            currencyList.add(ECurrency.ZH_HBB.getCode());
-            currencyList.add(ECurrency.ZH_HBYJ.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.YAOCHENG.getCode().equals(systemCode)) {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.YC_CB.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
-            // 公共服务平台不需要账户
-        } else {
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, mobile,
-                getAccountType(EUserKind.F1.getCode()), currencyList,
-                systemCode);
-        }
-        // 城市网注册送积分
-        if (ESystemCode.CSW.getCode().equals(systemCode)) {
-            Long amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.ZC,
-                EBoolean.NO.getCode());
-            accountBO
-                .doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-                    userId, ECurrency.JF, amount, EBizType.AJ_REG, "注册送积分",
-                    "注册送积分");
-            Long allAmount = accountBO.getAccountByUserId(userId, ECurrency.JF);
-            LevelRule levelRule = new LevelRule();
-            levelRule.setSystemCode(ESystemCode.CSW.getCode());
-            List<LevelRule> LevelRuleList = levelRuleBO
-                .queryLevelRuleList(levelRule);
-            for (LevelRule res : LevelRuleList) {
-                if (allAmount >= res.getAmountMin()
-                        && allAmount <= res.getAmountMax()) {
-                    upgradeLevel(userId, res.getCode());
-                    break;
-                }
-            }
-        } else if (ESystemCode.CAIGO.getCode().equals(systemCode)) {// 菜狗注册送积分
-            SYSConfig sysConfig = sysConfigBO.getConfigValue(
-                SysConstant.REGADDJF, systemCode, systemCode);
-            Long amount = AmountUtil.mul(1000L,
-                Double.valueOf(sysConfig.getCvalue()));
-            // 注册送积分
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
-                userId, ECurrency.CG_JF, amount, EBizType.AJ_REG, "用户["
-                        + mobile + "]注册送积分", "注册送积分");
-        }
-
-        // 发送初始化密码(只有城市网使用)
-        if (ESystemCode.CSW.getCode().equals(systemCode)) {
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + "用户，您已成功注册。初始化登录密码为" + loginPwd + "，请及时登录网站更改密码。",
-                "805042", systemCode);
-        }
-        // 注册环信
-        if (EBoolean.YES.getCode().equals(isRegHx)) {
-            instantMsgImpl.doRegisterUser(userId, systemCode);
-        }
-        return userId;
+        return result;
     }
 
     /**

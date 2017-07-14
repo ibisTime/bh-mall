@@ -1,12 +1,13 @@
 package com.std.user.dto.res;
 
-public class XN805180Res {
+public class XN805051ZRes {
+
     private String userId;
 
-    public XN805180Res() {
+    public XN805051ZRes() {
     }
 
-    public XN805180Res(String userId) {
+    public XN805051ZRes(String userId) {
         this.userId = userId;
     }
 

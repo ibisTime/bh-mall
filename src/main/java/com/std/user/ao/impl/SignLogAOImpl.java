@@ -142,7 +142,7 @@ public class SignLogAOImpl implements ISignLogAO {
         String code = signLogBO.saveSignLog(userId, location,
             user.getSystemCode());
 
-        SYSConfig sysConfig = sysConfigBO.getConfigValue(SysConstant.SIGNADDJF,
+        SYSConfig sysConfig = sysConfigBO.getConfig(SysConstant.SIGNADDJF,
             user.getCompanyCode(), user.getSystemCode());
         Long amount = AmountUtil.mul(1000L,
             Double.valueOf(sysConfig.getCvalue()));

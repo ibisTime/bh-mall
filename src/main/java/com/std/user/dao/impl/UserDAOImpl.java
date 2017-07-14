@@ -59,11 +59,6 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     }
 
     @Override
-    public int insertRen(User data) {
-        return super.insert(NAMESPACE.concat("insert_ren"), data);
-    }
-
-    @Override
     public int updateIdentity(User data) {
         return super.update(NAMESPACE.concat("update_identity"), data);
     }

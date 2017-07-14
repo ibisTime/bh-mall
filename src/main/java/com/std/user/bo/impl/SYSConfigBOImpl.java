@@ -1,7 +1,12 @@
 package com.std.user.bo.impl;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +14,6 @@ import com.std.user.bo.ISYSConfigBO;
 import com.std.user.bo.base.PaginableBOImpl;
 import com.std.user.dao.ISYSConfigDAO;
 import com.std.user.domain.SYSConfig;
-import com.std.user.exception.BizException;
 
 /**
  * @author: xieyj 
@@ -43,23 +47,37 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
         return sysConfig;
     }
 
-    /** 
-     * @see com.xnjr.base.bo.ISYSConfigBO#getConfigValue(java.lang.String)
-     */
     @Override
-    public SYSConfig getConfigValue(String ckey, String companyCode,
+    public SYSConfig getConfig(String ckey, String companyCode,
             String systemCode) {
         SYSConfig result = null;
-        if (ckey != null) {
+        if (ckey != null && StringUtils.isNotBlank(companyCode)
+                && StringUtils.isNotBlank(systemCode)) {
             SYSConfig condition = new SYSConfig();
             condition.setCkey(ckey);
             condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
             result = sysConfigDAO.select(condition);
-            if (null == result) {
-                throw new BizException("xn000000", "id记录不存在");
-            }
         }
         return result;
+    }
+
+    @Override
+    public Map<String, String> getConfigsMap(String companyCode,
+            String systemCode) {
+        Map<String, String> map = new HashMap<String, String>();
+        if (StringUtils.isNotBlank(systemCode)) {
+            SYSConfig condition = new SYSConfig();
+            condition.setCompanyCode(companyCode);
+            condition.setSystemCode(systemCode);
+            List<SYSConfig> list = sysConfigDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (SYSConfig sysConfig : list) {
+                    map.put(sysConfig.getCkey(), sysConfig.getCvalue());
+                }
+            }
+        }
+        return map;
+
     }
 }

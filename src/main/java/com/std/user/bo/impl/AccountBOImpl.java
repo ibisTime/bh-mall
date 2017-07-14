@@ -3,6 +3,7 @@ package com.std.user.bo.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -28,16 +29,20 @@ public class AccountBOImpl implements IAccountBO {
 
     @Override
     public void distributeAccountList(String userId, String realName,
-            String type, List<String> currencyList, String systemCode) {
-        XN002000Req req = new XN002000Req();
-        req.setUserId(userId);
-        req.setRealName(realName);
-        req.setType(type);
-        req.setCurrencyList(currencyList);
-        req.setSystemCode(systemCode);
-        req.setCompanyCode(systemCode);
-        BizConnecter.getBizData("002000", JsonUtils.object2Json(req),
-            Object.class);
+            String type, List<String> currencyList, String companyCode,
+            String systemCode) {
+        if (StringUtils.isNotBlank(userId)
+                && CollectionUtils.isNotEmpty(currencyList)) {
+            XN002000Req req = new XN002000Req();
+            req.setUserId(userId);
+            req.setRealName(realName);
+            req.setType(type);
+            req.setCurrencyList(currencyList);
+            req.setCompanyCode(companyCode);
+            req.setSystemCode(systemCode);
+            BizConnecter.getBizData("002000", JsonUtils.object2Json(req),
+                Object.class);
+        }
     }
 
     @Override
@@ -61,7 +66,7 @@ public class AccountBOImpl implements IAccountBO {
     public void doTransferAmountRemote(String fromUserId, String toUserId,
             ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote) {
-        if (amount != null && amount != 0) {
+        if (amount != null && amount.longValue() != 0) {
             XN002100Req req = new XN002100Req();
             req.setFromUserId(fromUserId);
             req.setToUserId(toUserId);

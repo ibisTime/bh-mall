@@ -13,7 +13,7 @@ package com.std.user.dto.req;
  * @since: 2017年5月17日 下午2:02:02 
  * @history:
  */
-public class XN805183Req {
+public class XN805044ZReq {
 
     // 待审核B端用户编号（必填）
     private String userId;

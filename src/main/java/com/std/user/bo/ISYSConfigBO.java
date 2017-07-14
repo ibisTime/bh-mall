@@ -8,6 +8,8 @@
  */
 package com.std.user.bo;
 
+import java.util.Map;
+
 import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.SYSConfig;
 
@@ -30,6 +32,17 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
      * @create: 2017年4月23日 下午8:08:12 xieyj
      * @history:
      */
-    public SYSConfig getConfigValue(String ckey, String companyCode,
+    public SYSConfig getConfig(String ckey, String companyCode,
+            String systemCode);
+
+    /**
+     * 获取所有配置
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年7月14日 下午7:03:12 xieyj
+     * @history:
+     */
+    public Map<String, String> getConfigsMap(String companyCode,
             String systemCode);
 }

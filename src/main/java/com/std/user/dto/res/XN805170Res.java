@@ -1,16 +1,20 @@
 package com.std.user.dto.res;
 
-public class XN805151Res {
+public class XN805170Res {
     // 用户编号
     private String userId;
 
     // 是否绑定手机号
     private String isNeedMobile;
 
-    public XN805151Res() {
+    public XN805170Res() {
     }
 
-    public XN805151Res(String userId, String isNeedMobile) {
+    public XN805170Res(String userId) {
+        this.userId = userId;
+    }
+
+    public XN805170Res(String userId, String isNeedMobile) {
         this.userId = userId;
         this.isNeedMobile = isNeedMobile;
     }

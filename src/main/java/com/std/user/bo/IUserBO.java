@@ -12,6 +12,8 @@ import java.util.List;
 
 import com.std.user.bo.base.IPaginableBO;
 import com.std.user.domain.User;
+import com.std.user.dto.req.XN805042Req;
+import com.std.user.dto.req.XN805043Req;
 import com.std.user.enums.EUserStatus;
 
 /** 
@@ -21,90 +23,55 @@ import com.std.user.enums.EUserStatus;
  */
 public interface IUserBO extends IPaginableBO<User> {
 
+    //
+    public User doGetUserByOpenId(String appOpenId, String h5OpenId,
+            String companyCode, String systemCode);
+
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile, String kind, String companyCode,
             String systemCode);
 
+    // 判断登录名是否存在
+    public void isLoginNameExist(String loginName, String kind,
+            String companyCode, String systemCode);
+
     public String getUserId(String mobile, String kind, String companyCode,
             String systemCode);
 
-    // public User getUserByMobile(String mobile, String kind, String
-    // companyCode,
-    // String systemCode);
+    // 查询openId
+    public void doCheckOpenId(String unionId, String h5OpenId,
+            String appOpenId, String companyCode, String systemCode);
 
-    /**
-     * 前端用户注册
-     * @param mobile
-     * @param loginPwd
-     * @param userReferee
-     * @param kind
-     * @param province
-     * @param city
-     * @param area
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2017年7月14日 上午11:47:00 xieyj
-     * @history:
-     */
+    // 前端用户注册
     public String doRegister(String mobile, String loginPwd,
             String userReferee, String kind, String province, String city,
             String area, String companyCode, String systemCode);
 
-    /**
-     *  判断前端用户手机号是否存在
-     * @param mobile
-     * @param systemCode 
-     * @create: 2016年12月14日 下午5:47:05 xieyj
-     * @history:
-     */
-    public void isMobileExist(String mobile, String systemCode);
+    public String doRegister(String unionId, String h5OpenId, String appOpenId,
+            String mobile, String kind, String loginPwd, String nickname,
+            String photo, String gender, String userReferee,
+            String companyCode, String systemCode);
 
-    /**
-     * 判断用户编号是否存在
-     * @param userId
-     * @param systemCode 
-     * @create: 2017年2月22日 下午1:02:42 haiqingzheng
-     * @history:
-     */
+    public void refreshWxInfo(String userId, String type, String unionId,
+            String openId, String nickname, String photo, String gender);
+
+    public String doAddUser(XN805042Req req, String roleCode);
+
+    public String doApplyRegUser(XN805043Req req, String roleCode);
+
+    public String saveUser(String mobile, String kind, String companyCode,
+            String systemCode);
+
+    // 判断用户编号是否存在
     public boolean isUserExist(String userId, String systemCode);
 
-    /**
-     * 根据手机号和类型判断手机号是否存在
-     * @param mobile
-     * @param kind
-     * @param systemCode 
-     * @create: 2016年12月14日 下午5:47:16 xieyj
-     * @history:
-     */
-    public void isMobileExist(String mobile, String kind, String systemCode);
-
-    /**
-     * 验证支付密码:拿tradePwd进行MD5后与数据库中userId得数据库支付密码比对
-     * @param userId
-     * @param tradePwd 
-     * @create: 2015年11月1日 下午4:47:48 myb858
-     * @history:
-     */
+    // 验证支付密码:拿tradePwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkTradePwd(String userId, String tradePwd);
 
-    /**
-     * 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
-     * @param userId
-     * @param loginPwd 
-     * @create: 2015年11月2日 下午1:18:57 myb858
-     * @history:
-     */
+    // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkLoginPwd(String userId, String loginPwd);
 
-    /**
-     * 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
-     * @param userId
-     * @param loginPwd
-     * @param alertStr 
-     * @create: 2016年12月15日 下午8:11:26 xieyj
-     * @history:
-     */
+    // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkLoginPwd(String userId, String loginPwd, String alertStr);
 
     /**
@@ -118,17 +85,6 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public void checkIdentify(String kind, String idKind, String idNo,
             String realName);
-
-    /**
-     * 判断登录名是否存在
-     * @param loginName
-     * @param kind
-     * @param systemCode 
-     * @create: 2016年12月14日 下午5:47:53 xieyj
-     * @history:
-     */
-    public void isLoginNameExist(String loginName, String kind,
-            String systemCode);
 
     /**
      *  判断推荐人是否存在(手机号)
@@ -157,25 +113,11 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public User getUser(String userId);
 
-    public User getUser(String userId, String systemCode);
-
     public List<User> getUsersByUserReferee(String userReferee);
 
     public User getUserByLoginName(String loginName, String systemCode);
 
     public List<User> queryUserList(User condition);
-
-    public String doAddUser(String loginName, String mobile, String loginPsd,
-            String userReferee, String realName, String idKind, String idNo,
-            String tradePsd, String kind, String level, String remark,
-            String updater, String pdf, String roleCode, Double divRate,
-            String systemCode, String status);
-
-    public String doAddUser(String mobile, String loginPsd, String userReferee,
-            String kind, String remark, String updater, String companyCode,
-            String systemCode);
-
-    public void doAddUser(User data);
 
     public void refreshStatus(String userId, EUserStatus normal,
             String updater, String remark);
@@ -197,21 +139,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshUserSupple(User data);
 
     public void refreshLevel(User data);
-
-    public String saveUser(User user);
-
-    public void refreshWxInfo(String userId, String openId, String name);
-
-    /**
-     * 判断unionId第一次存在，将openId更新成unionId,并返回用户userId
-     * @param unionId
-     * @param openId
-     * @param systemCode
-     * @return 
-     * @create: 2017年4月17日 下午5:27:05 xieyj
-     * @history:
-     */
-    public User doGetUserId(String unionId, String openId, String systemCode);
 
     /** 
      * @param mobile

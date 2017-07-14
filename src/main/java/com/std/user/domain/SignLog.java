@@ -13,7 +13,7 @@ import java.util.Date;
 import com.std.user.dao.base.ABaseDO;
 
 /**
- * 签到 
+ * 登录日志
  * @author: xieyj 
  * @since: 2016年8月31日 上午9:37:56 
  * @history:
@@ -46,14 +46,6 @@ public class SignLog extends ABaseDO {
 
     // 系统编号
     private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getCode() {
         return code;
@@ -101,5 +93,13 @@ public class SignLog extends ABaseDO {
 
     public void setSignDatetimeEnd(Date signDatetimeEnd) {
         this.signDatetimeEnd = signDatetimeEnd;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

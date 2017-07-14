@@ -5,15 +5,15 @@ import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
 import com.std.user.dto.req.XN805043Req;
-import com.std.user.dto.res.XN805043Res;
+import com.std.user.dto.res.XN805042Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 登录(可根据不同商铺登录)
+ * 申请注册
  * @author: xieyj 
- * @since: 2016年11月22日 下午3:39:17 
+ * @since: 2017年7月14日 下午11:03:23 
  * @history:
  */
 public class XN805043 extends AProcessor {
@@ -23,15 +23,13 @@ public class XN805043 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805043Res(userAO.doLogin(req.getLoginName(),
-            req.getLoginPwd(), req.getKind(), req.getCompanyCode(),
-            req.getSystemCode()));
+        return new XN805042Res(userAO.doApplyRegUser(req));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805043Req.class);
-        StringValidater.validateBlank(req.getLoginName(), req.getLoginPwd(),
-            req.getKind(), req.getSystemCode());
+        StringValidater.validateBlank(req.getLoginName(), req.getKind(),
+            req.getCompanyCode(), req.getSystemCode());
     }
 }

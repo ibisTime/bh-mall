@@ -1,15 +1,21 @@
 package com.std.user.dto.req;
 
-public class XN805151Req {
+public class XN805170Req {
 
     // 开放编号（必填）
     private String code;
 
-    // 类型(选填，默认h5 3=微信h5 4=微信APP)
+    // 类型(必填 微信h5=3 微信APP=4)
     private String type;
+
+    // 是否强制绑定手机号
+    private String isNeedMobile;
 
     // 手机号（选填）
     private String mobile;
+
+    // 用户类型（必填）
+    private String kind;
 
     // 短信验证码（选填）
     private String smsCaptcha;
@@ -23,19 +29,14 @@ public class XN805151Req {
     // 推荐人（选填）
     private String userReferee;
 
+    // 推荐人类型（选填）
+    private String userRefereeKind;
+
     // 公司编号（必填）
     private String companyCode;
 
     // 系统编号(必填)
     private String systemCode;
-
-    public String getIsLoginCaptcha() {
-        return isLoginCaptcha;
-    }
-
-    public void setIsLoginCaptcha(String isLoginCaptcha) {
-        this.isLoginCaptcha = isLoginCaptcha;
-    }
 
     public String getCode() {
         return code;
@@ -53,6 +54,14 @@ public class XN805151Req {
         this.type = type;
     }
 
+    public String getIsNeedMobile() {
+        return isNeedMobile;
+    }
+
+    public void setIsNeedMobile(String isNeedMobile) {
+        this.isNeedMobile = isNeedMobile;
+    }
+
     public String getMobile() {
         return mobile;
     }
@@ -61,12 +70,28 @@ public class XN805151Req {
         this.mobile = mobile;
     }
 
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
     public String getSmsCaptcha() {
         return smsCaptcha;
     }
 
     public void setSmsCaptcha(String smsCaptcha) {
         this.smsCaptcha = smsCaptcha;
+    }
+
+    public String getIsLoginCaptcha() {
+        return isLoginCaptcha;
+    }
+
+    public void setIsLoginCaptcha(String isLoginCaptcha) {
+        this.isLoginCaptcha = isLoginCaptcha;
     }
 
     public String getIsRegHx() {
@@ -83,6 +108,14 @@ public class XN805151Req {
 
     public void setUserReferee(String userReferee) {
         this.userReferee = userReferee;
+    }
+
+    public String getUserRefereeKind() {
+        return userRefereeKind;
+    }
+
+    public void setUserRefereeKind(String userRefereeKind) {
+        this.userRefereeKind = userRefereeKind;
     }
 
     public String getCompanyCode() {

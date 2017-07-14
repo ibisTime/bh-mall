@@ -229,69 +229,6 @@
 		)
 	</insert>
 	
-    <insert id="insert_ren" parameterType="user">
-		INSERT INTO tstd_user(
-		user_id
-		,nickname
-		,login_name
-		,login_pwd
-		,login_pwd_strength
-		
-		,kind
-		,level
-		,user_referee
-		,mobile
-		,id_kind
-		
-		,id_no
-		,real_name
-		,trade_pwd
-		,trade_pwd_strength
-		,role_code
-		
-		,div_rate
-		,status
-		,create_datetime
-		,updater
-		,update_datetime
-		
-		,remark
-		,pdf
-		,company_code
-		,system_code
-		)
-		VALUES(
-		#{userId}
-		,#{nickname}
-		,#{loginName}
-		,#{loginPwd}
-		,#{loginPwdStrength}
-		
-		,#{kind}
-		,#{level}
-		,#{userReferee}
-		,#{mobile}
-		,#{idKind}
-		
-		,#{idNo}
-		,#{realName}
-		,#{tradePwd}
-		,#{tradePwdStrength}
-		,#{roleCode}
-		
-		,#{divRate}
-		,#{status}
-		,#{createDatetime}
-		,#{updater}
-		,#{updateDatetime}
-		
-		,#{remark}
-		,#{pdf}
-		,#{companyCode}
-		,#{systemCode}
-		)
-	</insert>
-	
 	<update id="update_identity" parameterType="user">
 		UPDATE tstd_user
 		SET

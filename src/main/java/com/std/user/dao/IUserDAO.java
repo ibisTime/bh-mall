@@ -19,15 +19,6 @@ import com.std.user.domain.User;
 public interface IUserDAO extends IBaseDAO<User> {
     String NAMESPACE = IUserDAO.class.getName().concat(".");
 
-    /**
-     * 代注册
-     * @param user
-     * @return 
-     * @create: 2015年11月10日 下午2:18:42 myb858
-     * @history:
-     */
-    public int insertRen(User data);
-
     /** 
      * 更改姓名
      * @param data

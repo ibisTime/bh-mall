@@ -1,20 +1,28 @@
 package com.std.user.dto.req;
 
-public class XN805155Req {
+public class XN805050ZReq {
     // 登陆名（必填）
     private String loginName;
 
     // 登陆密码（必填）
     private String loginPwd;
 
-    // 类型（选填）
+    // 用户类型（选填）
     private String kind;
 
-    // 公司编号
+    // 公司编号（选填）
     private String companyCode;
 
-    // 系统编号
+    // 系统编号（必填）
     private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getLoginName() {
         return loginName;
@@ -46,13 +54,5 @@ public class XN805155Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 }

@@ -27,6 +27,7 @@ import com.std.user.domain.SYSDict;
 @Component
 public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         ISYSDictBO {
+
     @Autowired
     private ISYSDictDAO sysDictDAO;
 
