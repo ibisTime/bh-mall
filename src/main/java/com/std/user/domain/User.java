@@ -30,6 +30,12 @@ public class User extends ABaseDO {
     // 登陆名
     private String loginName;
 
+    // 手机号
+    private String mobile;
+
+    // 头像
+    private String photo;
+
     // 昵称
     private String nickname;
 
@@ -47,9 +53,6 @@ public class User extends ABaseDO {
 
     // 推荐人
     private String userReferee;
-
-    // 手机号
-    private String mobile;
 
     // 证件类型
     private String idKind;
@@ -75,6 +78,39 @@ public class User extends ABaseDO {
     // 状态
     private String status;
 
+    // 开放平台和公众平台唯一号
+    private String unionId;
+
+    // 微信h5第三方登录开放编号
+    private String h5OpenId;
+
+    // 微信app第三方登录开放编号
+    private String appOpenId;
+
+    // 性别(1 男 0 女)
+    private String gender;
+
+    // 介绍
+    private String introduce;
+
+    // 生日
+    private String birthday;
+
+    // 邮箱
+    private String email;
+
+    // 学位
+    private String diploma;
+
+    // 职业
+    private String occupation;
+
+    // 工作年限
+    private String workTime;
+
+    // 附件
+    private String pdf;
+
     // 注册时间
     private Date createDatetime;
 
@@ -87,28 +123,14 @@ public class User extends ABaseDO {
     // 备注
     private String remark;
 
-    // 附件
-    private String pdf;
-
     // 所属公司
     private String companyCode;
-
-    // 公司名称
-    private String companyName;
-
-    // 开放平台和公众平台唯一号
-    private String unionId;
-
-    // 第三方登录开放编号
-    private String openId;
-
-    // 极光编号
-    private String jpushId;
 
     // 系统编号
     private String systemCode;
 
     /***** 模糊查询使用字段 ******/
+
     private String loginNameForLikeQuery;
 
     private String mobileForLikeQuery;
@@ -127,9 +149,6 @@ public class User extends ABaseDO {
 
     // 粉丝数
     private Long totalFansNum;
-
-    // 头像
-    private String photo;
 
     // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
     private String loginType;
@@ -157,6 +176,22 @@ public class User extends ABaseDO {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getNickname() {
@@ -205,14 +240,6 @@ public class User extends ABaseDO {
 
     public void setUserReferee(String userReferee) {
         this.userReferee = userReferee;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getIdKind() {
@@ -279,6 +306,94 @@ public class User extends ABaseDO {
         this.status = status;
     }
 
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
+    public String getH5OpenId() {
+        return h5OpenId;
+    }
+
+    public void setH5OpenId(String h5OpenId) {
+        this.h5OpenId = h5OpenId;
+    }
+
+    public String getAppOpenId() {
+        return appOpenId;
+    }
+
+    public void setAppOpenId(String appOpenId) {
+        this.appOpenId = appOpenId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDiploma() {
+        return diploma;
+    }
+
+    public void setDiploma(String diploma) {
+        this.diploma = diploma;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
+    }
+
     public Date getCreateDatetime() {
         return createDatetime;
     }
@@ -311,52 +426,12 @@ public class User extends ABaseDO {
         this.remark = remark;
     }
 
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
-    }
-
     public String getCompanyCode() {
         return companyCode;
     }
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getUnionId() {
-        return unionId;
-    }
-
-    public void setUnionId(String unionId) {
-        this.unionId = unionId;
-    }
-
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
-    public String getJpushId() {
-        return jpushId;
-    }
-
-    public void setJpushId(String jpushId) {
-        this.jpushId = jpushId;
     }
 
     public String getSystemCode() {
@@ -431,14 +506,6 @@ public class User extends ABaseDO {
         this.totalFansNum = totalFansNum;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public String getLoginType() {
         return loginType;
     }
@@ -453,10 +520,6 @@ public class User extends ABaseDO {
 
     public void setRefeereLevel(Integer refeereLevel) {
         this.refeereLevel = refeereLevel;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
     }
 
     public Date getCreateBeginDatetime() {
@@ -474,4 +537,5 @@ public class User extends ABaseDO {
     public void setCreateEndDatetime(Date createEndDatetime) {
         this.createEndDatetime = createEndDatetime;
     }
+
 }
