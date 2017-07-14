@@ -124,57 +124,53 @@ DROP TABLE IF EXISTS `tstd_user`;
 CREATE TABLE `tstd_user` (
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
+  `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
+  `photo` varchar(255) DEFAULT NULL COMMENT '头像',
   `nickname` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
+  
   `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
   `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
-  `kind` varchar(4) DEFAULT NULL COMMENT '标识',
+  `kind` varchar(4) DEFAULT NULL COMMENT '用户类型',
   `level` varchar(4) DEFAULT NULL COMMENT '用户等级',
   `user_referee` varchar(32) DEFAULT NULL COMMENT '推荐人',
-  `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
+  
   `id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
   `id_no` varchar(32) DEFAULT NULL COMMENT '证件号码',
   `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
   `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
   `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
+  
   `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',
   `div_rate` decimal(18,8) DEFAULT NULL COMMENT '分成比例',
   `status` varchar(2) DEFAULT NULL COMMENT '状态',
-  `pdf` varchar(255) DEFAULT NULL COMMENT '附件',
-  `union_id` varchar(255) DEFAULT NULL COMMENT '开放联合编号',
-  `open_id` varchar(255) DEFAULT NULL COMMENT '开放编号',
-  `jpush_id` varchar(255) DEFAULT NULL COMMENT '极光ID',
+  
+  `union_id` varchar(255) DEFAULT NULL COMMENT '联合编号',
+  `h5_open_id` varchar(255) DEFAULT NULL COMMENT '公众号开放编号',
+  `app_open_id` varchar(255) DEFAULT NULL COMMENT 'app开放编号',
+  
+  `gender` char(1) DEFAULT NULL COMMENT '性别(1 男 0 女)',
+  `introduce` varchar(255) DEFAULT NULL COMMENT '自我介绍',
+  `birthday` varchar(16) DEFAULT NULL COMMENT '生日',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `diploma` varchar(4) DEFAULT NULL COMMENT '学位',
+  `occupation` varchar(64) DEFAULT NULL COMMENT '职业',
+  `work_time` varchar(4) DEFAULT NULL COMMENT '工作年限',
+  `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
+
+  `province` varchar(255) DEFAULT NULL COMMENT '省',
+  `city` varchar(255) DEFAULT NULL COMMENT '市',
+  `area` varchar(255) DEFAULT NULL COMMENT '区',
+  `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
+  `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
+  
   `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `tstd_user_ext`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_user_ext`;
-CREATE TABLE `tstd_user_ext` (
-  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
-  `gender` char(1) DEFAULT NULL COMMENT '性别(1 男 0 女)',
-  `birthday` varchar(16) DEFAULT NULL COMMENT '生日',
-  `photo` varchar(255) DEFAULT NULL COMMENT '头像',
-  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
-  `diploma` varchar(4) DEFAULT NULL COMMENT '学位',
-  `occupation` varchar(64) DEFAULT NULL COMMENT '职业',
-  `work_time` varchar(4) DEFAULT NULL COMMENT '工作时间',
-  `province` varchar(255) DEFAULT NULL COMMENT '省',
-  `city` varchar(255) DEFAULT NULL COMMENT '市',
-  `area` varchar(255) DEFAULT NULL COMMENT '区',
-  `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
-  `introduce` varchar(255) DEFAULT NULL COMMENT '简介',
-  `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
-  `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',  
-PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

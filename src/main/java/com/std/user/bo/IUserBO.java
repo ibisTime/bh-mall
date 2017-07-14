@@ -21,6 +21,36 @@ import com.std.user.enums.EUserStatus;
  */
 public interface IUserBO extends IPaginableBO<User> {
 
+    // 根据手机号和类型判断手机号是否存在
+    public void isMobileExist(String mobile, String kind, String companyCode,
+            String systemCode);
+
+    public String getUserId(String mobile, String kind, String companyCode,
+            String systemCode);
+
+    // public User getUserByMobile(String mobile, String kind, String
+    // companyCode,
+    // String systemCode);
+
+    /**
+     * 前端用户注册
+     * @param mobile
+     * @param loginPwd
+     * @param userReferee
+     * @param kind
+     * @param province
+     * @param city
+     * @param area
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年7月14日 上午11:47:00 xieyj
+     * @history:
+     */
+    public String doRegister(String mobile, String loginPwd,
+            String userReferee, String kind, String province, String city,
+            String area, String companyCode, String systemCode);
+
     /**
      *  判断前端用户手机号是否存在
      * @param mobile
@@ -48,18 +78,6 @@ public interface IUserBO extends IPaginableBO<User> {
      * @history:
      */
     public void isMobileExist(String mobile, String kind, String systemCode);
-
-    /**
-     * 根据手机号和类型判断手机号是否存在
-     * @param mobile
-     * @param kind
-     * @param companyCode
-     * @param systemCode 
-     * @create: 2016年12月14日 下午5:47:26 xieyj
-     * @history:
-     */
-    public void isMobileExist(String mobile, String kind, String companyCode,
-            String systemCode);
 
     /**
      * 验证支付密码:拿tradePwd进行MD5后与数据库中userId得数据库支付密码比对
@@ -121,11 +139,6 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public void checkUserReferee(String userReferee, String systemCode);
 
-    public String doRegister(String loginName, String nickname, String mobile,
-            String loginPwd, String loginPwdStrength, String userReferee,
-            String kind, String level, String companyCode, String openId,
-            String jpushId, String systemCode);
-
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
 
@@ -147,14 +160,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public User getUser(String userId, String systemCode);
 
     public List<User> getUsersByUserReferee(String userReferee);
-
-    public User getUserByMobile(String mobile, String systemCode);
-
-    public User getUserByMobileAndKind(String mobile, String kind,
-            String systemCode);
-
-    public User getUserByMobileAndKind(String mobile, String kind,
-            String companyCode, String systemCode);
 
     public User getUserByLoginName(String loginName, String systemCode);
 

@@ -32,16 +32,6 @@ public interface IUserAO {
      * 检查手机号是否存在
      * @param mobile
      * @param kind
-     * @param systemCode 
-     * @create: 2016年12月14日 下午7:25:30 xieyj
-     * @history:
-     */
-    public void doCheckMobile(String mobile, String kind, String systemCode);
-
-    /**
-     * 检查手机号是否存在
-     * @param mobile
-     * @param kind
      * @param companyCode
      * @param systemCode 
      * @create: 2016年12月14日 下午5:45:18 xieyj
@@ -51,6 +41,29 @@ public interface IUserAO {
             String systemCode);
 
     /**
+     * 注册前端用户
+     * @param mobile
+     * @param loginPwd
+     * @param userReferee
+     * @param userRefereeKind
+     * @param smsCaptcha
+     * @param kind
+     * @param isRegHx
+     * @param province
+     * @param city
+     * @param area
+     * @param companyCode
+     * @param systemCode
+     * @return 
+     * @create: 2017年7月14日 上午11:10:51 xieyj
+     * @history:
+     */
+    public String doRegister(String mobile, String loginPwd,
+            String userReferee, String userRefereeKind, String smsCaptcha,
+            String kind, String isRegHx, String province, String city,
+            String area, String companyCode, String systemCode);
+
+    /**
      * 检查登录密码是否正确
      * @param userId
      * @param password
@@ -58,28 +71,6 @@ public interface IUserAO {
      * @history:
      */
     public void doCheckLoginPwd(String userId, String password);
-
-    /**
-     * 注册
-     * @param mobile
-     * @param loginPwd
-     * @param loginPwdStrength
-     * @param userReferee
-     * @param smsCaptcha
-     * @param kind
-     * @param isRegHx
-     * @param province
-     * @param city
-     * @param area
-     * @param systemCode
-     * @return 
-     * @create: 2017年1月7日 下午12:57:42 xieyj
-     * @history:
-     */
-    public String doRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha,
-            String kind, String isRegHx, String province, String city,
-            String area, String systemCode);
 
     /**
      * 注册送积分

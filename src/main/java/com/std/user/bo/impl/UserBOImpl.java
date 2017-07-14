@@ -23,7 +23,6 @@ import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
 import com.std.user.common.PwdUtil;
 import com.std.user.core.OrderNoGenerater;
-import com.std.user.dao.ILevelRuleDAO;
 import com.std.user.dao.IUserDAO;
 import com.std.user.domain.User;
 import com.std.user.enums.EUserLevel;
@@ -43,38 +42,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Autowired
     private ILevelRuleDAO levelRuleDAO;
 
-    @Override
-    public void isMobileExist(String mobile, String systemCode) {
-        if (StringUtils.isNotBlank(mobile)) {
-            // 判断格式
-            PhoneUtil.checkMobile(mobile);
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind("ff3");
-            condition.setSystemCode(systemCode);
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "手机号已经存在");
-            }
-        }
-    }
-
-    @Override
-    public void isMobileExist(String mobile, String kind, String systemCode) {
-        if (StringUtils.isNotBlank(mobile)) {
-            // 判断格式
-            PhoneUtil.checkMobile(mobile);
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind(kind);
-            condition.setSystemCode(systemCode);
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "手机号已经存在");
-            }
-        }
-    }
-
     /** 
      * @see com.std.user.bo.IUserBO#isMobileExist(java.lang.String, java.lang.String, java.lang.String)
      */
@@ -93,6 +60,82 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                 throw new BizException("li01003", "手机号已经存在");
             }
         }
+    }
+
+    // @Override
+    // public User getUserByMobile(String mobile, String kind, String
+    // companyCode,
+    // String systemCode) {
+    // User data = null;
+    // if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
+    // User condition = new User();
+    // condition.setMobile(mobile);
+    // condition.setKind(kind);
+    // condition.setCompanyCode(companyCode);
+    // condition.setSystemCode(systemCode);
+    // List<User> list = userDAO.selectList(condition);
+    // if (CollectionUtils.isNotEmpty(list)) {
+    // data = list.get(0);
+    // }
+    // if (null == data) {
+    // throw new BizException("xn702002", "推荐人不存在");
+    // }
+    // }
+    // return data;
+    // }
+
+    @Override
+    public String getUserId(String mobile, String kind, String companyCode,
+            String systemCode) {
+        String userId = null;
+        if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
+            User condition = new User();
+            condition.setMobile(mobile);
+            condition.setKind(kind);
+            condition.setCompanyCode(companyCode);
+            condition.setSystemCode(systemCode);
+            List<User> list = userDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(list)) {
+                User data = list.get(0);
+                userId = data.getUserId();
+            } else
+                throw new BizException("xn702002", "手机号[" + mobile + "]用户不存在");
+        }
+        return userId;
+    }
+
+    @Override
+    public String doRegister(String mobile, String loginPwd,
+            String userReferee, String kind, String province, String city,
+            String area, String companyCode, String systemCode) {
+        String userId = OrderNoGenerater.generate("U");
+        User user = new User();
+        user.setUserId(userId);
+        user.setLoginName(mobile);
+        user.setMobile(mobile);
+        user.setLoginPwd(MD5Util.md5(loginPwd));
+        user.setUserReferee(userReferee);
+
+        user.setKind(kind);
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        user.setNickname(userId.substring(userId.length() - 8, userId.length()));
+        user.setLevel(EUserLevel.ONE.getCode());
+        // String tradePsd = EUserPwd.InitPwd.getCode();
+        // user.setTradePwd(MD5Util.md5(tradePsd));
+        // user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));
+        user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
+        Date date = new Date();
+        user.setCreateDatetime(date);
+        user.setUpdater(userId);
+        user.setUpdateDatetime(date);
+        user.setOpenId(openId);
+        user.setJpushId(jpushId);
+        if (StringUtils.isBlank(companyCode)) {
+            companyCode = systemCode;
+        }
+        user.setCompanyCode(companyCode);
+        user.setSystemCode(systemCode);
+        userDAO.insert(user);
     }
 
     /**
@@ -200,47 +243,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (StringUtils.isNotBlank(mobile)) {
             User condition = new User();
             condition.setMobile(mobile);
-            condition.setSystemCode(systemCode);
-            List<User> list = userDAO.selectList(condition);
-            if (CollectionUtils.isNotEmpty(list)) {
-                data = list.get(0);
-            }
-        }
-        return data;
-    }
-
-    /** 
-     * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
-     */
-    @Override
-    public User getUserByMobileAndKind(String mobile, String kind,
-            String systemCode) {
-        User data = null;
-        if (StringUtils.isNotBlank(mobile)) {
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind(kind);
-            condition.setSystemCode(systemCode);
-            List<User> list = userDAO.selectList(condition);
-            if (CollectionUtils.isNotEmpty(list)) {
-                data = list.get(0);
-            }
-        }
-        return data;
-    }
-
-    /** 
-     * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
-     */
-    @Override
-    public User getUserByMobileAndKind(String mobile, String kind,
-            String companyCode, String systemCode) {
-        User data = null;
-        if (StringUtils.isNotBlank(mobile)) {
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setKind(kind);
-            condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
             List<User> list = userDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {
@@ -368,53 +370,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                 throw new BizException("li01003", "推荐人不存在");
             }
         }
-    }
-
-    @Override
-    public String doRegister(String loginName, String nickname, String mobile,
-            String loginPwd, String loginPwdStrength, String userReferee,
-            String kind, String level, String companyCode, String openId,
-            String jpushId, String systemCode) {
-        String userId = null;
-        if (StringUtils.isNotBlank(loginPwdStrength)) {
-            User user = new User();
-            userId = OrderNoGenerater.generate("U");
-            user.setUserId(userId);
-            user.setLoginName(loginName);
-            user.setLoginPwd(MD5Util.md5(loginPwd));
-
-            user.setLoginPwdStrength(loginPwdStrength);
-            if (StringUtils.isBlank(nickname)) {
-                user.setNickname(userId.substring(userId.length() - 8,
-                    userId.length()));
-            } else {
-                user.setNickname(nickname);
-            }
-            user.setKind(kind);
-            user.setLevel(EUserLevel.ONE.getCode());
-            if (StringUtils.isNotBlank(level)) {
-                user.setLevel(level);
-            }
-            user.setUserReferee(userReferee);
-            user.setMobile(mobile);
-            // String tradePsd = EUserPwd.InitPwd.getCode();
-            // user.setTradePwd(MD5Util.md5(tradePsd));
-            // user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePsd));
-            user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
-            Date date = new Date();
-            user.setCreateDatetime(date);
-            user.setUpdater(userId);
-            user.setUpdateDatetime(date);
-            user.setOpenId(openId);
-            user.setJpushId(jpushId);
-            if (StringUtils.isBlank(companyCode)) {
-                companyCode = systemCode;
-            }
-            user.setCompanyCode(companyCode);
-            user.setSystemCode(systemCode);
-            userDAO.insert(user);
-        }
-        return userId;
     }
 
     @Override

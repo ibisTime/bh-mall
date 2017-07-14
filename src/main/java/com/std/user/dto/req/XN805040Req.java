@@ -7,8 +7,19 @@ public class XN805040Req {
     // kind(必填)
     private String kind;
 
+    // 公司编号（必填）
+    private String companyCode;
+
     // 系统编号（必填）
     private String systemCode;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getKind() {
         return kind;
@@ -18,12 +29,12 @@ public class XN805040Req {
         this.kind = kind;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {

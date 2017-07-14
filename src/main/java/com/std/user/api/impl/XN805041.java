@@ -12,7 +12,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 注册
+ * 前端用户普通注册
  * @author: myb858 
  * @since: 2015年8月23日 上午11:42:00
  * @history:

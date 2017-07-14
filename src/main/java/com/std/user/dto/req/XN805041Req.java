@@ -1,22 +1,22 @@
 package com.std.user.dto.req;
 
 public class XN805041Req {
-    // 手机号（必填）
+    // 手机号(必填)
     private String mobile;
 
-    // 注册密码（必填）
+    // 注册密码(必填)
     private String loginPwd;
 
-    // 注册密码（必填）
-    private String loginPwdStrength;
+    // 推荐人类型(选填)
+    private String userRefereeKind;
 
-    // 推荐人（非必填）
+    // 推荐人(选填)
     private String userReferee;
 
-    // 手机验证码（必填）
+    // 手机验证码(必填)
     private String smsCaptcha;
 
-    // 类别（必填）
+    // 类别(必填)
     private String kind;
 
     // 省(选填)
@@ -28,11 +28,62 @@ public class XN805041Req {
     // 区(选填)
     private String area;
 
-    // 是否注册环信（必填）
+    // 是否注册环信(必填)
     private String isRegHx;
+
+    // 公司编号(必填)
+    private String companyCode;
 
     // 系统编号(必填)
     private String systemCode;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getLoginPwd() {
+        return loginPwd;
+    }
+
+    public void setLoginPwd(String loginPwd) {
+        this.loginPwd = loginPwd;
+    }
+
+    public String getUserRefereeKind() {
+        return userRefereeKind;
+    }
+
+    public void setUserRefereeKind(String userRefereeKind) {
+        this.userRefereeKind = userRefereeKind;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
+    public String getSmsCaptcha() {
+        return smsCaptcha;
+    }
+
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 
     public String getProvince() {
         return province;
@@ -66,52 +117,12 @@ public class XN805041Req {
         this.isRegHx = isRegHx;
     }
 
-    public String getKind() {
-        return kind;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getLoginPwd() {
-        return loginPwd;
-    }
-
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
-    }
-
-    public String getLoginPwdStrength() {
-        return loginPwdStrength;
-    }
-
-    public void setLoginPwdStrength(String loginPwdStrength) {
-        this.loginPwdStrength = loginPwdStrength;
-    }
-
-    public String getUserReferee() {
-        return userReferee;
-    }
-
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
-    }
-
-    public String getSmsCaptcha() {
-        return smsCaptcha;
-    }
-
-    public void setSmsCaptcha(String smsCaptcha) {
-        this.smsCaptcha = smsCaptcha;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {

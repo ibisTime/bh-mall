@@ -25,12 +25,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.std.user.ao.IUserAO;
 import com.std.user.bo.IAccountBO;
-import com.std.user.bo.ICPasswordBO;
-import com.std.user.bo.ICompanyBO;
 import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
-import com.std.user.bo.ILevelRuleBO;
-import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISYSConfigBO;
 import com.std.user.bo.ISYSRoleBO;
 import com.std.user.bo.ISignLogBO;
@@ -49,8 +45,6 @@ import com.std.user.common.SysConstant;
 import com.std.user.common.WechatConstant;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.core.StringValidater;
-import com.std.user.domain.Company;
-import com.std.user.domain.LevelRule;
 import com.std.user.domain.SYSConfig;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
@@ -75,8 +69,6 @@ import com.std.user.enums.EFieldType;
 import com.std.user.enums.EIDKind;
 import com.std.user.enums.ELoginType;
 import com.std.user.enums.EPrefixCode;
-import com.std.user.enums.ERuleKind;
-import com.std.user.enums.ERuleType;
 import com.std.user.enums.ESex;
 import com.std.user.enums.ESysUser;
 import com.std.user.enums.ESystemCode;
@@ -143,11 +135,6 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     protected ISYSConfigBO sysConfigBO;
 
-    @Override
-    public void doCheckMobile(String mobile, String kind, String systemCode) {
-        userBO.isMobileExist(mobile, kind, systemCode);
-    }
-
     /** 
      * @see com.std.user.ao.IUserAO#doCheckMobile(java.lang.String, java.lang.String, java.lang.String)
      */
@@ -157,54 +144,44 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(mobile, kind, companyCode, systemCode);
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doCheckLoginPwd(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void doCheckLoginPwd(String userId, String loginPwd) {
-        User condition = new User();
-        condition.setUserId(userId);
-        List<User> userList1 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "用户不存在");
-        }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<User> userList2 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn702002", "登录密码错误");
-        }
-
-    }
-
     @Override
     @Transactional
     public String doRegister(String mobile, String loginPwd,
-            String loginPwdStrength, String userReferee, String smsCaptcha,
+            String userReferee, String userRefereeKind, String smsCaptcha,
             String kind, String isRegHx, String province, String city,
-            String area, String systemCode) {
+            String area, String companyCode, String systemCode) {
+        // 1、参数校验
         // 验证手机号
-        userBO.isMobileExist(mobile, kind, systemCode);
-        // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
-        if (StringUtils.isNotBlank(userReferee)) {
-            User refereeUser = userBO.getUserByMobileAndKind(userReferee, kind,
-                systemCode);
-            if (null == refereeUser) {
-                throw new BizException("xn702002", "推荐人不存在");
-            }
-            userReferee = refereeUser.getUserId();
-        }
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041", systemCode);
-        // 插入用户信息
-        String userId = userBO.doRegister(mobile, null, mobile, loginPwd,
-            loginPwdStrength, userReferee, kind, EUserLevel.ZERO.getCode(),
-            null, null, null, systemCode);
-        // 新增扩展信息
-        userExtBO.saveUserExt(userId, province, city, area, systemCode);
-        if (EBoolean.YES.getCode().equals(isRegHx)) {
-            // 注册环信
-            instantMsgImpl.doRegisterUser(userId, systemCode);
-        }
+        // 验证推荐人是否存在,并将手机号转化为用户编号
+        // 验证短信验证码
+        userBO.isMobileExist(mobile, kind, companyCode, systemCode);
+        String userRefereeId = userBO.getUserId(userReferee, userRefereeKind,
+            companyCode, systemCode);
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041", companyCode,
+            systemCode);
+
+        // 2、注册用户
+        String userId = userBO.doRegister(mobile, loginPwd, userRefereeId,
+            kind, province, city, area, companyCode, systemCode);
+        // 3、分配账户
+        distributeAccount(userId, mobile, kind, companyCode, systemCode);
+        // 4、第三方账号注册
+        thirdRegist(userId, companyCode, systemCode);
+        return userId;
+    }
+
+    /**
+     * 分配账号，并送积分
+     * @param userId
+     * @param mobile
+     * @param kind
+     * @param companyCode
+     * @param systemCode 
+     * @create: 2017年7月14日 上午11:52:23 xieyj
+     * @history:
+     */
+    public void distributeAccount(String userId, String mobile, String kind,
+            String companyCode, String systemCode) {
         // 分配账号
         if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
             List<String> currencyList = new ArrayList<String>();
@@ -244,7 +221,37 @@ public class UserAOImpl implements IUserAO {
             accountBO.distributeAccountList(userId, mobile,
                 getAccountType(kind), currencyList, systemCode);
         }
-        return userId;
+    }
+
+    /** 
+     * 第三方账号注册
+     * @param userId 
+     * @create: 2017年7月14日 上午11:54:54 xieyj
+     * @history: 
+     */
+    private void thirdRegist(String userId, String companyCode,
+            String systemCode) {
+        // 即时通信注册
+        instantMsgImpl.doRegisterUser(userId, systemCode);
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#doCheckLoginPwd(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doCheckLoginPwd(String userId, String loginPwd) {
+        User condition = new User();
+        condition.setUserId(userId);
+        List<User> userList1 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList1)) {
+            throw new BizException("xn702002", "用户不存在");
+        }
+        condition.setLoginPwd(MD5Util.md5(loginPwd));
+        List<User> userList2 = userBO.queryUserList(condition);
+        if (CollectionUtils.isEmpty(userList2)) {
+            throw new BizException("xn702002", "登录密码错误");
+        }
+
     }
 
     @Override
@@ -1158,7 +1165,7 @@ public class UserAOImpl implements IUserAO {
     public void doFindLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd, String loginPwdStrength, String kind,
             String systemCode) {
-        User user = userBO.getUserByMobileAndKind(mobile, kind, systemCode);
+        User user = userBO.getUserByMobile(mobile, kind, systemCode);
         if (user == null) {// 这里其实还有一种处理方法：就是直接注册
             throw new BizException("li01004", "用户不存在,请先注册");
         }
@@ -1717,8 +1724,8 @@ public class UserAOImpl implements IUserAO {
 
                     // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
                     if (PhoneUtil.isMobile(userReferee)) {
-                        User refereeUser = userBO.getUserByMobileAndKind(
-                            userReferee, EUserKind.F1.getCode(), systemCode);
+                        User refereeUser = userBO.getUserByMobile(userReferee,
+                            EUserKind.F1.getCode(), systemCode);
                         if (null == refereeUser) {
                             throw new BizException("xn702002", "推荐人不存在");
                         }
