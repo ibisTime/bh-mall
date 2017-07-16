@@ -21,7 +21,7 @@ public class IdentifyBOImpl implements IIdentifyBO {
     static Logger logger = Logger.getLogger(IdentifyBOImpl.class);
 
     @Override
-    public void doIdentify(String systemCode, String companyCode,
+    public void doTwoIdentify(String systemCode, String companyCode,
             String userId, String realName, String idKind, String idNo) {
         if (StringUtils.isNotBlank(realName)) {
             // try {

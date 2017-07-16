@@ -1,20 +1,12 @@
-/**
- * @Title User.java 
- * @Package com.ibis.pz.domain 
- * @Description 
- * @author miyb  
- * @date 2015-2-6 上午10:31:01 
- * @version V1.0   
- */
 package com.std.user.domain;
 
 import java.util.Date;
 
 import com.std.user.dao.base.ABaseDO;
 
-/** 
- * @author: miyb 
- * @since: 2015-2-6 上午10:31:01 
+/**
+ * @author: xieyj 
+ * @since: 2017年7月16日 下午4:51:56 
  * @history:
  */
 public class User extends ABaseDO {
@@ -94,7 +86,7 @@ public class User extends ABaseDO {
     private String introduce;
 
     // 生日
-    private String birthday;
+    private Date birthday;
 
     // 邮箱
     private String email;
@@ -148,17 +140,6 @@ public class User extends ABaseDO {
     private String systemCode;
 
     /***** 模糊查询使用字段 ******/
-
-    private String loginNameForLikeQuery;
-
-    private String mobileForLikeQuery;
-
-    private String realNameForLikeQuery;
-
-    private String userRefereeName;
-
-    private UserExt userExt;
-
     // ossUserId
     private String ossUserId;
 
@@ -171,14 +152,22 @@ public class User extends ABaseDO {
     // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
     private String loginType;
 
-    // 推荐人等级
-    private Integer refeereLevel;
+    // 注册时间起
+    private Date createDatetimeStart;
 
-    // 开始注册时间
-    private Date createBeginDatetime;
+    // 注册时间止
+    private Date createDatetimeEnd;
 
-    // 结束注册时间
-    private Date createEndDatetime;
+    // 用户推荐人
+    private User refereeUser;
+
+    public User getRefereeUser() {
+        return refereeUser;
+    }
+
+    public void setRefereeUser(User refereeUser) {
+        this.refereeUser = refereeUser;
+    }
 
     public String getUserId() {
         return userId;
@@ -364,11 +353,11 @@ public class User extends ABaseDO {
         this.introduce = introduce;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
@@ -410,6 +399,54 @@ public class User extends ABaseDO {
 
     public void setPdf(String pdf) {
         this.pdf = pdf;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     public Date getCreateDatetime() {
@@ -460,46 +497,6 @@ public class User extends ABaseDO {
         this.systemCode = systemCode;
     }
 
-    public String getLoginNameForLikeQuery() {
-        return loginNameForLikeQuery;
-    }
-
-    public void setLoginNameForLikeQuery(String loginNameForLikeQuery) {
-        this.loginNameForLikeQuery = loginNameForLikeQuery;
-    }
-
-    public String getMobileForLikeQuery() {
-        return mobileForLikeQuery;
-    }
-
-    public void setMobileForLikeQuery(String mobileForLikeQuery) {
-        this.mobileForLikeQuery = mobileForLikeQuery;
-    }
-
-    public String getRealNameForLikeQuery() {
-        return realNameForLikeQuery;
-    }
-
-    public void setRealNameForLikeQuery(String realNameForLikeQuery) {
-        this.realNameForLikeQuery = realNameForLikeQuery;
-    }
-
-    public String getUserRefereeName() {
-        return userRefereeName;
-    }
-
-    public void setUserRefereeName(String userRefereeName) {
-        this.userRefereeName = userRefereeName;
-    }
-
-    public UserExt getUserExt() {
-        return userExt;
-    }
-
-    public void setUserExt(UserExt userExt) {
-        this.userExt = userExt;
-    }
-
     public String getOssUserId() {
         return ossUserId;
     }
@@ -532,75 +529,20 @@ public class User extends ABaseDO {
         this.loginType = loginType;
     }
 
-    public Integer getRefeereLevel() {
-        return refeereLevel;
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
     }
 
-    public void setRefeereLevel(Integer refeereLevel) {
-        this.refeereLevel = refeereLevel;
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
     }
 
-    public Date getCreateBeginDatetime() {
-        return createBeginDatetime;
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
     }
 
-    public void setCreateBeginDatetime(Date createBeginDatetime) {
-        this.createBeginDatetime = createBeginDatetime;
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
-    public Date getCreateEndDatetime() {
-        return createEndDatetime;
-    }
-
-    public void setCreateEndDatetime(Date createEndDatetime) {
-        this.createEndDatetime = createEndDatetime;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
 }

@@ -4,32 +4,34 @@ import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.dto.req.XN001302Req;
+import com.std.user.dto.req.XN805062ZReq;
 import com.std.user.dto.res.BooleanRes;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 更新用户等级
- * @author: xieyj 
- * @since: 2017年4月1日 下午2:46:16 
+ * 修改手机号(需支付密码)
+ * @author: myb858 
+ * @since: 2015年9月15日 下午2:36:27 
  * @history:
  */
-public class XN001302 extends AProcessor {
+public class XN805062Z extends AProcessor {
     private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
-    private XN001302Req req = null;
+    private XN805062ZReq req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doUpLevel(req.getUserId(), req.getLevel());
+        userAO.doChangeMoblie(req.getUserId(), req.getNewMobile(),
+            req.getSmsCaptcha(), req.getTradePwd());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN001302Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getLevel());
+        req = JsonUtil.json2Bean(inputparams, XN805062ZReq.class);
+        StringValidater.validateBlank(req.getUserId(), req.getNewMobile(),
+            req.getSmsCaptcha(), req.getTradePwd());
     }
 }

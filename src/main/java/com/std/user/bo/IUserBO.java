@@ -100,11 +100,9 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public int refreshRealName(String userId, String realName);
 
-    public int refreshLoginPwd(String userId, String loginPwd,
-            String loginPwdStrength);
+    public int refreshLoginPwd(String userId, String loginPwd);
 
-    public int refreshTradePwd(String userId, String tradePwd,
-            String tradePwdStrength);
+    public int refreshTradePwd(String userId, String tradePwd);
 
     public int refreshMobile(String userId, String mobile);
 

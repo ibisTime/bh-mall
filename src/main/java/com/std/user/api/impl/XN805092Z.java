@@ -4,32 +4,34 @@ import com.std.user.ao.IUserAO;
 import com.std.user.api.AProcessor;
 import com.std.user.common.JsonUtil;
 import com.std.user.core.StringValidater;
-import com.std.user.dto.req.XN001302Req;
-import com.std.user.dto.res.BooleanRes;
+import com.std.user.dto.req.XN805092ZReq;
+import com.std.user.dto.res.XN805053Res;
 import com.std.user.exception.BizException;
 import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 更新用户等级
+ * 设置角色
  * @author: xieyj 
- * @since: 2017年4月1日 下午2:46:16 
+ * @since: 2017年7月16日 下午3:41:47 
  * @history:
  */
-public class XN001302 extends AProcessor {
+public class XN805092Z extends AProcessor {
     private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
-    private XN001302Req req = null;
+    private XN805092ZReq req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doUpLevel(req.getUserId(), req.getLevel());
-        return new BooleanRes(true);
+        userAO.doRoleUser(req.getUserId(), req.getRoleCode(), req.getUpdater(),
+            req.getRemark());
+        return new XN805053Res(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN001302Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getLevel());
+        req = JsonUtil.json2Bean(inputparams, XN805092ZReq.class);
+        StringValidater.validateBlank(req.getUserId(), req.getRoleCode(),
+            req.getUpdater());
     }
 }

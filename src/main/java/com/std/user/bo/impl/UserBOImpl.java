@@ -332,22 +332,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public int refreshTradePwd(String userId, String tradePwd,
-            String tradePwdStrength) {
+    public int refreshTradePwd(String userId, String tradePwd) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
             data.setTradePwd(MD5Util.md5(tradePwd));
-            data.setTradePwdStrength(tradePwdStrength);
+            data.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePwd));
             count = userDAO.updateTradePwd(data);
         }
         return count;
     }
 
-    /** 
-     * @see com.ibis.pz.user.IUserBO#getUser(java.lang.String)
-     */
     @Override
     public User getUser(String userId) {
         User data = null;
@@ -431,19 +427,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userDAO.selectList(data);
     }
 
-    /**
-     * 
-     * @see com.ibis.pz.user.IUserBO#refreshLoginPwd(java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
-    public int refreshLoginPwd(String userId, String loginPwd,
-            String loginPwdStrength) {
+    public int refreshLoginPwd(String userId, String loginPwd) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
-            data.setLoginPwd(loginPwd);
-            data.setLoginPwdStrength(loginPwdStrength);
+            data.setLoginPwd(MD5Util.md5(loginPwd));
+            data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
             count = userDAO.updateLoginPwd(data);
         }
         return count;

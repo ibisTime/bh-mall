@@ -11,7 +11,7 @@ import com.std.user.exception.ParaException;
 import com.std.user.spring.SpringContextHolder;
 
 /**
- * 修改手机号(不需要交易密码)
+ * 修改手机号
  * @author: xieyj 
  * @since: 2016年12月27日 下午9:01:00 
  * @history:

@@ -27,7 +27,7 @@ public class XN805044 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        userAO.approveUser(req.getUserId(), req.getApprover(),
+        userAO.doApproveUser(req.getUserId(), req.getApprover(),
             req.getApproveResult(), req.getDivRate(), req.getRemark());
         return new BooleanRes(true);
     }
