@@ -12,10 +12,8 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.std.user.bo.ICPasswordBO;
 import com.std.user.enums.ECPwdType;
 import com.std.user.enums.ESystemCode;
 import com.std.user.enums.EUserPwd;
@@ -28,9 +26,6 @@ import com.std.user.util.HttpsUtil;
 public class InstantMsgImpl {
     protected static final Logger logger = LoggerFactory
         .getLogger(InstantMsgImpl.class);
-
-    @Autowired
-    private ICPasswordBO cPasswordBO;
 
     public void doRegisterUser(String username, String systemCode) {
         UserReq req = new UserReq();

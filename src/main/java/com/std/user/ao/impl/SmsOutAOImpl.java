@@ -21,7 +21,7 @@ public class SmsOutAOImpl implements ISmsOutAO {
     @Override
     public void sendCaptcha(String mobile, String bizType, String companyCode,
             String systemCode) {
-        smsOutBO.sendCaptcha(mobile, bizType, systemCode);
+        smsOutBO.sendCaptcha(mobile, bizType, companyCode, systemCode);
     }
 
     @Override
@@ -30,8 +30,7 @@ public class SmsOutAOImpl implements ISmsOutAO {
         if (user == null) {
             throw new BizException("xn0000", "该用户编号不存在");
         }
-        String systemCode = user.getSystemCode();
-        String mobile = user.getMobile();
-        smsOutBO.sendSmsOut(mobile, content, "001200", systemCode);
+        smsOutBO.sendSmsOut(user.getMobile(), content, "001200",
+            user.getCompanyCode(), user.getSystemCode());
     }
 }

@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ISignLogAO;
 import com.std.user.bo.IAccountBO;
-import com.std.user.bo.ILevelRuleBO;
-import com.std.user.bo.IRuleBO;
 import com.std.user.bo.ISYSConfigBO;
 import com.std.user.bo.ISignLogBO;
 import com.std.user.bo.IUserBO;
@@ -17,7 +15,6 @@ import com.std.user.bo.base.Paginable;
 import com.std.user.common.AmountUtil;
 import com.std.user.common.DateUtil;
 import com.std.user.common.SysConstant;
-import com.std.user.domain.LevelRule;
 import com.std.user.domain.SYSConfig;
 import com.std.user.domain.SignLog;
 import com.std.user.domain.User;
@@ -25,8 +22,6 @@ import com.std.user.dto.res.XN805100Res;
 import com.std.user.dto.res.XN805931Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.ECurrency;
-import com.std.user.enums.ERuleKind;
-import com.std.user.enums.ERuleType;
 import com.std.user.enums.ESysUser;
 import com.std.user.enums.ESystemCode;
 import com.std.user.exception.BizException;
@@ -41,13 +36,7 @@ public class SignLogAOImpl implements ISignLogAO {
     private IUserBO userBO;
 
     @Autowired
-    private IRuleBO ruleBO;
-
-    @Autowired
     private IAccountBO accountBO;
-
-    @Autowired
-    private ILevelRuleBO levelRuleBO;
 
     @Autowired
     protected ISYSConfigBO sysConfigBO;
@@ -78,28 +67,28 @@ public class SignLogAOImpl implements ISignLogAO {
      */
     private Long addAccountAmount(User user) {
         Long amount = 0L;
-        if (ESystemCode.CSW.getCode().equals(user.getSystemCode())) {
-            // 签到送钱
-            amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
-                user.getLevel());
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
-                user.getUserId(), ECurrency.JF, amount, EBizType.AJ_SIGN,
-                "签到送赏金", "签到送赏金");
-            Long totalAmount = accountBO.getAccountByUserId(user.getUserId(),
-                ECurrency.JF);
-            List<LevelRule> LevelRuleList = levelRuleBO.queryLevelRuleList(user
-                .getSystemCode());
-            for (LevelRule res : LevelRuleList) {
-                if (totalAmount >= res.getAmountMin()
-                        && totalAmount <= res.getAmountMax()) {
-                    User udata = new User();
-                    udata.setUserId(user.getUserId());
-                    udata.setLevel(res.getCode());
-                    userBO.refreshLevel(udata);
-                    break;
-                }
-            }
-        }
+        // if (ESystemCode.CSW.getCode().equals(user.getSystemCode())) {
+        // // 签到送钱
+        // amount = ruleBO.getRuleByCondition(ERuleKind.JF, ERuleType.MRQD,
+        // user.getLevel());
+        // accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CSW.getCode(),
+        // user.getUserId(), ECurrency.JF, amount, EBizType.AJ_SIGN,
+        // "签到送赏金", "签到送赏金");
+        // Long totalAmount = accountBO.getAccountByUserId(user.getUserId(),
+        // ECurrency.JF);
+        // List<LevelRule> LevelRuleList = levelRuleBO.queryLevelRuleList(user
+        // .getSystemCode());
+        // for (LevelRule res : LevelRuleList) {
+        // if (totalAmount >= res.getAmountMin()
+        // && totalAmount <= res.getAmountMax()) {
+        // User udata = new User();
+        // udata.setUserId(user.getUserId());
+        // udata.setLevel(res.getCode());
+        // userBO.refreshLevel(udata);
+        // break;
+        // }
+        // }
+        // }
         return amount;
     }
 

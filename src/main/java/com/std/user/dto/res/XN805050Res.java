@@ -1,21 +1,21 @@
 package com.std.user.dto.res;
 
 public class XN805050Res {
-    // 是否成功
-    private boolean isSuccess;
+    private String userId;
 
     public XN805050Res() {
     }
 
-    public XN805050Res(boolean isSuccess) {
-        this.isSuccess = isSuccess;
+    public XN805050Res(String userId) {
+        this.userId = userId;
     }
 
-    public boolean getIsSuccess() {
-        return isSuccess;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setIsSuccess(boolean isSuccess) {
-        this.isSuccess = isSuccess;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
+
 }

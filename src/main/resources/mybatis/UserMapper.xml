@@ -5,32 +5,49 @@
 	<resultMap id="user_DB_Result" type="user">
 		<result column="user_id" property="userId" />
 		<result column="login_name" property="loginName" />
+		<result column="mobile" property="mobile" />
+		<result column="photo" property="photo" />
 		<result column="nickname" property="nickname" />
+		
 		<result column="login_pwd_strength" property="loginPwdStrength" />		
 		<result column="kind" property="kind" />
-		
 		<result column="level" property="level" />		
 		<result column="user_referee" property="userReferee" />
-		<result column="mobile" property="mobile" />
 		<result column="id_kind" property="idKind" />
-		<result column="id_no" property="idNo" />
 		
+		<result column="id_no" property="idNo" />
 		<result column="real_name" property="realName" />
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="role_code" property="roleCode" />
 		<result column="div_rate" property="divRate" />
-		<result column="status" property="status" />
-		<result column="create_datetime" property="createDatetime" />
 		
+		<result column="status" property="status" />
+		<result column="union_id" property="unionId" />
+		<result column="h5_open_id" property="h5OpenId" />
+		<result column="app_open_id" property="appOpenId" />
+		<result column="gender" property="gender" />
+		
+		<result column="introduce" property="introduce" />
+		<result column="birthday" property="birthday" />
+		<result column="email" property="email" />
+		<result column="diploma" property="diploma" />
+		<result column="occupation" property="occupation" />
+		
+		<result column="work_time" property="workTime" />
+		<result column="pdf" property="pdf" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		
+		<result column="address" property="address" />
+		<result column="longitude" property="longitude" />
+		<result column="latitude" property="latitude" />
+		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
+		
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		<result column="pdf" property="pdf" />
 		<result column="company_code" property="companyCode" />
-		
-		<result column="company_name" property="companyName" />
-		<result column="open_id" property="openId" />
-		<result column="jpush_id" property="jpushId" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -39,20 +56,10 @@
 				AND t.user_id = #{userId}
 			</if>
 			<if test="loginName != null and loginName != '' ">
-				<choose>
-					<when test='loginType == "3"'>
-						AND (t.login_name = #{loginName} OR t.mobile = #{loginName})
-					</when>
-					<when test='loginType == "2"'>
-						AND t.mobile = #{loginName}
-					</when>
-				    <otherwise>
-						AND t.login_name = #{loginName}
-					</otherwise>
-				</choose>
+				AND t.login_name = #{loginName}
 			</if>
-			<if test="loginNameForLikeQuery != null and loginNameForLikeQuery != '' ">
-				AND t.login_name like "%"#{loginNameForLikeQuery}"%"
+			<if test="loginNameForQuery != null and loginNameForQuery != '' ">
+				AND t.login_name like "%"#{loginNameForQuery}"%"
 			</if>
 			<if test="nickname != null and nickname != '' ">
 				AND t.nickname like "%"#{nickname}"%"
@@ -80,8 +87,8 @@
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
 			</if>
-			<if test="mobileForLikeQuery != null and mobileForLikeQuery != '' ">
-				AND t.mobile like "%"#{mobileForLikeQuery}"%"
+			<if test="mobileForQuery != null and mobileForQuery != '' ">
+				AND t.mobile like "%"#{mobileForQuery}"%"
 			</if>
 			<if test="idKind != null and idKind != '' ">
 				AND t.id_kind = #{idKind}
@@ -92,8 +99,8 @@
 			<if test="realName != null and realName != '' ">
 				AND t.real_name = #{realName}
 			</if>
-			<if test="realNameForLikeQuery != null and realNameForLikeQuery != '' ">
-				AND t.real_name like "%"#{realNameForLikeQuery}"%"
+			<if test="realNameForQuery != null and realNameForQuery != '' ">
+				AND t.real_name like "%"#{realNameForQuery}"%"
 			</if>
 			<if test="roleCode != null and roleCode != '' ">
 				AND t.role_code = #{roleCode}
@@ -110,17 +117,41 @@
 			<if test="tradePwd != null and tradePwd != '' ">
 				AND t.trade_pwd = #{tradePwd}
 			</if>	
-			<if test="openId != null and openId != '' ">
-				AND t.open_id = #{openId}
+			<if test="unionId != null and unionId != '' ">
+				AND t.union_id = #{unionId}
 			</if>
-			<if test="jpushId != null and jpushId != '' ">
-				AND t.jpush_id = #{jpushId}
+			<if test="h5OpenId != null and h5OpenId != '' ">
+				AND t.h5_open_id = #{h5OpenId}
 			</if>
-			<if test="createBeginDatetime != null and createBeginDatetime != '' ">
-				<![CDATA[AND t.create_datetime >= #{createBeginDatetime}]]>
+			<if test="appOpenId != null and appOpenId != '' ">
+				AND t.app_open_id = #{appOpenId}
 			</if>
-			<if test="createEndDatetime != null and createEndDatetime != '' ">
-				<![CDATA[AND t.create_datetime <= #{createEndDatetime}]]>
+			<if test="gender != null and gender != '' ">
+				AND t.gender = #{gender}
+			</if>
+			<if test="province != null and province != '' ">
+				AND t.province = #{province}
+			</if>
+			<if test="provinceForQuery != null and provinceForQuery != '' ">
+				AND t.province like "%"#{provinceForQuery}"%"
+			</if>
+			<if test="city != null and city != '' ">
+				AND t.city = #{city}
+			</if>
+			<if test="cityForQuery != null and cityForQuery != '' ">
+				AND t.city like "%"#{cityForQuery}"%"
+			</if>
+			<if test="area != null and area != '' ">
+				AND t.area = #{area}
+			</if>
+			<if test="areaForQuery != null and areaForQuery != '' ">
+				AND t.area like "%"#{areaForQuery}"%"
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
@@ -134,35 +165,52 @@
 		SELECT 
 		t.user_id
 		,t.login_name
+		,t.mobile
+		,t.photo
 		,t.nickname
+		
 		,t.login_pwd_strength
 		,t.kind	
-		
 		,t.level
 		,t.user_referee
-		,t.mobile
 		,t.id_kind
-		,t.id_no
 		
+		,t.id_no
 		,t.real_name
 		,t.trade_pwd_strength
 		,t.role_code
 		,t.div_rate
-		,t.status
 		
+		,t.status
+		,t.union_id
+		,t.h5_open_id
+		,t.app_open_id
+		,t.gender
+		
+		,t.introduce
+		,t.birthday
+		,t.email
+		,t.diploma
+		,t.occupation
+		
+		,t.work_time
+		,t.pdf
+		,t.province
+		,t.city
+		,t.area
+		
+		,t.address
+		,t.longitude
+		,t.latitude
 		,t.create_datetime
 		,t.updater
+		
 		,t.update_datetime
 		,t.remark
-		,t.pdf
-		
 		,t.company_code
-		,tc.name as company_name
-		,t.open_id
-		,t.jpush_id
 		,t.system_code
 		FROM
-		tstd_user t left join tstd_company tc on t.company_code = tc.code
+		tstd_user t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -172,7 +220,7 @@
 	</select>
 
 	<select id="select_user_count" parameterType="user" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_user t left join tstd_company tc on t.company_code = tc.code
+		SELECT count(1) FROM tstd_user t 
 		<include refid="where_condition"/>
 	</select>
 
@@ -180,51 +228,103 @@
 		INSERT INTO tstd_user(
 		user_id
 		,login_name
+		,mobile
+		,photo
 		,nickname
+		
 		,login_pwd
 		,login_pwd_strength
-		
-		,trade_pwd
-		,trade_pwd_strength
 		,kind
 		,level
 		,user_referee
 		
-		,mobile
+		,id_kind
+		,id_no
+		,real_name
+		,trade_pwd
+		,trade_pwd_strength
+		
+		,role_code
+		,div_rate
 		,status
+		,union_id
+		,h5_open_id
+		
+		,app_open_id
+		,gender
+		,introduce
+		,birthday
+		,email
+		
+		,diploma
+		,occupation
+		,work_time
+		,pdf
+		,province
+		
+		,city
+		,area
+		,address
+		,longitude
+		,latitude
+		
 		,create_datetime
 		,updater
 		,update_datetime
-		
 		,remark
 		,company_code
-		,open_id
-		,jpush_id
+		
 		,system_code
 		)
 		VALUES(
 		#{userId}
 		,#{loginName}
+		,#{mobile}
+		,#{photo}
 		,#{nickname}
+		
 		,#{loginPwd}
 		,#{loginPwdStrength}
-		
-		,#{tradePwd}
-		,#{tradePwdStrength}
 		,#{kind}
 		,#{level}
 		,#{userReferee}
 		
-		,#{mobile}
+		,#{idKind}
+		,#{idNo}
+		,#{realName}
+		,#{tradePwd}
+		,#{tradePwdStrength}
+		
+		,#{roleCode}
+		,#{divRate}
 		,#{status}
+		,#{unionId}
+		,#{h5OpenId}
+		
+		,#{appOpenId}
+		,#{gender}
+		,#{introduce}
+		,#{birthday}
+		,#{email}
+		
+		,#{diploma}
+		,#{occupation}
+		,#{workTime}
+		,#{pdf}
+		,#{province}
+		
+		,#{city}
+		,#{area}
+		,#{address}
+		,#{longitude}
+		,#{latitude}
+		
 		,#{createDatetime}
 		,#{updater}
 		,#{updateDatetime}
-		
 		,#{remark}
 		,#{companyCode}
-		,#{openId}
-		,#{jpushId}
+		
 		,#{systemCode}
 		)
 	</insert>

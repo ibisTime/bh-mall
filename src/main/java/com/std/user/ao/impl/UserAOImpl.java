@@ -51,10 +51,12 @@ import com.std.user.dto.req.XN805042Req;
 import com.std.user.dto.req.XN805043Req;
 import com.std.user.dto.req.XN805081ZReq;
 import com.std.user.dto.req.XN805095Req;
+import com.std.user.dto.req.XN805170Req;
 import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
 import com.std.user.dto.res.XN805041Res;
+import com.std.user.dto.res.XN805170Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.ECPwdType;
@@ -400,16 +402,16 @@ public class UserAOImpl implements IUserAO {
         condition.setSystemCode(systemCode);
         List<User> userList1 = userBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "登录名不存在");
+            throw new BizException("xn805050", "登录名不存在");
         }
         condition.setLoginPwd(MD5Util.md5(loginPwd));
         List<User> userList2 = userBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn702002", "登录密码错误");
+            throw new BizException("xn805050", "登录密码错误");
         }
         User user = userList2.get(0);
-        if (!EUserStatus.NORMAL.equals(user.getStatus())) {
-            throw new BizException("xn702002", "该账号"
+        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+            throw new BizException("xn805050", "该账号"
                     + EUserStatus.getMap().get(user.getStatus()).getValue()
                     + "，请联系工作人员");
         }
@@ -1002,7 +1004,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public XN805151Res doLoginWeChat(XN805151Req req) {
+    public XN805170Res doLoginWeChat(XN805170Req req) {
         String companyCode = req.getCompanyCode();
         String systemCode = req.getSystemCode();
         // Step1：获取密码参数信息
@@ -1111,10 +1113,10 @@ public class UserAOImpl implements IUserAO {
      * @create: 2017年7月14日 下午9:58:06 xieyj
      * @history: 
      */
-    private XN805151Res doWxLoginReg(XN805151Req req, String companyCode,
+    private XN805170Res doWxLoginReg(XN805170Req req, String companyCode,
             String systemCode, String unionId, String appOpenId,
             String h5OpenId, String nickname, String photo, String gender) {
-        XN805151Res result;
+        XN805170Res result;
         // 验证推荐人,将userReferee手机号转为用户编号
         String userRefereeId = userBO.getUserId(req.getUserReferee(),
             req.getUserRefereeKind(), companyCode, systemCode);
@@ -1130,10 +1132,10 @@ public class UserAOImpl implements IUserAO {
         return result;
     }
 
-    private XN805151Res doWxLoginRegMobile(XN805151Req req, String companyCode,
+    private XN805170Res doWxLoginRegMobile(XN805170Req req, String companyCode,
             String systemCode, String unionId, String appOpenId,
             String h5OpenId, String nickname, String photo, String gender) {
-        XN805151Res result;
+        XN805170Res result;
         if (StringUtils.isNotBlank(req.getMobile())) {
             // 判断是否需要验证码验证码,登录前一定要验证
             if (!EBoolean.YES.getCode().equals(req.getIsLoginCaptcha())) {

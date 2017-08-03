@@ -57,11 +57,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
         req.setMobile(mobile);
         req.setCaptcha(captcha);
         req.setBizType(bizType);
-        if (systemCode.equals(companyCode)) {
-            req.setCompanyCode(null);
-        } else {
-            req.setCompanyCode(companyCode);
-        }
+        req.setCompanyCode(companyCode);
         req.setSystemCode(systemCode);
         BizConnecter.getBizData("804082", JsonUtils.object2Json(req),
             BooleanRes.class);

@@ -10,13 +10,10 @@ import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.std.user.bo.ICPasswordBO;
 import com.std.user.common.MD5Util;
-import com.std.user.domain.CPassword;
 import com.std.user.dto.res.XN807910Res;
 import com.std.user.exception.BizException;
 import com.std.user.util.HttpsUtil;
@@ -24,9 +21,6 @@ import com.std.user.util.SignUtil;
 
 @Component
 public class WechatTokenUtil {
-
-    @Autowired
-    protected ICPasswordBO cPasswordBO;
 
     private Map<String, String> map = new HashMap<>();
 

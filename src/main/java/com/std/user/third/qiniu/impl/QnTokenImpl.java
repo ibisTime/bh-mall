@@ -11,7 +11,6 @@ package com.std.user.third.qiniu.impl;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.qiniu.util.Auth;
@@ -26,8 +25,6 @@ import com.std.user.exception.BizException;
  */
 @Component
 public class QnTokenImpl {
-    @Autowired
-    protected ICPasswordBO cPasswordBO;
 
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     public String getUploadToken(String companyCode, String systemCode) {

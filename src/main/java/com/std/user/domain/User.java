@@ -140,6 +140,26 @@ public class User extends ABaseDO {
     private String systemCode;
 
     /***** 模糊查询使用字段 ******/
+    // 登录名模糊查询
+    private String loginNameForQuery;
+
+    // 手机号模糊查询
+    private String mobileForQuery;
+
+    // 真实姓名模糊查询
+    private String realNameForQuery;
+
+    // 省份
+    private String provinceForQuery;
+
+    // 城市
+    private String cityForQuery;
+
+    // 县区
+    private String areaForQuery;
+
+    /***** 辅助字段 ******/
+
     // ossUserId
     private String ossUserId;
 
@@ -160,14 +180,6 @@ public class User extends ABaseDO {
 
     // 用户推荐人
     private User refereeUser;
-
-    public User getRefereeUser() {
-        return refereeUser;
-    }
-
-    public void setRefereeUser(User refereeUser) {
-        this.refereeUser = refereeUser;
-    }
 
     public String getUserId() {
         return userId;
@@ -497,6 +509,54 @@ public class User extends ABaseDO {
         this.systemCode = systemCode;
     }
 
+    public String getLoginNameForQuery() {
+        return loginNameForQuery;
+    }
+
+    public void setLoginNameForQuery(String loginNameForQuery) {
+        this.loginNameForQuery = loginNameForQuery;
+    }
+
+    public String getMobileForQuery() {
+        return mobileForQuery;
+    }
+
+    public void setMobileForQuery(String mobileForQuery) {
+        this.mobileForQuery = mobileForQuery;
+    }
+
+    public String getRealNameForQuery() {
+        return realNameForQuery;
+    }
+
+    public void setRealNameForQuery(String realNameForQuery) {
+        this.realNameForQuery = realNameForQuery;
+    }
+
+    public String getProvinceForQuery() {
+        return provinceForQuery;
+    }
+
+    public void setProvinceForQuery(String provinceForQuery) {
+        this.provinceForQuery = provinceForQuery;
+    }
+
+    public String getCityForQuery() {
+        return cityForQuery;
+    }
+
+    public void setCityForQuery(String cityForQuery) {
+        this.cityForQuery = cityForQuery;
+    }
+
+    public String getAreaForQuery() {
+        return areaForQuery;
+    }
+
+    public void setAreaForQuery(String areaForQuery) {
+        this.areaForQuery = areaForQuery;
+    }
+
     public String getOssUserId() {
         return ossUserId;
     }
@@ -543,6 +603,14 @@ public class User extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public User getRefereeUser() {
+        return refereeUser;
+    }
+
+    public void setRefereeUser(User refereeUser) {
+        this.refereeUser = refereeUser;
     }
 
 }
