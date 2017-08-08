@@ -1,91 +1,48 @@
 package com.std.user.dto.req;
 
 public class XN805062Req {
-    private String code;
 
-    // 银行代号（选填）
-    private String bankCode;
+    // userId（必填）
+    private String userId;
 
-    // 银行名字（选填）
-    private String bankName;
+    // 新手机号（必填）
+    private String newMobile;
 
-    // 开卡支行（选填）
-    private String subbranch;
+    // 验证码（必填）
+    private String smsCaptcha;
 
-    // 卡号（必填）
-    private String bankCardNo;
+    // 支付密码（必填）
+    private String tradePwd;
 
-    // 银行预留手机号（选填）
-    private String bindMobile;
-
-    // 更新人（必填）
-    private String updater;
-
-    // 备注（选填）
-    private String remark;
-
-    public String getCode() {
-        return code;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getBankCode() {
-        return bankCode;
+    public String getNewMobile() {
+        return newMobile;
     }
 
-    public void setBankCode(String bankCode) {
-        this.bankCode = bankCode;
+    public void setNewMobile(String newMobile) {
+        this.newMobile = newMobile;
     }
 
-    public String getBankName() {
-        return bankName;
+    public String getSmsCaptcha() {
+        return smsCaptcha;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
     }
 
-    public String getSubbranch() {
-        return subbranch;
+    public String getTradePwd() {
+        return tradePwd;
     }
 
-    public void setSubbranch(String subbranch) {
-        this.subbranch = subbranch;
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
     }
-
-    public String getBankCardNo() {
-        return bankCardNo;
-    }
-
-    public void setBankCardNo(String bankCardNo) {
-        this.bankCardNo = bankCardNo;
-    }
-
-    public String getBindMobile() {
-        return bindMobile;
-    }
-
-    public void setBindMobile(String bindMobile) {
-        this.bindMobile = bindMobile;
-    }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
 }

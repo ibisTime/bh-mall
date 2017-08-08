@@ -252,6 +252,8 @@ public class UserAOImpl implements IUserAO {
         String userId = null;
         if (ESystemCode.CAIGO.getCode().equals(req.getSystemCode())) {
             userId = doAddUserCaigo(req);
+        } else if (ESystemCode.YLQ.getCode().equals(req.getSystemCode())) {
+            userId = doAddUserYLQ(req);
         } else {
         }
         return userId;
@@ -267,7 +269,7 @@ public class UserAOImpl implements IUserAO {
             if (StringUtils.isBlank(req.getLoginPwd())) {
                 req.setLoginPwd(RandomUtil.generate6());
             }
-            userId = userBO.doAddUser(req, null);
+            userId = userBO.doAddUser(req);
 
             // 分配账户
             List<String> currencyList = new ArrayList<String>();
@@ -291,7 +293,7 @@ public class UserAOImpl implements IUserAO {
             if (StringUtils.isBlank(req.getLoginPwd())) {
                 req.setLoginPwd(RandomUtil.generate6());
             }
-            userId = userBO.doAddUser(req, null);
+            userId = userBO.doAddUser(req);
 
             // 分配账户
             List<String> currencyList = new ArrayList<String>();
@@ -311,7 +313,45 @@ public class UserAOImpl implements IUserAO {
             // 验证登录名
             userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
                 req.getCompanyCode(), req.getSystemCode());
-            userId = userBO.doAddUser(req, null);
+            userId = userBO.doAddUser(req);
+        }
+        return userId;
+    }
+
+    private String doAddUserYLQ(XN805042Req req) {
+        String userId = null;
+        if (EUserKind.Customer.getCode().equals(req.getKind())) {
+            // 验证手机号
+            userBO.isMobileExist(req.getMobile(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            // 判断登录密码是否为空
+            if (StringUtils.isBlank(req.getLoginPwd())) {
+                req.setLoginPwd(RandomUtil.generate6());
+            }
+            userId = userBO.doAddUser(req);
+
+            // 分配账户
+            List<String> currencyList = new ArrayList<String>();
+            currencyList.add(ECurrency.CNY.getCode());
+            currencyList.add(ECurrency.CG_JF.getCode());
+            currencyList.add(ECurrency.CG_CGB.getCode());
+            accountBO.distributeAccountList(userId, req.getMobile(),
+                req.getKind(), currencyList, req.getCompanyCode(),
+                req.getSystemCode());
+            // 发送短信
+            smsOutBO.sendSmsOut(req.getMobile(),
+                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
+                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
+                        + "，请及时登录网站更改密码。", "805042", req.getCompanyCode(),
+                req.getSystemCode());
+        } else if (EUserKind.Plat.getCode().equals(req.getKind())) {
+            // 验证登录名
+            userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+
+            userId = userBO.doAddUser(req);
+        } else {
+            throw new BizException("xn805042", "用户类型" + req.getKind() + "未能识别");
         }
         return userId;
     }
@@ -539,7 +579,7 @@ public class UserAOImpl implements IUserAO {
             String newLoginPwd, String kind, String companyCode,
             String systemCode) {
         String userId = userBO.getUserId(mobile, kind, companyCode, systemCode);
-        if (StringUtils.isNotBlank(userId)) {
+        if (StringUtils.isBlank(userId)) {
             throw new BizException("li01004", "用户不存在,请先注册");
         }
         // 短信验证码是否正确
@@ -666,6 +706,11 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                 + "用户，您的支付密码修改成功。请妥善保管您的账户相关信息。", "805069",
             user.getCompanyCode(), user.getSystemCode());
+    }
+
+    @Override
+    public void modifyPhoto(String userId, String photo) {
+        userBO.refreshPhoto(userId, photo);
     }
 
     // 修改用户信息
@@ -881,11 +926,8 @@ public class UserAOImpl implements IUserAO {
             // 推荐人转义
             User userReferee = userBO.getUser(user.getUserReferee());
             if (userReferee != null) {
-                user.setUserRefereeName(userReferee.getLoginName());
+                user.setRefereeUser(userReferee);
             }
-            // 扩展信息
-            UserExt userExt = userExtBO.getUserExt(user.getUserId());
-            user.setUserExt(userExt);
         }
         return page;
     }
@@ -959,8 +1001,15 @@ public class UserAOImpl implements IUserAO {
         if (user == null) {
             throw new BizException("li01004", userId + "用户不存在");
         } else {
+            // 拉取推荐人信息
             User refereeUser = userBO.getUser(user.getUserReferee());
             user.setRefereeUser(refereeUser);
+            // 是否设置过交易密码
+            if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
+                user.setTradepwdFlag(true);
+            } else {
+                user.setTradepwdFlag(false);
+            }
             // 获取我关注的人
             UserRelation toCondition = new UserRelation();
             toCondition.setUserId(userId);
@@ -1287,4 +1336,5 @@ public class UserAOImpl implements IUserAO {
         data.setLevel(level);
         userBO.refreshLevel(data);
     }
+
 }

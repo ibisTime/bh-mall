@@ -55,7 +55,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo, String gender);
 
-    public String doAddUser(XN805042Req req, String roleCode);
+    public String doAddUser(XN805042Req req);
 
     public String doApplyRegUser(XN805043Req req, String roleCode);
 
@@ -74,25 +74,11 @@ public interface IUserBO extends IPaginableBO<User> {
     // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkLoginPwd(String userId, String loginPwd, String alertStr);
 
-    /**
-     * 校验是否已经有人实名认证
-     * @param kind
-     * @param idKind
-     * @param idNo
-     * @param realName 
-     * @create: 2017年4月6日 下午3:55:30 xieyj
-     * @history:
-     */
+    // 校验是否已经有人实名认证
     public void checkIdentify(String kind, String idKind, String idNo,
             String realName);
 
-    /**
-     *  判断推荐人是否存在(手机号)
-     * @param userReferee 推荐人
-     * @return 
-     * @create: 2015-5-16 下午4:08:06 miyb
-     * @history:
-     */
+    // 判断推荐人是否存在(手机号)
     public void checkUserReferee(String userReferee, String systemCode);
 
     public int refreshIdentity(String userId, String realName, String idKind,
@@ -130,6 +116,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshNickname(String userId, String nickname);
 
+    public void refreshPhoto(String userId, String photo);
+
     public void refreshCompany(String userId, String companyCode);
 
     public void refreshUser(User data);
@@ -138,14 +126,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshLevel(User data);
 
-    /** 
-     * @param mobile
-     * @param kind
-     * @param systemCode
-     * @return 
-     * @create: 2017年4月17日 下午5:11:57 xieyj
-     * @history: 
-     */
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
 
@@ -154,11 +134,5 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public int refreshDivRate(String userId, Double divRate);
 
-    /**
-     * @param condition
-     * @return 
-     * @create: 2017年5月16日 下午5:52:25 asus
-     * @history:
-     */
     public Long totalUser(User condition);
 }

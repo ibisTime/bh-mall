@@ -39,7 +39,7 @@ public class AddressAOImpl implements IAddressAO {
     @Override
     @Transactional
     public String addAddress(Address data) {
-        User user = userBO.getUser(data.getUserId(), data.getSystemCode());
+        User user = userBO.getUser(data.getUserId());
         String code = null;
         if (data != null) {
             // 如果新增地址设置为默认地址，该用户其他地址设置为非默认

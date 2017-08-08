@@ -442,6 +442,13 @@
 		user_id = #{userId}	
 	</update>
 	
+	<update id="update_user_photo" parameterType="user">
+		UPDATE tstd_user
+		SET
+		photo = #{photo}
+		WHERE user_id = #{userId}
+	</update>
+	
 	<update id="update_user" parameterType="user">
 		UPDATE tstd_user
 		SET

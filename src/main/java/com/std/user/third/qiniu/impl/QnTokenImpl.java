@@ -11,10 +11,11 @@ package com.std.user.third.qiniu.impl;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.qiniu.util.Auth;
-import com.std.user.enums.ECPwdType;
+import com.std.user.bo.ISYSConfigBO;
 import com.std.user.exception.BizException;
 
 /** 
@@ -26,17 +27,20 @@ import com.std.user.exception.BizException;
 @Component
 public class QnTokenImpl {
 
+    @Autowired
+    ISYSConfigBO sysConfigBO;
+
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     public String getUploadToken(String companyCode, String systemCode) {
-        Map<String, String> resultMap = cPasswordBO.queryCPasswordList(
-            ECPwdType.QINIU.getCode(), null, systemCode);
+        Map<String, String> resultMap = sysConfigBO.getConfigsMap("qiniu",
+            companyCode, systemCode);
         if (resultMap == null) {
             throw new BizException("xn000000", "七牛云图片参数异常");
         }
         String ACCESS_KEY = resultMap.get("ACCESS_KEY");
         String SECRET_KEY = resultMap.get("SECRET_KEY");
         // 存储空间名称
-        String bucket = resultMap.get("bucket");
+        String bucket = resultMap.get("BUCKET");
         if (StringUtils.isBlank(ACCESS_KEY) || StringUtils.isBlank(SECRET_KEY)
                 || StringUtils.isBlank(bucket)) {
             throw new BizException("xn000000", "七牛云图片参数异常");

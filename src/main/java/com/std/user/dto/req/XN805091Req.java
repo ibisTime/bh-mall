@@ -1,11 +1,9 @@
 package com.std.user.dto.req;
 
-public class XN805091ZReq {
-    // 用户编号
-    private String userId;
+public class XN805091Req {
 
-    // 目标状态
-    private String toStatus;
+    // 用户编号(必填)
+    private String userId;
 
     // 更新人(必填)
     private String updater;
@@ -19,14 +17,6 @@ public class XN805091ZReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getToStatus() {
-        return toStatus;
-    }
-
-    public void setToStatus(String toStatus) {
-        this.toStatus = toStatus;
     }
 
     public String getUpdater() {

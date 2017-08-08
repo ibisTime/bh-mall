@@ -28,6 +28,7 @@ import com.std.user.domain.User;
 import com.std.user.dto.req.XN805042Req;
 import com.std.user.dto.req.XN805043Req;
 import com.std.user.enums.EUserLevel;
+import com.std.user.enums.EUserPwd;
 import com.std.user.enums.EUserStatus;
 import com.std.user.exception.BizException;
 
@@ -185,7 +186,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public String doAddUser(XN805042Req req, String roleCode) {
+    public String doAddUser(XN805042Req req) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
@@ -193,6 +194,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setMobile(req.getMobile());
         user.setNickname(userId.substring(userId.length() - 8, userId.length()));
 
+        if (StringUtils.isBlank(req.getLoginPwd())) {
+            req.setLoginPwd(EUserPwd.InitPwd.getCode());
+        }
         user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
             .getLoginPwd()));
@@ -205,8 +209,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdNo(req.getIdNo());
         user.setRealName(req.getRealName());
 
-        user.setRoleCode(roleCode);
+        user.setRoleCode(req.getRoleCode());
 
+        if (StringUtils.isBlank(req.getDivRate())) {
+            req.setDivRate("0");
+        }
         user.setDivRate(Double.valueOf(req.getDivRate()));
         user.setStatus(EUserStatus.NORMAL.getCode());
         user.setPdf(req.getPdf());
@@ -689,6 +696,16 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data.setUserId(userId);
             data.setNickname(nickname);
             userDAO.updateNickname(data);
+        }
+    }
+
+    @Override
+    public void refreshPhoto(String userId, String photo) {
+        if (StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setPhoto(photo);
+            userDAO.updatePhoto(data);
         }
     }
 

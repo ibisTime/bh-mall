@@ -1,10 +1,11 @@
 package com.std.user.dto.req;
 
-public class XN805092ZReq {
-    // 用户编号
+public class XN805092Req {
+
+    // 用户编号(必填)
     private String userId;
 
-    // 角色编号
+    // 角色编号(必填)
     private String roleCode;
 
     // 更新人(必填)

@@ -1,14 +1,15 @@
 package com.std.user.dto.req;
 
-public class XN805069ZReq {
-    // userId
+public class XN805067Req {
+
+    // userId（必填）
     private String userId;
 
-    // 原支付密码
-    private String oldTradePwd;
-
-    // 新支付密码
+    // 新支付密码（必填）
     private String newTradePwd;
+
+    // 短信验证码（必填）
+    private String smsCaptcha;
 
     public String getUserId() {
         return userId;
@@ -18,20 +19,20 @@ public class XN805069ZReq {
         this.userId = userId;
     }
 
-    public String getOldTradePwd() {
-        return oldTradePwd;
-    }
-
-    public void setOldTradePwd(String oldTradePwd) {
-        this.oldTradePwd = oldTradePwd;
-    }
-
     public String getNewTradePwd() {
         return newTradePwd;
     }
 
     public void setNewTradePwd(String newTradePwd) {
         this.newTradePwd = newTradePwd;
+    }
+
+    public String getSmsCaptcha() {
+        return smsCaptcha;
+    }
+
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
     }
 
 }

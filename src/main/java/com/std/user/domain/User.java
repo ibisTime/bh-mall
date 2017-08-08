@@ -160,6 +160,9 @@ public class User extends ABaseDO {
 
     /***** 辅助字段 ******/
 
+    // 是否设置交易密码
+    private boolean tradepwdFlag;
+
     // ossUserId
     private String ossUserId;
 
@@ -611,6 +614,14 @@ public class User extends ABaseDO {
 
     public void setRefereeUser(User refereeUser) {
         this.refereeUser = refereeUser;
+    }
+
+    public boolean isTradepwdFlag() {
+        return tradepwdFlag;
+    }
+
+    public void setTradepwdFlag(boolean tradepwdFlag) {
+        this.tradepwdFlag = tradepwdFlag;
     }
 
 }

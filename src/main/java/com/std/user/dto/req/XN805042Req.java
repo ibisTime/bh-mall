@@ -31,8 +31,8 @@ public class XN805042Req {
     // 分成比例(选填)
     private String divRate;
 
-    // 是否注册环信(选填)
-    private String isRegHx;
+    // 角色编号
+    private String roleCode;
 
     // 省(选填)
     private String province;
@@ -60,6 +60,14 @@ public class XN805042Req {
 
     // 系统编号(必填)
     private String systemCode;
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
 
     public String getLoginName() {
         return loginName;
@@ -139,14 +147,6 @@ public class XN805042Req {
 
     public void setDivRate(String divRate) {
         this.divRate = divRate;
-    }
-
-    public String getIsRegHx() {
-        return isRegHx;
-    }
-
-    public void setIsRegHx(String isRegHx) {
-        this.isRegHx = isRegHx;
     }
 
     public String getProvince() {

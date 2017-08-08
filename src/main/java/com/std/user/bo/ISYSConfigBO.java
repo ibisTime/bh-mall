@@ -43,6 +43,6 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
      * @create: 2017年7月14日 下午7:03:12 xieyj
      * @history:
      */
-    public Map<String, String> getConfigsMap(String companyCode,
+    public Map<String, String> getConfigsMap(String type, String companyCode,
             String systemCode);
 }

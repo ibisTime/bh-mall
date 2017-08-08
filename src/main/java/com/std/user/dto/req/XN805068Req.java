@@ -1,6 +1,6 @@
 package com.std.user.dto.req;
 
-public class XN805068ZReq {
+public class XN805068Req {
     // userId（必填）
     private String userId;
 

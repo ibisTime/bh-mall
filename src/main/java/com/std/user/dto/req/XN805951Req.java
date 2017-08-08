@@ -1,6 +1,7 @@
 package com.std.user.dto.req;
 
 public class XN805951Req {
+
     // 系统编号(必填)
     private String systemCode;
 
