@@ -48,9 +48,7 @@ public class AccountBOImpl implements IAccountBO {
     @Override
     public void refreshRealName(String userId, String realName,
             String systemCode) {
-        // 正汇不处理
-        if (!ESystemCode.ZHPAY.getCode().equals(systemCode)
-                && !ESystemCode.SERVICE.getCode().equals(systemCode)) {
+        if (!ESystemCode.SERVICE.getCode().equals(systemCode)) {
             XN002001Req req = new XN002001Req();
             req.setUserId(userId);
             req.setRealName(realName);

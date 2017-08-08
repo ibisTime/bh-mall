@@ -26,22 +26,21 @@ public class XN001402 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         User condition = new User();
-        condition.setLoginNameForLikeQuery(req.getLoginName());
+        condition.setLoginNameForQuery(req.getLoginName());
         condition.setNickname(req.getNickname());
         condition.setKind(req.getKind());
         condition.setLevel(req.getLevel());
         condition.setUserReferee(req.getUserReferee());
-        condition.setMobileForLikeQuery(req.getMobile());
+        condition.setMobileForQuery(req.getMobile());
 
         condition.setIdKind(req.getIdKind());
         condition.setIdNo(req.getIdNo());
-        condition.setRealNameForLikeQuery(req.getRealName());
+        condition.setRealNameForQuery(req.getRealName());
         condition.setRoleCode(req.getRoleCode());
         condition.setStatus(req.getStatus());
 
         condition.setUpdater(req.getUpdater());
         condition.setCompanyCode(req.getCompanyCode());
-        condition.setOpenId(req.getOpenId());
         condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

@@ -45,7 +45,7 @@ public class XN805120 extends AProcessor {
         condition.setAppOpenId(req.getAppOpenId());
         condition.setGender(req.getGender());
         condition.setGender(req.getGender());
-        condition.setBirthday(DateUtil.getFrontDate(req.getBirthday(), false));
+        condition.setBirthday(req.getBirthday());
         condition.setEmail(req.getEmail());
 
         condition.setDiploma(req.getDiploma());

@@ -45,9 +45,6 @@ public class XN001402Req extends APageReq {
     // 公司编号
     private String companyCode;
 
-    // 第三方登录开放编号
-    private String openId;
-
     // 系统编号
     private String systemCode;
 
@@ -163,11 +160,4 @@ public class XN001402Req extends APageReq {
         this.nickname = nickname;
     }
 
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
 }

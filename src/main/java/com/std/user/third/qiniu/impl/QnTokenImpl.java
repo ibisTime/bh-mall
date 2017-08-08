@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import com.qiniu.util.Auth;
 import com.std.user.bo.ISYSConfigBO;
+import com.std.user.common.SysConstant;
+import com.std.user.enums.EConfigType;
 import com.std.user.exception.BizException;
 
 /** 
@@ -32,15 +34,15 @@ public class QnTokenImpl {
 
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     public String getUploadToken(String companyCode, String systemCode) {
-        Map<String, String> resultMap = sysConfigBO.getConfigsMap("qiniu",
-            companyCode, systemCode);
+        Map<String, String> resultMap = sysConfigBO.getConfigsMap(
+            EConfigType.QINIU.getCode(), companyCode, systemCode);
         if (resultMap == null) {
             throw new BizException("xn000000", "七牛云图片参数异常");
         }
-        String ACCESS_KEY = resultMap.get("ACCESS_KEY");
-        String SECRET_KEY = resultMap.get("SECRET_KEY");
+        String ACCESS_KEY = resultMap.get(SysConstant.QINIU_ACCESS_KEY);
+        String SECRET_KEY = resultMap.get(SysConstant.QINIU_SECRET_KEY);
         // 存储空间名称
-        String bucket = resultMap.get("BUCKET");
+        String bucket = resultMap.get(SysConstant.QINIU_BUCKET);
         if (StringUtils.isBlank(ACCESS_KEY) || StringUtils.isBlank(SECRET_KEY)
                 || StringUtils.isBlank(bucket)) {
             throw new BizException("xn000000", "七牛云图片参数异常");

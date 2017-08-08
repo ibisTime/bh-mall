@@ -12,10 +12,12 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.std.user.enums.ECPwdType;
-import com.std.user.enums.ESystemCode;
+import com.std.user.bo.ISYSConfigBO;
+import com.std.user.common.SysConstant;
+import com.std.user.enums.EConfigType;
 import com.std.user.enums.EUserPwd;
 import com.std.user.exception.BizException;
 import com.std.user.http.JsonUtils;
@@ -24,22 +26,20 @@ import com.std.user.util.HttpsUtil;
 
 @Component
 public class InstantMsgImpl {
+    @Autowired
+    ISYSConfigBO sysConfigBO;
+
     protected static final Logger logger = LoggerFactory
         .getLogger(InstantMsgImpl.class);
 
     public void doRegisterUser(String username, String systemCode) {
         UserReq req = new UserReq();
         req.setUsername(username);
-        // 城市网环信账号密码123456，其他系统888888
-        if (ESystemCode.CSW.getCode().equals(systemCode)) {
-            req.setPassword(EUserPwd.InitPwd16.getCode());
-        } else {
-            req.setPassword(EUserPwd.InitPwd.getCode());
-        }
-        Map<String, String> resultMap = cPasswordBO.queryCPasswordList(
-            ECPwdType.HX.getCode(), null, systemCode);
-        String org_name = resultMap.get("org_name");
-        String app_name = resultMap.get("app_name");
+        req.setPassword(EUserPwd.InitPwd.getCode());
+        Map<String, String> resultMap = sysConfigBO.getConfigsMap(
+            EConfigType.HX.getCode(), systemCode, systemCode);
+        String org_name = resultMap.get(SysConstant.ORG_NAME);
+        String app_name = resultMap.get(SysConstant.APP_NAME);
         String postUrl = "https://a1.easemob.com/" + org_name + "/" + app_name
                 + "/users";
         try {

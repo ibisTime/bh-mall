@@ -111,16 +111,7 @@ public interface IUserAO {
     // 注销/激活用户
     public void doCloseOpen(String userId, String updater, String remark);
 
-    /**
-     * 设置角色
-     * @param userId
-     * @param roleCode
-     * @param updater
-     * @param remark
-     * @return 
-     * @create: 2016年5月24日 下午5:50:16 myb858
-     * @history:
-     */
+    // 设置角色
     public void doRoleUser(String userId, String roleCode, String updater,
             String remark);
 
@@ -161,36 +152,13 @@ public interface IUserAO {
 
     public List<User> getUserRefereeList(String userId);
 
-    /**
-     * 查询用户详情(对外开放)
-     * @param userId
-     * @param systemCode
-     * @return 
-     * @create: 2017年3月6日 上午11:53:51 xieyj
-     * @history:
-     */
+    // 查询用户详情(对外开放)
     public XN001400Res doGetDetailUser(String userId);
 
-    /**
-     * 根据手机号，种类，公司编号，系统编号获取用户编号
-     * @param mobile
-     * @param kind
-     * @param companyCode
-     * @param systemCode
-     * @return 
-     * @create: 2016年12月28日 上午10:38:08 xieyj
-     * @history:
-     */
+    // 根据手机号，种类，公司编号，系统编号获取用户编号
     public String doGetUserIdByCondition(String mobile, String kind,
             String companyCode, String systemCode);
 
-    /**
-     * 校验支付密码
-     * @param userId
-     * @param tradePwd
-     * @return 
-     * @create: 2015年11月10日 上午9:16:42 myb858
-     * @history:
-     */
+    // 校验支付密码
     public void doCheckTradePwd(String userId, String tradePwd);
 }

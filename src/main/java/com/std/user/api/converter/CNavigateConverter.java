@@ -5,7 +5,6 @@ import com.std.user.domain.CNavigate;
 import com.std.user.dto.req.XN805800Req;
 import com.std.user.dto.req.XN805802Req;
 import com.std.user.dto.req.XN805805Req;
-import com.std.user.dto.req.XN806052Req;
 
 public class CNavigateConverter {
 
@@ -44,7 +43,6 @@ public class CNavigateConverter {
         result.setRemark(req.getRemark());
         result.setContentType(req.getContentType());
         result.setCompanyCode(req.getCompanyCode());
-        result.setIsCompanyEdit(req.getIsCompanyEdit());
         return result;
     }
 
@@ -63,18 +61,4 @@ public class CNavigateConverter {
         return result;
     }
 
-    // 列表查询导航
-    public static CNavigate converter(XN806052Req req) {
-        CNavigate result = new CNavigate();
-        result.setName(req.getName());
-        result.setType(req.getType());
-        result.setStatus(req.getStatus());
-        result.setLocation(req.getLocation());
-        result.setBelong(req.getBelong());
-        result.setParentCode(req.getParentCode());
-        result.setContentType(req.getContentType());
-        result.setCompanyCode(req.getCompanyCode());
-        result.setSystemCode(req.getSystemCode());
-        return result;
-    }
 }

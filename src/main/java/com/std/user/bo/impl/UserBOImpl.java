@@ -374,39 +374,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userList;
     }
 
-    @Override
-    public User getUser(String userId, String systemCode) {
-        User data = null;
-        if (StringUtils.isNotBlank(userId)) {
-            User condition = new User();
-            condition.setUserId(userId);
-            condition.setSystemCode(systemCode);
-            data = userDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn000000", "该用户编号[" + userId + "]不存在!");
-            }
-        }
-        return data;
-    }
-
-    /** 
-     * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
-     */
-    @Override
-    public User getUserByMobile(String mobile, String systemCode) {
-        User data = null;
-        if (StringUtils.isNotBlank(mobile)) {
-            User condition = new User();
-            condition.setMobile(mobile);
-            condition.setSystemCode(systemCode);
-            List<User> list = userDAO.selectList(condition);
-            if (CollectionUtils.isNotEmpty(list)) {
-                data = list.get(0);
-            }
-        }
-        return data;
-    }
-
     /** 
      * @see com.ibis.pz.user.IUserBO#getUserByMobile(java.lang.String)
      */
@@ -585,56 +552,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public String doAddUser(String mobile, String loginPsd, String userReferee,
-            String kind, String remark, String updater, String companyCode,
-            String systemCode) {
-        String userId = null;
-        if (StringUtils.isNotBlank(mobile)) {
-            User user = new User();
-            userId = OrderNoGenerater.generate("U");
-
-            user.setUserId(userId);
-            user.setLoginName(mobile);
-            user.setNickname(userId.substring(userId.length() - 8,
-                userId.length()));
-            user.setLoginPwd(loginPsd);
-            if (StringUtils.isNotBlank(loginPsd)) {
-                user.setLoginPwdStrength(PwdUtil
-                    .calculateSecurityLevel(loginPsd));
-            }
-            user.setKind(kind);
-
-            user.setLevel(EUserLevel.ZERO.getCode());
-            user.setUserReferee(userReferee);
-            user.setMobile(mobile);
-            user.setStatus(EUserStatus.NORMAL.getCode());// 0正常;1程序锁定;2人工锁定
-            Date date = new Date();
-
-            user.setCreateDatetime(date);
-            user.setUpdater(updater);
-            user.setUpdateDatetime(date);
-            user.setRemark(remark);
-            if (StringUtils.isBlank(companyCode)) {
-                companyCode = systemCode;
-            }
-            user.setCompanyCode(systemCode);
-            user.setSystemCode(systemCode);
-            userDAO.insertRen(user);
-        }
-        return userId;
-    }
-
-    /** 
-     * @see com.std.user.bo.IUserBO#doAddUser(com.std.user.domain.User)
-     */
-    @Override
-    public void doAddUser(User data) {
-        if (null != data && StringUtils.isNotBlank(data.getUserId())) {
-            userDAO.insertRen(data);
-        }
-    }
-
-    @Override
     public void refreshStatus(String userId, EUserStatus status,
             String updater, String remark) {
         if (StringUtils.isNotBlank(userId)) {
@@ -793,24 +710,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     public Long totalUser(User condition) {
         return userDAO.selectTotalCount(condition);
-    }
-
-    /** 
-     * @see com.std.user.bo.IUserBO#isMobileExist(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void isMobileExist(String mobile, String systemCode) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /** 
-     * @see com.std.user.bo.IUserBO#isMobileExist(java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void isMobileExist(String mobile, String kind, String systemCode) {
-        // TODO Auto-generated method stub
-
     }
 
     /** 

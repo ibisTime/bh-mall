@@ -5,22 +5,28 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
+import com.std.user.bo.ISYSConfigBO;
 import com.std.user.common.MD5Util;
+import com.std.user.common.SysConstant;
 import com.std.user.dto.res.XN807910Res;
+import com.std.user.enums.EConfigType;
 import com.std.user.exception.BizException;
 import com.std.user.util.HttpsUtil;
 import com.std.user.util.SignUtil;
 
 @Component
 public class WechatTokenUtil {
+
+    @Autowired
+    ISYSConfigBO sysConfigBO;
 
     private Map<String, String> map = new HashMap<>();
 
@@ -72,22 +78,16 @@ public class WechatTokenUtil {
         String jsapi_ticket = null;
         String appId = "";
         String appSecret = "";
-        CPassword condition = new CPassword();
-        condition.setType("3");
-        condition.setAccount("ACCESS_KEY");
-        condition.setCompanyCode(companyCode);
-        condition.setSystemCode(systemCode);
-        List<CPassword> result = cPasswordBO.queryCPasswordList(condition);
-        if (CollectionUtils.isEmpty(result)) {
+        Map<String, String> resultMap = sysConfigBO.getConfigsMap(
+            EConfigType.WEIXIN_H5.getCode(), companyCode, systemCode);
+        appId = resultMap.get(SysConstant.WX_H5_ACCESS_KEY);
+        appSecret = resultMap.get(SysConstant.WX_H5_SECRET_KEY);
+        if (StringUtils.isBlank(appId)) {
             throw new BizException("XN000000", "微信公众号appId配置获取失败，请检查配置");
         }
-        appId = result.get(0).getPassword();
-        condition.setAccount("SECRET_KEY");
-        result = cPasswordBO.queryCPasswordList(condition);
-        if (CollectionUtils.isEmpty(result)) {
+        if (StringUtils.isBlank(appSecret)) {
             throw new BizException("XN000000", "微信公众号appSecret配置获取失败，请检查配置");
         }
-        appSecret = result.get(0).getPassword();
         String requestUrl = "https://api.weixin.qq.com/cgi-bin/token?";
         String params = "grant_type=client_credential&appid=" + appId
                 + "&secret=" + appSecret + "";

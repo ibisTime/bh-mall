@@ -45,7 +45,6 @@ import com.std.user.core.StringValidater;
 import com.std.user.domain.SYSConfig;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
-import com.std.user.domain.UserExt;
 import com.std.user.domain.UserRelation;
 import com.std.user.dto.req.XN805042Req;
 import com.std.user.dto.req.XN805043Req;
@@ -59,7 +58,7 @@ import com.std.user.dto.res.XN805041Res;
 import com.std.user.dto.res.XN805170Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
-import com.std.user.enums.ECPwdType;
+import com.std.user.enums.EConfigType;
 import com.std.user.enums.ECurrency;
 import com.std.user.enums.EIDKind;
 import com.std.user.enums.ELoginType;
@@ -720,6 +719,19 @@ public class UserAOImpl implements IUserAO {
     // 完善手机号和身份信息
     public void doModfiyMobileAndIds(String userId, String mobile,
             String realName, String idKind, String idNo) {
+        User user = userBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("xn0110", "用户不存在");
+        }
+        if (StringUtils.isBlank(user.getMobile())) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setMobile(mobile);
+            data.setRealName(realName);
+            data.setIdKind(idKind);
+            data.setIdNo(idNo);
+            userBO.refreshUserSupple(data);
+        }
     }
 
     // 修改经纬度
@@ -882,22 +894,21 @@ public class UserAOImpl implements IUserAO {
         if (dbUser == null) {
             throw new BizException("xn000000", "该用户编号不存在！");
         }
-        UserExt condition = new UserExt();
+        User condition = new User();
         condition.setKind(dbUser.getKind());
         condition.setProvince(req.getProvince());
         condition.setCity(req.getCity());
         condition.setArea(req.getArea());
-        List<UserExt> list = userExtBO.queryUserExtList(condition);
+        List<User> list = userBO.queryUserList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
-            UserExt userExt = list.get(0);
-            if (!userExt.getUserId().equals(req.getUserId())) {
+            User user = list.get(0);
+            if (!user.getUserId().equals(req.getUserId())) {
                 throw new BizException("xn000000", "该辖区已存在合伙人！");
             }
         }
 
         User data = new User();
         data.setUserId(req.getUserId());
-        data.setLoginName(req.getLoginName());
         data.setMobile(req.getMobile());
         data.setIdKind(req.getIdKind());
         data.setIdNo(req.getIdNo());
@@ -909,13 +920,11 @@ public class UserAOImpl implements IUserAO {
         data.setRemark(req.getRemark());
         data.setStatus(dbUser.getStatus());
 
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+
         userBO.refreshUser(data);
-        // 2、修改用户扩展信息
-        UserExt userExt = userExtBO.getUserExt(req.getUserId());
-        userExt.setProvince(req.getProvince());
-        userExt.setCity(req.getCity());
-        userExt.setArea(req.getArea());
-        userExtBO.refreshUserExt(userExt);
     }
 
     @Override
@@ -977,8 +986,6 @@ public class UserAOImpl implements IUserAO {
         User userRefeere = userBO.getUser(userId);
         if (userRefeere != null) {
             userRefeere.setRefeereLevel(refeereLevel);
-            UserExt userExt = userExtBO.getUserExt(userId);
-            userRefeere.setUserExt(userExt);
         }
         return userRefeere;
     }
@@ -988,8 +995,6 @@ public class UserAOImpl implements IUserAO {
         if (CollectionUtils.isNotEmpty(userList)) {
             for (User user : userList) {
                 user.setRefeereLevel(refeereLevel);
-                UserExt userExt = userExtBO.getUserExt(user.getUserId());
-                user.setUserExt(userExt);
             }
         }
         return userList;
@@ -1057,14 +1062,14 @@ public class UserAOImpl implements IUserAO {
         String companyCode = req.getCompanyCode();
         String systemCode = req.getSystemCode();
         // Step1：获取密码参数信息
-        Map<String, String> configPwd = sysConfigBO.getConfigsMap(companyCode,
-            systemCode);
+        Map<String, String> configPwd = sysConfigBO.getConfigsMap(
+            EConfigType.WEIXIN_H5.getCode(), companyCode, systemCode);
         String appId = null;
         String appSecret = null;
-        if (ECPwdType.WEIXIN_APP.getCode().equals(req.getType())) {
+        if (EConfigType.WEIXIN_APP.getCode().equals(req.getType())) {
             appId = configPwd.get(SysConstant.WX_APP_ACCESS_KEY);
             appSecret = configPwd.get(SysConstant.WX_APP_SECRET_KEY);
-        } else if (ECPwdType.WEIXIN_H5.getCode().equals(req.getType())) {
+        } else if (EConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
             appId = configPwd.get(SysConstant.WX_H5_ACCESS_KEY);
             appSecret = configPwd.get(SysConstant.WX_H5_SECRET_KEY);
         } else {
@@ -1087,7 +1092,7 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("code", req.getCode());
         logger.info("appId:" + appId + ",appSecret:" + appSecret + ",code:"
                 + req.getCode());
-        XN805151Res result = null;
+        XN805170Res result = null;
         try {
             String response = PostSimulater.requestPostForm(
                 WechatConstant.WX_TOKEN_URL, fromProperties);
@@ -1113,9 +1118,9 @@ public class UserAOImpl implements IUserAO {
             String unionId = (String) wxRes.get("unionid");
             String appOpenId = null;
             String h5OpenId = null;
-            if (ECPwdType.WEIXIN_APP.getCode().equals(req.getType())) {
+            if (EConfigType.WEIXIN_APP.getCode().equals(req.getType())) {
                 appOpenId = (String) wxRes.get("openid");
-            } else if (ECPwdType.WEIXIN_H5.getCode().equals(req.getType())) {
+            } else if (EConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
                 h5OpenId = (String) wxRes.get("openid");
             }
             // Step4：根据openId，unionId从数据库中查询用户信息
@@ -1123,7 +1128,7 @@ public class UserAOImpl implements IUserAO {
                 companyCode, systemCode);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
                 addLoginAmount(dbUser);// 每天登录送积分
-                result = new XN805151Res(dbUser.getUserId());
+                result = new XN805170Res(dbUser.getUserId());
             } else {
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
@@ -1177,7 +1182,7 @@ public class UserAOImpl implements IUserAO {
             userRefereeId, companyCode, systemCode);
         distributeAccount(userId, nickname, req.getKind(), companyCode,
             systemCode);
-        result = new XN805151Res(userId, EBoolean.NO.getCode());
+        result = new XN805170Res(userId, EBoolean.NO.getCode());
         return result;
     }
 
@@ -1210,14 +1215,14 @@ public class UserAOImpl implements IUserAO {
                     systemCode);
                 distributeAccount(userId, req.getMobile(), req.getKind(),
                     companyCode, systemCode);
-                result = new XN805151Res(userId);
+                result = new XN805170Res(userId);
             } else {
                 userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId,
                     appOpenId, nickname, photo, gender);
-                result = new XN805151Res(mobileUserId);
+                result = new XN805170Res(mobileUserId);
             }
         } else {
-            result = new XN805151Res(null, EBoolean.YES.getCode());
+            result = new XN805170Res(null, EBoolean.YES.getCode());
         }
         return result;
     }
@@ -1250,20 +1255,6 @@ public class UserAOImpl implements IUserAO {
         return result;
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doModfiyMobileAndIds(com.std.user.domain.User)
-     */
-    @Override
-    public void doModfiyMobileAndIds(User data) {
-        User user = userBO.getUser(data.getUserId());
-        if (user == null) {
-            throw new BizException("xn0110", "用户不存在");
-        }
-        if (StringUtils.isBlank(user.getMobile())) {
-            userBO.refreshUserSupple(data);
-        }
-    }
-
     @Override
     public XN001400Res doGetDetailUser(String userId) {
         User user = userBO.getUser(userId);
@@ -1273,7 +1264,6 @@ public class UserAOImpl implements IUserAO {
         XN001400Res res = new XN001400Res();
 
         res.setUserId(userId);
-        res.setOpenId(user.getOpenId());
         res.setLoginName(user.getLoginName());
         res.setNickname(user.getNickname());
         res.setMobile(user.getMobile());
@@ -1305,23 +1295,20 @@ public class UserAOImpl implements IUserAO {
         res.setSystemCode(user.getSystemCode());
         res.setCompanyCode(user.getCompanyCode());
         // 获取用户扩展信息
-        UserExt userExt = userExtBO.getUserExt(userId);
-        if (userExt != null) {
-            res.setProvince(userExt.getProvince());
-            res.setCity(userExt.getCity());
-            res.setArea(userExt.getArea());
-            res.setAddress(userExt.getAddress());
-            res.setPhoto(userExt.getPhoto());
-            res.setGender(userExt.getGender());
-            res.setBirthday(userExt.getBirthday());
-            res.setEmail(userExt.getEmail());
-            res.setDiploma(userExt.getDiploma());
-            res.setOccupation(userExt.getOccupation());
-            res.setWorkTime(userExt.getWorkTime());
-            res.setIntroduce(userExt.getIntroduce());
-            res.setLatitude(userExt.getLatitude());
-            res.setLongitude(userExt.getLongitude());
-        }
+        res.setProvince(user.getProvince());
+        res.setCity(user.getCity());
+        res.setArea(user.getArea());
+        res.setAddress(user.getAddress());
+        res.setPhoto(user.getPhoto());
+        res.setGender(user.getGender());
+        res.setBirthday(user.getBirthday());
+        res.setEmail(user.getEmail());
+        res.setDiploma(user.getDiploma());
+        res.setOccupation(user.getOccupation());
+        res.setWorkTime(user.getWorkTime());
+        res.setIntroduce(user.getIntroduce());
+        res.setLatitude(user.getLatitude());
+        res.setLongitude(user.getLongitude());
 
         return res;
     }

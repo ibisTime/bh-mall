@@ -86,7 +86,7 @@ public class User extends ABaseDO {
     private String introduce;
 
     // 生日
-    private Date birthday;
+    private String birthday;
 
     // 邮箱
     private String email;
@@ -368,11 +368,11 @@ public class User extends ABaseDO {
         this.introduce = introduce;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 

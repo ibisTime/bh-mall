@@ -3,9 +3,9 @@ INSERT INTO `tstd_user` (`user_id`,`login_name`,`login_pwd`,`login_pwd_strength`
 
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('superAdmin','超级管理员','1','admin',now(),NULL,'CD-YLQ000014');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('qiniu','ACCESS_KEY','ulfN2j4k6vHEsmKw-4EKZEGKL9qVkI7UJgrAHr4s','admin',now(),NULL,'CD-YLQ000014','CD-YLQ000014');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('qiniu','SECRET_KEY','aCdHlg4ct83YENkupTWLovs2-ISxKfS1U2FoHyZb','admin',now(),NULL,'CD-YLQ000014','CD-YLQ000014');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('qiniu','BUCKET','ylq-pic','admin',now(),NULL,'CD-YLQ000014','CD-YLQ000014');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('QINIU','QINIU_ACCESS_KEY','ulfN2j4k6vHEsmKw-4EKZEGKL9qVkI7UJgrAHr4s','admin',now(),NULL,'CD-YLQ000014','CD-YLQ000014');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('QINIU','QINIU_SECRET_KEY','aCdHlg4ct83YENkupTWLovs2-ISxKfS1U2FoHyZb','admin',now(),NULL,'CD-YLQ000014','CD-YLQ000014');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('QINIU','QINIU_BUCKET','ylq-pic','admin',now(),NULL,'CD-YLQ000014','CD-YLQ000014');
 
 /*
 -- Query: SELECT code,name,type,url,order_no,updater, now() as update_datetime,remark,parent_code,system_code FROM tsys_menu where system_code = 'CD-YLQ000014'
