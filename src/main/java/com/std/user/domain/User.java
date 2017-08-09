@@ -184,6 +184,16 @@ public class User extends ABaseDO {
     // 用户推荐人
     private User refereeUser;
 
+    private Integer refeereLevel;
+
+    public Integer getRefeereLevel() {
+        return refeereLevel;
+    }
+
+    public void setRefeereLevel(Integer refeereLevel) {
+        this.refeereLevel = refeereLevel;
+    }
+
     public String getUserId() {
         return userId;
     }

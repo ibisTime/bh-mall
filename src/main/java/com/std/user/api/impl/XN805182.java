@@ -23,7 +23,7 @@ public class XN805182 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doEditUser(req);
+        // userAO.doEditUser(req);
         return new BooleanRes(true);
     }
 
