@@ -38,8 +38,8 @@ public class InstantMsgImpl {
         req.setPassword(EUserPwd.InitPwd.getCode());
         Map<String, String> resultMap = sysConfigBO.getConfigsMap(
             EConfigType.HX.getCode(), systemCode, systemCode);
-        String org_name = resultMap.get(SysConstant.ORG_NAME);
-        String app_name = resultMap.get(SysConstant.APP_NAME);
+        String org_name = resultMap.get(SysConstant.HX_ORG_NAME);
+        String app_name = resultMap.get(SysConstant.HX_APP_NAME);
         String postUrl = "https://a1.easemob.com/" + org_name + "/" + app_name
                 + "/users";
         try {
