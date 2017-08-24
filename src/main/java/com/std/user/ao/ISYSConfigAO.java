@@ -1,5 +1,7 @@
 package com.std.user.ao;
 
+import java.util.Map;
+
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.SYSConfig;
 
@@ -20,5 +22,8 @@ public interface ISYSConfigAO {
     public SYSConfig getSYSConfig(Long id);
 
     public SYSConfig getSYSConfig(String key, String companyCode,
+            String systemCode);
+
+    public Map<String, String> querySYSConfig(String type, String companyCode,
             String systemCode);
 }

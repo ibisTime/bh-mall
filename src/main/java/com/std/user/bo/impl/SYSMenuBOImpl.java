@@ -93,11 +93,15 @@ public class SYSMenuBOImpl extends PaginableBOImpl<SYSMenu> implements
         return data;
     }
 
-    /** 
-     * @see com.std.user.bo.ISYSMenuBO#querySYSMenuList(com.xnjr.std.security.domain.SYSMenu)
-     */
     @Override
     public List<SYSMenu> querySYSMenuList(SYSMenu data) {
         return sysMenuDAO.selectList(data);
+    }
+
+    @Override
+    public List<SYSMenu> querySYSMenuList(String parentCode) {
+        SYSMenu condition = new SYSMenu();
+        condition.setParentCode(parentCode);
+        return sysMenuDAO.selectList(condition);
     }
 }

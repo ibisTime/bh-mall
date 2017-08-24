@@ -111,14 +111,19 @@
 		id = #{id}			
 	</update>
 	
-	<delete id="delete_sysMenuRole" parameterType="sysMenuRole">
+	<delete id="delete_sysMenuRole" parameterType="java.lang.Long">
 		DELETE FROM tsys_menu_role 
 		WHERE id = #{id}
 	</delete>
 	
-	<delete id="delete_sysMenuRoleList" parameterType="sysMenuRole">
+	<delete id="delete_sysMenuRoleByRole" parameterType="java.lang.String">
 		DELETE FROM tsys_menu_role 
 		WHERE role_code = #{roleCode}		
+	</delete>
+	
+	<delete id="delete_sysMenuRoleByMenu" parameterType="java.lang.String">
+		DELETE FROM tsys_menu_role 
+		WHERE menu_code = #{menuCode}		
 	</delete>
 	
 	<select id="select_sysMenu_list" parameterType="sysMenuRole"

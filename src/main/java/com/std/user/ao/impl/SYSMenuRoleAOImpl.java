@@ -36,7 +36,7 @@ public class SYSMenuRoleAOImpl implements ISYSMenuRoleAO {
             throw new BizException("lh0000", "角色编号不存在！");
         }
         // 删除角色所关联的菜单
-        sysMenuRoleBO.removeSYSMenuList(data.getRoleCode());
+        sysMenuRoleBO.removeSYSMenuRoleByRole(data.getRoleCode());
         // 重新分配角色菜单
         if (CollectionUtils.isNotEmpty(data.getMenuCodeList())) {
             for (String sysMenuCode : data.getMenuCodeList()) {

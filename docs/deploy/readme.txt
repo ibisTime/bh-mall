@@ -11,12 +11,13 @@
 
 部署步骤：
 1、包上传
-scp -P22 ./std-user.war root@118.178.124.16:/home
-cdxt123456Q
+scp -P22 ./std-user.war root@121.43.101.148:/home
+cdkj123456Q
   
 2，部署
-  ssh root@118.178.124.16 -p 22
-  cdxt123456Q
+  ssh root@121.43.101.148 -p 22
+  cdkj123456Q
+  
    --------------------common
   cd /home/wwwroot/common/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
@@ -33,12 +34,11 @@ cdxt123456Q
   ../bin/startup.sh
   http://121.43.101.148:8905/std-user/api
  
-  cd /home/wwwroot/caigo/tomcat_std_user/webapps
+  cd /home/wwwroot/hy/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
   cp ./std-user/WEB-INF/classes/config.properties .
   
-  rm -rf std-user.war
-  rm -rf std-user
+  rm -rf std-user*
   mv /home/std-user.war .
   
   mv -f application.properties ./std-user/WEB-INF/classes/
@@ -47,24 +47,7 @@ cdxt123456Q
   ../bin/shutdown.sh
   ../bin/startup.sh
   
-  http://121.43.101.148:5305/std-user/api
-  
- --------------------cswlm
-  cd /home/wwwroot/forum/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  
-  http://121.43.101.148:5405/std-user/api
+  http://121.43.101.148:3805/std-user/api
   
   --------------------jj-service
   cd /home/wwwroot/jj-service/tomcat_std_user/webapps
@@ -99,22 +82,6 @@ cdxt123456Q
   ../bin/startup.sh
   
 http://121.43.101.148:6302/std-user/api
-
-  --------------------mall  --------------------
-  cd /home/wwwroot/b2cmall/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  http://121.43.101.148:6405/std-user/api
   
   --------------------push-sms
   cd /home/wwwroot/push-sms/tomcat_std_user/webapps
@@ -132,40 +99,8 @@ http://121.43.101.148:6302/std-user/api
   ../bin/startup.sh
   
 http://121.43.101.148:6505/std-user/api
-  
-  --------------------zhpay
-  cd /home/wwwroot/zhpay/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  
-  http://121.43.101.148:5605/std-user/api
-  
-   --------------------qlqq
-  cd /home/wwwroot/ride/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  
-     --------------------loan
+
+  --------------------loan
   cd /home/wwwroot/loan/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
   cp ./std-user/WEB-INF/classes/config.properties .
@@ -181,23 +116,4 @@ http://121.43.101.148:6505/std-user/api
   ../bin/startup.sh
   
   http://121.43.101.148:5805/std-user/api
-  
-       --------------------game
-  cd /home/wwwroot/game/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  http://118.178.124.16:5505/std-user/api
-  
-    http://121.43.101.148:8905/std-user/api
-  
   

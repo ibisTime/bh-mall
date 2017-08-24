@@ -6,8 +6,8 @@ package com.std.user.enums;
  * @history:
  */
 public enum EConfigType {
-    HX("HX", "环信"), QINIU("QINIU", "七牛"), WEIXIN_H5("WX_H5", "微信h5"), WEIXIN_APP(
-            "WX_APP", "微信APP");
+    HX("hx", "环信"), QINIU("qiniu", "七牛"), WEIXIN_H5("wx_h5", "微信h5"), WEIXIN_APP(
+            "wx_app", "微信APP");
 
     EConfigType(String code, String value) {
         this.code = code;

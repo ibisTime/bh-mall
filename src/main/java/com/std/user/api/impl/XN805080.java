@@ -24,7 +24,7 @@ public class XN805080 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.modifyPhoto(req.getUserId(), req.getPhoto());
+        userAO.doModifyPhoto(req.getUserId(), req.getPhoto());
         return new BooleanRes(true);
     }
 

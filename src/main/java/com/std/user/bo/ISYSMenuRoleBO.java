@@ -23,7 +23,9 @@ import com.std.user.domain.SYSMenuRole;
 public interface ISYSMenuRoleBO extends IPaginableBO<SYSMenuRole> {
     public int saveSYSMenuRole(SYSMenuRole data);
 
-    public int removeSYSMenuList(String roleCode);
+    public int removeSYSMenuRoleByRole(String roleCode);
+
+    public int removeSYSMenuRoleByMenu(String menuCode);
 
     public List<SYSMenu> querySYSMenuList(SYSMenuRole data);
 }

@@ -44,12 +44,12 @@ public class SYSMenuRoleBOImpl extends PaginableBOImpl<SYSMenuRole> implements
     }
 
     @Override
-    public int removeSYSMenuList(String roleCode) {
+    public int removeSYSMenuRoleByRole(String roleCode) {
         int count = 0;
         if (StringUtils.isNotBlank(roleCode)) {
             SYSMenuRole condition = new SYSMenuRole();
             condition.setRoleCode(roleCode);
-            count = sysMenuRoleDAO.deleteSYSMenuList(condition);
+            count = sysMenuRoleDAO.deleteSYSMenuRoleByRole(condition);
         }
         return count;
     }
@@ -57,5 +57,19 @@ public class SYSMenuRoleBOImpl extends PaginableBOImpl<SYSMenuRole> implements
     @Override
     public List<SYSMenu> querySYSMenuList(SYSMenuRole data) {
         return sysMenuRoleDAO.selectSYSMenuList(data);
+    }
+
+    /** 
+     * @see com.std.user.bo.ISYSMenuRoleBO#removeSYSMenuRoleByMenu(java.lang.String)
+     */
+    @Override
+    public int removeSYSMenuRoleByMenu(String menuCode) {
+        int count = 0;
+        if (StringUtils.isNotBlank(menuCode)) {
+            SYSMenuRole condition = new SYSMenuRole();
+            condition.setMenuCode(menuCode);
+            count = sysMenuRoleDAO.deleteSYSMenuRoleByMenu(condition);
+        }
+        return count;
     }
 }

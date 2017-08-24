@@ -52,7 +52,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         }
         // 删除角色和角色菜单关联表
         sysRoleBO.removeSYSRole(roleCode);
-        sysMenuRoleBO.removeSYSMenuList(roleCode);
+        sysMenuRoleBO.removeSYSMenuRoleByRole(roleCode);
         return true;
     }
 

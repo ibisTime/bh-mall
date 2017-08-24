@@ -130,12 +130,9 @@ public class UserAOImpl implements IUserAO {
             String kind, String isRegHx, String province, String city,
             String area, String companyCode, String systemCode) {
         // 1、参数校验
-        // 验证手机号是否存在
         userBO.isMobileExist(mobile, kind, companyCode, systemCode);
-        // 验证推荐人是否存在,并将手机号转化为用户编号
         String userRefereeId = userBO.getUserId(userReferee, userRefereeKind,
             companyCode, systemCode);
-        // 验证短信验证码
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041", companyCode,
             systemCode);
         // 2、注册用户
@@ -155,10 +152,10 @@ public class UserAOImpl implements IUserAO {
     private void distributeAccount(String userId, String mobile, String kind,
             String companyCode, String systemCode) {
         List<String> currencyList = new ArrayList<String>();
-        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
+        if (ESystemCode.HYDS.getCode().equals(systemCode)) {
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+            currencyList.add(ECurrency.HY_XJK.getCode());
         } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
             // 公共服务平台不需要账户
         } else {
@@ -181,32 +178,8 @@ public class UserAOImpl implements IUserAO {
                 amount = AmountUtil.mul(1000L,
                     Double.valueOf(sysConfig.getCvalue()));
                 accountBO.doTransferAmountRemote(getSysUserId(userId), userId,
-                    ECurrency.CG_JF, amount, EBizType.AJ_REG, "用户[" + mobile
+                    ECurrency.JF, amount, EBizType.AJ_REG, "用户[" + mobile
                             + "]注册送积分", "注册送积分");
-            }
-        }
-        return amount;
-    }
-
-    // 每天登录送积分
-    private Long addLoginAmount(User user) {
-        Long amount = 0L;
-        if (EUserKind.Customer.getCode().equals(user.getKind())) {
-            Boolean result = signLogBO.isSignToday(user.getUserId());
-            if (!result) {
-                signLogBO.saveSignLog(user.getUserId(), "",
-                    user.getSystemCode());
-                SYSConfig sysConfig = sysConfigBO.getConfig(
-                    SysConstant.CUSER_LOGIN_ADDJF, user.getCompanyCode(),
-                    user.getSystemCode());
-                if (null != sysConfig) {
-                    amount = AmountUtil.mul(1000L,
-                        Double.valueOf(sysConfig.getCvalue()));
-                    accountBO.doTransferAmountRemote(
-                        getSysUserId(user.getSystemCode()), user.getUserId(),
-                        ECurrency.CG_JF, amount, EBizType.AJ_SIGN,
-                        "用户[" + user.getMobile() + "]登录送积分", "登录送积分");
-                }
             }
         }
         return amount;
@@ -249,16 +222,14 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doAddUser(XN805042Req req) {
         String userId = null;
-        if (ESystemCode.CAIGO.getCode().equals(req.getSystemCode())) {
-            userId = doAddUserCaigo(req);
-        } else if (ESystemCode.YLQ.getCode().equals(req.getSystemCode())) {
-            userId = doAddUserYLQ(req);
+        if (ESystemCode.HYDS.getCode().equals(req.getSystemCode())) {
+            userId = doAddUserHyds(req);
         } else {
         }
         return userId;
     }
 
-    private String doAddUserCaigo(XN805042Req req) {
+    private String doAddUserHyds(XN805042Req req) {
         String userId = null;
         if (EUserKind.Customer.getCode().equals(req.getKind())) {
             // 验证手机号
@@ -273,67 +244,8 @@ public class UserAOImpl implements IUserAO {
             // 分配账户
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, req.getMobile(),
-                req.getKind(), currencyList, req.getCompanyCode(),
-                req.getSystemCode());
-            // 发送短信
-            smsOutBO.sendSmsOut(req.getMobile(),
-                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
-                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
-                        + "，请及时登录网站更改密码。", "805042", req.getCompanyCode(),
-                req.getSystemCode());
-        } else if (EUserKind.Merchant.getCode().equals(req.getKind())) {
-            // 验证手机号
-            userBO.isMobileExist(req.getMobile(), req.getKind(),
-                req.getCompanyCode(), req.getSystemCode());
-            // 判断登录密码是否为空
-            if (StringUtils.isBlank(req.getLoginPwd())) {
-                req.setLoginPwd(RandomUtil.generate6());
-            }
-            userId = userBO.doAddUser(req);
-
-            // 分配账户
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
-            accountBO.distributeAccountList(userId, req.getMobile(),
-                req.getKind(), currencyList, req.getCompanyCode(),
-                req.getSystemCode());
-            // 发送短信
-            smsOutBO.sendSmsOut(req.getMobile(),
-                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
-                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
-                        + "，请及时登录网站更改密码。", "805042", req.getCompanyCode(),
-                req.getSystemCode());
-        } else if (EUserKind.Plat.getCode().equals(req.getKind())) {
-            // 验证登录名
-            userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
-                req.getCompanyCode(), req.getSystemCode());
-            userId = userBO.doAddUser(req);
-        }
-        return userId;
-    }
-
-    private String doAddUserYLQ(XN805042Req req) {
-        String userId = null;
-        if (EUserKind.Customer.getCode().equals(req.getKind())) {
-            // 验证手机号
-            userBO.isMobileExist(req.getMobile(), req.getKind(),
-                req.getCompanyCode(), req.getSystemCode());
-            // 判断登录密码是否为空
-            if (StringUtils.isBlank(req.getLoginPwd())) {
-                req.setLoginPwd(RandomUtil.generate6());
-            }
-            userId = userBO.doAddUser(req);
-
-            // 分配账户
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
+            currencyList.add(ECurrency.HY_XJK.getCode());
             accountBO.distributeAccountList(userId, req.getMobile(),
                 req.getKind(), currencyList, req.getCompanyCode(),
                 req.getSystemCode());
@@ -381,8 +293,7 @@ public class UserAOImpl implements IUserAO {
             // 分配账户
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
             accountBO.distributeAccountList(userId, req.getMobile(),
                 req.getKind(), currencyList, req.getCompanyCode(),
                 req.getSystemCode());
@@ -405,8 +316,7 @@ public class UserAOImpl implements IUserAO {
             // 分配账户
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.CG_JF.getCode());
-            currencyList.add(ECurrency.CG_CGB.getCode());
+            currencyList.add(ECurrency.JF.getCode());
             accountBO.distributeAccountList(userId, req.getMobile(),
                 req.getKind(), currencyList, req.getCompanyCode(),
                 req.getSystemCode());
@@ -456,6 +366,30 @@ public class UserAOImpl implements IUserAO {
         }
         addLoginAmount(user);
         return user.getUserId();
+    }
+
+    // 每天登录送积分
+    private Long addLoginAmount(User user) {
+        Long amount = 0L;
+        if (EUserKind.Customer.getCode().equals(user.getKind())) {
+            Boolean result = signLogBO.isSignToday(user.getUserId());
+            if (!result) {
+                signLogBO.saveSignLog(user.getUserId(), "",
+                    user.getSystemCode());
+                SYSConfig sysConfig = sysConfigBO.getConfig(
+                    SysConstant.CUSER_LOGIN_ADDJF, user.getCompanyCode(),
+                    user.getSystemCode());
+                if (null != sysConfig) {
+                    amount = AmountUtil.mul(1000L,
+                        Double.valueOf(sysConfig.getCvalue()));
+                    accountBO.doTransferAmountRemote(
+                        getSysUserId(user.getSystemCode()), user.getUserId(),
+                        ECurrency.JF, amount, EBizType.AJ_SIGN,
+                        "用户[" + user.getMobile() + "]登录送积分", "登录送积分");
+                }
+            }
+        }
+        return amount;
     }
 
     @Override
@@ -708,7 +642,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void modifyPhoto(String userId, String photo) {
+    public void doModifyPhoto(String userId, String photo) {
         userBO.refreshPhoto(userId, photo);
     }
 
@@ -717,6 +651,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     // 完善手机号和身份信息
+    @Override
     public void doModfiyMobileAndIds(String userId, String mobile,
             String realName, String idKind, String idNo) {
         User user = userBO.getUser(userId);
@@ -1029,9 +964,6 @@ public class UserAOImpl implements IUserAO {
         return user;
     }
 
-    /** 
-     * @see com.std.user.ao.IUserAO#doGetUserIdByCondition(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public String doGetUserIdByCondition(String mobile, String kind,
             String companyCode, String systemCode) {
@@ -1153,20 +1085,6 @@ public class UserAOImpl implements IUserAO {
         return result;
     }
 
-    /** 
-     * @param req
-     * @param companyCode
-     * @param systemCode
-     * @param unionId
-     * @param appOpenId
-     * @param h5OpenId
-     * @param nickname
-     * @param photo
-     * @param gender
-     * @return 
-     * @create: 2017年7月14日 下午9:58:06 xieyj
-     * @history: 
-     */
     private XN805170Res doWxLoginReg(XN805170Req req, String companyCode,
             String systemCode, String unionId, String appOpenId,
             String h5OpenId, String nickname, String photo, String gender) {
@@ -1323,5 +1241,4 @@ public class UserAOImpl implements IUserAO {
         data.setLevel(level);
         userBO.refreshLevel(data);
     }
-
 }

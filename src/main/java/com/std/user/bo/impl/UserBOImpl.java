@@ -39,6 +39,7 @@ import com.std.user.exception.BizException;
  */
 @Component
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
+
     @Autowired
     private IUserDAO userDAO;
 

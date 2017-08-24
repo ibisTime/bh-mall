@@ -96,7 +96,7 @@ public interface IUserAO {
             String realName);
 
     // 修改头像
-    public void modifyPhoto(String userId, String photo);
+    public void doModifyPhoto(String userId, String photo);
 
     // 修改用户信息
     public void doModifyUserExt(XN805081ZReq req);

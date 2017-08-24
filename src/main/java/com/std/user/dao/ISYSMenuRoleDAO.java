@@ -8,14 +8,16 @@ import com.std.user.domain.SYSMenuRole;
 
 /**
  * 角色菜单
- * @author: Gejin 
- * @since: 2016年4月16日 下午10:24:53 
+ * @author: xieyj 
+ * @since: 2017年8月23日 下午2:59:09 
  * @history:
  */
 public interface ISYSMenuRoleDAO extends IBaseDAO<SYSMenuRole> {
     String NAMESPACE = ISYSMenuRoleDAO.class.getName().concat(".");
 
-    public List<SYSMenu> selectSYSMenuList(SYSMenuRole data);
+    public List<SYSMenu> selectSYSMenuList(SYSMenuRole condition);
 
-    public int deleteSYSMenuList(SYSMenuRole data);
+    public int deleteSYSMenuRoleByRole(SYSMenuRole condition);
+
+    public int deleteSYSMenuRoleByMenu(SYSMenuRole condition);
 }

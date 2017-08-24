@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.std.user.ao.ISYSMenuAO;
 import com.std.user.bo.ISYSMenuBO;
+import com.std.user.bo.ISYSMenuRoleBO;
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.SYSMenu;
 import com.std.user.exception.BizException;
@@ -16,6 +18,9 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
 
     @Autowired
     ISYSMenuBO sysMenuBO;
+
+    @Autowired
+    ISYSMenuRoleBO sysMenuRoleBO;
 
     @Override
     public String addSYSMenu(SYSMenu data) {
@@ -33,11 +38,17 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
     }
 
     @Override
+    @Transactional
     public boolean dropSYSMenu(String code) {
         if (!sysMenuBO.isSYSMenuExist((code))) {
             throw new BizException("lh0000", "删除菜单不存在！");
         }
         sysMenuBO.removeSYSMenu(code);
+        List<SYSMenu> childMenuList = sysMenuBO.querySYSMenuList(code);
+        for (SYSMenu sysMenu : childMenuList) {
+            sysMenuBO.removeSYSMenu(sysMenu.getCode());
+        }
+        sysMenuRoleBO.removeSYSMenuRoleByMenu(code);
         return true;
     }
 
