@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.std.user.ao.ISmsOutAO;
 import com.std.user.bo.ISmsOutBO;
 import com.std.user.bo.IUserBO;
+import com.std.user.common.PhoneUtil;
 import com.std.user.domain.User;
 import com.std.user.exception.BizException;
 
@@ -32,5 +33,13 @@ public class SmsOutAOImpl implements ISmsOutAO {
         }
         smsOutBO.sendSmsOut(user.getMobile(), content, "001200",
             user.getCompanyCode(), user.getSystemCode());
+    }
+
+    @Override
+    public void sendContent(String tokenId, String mobile, String content,
+            String companyCode, String systemCode) {
+        PhoneUtil.checkMobile(mobile);
+        smsOutBO.sendSmsOut(mobile, content, "001201", companyCode, systemCode);
+
     }
 }
