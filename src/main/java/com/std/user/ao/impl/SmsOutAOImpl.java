@@ -40,6 +40,5 @@ public class SmsOutAOImpl implements ISmsOutAO {
             String companyCode, String systemCode) {
         PhoneUtil.checkMobile(mobile);
         smsOutBO.sendSmsOut(mobile, content, "001201", companyCode, systemCode);
-
     }
 }

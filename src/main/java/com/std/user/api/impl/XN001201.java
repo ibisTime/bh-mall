@@ -24,7 +24,7 @@ public class XN001201 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         smsOutAO.sendContent(req.getTokenId(), req.getMobile(),
-            req.getContent());
+            req.getContent(), req.getCompanyCode(), req.getSystemCode());
         return new BooleanRes(true);
     }
 
