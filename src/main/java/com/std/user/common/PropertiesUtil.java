@@ -40,6 +40,9 @@ public class PropertiesUtil {
 
         public static String IDENTIFY_URL = props.getProperty("IDENTIFY_URL");
 
+        public static String HW_PARTNER_ROLECODE = props
+            .getProperty("HW_PARTNER_ROLECODE");
+
         public static String JMS_ROLECODE = props.getProperty("JMS_ROLECODE");
 
         public static String YC_JMS_ROLECODE = props

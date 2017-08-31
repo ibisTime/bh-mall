@@ -39,6 +39,7 @@ import com.std.user.common.AmountUtil;
 import com.std.user.common.DateUtil;
 import com.std.user.common.MD5Util;
 import com.std.user.common.PhoneUtil;
+import com.std.user.common.PropertiesUtil;
 import com.std.user.common.SysConstant;
 import com.std.user.common.WechatConstant;
 import com.std.user.core.StringValidater;
@@ -152,7 +153,7 @@ public class UserAOImpl implements IUserAO {
     private void distributeAccount(String userId, String mobile, String kind,
             String companyCode, String systemCode) {
         List<String> currencyList = new ArrayList<String>();
-        if (ESystemCode.HYDS.getCode().equals(systemCode)) {
+        if (ESystemCode.HW.getCode().equals(systemCode)) {
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.JF.getCode());
             currencyList.add(ECurrency.HY_XJK.getCode());
@@ -222,14 +223,14 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doAddUser(XN805042Req req) {
         String userId = null;
-        if (ESystemCode.HYDS.getCode().equals(req.getSystemCode())) {
-            userId = doAddUserHyds(req);
+        if (ESystemCode.HW.getCode().equals(req.getSystemCode())) {
+            userId = doAddUserHwds(req);
         } else {
         }
         return userId;
     }
 
-    private String doAddUserHyds(XN805042Req req) {
+    private String doAddUserHwds(XN805042Req req) {
         String userId = null;
         if (EUserKind.Customer.getCode().equals(req.getKind())) {
             // 验证手机号
@@ -259,7 +260,12 @@ public class UserAOImpl implements IUserAO {
             // 验证登录名
             userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
                 req.getCompanyCode(), req.getSystemCode());
-
+            userId = userBO.doAddUser(req);
+        } else if (EUserKind.Partner.getCode().equals(req.getKind())) {
+            // 验证登录名
+            userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
+                req.getCompanyCode(), req.getSystemCode());
+            req.setRoleCode(PropertiesUtil.Config.HW_PARTNER_ROLECODE);
             userId = userBO.doAddUser(req);
         } else {
             throw new BizException("xn805042", "用户类型" + req.getKind() + "未能识别");

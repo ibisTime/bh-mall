@@ -18,23 +18,7 @@ cdkj123456Q
   ssh root@121.43.101.148 -p 22
   cdkj123456Q
   
-   --------------------common
-  cd /home/wwwroot/common/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./zh-user/WEB-INF/classes/
-  mv -f config.properties ./zh-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  http://121.43.101.148:8905/std-user/api
- 
-  cd /home/wwwroot/hy/tomcat_std_user/webapps
+  cd /mnt/www/hw/tomcat_std_user/webapps
   cp ./std-user/WEB-INF/classes/application.properties .
   cp ./std-user/WEB-INF/classes/config.properties .
   
@@ -48,72 +32,4 @@ cdkj123456Q
   ../bin/startup.sh
   
   http://121.43.101.148:3805/std-user/api
-  
-  --------------------jj-service
-  cd /home/wwwroot/jj-service/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  
-  http://121.43.101.148:5505/std-user/api
-  
-  --------------------cdhome
-  cd /home/wwwroot/cdhome/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  
-http://121.43.101.148:6302/std-user/api
-  
-  --------------------push-sms
-  cd /home/wwwroot/push-sms/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  
-http://121.43.101.148:6505/std-user/api
-
-  --------------------loan
-  cd /home/wwwroot/loan/tomcat_std_user/webapps
-  cp ./std-user/WEB-INF/classes/application.properties .
-  cp ./std-user/WEB-INF/classes/config.properties .
-  
-  rm -rf std-user.war
-  rm -rf std-user
-  mv /home/std-user.war .
-  
-  mv -f application.properties ./std-user/WEB-INF/classes/
-  mv -f config.properties ./std-user/WEB-INF/classes/
-  
-  ../bin/shutdown.sh
-  ../bin/startup.sh
-  
-  http://121.43.101.148:5805/std-user/api
   

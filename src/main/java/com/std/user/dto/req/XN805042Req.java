@@ -31,7 +31,7 @@ public class XN805042Req {
     // 分成比例(选填)
     private String divRate;
 
-    // 角色编号
+    // 角色编号(选填)
     private String roleCode;
 
     // 省(选填)
