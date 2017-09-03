@@ -43,6 +43,9 @@ public class XN805042Req {
     // 区(选填)
     private String area;
 
+    // 地址(选填)
+    private String address;
+
     // 经度(选填)
     private String longitude;
 
@@ -60,14 +63,6 @@ public class XN805042Req {
 
     // 系统编号(必填)
     private String systemCode;
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
 
     public String getLoginName() {
         return loginName;
@@ -149,6 +144,14 @@ public class XN805042Req {
         this.divRate = divRate;
     }
 
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
     public String getProvince() {
         return province;
     }
@@ -171,6 +174,14 @@ public class XN805042Req {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getLongitude() {
@@ -220,5 +231,4 @@ public class XN805042Req {
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
     }
-
 }

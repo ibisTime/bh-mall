@@ -6,7 +6,7 @@ import com.std.user.bo.base.Paginable;
 import com.std.user.domain.User;
 import com.std.user.dto.req.XN805042Req;
 import com.std.user.dto.req.XN805043Req;
-import com.std.user.dto.req.XN805081ZReq;
+import com.std.user.dto.req.XN805081Req;
 import com.std.user.dto.req.XN805095Req;
 import com.std.user.dto.req.XN805170Req;
 import com.std.user.dto.res.XN001400Res;
@@ -98,9 +98,6 @@ public interface IUserAO {
     // 修改头像
     public void doModifyPhoto(String userId, String photo);
 
-    // 修改用户信息
-    public void doModifyUserExt(XN805081ZReq req);
-
     // 完善手机号和身份信息
     public void doModfiyMobileAndIds(String userId, String mobile,
             String realName, String idKind, String idNo);
@@ -125,6 +122,9 @@ public interface IUserAO {
     // 审核注册用户
     public void doApproveUser(String userId, String approver,
             String approveResult, String divRate, String remark);
+
+    // 修改用户名称和地址信息
+    public void doModifyNameAddress(XN805081Req req);
 
     // 修改用户信息
     public void doModifyUser(XN805095Req req);

@@ -119,8 +119,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             if (CollectionUtils.isNotEmpty(list)) {
                 User data = list.get(0);
                 userId = data.getUserId();
-            } else
-                throw new BizException("xn702002", "手机号[" + mobile + "]用户不存在");
+            }
         }
         return userId;
     }
@@ -222,6 +221,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setProvince(req.getProvince());
         user.setCity(req.getCity());
         user.setArea(req.getArea());
+        user.setAddress(req.getAddress());
         user.setLatitude(req.getLatitude());
         user.setLongitude(req.getLongitude());
 
@@ -360,6 +360,20 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             User condition = new User();
             condition.setUserId(userId);
             data = userDAO.select(condition);
+        }
+        return data;
+    }
+
+    @Override
+    public User getCheckUser(String userId) {
+        User data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            User condition = new User();
+            condition.setUserId(userId);
+            data = userDAO.select(condition);
+            if (null == data) {
+                throw new BizException("xn702002", userId + "用户不存在");
+            }
         }
         return data;
     }
@@ -638,12 +652,19 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     /** 
-     * @see com.std.user.bo.IUserBO#refreshUserSupple(com.std.user.domain.User)
+     * @see com.std.user.bo.IUserBO#refreshUserMobileIds(com.std.user.domain.User)
      */
     @Override
-    public void refreshUserSupple(User data) {
+    public void refreshUserMobileIds(User data) {
         if (null != data) {
-            userDAO.updateSupple(data);
+            userDAO.updateMobileIds(data);
+        }
+    }
+
+    @Override
+    public void refreshNameAddress(User data) {
+        if (null != data) {
+            userDAO.updateNameAddress(data);
         }
     }
 

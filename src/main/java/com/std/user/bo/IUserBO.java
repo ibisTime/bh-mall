@@ -97,6 +97,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public User getUser(String userId);
 
+    public User getCheckUser(String userId);
+
     public List<User> getUsersByUserReferee(String userReferee);
 
     public User getUserByLoginName(String loginName, String systemCode);
@@ -122,9 +124,11 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshUser(User data);
 
-    public void refreshUserSupple(User data);
+    public void refreshUserMobileIds(User data);
 
     public void refreshLevel(User data);
+
+    public void refreshNameAddress(User data);
 
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);

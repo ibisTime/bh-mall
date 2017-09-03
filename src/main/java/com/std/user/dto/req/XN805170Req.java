@@ -20,8 +20,8 @@ public class XN805170Req {
     // 短信验证码（选填）
     private String smsCaptcha;
 
-    // 是否需要传入验证码，默认是(选填)，非微信登录后绑定微信，不传验证码
-    private String isLoginCaptcha;
+    // 是否(非微信登录)登录状态，是则无需验证手机号，否则传验证验证手机
+    private String isLoginStatus;
 
     // 是否注册环信（必填）
     private String isRegHx;
@@ -86,12 +86,12 @@ public class XN805170Req {
         this.smsCaptcha = smsCaptcha;
     }
 
-    public String getIsLoginCaptcha() {
-        return isLoginCaptcha;
+    public String getIsLoginStatus() {
+        return isLoginStatus;
     }
 
-    public void setIsLoginCaptcha(String isLoginCaptcha) {
-        this.isLoginCaptcha = isLoginCaptcha;
+    public void setIsLoginStatus(String isLoginStatus) {
+        this.isLoginStatus = isLoginStatus;
     }
 
     public String getIsRegHx() {

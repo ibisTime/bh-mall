@@ -144,11 +144,16 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     }
 
     /** 
-     * @see com.std.user.dao.IUserDAO#updateSupple(com.std.user.domain.User)
+     * @see com.std.user.dao.IUserDAO#updateMobileIds(com.std.user.domain.User)
      */
     @Override
-    public int updateSupple(User data) {
-        return super.update(NAMESPACE.concat("update_user_supple"), data);
+    public int updateMobileIds(User data) {
+        return super.update(NAMESPACE.concat("update_user_mobileIds"), data);
+    }
+
+    @Override
+    public int updateNameAddress(User data) {
+        return super.update(NAMESPACE.concat("update_nameAddress"), data);
     }
 
     /** 

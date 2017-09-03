@@ -49,6 +49,7 @@ import com.std.user.domain.User;
 import com.std.user.domain.UserRelation;
 import com.std.user.dto.req.XN805042Req;
 import com.std.user.dto.req.XN805043Req;
+import com.std.user.dto.req.XN805081Req;
 import com.std.user.dto.req.XN805081ZReq;
 import com.std.user.dto.req.XN805095Req;
 import com.std.user.dto.req.XN805170Req;
@@ -134,6 +135,9 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(mobile, kind, companyCode, systemCode);
         String userRefereeId = userBO.getUserId(userReferee, userRefereeKind,
             companyCode, systemCode);
+        if (StringUtils.isBlank(userRefereeId)) {
+            throw new BizException("xn702002", userReferee + "用户不存在");
+        }
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041", companyCode,
             systemCode);
         // 2、注册用户
@@ -405,7 +409,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805051", companyCode,
             systemCode);
         String userId = userBO.getUserId(mobile, kind, companyCode, systemCode);
-        if (StringUtils.isNotBlank(userId)) {
+        if (StringUtils.isBlank(userId)) {
             userId = userBO.saveUser(mobile, kind, companyCode, systemCode);
         }
         return userId;
@@ -671,7 +675,7 @@ public class UserAOImpl implements IUserAO {
             data.setRealName(realName);
             data.setIdKind(idKind);
             data.setIdNo(idNo);
-            userBO.refreshUserSupple(data);
+            userBO.refreshUserMobileIds(data);
         }
     }
 
@@ -1098,6 +1102,9 @@ public class UserAOImpl implements IUserAO {
         // 验证推荐人,将userReferee手机号转为用户编号
         String userRefereeId = userBO.getUserId(req.getUserReferee(),
             req.getUserRefereeKind(), companyCode, systemCode);
+        if (StringUtils.isBlank(userRefereeId)) {
+            throw new BizException("xn702002", req.getUserReferee() + "用户不存在");
+        }
         userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
             systemCode);
         // 插入用户信息
@@ -1116,13 +1123,13 @@ public class UserAOImpl implements IUserAO {
         XN805170Res result;
         if (StringUtils.isNotBlank(req.getMobile())) {
             // 判断是否需要验证码验证码,登录前一定要验证
-            if (!EBoolean.YES.getCode().equals(req.getIsLoginCaptcha())) {
+            if (!EBoolean.YES.getCode().equals(req.getIsLoginStatus())) {
                 if (StringUtils.isBlank(req.getSmsCaptcha())) {
                     throw new BizException("xn702002", "请输入短信验证码");
                 }
                 // 短信验证码是否正确
                 smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-                    "805151", companyCode, systemCode);
+                    "805170", companyCode, systemCode);
             }
             String mobileUserId = userBO.getUserId(req.getMobile(),
                 req.getKind(), companyCode, systemCode);
@@ -1246,5 +1253,22 @@ public class UserAOImpl implements IUserAO {
         data.setUserId(userId);
         data.setLevel(level);
         userBO.refreshLevel(data);
+    }
+
+    /** 
+     * @see com.std.user.ao.IUserAO#doModifyNameAddress(com.std.user.dto.req.XN805081Req)
+     */
+    @Override
+    public void doModifyNameAddress(XN805081Req req) {
+        User data = userBO.getCheckUser(req.getUserId());
+        data.setRealName(req.getRealName());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        data.setAddress(req.getAddress());
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+        userBO.refreshNameAddress(data);
     }
 }
