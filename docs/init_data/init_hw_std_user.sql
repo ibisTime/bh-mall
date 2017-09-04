@@ -300,6 +300,10 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_access_key','wx9c709bf30e60c07b','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_secret_key','2e334a962351aca2add4101cdc063386','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
 
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_reg_addjf','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_login_addjf','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_sign_addjf','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_userref_addxjk','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','about_us','关于我们','admin',now(),'关于我们','CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','reg_protocol','注册协议','admin',now(),'注册协议','CD-CHW000015','CD-CHW000015');

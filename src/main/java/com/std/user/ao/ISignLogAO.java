@@ -1,11 +1,9 @@
 package com.std.user.ao;
 
-import java.util.List;
-
 import com.std.user.bo.base.Paginable;
 import com.std.user.domain.SignLog;
 import com.std.user.dto.res.XN805100Res;
-import com.std.user.dto.res.XN805931Res;
+import com.std.user.dto.res.XN805103Res;
 
 /** 
  * 签到AO
@@ -27,26 +25,6 @@ public interface ISignLogAO {
      */
     public XN805100Res addSignLog(String userId, String location);
 
-    /**
-     * 签到(大账户积分)
-     * @param userId
-     * @param location
-     * @return 
-     * @create: 2016年10月22日 上午12:14:56 xieyj
-     * @history:
-     */
-    public XN805931Res signToday(String userId, String location);
-
-    /** 
-     * 列表查询签到记录
-     * @param condition
-     * @return 
-     * @create: 2016年9月18日 下午7:24:05 zuixian
-     * @history: 
-     */
-    public List<SignLog> querySignLogList(String userId,
-            String signDatetimeStart, String signDatetimeEnd);
-
     /** 
      * 分页查询签到纪录
      * @param condition
@@ -58,7 +36,11 @@ public interface ISignLogAO {
             int limit);
 
     /**
-     * 
+     * 获取连续签到天数
+     * @param userId
+     * @return 
+     * @create: 2017年9月4日 下午8:36:58 xieyj
+     * @history:
      */
-    public Long getSerialsSignDays(String userId);
+    public XN805103Res getTodaySignDays(String userId);
 }

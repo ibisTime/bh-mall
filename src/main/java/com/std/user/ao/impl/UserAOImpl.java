@@ -160,7 +160,7 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.HW.getCode().equals(systemCode)) {
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.JF.getCode());
-            currencyList.add(ECurrency.HY_XJK.getCode());
+            currencyList.add(ECurrency.HW_XJK.getCode());
         } else if (ESystemCode.SERVICE.getCode().equals(systemCode)) {
             // 公共服务平台不需要账户
         } else {
@@ -192,8 +192,10 @@ public class UserAOImpl implements IUserAO {
 
     private String getSysUserId(String systemCode) {
         String userId = null;
-        if (ESystemCode.CAIGO.getCode().equals(systemCode)) {
-            userId = ESysUser.SYS_USER_CAIGO.getCode();
+        if (ESystemCode.HW.getCode().equals(systemCode)) {
+            userId = ESysUser.SYS_USER_HW.getCode();
+        } else {
+
         }
         return userId;
     }
@@ -230,6 +232,7 @@ public class UserAOImpl implements IUserAO {
         if (ESystemCode.HW.getCode().equals(req.getSystemCode())) {
             userId = doAddUserHwds(req);
         } else {
+            throw new BizException("xn805000", "系统对应用户编号不存在");
         }
         return userId;
     }
@@ -250,7 +253,7 @@ public class UserAOImpl implements IUserAO {
             List<String> currencyList = new ArrayList<String>();
             currencyList.add(ECurrency.CNY.getCode());
             currencyList.add(ECurrency.JF.getCode());
-            currencyList.add(ECurrency.HY_XJK.getCode());
+            currencyList.add(ECurrency.HW_XJK.getCode());
             accountBO.distributeAccountList(userId, req.getMobile(),
                 req.getKind(), currencyList, req.getCompanyCode(),
                 req.getSystemCode());

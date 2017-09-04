@@ -46,7 +46,7 @@ public class WechatTokenUtil {
         String time = map.get(systemCode + "." + companyCode + ".time");
         String accessToken = map.get(systemCode + "." + companyCode
                 + ".access_token");
-        Long nowDate = new Date().getTime();
+        Long nowDate = new Date().getTime() / 1000;
         if (accessToken != null && time != null
                 && nowDate - Long.parseLong(time) < 3000 * 1000) {
             System.out.println("accessToken存在，且没有超时，返回单例");

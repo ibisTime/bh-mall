@@ -2,34 +2,38 @@ package com.std.user.dto.res;
 
 public class XN805103Res {
 
-    // 记录编号
-    private String code;
+    // 连续天数
+    private Long days;
 
-    // 签到金额
-    private Long amount;
+    // 今天是否签到
+    private boolean todaySign;
 
     public XN805103Res() {
 
     }
 
-    public XN805103Res(String code, Long amount) {
-        this.code = code;
-        this.amount = amount;
+    public XN805103Res(Long days, boolean todaySign) {
+        this.days = days;
+        this.todaySign = todaySign;
     }
 
-    public String getCode() {
-        return code;
+    public XN805103Res(Long days) {
+        this.days = days;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public Long getDays() {
+        return days;
     }
 
-    public Long getAmount() {
-        return amount;
+    public void setDays(Long days) {
+        this.days = days;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public boolean getTodaySign() {
+        return todaySign;
+    }
+
+    public void setTodaySign(boolean todaySign) {
+        this.todaySign = todaySign;
     }
 }
