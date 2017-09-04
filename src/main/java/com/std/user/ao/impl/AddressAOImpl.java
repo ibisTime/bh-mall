@@ -42,10 +42,15 @@ public class AddressAOImpl implements IAddressAO {
         User user = userBO.getUser(data.getUserId());
         String code = null;
         if (data != null) {
-            // 如果新增地址设置为默认地址，该用户其他地址设置为非默认
-            if (EBoolean.YES.getCode().equals(data.getIsDefault())) {
-                addressBO.refreshAddressDefByUser(data.getUserId(),
-                    EBoolean.NO.getCode());
+            // 用户没有地址，则第一条地址为默认地址
+            if (!addressBO.isHaveAddress(data.getUserId())) {
+                data.setIsDefault(EBoolean.YES.getCode());
+            } else {
+                // 如果新增地址设置为默认地址，该用户其他地址设置为非默认
+                if (EBoolean.YES.getCode().equals(data.getIsDefault())) {
+                    addressBO.refreshAddressDefByUser(data.getUserId(),
+                        EBoolean.NO.getCode());
+                }
             }
             data.setSystemCode(user.getSystemCode());
             code = addressBO.saveAddress(data);

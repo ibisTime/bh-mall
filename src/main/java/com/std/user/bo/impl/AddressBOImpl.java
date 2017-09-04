@@ -106,4 +106,16 @@ public class AddressBOImpl extends PaginableBOImpl<Address> implements
         }
         return address;
     }
+
+    @Override
+    public boolean isHaveAddress(String userId) {
+        boolean result = false;
+        Address condition = new Address();
+        condition.setUserId(userId);
+        long count = addressDAO.selectTotalCount(condition);
+        if (count > 0) {
+            result = true;
+        }
+        return result;
+    }
 }

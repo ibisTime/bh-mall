@@ -85,4 +85,13 @@ public interface IAddressBO extends IPaginableBO<Address> {
      */
     public Address getAddress(String code);
 
+    /**
+     * 是否有地址
+     * @param userId
+     * @return 
+     * @create: 2017年9月4日 上午11:24:35 xieyj
+     * @history:
+     */
+    public boolean isHaveAddress(String userId);
+
 }
