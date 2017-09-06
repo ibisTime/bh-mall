@@ -9,6 +9,6 @@ public interface ISmsOutAO {
     public void sendContent(String tokenId, String userId, String content);
 
     // 发送内容
-    public void sendContent(String tokenId, String userId, String content,
+    public void sendContent(String tokenId, String mobile, String content,
             String companyCode, String systemCode);
 }
