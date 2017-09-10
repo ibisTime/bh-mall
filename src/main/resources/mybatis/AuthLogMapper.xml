@@ -105,7 +105,7 @@
 		auth_arg1 = #{authArg1}
 		,auth_arg2 = #{authArg2}
 		,auth_arg3 = #{authArg3}
-		,status =#{status}
+		,status = #{status}
 		,apply_datetime =#{applyDatetime}
 		,remark=#{remark}
 		WHERE code = #{code}

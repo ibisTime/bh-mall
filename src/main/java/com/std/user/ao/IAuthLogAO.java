@@ -16,4 +16,6 @@ public interface IAuthLogAO {
 
     public AuthLog getAuthLog(String code);
 
+    public AuthLog getAuthLog(String userId, String type);
+
 }

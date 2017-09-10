@@ -3,6 +3,7 @@ package com.std.user.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import com.std.user.core.EGeneratePrefix;
 import com.std.user.core.OrderNoGenerater;
 import com.std.user.dao.IAuthLogDAO;
 import com.std.user.domain.AuthLog;
+import com.std.user.domain.User;
 import com.std.user.enums.EAuthStatus;
 import com.std.user.enums.EAuthType;
 import com.std.user.enums.EIDKind;
@@ -26,27 +28,28 @@ public class AuthLogBOImpl extends PaginableBOImpl<AuthLog> implements
     private IAuthLogDAO authLogDAO;
 
     @Override
-    public String applyStudentAuth(String xuexinPic, String applyUser) {
+    public String applyStudentAuth(String xuexinPic, User user) {
         String code = null;
-        if (StringUtils.isNotBlank(xuexinPic)
-                && StringUtils.isNotBlank(applyUser)) {
+        if (StringUtils.isNotBlank(xuexinPic)) {
             AuthLog data = new AuthLog();
             code = OrderNoGenerater.generate(EGeneratePrefix.Auth.getCode());
             data.setCode(code);
             data.setType(EAuthType.STUDENT.getCode());
             data.setAuthArg1(xuexinPic);
-            data.setApplyUser(applyUser);
+            data.setStatus(EAuthStatus.TO_APPROVE.getCode());
+            data.setApplyUser(user.getUserId());
             data.setApplyDatetime(new Date());
+            data.setCompanyCode(user.getCompanyCode());
+            data.setSystemCode(user.getSystemCode());
             authLogDAO.insert(data);
         }
         return code;
     }
 
     @Override
-    public void reApplyStudentAuth(String code, String xuexinPic) {
-        if (StringUtils.isNotBlank(code) && StringUtils.isNotBlank(xuexinPic)) {
-            AuthLog data = new AuthLog();
-            data.setCode(code);
+    public void reApplyStudentAuth(AuthLog data, String xuexinPic,
+            String applyUser) {
+        if (data != null && StringUtils.isNotBlank(xuexinPic)) {
             data.setAuthArg1(xuexinPic);
             data.setStatus(EAuthStatus.TO_APPROVE.getCode());
             data.setApplyDatetime(new Date());
@@ -133,7 +136,10 @@ public class AuthLogBOImpl extends PaginableBOImpl<AuthLog> implements
             AuthLog condition = new AuthLog();
             condition.setApplyUser(applyUser);
             condition.setType(type.getCode());
-            data = authLogDAO.select(condition);
+            List<AuthLog> dataList = authLogDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(dataList)) {
+                data = dataList.get(0);
+            }
         }
         return data;
     }
