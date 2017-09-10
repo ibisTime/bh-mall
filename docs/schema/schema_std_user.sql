@@ -136,6 +136,9 @@ CREATE TABLE `tstd_user` (
   `id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
   `id_no` varchar(32) DEFAULT NULL COMMENT '证件号码',
   `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
+  `zm_score` varchar(32) DEFAULT NULL COMMENT '芝麻分',
+  `zm_auth_datetime` datetime DEFAULT NULL COMMENT '芝麻认证时间',
+  
   `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
   `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
   
@@ -153,6 +156,7 @@ CREATE TABLE `tstd_user` (
   `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
   `diploma` varchar(4) DEFAULT NULL COMMENT '学位',
   `occupation` varchar(64) DEFAULT NULL COMMENT '职业',
+  `grad_datetime` datetime DEFAULT NULL COMMENT '毕业时间',
   `work_time` varchar(4) DEFAULT NULL COMMENT '工作年限',
   `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
 
@@ -205,6 +209,27 @@ CREATE TABLE `tstd_blacklist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+--  Table structure for `tstd_auth_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_auth_log`;
+CREATE TABLE `tstd_auth_log` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '认证类型',
+  `auth_arg1` varchar(255) DEFAULT NULL COMMENT '入参1',
+  `auth_arg2` varchar(255) DEFAULT NULL COMMENT '入参2',
+  `auth_arg3` varchar(255) DEFAULT NULL COMMENT '入参3',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态 0=待处理 1=认证通过 2=认证不通过',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `approve_user` varchar(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `result` varchar(255) DEFAULT NULL COMMENT '出参',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tsys_menu`

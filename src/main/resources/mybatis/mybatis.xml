@@ -20,5 +20,6 @@
 	    <typeAlias alias="invitation" type="com.std.user.domain.Invitation" />
 	    
 	    <typeAlias alias="blacklist" type="com.std.user.domain.Blacklist" />
+	    <typeAlias alias="authLog" type="com.std.user.domain.AuthLog" />
 	</typeAliases>
 </configuration>	

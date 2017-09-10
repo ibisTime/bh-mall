@@ -1,14 +1,12 @@
 package com.std.user.third.wechat.impl;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +22,8 @@ import com.std.user.util.SignUtil;
 
 @Component
 public class WechatTokenUtil {
+
+    private static Logger logger = Logger.getLogger(WechatTokenUtil.class);
 
     @Autowired
     ISYSConfigBO sysConfigBO;
@@ -96,6 +96,7 @@ public class WechatTokenUtil {
             result1 = new String(HttpsUtil.post(requestUrl, params, "utf-8"));
             String access_token = JSONObject.parseObject(result1).getString(
                 "access_token");
+            logger.info("********微信分享结果result1:" + result1 + "********");
             requestUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?";
             params = "access_token=" + access_token + "&type=jsapi";
             result1 = new String(HttpsUtil.post(requestUrl, params, "utf-8"));
@@ -107,12 +108,8 @@ public class WechatTokenUtil {
             map.put(systemCode + "." + companyCode + ".jsapi_token",
                 jsapi_ticket);
             map.put("appId", appId);
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new BizException("xn0000", e.getMessage());
         }
         return map;
     }

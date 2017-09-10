@@ -64,6 +64,21 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     }
 
     @Override
+    public int updateIdentityZmscore(User data) {
+        return super.update(NAMESPACE.concat("update_identity_zmscore"), data);
+    }
+
+    @Override
+    public int updateZmscore(User data) {
+        return super.update(NAMESPACE.concat("update_zmscore"), data);
+    }
+
+    @Override
+    public int updateGradDatetime(User data) {
+        return super.update(NAMESPACE.concat("update_gradDatetime"), data);
+    }
+
+    @Override
     public int updateRealName(User data) {
         return super.update(NAMESPACE.concat("update_real_name"), data);
     }

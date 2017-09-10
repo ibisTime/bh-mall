@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.std.user.ao.IUserAO;
 import com.std.user.bo.IAccountBO;
+import com.std.user.bo.IAuthLogBO;
 import com.std.user.bo.IFieldTimesBO;
 import com.std.user.bo.IIdentifyBO;
 import com.std.user.bo.ISYSConfigBO;
@@ -43,6 +44,7 @@ import com.std.user.common.PropertiesUtil;
 import com.std.user.common.SysConstant;
 import com.std.user.common.WechatConstant;
 import com.std.user.core.StringValidater;
+import com.std.user.domain.AuthLog;
 import com.std.user.domain.SYSConfig;
 import com.std.user.domain.SYSRole;
 import com.std.user.domain.User;
@@ -56,8 +58,11 @@ import com.std.user.dto.req.XN805170Req;
 import com.std.user.dto.res.XN001400Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
+import com.std.user.dto.res.XN798015Res;
+import com.std.user.dto.res.XN798022Res;
 import com.std.user.dto.res.XN805041Res;
 import com.std.user.dto.res.XN805170Res;
+import com.std.user.enums.EAuthType;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.EBoolean;
 import com.std.user.enums.EConfigType;
@@ -103,6 +108,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     IIdentifyBO dentifyBO;
+
+    @Autowired
+    IAuthLogBO authLogBO;
 
     @Autowired
     ISmsOutBO smsOutBO;
@@ -831,6 +839,58 @@ public class UserAOImpl implements IUserAO {
             // 回写Account表realName;
             accountBO.refreshRealName(user.getUserId(), res.getRealName(),
                 user.getSystemCode());
+        }
+        return res;
+    }
+
+    @Override
+    @Transactional
+    public XN798022Res doZhimaH5URLQuery(String userId, String idNo,
+            String realName) {
+        User user = userBO.getUser(userId);
+        // 判断库中是否有该记录
+        userBO.checkIdentify(user.getKind(), EIDKind.IDCard.getCode(), idNo,
+            realName);
+        // 判断芝麻认证是否失效
+        Date zmAuthDatetime = user.getZmAuthDatetime();
+        if (null != user.getZmScore() && null != zmAuthDatetime
+                && DateUtil.daysBetween(zmAuthDatetime, new Date()) < 30) {
+            throw new BizException("xn805095", "芝麻分还未过期，无需重新认证");
+        }
+        // 保存授权信息
+        authLogBO.saveZmAuth(user.getUserId(), idNo, realName,
+            user.getCompanyCode(), user.getSystemCode());
+        return dentifyBO.doQueryZhimaH5InvokeURL(user.getSystemCode(),
+            user.getCompanyCode(), idNo, realName);
+    }
+
+    @Override
+    @Transactional
+    public XN798015Res doZhimaScoreQuery(String userId) {
+        User user = userBO.getUser(userId);
+        XN798015Res res = null;
+        AuthLog authLog = authLogBO.getAuthLog(user.getUserId(),
+            EAuthType.ZM_SCORE);
+        if (authLog == null) {
+            res = new XN798015Res();
+            res.setAuthorized(false);
+        } else {
+            res = dentifyBO.doQueryZhimaScore(authLog.getSystemCode(),
+                authLog.getCompanyCode(), authLog.getAuthArg2(),
+                authLog.getAuthArg3());
+            if (res.isAuthorized()) {
+                if (StringUtils.isBlank(user.getIdNo())
+                        && StringUtils.isBlank(user.getRealName())) {
+                    // 更新用户芝麻分
+                    userBO.refreshIdentityZm(userId, authLog.getAuthArg3(),
+                        authLog.getAuthArg1(), authLog.getAuthArg2(),
+                        res.getZmScore());
+                } else {
+                    userBO.refreshZmScore(userId, res.getZmScore());
+                }
+                authLogBO.approveAuthPass(authLog.getCode(), "system",
+                    res.getZmScore(), res.getBizNo());
+            }
         }
         return res;
     }

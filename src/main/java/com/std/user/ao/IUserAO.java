@@ -10,6 +10,8 @@ import com.std.user.dto.req.XN805081Req;
 import com.std.user.dto.req.XN805095Req;
 import com.std.user.dto.req.XN805170Req;
 import com.std.user.dto.res.XN001400Res;
+import com.std.user.dto.res.XN798015Res;
+import com.std.user.dto.res.XN798022Res;
 import com.std.user.dto.res.XN805041Res;
 import com.std.user.dto.res.XN805170Res;
 
@@ -143,6 +145,13 @@ public interface IUserAO {
 
     // 芝麻认证查询
     public Object doZhimaQuery(String userId, String bizNo);
+
+    // h5页面授权URL
+    public XN798022Res doZhimaH5URLQuery(String userId, String idNo,
+            String realName);
+
+    // 获取芝麻分
+    public XN798015Res doZhimaScoreQuery(String userId);
 
     public Paginable<User> queryUserPage(int start, int limit, User condition);
 

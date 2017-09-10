@@ -17,6 +17,9 @@
 		
 		<result column="id_no" property="idNo" />
 		<result column="real_name" property="realName" />
+		<result column="zm_score" property="zmScore" />
+		<result column="zm_auth_datetime" property="zmAuthDatetime" />
+		
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="role_code" property="roleCode" />
 		<result column="div_rate" property="divRate" />
@@ -33,6 +36,7 @@
 		<result column="diploma" property="diploma" />
 		<result column="occupation" property="occupation" />
 		
+		<result column="grad_datetime" property="gradDatetime" />
 		<result column="work_time" property="workTime" />
 		<result column="pdf" property="pdf" />
 		<result column="province" property="province" />
@@ -177,6 +181,8 @@
 		
 		,t.id_no
 		,t.real_name
+		,t.zm_score
+		,t.zm_auth_datetime
 		,t.trade_pwd_strength
 		,t.role_code
 		,t.div_rate
@@ -193,6 +199,7 @@
 		,t.diploma
 		,t.occupation
 		
+		,t.grad_datetime
 		,t.work_time
 		,t.pdf
 		,t.province
@@ -335,6 +342,35 @@
 		 real_name= #{realName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_identity_zmscore" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 real_name= #{realName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		,zm_score=#{zmScore}
+		,zm_auth_datetime=#{zmAuthDatetime}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_zmscore" parameterType="user">
+		UPDATE tstd_user
+		SET
+		zm_score=#{zmScore}
+		,zm_auth_datetime=#{zmAuthDatetime}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_gradDatetime" parameterType="user">
+		UPDATE tstd_user
+		SET
+		grad_datetime=#{gradDatetime}
 		WHERE
 		user_id = #{userId}	
 	</update>

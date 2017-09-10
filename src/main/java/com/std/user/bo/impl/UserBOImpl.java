@@ -298,20 +298,58 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userId;
     }
 
-    /**
-     * @see com.ibis.pz.user.IUserBO#refreshIdentity(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo) {
-        User data = new User();
-        data.setUserId(userId);
-        data.setRealName(realName);
-        data.setIdKind(idKind);
-        data.setIdNo(idNo);
         int count = 0;
-        if (data != null && StringUtils.isNotBlank(data.getUserId())) {
+        if (StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setRealName(realName);
+            data.setIdKind(idKind);
+            data.setIdNo(idNo);
             count = userDAO.updateIdentity(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshIdentityZm(String userId, String realName, String idKind,
+            String idNo, String zmScore) {
+        int count = 0;
+        if (StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setRealName(realName);
+            data.setIdKind(idKind);
+            data.setIdNo(idNo);
+            data.setZmScore(zmScore);
+            data.setZmAuthDatetime(new Date());
+            count = userDAO.updateIdentityZmscore(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshZmScore(String userId, String zmScore) {
+        int count = 0;
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(zmScore)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setZmScore(zmScore);
+            data.setZmAuthDatetime(new Date());
+            count = userDAO.updateZmscore(data);
+        }
+        return count;
+    }
+
+    public int refreshGradDatetime(String userId, Date gradDatetime) {
+        int count = 0;
+        if (StringUtils.isNotBlank(userId) && null != gradDatetime) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setGradDatetime(gradDatetime);
+            count = userDAO.updateGradDatetime(data);
         }
         return count;
     }

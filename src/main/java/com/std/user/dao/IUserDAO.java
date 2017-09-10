@@ -25,6 +25,15 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 实名认证
     public int updateIdentity(User data);
 
+    // 实名认证芝麻分
+    public int updateIdentityZmscore(User data);
+
+    // 芝麻分
+    public int updateZmscore(User data);
+
+    // 毕业时间
+    public int updateGradDatetime(User data);
+
     // 设置支付密码
     public int updateTradePwd(User data);
 

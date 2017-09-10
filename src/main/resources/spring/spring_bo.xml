@@ -53,4 +53,8 @@
 	<bean id="blacklistBO" class="com.std.user.bo.impl.BlacklistBOImpl">
 		<property name="paginableDAO" ref="blacklistDAOImpl"/>
 	</bean>	
+	
+	<bean id="authLogBO" class="com.std.user.bo.impl.AuthLogBOImpl">
+		<property name="paginableDAO" ref="authLogDAOImpl"/>
+	</bean>	
 </beans>

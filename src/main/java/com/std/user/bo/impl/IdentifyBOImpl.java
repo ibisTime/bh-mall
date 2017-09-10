@@ -9,10 +9,14 @@ import com.std.user.dto.req.XN798001Req;
 import com.std.user.dto.req.XN798006Req;
 import com.std.user.dto.req.XN798011Req;
 import com.std.user.dto.req.XN798012Req;
+import com.std.user.dto.req.XN798015Req;
+import com.std.user.dto.req.XN798022Req;
 import com.std.user.dto.res.XN798001Res;
 import com.std.user.dto.res.XN798006Res;
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
+import com.std.user.dto.res.XN798015Res;
+import com.std.user.dto.res.XN798022Res;
 import com.std.user.http.BizConnecter;
 import com.std.user.http.JsonUtils;
 
@@ -91,5 +95,29 @@ public class IdentifyBOImpl implements IIdentifyBO {
         req.setBizNo(bizNo);
         return BizConnecter.getBizData("798012", JsonUtils.object2Json(req),
             XN798012Res.class);
+    }
+
+    @Override
+    public XN798022Res doQueryZhimaH5InvokeURL(String systemCode,
+            String companyCode, String idNo, String realName) {
+        XN798022Req req = new XN798022Req();
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(companyCode);
+        req.setIdNo(idNo);
+        req.setRealName(realName);
+        return BizConnecter.getBizData("798022", JsonUtils.object2Json(req),
+            XN798022Res.class);
+    }
+
+    @Override
+    public XN798015Res doQueryZhimaScore(String systemCode, String companyCode,
+            String idNo, String realName) {
+        XN798015Req req = new XN798015Req();
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(companyCode);
+        req.setIdNo(idNo);
+        req.setRealName(realName);
+        return BizConnecter.getBizData("798015", JsonUtils.object2Json(req),
+            XN798015Res.class);
     }
 }

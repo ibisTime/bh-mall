@@ -238,7 +238,7 @@ public class DateUtil {
      * 当月最后一天
      * @return
      */
-    private static String getLastDay() {
+    public static String getLastDay() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         Date theDate = calendar.getTime();
@@ -246,6 +246,11 @@ public class DateUtil {
         StringBuffer str = new StringBuffer().append(s).append(" 23:59:59");
         return str.toString();
 
+    }
+
+    public static int daysBetween(Date beginDate, Date endDate) {
+        long times = endDate.getTime() - beginDate.getTime();
+        return (int) (times / 60 / 60 / 1000 / 24);
     }
 
     public static void main(String[] args) {

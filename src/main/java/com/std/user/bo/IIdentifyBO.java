@@ -2,6 +2,8 @@ package com.std.user.bo;
 
 import com.std.user.dto.res.XN798011Res;
 import com.std.user.dto.res.XN798012Res;
+import com.std.user.dto.res.XN798015Res;
+import com.std.user.dto.res.XN798022Res;
 
 public interface IIdentifyBO {
     /**
@@ -37,4 +39,9 @@ public interface IIdentifyBO {
     public XN798012Res doZhimaQuery(String systemCode, String companyCode,
             String bizNo);
 
+    public XN798022Res doQueryZhimaH5InvokeURL(String systemCode,
+            String companyCode, String idNo, String realName);
+
+    public XN798015Res doQueryZhimaScore(String systemCode, String companyCode,
+            String idNo, String realName);
 }

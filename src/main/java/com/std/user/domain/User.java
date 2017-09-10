@@ -61,6 +61,12 @@ public class User extends ABaseDO {
     // 支付密码强度
     private String tradePwdStrength;
 
+    // 芝麻分
+    private String zmScore;
+
+    // 芝麻认证时间
+    private Date zmAuthDatetime;
+
     // 角色编号
     private String roleCode;
 
@@ -96,6 +102,9 @@ public class User extends ABaseDO {
 
     // 职业
     private String occupation;
+
+    // 毕业时间
+    private Date gradDatetime;
 
     // 工作年限
     private String workTime;
@@ -634,4 +643,27 @@ public class User extends ABaseDO {
         this.tradepwdFlag = tradepwdFlag;
     }
 
+    public Date getGradDatetime() {
+        return gradDatetime;
+    }
+
+    public void setGradDatetime(Date gradDatetime) {
+        this.gradDatetime = gradDatetime;
+    }
+
+    public String getZmScore() {
+        return zmScore;
+    }
+
+    public void setZmScore(String zmScore) {
+        this.zmScore = zmScore;
+    }
+
+    public Date getZmAuthDatetime() {
+        return zmAuthDatetime;
+    }
+
+    public void setZmAuthDatetime(Date zmAuthDatetime) {
+        this.zmAuthDatetime = zmAuthDatetime;
+    }
 }

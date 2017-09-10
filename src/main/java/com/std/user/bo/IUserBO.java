@@ -8,6 +8,7 @@
  */
 package com.std.user.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.std.user.bo.base.IPaginableBO;
@@ -83,6 +84,13 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
+
+    public int refreshIdentityZm(String userId, String realName, String idKind,
+            String idNo, String zmScore);
+
+    public int refreshZmScore(String userId, String zmScore);
+
+    public int refreshGradDatetime(String userId, Date gradDatetime);
 
     public int refreshRealName(String userId, String realName);
 
