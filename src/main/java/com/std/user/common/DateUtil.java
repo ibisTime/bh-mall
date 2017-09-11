@@ -253,6 +253,12 @@ public class DateUtil {
         return (int) (times / 60 / 60 / 1000 / 24);
     }
 
+    // 将时间戳转换为时间
+    public static Date stampToDate(Long dateS) {
+        long dates = new Long(dateS);
+        return new Date(dates);
+    }
+
     public static void main(String[] args) {
         System.out.println(getLastDay());
         // List<Date> arrayDate = getDatesArray("2014-01-01", "2014-03-01", 2);

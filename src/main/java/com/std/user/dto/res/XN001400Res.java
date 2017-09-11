@@ -31,6 +31,12 @@ public class XN001400Res {
     // 真实姓名
     private String realName;
 
+    // 芝麻分
+    private String zmScore;
+
+    // 芝麻认证时间
+    private Long zmAuthDatetimeTimes;
+
     // 推荐人
     private String userReferee;
 
@@ -88,6 +94,9 @@ public class XN001400Res {
     // 职业
     private String occupation;
 
+    // 学生毕业时间
+    private Long gradDatetimeTimes;
+
     // 工作年限
     private String workTime;
 
@@ -99,46 +108,6 @@ public class XN001400Res {
 
     // 系统编号
     private String systemCode;
-
-    public String getIdentityFlag() {
-        return identityFlag;
-    }
-
-    public void setIdentityFlag(String identityFlag) {
-        this.identityFlag = identityFlag;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getIdKind() {
-        return idKind;
-    }
-
-    public void setIdKind(String idKind) {
-        this.idKind = idKind;
-    }
-
-    public String getIdNo() {
-        return idNo;
-    }
-
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
 
     public String getUserId() {
         return userId;
@@ -162,6 +131,22 @@ public class XN001400Res {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getPhoto() {
@@ -188,28 +173,12 @@ public class XN001400Res {
         this.level = level;
     }
 
-    public String getTradepwdFlag() {
-        return tradepwdFlag;
-    }
-
-    public void setTradepwdFlag(String tradepwdFlag) {
-        this.tradepwdFlag = tradepwdFlag;
-    }
-
     public String getKind() {
         return kind;
     }
 
     public void setKind(String kind) {
         this.kind = kind;
-    }
-
-    public String getUserReferee() {
-        return userReferee;
-    }
-
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
     }
 
     public String getRealName() {
@@ -220,12 +189,68 @@ public class XN001400Res {
         this.realName = realName;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
+    public String getZmScore() {
+        return zmScore;
     }
 
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
+    public void setZmScore(String zmScore) {
+        this.zmScore = zmScore;
+    }
+
+    public Long getZmAuthDatetimeTimes() {
+        return zmAuthDatetimeTimes;
+    }
+
+    public void setZmAuthDatetimeTimes(Long zmAuthDatetimeTimes) {
+        this.zmAuthDatetimeTimes = zmAuthDatetimeTimes;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public String getIdentityFlag() {
+        return identityFlag;
+    }
+
+    public void setIdentityFlag(String identityFlag) {
+        this.identityFlag = identityFlag;
+    }
+
+    public String getTradepwdFlag() {
+        return tradepwdFlag;
+    }
+
+    public void setTradepwdFlag(String tradepwdFlag) {
+        this.tradepwdFlag = tradepwdFlag;
+    }
+
+    public String getDivRate() {
+        return divRate;
+    }
+
+    public void setDivRate(String divRate) {
+        this.divRate = divRate;
     }
 
     public String getTotalFollowNum() {
@@ -266,6 +291,14 @@ public class XN001400Res {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getLongitude() {
@@ -324,6 +357,14 @@ public class XN001400Res {
         this.occupation = occupation;
     }
 
+    public Long getGradDatetimeTimes() {
+        return gradDatetimeTimes;
+    }
+
+    public void setGradDatetimeTimes(Long gradDatetimeTimes) {
+        this.gradDatetimeTimes = gradDatetimeTimes;
+    }
+
     public String getWorkTime() {
         return workTime;
     }
@@ -340,27 +381,19 @@ public class XN001400Res {
         this.introduce = introduce;
     }
 
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getSystemCode() {
         return systemCode;
     }
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getDivRate() {
-        return divRate;
-    }
-
-    public void setDivRate(String divRate) {
-        this.divRate = divRate;
     }
 }

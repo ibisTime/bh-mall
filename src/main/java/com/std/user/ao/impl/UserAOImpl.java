@@ -183,16 +183,35 @@ public class UserAOImpl implements IUserAO {
     private Long addRegAmount(String userId, String mobile, String kind,
             String companyCode, String systemCode) {
         Long amount = 0L;
-        // 注册送积分
         if (EUserKind.Customer.getCode().equals(kind)) {
             SYSConfig sysConfig = sysConfigBO.getConfig(
-                SysConstant.CUSER_LOGIN_ADDJF, companyCode, systemCode);
+                SysConstant.CUSER_REG_ADDJF, companyCode, systemCode);
             if (null != sysConfig) {
                 amount = AmountUtil.mul(1000L,
                     Double.valueOf(sysConfig.getCvalue()));
-                accountBO.doTransferAmountRemote(getSysUserId(userId), userId,
-                    ECurrency.JF, amount, EBizType.AJ_REG, "用户[" + mobile
-                            + "]注册送积分", "注册送积分");
+                accountBO.doTransferAmountRemote(getSysUserId(systemCode),
+                    userId, ECurrency.JF, amount, EBizType.AJ_REG, "用户["
+                            + mobile + "]注册送积分", "注册送积分");
+            }
+        }
+        return amount;
+    }
+
+    // 推荐送积分
+    private Long addUserRefAmount(String userId, String mobile, String kind,
+            String companyCode, String systemCode) {
+        Long amount = 0L;
+        if (StringUtils.isNotBlank(userId)) {
+            if (EUserKind.Customer.getCode().equals(kind)) {
+                SYSConfig sysConfig = sysConfigBO.getConfig(
+                    SysConstant.CUSER_USERREF_ADDJF, companyCode, systemCode);
+                if (null != sysConfig) {
+                    amount = AmountUtil.mul(1000L,
+                        Double.valueOf(sysConfig.getCvalue()));
+                    accountBO.doTransferAmountRemote(getSysUserId(systemCode),
+                        userId, ECurrency.JF, amount, EBizType.AJ_REG, "用户["
+                                + mobile + "]推荐送积分", "推荐送积分");
+                }
             }
         }
         return amount;
@@ -392,15 +411,15 @@ public class UserAOImpl implements IUserAO {
     // 每天登录送积分
     private Long addLoginAmount(User user) {
         Long amount = 0L;
-        if (EUserKind.Customer.getCode().equals(user.getKind())) {
-            Boolean result = signLogBO.isSignToday(user.getUserId());
-            if (!result) {
-                signLogBO.saveSignLog(user.getUserId(), "",
-                    user.getSystemCode());
-                SYSConfig sysConfig = sysConfigBO.getConfig(
-                    SysConstant.CUSER_LOGIN_ADDJF, user.getCompanyCode(),
-                    user.getSystemCode());
-                if (null != sysConfig) {
+        SYSConfig sysConfig = sysConfigBO.getConfig(
+            SysConstant.CUSER_LOGIN_ADDJF, user.getCompanyCode(),
+            user.getSystemCode());
+        if (null != sysConfig) {
+            if (EUserKind.Customer.getCode().equals(user.getKind())) {
+                Boolean result = signLogBO.isSignToday(user.getUserId());
+                if (!result) {
+                    signLogBO.saveSignLog(user.getUserId(), "",
+                        user.getSystemCode());
                     amount = AmountUtil.mul(1000L,
                         Double.valueOf(sysConfig.getCvalue()));
                     accountBO.doTransferAmountRemote(
@@ -1209,7 +1228,13 @@ public class UserAOImpl implements IUserAO {
                     systemCode);
                 distributeAccount(userId, req.getMobile(), req.getKind(),
                     companyCode, systemCode);
-                result = new XN805170Res(userId);
+                // 注册送积分
+                Long amount = addRegAmount(userId, req.getMobile(),
+                    EUserKind.Customer.getCode(), companyCode, systemCode);
+                result = new XN805170Res(userId, amount);
+                // 推荐人送积分
+                addUserRefAmount(userRefereeId, req.getUserReferee(),
+                    req.getUserRefereeKind(), companyCode, systemCode);
             } else {
                 userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId,
                     appOpenId, nickname, photo, gender);
@@ -1266,7 +1291,13 @@ public class UserAOImpl implements IUserAO {
         res.setLevel(user.getLevel());
         res.setKind(user.getKind());
         res.setRealName(user.getRealName());
+        res.setZmScore(user.getZmScore());
 
+        if (null != user.getZmAuthDatetime()) {
+            res.setZmAuthDatetimeTimes(user.getZmAuthDatetime().getTime());
+        } else {
+            res.setZmAuthDatetimeTimes(0L);
+        }
         res.setUserReferee(user.getUserReferee());
         res.setIdKind(user.getIdKind());
         res.setIdNo(user.getIdNo());
@@ -1300,6 +1331,11 @@ public class UserAOImpl implements IUserAO {
         res.setDiploma(user.getDiploma());
         res.setOccupation(user.getOccupation());
         res.setWorkTime(user.getWorkTime());
+        if (null != user.getGradDatetime()) {
+            res.setGradDatetimeTimes(user.getGradDatetime().getTime());
+        } else {
+            res.setGradDatetimeTimes(0L);
+        }
         res.setIntroduce(user.getIntroduce());
         res.setLatitude(user.getLatitude());
         res.setLongitude(user.getLongitude());

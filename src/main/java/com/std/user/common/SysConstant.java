@@ -32,8 +32,6 @@ public class SysConstant {
 
     public static String CUSER_SIGN_ADDJF = "cuser_sign_addjf"; // C端签到送积分
 
-    public static String CUSER_USERREF_ADDXJK = "cuser_userref_addxjk"; // C端推荐人加小金块
-
     public static String CUSER_USERREF_ADDJF = "cuser_userref_addjf"; // C端推荐人加积分
 
 }

@@ -2,7 +2,7 @@ INSERT INTO `tstd_user` (`user_id`,`login_name`,`login_pwd`,`login_pwd_strength`
 
 /*
 -- Query: SELECT code,name,type,url,order_no,'admin' updater, now() as update_datetime,remark,parent_code,'CD-CHW000015' system_code FROM tsys_menu
--- Date: 2017-09-08 10:24
+-- Date: 2017-09-11 14:48
 */
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('HYSM201612071021105964','财务管理','1','#','3','admin',now(),'','HYSM201700000000000000','CD-CHW000015');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('HYSM2016120710215035834','账户查询','1','#','1','admin',now(),'','HYSM201612071021105964','CD-CHW000015');
@@ -178,6 +178,14 @@ INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709072032277674988','订单查询','1','/mall/leaseOrderQuery.htm','4','admin',now(),'','SM201708311108348702445','CD-CHW000015');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709072033200218734','详情','2','/detail','1','admin',now(),'','SM201709072032277674988','CD-CHW000015');
 INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709072033446349734','导出','2','/export','2','admin',now(),'','SM201709072032277674988','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111011459092484','免押金管理','1','#','7','admin',now(),'','HYSM201708241036442974134','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111012547147425','学生认证管理','1','/user/students.htm','1','admin',now(),'','SM201709111011459092484','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111013222355586','审核','2','/check','1','admin',now(),'','SM201709111012547147425','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111013444552925','详情','2','/detail','2','admin',now(),'','SM201709111012547147425','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111119331949778','芝麻认证查询','1','/user/zmQuery.htm','2','admin',now(),'','SM201709111011459092484','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111119532796858','详情','2','/detail','1','admin',now(),'','SM201709111119331949778','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111226578907591','推广规则','1','/rules/tgRule.htm','1','admin',now(),'','SM201708311109128401946','CD-CHW000015');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201709111227283933403','修改','2','/edit','1','admin',now(),'','SM201709111226578907591','CD-CHW000015');
 
 /*
 -- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`system_code` FROM tsys_role where system_code = 'CD-CZH000001'
@@ -187,10 +195,9 @@ LIMIT 0, 10000
 */
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','超级管角色','1','admin',now(),'','CD-CHW000015');
 INSERT INTO `tsys_role` (`code`,`name`,`level`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000001','加盟商角色','1','admin',now(),'','CD-CHW000015');
-
 /*
 -- Query: select `role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code` from tsys_menu_role where role_code in ('HWSR201700000000000000','HWSR201700000000000001')
--- Date: 2017-09-08 10:25
+-- Date: 2017-09-11 14:48
 */
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000001','HYSM201700000000000000','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000001','HYSM201708241036442974134','admin',now(),NULL,'CD-CHW000015');
@@ -336,6 +343,8 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709072033200218734','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709072033446349734','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201708311109128401946','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111226578907591','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111227283933403','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201708311109281904152','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201708311130585876317','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201708312131157986140','admin',now(),NULL,'CD-CHW000015');
@@ -367,6 +376,12 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709052138578985993','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM20170905213929548769','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709052140368699812','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111011459092484','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111012547147425','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111013222355586','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111013444552925','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111119331949778','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','SM201709111119532796858','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('HWSR201700000000000000','HYSM201708241037322072730','admin',now(),NULL,'CD-CHW000015');
 
 /*
@@ -380,10 +395,9 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_access_key','wx9c709bf30e60c07b','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_secret_key','2e334a962351aca2add4101cdc063386','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_reg_addjf','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_login_addjf','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_sign_addjf','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_userref_addxjk','10','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_reg_addjf','10','admin',now(),'注册送积分数量','CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_sign_addjf','15','admin',now(),'签到送积分数量','CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_userref_addjf','10','admin',now(),'推荐送积分数量','CD-CHW000015','CD-CHW000015');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','about_us','关于我们','admin',now(),'关于我们','CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','reg_protocol','注册协议','admin',now(),'注册协议','CD-CHW000015','CD-CHW000015');
@@ -392,7 +406,9 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','time','09:00:00 - 17:30:00','admin',now(),'服务时间','CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','telephone','0571-89000000','admin',now(),'服务电话','CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','reg_url','http://hy.hichengdai.com','admin',now(),'注册链接','CD-CHW000015','CD-CHW000015');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','xuexin_guide','','admin',now(),'学信网学生认证引导','CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','xuexin_guide','学信网学生认证引导','admin',now(),'学信网学生认证引导','CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','sign_rule','签到规则','admin',now(),'签到规则','CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('sys_txt','userref_rule','推荐规则说明','admin',now(),'推荐规则说明','CD-CHW000015','CD-CHW000015');
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'user_status','用户状态','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','user_status','0','正常','admin',now(),NULL,'CD-CHW000015');
@@ -428,3 +444,8 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'auth_type','认证类型','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','auth_type','zm_score','芝麻分','admin',now(),NULL,'CD-CHW000015');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','auth_type','student','学生','admin',now(),NULL,'CD-CHW000015');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'auth_status','认证状态','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','auth_status','0','待审核','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','auth_status','1','认证成功','admin',now(),NULL,'CD-CHW000015');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','auth_status','2','认证失败','admin',now(),NULL,'CD-CHW000015');

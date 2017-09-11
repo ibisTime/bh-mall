@@ -215,7 +215,7 @@ CREATE TABLE `tstd_blacklist` (
 DROP TABLE IF EXISTS `tstd_auth_log`;
 CREATE TABLE `tstd_auth_log` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `type` varchar(4) DEFAULT NULL COMMENT '认证类型',
+  `type` varchar(32) DEFAULT NULL COMMENT '认证类型',
   `auth_arg1` varchar(255) DEFAULT NULL COMMENT '入参1',
   `auth_arg2` varchar(255) DEFAULT NULL COMMENT '入参2',
   `auth_arg3` varchar(255) DEFAULT NULL COMMENT '入参3',

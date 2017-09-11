@@ -38,6 +38,8 @@ public class WechatTokenUtil {
         String nonceStr = createNonceStr();
         String sign = SignUtil.getSignature(jsapiTicket, timestamp, nonceStr,
             url);
+        logger.info("jsapiTicket:" + jsapiTicket + ";timestamp" + timestamp
+                + ";nonceStr:" + nonceStr + ";sign:" + sign);
         return new XN807910Res(map.get("appId"), timestamp, nonceStr, sign);
     }
 

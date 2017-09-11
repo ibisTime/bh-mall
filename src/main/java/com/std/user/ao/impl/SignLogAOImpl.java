@@ -21,7 +21,6 @@ import com.std.user.dto.res.XN805103Res;
 import com.std.user.enums.EBizType;
 import com.std.user.enums.ECurrency;
 import com.std.user.enums.ESysUser;
-import com.std.user.enums.ESystemCode;
 import com.std.user.exception.BizException;
 
 @Service
@@ -49,10 +48,10 @@ public class SignLogAOImpl implements ISignLogAO {
             throw new BizException("XN000000", "今日已签到，请明日再来哦");
         }
         Long amount = 0L;
-        if (ESystemCode.HW.getCode().equals(user.getSystemCode())) {
-            SYSConfig sysConfig = sysConfigBO.getConfig(
-                SysConstant.CUSER_USERREF_ADDXJK, user.getCompanyCode(),
-                user.getSystemCode());
+        SYSConfig sysConfig = sysConfigBO.getConfig(
+            SysConstant.CUSER_SIGN_ADDJF, user.getCompanyCode(),
+            user.getSystemCode());
+        if (null != sysConfig) {
             amount = AmountUtil.mul(1000L,
                 Double.valueOf(sysConfig.getCvalue()));
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_HW.getCode(),

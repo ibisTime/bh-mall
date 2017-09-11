@@ -7,11 +7,27 @@ public class XN805170Res {
     // 是否绑定手机号
     private String isNeedMobile;
 
+    // 送积分
+    private Long jfAmount;
+
+    public Long getJfAmount() {
+        return jfAmount;
+    }
+
+    public void setJfAmount(Long jfAmount) {
+        this.jfAmount = jfAmount;
+    }
+
     public XN805170Res() {
     }
 
     public XN805170Res(String userId) {
         this.userId = userId;
+    }
+
+    public XN805170Res(String userId, Long jfAmount) {
+        this.userId = userId;
+        this.jfAmount = jfAmount;
     }
 
     public XN805170Res(String userId, String isNeedMobile) {
