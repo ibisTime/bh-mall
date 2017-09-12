@@ -4,8 +4,8 @@ public class XN001400Res {
     // 用户ID
     private String userId;
 
-    // openID
-    private String openId;
+    // h5支付openId
+    private String h5OpenId;
 
     // 最好不是手机号，就是一般的登录名。目前第一版版本先用手机号，因为用一般登录名，注册流程以及手机验证就要变
     private String loginName;
@@ -117,12 +117,12 @@ public class XN001400Res {
         this.userId = userId;
     }
 
-    public String getOpenId() {
-        return openId;
+    public String getH5OpenId() {
+        return h5OpenId;
     }
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
+    public void setH5OpenId(String h5OpenId) {
+        this.h5OpenId = h5OpenId;
     }
 
     public String getLoginName() {

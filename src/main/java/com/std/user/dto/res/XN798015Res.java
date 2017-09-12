@@ -8,6 +8,8 @@
  */
 package com.std.user.dto.res;
 
+import java.util.Date;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2017年7月26日 下午5:55:24 
@@ -23,6 +25,17 @@ public class XN798015Res extends XN798017Res {
 
     // 用户的芝麻信用评分。分值范围[350,950]。如果用户数据不足，无法评分时，返回字符串"N/A"。
     private String zmScore;
+
+    // 认证时间
+    private Date zmAuthDatetime;
+
+    public Date getZmAuthDatetime() {
+        return zmAuthDatetime;
+    }
+
+    public void setZmAuthDatetime(Date zmAuthDatetime) {
+        this.zmAuthDatetime = zmAuthDatetime;
+    }
 
     public boolean isAuthorized() {
         return authorized;

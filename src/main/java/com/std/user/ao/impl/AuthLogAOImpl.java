@@ -1,6 +1,7 @@
 package com.std.user.ao.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,12 +67,22 @@ public class AuthLogAOImpl implements IAuthLogAO {
     @Override
     public Paginable<AuthLog> queryAuthLogPage(int start, int limit,
             AuthLog condition) {
-        return authLogBO.getPaginable(start, limit, condition);
+        Paginable<AuthLog> page = authLogBO.getPaginable(start, limit,
+            condition);
+        List<AuthLog> list = page.getList();
+        for (AuthLog authLog : list) {
+            User user = userBO.getCheckUser(authLog.getApplyUser());
+            authLog.setUser(user);
+        }
+        return page;
     }
 
     @Override
     public AuthLog getAuthLog(String code) {
-        return authLogBO.getAuthLog(code);
+        AuthLog authLog = authLogBO.getAuthLog(code);
+        User user = userBO.getCheckUser(authLog.getApplyUser());
+        authLog.setUser(user);
+        return authLog;
     }
 
     @Override

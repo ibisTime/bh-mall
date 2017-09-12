@@ -30,35 +30,51 @@ public class BlacklistAOImpl implements IBlacklistAO {
             throw new BizException("xn000000", "用户编号不存在");
         }
         blacklistBO.saveBlacklist(user, type, remark);
-
     }
 
     @Override
-    public int dropBlacklist(Long id, String updater, String remark) {
-        int count = 0;
+    public boolean isBlacklist(String userId, String type) {
+        boolean result = false;
+        Blacklist condition = new Blacklist();
+        condition.setUserId(userId);
+        condition.setType(type);
+        condition.setStatus(EBlacklistStatus.VALID.getCode());
+        long count = blacklistBO.getTotalCount(condition);
+        if (count > 0) {
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public void dropBlacklist(Long id, String updater, String remark) {
         Blacklist blacklist = blacklistBO.getBlacklist(id);
         if (EBlacklistStatus.VALID.getCode().equals(blacklist.getStatus())) {
-            count = blacklistBO.removeBlacklist(id, updater, remark);
+            blacklistBO.removeBlacklist(id, updater, remark);
         } else {
             throw new BizException("xn000000", "记录不存在");
         }
-        return count;
     }
 
     @Override
     public Paginable<Blacklist> queryBlacklistPage(int start, int limit,
             Blacklist condition) {
-        return blacklistBO.getPaginable(start, limit, condition);
-    }
-
-    @Override
-    public List<Blacklist> queryBlacklistList(Blacklist condition) {
-        return blacklistBO.queryBlacklistList(condition);
+        Paginable<Blacklist> page = blacklistBO.getPaginable(start, limit,
+            condition);
+        List<Blacklist> list = page.getList();
+        for (Blacklist blacklist : list) {
+            User user = userBO.getUser(blacklist.getUserId());
+            blacklist.setUser(user);
+        }
+        return page;
     }
 
     @Override
     public Blacklist getBlacklist(Long id) {
-        return blacklistBO.getBlacklist(id);
+        Blacklist blacklist = blacklistBO.getBlacklist(id);
+        User user = userBO.getUser(blacklist.getUserId());
+        blacklist.setUser(user);
+        return blacklist;
     }
 
 }

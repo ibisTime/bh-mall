@@ -894,21 +894,30 @@ public class UserAOImpl implements IUserAO {
             res = new XN798015Res();
             res.setAuthorized(false);
         } else {
-            res = dentifyBO.doQueryZhimaScore(authLog.getSystemCode(),
-                authLog.getCompanyCode(), authLog.getAuthArg2(),
-                authLog.getAuthArg3());
-            if (res.isAuthorized()) {
-                if (StringUtils.isBlank(user.getIdNo())
-                        && StringUtils.isBlank(user.getRealName())) {
-                    // 更新用户芝麻分
-                    userBO.refreshIdentityZm(userId, authLog.getAuthArg3(),
-                        authLog.getAuthArg1(), authLog.getAuthArg2(),
-                        res.getZmScore());
-                } else {
-                    userBO.refreshZmScore(userId, res.getZmScore());
+            if (StringUtils.isBlank(user.getZmScore())
+                    && null == user.getZmAuthDatetime()) {
+                res = dentifyBO.doQueryZhimaScore(authLog.getSystemCode(),
+                    authLog.getCompanyCode(), authLog.getAuthArg2(),
+                    authLog.getAuthArg3());
+                if (res.isAuthorized()) {
+                    if (StringUtils.isBlank(user.getIdNo())
+                            && StringUtils.isBlank(user.getRealName())) {
+                        // 更新用户芝麻分
+                        userBO.refreshIdentityZm(userId, authLog.getAuthArg3(),
+                            authLog.getAuthArg1(), authLog.getAuthArg2(),
+                            res.getZmScore());
+                    } else {
+                        userBO.refreshZmScore(userId, res.getZmScore());
+                    }
+                    authLogBO.approveAuthPass(authLog.getCode(), "system",
+                        res.getZmScore(), res.getBizNo());
+                    res.setZmAuthDatetime(new Date());
                 }
-                authLogBO.approveAuthPass(authLog.getCode(), "system",
-                    res.getZmScore(), res.getBizNo());
+            } else {
+                res = new XN798015Res();
+                res.setAuthorized(true);
+                res.setZmScore(user.getZmScore());
+                res.setZmAuthDatetime(user.getZmAuthDatetime());
             }
         }
         return res;
@@ -1281,8 +1290,8 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", userId + "用户不存在");
         }
         XN001400Res res = new XN001400Res();
-
         res.setUserId(userId);
+        res.setH5OpenId(user.getH5OpenId());
         res.setLoginName(user.getLoginName());
         res.setNickname(user.getNickname());
         res.setMobile(user.getMobile());
@@ -1339,7 +1348,6 @@ public class UserAOImpl implements IUserAO {
         res.setIntroduce(user.getIntroduce());
         res.setLatitude(user.getLatitude());
         res.setLongitude(user.getLongitude());
-
         return res;
     }
 

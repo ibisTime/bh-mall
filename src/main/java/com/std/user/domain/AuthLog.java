@@ -2,8 +2,6 @@ package com.std.user.domain;
 
 import java.util.Date;
 
-import cn.jpush.api.report.UsersResult.User;
-
 import com.std.user.dao.base.ABaseDO;
 
 /**

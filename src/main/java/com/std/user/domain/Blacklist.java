@@ -41,6 +41,17 @@ public class Blacklist extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // *********db properties**********
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }

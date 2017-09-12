@@ -88,6 +88,4 @@
 		,remark = #{remark}
 		WHERE id = #{id}
 	</delete>
-
-
 </mapper>
