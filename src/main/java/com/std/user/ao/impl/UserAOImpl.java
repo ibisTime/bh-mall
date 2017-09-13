@@ -1291,7 +1291,7 @@ public class UserAOImpl implements IUserAO {
         }
         XN001400Res res = new XN001400Res();
         res.setUserId(userId);
-        res.setH5OpenId(user.getH5OpenId());
+        res.setOpenId(user.getH5OpenId());
         res.setLoginName(user.getLoginName());
         res.setNickname(user.getNickname());
         res.setMobile(user.getMobile());
