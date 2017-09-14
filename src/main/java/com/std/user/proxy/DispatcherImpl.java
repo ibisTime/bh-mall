@@ -41,7 +41,7 @@ public class DispatcherImpl implements IDispatcher {
         } catch (Exception e) {
             logger.error("系统异常：" + e.getMessage());
             if (e instanceof BizException) {
-                rm.setErrorCode(EErrorCode.BIZ_ERR.getCode());
+                rm.setErrorCode(((BizException) e).getErrorCode());
                 rm.setErrorInfo(((BizException) e).getErrorMessage());
                 rm.setData("");
             } else if (e instanceof ParaException) {

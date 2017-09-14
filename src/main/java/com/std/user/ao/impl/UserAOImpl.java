@@ -1161,9 +1161,6 @@ public class UserAOImpl implements IUserAO {
             User dbUser = userBO.doGetUserByOpenId(appOpenId, h5OpenId,
                 companyCode, systemCode);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                if (!EUserStatus.NORMAL.getCode().equals(dbUser.getStatus())) {
-                    throw new BizException("lock", "用户状态异常");
-                }
                 addLoginAmount(dbUser);// 每天登录送积分
                 result = new XN805170Res(dbUser.getUserId());
             } else {

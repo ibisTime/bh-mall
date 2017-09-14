@@ -56,7 +56,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (CollectionUtils.isNotEmpty(userList)) {
             user = userList.get(0);
             if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-                throw new BizException("10002", "用户被锁定");
+                throw new BizException("user_lock", "用户状态异常");
             }
         }
         return user;
