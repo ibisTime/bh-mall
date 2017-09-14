@@ -32,6 +32,12 @@
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
 			</if>

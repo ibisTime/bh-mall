@@ -33,7 +33,7 @@ public class XN805215 extends AProcessor {
         condition.setApplyUser(req.getApplyUser());
         condition.setApplyDatetimeStart(DateUtil.getFrontDate(
             req.getDateStart(), false));
-        condition.setApplyDatetimeEnd(DateUtil.getFrontDate(req.getDateStart(),
+        condition.setApplyDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
             true));
 
         condition.setApproveUser(req.getApproveUser());
