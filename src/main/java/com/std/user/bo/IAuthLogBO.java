@@ -20,7 +20,8 @@ public interface IAuthLogBO extends IPaginableBO<AuthLog> {
     public int approveAuthPass(String code, String approveUser, String result,
             String remark);
 
-    public int approveAuthNoPass(String code, String approveUser, String remark);
+    public int approveAuthNoPass(String code, String approveUser,
+            String result, String remark);
 
     public List<AuthLog> queryAuthLogList(AuthLog condition);
 

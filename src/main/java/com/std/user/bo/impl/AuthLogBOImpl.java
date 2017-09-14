@@ -110,7 +110,8 @@ public class AuthLogBOImpl extends PaginableBOImpl<AuthLog> implements
     }
 
     @Override
-    public int approveAuthNoPass(String code, String approveUser, String remark) {
+    public int approveAuthNoPass(String code, String approveUser,
+            String result, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             AuthLog data = new AuthLog();
@@ -118,6 +119,7 @@ public class AuthLogBOImpl extends PaginableBOImpl<AuthLog> implements
             data.setStatus(EAuthStatus.APPROVE_NO.getCode());
             data.setApproveUser(approveUser);
             data.setApproveDatetime(new Date());
+            data.setResult(result);
             data.setRemark(remark);
             count = authLogDAO.approveAuth(data);
         }

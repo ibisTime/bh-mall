@@ -60,7 +60,8 @@ public class AuthLogAOImpl implements IAuthLogAO {
             Date gradDate = DateUtil.getFrontDate(gradDatetime, false);
             userBO.refreshGradDatetime(data.getApplyUser(), gradDate);
         } else {
-            authLogBO.approveAuthNoPass(code, approveUser, remark);
+            authLogBO
+                .approveAuthNoPass(code, approveUser, gradDatetime, remark);
         }
     }
 

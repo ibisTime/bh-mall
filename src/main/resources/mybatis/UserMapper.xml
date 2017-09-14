@@ -549,16 +549,10 @@
 	<update id="update_wx_info" parameterType="user">
 		UPDATE tstd_user
 		SET
-		open_id = #{openId}
+		union_id =#{unionId}
+		,h5_open_id =#{h5OpenId}
+		,app_open_id =#{appOpenId}
 		,nickname = #{nickname}
-		WHERE
-		user_id = #{userId}		
-	</update>
-	
-	<update id="update_wx_openId" parameterType="user">
-		UPDATE tstd_user
-		SET
-		open_id = #{openId}
 		WHERE
 		user_id = #{userId}		
 	</update>

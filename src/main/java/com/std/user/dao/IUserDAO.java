@@ -77,8 +77,6 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 微信登录更新用户信息
     public int updateWxInfo(User data);
 
-    public int updateWxOpenId(User data);
-
     public int approveUser(User data);
 
     public int updateDivRate(User data);

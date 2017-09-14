@@ -24,10 +24,8 @@ public class XN805211 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        authLogAO
-            .approveStudentAuth(req.getCode(), req.getApproveResult(),
-                req.getApproveUser(), req.getGradDatetime(),
-                req.getApproveResult());
+        authLogAO.approveStudentAuth(req.getCode(), req.getApproveResult(),
+            req.getApproveUser(), req.getGradDatetime(), req.getRemark());
         return new BooleanRes(true);
     }
 

@@ -734,7 +734,8 @@ public class UserAOImpl implements IUserAO {
             userStatus = EUserStatus.NORMAL;
         }
         userBO.refreshStatus(userId, userStatus, updater, remark);
-        if (!EUserKind.Plat.getCode().equals(user.getKind())) {
+        if (!EUserKind.Plat.getCode().equals(user.getKind())
+                && PhoneUtil.isMobile(mobile)) {
             // 发送短信
             smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
                     + smsContent, "805091", user.getCompanyCode(),
