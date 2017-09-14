@@ -209,8 +209,8 @@ public class UserAOImpl implements IUserAO {
                     amount = AmountUtil.mul(1000L,
                         Double.valueOf(sysConfig.getCvalue()));
                     accountBO.doTransferAmountRemote(getSysUserId(systemCode),
-                        userId, ECurrency.JF, amount, EBizType.AJ_REG, "用户["
-                                + mobile + "]推荐送积分", "推荐送积分");
+                        userId, ECurrency.JF, amount, EBizType.AJ_REG_REF,
+                        "用户[" + mobile + "]推荐送积分", "推荐送积分");
                 }
             }
         }
@@ -1161,6 +1161,9 @@ public class UserAOImpl implements IUserAO {
             User dbUser = userBO.doGetUserByOpenId(appOpenId, h5OpenId,
                 companyCode, systemCode);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                if (!EUserStatus.NORMAL.getCode().equals(dbUser.getStatus())) {
+                    throw new BizException("lock", "用户状态异常");
+                }
                 addLoginAmount(dbUser);// 每天登录送积分
                 result = new XN805170Res(dbUser.getUserId());
             } else {

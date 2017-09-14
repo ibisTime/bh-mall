@@ -75,6 +75,7 @@ public class SignLogAOImpl implements ISignLogAO {
         Long days = signLogBO.getSerialsSignDays(userId);
         boolean todaySign = false;
         SignLog condition = new SignLog();
+        condition.setUserId(userId);
         condition.setSignDatetimeStart(DateUtil.getTodayStart());
         condition.setSignDatetimeEnd(DateUtil.getTodayEnd());
         if (signLogBO.getTotalCount(condition) > 0) {
