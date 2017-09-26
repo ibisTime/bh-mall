@@ -443,8 +443,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('qiniu','qiniu_secret_key','ed5q5pSqKZZDN80gjGSkX93TmdDMTeZPVNd5bxgA','admin',now(),'七牛云key2','CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('qiniu','qiniu_bucket','hyds','admin',now(),'存储空间','CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('qiniu','qiniu_domain','ov30dsi08.bkt.clouddn.com','admin',now(),'访问域名','CD-CHW000015','CD-CHW000015');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_access_key','wx9b874d991d7e50d5','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_secret_key','aa1832cf32722e0fb977a6c9f6aafa20','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_access_key','wxcc167aa0ba8adb20','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('wx_h5','wx_h5_secret_key','33005a35e5e19b08b07e9d52c74400ff','admin',now(),NULL,'CD-CHW000015','CD-CHW000015');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_reg_addjf','10','admin',now(),'注册送积分数量','CD-CHW000015','CD-CHW000015');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('gift','cuser_sign_addjf','15','admin',now(),'签到送积分数量','CD-CHW000015','CD-CHW000015');
