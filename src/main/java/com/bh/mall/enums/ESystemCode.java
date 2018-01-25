@@ -1,0 +1,50 @@
+/**
+ * @Title ECurrency.java 
+ * @Package com.ibis.account.enums 
+ * @Description 
+ * @author miyb  
+ * @date 2015-3-15 下午4:41:06 
+ * @version V1.0   
+ */
+package com.bh.mall.enums;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author: xieyj 
+ * @since: 2016年12月24日 下午1:51:38 
+ * @history:
+ */
+public enum ESystemCode {
+    CSH("CD-CCSH00000X", "橙商户"), CAIGO("CD-CCG000007", "菜狗商城"), DZT(
+            "CD-CDZT000009", "定制通"), YAOCHENG("CD-CYC000009", "姚橙"), PIPE(
+            "CD-CGD000006", "全能水电工助手"), JKYG("CD-JKEG000011", "健康E购"), SERVICE(
+            "CD-CJJ000010", "公共服务平台"), YLQ("CD-YLQ000014", "一两千"), HW(
+            "CD-CHW000015", "户外电商");
+
+    public static Map<String, ESystemCode> getCurrencyMap() {
+        Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();
+        for (ESystemCode currency : ESystemCode.values()) {
+            map.put(currency.getCode(), currency);
+        }
+        return map;
+    }
+
+    ESystemCode(String code, String value) {
+        this.code = code;
+        this.value = value;
+    }
+
+    private String code;
+
+    private String value;
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getValue() {
+        return value;
+    }
+}

@@ -12,49 +12,39 @@
 
 	
 	<!-- 分页BO层注入paginableDao -->
-	<bean id="userBO" class="com.std.user.bo.impl.UserBOImpl">
+	<bean id="userBO" class="com.bh.mall.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl" />
 	</bean>
-	<bean id="userRelationBO" class="com.std.user.bo.impl.UserRelationBOImpl">
+	<bean id="userRelationBO" class="com.bh.mall.bo.impl.UserRelationBOImpl">
 		<property name="paginableDAO" ref="userRelationDAOImpl" />
 	</bean>
-	<bean id="addressBO" class="com.std.user.bo.impl.AddressBOImpl">
+	<bean id="addressBO" class="com.bh.mall.bo.impl.AddressBOImpl">
 		<property name="paginableDAO" ref="addressDAOImpl"/>
 	</bean>	
-	<bean id="sysMenuBO" class="com.std.user.bo.impl.SYSMenuBOImpl">
+	<bean id="sysMenuBO" class="com.bh.mall.bo.impl.SYSMenuBOImpl">
 		<property name="paginableDAO" ref="sysMenuDAOImpl"/>
 	</bean>
 	
-	<bean id="sysRoleBO" class="com.std.user.bo.impl.SYSRoleBOImpl">
+	<bean id="sysRoleBO" class="com.bh.mall.bo.impl.SYSRoleBOImpl">
 		<property name="paginableDAO" ref="sysRoleDAOImpl"/>
 	</bean>
-	<bean id="sysMenuRoleBO" class="com.std.user.bo.impl.SYSMenuRoleBOImpl">
+	<bean id="sysMenuRoleBO" class="com.bh.mall.bo.impl.SYSMenuRoleBOImpl">
 		<property name="paginableDAO" ref="sysMenuRoleDAOImpl"/>
 	</bean>
-	<bean id="signLogBO" class="com.std.user.bo.impl.SignLogBOImpl">
+	<bean id="signLogBO" class="com.bh.mall.bo.impl.SignLogBOImpl">
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
 	</bean>
 
-	<bean id="cNavigateBO" class="com.std.user.bo.impl.CNavigateBOImpl">
+	<bean id="cNavigateBO" class="com.bh.mall.bo.impl.CNavigateBOImpl">
 		<property name="paginableDAO" ref="cNavigateDAOImpl"/>
 	</bean>
 	
-	<bean id="sysDictBO" class="com.std.user.bo.impl.SYSDictBOImpl">
+	<bean id="sysDictBO" class="com.bh.mall.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl"/>
 	</bean>	
-	<bean id="sysConfigBO" class="com.std.user.bo.impl.SYSConfigBOImpl">
+	<bean id="sysConfigBO" class="com.bh.mall.bo.impl.SYSConfigBOImpl">
 		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
 	</bean>	
 	
-	<bean id="invitationBO" class="com.std.user.bo.impl.InvitationBOImpl">
-		<property name="paginableDAO" ref="invitationDAOImpl"/>
-	</bean>	
-		
-	<bean id="blacklistBO" class="com.std.user.bo.impl.BlacklistBOImpl">
-		<property name="paginableDAO" ref="blacklistDAOImpl"/>
-	</bean>	
 	
-	<bean id="authLogBO" class="com.std.user.bo.impl.AuthLogBOImpl">
-		<property name="paginableDAO" ref="authLogDAOImpl"/>
-	</bean>	
 </beans>

@@ -2,24 +2,17 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>		
-		<typeAlias alias="user" type="com.std.user.domain.User" />
-		<typeAlias alias="address" type="com.std.user.domain.Address" />
-		<typeAlias alias="sysMenu" type="com.std.user.domain.SYSMenu" />
-	    <typeAlias alias="sysRole" type="com.std.user.domain.SYSRole" />
- 	    <typeAlias alias="sysMenuRole" type="com.std.user.domain.SYSMenuRole" />
+		<typeAlias alias="user" type="com.bh.mall.domain.User" />
+		<typeAlias alias="address" type="com.bh.mall.domain.Address" />
+		<typeAlias alias="sysMenu" type="com.bh.mall.domain.SYSMenu" />
+	    <typeAlias alias="sysRole" type="com.bh.mall.domain.SYSRole" />
+ 	    <typeAlias alias="sysMenuRole" type="com.bh.mall.domain.SYSMenuRole" />
  	    
- 	    <typeAlias alias="userRelation" type="com.std.user.domain.UserRelation" />
- 	    <typeAlias alias="signLog" type="com.std.user.domain.SignLog" />
- 	    <typeAlias alias="userExt" type="com.std.user.domain.UserExt" />
- 	    <typeAlias alias="signLog" type="com.std.user.domain.SignLog" />
- 	    
- 	    <typeAlias alias="cNavigate" type="com.std.user.domain.CNavigate" />
-	    <typeAlias alias="sysDict" type="com.std.user.domain.SYSDict" />
-	    <typeAlias alias="sysConfig" type="com.std.user.domain.SYSConfig" />
-	    <typeAlias alias="fieldTimes" type="com.std.user.domain.FieldTimes" />
-	    <typeAlias alias="invitation" type="com.std.user.domain.Invitation" />
+ 	    <typeAlias alias="userRelation" type="com.bh.mall.domain.UserRelation" />
+ 	    <typeAlias alias="signLog" type="com.bh.mall.domain.SignLog" />
+ 	    <typeAlias alias="cNavigate" type="com.bh.mall.domain.CNavigate" />
+	    <typeAlias alias="sysDict" type="com.bh.mall.domain.SYSDict" />
+	    <typeAlias alias="sysConfig" type="com.bh.mall.domain.SYSConfig" />
 	    
-	    <typeAlias alias="blacklist" type="com.std.user.domain.Blacklist" />
-	    <typeAlias alias="authLog" type="com.std.user.domain.AuthLog" />
 	</typeAliases>
 </configuration>	
