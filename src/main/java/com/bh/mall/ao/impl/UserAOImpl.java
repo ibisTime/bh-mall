@@ -26,7 +26,6 @@ import com.bh.mall.ao.IUserAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
-import com.bh.mall.bo.ISignLogBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IUserRelationBO;
@@ -94,9 +93,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     ISmsOutBO smsOutBO;
-
-    @Autowired
-    protected ISignLogBO signLogBO;
 
     @Autowired
     protected ISYSConfigBO sysConfigBO;
@@ -381,32 +377,7 @@ public class UserAOImpl implements IUserAO {
                     + EUserStatus.getMap().get(user.getStatus()).getValue()
                     + "，请联系工作人员");
         }
-        addLoginAmount(user);
         return user.getUserId();
-    }
-
-    // 每天登录送积分
-    private Long addLoginAmount(User user) {
-        Long amount = 0L;
-        SYSConfig sysConfig = sysConfigBO.getConfig(
-            SysConstant.CUSER_LOGIN_ADDJF, user.getCompanyCode(),
-            user.getSystemCode());
-        if (null != sysConfig) {
-            if (EUserKind.Customer.getCode().equals(user.getKind())) {
-                Boolean result = signLogBO.isSignToday(user.getUserId());
-                if (!result) {
-                    signLogBO.saveSignLog(user.getUserId(), "",
-                        user.getSystemCode());
-                    amount = AmountUtil.mul(1000L,
-                        Double.valueOf(sysConfig.getCvalue()));
-                    accountBO.doTransferAmountRemote(
-                        getSysUserId(user.getSystemCode()), user.getUserId(),
-                        ECurrency.JF, amount, EBizType.AJ_SIGN,
-                        "用户[" + user.getMobile() + "]登录送积分", "登录送积分");
-                }
-            }
-        }
-        return amount;
     }
 
     @Override
@@ -711,7 +682,6 @@ public class UserAOImpl implements IUserAO {
             User dbUser = userBO.doGetUserByOpenId(appOpenId, h5OpenId,
                 companyCode, systemCode);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                addLoginAmount(dbUser);// 每天登录送积分
                 result = new XN805170Res(dbUser.getUserId());
             } else {
                 String nickname = (String) wxRes.get("nickname");

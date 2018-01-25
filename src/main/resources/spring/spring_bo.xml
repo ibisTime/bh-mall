@@ -31,9 +31,7 @@
 	<bean id="sysMenuRoleBO" class="com.bh.mall.bo.impl.SYSMenuRoleBOImpl">
 		<property name="paginableDAO" ref="sysMenuRoleDAOImpl"/>
 	</bean>
-	<bean id="signLogBO" class="com.bh.mall.bo.impl.SignLogBOImpl">
-		<property name="paginableDAO" ref="signLogDAOImpl"/>
-	</bean>
+	
 
 	<bean id="cNavigateBO" class="com.bh.mall.bo.impl.CNavigateBOImpl">
 		<property name="paginableDAO" ref="cNavigateDAOImpl"/>

@@ -9,7 +9,6 @@
  	    <typeAlias alias="sysMenuRole" type="com.bh.mall.domain.SYSMenuRole" />
  	    
  	    <typeAlias alias="userRelation" type="com.bh.mall.domain.UserRelation" />
- 	    <typeAlias alias="signLog" type="com.bh.mall.domain.SignLog" />
  	    <typeAlias alias="cNavigate" type="com.bh.mall.domain.CNavigate" />
 	    <typeAlias alias="sysDict" type="com.bh.mall.domain.SYSDict" />
 	    <typeAlias alias="sysConfig" type="com.bh.mall.domain.SYSConfig" />
