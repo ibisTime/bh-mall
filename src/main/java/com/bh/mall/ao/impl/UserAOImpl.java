@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IUserAO;
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IIdentifyBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISignLogBO;
@@ -92,9 +91,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected ISYSRoleBO sysRoleBO;
-
-    @Autowired
-    IIdentifyBO dentifyBO;
 
     @Autowired
     ISmsOutBO smsOutBO;
