@@ -1,17 +1,12 @@
 package com.bh.mall.dto.req;
 
 /**
- * 分页查询角色
+ * 列表查询角色
  * @author: xieyj 
- * @since: 2016年5月16日 下午9:49:45 
+ * @since: 2016年5月16日 下午9:51:10 
  * @history:
  */
-public class XN627925Req extends APageReq {
-
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1L;
+public class XN627936Req {
 
     // 角色名称(选填)
     private String name;

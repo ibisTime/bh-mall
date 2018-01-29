@@ -150,9 +150,38 @@ public class User extends ABaseDO {
     private String systemCode;
 
     // ******db******
+    // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
+    private String loginType;
+
+    // 注册时间起
+    private Date createDatetimeStart;
+
+    // 注册时间止
+    private Date createDatetimeEnd;
+
+    // 用户推荐人
     private User refereeUser;
 
     private Integer refeereLevel;
+
+    /***** 模糊查询使用字段 ******/
+    // 登录名模糊查询
+    private String loginNameForQuery;
+
+    // 手机号模糊查询
+    private String mobileForQuery;
+
+    // 真实姓名模糊查询
+    private String realNameForQuery;
+
+    // 省份
+    private String provinceForQuery;
+
+    // 城市
+    private String cityForQuery;
+
+    // 县区
+    private String areaForQuery;
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -528,6 +557,78 @@ public class User extends ABaseDO {
 
     public void setRefeereLevel(Integer refeereLevel) {
         this.refeereLevel = refeereLevel;
+    }
+
+    public String getLoginNameForQuery() {
+        return loginNameForQuery;
+    }
+
+    public void setLoginNameForQuery(String loginNameForQuery) {
+        this.loginNameForQuery = loginNameForQuery;
+    }
+
+    public String getMobileForQuery() {
+        return mobileForQuery;
+    }
+
+    public void setMobileForQuery(String mobileForQuery) {
+        this.mobileForQuery = mobileForQuery;
+    }
+
+    public String getRealNameForQuery() {
+        return realNameForQuery;
+    }
+
+    public void setRealNameForQuery(String realNameForQuery) {
+        this.realNameForQuery = realNameForQuery;
+    }
+
+    public String getProvinceForQuery() {
+        return provinceForQuery;
+    }
+
+    public void setProvinceForQuery(String provinceForQuery) {
+        this.provinceForQuery = provinceForQuery;
+    }
+
+    public String getCityForQuery() {
+        return cityForQuery;
+    }
+
+    public void setCityForQuery(String cityForQuery) {
+        this.cityForQuery = cityForQuery;
+    }
+
+    public String getAreaForQuery() {
+        return areaForQuery;
+    }
+
+    public void setAreaForQuery(String areaForQuery) {
+        this.areaForQuery = areaForQuery;
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
 }

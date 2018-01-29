@@ -7,7 +7,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SYSMenuRole;
-import com.bh.mall.dto.req.XN627927Req;
+import com.bh.mall.dto.req.XN627920ZReq;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -19,11 +19,11 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2016年4月17日 上午8:26:30 
  * @history:
  */
-public class XN627927 extends AProcessor {
+public class XN627920Z extends AProcessor {
     private ISYSMenuRoleAO sysMenuRoleAO = SpringContextHolder
         .getBean(ISYSMenuRoleAO.class);
 
-    private XN627927Req req = null;
+    private XN627920ZReq req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -39,7 +39,7 @@ public class XN627927 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627927Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627920ZReq.class);
         StringValidater.validateBlank(req.getRoleCode(), req.getUpdater(),
             req.getSystemCode());
         if (CollectionUtils.isEmpty(req.getMenuCodeList())) {

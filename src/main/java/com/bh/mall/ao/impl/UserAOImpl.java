@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IUserAO;
-import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
@@ -43,6 +42,7 @@ import com.bh.mall.dto.res.XN805170Res;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.ELoginType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserPwd;
@@ -67,9 +67,6 @@ public class UserAOImpl implements IUserAO {
     protected IUserBO userBO;
 
     @Autowired
-    protected IAccountBO accountBO;
-
-    @Autowired
     protected InstantMsgImpl instantMsgImpl;
 
     @Autowired
@@ -88,7 +85,7 @@ public class UserAOImpl implements IUserAO {
         if (EUserKind.Customer.getCode().equals(kind)
                 || EUserKind.Merchant.getCode().equals(kind)) {
             condition.setLoginName(loginName);
-            // condition.setLoginType(ELoginType.MOBILE.getCode());
+            condition.setLoginType(ELoginType.MOBILE.getCode());
         } else {
             condition.setLoginName(loginName);
         }
@@ -143,8 +140,6 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.CH_CNY.getCode());
             currencyList.add(ECurrency.JS_CNY.getCode());
         }
-        accountBO.distributeAccountList(userId, mobile, kind, currencyList,
-            companyCode, systemCode);
     }
 
     // 第三方注册
@@ -203,9 +198,6 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.TJ_CNY.getCode());
             currencyList.add(ECurrency.CH_CNY.getCode());
             currencyList.add(ECurrency.JS_CNY.getCode());
-            accountBO.distributeAccountList(userId, req.getMobile(),
-                req.getKind(), currencyList, req.getCompanyCode(),
-                req.getSystemCode());
             // 发送短信
             smsOutBO.sendSmsOut(req.getMobile(),
                 "尊敬的" + PhoneUtil.hideMobile(req.getMobile())

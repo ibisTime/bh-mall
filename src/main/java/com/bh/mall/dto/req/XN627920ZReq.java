@@ -1,26 +1,28 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
- * 增加角色
+ * 菜单角色-增加菜单角色
  * @author: xieyj 
- * @since: 2016年5月16日 下午10:53:50 
+ * @since: 2016年5月16日 下午10:46:42 
  * @history:
  */
-public class XN627923Req {
+public class XN627920ZReq {
 
-    // 角色名称(必填)
-    private String name;
+    // 角色编号（必填）
+    private String roleCode;
 
-    // 角色等级(必填)
-    private String level;
+    // 菜单数组（必填）
+    private List<String> menuCodeList;
 
-    // 更新人(必填)
+    // 更新人（必填）
     private String updater;
 
-    // 备注(选填)
+    // 备注（选填）
     private String remark;
 
-    // 系统编号（必填）
+    // 系统编号(必填)
     private String systemCode;
 
     public String getSystemCode() {
@@ -31,20 +33,20 @@ public class XN627923Req {
         this.systemCode = systemCode;
     }
 
-    public String getName() {
-        return name;
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
-    public String getLevel() {
-        return level;
+    public List<String> getMenuCodeList() {
+        return menuCodeList;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setMenuCodeList(List<String> menuCodeList) {
+        this.menuCodeList = menuCodeList;
     }
 
     public String getUpdater() {

@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2016年5月16日 下午10:45:20 
  * @history:
  */
-public class XN627926Req {
+public class XN627926ZReq {
 
     // 角色编号（必填）
     private String roleCode;

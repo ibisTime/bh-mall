@@ -1,12 +1,12 @@
 package com.bh.mall.dto.req;
 
 /**
- * 删除角色
- * @author: xieyj 
- * @since: 2016年5月16日 下午10:06:08 
+ * 角色-详情
+ * @author: Gejin 
+ * @since: 2016年4月16日 下午5:24:01 
  * @history:
  */
-public class XN627924Req {
+public class XN627937Req {
 
     // 角色编号(必填)
     private String code;
@@ -18,5 +18,4 @@ public class XN627924Req {
     public void setCode(String code) {
         this.code = code;
     }
-
 }
