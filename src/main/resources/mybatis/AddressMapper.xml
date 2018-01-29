@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.std.user.dao.IAddressDAO">
+<mapper namespace="com.bh.mall.dao.IAddressDAO">
 	<resultMap id="address_DB_Result" type="address">
 		<result column="code" property="code" />
-		<result column="addressee" property="addressee" />
+		<result column="type" property="type"/>
+		<result column="receiver" property="receiver" />
 		<result column="mobile" property="mobile" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
@@ -18,6 +19,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
@@ -33,7 +37,8 @@
 	<select id="select_address" parameterType="address" resultMap="address_DB_Result">
 		SELECT
 		code,
-		addressee,
+		type,
+		receiver,
 		mobile,
 		province,
 		city,
@@ -43,7 +48,7 @@
 		user_id,
 		system_code
 		FROM
-		tstd_address t
+		tbh_address t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -54,12 +59,12 @@
 
 	<select id="select_address_count" parameterType="address"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_address t
+		SELECT count(1) FROM tbh_address t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_address" parameterType="address">
-		INSERT INTO tstd_address(
+		INSERT INTO tbh_address(
 		code
 		,addressee
 		,mobile
@@ -86,7 +91,7 @@
 	</insert>
 
 	<update id="update_address" parameterType="address">
-		UPDATE tstd_address
+		UPDATE tbh_address
 		SET
 		addressee=#{addressee},
 		mobile=#{mobile},
@@ -100,7 +105,7 @@
 	</update>
 	
 	<update id="update_addressDef" parameterType="address">
-		UPDATE tstd_address
+		UPDATE tbh_address
 		SET
 		is_default=#{isDefault}
 		WHERE
@@ -108,7 +113,7 @@
 	</update>
 	
 	<update id="update_addressDefByUser" parameterType="address">
-		UPDATE tstd_address
+		UPDATE tbh_address
 		SET
 		is_default=#{isDefault}
 		WHERE
@@ -116,7 +121,7 @@
 	</update>
 	
 	<delete id="delete_address" parameterType="address">
-		DELETE FROM tstd_address
+		DELETE FROM tbh_address
 		WHERE
 		code = #{code}
 	</delete>

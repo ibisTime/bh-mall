@@ -5,16 +5,14 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * @author: xieyj 
- * @since: 2017年7月16日 下午4:51:56 
- * @history:
- */
+* 代理
+* @author: chenshan 
+* @since: 2018-01-29 15:45:50
+* @history:
+*/
 public class User extends ABaseDO {
 
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1975331351390818527L;
+    private static final long serialVersionUID = 1L;
 
     // userId
     private String userId;
@@ -24,6 +22,9 @@ public class User extends ABaseDO {
 
     // 手机号
     private String mobile;
+
+    // 微信号
+    private String weixinId;
 
     // 头像
     private String photo;
@@ -40,11 +41,26 @@ public class User extends ABaseDO {
     // 身份标识
     private String kind;
 
-    // 用户等级
-    private String level;
+    // 目前用户等级
+    private String nowLevel;
+
+    // 需升等级
+    private String applyLevel;
 
     // 推荐人
     private String userReferee;
+
+    // 介绍人
+    private String introducer;
+
+    // 上级用户编号
+    private String highLevel;
+
+    // 意向归属用户
+    private String purUser;
+
+    // 团队名称
+    private String teamName;
 
     // 证件类型
     private String idKind;
@@ -52,29 +68,35 @@ public class User extends ABaseDO {
     // 证件号码
     private String idNo;
 
+    // 身份证正面照片
+    private String idCardReverse;
+
+    // 身份证背面照片
+    private String idCardFront;
+
+    // 手持身份证照片
+    private String idCardHand;
+
     // 真实姓名
     private String realName;
-
-    // 支付密码
-    private String tradePwd;
-
-    // 支付密码强度
-    private String tradePwdStrength;
-
-    // 芝麻分
-    private String zmScore;
-
-    // 芝麻认证时间
-    private Date zmAuthDatetime;
 
     // 角色编号
     private String roleCode;
 
-    // 分成比例
-    private Double divRate;
+    // 意向状态
+    private String intendStatus;
 
-    // 状态
-    private String status;
+    // 来源
+    private String source;
+
+    // 最开始申请时间
+    private Date applyDatetime;
+
+    // 关联管理员
+    private String manager;
+
+    // 红线金额
+    private Long redAmount;
 
     // 开放平台和公众平台唯一号
     private String unionId;
@@ -85,37 +107,10 @@ public class User extends ABaseDO {
     // 微信app第三方登录开放编号
     private String appOpenId;
 
-    // 性别(1 男 0 女)
-    private String gender;
-
-    // 介绍
-    private String introduce;
-
-    // 生日
-    private String birthday;
-
-    // 邮箱
-    private String email;
-
-    // 学位
-    private String diploma;
-
-    // 职业
-    private String occupation;
-
-    // 毕业时间
-    private Date gradDatetime;
-
-    // 工作年限
-    private String workTime;
-
-    // 附件
-    private String pdf;
-
     // 省
     private String province;
 
-    // 市区
+    // 市
     private String city;
 
     // 区(县)
@@ -124,507 +119,399 @@ public class User extends ABaseDO {
     // 具体地址
     private String address;
 
-    // 经度
-    private String longitude;
-
-    // 维度
-    private String latitude;
-
     // 注册时间
     private Date createDatetime;
 
-    // 更新人
+    // 最后更新人
     private String updater;
 
-    // 更新时间
+    // 最后更新时间
     private Date updateDatetime;
+
+    // 最后一次保证金截图
+    private String cashPdf;
+
+    // 最后审核人
+    private String approver;
+
+    // 最后审核时间
+    private Date approveDatetime;
+
+    // 最后一条代理轨迹记录
+    private String lastAgentLog;
 
     // 备注
     private String remark;
 
-    // 所属公司
+    // 公司编号
     private String companyCode;
 
     // 系统编号
     private String systemCode;
 
-    /***** 模糊查询使用字段 ******/
-    // 登录名模糊查询
-    private String loginNameForQuery;
-
-    // 手机号模糊查询
-    private String mobileForQuery;
-
-    // 真实姓名模糊查询
-    private String realNameForQuery;
-
-    // 省份
-    private String provinceForQuery;
-
-    // 城市
-    private String cityForQuery;
-
-    // 县区
-    private String areaForQuery;
-
-    /***** 辅助字段 ******/
-
-    // 是否设置交易密码
-    private boolean tradepwdFlag;
-
-    // ossUserId
-    private String ossUserId;
-
-    // 关注数
-    private Long totalFollowNum;
-
-    // 粉丝数
-    private Long totalFansNum;
-
-    // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
-    private String loginType;
-
-    // 注册时间起
-    private Date createDatetimeStart;
-
-    // 注册时间止
-    private Date createDatetimeEnd;
-
-    // 用户推荐人
+    // ******db******
     private User refereeUser;
 
     private Integer refeereLevel;
 
-    public Integer getRefeereLevel() {
-        return refeereLevel;
-    }
-
-    public void setRefeereLevel(Integer refeereLevel) {
-        this.refeereLevel = refeereLevel;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getLoginName() {
         return loginName;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setWeixinId(String weixinId) {
+        this.weixinId = weixinId;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getWeixinId() {
+        return weixinId;
     }
 
     public void setPhoto(String photo) {
         this.photo = photo;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getPhoto() {
+        return photo;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public String getLoginPwd() {
-        return loginPwd;
+    public String getNickname() {
+        return nickname;
     }
 
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
     }
 
-    public String getLoginPwdStrength() {
-        return loginPwdStrength;
+    public String getLoginPwd() {
+        return loginPwd;
     }
 
     public void setLoginPwdStrength(String loginPwdStrength) {
         this.loginPwdStrength = loginPwdStrength;
     }
 
-    public String getKind() {
-        return kind;
+    public String getLoginPwdStrength() {
+        return loginPwdStrength;
     }
 
     public void setKind(String kind) {
         this.kind = kind;
     }
 
-    public String getLevel() {
-        return level;
+    public String getKind() {
+        return kind;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setNowLevel(String nowLevel) {
+        this.nowLevel = nowLevel;
     }
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getNowLevel() {
+        return nowLevel;
+    }
+
+    public void setApplyLevel(String applyLevel) {
+        this.applyLevel = applyLevel;
+    }
+
+    public String getApplyLevel() {
+        return applyLevel;
     }
 
     public void setUserReferee(String userReferee) {
         this.userReferee = userReferee;
     }
 
-    public String getIdKind() {
-        return idKind;
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
+    }
+
+    public String getIntroducer() {
+        return introducer;
+    }
+
+    public void setHighLevel(String highLevel) {
+        this.highLevel = highLevel;
+    }
+
+    public String getHighLevel() {
+        return highLevel;
+    }
+
+    public void setPurUser(String purUser) {
+        this.purUser = purUser;
+    }
+
+    public String getPurUser() {
+        return purUser;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getTeamName() {
+        return teamName;
     }
 
     public void setIdKind(String idKind) {
         this.idKind = idKind;
     }
 
-    public String getIdNo() {
-        return idNo;
+    public String getIdKind() {
+        return idKind;
     }
 
     public void setIdNo(String idNo) {
         this.idNo = idNo;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdCardReverse(String idCardReverse) {
+        this.idCardReverse = idCardReverse;
+    }
+
+    public String getIdCardReverse() {
+        return idCardReverse;
+    }
+
+    public void setIdCardFront(String idCardFront) {
+        this.idCardFront = idCardFront;
+    }
+
+    public String getIdCardFront() {
+        return idCardFront;
+    }
+
+    public void setIdCardHand(String idCardHand) {
+        this.idCardHand = idCardHand;
+    }
+
+    public String getIdCardHand() {
+        return idCardHand;
     }
 
     public void setRealName(String realName) {
         this.realName = realName;
     }
 
-    public String getTradePwd() {
-        return tradePwd;
-    }
-
-    public void setTradePwd(String tradePwd) {
-        this.tradePwd = tradePwd;
-    }
-
-    public String getTradePwdStrength() {
-        return tradePwdStrength;
-    }
-
-    public void setTradePwdStrength(String tradePwdStrength) {
-        this.tradePwdStrength = tradePwdStrength;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
+    public String getRealName() {
+        return realName;
     }
 
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
     }
 
-    public Double getDivRate() {
-        return divRate;
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setDivRate(Double divRate) {
-        this.divRate = divRate;
+    public void setIntendStatus(String intendStatus) {
+        this.intendStatus = intendStatus;
     }
 
-    public String getStatus() {
-        return status;
+    public String getIntendStatus() {
+        return intendStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSource(String source) {
+        this.source = source;
     }
 
-    public String getUnionId() {
-        return unionId;
+    public String getSource() {
+        return source;
+    }
+
+    public void setApplyDatetime(Date applyDatetime) {
+        this.applyDatetime = applyDatetime;
+    }
+
+    public Date getApplyDatetime() {
+        return applyDatetime;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setRedAmount(Long redAmount) {
+        this.redAmount = redAmount;
+    }
+
+    public Long getRedAmount() {
+        return redAmount;
     }
 
     public void setUnionId(String unionId) {
         this.unionId = unionId;
     }
 
-    public String getH5OpenId() {
-        return h5OpenId;
+    public String getUnionId() {
+        return unionId;
     }
 
     public void setH5OpenId(String h5OpenId) {
         this.h5OpenId = h5OpenId;
     }
 
-    public String getAppOpenId() {
-        return appOpenId;
+    public String getH5OpenId() {
+        return h5OpenId;
     }
 
     public void setAppOpenId(String appOpenId) {
         this.appOpenId = appOpenId;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getIntroduce() {
-        return introduce;
-    }
-
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDiploma() {
-        return diploma;
-    }
-
-    public void setDiploma(String diploma) {
-        this.diploma = diploma;
-    }
-
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    public String getWorkTime() {
-        return workTime;
-    }
-
-    public void setWorkTime(String workTime) {
-        this.workTime = workTime;
-    }
-
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
-    }
-
-    public String getProvince() {
-        return province;
+    public String getAppOpenId() {
+        return appOpenId;
     }
 
     public void setProvince(String province) {
         this.province = province;
     }
 
-    public String getCity() {
-        return city;
+    public String getProvince() {
+        return province;
     }
 
     public void setCity(String city) {
         this.city = city;
     }
 
-    public String getArea() {
-        return area;
+    public String getCity() {
+        return city;
     }
 
     public void setArea(String area) {
         this.area = area;
     }
 
-    public String getAddress() {
-        return address;
+    public String getArea() {
+        return area;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public Date getCreateDatetime() {
-        return createDatetime;
+    public String getAddress() {
+        return address;
     }
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
     }
 
-    public String getUpdater() {
-        return updater;
+    public Date getCreateDatetime() {
+        return createDatetime;
     }
 
     public void setUpdater(String updater) {
         this.updater = updater;
     }
 
-    public Date getUpdateDatetime() {
-        return updateDatetime;
+    public String getUpdater() {
+        return updater;
     }
 
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
     }
 
-    public String getRemark() {
-        return remark;
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setCashPdf(String cashPdf) {
+        this.cashPdf = cashPdf;
+    }
+
+    public String getCashPdf() {
+        return cashPdf;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver;
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
+    }
+
+    public Date getApproveDatetime() {
+        return approveDatetime;
+    }
+
+    public void setLastAgentLog(String lastAgentLog) {
+        this.lastAgentLog = lastAgentLog;
+    }
+
+    public String getLastAgentLog() {
+        return lastAgentLog;
     }
 
     public void setRemark(String remark) {
         this.remark = remark;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
+    public String getRemark() {
+        return remark;
     }
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
     }
 
-    public String getSystemCode() {
-        return systemCode;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
     }
 
-    public String getLoginNameForQuery() {
-        return loginNameForQuery;
-    }
-
-    public void setLoginNameForQuery(String loginNameForQuery) {
-        this.loginNameForQuery = loginNameForQuery;
-    }
-
-    public String getMobileForQuery() {
-        return mobileForQuery;
-    }
-
-    public void setMobileForQuery(String mobileForQuery) {
-        this.mobileForQuery = mobileForQuery;
-    }
-
-    public String getRealNameForQuery() {
-        return realNameForQuery;
-    }
-
-    public void setRealNameForQuery(String realNameForQuery) {
-        this.realNameForQuery = realNameForQuery;
-    }
-
-    public String getProvinceForQuery() {
-        return provinceForQuery;
-    }
-
-    public void setProvinceForQuery(String provinceForQuery) {
-        this.provinceForQuery = provinceForQuery;
-    }
-
-    public String getCityForQuery() {
-        return cityForQuery;
-    }
-
-    public void setCityForQuery(String cityForQuery) {
-        this.cityForQuery = cityForQuery;
-    }
-
-    public String getAreaForQuery() {
-        return areaForQuery;
-    }
-
-    public void setAreaForQuery(String areaForQuery) {
-        this.areaForQuery = areaForQuery;
-    }
-
-    public String getOssUserId() {
-        return ossUserId;
-    }
-
-    public void setOssUserId(String ossUserId) {
-        this.ossUserId = ossUserId;
-    }
-
-    public Long getTotalFollowNum() {
-        return totalFollowNum;
-    }
-
-    public void setTotalFollowNum(Long totalFollowNum) {
-        this.totalFollowNum = totalFollowNum;
-    }
-
-    public Long getTotalFansNum() {
-        return totalFansNum;
-    }
-
-    public void setTotalFansNum(Long totalFansNum) {
-        this.totalFansNum = totalFansNum;
-    }
-
-    public String getLoginType() {
-        return loginType;
-    }
-
-    public void setLoginType(String loginType) {
-        this.loginType = loginType;
-    }
-
-    public Date getCreateDatetimeStart() {
-        return createDatetimeStart;
-    }
-
-    public void setCreateDatetimeStart(Date createDatetimeStart) {
-        this.createDatetimeStart = createDatetimeStart;
-    }
-
-    public Date getCreateDatetimeEnd() {
-        return createDatetimeEnd;
-    }
-
-    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
-        this.createDatetimeEnd = createDatetimeEnd;
+    public String getSystemCode() {
+        return systemCode;
     }
 
     public User getRefereeUser() {
@@ -635,35 +522,12 @@ public class User extends ABaseDO {
         this.refereeUser = refereeUser;
     }
 
-    public boolean isTradepwdFlag() {
-        return tradepwdFlag;
+    public Integer getRefeereLevel() {
+        return refeereLevel;
     }
 
-    public void setTradepwdFlag(boolean tradepwdFlag) {
-        this.tradepwdFlag = tradepwdFlag;
+    public void setRefeereLevel(Integer refeereLevel) {
+        this.refeereLevel = refeereLevel;
     }
 
-    public Date getGradDatetime() {
-        return gradDatetime;
-    }
-
-    public void setGradDatetime(Date gradDatetime) {
-        this.gradDatetime = gradDatetime;
-    }
-
-    public String getZmScore() {
-        return zmScore;
-    }
-
-    public void setZmScore(String zmScore) {
-        this.zmScore = zmScore;
-    }
-
-    public Date getZmAuthDatetime() {
-        return zmAuthDatetime;
-    }
-
-    public void setZmAuthDatetime(Date zmAuthDatetime) {
-        this.zmAuthDatetime = zmAuthDatetime;
-    }
 }
