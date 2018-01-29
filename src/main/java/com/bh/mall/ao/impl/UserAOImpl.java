@@ -28,7 +28,6 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IUserBO;
-import com.bh.mall.bo.IUserRelationBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.MD5Util;
@@ -38,12 +37,9 @@ import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SYSConfig;
-import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.User;
-import com.bh.mall.domain.UserRelation;
 import com.bh.mall.dto.req.XN805042Req;
 import com.bh.mall.dto.req.XN805043Req;
-import com.bh.mall.dto.req.XN805081ZReq;
 import com.bh.mall.dto.req.XN805095Req;
 import com.bh.mall.dto.req.XN805170Req;
 import com.bh.mall.dto.res.XN805041Res;
@@ -84,9 +80,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected InstantMsgImpl instantMsgImpl;
-
-    @Autowired
-    protected IUserRelationBO userRelationBO;
 
     @Autowired
     protected ISYSRoleBO sysRoleBO;
@@ -284,67 +277,6 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public String doApplyRegUser(XN805043Req req) {
         String userId = null;
-        if (ESystemCode.CAIGO.getCode().equals(req.getSystemCode())) {
-            userId = doApplyRegUserCaigo(req);
-        } else {
-        }
-        return userId;
-    }
-
-    private String doApplyRegUserCaigo(XN805043Req req) {
-        String userId = null;
-        if (EUserKind.Customer.getCode().equals(req.getKind())) {
-            // 验证手机号
-            userBO.isMobileExist(req.getMobile(), req.getKind(),
-                req.getCompanyCode(), req.getSystemCode());
-            // 判断登录密码是否为空
-            if (StringUtils.isBlank(req.getLoginPwd())) {
-                req.setLoginPwd(RandomUtil.generate6());
-            }
-            userId = userBO.doApplyRegUser(req, null);
-
-            // 分配账户
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, req.getMobile(),
-                req.getKind(), currencyList, req.getCompanyCode(),
-                req.getSystemCode());
-            // 发送短信
-            smsOutBO.sendSmsOut(req.getMobile(),
-                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
-                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
-                        + "，请及时登录网站更改密码。", "805043", req.getCompanyCode(),
-                req.getSystemCode());
-        } else if (EUserKind.Merchant.getCode().equals(req.getKind())) {
-            // 验证手机号
-            userBO.isMobileExist(req.getMobile(), req.getKind(),
-                req.getCompanyCode(), req.getSystemCode());
-            // 判断登录密码是否为空
-            if (StringUtils.isBlank(req.getLoginPwd())) {
-                req.setLoginPwd(RandomUtil.generate6());
-            }
-            userId = userBO.doApplyRegUser(req, null);
-
-            // 分配账户
-            List<String> currencyList = new ArrayList<String>();
-            currencyList.add(ECurrency.CNY.getCode());
-            currencyList.add(ECurrency.JF.getCode());
-            accountBO.distributeAccountList(userId, req.getMobile(),
-                req.getKind(), currencyList, req.getCompanyCode(),
-                req.getSystemCode());
-            // 发送短信
-            smsOutBO.sendSmsOut(req.getMobile(),
-                "尊敬的" + PhoneUtil.hideMobile(req.getMobile())
-                        + "用户，您已成功注册。初始化登录密码为" + req.getLoginPwd()
-                        + "，请及时登录网站更改密码。", "805043", req.getCompanyCode(),
-                req.getSystemCode());
-        } else if (EUserKind.Plat.getCode().equals(req.getKind())) {
-            // 验证登录名
-            userBO.isLoginNameExist(req.getLoginName(), req.getKind(),
-                req.getCompanyCode(), req.getSystemCode());
-            userId = userBO.doApplyRegUser(req, null);
-        }
         return userId;
     }
 
@@ -398,50 +330,6 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshPhoto(userId, photo);
     }
 
-    // 修改用户信息
-    public void doModifyUserExt(XN805081ZReq req) {
-    }
-
-    // 完善手机号和身份信息
-    @Override
-    public void doModfiyMobileAndIds(String userId, String mobile,
-            String realName, String idKind, String idNo) {
-        User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn0110", "用户不存在");
-        }
-        if (StringUtils.isBlank(user.getMobile())) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setMobile(mobile);
-            data.setRealName(realName);
-            data.setIdKind(idKind);
-            data.setIdNo(idNo);
-            userBO.refreshUserMobileIds(data);
-        }
-    }
-
-    // 修改经纬度
-    public void doModifyLngLat(String userId, String longitude, String latitude) {
-    }
-
-    @Override
-    public void doRoleUser(String userId, String roleCode, String updater,
-            String remark) {
-        User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", "用户不存在");
-        }
-        SYSRole role = sysRoleBO.getSYSRole(roleCode);
-        if (role == null) {
-            throw new BizException("li01004", "角色不存在");
-        }
-        if (!user.getSystemCode().equals(role.getSystemCode())) {
-            throw new BizException("li01004", "用户和角色系统不对应");
-        }
-        userBO.refreshRole(userId, roleCode, updater, remark);
-    }
-
     @Override
     public void doApproveUser(String userId, String approver,
             String approveResult, String divRate, String remark) {
@@ -457,16 +345,6 @@ public class UserAOImpl implements IUserAO {
             divRateD = StringValidater.toDouble(divRate);
         }
         userBO.approveUser(userId, approver, userStatus, divRateD, remark);
-    }
-
-    @Override
-    public void doModifyDivRate(String userId, Double divRate, String updater,
-            String remark) {
-        User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
-        userBO.refreshDivRate(userId, divRate);
     }
 
     @Override
@@ -597,16 +475,6 @@ public class UserAOImpl implements IUserAO {
             } else {
                 user.setTradepwdFlag(false);
             }
-            // 获取我关注的人
-            UserRelation toCondition = new UserRelation();
-            toCondition.setUserId(userId);
-            toCondition.setStatus(EBoolean.YES.getCode());
-            user.setTotalFollowNum(userRelationBO.getTotalCount(toCondition));
-            // 获取我粉丝的人
-            UserRelation condition = new UserRelation();
-            condition.setToUser(userId);
-            condition.setStatus(EBoolean.YES.getCode());
-            user.setTotalFansNum(userRelationBO.getTotalCount(condition));
         }
         return user;
     }

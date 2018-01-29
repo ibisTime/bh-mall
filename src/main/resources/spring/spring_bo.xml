@@ -15,9 +15,6 @@
 	<bean id="userBO" class="com.bh.mall.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl" />
 	</bean>
-	<bean id="userRelationBO" class="com.bh.mall.bo.impl.UserRelationBOImpl">
-		<property name="paginableDAO" ref="userRelationDAOImpl" />
-	</bean>
 	<bean id="addressBO" class="com.bh.mall.bo.impl.AddressBOImpl">
 		<property name="paginableDAO" ref="addressDAOImpl"/>
 	</bean>	

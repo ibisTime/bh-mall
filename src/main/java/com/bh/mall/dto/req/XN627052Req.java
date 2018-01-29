@@ -1,58 +1,34 @@
-package com.bh.mall.domain;
-
-import com.bh.mall.dao.base.ABaseDO;
+package com.bh.mall.dto.req;
 
 /** 
  * @author: xieyj 
- * @since: 2015年8月26日 下午10:45:36 
+ * @since: 2015年8月19日 下午7:41:26 
  * @history:
  */
-public class Address extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = -2168684738489818621L;
-
-    // 收件编号
+public class XN627052Req {
+    // 收件编号（必填）
     private String code;
 
-    // 类型(1.用户地址，2.售后地址)
-    private String type;
-
-    // 用户编号
-    private String userId;
-
-    // 收件人名称
+    // 收件人名称（必填）
     private String receiver;
 
-    // 手机号
+    // 手机号（必填）
     private String mobile;
 
-    // 省份
+    // 省份（必填）
     private String province;
 
-    // 城市
+    // 城市（必填）
     private String city;
 
-    // 区
+    // 区（必填）
     private String district;
 
-    // 具体地址
+    // 具体地址（必填）
     private String detailAddress;
 
-    // 是否默认地址
+    // 是否默认地址（选填）
     private String isDefault;
-
-    // 系统编号
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getCode() {
         return code;
@@ -60,14 +36,6 @@ public class Address extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getMobile() {
@@ -116,14 +84,6 @@ public class Address extends ABaseDO {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getReceiver() {

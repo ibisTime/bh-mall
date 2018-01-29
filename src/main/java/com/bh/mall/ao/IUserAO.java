@@ -52,18 +52,6 @@ public interface IUserAO {
     // 修改头像
     public void doModifyPhoto(String userId, String photo);
 
-    // 完善手机号和身份信息
-    public void doModfiyMobileAndIds(String userId, String mobile,
-            String realName, String idKind, String idNo);
-
-    // 设置角色
-    public void doRoleUser(String userId, String roleCode, String updater,
-            String remark);
-
-    // 修改分成比例
-    public void doModifyDivRate(String userId, Double divRate, String updater,
-            String remark);
-
     // 修改用户等级
     public void doUpLevel(String userId, String level);
 
