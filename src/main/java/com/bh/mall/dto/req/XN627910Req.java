@@ -8,7 +8,7 @@ import java.util.List;
  * @since: 2016年5月16日 下午10:46:42 
  * @history:
  */
-public class XN627920ZReq {
+public class XN627910Req {
 
     // 角色编号（必填）
     private String roleCode;
