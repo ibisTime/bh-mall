@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2016年5月16日 下午9:51:10 
  * @history:
  */
-public class XN627936Req {
+public class XN627926Req {
 
     // 角色名称(选填)
     private String name;
