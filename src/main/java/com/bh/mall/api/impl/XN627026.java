@@ -17,13 +17,13 @@ public class XN627026 extends AProcessor {
 	private XN627026Req req;
 	@Override
 	public Object doBusiness() throws BizException {
-		return agentUpgradeAO.getAgentUpgrade(req.getAgentCode());
+		return agentUpgradeAO.queryAgentUpgradeList(req.getAgentCode(), req.getCode());
 	}
 
 	@Override
 	public void doCheck(String inputparams) throws ParaException {
 		req = JsonUtils.json2Bean(inputparams, XN627026Req.class);
-		StringValidater.validateBlank(req.getAgentCode());
+		StringValidater.validateBlank(req.getCode());
 	}
 
 }

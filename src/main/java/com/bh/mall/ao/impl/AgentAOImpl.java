@@ -1,9 +1,10 @@
 package com.bh.mall.ao.impl;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.bo.IAgentBO;
@@ -15,10 +16,9 @@ import com.bh.mall.exception.BizException;
 public class AgentAOImpl implements IAgentAO {
 
 	@Autowired
-	IAgentBO agentBO;
+	private IAgentBO agentBO;
 	
 	@Override
-	@Transactional
 	public int editAgent(String code,String level,String name) {
 		Agent data=agentBO.getAgent(code);
 		if(data==null){
@@ -28,14 +28,12 @@ public class AgentAOImpl implements IAgentAO {
 	}
 
 	@Override
-	@Transactional
-	public Paginable<Agent> selectAgentPageList(int start, int limit, Agent condition) {
+	public Paginable<Agent> queryAgentListPage(int start, int limit, Agent condition) {
 		return agentBO.getPaginable(start, limit, condition);
 	}
 
 
 	@Override
-	@Transactional
 	public Agent getAgent(String code) {
 		Agent data = agentBO.getAgent(code);
 		if(data==null){
@@ -45,9 +43,7 @@ public class AgentAOImpl implements IAgentAO {
 	}
 
 	@Override
-	@Transactional
-	public Object selectAgentList(String name, String level) {
-		return agentBO.selectList(name, level);
+	public List<Agent> queryAgentList(String level, String name) {
+		return agentBO.queryAgentList(level, name);
 	}
-
 }

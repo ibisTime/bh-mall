@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.IAgentDao">
+<mapper namespace="com.bh.mall.dao.IAgentDAO">
 	<resultMap id="aegnt_DB_Result" type="agent">
 		<result column="code" property="code"/>
 		<result column="name" property="name"/>
 		<result column="level" property="level"/>
 	</resultMap>
-	<update id="update_agent" parameterType="agent">
-		UPDATE tbh_agent SET 
-		code=#{code},
-		name=#{name},
-		level=#{level}
-	</update>
-	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != ''">
+				AND code = #{code}
+			</if>
 			<if test="name != null and name != ''">
 				AND name like "%"#{name}"%"
 			</if>
@@ -35,14 +31,16 @@
 		</trim>
 	</select>
 	
-	<select id="get_agent" parameterType="java.lang.String" resultType="agent">
-		select * FROM agent WHERE code=#{code}
+	
+	<select id="select_count" parameterType="agent" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_agent
+		<include refid="where_condition"/>
 	</select>
 	
-	<select id="select_count" parameterType="user" resultType="java.lang.Integer">
-		SELECT count(*) FROM tbh_agent 
-		<include refid="where_condition"></include>
-	</select>
-	
-
+	<update id="update_agent" parameterType="agent">
+		UPDATE tbh_agent SET 
+		name=#{name},
+		level=#{level}
+		WHERE code=#{code}
+	</update>
 </mapper>

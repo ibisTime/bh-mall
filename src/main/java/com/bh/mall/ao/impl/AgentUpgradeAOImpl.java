@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IAgentUpgradeAO;
 import com.bh.mall.bo.IAgentUpgradeBO;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.domain.AgentUpgrade;
 import com.bh.mall.exception.BizException;
 
@@ -28,13 +27,17 @@ public class AgentUpgradeAOImpl implements IAgentUpgradeAO {
 
 	@Override
 	@Transactional
-	public List<AgentUpgrade> queryList(AgentUpgrade condition) {
-		return agentUpgradeBO.queryList(condition);
+	public List<AgentUpgrade> queryAgentUpgradeList(String agentCode, String code) {
+		AgentUpgrade data = agentUpgradeBO.getAgentUpgrade(code);
+		if(data == null) {
+			throw new BizException("xn000", "该代理升级信息不存在");
+		}
+		return agentUpgradeBO.queryList(agentCode);
 	}
 
 	@Override
 	@Transactional
-	public Paginable<AgentUpgrade> selectPageList(AgentUpgrade condition, int start, int limit) {
+	public Paginable<AgentUpgrade> queryAgentUpgradeListPage(AgentUpgrade condition, int start, int limit) {
 		return agentUpgradeBO.getPaginable(start, limit, condition);
 	}
 
@@ -47,7 +50,5 @@ public class AgentUpgradeAOImpl implements IAgentUpgradeAO {
 		}
 		return agentUpgradeBO.getAgentUpgrade(code);
 	}
-
-	
 
 }

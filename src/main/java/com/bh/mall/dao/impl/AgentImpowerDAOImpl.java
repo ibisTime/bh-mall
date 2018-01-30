@@ -12,7 +12,7 @@ public class AgentImpowerDAOImpl extends AMybatisTemplate implements IAgentImPow
 
 	@Override
 	public AgentImpower select(AgentImpower condition) {
-		return super.select(NAMESPACE.concat("get_agentImpower"), condition, AgentImpower.class);
+		return super.select(NAMESPACE.concat("select_agentImpower"), condition, AgentImpower.class);
 	}
 
 	@Override
@@ -26,8 +26,8 @@ public class AgentImpowerDAOImpl extends AMybatisTemplate implements IAgentImPow
 	}
 
 	@Override
-	public List<AgentImpower> selectList(AgentImpower condition, int start, int pageSize) {
-		return super.selectList(NAMESPACE.concat("select_agentImpower"), start, pageSize, condition, AgentImpower.class);
+	public List<AgentImpower> selectList(AgentImpower condition, int start, int limit) {
+		return super.selectList(NAMESPACE.concat("select_agentImpower"), start, limit, condition, AgentImpower.class);
 	}
 
 	@Override
@@ -35,10 +35,6 @@ public class AgentImpowerDAOImpl extends AMybatisTemplate implements IAgentImPow
 		return super.selectList(NAMESPACE.concat("select_agentImpower"), condition, AgentImpower.class);
 	}
 
-	@Override
-	public AgentImpower getAgentImpower(AgentImpower condition) {
-		return super.select(NAMESPACE.concat("get_agentImpower"), condition, AgentImpower.class);
-	}
 
 	@Override
 	public int insert(AgentImpower data) {

@@ -29,13 +29,12 @@ public class XN627015 extends AProcessor {
 		int start = Integer.valueOf(req.getStart());
 		int limit = Integer.valueOf(req.getStart());
 		
-		return agentImpowerAO.selectPageList(condition, start, limit);
+		return agentImpowerAO.queryAgentImpowerListPage(condition, start, limit);
 	}
 
 	@Override
 	public void doCheck(String inputparams) throws ParaException {
 		req = JsonUtils.json2Bean(inputparams, XN627015Req.class);
-		StringValidater.validateBlank(req.getAgentCode(), req.getOrderColumn(), req.getOrderDir());
 		StringValidater.validateNumber(req.getLimit()+"", req.getStart()+"");
 	}
 

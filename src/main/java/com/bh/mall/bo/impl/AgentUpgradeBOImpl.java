@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentUpgradeBO;
-import com.bh.mall.bo.base.Page;
-import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.IAgentUpgradeDAO;
 import com.bh.mall.domain.AgentUpgrade;
@@ -25,22 +23,17 @@ public class AgentUpgradeBOImpl extends PaginableBOImpl<AgentUpgrade> implements
 	}
 
 	@Override
-	public List<AgentUpgrade> queryList(AgentUpgrade condition) {
+	public List<AgentUpgrade> queryList(String agentCode) {
+		AgentUpgrade condition = new AgentUpgrade();
+		condition.setAgentCode(agentCode);
 		return agentUpgradeDAO.selectList(condition);
 	}
 
 	@Override
-	public List<AgentUpgrade> queryList(AgentUpgrade condition, int start, int limit) {
-		long totalCount = agentUpgradeDAO.selectTotalCount(condition);
-		Page<AgentUpgrade> page = new Page<AgentUpgrade>(start, limit, totalCount);
-		return agentUpgradeDAO.selectList(condition, page.getStart(), limit);
-	}
-
-	@Override
-	public AgentUpgrade getAgentUpgrade(String code) {
+	public AgentUpgrade getAgentUpgrade(String agentCode) {
 		AgentUpgrade condition = new AgentUpgrade();
-		condition.setCode(code);
-		return agentUpgradeDAO.getAgentUpgrade(condition);
+		condition.setCode(agentCode);
+		return agentUpgradeDAO.select(condition);
 	}
 
 }

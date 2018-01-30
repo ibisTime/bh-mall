@@ -24,18 +24,18 @@ public class AgentUpgradeDAOImpl extends AMybatisTemplate implements IAgentUpgra
 
 	@Override
 	public List<AgentUpgrade> selectList(AgentUpgrade condition, int start, int pageSize) {
-		return super.selectList(NAMESPACE.concat("select_list"), start, pageSize, condition, AgentUpgrade.class);
+		return super.selectList(NAMESPACE.concat("select_agentUpgrade"), start, pageSize, condition, AgentUpgrade.class);
 	}
 
 	@Override
 	public List<AgentUpgrade> selectList(AgentUpgrade condition) {
-		return super.selectList(NAMESPACE.concat("select_list"), condition, AgentUpgrade.class);
+		return super.selectList(NAMESPACE.concat("select_agentUpgrade"), condition, AgentUpgrade.class);
 
 	}
 
 	@Override
-	public AgentUpgrade getAgentUpgrade(AgentUpgrade condition) {
-		return super.select(NAMESPACE.concat("get_agentUpgrade"), condition, AgentUpgrade.class);
+	public AgentUpgrade select(AgentUpgrade condition) {
+		return super.select(NAMESPACE.concat("select_agentUpgrade"), condition, AgentUpgrade.class);
 	}
 
 	@Override
@@ -48,12 +48,6 @@ public class AgentUpgradeDAOImpl extends AMybatisTemplate implements IAgentUpgra
 	public int delete(AgentUpgrade data) {
 		// XXX Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public AgentUpgrade select(AgentUpgrade condition) {
-		// XXX Auto-generated method stub
-		return null;
 	}
 
 }

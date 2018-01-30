@@ -7,7 +7,7 @@ import com.bh.mall.domain.AgentUpgrade;
 
 public interface IAgentUpgradeDAO extends IBaseDAO<AgentUpgrade>{
 
-	String NAMESPACE = IAgentImPowerDAO.class.getName().concat(".");
+	String NAMESPACE = IAgentUpgradeDAO.class.getName().concat(".");
 	/**
 	 * 更新
 	 * @param data
@@ -21,8 +21,4 @@ public interface IAgentUpgradeDAO extends IBaseDAO<AgentUpgrade>{
 	 */
 	public List<AgentUpgrade> selectList(AgentUpgrade condition);
 	
-	/**
-	 * 详情查询
-	 */
-	public AgentUpgrade getAgentUpgrade(AgentUpgrade condition);
 }

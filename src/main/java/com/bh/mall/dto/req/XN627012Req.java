@@ -1,7 +1,10 @@
 package com.bh.mall.dto.req;
 
 public class XN627012Req {
-
+	
+	// 编号
+	private String code;
+	// 代理编号
 	private String agentCode;
 	//授权金额
 	private String impowerAmount;
@@ -20,6 +23,13 @@ public class XN627012Req {
 	// 红线设置
 	private String redPercent;
 	
+	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 	public String getAgentCode() {
 		return agentCode;
 	}

@@ -21,9 +21,5 @@ public interface IAgentImPowerDAO extends IBaseDAO<AgentImpower>{
 	 */
 	public List<AgentImpower> selectList(AgentImpower condition);
 	
-	/**
-	 * 详情查询
-	 */
-	public AgentImpower getAgentImpower(AgentImpower condition);
 	
 }

@@ -30,14 +30,13 @@ public class XN627025 extends AProcessor {
 		condition.setOrder(column, req.getOrderDir());
 		int start = Integer.valueOf(req.getStart());
 		int limit = Integer.valueOf(req.getStart());
-		return agentUpgradeAO.selectPageList(condition, start, limit);
+		return agentUpgradeAO.queryAgentUpgradeListPage(condition, start, limit);
 	}
 
 	@Override
 	public void doCheck(String inputparams) throws ParaException {
 		req = JsonUtils.json2Bean(inputparams, XN627025Req.class);
-		StringValidater.validateBlank(req.getAgentCode(), req.getOrderColumn(), req.getOrderDir());
-		StringValidater.validateNumber(req.getLimit()+"", req.getStart()+"");
+		StringValidater.validateNumber(req.getLimit(), req.getStart());
 	}
 
 }

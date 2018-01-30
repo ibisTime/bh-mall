@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.bh.mall.dao.IAgentDao;
+import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.Agent;
 
-@Repository("agentDaoImpl")
-public class AgentDaoImpl extends AMybatisTemplate implements IAgentDao {
+@Repository("agentDAOImpl")
+public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
 
 	@Override
 	public Agent select(Agent condition) {
-		return super.select(NAMESPACE.concat("get_Agent"), condition, Agent.class);
+		return super.select(NAMESPACE.concat("select_agent"), condition, Agent.class);
 	}
 
 	@Override
@@ -36,10 +36,7 @@ public class AgentDaoImpl extends AMybatisTemplate implements IAgentDao {
 		return super.selectList(NAMESPACE.concat("select_agent"), condition, Agent.class);
 	}
 
-	@Override
-	public Agent getAgent(Agent condition) {
-		return super.select(NAMESPACE.concat("get_agent"), condition, Agent.class);
-	}
+	
 
 	@Override
 	public int insert(Agent data) {

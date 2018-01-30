@@ -1,8 +1,8 @@
 package com.bh.mall.ao;
 
+
 import java.util.List;
 
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
 
@@ -17,11 +17,11 @@ public interface IAgentAO {
 	
 	/**
 	 * 分页查询代理
-	 * @param condition
 	 * @param start
+	 * @param condition
 	 * @param pageSize
 	 */
-	public Paginable<Agent> selectAgentPageList(int limit, int start, Agent condition);
+	public Paginable<Agent> queryAgentListPage(int start, int limit, Agent condition);
 	
 	/**
 	 * 查询代理详情
@@ -34,6 +34,8 @@ public interface IAgentAO {
 	 * 查询代理详情
 	 * @param condition
 	 */
-	public Object selectAgentList(String name, String level);
+	public List<Agent> queryAgentList(String level, String name);
+
+
 
 }

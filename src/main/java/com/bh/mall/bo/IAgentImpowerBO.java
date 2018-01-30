@@ -9,9 +9,7 @@ public interface IAgentImpowerBO extends IPaginableBO<AgentImpower>{
 	
 	public int updateAgentImpower(AgentImpower data);
 	
-	public List<AgentImpower> queryList(String string);
-	
-	public List<AgentImpower> queryList(AgentImpower condition, int start, int limit);
+	public List<AgentImpower> queryList(String agentCode);
 	
 	public AgentImpower getAgentImpower(String code);
 }

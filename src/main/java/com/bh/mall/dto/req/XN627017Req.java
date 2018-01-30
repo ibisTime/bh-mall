@@ -11,5 +11,5 @@ public class XN627017Req {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
 }

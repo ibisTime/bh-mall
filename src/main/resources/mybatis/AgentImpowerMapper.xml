@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.impl.AgentImpowerDAOImpl">
+<mapper namespace="com.bh.mall.dao.IAgentImPowerDAO">
 	<resultMap type="agentImpower" id="agentImpower_DB_Result">
 		<result column="code" property="code"/>
 		<result column="agent_code" property="agentCode"/>
@@ -16,17 +16,29 @@
 	</resultMap>
 	
 	<sql id="where_condition">
-		<if test="agentCode != null and agentCode != ''">
-			AND agent_code=#{agentCode}
-		</if>
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != ''">
+				AND code=#{code}
+			</if>
+			<if test="agentCode != null and agentCode != ''">
+				AND agent_code=#{agentCode}
+			</if>
+		</trim>
 	</sql>
 	
-	<select id="get_agentImpower" parameterType="java.lang.String" resultType="agentImpower">
-		SELECT * FROM tbh_agent_impower WHERE code=#{code}
-	</select>
-	
-	<select id="select_agentImpower">
-		SELECT * FROM tbh_agent_impower 
+	<select id="select_agentImpower" parameterType="agentImpower" resultMap="agentImpower_DB_Result">
+		SELECT 
+			code, 
+			agent_code, 
+			is_intent, 
+			is_intro,
+			is_realname,
+			is_company_impower,
+			impower_amount,
+			min_charge,
+			red_percent,
+			is_summary
+		 FROM tbh_agent_impower 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
 			<if test="order != null and order != '' ">
@@ -35,9 +47,13 @@
 		</trim>
 	</select>
 	
+	<select id="select_count" parameterType="agentImpower" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_agent_impower
+		<include refid="where_condition"/>
+	</select>
+	
 	<update id="update_agentImpower" parameterType="agentImpower">
 		UPDATE tbh_agent_impower SET
-		code=#{code},
 		agent_code=#{agentCode},
 		is_intent=#{isIntent},
 		is_intro=#{isIntro},
@@ -46,7 +62,8 @@
 		impower_amount=#{impowerAmount},
 		min_charge=#{minCharge},
 		red_percent=#{redPercent},
-		is_summary=#{isSummary},
+		is_summary=#{isSummary}
+		WHERE code=#{code}
 	</update>
 	
 </mapper>

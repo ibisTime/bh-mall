@@ -41,5 +41,16 @@
 		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
 	</bean>	
 	
+	<bean id="agentBO" class="com.bh.mall.bo.impl.AgentBOImpl">
+		<property name="paginableDAO" ref="agentDAOImpl"></property>
+	</bean>
+	
+	<bean id="agentImpowerBO" class="com.bh.mall.bo.impl.AgentImpowerBOImpl">
+		<property name="paginableDAO" ref="agentImpowerDAOImpl"></property>
+	</bean>
+	
+	<bean id="agentUpgradeBO" class="com.bh.mall.bo.impl.AgentUpgradeBOImpl">
+		<property name="paginableDAO" ref="agentUpgradeDAOImpl"></property>
+	</bean>
 	
 </beans>

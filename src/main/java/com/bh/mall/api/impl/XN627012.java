@@ -20,6 +20,7 @@ public class XN627012 extends AProcessor {
 	@Override
 	public Object doBusiness() throws BizException {
 		AgentImpower data = new AgentImpower();
+		data.setCode(req.getCode());
 		data.setAgentCode(req.getAgentCode());
 		data.setImpowerAmount(BigInteger.valueOf(Long.valueOf(req.getImpowerAmount())));
 		data.setIsCompanyImpower(req.getIsCompanyImpower());
