@@ -25,7 +25,7 @@ import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IUserDAO;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN805042Req;
+import com.bh.mall.dto.req.XN627201Req;
 import com.bh.mall.dto.req.XN805043Req;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
@@ -155,7 +155,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public String doAddUser(XN805042Req req) {
+    public String doAddUser(XN627201Req req) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
@@ -178,10 +178,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setRealName(req.getRealName());
 
         user.setRoleCode(req.getRoleCode());
-
-        if (StringUtils.isBlank(req.getDivRate())) {
-            req.setDivRate("0");
-        }
 
         user.setProvince(req.getProvince());
         user.setCity(req.getCity());

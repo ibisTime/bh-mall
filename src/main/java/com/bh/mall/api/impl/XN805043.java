@@ -5,7 +5,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN805043Req;
-import com.bh.mall.dto.res.XN805042Res;
+import com.bh.mall.dto.res.XN627201Res;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -23,7 +23,7 @@ public class XN805043 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805042Res(userAO.doApplyRegUser(req));
+        return new XN627201Res(userAO.doApplyRegUser(req));
     }
 
     @Override

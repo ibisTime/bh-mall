@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN805042Req;
+import com.bh.mall.dto.req.XN627201Req;
 import com.bh.mall.dto.req.XN805043Req;
 import com.bh.mall.dto.req.XN805095Req;
 import com.bh.mall.dto.req.XN805170Req;
@@ -30,7 +30,7 @@ public interface IUserAO {
             String area, String companyCode, String systemCode);
 
     // 代注册
-    public String doAddUser(XN805042Req req);
+    public String doAddUser(XN627201Req req);
 
     // 申请注册
     public String doApplyRegUser(XN805043Req req);

@@ -5,7 +5,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN627200Req;
-import com.bh.mall.dto.res.XN805050Res;
+import com.bh.mall.dto.res.XN627200Res;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -23,7 +23,7 @@ public class XN627200 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN805050Res(userAO.doLogin(req.getLoginName(),
+        return new XN627200Res(userAO.doLogin(req.getLoginName(),
             req.getLoginPwd(), req.getKind(), req.getCompanyCode(),
             req.getSystemCode()));
     }

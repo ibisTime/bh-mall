@@ -83,8 +83,8 @@ public class User extends ABaseDO {
     // 角色编号
     private String roleCode;
 
-    // 意向状态
-    private String intendStatus;
+    // 状态
+    private String status;
 
     // 来源
     private String source;
@@ -367,14 +367,6 @@ public class User extends ABaseDO {
         return roleCode;
     }
 
-    public void setIntendStatus(String intendStatus) {
-        this.intendStatus = intendStatus;
-    }
-
-    public String getIntendStatus() {
-        return intendStatus;
-    }
-
     public void setSource(String source) {
         this.source = source;
     }
@@ -629,6 +621,14 @@ public class User extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
