@@ -27,7 +27,6 @@ import com.bh.mall.dao.IUserDAO;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN805042Req;
 import com.bh.mall.dto.req.XN805043Req;
-import com.bh.mall.enums.EUserLevel;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -55,9 +54,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         User user = null;
         if (CollectionUtils.isNotEmpty(userList)) {
             user = userList.get(0);
-            if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-                throw new BizException("user_lock", "用户状态异常");
-            }
         }
         return user;
     }
@@ -82,28 +78,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
         }
     }
-
-    // @Override
-    // public User getUserByMobile(String mobile, String kind, String
-    // companyCode,
-    // String systemCode) {
-    // User data = null;
-    // if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
-    // User condition = new User();
-    // condition.setMobile(mobile);
-    // condition.setKind(kind);
-    // condition.setCompanyCode(companyCode);
-    // condition.setSystemCode(systemCode);
-    // List<User> list = userDAO.selectList(condition);
-    // if (CollectionUtils.isNotEmpty(list)) {
-    // data = list.get(0);
-    // }
-    // if (null == data) {
-    // throw new BizException("xn702002", "推荐人不存在");
-    // }
-    // }
-    // return data;
-    // }
 
     @Override
     public String getUserId(String mobile, String kind, String companyCode,
@@ -139,8 +113,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         user.setNickname(userId.substring(userId.length() - 8, userId.length()));
         user.setUserReferee(userReferee);
-        user.setLevel(EUserLevel.ONE.getCode());
-        user.setStatus(EUserStatus.NORMAL.getCode());
         user.setProvince(province);
         user.setCity(city);
         user.setArea(area);
@@ -173,10 +145,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
         user.setNickname(nickname);
         user.setPhoto(photo);
-        user.setGender(gender);
         user.setUserReferee(userReferee);
-        user.setLevel(EUserLevel.ONE.getCode());
-        user.setStatus(EUserStatus.NORMAL.getCode());
 
         user.setCreateDatetime(new Date());
         user.setCompanyCode(companyCode);
@@ -202,7 +171,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             .getLoginPwd()));
 
         user.setKind(req.getKind());
-        user.setLevel(EUserLevel.ONE.getCode());
         user.setUserReferee(req.getUserReferee());
 
         user.setIdKind(req.getIdKind());
@@ -214,16 +182,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (StringUtils.isBlank(req.getDivRate())) {
             req.setDivRate("0");
         }
-        user.setDivRate(Double.valueOf(req.getDivRate()));
-        user.setStatus(EUserStatus.NORMAL.getCode());
-        user.setPdf(req.getPdf());
 
         user.setProvince(req.getProvince());
         user.setCity(req.getCity());
         user.setArea(req.getArea());
         user.setAddress(req.getAddress());
-        user.setLatitude(req.getLatitude());
-        user.setLongitude(req.getLongitude());
 
         Date date = new Date();
         user.setCreateDatetime(date);
@@ -250,7 +213,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
             .getLoginPwd()));
         user.setKind(req.getKind());
-        user.setLevel(EUserLevel.ONE.getCode());
         user.setUserReferee(req.getUserReferee());
 
         user.setIdKind(req.getIdKind());
@@ -259,15 +221,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
         user.setRoleCode(roleCode);
 
-        user.setDivRate(Double.valueOf(req.getDivRate()));
-        user.setStatus(EUserStatus.TO_APPROVE.getCode());
-        user.setPdf(req.getPdf());
-
         user.setProvince(req.getProvince());
         user.setCity(req.getCity());
         user.setArea(req.getArea());
-        user.setLatitude(req.getLatitude());
-        user.setLongitude(req.getLongitude());
 
         Date date = new Date();
         user.setCreateDatetime(date);
@@ -314,47 +270,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public int refreshIdentityZm(String userId, String realName, String idKind,
-            String idNo, String zmScore) {
-        int count = 0;
-        if (StringUtils.isNotBlank(userId)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setRealName(realName);
-            data.setIdKind(idKind);
-            data.setIdNo(idNo);
-            data.setZmScore(zmScore);
-            data.setZmAuthDatetime(new Date());
-            count = userDAO.updateIdentityZmscore(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshZmScore(String userId, String zmScore) {
-        int count = 0;
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(zmScore)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setZmScore(zmScore);
-            data.setZmAuthDatetime(new Date());
-            count = userDAO.updateZmscore(data);
-        }
-        return count;
-    }
-
-    public int refreshGradDatetime(String userId, Date gradDatetime) {
-        int count = 0;
-        if (StringUtils.isNotBlank(userId) && null != gradDatetime) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setGradDatetime(gradDatetime);
-            count = userDAO.updateGradDatetime(data);
-        }
-        return count;
-    }
-
-    @Override
     public int refreshRealName(String userId, String realName) {
         User data = new User();
         data.setUserId(userId);
@@ -362,31 +277,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         int count = 0;
         if (data != null && StringUtils.isNotBlank(data.getUserId())) {
             count = userDAO.updateRealName(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshDivRate(String userId, Double divRate) {
-        User data = new User();
-        data.setUserId(userId);
-        data.setDivRate(divRate);
-        int count = 0;
-        if (data != null && StringUtils.isNotBlank(data.getUserId())) {
-            count = userDAO.updateDivRate(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshTradePwd(String userId, String tradePwd) {
-        int count = 0;
-        if (StringUtils.isNotBlank(userId)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setTradePwd(MD5Util.md5(tradePwd));
-            data.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePwd));
-            count = userDAO.updateTradePwd(data);
         }
         return count;
     }
@@ -469,34 +359,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public int refreshMobile(String userId, String mobile) {
-        int count = 0;
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(mobile)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setMobile(mobile);
-            count = userDAO.updateMobile(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshBindMobile(String userId, String loginName,
-            String mobile, String loginPwd, String loginPwdStrength) {
-        int count = 0;
-        User data = new User();
-        data.setUserId(userId);
-        data.setLoginName(loginName);
-        data.setMobile(mobile);
-        data.setLoginPwd(MD5Util.md5(loginPwd));
-        data.setLoginPwdStrength(loginPwdStrength);
-        if (data != null && StringUtils.isNotBlank(data.getUserId())) {
-            count = userDAO.updateBindMobile(data);
-        }
-        return count;
-    }
-
-    @Override
     public void isLoginNameExist(String loginName, String kind,
             String companyCode, String systemCode) {
         if (StringUtils.isNotBlank(loginName)) {
@@ -545,7 +407,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
             User condition = new User();
             condition.setUserId(userId);
-            condition.setTradePwd(MD5Util.md5(tradePwd));
             long count = this.getTotalCount(condition);
             if (count != 1) {
                 throw new BizException("jd00001", "支付密码错误");
@@ -610,42 +471,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
-            data.setStatus(status.getCode());
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);
             userDAO.updateStatus(data);
-        }
-    }
-
-    @Override
-    public void refreshRole(String userId, String roleCode, String updater,
-            String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setRoleCode(roleCode);
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            userDAO.updateRole(data);
-        }
-    }
-
-    /** 
-     * @see com.bh.mall.bo.IUserBO#refreshStatus(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void refreshPdf(String userId, String pdf, String updater,
-            String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setPdf(pdf);
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            userDAO.updatePdf(data);
         }
     }
 
@@ -689,37 +518,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
     }
 
-    /** 
-     * @see com.bh.mall.bo.IUserBO#refreshUserMobileIds(com.bh.mall.domain.User)
-     */
-    @Override
-    public void refreshUserMobileIds(User data) {
-        if (null != data) {
-            userDAO.updateMobileIds(data);
-        }
-    }
-
-    @Override
-    public void refreshNameAddress(User data) {
-        if (null != data) {
-            userDAO.updateNameAddress(data);
-        }
-    }
-
-    /** 
-     * @see com.bh.mall.bo.IUserBO#refreshCompany(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void refreshCompany(String userId, String companyCode) {
-        User data = new User();
-        data.setUserId(userId);
-        data.setCompanyCode(companyCode);
-        userDAO.updateCompany(data);
-    }
-
-    /** 
-     * @see com.bh.mall.bo.IUserBO#refreshLevel(com.bh.mall.domain.User)
-     */
     @Override
     public void refreshLevel(User data) {
         userDAO.updateLevel(data);
@@ -738,13 +536,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         dbUser.setNickname(nickname);
         dbUser.setPhoto(photo);
-        dbUser.setGender(gender);
         userDAO.updateWxInfo(dbUser);
     }
 
-    /** 
-     * @see com.bh.mall.bo.IUserBO#queryUserList(java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public List<User> queryUserList(String mobile, String kind,
             String systemCode) {
@@ -753,23 +547,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         condition.setKind(kind);
         condition.setSystemCode(systemCode);
         return userDAO.selectList(condition);
-    }
-
-    @Override
-    public void approveUser(String userId, String approver, String status,
-            Double divRate, String remark) {
-        User user = new User();
-        user.setUserId(userId);
-        user.setDivRate(divRate);
-        user.setStatus(status);
-        user.setUpdater(approver);
-        user.setUpdateDatetime(new Date());
-        user.setRemark(remark);
-        userDAO.approveUser(user);
-    }
-
-    public Long totalUser(User condition) {
-        return userDAO.selectTotalCount(condition);
     }
 
     /** 

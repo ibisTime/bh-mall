@@ -1,55 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.std.user.dao.IUserDAO">
+<mapper namespace="com.bh.mall.dao.IUserDAO">
 	<resultMap id="user_DB_Result" type="user">
 		<result column="user_id" property="userId" />
 		<result column="login_name" property="loginName" />
 		<result column="mobile" property="mobile" />
+		<result column="weixin_id" property="weixinId" />
 		<result column="photo" property="photo" />
 		<result column="nickname" property="nickname" />
-		
-		<result column="login_pwd_strength" property="loginPwdStrength" />		
+		<result column="login_pwd" property="loginPwd" />
+		<result column="login_pwd_strength" property="loginPwdStrength" />
 		<result column="kind" property="kind" />
-		<result column="level" property="level" />		
+		<result column="now_level" property="nowLevel" />
+		<result column="apply_level" property="applyLevel" />
 		<result column="user_referee" property="userReferee" />
+		<result column="introducer" property="introducer" />
+		<result column="high_level" property="highLevel" />
+		<result column="pur_user" property="purUser" />
+		<result column="team_name" property="teamName" />
 		<result column="id_kind" property="idKind" />
-		
 		<result column="id_no" property="idNo" />
+		<result column="id_card_reverse" property="idCardReverse" />
+		<result column="id_card_front" property="idCardFront" />
+		<result column="id_card_hand" property="idCardHand" />
 		<result column="real_name" property="realName" />
-		<result column="zm_score" property="zmScore" />
-		<result column="zm_auth_datetime" property="zmAuthDatetime" />
-		
-		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="role_code" property="roleCode" />
-		<result column="div_rate" property="divRate" />
-		
-		<result column="status" property="status" />
+		<result column="intend_status" property="intendStatus" />
+		<result column="source" property="source" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="manager" property="manager" />
+		<result column="red_amount" property="redAmount" />
 		<result column="union_id" property="unionId" />
 		<result column="h5_open_id" property="h5OpenId" />
 		<result column="app_open_id" property="appOpenId" />
-		<result column="gender" property="gender" />
-		
-		<result column="introduce" property="introduce" />
-		<result column="birthday" property="birthday" />
-		<result column="email" property="email" />
-		<result column="diploma" property="diploma" />
-		<result column="occupation" property="occupation" />
-		
-		<result column="grad_datetime" property="gradDatetime" />
-		<result column="work_time" property="workTime" />
-		<result column="pdf" property="pdf" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
 		<result column="area" property="area" />
-		
 		<result column="address" property="address" />
-		<result column="longitude" property="longitude" />
-		<result column="latitude" property="latitude" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
-		
 		<result column="update_datetime" property="updateDatetime" />
+		<result column="cash_pdf" property="cashPdf" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
+		<result column="last_agent_log" property="lastAgentLog" />
 		<result column="remark" property="remark" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
@@ -82,8 +77,8 @@
 				  AND 1 = 1
 				 </otherwise>
 			</choose>	
-			<if test="level != null and level != '' ">
-				AND t.level = #{level}
+			<if test="nowLevel != null and nowLevel != '' ">
+				AND t.now_level = #{nowLevel}
 			</if>	
 			<if test="userReferee != null and userReferee != '' ">
 				AND t.user_referee = #{userReferee}
@@ -109,17 +104,14 @@
 			<if test="roleCode != null and roleCode != '' ">
 				AND t.role_code = #{roleCode}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
+			<if test="intendStatus != null and intendStatus != '' ">
+				AND t.intend_status = #{intendStatus}
 			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
 			<if test="loginPwd != null and loginPwd != '' ">
 				AND t.login_pwd = #{loginPwd}
-			</if>	
-			<if test="tradePwd != null and tradePwd != '' ">
-				AND t.trade_pwd = #{tradePwd}
 			</if>	
 			<if test="unionId != null and unionId != '' ">
 				AND t.union_id = #{unionId}
@@ -129,9 +121,6 @@
 			</if>
 			<if test="appOpenId != null and appOpenId != '' ">
 				AND t.app_open_id = #{appOpenId}
-			</if>
-			<if test="gender != null and gender != '' ">
-				AND t.gender = #{gender}
 			</if>
 			<if test="province != null and province != '' ">
 				AND t.province = #{province}
@@ -165,239 +154,214 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
-		SELECT 
+		<select id="select_user" parameterType="user" resultMap="user_DB_Result">
+		SELECT
 		t.user_id
 		,t.login_name
 		,t.mobile
+		,t.weixin_id
 		,t.photo
 		,t.nickname
-		
+		,t.login_pwd
 		,t.login_pwd_strength
-		,t.kind	
-		,t.level
+		,t.kind
+		,t.now_level
+		,t.apply_level
 		,t.user_referee
+		,t.introducer
+		,t.high_level
+		,t.pur_user
+		,t.team_name
 		,t.id_kind
-		
 		,t.id_no
+		,t.id_card_reverse
+		,t.id_card_front
+		,t.id_card_hand
 		,t.real_name
-		,t.zm_score
-		,t.zm_auth_datetime
-		,t.trade_pwd_strength
 		,t.role_code
-		,t.div_rate
-		
-		,t.status
+		,t.intend_status
+		,t.source
+		,t.apply_datetime
+		,t.manager
+		,t.red_amount
 		,t.union_id
 		,t.h5_open_id
 		,t.app_open_id
-		,t.gender
-		
-		,t.introduce
-		,t.birthday
-		,t.email
-		,t.diploma
-		,t.occupation
-		
-		,t.grad_datetime
-		,t.work_time
-		,t.pdf
 		,t.province
 		,t.city
 		,t.area
-		
 		,t.address
-		,t.longitude
-		,t.latitude
 		,t.create_datetime
 		,t.updater
-		
 		,t.update_datetime
+		,t.cash_pdf
+		,t.approver
+		,t.approve_datetime
+		,t.last_agent_log
 		,t.remark
 		,t.company_code
 		,t.system_code
 		FROM
-		tstd_user t
-		<include refid="where_condition"/>
+		tbh_user t
+		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
-				${order}
+				t.${order}
 			</if>
 		</trim>
 	</select>
 
 	<select id="select_user_count" parameterType="user" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_user t 
+		SELECT count(1) FROM tbh_user t 
 		<include refid="where_condition"/>
 	</select>
 
 	<insert id="insert_user" parameterType="user">
-		INSERT INTO tstd_user(
+		INSERT INTO
+		tbh_user(
 		user_id
 		,login_name
 		,mobile
+		,weixin_id
 		,photo
 		,nickname
-		
 		,login_pwd
 		,login_pwd_strength
 		,kind
-		,level
+		,now_level
+		,apply_level
 		,user_referee
-		
+		,introducer
+		,high_level
+		,pur_user
+		,team_name
 		,id_kind
 		,id_no
+		,id_card_reverse
+		,id_card_front
+		,id_card_hand
 		,real_name
-		,trade_pwd
-		,trade_pwd_strength
-		
 		,role_code
-		,div_rate
-		,status
+		,intend_status
+		,source
+		,apply_datetime
+		,manager
+		,red_amount
 		,union_id
 		,h5_open_id
-		
 		,app_open_id
-		,gender
-		,introduce
-		,birthday
-		,email
-		
-		,diploma
-		,occupation
-		,work_time
-		,pdf
 		,province
-		
 		,city
 		,area
 		,address
-		,longitude
-		,latitude
-		
 		,create_datetime
 		,updater
 		,update_datetime
+		,cash_pdf
+		,approver
+		,approve_datetime
+		,last_agent_log
 		,remark
 		,company_code
-		
 		,system_code
 		)
 		VALUES(
 		#{userId}
 		,#{loginName}
 		,#{mobile}
+		,#{weixinId}
 		,#{photo}
 		,#{nickname}
-		
 		,#{loginPwd}
 		,#{loginPwdStrength}
 		,#{kind}
-		,#{level}
+		,#{nowLevel}
+		,#{applyLevel}
 		,#{userReferee}
-		
+		,#{introducer}
+		,#{highLevel}
+		,#{purUser}
+		,#{teamName}
 		,#{idKind}
 		,#{idNo}
+		,#{idCardReverse}
+		,#{idCardFront}
+		,#{idCardHand}
 		,#{realName}
-		,#{tradePwd}
-		,#{tradePwdStrength}
-		
 		,#{roleCode}
-		,#{divRate}
-		,#{status}
+		,#{intendStatus}
+		,#{source}
+		,#{applyDatetime}
+		,#{manager}
+		,#{redAmount}
 		,#{unionId}
 		,#{h5OpenId}
-		
 		,#{appOpenId}
-		,#{gender}
-		,#{introduce}
-		,#{birthday}
-		,#{email}
-		
-		,#{diploma}
-		,#{occupation}
-		,#{workTime}
-		,#{pdf}
 		,#{province}
-		
 		,#{city}
 		,#{area}
 		,#{address}
-		,#{longitude}
-		,#{latitude}
-		
 		,#{createDatetime}
 		,#{updater}
 		,#{updateDatetime}
+		,#{cashPdf}
+		,#{approver}
+		,#{approveDatetime}
+		,#{lastAgentLog}
 		,#{remark}
 		,#{companyCode}
-		
 		,#{systemCode}
 		)
 	</insert>
 	
-	<update id="update_identity" parameterType="user">
-		UPDATE tstd_user
+	<update id="update_user" parameterType="user">
+		UPDATE tbh_user
 		SET
-		 real_name= #{realName}
+		login_name = #{loginName}
+		,mobile = #{mobile}
+		,weixin_id = #{weixinId}
+		,photo = #{photo}
+		,nickname = #{nickname}
+		,login_pwd = #{loginPwd}
+		,login_pwd_strength = #{loginPwdStrength}
+		,kind = #{kind}
+		,now_level = #{nowLevel}
+		,apply_level = #{applyLevel}
+		,user_referee = #{userReferee}
+		,introducer = #{introducer}
+		,high_level = #{highLevel}
+		,pur_user = #{purUser}
+		,team_name = #{teamName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_identity_zmscore" parameterType="user">
-		UPDATE tstd_user
-		SET
-		 real_name= #{realName}
-		,id_kind = #{idKind}
-		,id_no = #{idNo}
-		,zm_score=#{zmScore}
-		,zm_auth_datetime=#{zmAuthDatetime}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_zmscore" parameterType="user">
-		UPDATE tstd_user
-		SET
-		zm_score=#{zmScore}
-		,zm_auth_datetime=#{zmAuthDatetime}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_gradDatetime" parameterType="user">
-		UPDATE tstd_user
-		SET
-		grad_datetime=#{gradDatetime}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_real_name" parameterType="user">
-		UPDATE tstd_user
-		SET
-		real_name= #{realName}
-		WHERE
-		user_id = #{userId}
-	</update>
-	
-	<update id="update_div_rate" parameterType="user">
-		UPDATE tstd_user
-		SET
-		div_rate= #{divRate}
-		WHERE
-		user_id = #{userId}
-	</update>
-	
-	<update id="update_trade_pwd" parameterType="user">
-		UPDATE tstd_user
-		SET
-		 trade_pwd = #{tradePwd}
-		,trade_pwd_strength = #{tradePwdStrength}
-		WHERE
-		user_id = #{userId}	
+		,id_card_reverse = #{idCardReverse}
+		,id_card_front = #{idCardFront}
+		,id_card_hand = #{idCardHand}
+		,real_name = #{realName}
+		,role_code = #{roleCode}
+		,intend_status = #{intendStatus}
+		,source = #{source}
+		,apply_datetime = #{applyDatetime}
+		,manager = #{manager}
+		,red_amount = #{redAmount}
+		,union_id = #{unionId}
+		,h5_open_id = #{h5OpenId}
+		,app_open_id = #{appOpenId}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		,create_datetime = #{createDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,cash_pdf = #{cashPdf}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,last_agent_log = #{lastAgentLog}
+		,remark = #{remark}
+		,company_code = #{companyCode}
+		,system_code = #{systemCode}
+		WHERE code = #{code}
 	</update>
 	
 	<update id="update_login_pwd" parameterType="user">
@@ -408,59 +372,6 @@
 		WHERE
 		user_id = #{userId}	
 	</update>	
-	
-	<update id="update_mobile" parameterType="user">
-		UPDATE tstd_user
-		SET
-		login_name = #{mobile}
-		,mobile = #{mobile}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_bind_mobile" parameterType="user">
-		UPDATE tstd_user
-		SET
-		login_name = #{loginName}
-		,mobile = #{mobile}
-		,login_pwd = #{loginPwd}
-		,login_pwd_strength = #{loginPwdStrength}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_status" parameterType="user">
-		UPDATE tstd_user
-		SET
-		status = #{status}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_role" parameterType="user">
-		UPDATE tstd_user
-		SET
-		role_code = #{roleCode}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_user_pdf" parameterType="user">
-		UPDATE tstd_user
-		SET
-		 pdf = #{pdf}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE
-		user_id = #{userId}	
-	</update>
 	
 	<update id="update_user_loginName" parameterType="user">
 		UPDATE tstd_user
@@ -485,87 +396,4 @@
 		WHERE user_id = #{userId}
 	</update>
 	
-	<update id="update_user" parameterType="user">
-		UPDATE tstd_user
-		SET
-		login_name = #{loginName}
-		,mobile = #{mobile}
-		,id_kind = #{idKind}
-		,id_no = #{idNo}
-		,real_name = #{realName}
-		
-		,div_rate = #{divRate}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		,status = #{status}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_nameAddress" parameterType="user">
-		UPDATE tstd_user
-		SET
-		real_name = #{realName}
-		,province =#{province}
-		,city =#{city}
-		,area =#{area}
-		
-		,address = #{address}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_user_mobileIds" parameterType="user">
-		UPDATE tstd_user
-		SET
-		mobile= #{mobile}
-		,real_name= #{realName}
-		,id_kind = #{idKind}
-		,id_no = #{idNo}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_user_company" parameterType="user">
-		UPDATE tstd_user
-		SET
-		company_code = #{companyCode}
-		WHERE
-		user_id = #{userId}		
-	</update>
-	
-	<update id="update_level" parameterType="user">
-		UPDATE tstd_user
-		SET
-		level = #{level}
-		WHERE
-		user_id = #{userId}		
-	</update>
-	
-	<update id="update_wx_info" parameterType="user">
-		UPDATE tstd_user
-		SET
-		union_id =#{unionId}
-		,h5_open_id =#{h5OpenId}
-		,app_open_id =#{appOpenId}
-		,nickname = #{nickname}
-		WHERE
-		user_id = #{userId}		
-	</update>
-	
-	<update id="approve_user" parameterType="user">
-		UPDATE tstd_user
-		SET
-		div_rate = #{divRate}
-		,status = #{status}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE
-		user_id = #{userId}		
-	</update>
 </mapper>

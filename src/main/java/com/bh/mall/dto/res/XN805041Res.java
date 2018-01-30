@@ -8,9 +8,8 @@ public class XN805041Res {
     public XN805041Res() {
     }
 
-    public XN805041Res(String userId, Long amount) {
+    public XN805041Res(String userId) {
         this.userId = userId;
-        this.amount = amount;
     }
 
     public String getUserId() {

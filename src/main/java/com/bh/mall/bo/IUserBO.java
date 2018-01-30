@@ -8,7 +8,6 @@
  */
 package com.bh.mall.bo;
 
-import java.util.Date;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
@@ -85,23 +84,9 @@ public interface IUserBO extends IPaginableBO<User> {
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
 
-    public int refreshIdentityZm(String userId, String realName, String idKind,
-            String idNo, String zmScore);
-
-    public int refreshZmScore(String userId, String zmScore);
-
-    public int refreshGradDatetime(String userId, Date gradDatetime);
-
     public int refreshRealName(String userId, String realName);
 
     public int refreshLoginPwd(String userId, String loginPwd);
-
-    public int refreshTradePwd(String userId, String tradePwd);
-
-    public int refreshMobile(String userId, String mobile);
-
-    public int refreshBindMobile(String userId, String loginName,
-            String mobile, String loginPwd, String loginPwdStrength);
 
     public User getUser(String userId);
 
@@ -116,35 +101,17 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshStatus(String userId, EUserStatus normal,
             String updater, String remark);
 
-    public void refreshRole(String userId, String roleCode, String updater,
-            String remark);
-
-    public void refreshPdf(String userId, String pdf, String updater,
-            String remark);
-
     public void refreshLoginName(String userId, String loginName);
 
     public void refreshNickname(String userId, String nickname);
 
     public void refreshPhoto(String userId, String photo);
 
-    public void refreshCompany(String userId, String companyCode);
-
     public void refreshUser(User data);
 
-    public void refreshUserMobileIds(User data);
-
     public void refreshLevel(User data);
-
-    public void refreshNameAddress(User data);
 
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
 
-    public void approveUser(String userId, String approver, String status,
-            Double divRate, String remark);
-
-    public int refreshDivRate(String userId, Double divRate);
-
-    public Long totalUser(User condition);
 }

@@ -16,11 +16,14 @@ public class Address extends ABaseDO {
     // 收件编号
     private String code;
 
+    // 类型(1.用户地址，2.售后地址)
+    private String type;
+
     // 用户编号
     private String userId;
 
     // 收件人名称
-    private String addressee;
+    private String receiver;
 
     // 手机号
     private String mobile;
@@ -65,14 +68,6 @@ public class Address extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getAddressee() {
-        return addressee;
-    }
-
-    public void setAddressee(String addressee) {
-        this.addressee = addressee;
     }
 
     public String getMobile() {
@@ -121,5 +116,21 @@ public class Address extends ABaseDO {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 }

@@ -19,9 +19,9 @@ import com.bh.mall.dto.res.XN805170Res;
 public interface IUserAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
-    // 检查手机号是否存在
-    public void doCheckMobile(String mobile, String kind, String companyCode,
-            String systemCode);
+    // 用户登录
+    public String doLogin(String loginName, String loginPwd, String kind,
+            String companyCode, String systemCode);
 
     // 注册前端用户
     public XN805041Res doRegister(String mobile, String loginPwd,
@@ -34,10 +34,6 @@ public interface IUserAO {
 
     // 申请注册
     public String doApplyRegUser(XN805043Req req);
-
-    // 用户登录
-    public String doLogin(String loginName, String loginPwd, String kind,
-            String companyCode, String systemCode);
 
     // 微信注册/登录
     public XN805170Res doLoginWeChat(XN805170Req req);
@@ -52,24 +48,8 @@ public interface IUserAO {
     // 修改头像
     public void doModifyPhoto(String userId, String photo);
 
-    // 完善手机号和身份信息
-    public void doModfiyMobileAndIds(String userId, String mobile,
-            String realName, String idKind, String idNo);
-
-    // 设置角色
-    public void doRoleUser(String userId, String roleCode, String updater,
-            String remark);
-
-    // 修改分成比例
-    public void doModifyDivRate(String userId, Double divRate, String updater,
-            String remark);
-
     // 修改用户等级
     public void doUpLevel(String userId, String level);
-
-    // 审核注册用户
-    public void doApproveUser(String userId, String approver,
-            String approveResult, String divRate, String remark);
 
     // 修改用户信息
     public void doModifyUser(XN805095Req req);
