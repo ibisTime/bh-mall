@@ -13,5 +13,8 @@
 	    <typeAlias alias="sysDict" type="com.bh.mall.domain.SYSDict" />
 	    <typeAlias alias="sysConfig" type="com.bh.mall.domain.SYSConfig" />
 	    
+	    <typeAlias alias="agent" type="com.bh.mall.domain.Agent"/>
+	    <typeAlias alias="agentImpower" type="com.bh.mall.domain.AgentImpower"/>
+	    <typeAlias alias="agentUpgrade" type="com.bh.mall.domain.AgentUpgrade"/>
 	</typeAliases>
 </configuration>	

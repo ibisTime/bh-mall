@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.impl.AgentImpowerDAOImpl">
+	<resultMap type="agentImpower" id="agentImpower_DB_Result">
+		<result column="code" property="code"/>
+		<result column="agent_code" property="agentCode"/>
+		<result column="is_intent" property="isIntent"/>
+		<result column="is_intro" property="isIntro"/>
+		<result column="is_realname" property="isRealname"/>
+		<result column="is_company_impower" property="isCompanyImpower"/>
+		<result column="impower_amount" property="impowerAmount"/>
+		<result column="min_charge" property="minCharge"/>
+		<result column="red_percent" property="redPercent"/>
+		<result column="is_summary" property="isSummary"/>
+	</resultMap>
+	
+	<sql id="where_condition">
+		<if test="agentCode != null and agentCode != ''">
+			AND agent_code=#{agentCode}
+		</if>
+	</sql>
+	
+	<select id="get_agentImpower" parameterType="java.lang.String" resultType="agentImpower">
+		SELECT * FROM tbh_agent_impower WHERE code=#{code}
+	</select>
+	
+	<select id="select_agentImpower">
+		SELECT * FROM tbh_agent_impower 
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	<update id="update_agentImpower" parameterType="agentImpower">
+		UPDATE tbh_agent_impower SET
+		code=#{code},
+		agent_code=#{agentCode},
+		is_intent=#{isIntent},
+		is_intro=#{isIntro},
+		is_realname=#{isRealname},
+		is_company_impower=#{isCompanyImpower},
+		impower_amount=#{impowerAmount},
+		min_charge=#{minCharge},
+		red_percent=#{redPercent},
+		is_summary=#{isSummary},
+	</update>
+	
+</mapper>

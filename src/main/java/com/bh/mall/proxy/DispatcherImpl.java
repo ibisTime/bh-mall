@@ -18,7 +18,7 @@ public class DispatcherImpl implements IDispatcher {
         ReturnMessage rm = new ReturnMessage();
         try {
             // 加载配置文件,proxy实例化
-            String classname = "com.std.user.api.impl.XNOther";
+            String classname = "com.bh.mall.api.impl.XNOther";
             // ConfigDescribe configDescribe = ConfigLoader.loadConfig();
             // if (StringUtils.isNotBlank(transcode) && configDescribe != null)
             // {
