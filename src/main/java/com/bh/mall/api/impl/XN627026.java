@@ -1,10 +1,8 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.ao.IAgentUpgradeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.dto.req.XN627016Req;
 import com.bh.mall.dto.req.XN627026Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
