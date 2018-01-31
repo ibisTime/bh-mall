@@ -37,8 +37,8 @@ public class AgentUpgradeAOImpl implements IAgentUpgradeAO {
     }
 
     @Override
-    public Paginable<AgentUpgrade> queryAgentUpgradeListPage(
-            AgentUpgrade condition, int start, int limit) {
+    public Paginable<AgentUpgrade> queryAgentUpgradeListPage(int start,
+            int limit, AgentUpgrade condition) {
         return agentUpgradeBO.getPaginable(start, limit, condition);
     }
 

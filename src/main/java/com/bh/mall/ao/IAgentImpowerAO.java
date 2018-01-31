@@ -21,8 +21,8 @@ public interface IAgentImpowerAO {
      * @param start
      * @param limit
      */
-    public Paginable<AgentImpower> queryAgentImpowerListPage(
-            AgentImpower condition, int start, int limit);
+    public Paginable<AgentImpower> queryAgentImpowerListPage(int start,
+            int limit, AgentImpower condition);
 
     /**
      * 代理授权列表查询

@@ -37,7 +37,7 @@ public class XN627025 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return agentUpgradeAO
-            .queryAgentUpgradeListPage(condition, start, limit);
+            .queryAgentUpgradeListPage(start, limit, condition);
     }
 
     @Override

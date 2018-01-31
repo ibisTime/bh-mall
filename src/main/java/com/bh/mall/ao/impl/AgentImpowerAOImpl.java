@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAgentImpowerAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
@@ -19,9 +20,13 @@ public class AgentImpowerAOImpl implements IAgentImpowerAO {
     @Autowired
     IAgentImpowerBO agentImpowerBO;
 
+    @Autowired
+    IAgentBO agentBO;
+
     @Override
     @Transactional
     public int editAgentImpower(XN627012Req req) {
+        agentBO.getAgent(req.getAgentCode());
         AgentImpower data = agentImpowerBO.getAgentImpower(req.getCode());
 
         data.setAgentCode(req.getAgentCode());
@@ -51,8 +56,8 @@ public class AgentImpowerAOImpl implements IAgentImpowerAO {
 
     @Override
     @Transactional
-    public Paginable<AgentImpower> queryAgentImpowerListPage(
-            AgentImpower condition, int start, int limit) {
+    public Paginable<AgentImpower> queryAgentImpowerListPage(int start,
+            int limit, AgentImpower condition) {
         return agentImpowerBO.getPaginable(start, limit, condition);
     }
 
