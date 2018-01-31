@@ -2,6 +2,12 @@ package com.bh.mall.domain;
 
 import com.bh.mall.dao.base.ABaseDO;
 
+/**
+ * 等级授权设置
+ * @author: chenshan 
+ * @since: 2018年1月31日 下午1:51:00 
+ * @history:
+ */
 public class AgentImpower extends ABaseDO {
 
     /**

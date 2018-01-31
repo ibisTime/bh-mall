@@ -13,7 +13,7 @@ public interface IAgentUpgradeAO {
      * @param req
      * @return
      */
-    public int updateAgentUpgrade(XN627022Req req);
+    public void editAgentUpgrade(XN627022Req req);
 
     /**
      * 代理升级列表查询

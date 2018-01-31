@@ -10,22 +10,22 @@
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
-				AND code = #{code}
+				AND t.code = #{code}
 			</if>
 			<if test="name != null and name != ''">
-				AND name like "%"#{name}"%"
+				AND t.name like "%"#{name}"%"
 			</if>
 			<if test="level != null and level !=''">
-				AND level = #{level}
+				AND t.level = #{level}
 			</if>
 		</trim>
 	</sql>
 	<select id="select_agent" parameterType="agent" resultMap="aegnt_DB_Result">
 		SELECT 
-		code
-		,name
-		,level 
-		FROM tbh_agent
+		t.code
+		,t.name
+		,t.level 
+		FROM tbh_agent t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -36,7 +36,7 @@
 	
 	
 	<select id="select_count" parameterType="agent" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_agent
+		SELECT count(1) FROM tbh_agent t
 		<include refid="where_condition"/>
 	</select>
 	
