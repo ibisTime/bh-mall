@@ -2,7 +2,6 @@ package com.bh.mall.api.impl;
 
 import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.api.AProcessor;
-import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.dto.req.XN627016Req;
 import com.bh.mall.exception.BizException;
@@ -25,15 +24,14 @@ public class XN627016 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-    	AgentImpower condition = new AgentImpower();
-    	condition.setAgentCode(req.getAgentCode());
+        AgentImpower condition = new AgentImpower();
+        condition.setAgentCode(req.getAgentCode());
         return agentImpowerAO.queryAgentImpowerList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN627016Req.class);
-        StringValidater.validateBlank(req.getCode());
     }
 
 }
