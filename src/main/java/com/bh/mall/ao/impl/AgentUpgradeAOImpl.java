@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,44 +8,55 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAgentUpgradeAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentUpgradeBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.AgentUpgrade;
-import com.bh.mall.exception.BizException;
+import com.bh.mall.dto.req.XN627022Req;
 
 @Service
 public class AgentUpgradeAOImpl implements IAgentUpgradeAO {
 
-	@Autowired
-	IAgentUpgradeBO agentUpgradeBO;
-	
+    @Autowired
+    IAgentUpgradeBO agentUpgradeBO;
 
-	@Override
-	@Transactional
-	public int updateAgentUpgrade(AgentUpgrade data) {
-		return agentUpgradeBO.updateAgentUpgrade(data);
-	}
+    @Autowired
+    IAgentBO agentBO;
 
-	@Override
-	@Transactional
-	public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition) {
-		return agentUpgradeBO.queryAgentUpgradeList(condition);
-	}
+    @Override
+    @Transactional
+    public void editAgentUpgrade(XN627022Req req) {
+        agentBO.getAgent(req.getAgentCode());
+        agentUpgradeBO.getAgentUpgrade(req.getCode());
+        AgentUpgrade data = new AgentUpgrade();
+        data.setAgentCode(req.getAgentCode());
+        data.setCode(req.getCode());
+        data.setIsCompanyApprove(req.getIsCompanyApprove());
+        data.setIsReset(req.getIsReset());
+        data.setRecommendNumber(Integer.valueOf(req.getRecommendNumber()));
+        data.setUpgradeFirstAmount(
+            BigInteger.valueOf(Long.valueOf(req.getUpgradeFirstAmount())));
 
-	@Override
-	@Transactional
-	public Paginable<AgentUpgrade> queryAgentUpgradeListPage(AgentUpgrade condition, int start, int limit) {
-		return agentUpgradeBO.getPaginable(start, limit, condition);
-	}
+        agentUpgradeBO.editAgentUpgrade(data);
+    }
 
-	@Override
-	@Transactional
-	public AgentUpgrade getAgentUpgrade(String code) {
-		AgentUpgrade data = agentUpgradeBO.getAgentUpgrade(code);
-		if(data == null) {
-			throw new BizException("xn0000", "该代理不存在");
-		}
-		return agentUpgradeBO.getAgentUpgrade(code);
-	}
+    @Override
+    @Transactional
+    public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition) {
+        return agentUpgradeBO.queryAgentUpgradeList(condition);
+    }
+
+    @Override
+    @Transactional
+    public Paginable<AgentUpgrade> queryAgentUpgradeListPage(int start,
+            int limit, AgentUpgrade condition) {
+        return agentUpgradeBO.getPaginable(start, limit, condition);
+    }
+
+    @Override
+    @Transactional
+    public AgentUpgrade getAgentUpgrade(String code) {
+        return agentUpgradeBO.getAgentUpgrade(code);
+    }
 
 }

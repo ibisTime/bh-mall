@@ -52,8 +52,4 @@
 	<bean id="agentUpgradeBO" class="com.bh.mall.bo.impl.AgentUpgradeBOImpl">
 		<property name="paginableDAO" ref="agentUpgradeDAOImpl"></property>
 	</bean>
-	
-	<bean id="MaterialBO" class="com.bh.mall.bo.impl.MaterialBOImpl">
-		<property name="paginableDAO" ref="materialDAOImpl"></property>
-	</bean>
 </beans>

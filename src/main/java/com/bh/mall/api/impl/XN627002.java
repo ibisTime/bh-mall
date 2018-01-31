@@ -9,10 +9,12 @@ import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
+
 /**
  * 修改代理
- * @author nyc
- *
+ * @author: nyc 
+ * @since: 2018年1月31日 下午2:36:28 
+ * @history:
  */
 public class XN627002 extends AProcessor {
 

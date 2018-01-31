@@ -19,10 +19,10 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     private IAgentDAO agentDAO;
 
     @Override
-    public int updateAgent(Agent data, String level, String name) {
+    public void editAgent(Agent data, String level, String name) {
         data.setLevel(level);
         data.setName(name);
-        return agentDAO.update(data);
+        agentDAO.update(data);
     }
 
     @Override

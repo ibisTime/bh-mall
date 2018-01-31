@@ -22,9 +22,9 @@
 	</sql>
 	<select id="select_agent" parameterType="agent" resultMap="aegnt_DB_Result">
 		SELECT 
-		code
-		,name
-		,level 
+			code,
+			name,
+			level 
 		FROM tbh_agent
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">

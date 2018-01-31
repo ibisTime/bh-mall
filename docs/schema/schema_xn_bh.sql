@@ -180,3 +180,46 @@ CREATE TABLE `tsys_role` (
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for table `tbh_agent`
+-- ----------------------------
+DROP TABLE IF EXISTS `tbh_agent`;
+CREATE TABLE `tbh_agent` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `name` varchar(64) DEFAULT NULL COMMENT '等级名称',
+  `level` varchar(32) DEFAULT NULL COMMENT '等级',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for table `tbh_agent_impower`
+-- ----------------------------
+DROP TABLE IF EXISTS `tbh_agent_impower`;
+CREATE TABLE `tbh_agent_impower` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `agent_code` varchar(32) DEFAULT NULL COMMENT '代理编号',
+  `is_intent` char(1) DEFAULT NULL COMMENT '是否被意向（0否 1是）',
+  `is_intro` char(1) DEFAULT NULL COMMENT '是否可被介绍（0否 1是）',
+  `is_realname` char(1) DEFAULT NULL COMMENT '是否实名（0否 1是）',
+  `is_company_impower` char(1) DEFAULT NULL COMMENT '是否需要公司审核（0否 1是）',
+  `impower_amount` bigint(20) DEFAULT NULL COMMENT '授权单金额',
+  `min_charge` bigint(20) DEFAULT NULL COMMENT '充值门槛',
+  `red_percent` decimal(10,0) DEFAULT NULL COMMENT '红线金额百分比',
+  `is_summary` char(1) DEFAULT NULL COMMENT '授权是否汇总（0否 1是）',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for table `tbh_agent_upgrade`
+-- ----------------------------
+DROP TABLE IF EXISTS `tbh_agent_upgrade`;
+CREATE TABLE `tbh_agent_upgrade` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `agent_code` varchar(32) DEFAULT NULL COMMENT '代理编号',
+  `is_company_approve` char(1) DEFAULT NULL COMMENT '本等级升级是否公司审核',
+  `upgrade_first_amount` bigint(20) DEFAULT NULL COMMENT '本等级升级首单总额',
+  `recommend_number` int(11) DEFAULT NULL COMMENT '半门槛推荐人数',
+  `is_reset` char(1) DEFAULT NULL COMMENT '本等级升级是否余额清零',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

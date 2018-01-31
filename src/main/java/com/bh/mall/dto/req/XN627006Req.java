@@ -1,32 +1,33 @@
 package com.bh.mall.dto.req;
 
 /**
- * 列表查询代理
- * @author nyc
- *
+ * 查询代理列表
+ * @author: nyc 
+ * @since: 2018年1月31日 下午2:53:07 
+ * @history:
  */
 public class XN627006Req {
 
-	// 等级名称  （选填）
-	private String level;
-	// 等级名称  （选填）
-	private String name;
+    // 等级名称 （选填）
+    private String level;
 
-	public String getLevel() {
-		return level;
-	}
+    // 等级名称 （选填）
+    private String name;
 
-	public void setLevel(String level) {
-		this.level = level;
-	}
+    public String getLevel() {
+        return level;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

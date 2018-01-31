@@ -22,8 +22,11 @@ public interface IAgentAO {
     /**
      * 分页查询代理
      * @param start
+     * @param limit
      * @param condition
-     * @param pageSize
+     * @return 
+     * @create: 2018年1月31日 下午2:30:59 nyc
+     * @history:
      */
     public Paginable<Agent> queryAgentListPage(int start, int limit,
             Agent condition);
@@ -31,13 +34,18 @@ public interface IAgentAO {
     /**
      * 查询代理详情
      * @param code
-     * @return
+     * @return 
+     * @create: 2018年1月31日 下午2:31:14 nyc
+     * @history:
      */
     public Agent getAgent(String code);
 
     /**
      * 列表查询代理
      * @param condition
+     * @return 
+     * @create: 2018年1月31日 下午2:31:23 nyc
+     * @history:
      */
     public List<Agent> queryAgentList(Agent condition);
 

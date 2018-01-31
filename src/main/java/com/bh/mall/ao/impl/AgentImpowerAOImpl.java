@@ -1,5 +1,7 @@
 package com.bh.mall.ao.impl;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,47 +9,59 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAgentImpowerAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.AgentImpower;
-import com.bh.mall.exception.BizException;
+import com.bh.mall.dto.req.XN627012Req;
 
 @Service
 public class AgentImpowerAOImpl implements IAgentImpowerAO {
 
-	@Autowired
-	IAgentImpowerBO agentImpowerBO;
+    @Autowired
+    IAgentImpowerBO agentImpowerBO;
 
-	@Override
-	@Transactional
-	public int editAgentImpower(AgentImpower data) {
-		return agentImpowerBO.updateAgentImpower(data);
-	}
+    @Autowired
+    IAgentBO agentBO;
 
+    @Override
+    @Transactional
+    public void editAgentImpower(XN627012Req req) {
+        agentBO.getAgent(req.getAgentCode());
+        agentImpowerBO.getAgentImpower(req.getCode());
+        AgentImpower data = new AgentImpower();
+        data.setCode(req.getCode());
+        data.setAgentCode(req.getAgentCode());
+        data.setImpowerAmount(
+            BigInteger.valueOf(Long.valueOf(req.getImpowerAmount())));
+        data.setIsCompanyImpower(req.getIsCompanyImpower());
+        data.setIsIntent(req.getIsIntent());
+        data.setIsIntro(req.getIsIntro());
+        data.setIsRealname(req.getIsRealName());
+        data.setIsSummary(req.getIsSummary());
+        data.setMinCharge(BigInteger.valueOf(Long.valueOf(req.getMinCharge())));
+        data.setRedPercent(
+            BigDecimal.valueOf(Double.valueOf(req.getRedPercent())));
+        agentImpowerBO.editAgentImpower(data);
+    }
 
-	@Override
-	@Transactional
-	public List<AgentImpower> queryAgentImpowerList(AgentImpower condition) {
-		return agentImpowerBO.queryAgentImpowerList(condition);
-	}
+    @Override
+    @Transactional
+    public List<AgentImpower> queryAgentImpowerList(AgentImpower condition) {
+        return agentImpowerBO.queryAgentImpowerList(condition);
+    }
 
-	@Override
-	@Transactional
-	public AgentImpower getAgentImpower(String code) {
-		AgentImpower data = agentImpowerBO.getAgentImpower(code);
-		if(data == null) {
-			throw new BizException("xn0000", "该代理不存在");
-		}
-		return agentImpowerBO.getAgentImpower(code);
-	}
+    @Override
+    @Transactional
+    public AgentImpower getAgentImpower(String code) {
+        return agentImpowerBO.getAgentImpower(code);
+    }
 
-
-	@Override
-	@Transactional
-	public Paginable<AgentImpower> queryAgentImpowerListPage(AgentImpower condition, int start, int limit) {
-		return agentImpowerBO.getPaginable(start, limit, condition);
-	}
-
-	
+    @Override
+    @Transactional
+    public Paginable<AgentImpower> queryAgentImpowerListPage(int start,
+            int limit, AgentImpower condition) {
+        return agentImpowerBO.getPaginable(start, limit, condition);
+    }
 
 }

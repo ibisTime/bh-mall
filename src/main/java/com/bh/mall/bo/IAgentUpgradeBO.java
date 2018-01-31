@@ -7,9 +7,9 @@ import com.bh.mall.domain.AgentUpgrade;
 
 public interface IAgentUpgradeBO extends IPaginableBO<AgentUpgrade> {
 
-	public int updateAgentUpgrade(AgentUpgrade data);
-	
-	public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition);
-	
-	public AgentUpgrade getAgentUpgrade(String code);
+    public void editAgentUpgrade(AgentUpgrade data);
+
+    public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition);
+
+    public AgentUpgrade getAgentUpgrade(String code);
 }

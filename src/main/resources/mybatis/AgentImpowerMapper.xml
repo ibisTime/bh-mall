@@ -18,26 +18,26 @@
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
-				AND code=#{code}
+				AND m.code=#{code}
 			</if>
 			<if test="agentCode != null and agentCode != ''">
-				AND agent_code=#{agentCode}
+				AND m.agent_code=#{agentCode}
 			</if>
 		</trim>
 	</sql>
 	
 	<select id="select_agentImpower" parameterType="agentImpower" resultMap="agentImpower_DB_Result">
 		SELECT 
-			code, 
-			agent_code, 
-			is_intent, 
-			is_intro,
-			is_realname,
-			is_company_impower,
-			impower_amount,
-			min_charge,
-			red_percent,
-			is_summary
+			m.code, 
+			m.agent_code, 
+			m.is_intent, 
+			m.is_intro,
+			m.is_realname,
+			m.is_company_impower,
+			m.impower_amount,
+			m.min_charge,
+			m.red_percent,
+			m.is_summary
 		 FROM tbh_agent_impower 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">

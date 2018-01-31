@@ -14,16 +14,23 @@
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
-				AND code=#{code}
+				AND u.code=#{code}
 			</if>
 			<if test="agentCode != null and agentCode != ''">
-				AND agent_code=#{agentCode}
+				AND u.agent_code=#{agentCode}
 			</if>
 		</trim>
 	</sql>
 	
 	<select id="select_agentUpgrade" parameterType="agentUpgrade" resultMap="aegnt_DB_Result">
-		SELECT * FROM tbh_agent_upgrade 
+		SELECT 
+			u.code
+			u.agent_code,
+			u.is_company_approve,
+			u.upgrade_first_amount,
+			u.recommend_number,
+			u.is_reset
+		FROM tbh_agent_upgrade 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
