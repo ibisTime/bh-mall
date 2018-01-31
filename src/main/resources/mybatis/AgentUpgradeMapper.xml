@@ -14,23 +14,23 @@
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
-				AND u.code=#{code}
+				AND t.code=#{code}
 			</if>
 			<if test="agentCode != null and agentCode != ''">
-				AND u.agent_code=#{agentCode}
+				AND t.agent_code=#{agentCode}
 			</if>
 		</trim>
 	</sql>
 	
 	<select id="select_agentUpgrade" parameterType="agentUpgrade" resultMap="aegnt_DB_Result">
 		SELECT 
-			u.code
-			u.agent_code,
-			u.is_company_approve,
-			u.upgrade_first_amount,
-			u.recommend_number,
-			u.is_reset
-		FROM tbh_agent_upgrade 
+		t.code
+		,t.agent_code
+		,t.is_company_approve
+		,t.upgrade_first_amount
+		,t.recommend_number
+		,t.is_reset
+		FROM tbh_agent_upgrade t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -40,7 +40,7 @@
 	</select>
 	
 	<select id="select_count" parameterType="agentUpgrade" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_agent_upgrade
+		SELECT count(1) FROM tbh_agent_upgrade t
 		<include refid="where_condition"></include>
 	</select>
 

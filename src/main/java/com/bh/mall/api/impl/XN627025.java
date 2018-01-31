@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.ao.IAgentUpgradeAO;
 import com.bh.mall.api.AProcessor;
-import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentUpgrade;
 import com.bh.mall.dto.req.XN627025Req;
@@ -30,14 +29,15 @@ public class XN627025 extends AProcessor {
     public Object doBusiness() throws BizException {
         AgentUpgrade condition = new AgentUpgrade();
         condition.setAgentCode(req.getAgentCode());
-        String column = req.getOrderColumn();
 
+        String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IAgentImpowerAO.DEFAULT_ORDER_COLUMN;
         }
+
         condition.setOrder(column, req.getOrderDir());
-        int start = Integer.valueOf(req.getStart());
-        int limit = Paginable.DEFAULT_PAGE_SIZE;
+        int start = StringValidater.toInteger(req.getStart());
+        int limit = StringValidater.toInteger(req.getLimit());
 
         return agentUpgradeAO.queryAgentUpgradeListPage(start, limit,
             condition);
@@ -46,7 +46,7 @@ public class XN627025 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN627025Req.class);
-        StringValidater.validateNumber(req.getStart());
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 
 }

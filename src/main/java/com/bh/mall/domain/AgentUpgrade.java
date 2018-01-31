@@ -27,10 +27,10 @@ public class AgentUpgrade extends ABaseDO {
     private String isCompanyApprove;
 
     // 本等级升级首单总额
-    private BigInteger upgradeFirstAmount;
+     private Long upgradeFirstAmount;
 
     // 半门槛推荐人数
-    private int recommendNumber;
+    private Integer recommendNumber;
 
     // 本等级升级是否余额清零
     private String isReset;
@@ -59,19 +59,18 @@ public class AgentUpgrade extends ABaseDO {
         this.isCompanyApprove = isCompanyApprove;
     }
 
-    public BigInteger getUpgradeFirstAmount() {
+    public Long getUpgradeFirstAmount() {
         return upgradeFirstAmount;
     }
-
-    public void setUpgradeFirstAmount(BigInteger upgradeFirstAmount) {
+  public void setUpgradeFirstAmount(Long upgradeFirstAmount) {
         this.upgradeFirstAmount = upgradeFirstAmount;
     }
 
-    public int getRecommendNumber() {
+   public Integer getRecommendNumber() {
         return recommendNumber;
     }
 
-    public void setRecommendNumber(int recommendNumber) {
+    public void setRecommendNumber(Integer recommendNumber) {
         this.recommendNumber = recommendNumber;
     }
 

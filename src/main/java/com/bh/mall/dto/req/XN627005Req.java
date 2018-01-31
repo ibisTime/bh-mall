@@ -6,7 +6,13 @@ package com.bh.mall.dto.req;
  * @since: 2018年1月31日 下午2:40:21 
  * @history:
  */
-public class XN627005Req {
+public class XN627005Req extends APageReq {
+
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = -3263503860757346138L;
+
 
     // 等级 （选填）
     private String level;
@@ -14,19 +20,7 @@ public class XN627005Req {
     // 等级 （选填）
     private String name;
 
-    // 每页数量 （必填）
-    private String limit;
-
-    // 页码 （必填）
-    private String start;
-
-    // 排序字段 （选填）
-    private String orderColumn;
-
-    // 排序方式 （选填）
-    private String orderDir;
-
-    public String getLevel() {
+   public String getLevel() {
         return level;
     }
 
@@ -41,37 +35,6 @@ public class XN627005Req {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getLimit() {
-        return limit;
-    }
-
-    public void setLimit(String limit) {
-        this.limit = limit;
-    }
-
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    public String getOrderColumn() {
-        return orderColumn;
-    }
-
-    public void setOrderColumn(String orderColumn) {
-        this.orderColumn = orderColumn;
-    }
-
-    public String getOrderDir() {
-        return orderDir;
-    }
-
-    public void setOrderDir(String orderDir) {
-        this.orderDir = orderDir;
-    }
+  
 
 }

@@ -1,125 +1,128 @@
 package com.bh.mall.domain;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.bh.mall.dao.base.ABaseDO;
 
-public class AgentImpower extends ABaseDO{
+/**
+ * 等级授权设置
+ * @author: chenshan 
+ * @since: 2018年1月31日 下午1:51:00 
+ * @history:
+ */
+public class AgentImpower extends ABaseDO {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6038753576544375788L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6038753576544375788L;
 
-	// 编号
-	private String code;
-	
-	//代理编号
-	private String agentCode;
-	
-	//本等级是够可被意向
-	private String isIntent;
-	
-	// 本等级是否可被介绍
-	private String isIntro;
-	
-	// 本等级是否需要实名
-	private String isRealname;
-	
-	// 本等级是否需要公司审核(授权)
-	private String isCompanyImpower;
-	
-	// 本等级授权单金额
-	private BigInteger impowerAmount;
-	
-	// 本等级充值门槛
-	private BigInteger minCharge;
-	
-	// 红线金额百分比  
-	private BigDecimal redPercent;
-	
-	// 本等级授权是否汇总
-	private String isSummary;
+    // 编号
+    private String code;
 
-	public String getCode() {
-		return code;
-	}
+    // 代理编号
+    private String agentCode;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    // 本等级是够可被意向
+    private String isIntent;
 
-	public String getAgentCode() {
-		return agentCode;
-	}
+    // 本等级是否可被介绍
+    private String isIntro;
 
-	public void setAgentCode(String agentCode) {
-		this.agentCode = agentCode;
-	}
+    // 本等级是否需要实名
+    private String isRealname;
 
-	public String getIsIntent() {
-		return isIntent;
-	}
+    // 本等级是否需要公司审核(授权)
+    private String isCompanyImpower;
 
-	public void setIsIntent(String isIntent) {
-		this.isIntent = isIntent;
-	}
+    // 本等级授权单金额
+    private Long impowerAmount;
 
-	public String getIsIntro() {
-		return isIntro;
-	}
+    // 本等级充值门槛
+    private Long minCharge;
 
-	public void setIsIntro(String isIntro) {
-		this.isIntro = isIntro;
-	}
+    // 红线金额百分比
+    private Double redPercent;
 
-	public String getIsRealname() {
-		return isRealname;
-	}
+    // 本等级授权是否汇总
+    private String isSummary;
 
-	public void setIsRealname(String isRealname) {
-		this.isRealname = isRealname;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getIsCompanyImpower() {
-		return isCompanyImpower;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setIsCompanyImpower(String isCompanyImpower) {
-		this.isCompanyImpower = isCompanyImpower;
-	}
+    public String getAgentCode() {
+        return agentCode;
+    }
 
-	public BigInteger getImpowerAmount() {
-		return impowerAmount;
-	}
+    public void setAgentCode(String agentCode) {
+        this.agentCode = agentCode;
+    }
 
-	public void setImpowerAmount(BigInteger impowerAmount) {
-		this.impowerAmount = impowerAmount;
-	}
+    public String getIsIntent() {
+        return isIntent;
+    }
 
-	public BigInteger getMinCharge() {
-		return minCharge;
-	}
+    public void setIsIntent(String isIntent) {
+        this.isIntent = isIntent;
+    }
 
-	public void setMinCharge(BigInteger minCharge) {
-		this.minCharge = minCharge;
-	}
+    public String getIsIntro() {
+        return isIntro;
+    }
 
-	public BigDecimal getRedPercent() {
-		return redPercent;
-	}
+    public void setIsIntro(String isIntro) {
+        this.isIntro = isIntro;
+    }
 
-	public void setRedPercent(BigDecimal redPercent) {
-		this.redPercent = redPercent;
-	}
+    public String getIsRealname() {
+        return isRealname;
+    }
 
-	public String getIsSummary() {
-		return isSummary;
-	}
+    public void setIsRealname(String isRealname) {
+        this.isRealname = isRealname;
+    }
 
-	public void setIsSummary(String isSummary) {
-		this.isSummary = isSummary;
-	}
+    public String getIsCompanyImpower() {
+        return isCompanyImpower;
+    }
+
+    public void setIsCompanyImpower(String isCompanyImpower) {
+        this.isCompanyImpower = isCompanyImpower;
+    }
+
+    public Long getImpowerAmount() {
+        return impowerAmount;
+    }
+
+    public void setImpowerAmount(Long impowerAmount) {
+        this.impowerAmount = impowerAmount;
+    }
+
+    public Long getMinCharge() {
+        return minCharge;
+    }
+
+    public void setMinCharge(Long minCharge) {
+        this.minCharge = minCharge;
+    }
+
+    public Double getRedPercent() {
+        return redPercent;
+    }
+
+    public void setRedPercent(Double redPercent) {
+        this.redPercent = redPercent;
+    }
+
+    public String getIsSummary() {
+        return isSummary;
+    }
+
+    public void setIsSummary(String isSummary) {
+        this.isSummary = isSummary;
+    }
 
 }

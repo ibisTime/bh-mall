@@ -44,6 +44,7 @@ public interface IAgentImpowerAO {
      * @return 
      * @create: 2018年1月31日 下午3:39:43 nyc
      * @history:
+    
      */
     public AgentImpower getAgentImpower(String code);
 }

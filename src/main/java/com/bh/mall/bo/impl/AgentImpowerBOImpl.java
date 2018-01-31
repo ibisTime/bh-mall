@@ -29,6 +29,7 @@ public class AgentImpowerBOImpl extends PaginableBOImpl<AgentImpower>
             throw new BizException("xn0000", "该代理授权对应的代理不存在");
         }
         agentImPowerDAO.update(data);
+
     }
 
     @Override

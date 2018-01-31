@@ -3,7 +3,7 @@ package com.bh.mall.domain;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * 代理表 agent
+ * 代理等级表 agent
  * @author: nyc 
  * @since: 2018年1月31日 下午2:04:03 
  * @history:

@@ -5,46 +5,22 @@ package com.bh.mall.dto.req;
  * @author nyc
  *
  */
-public class XN627015Req {
+public class XN627015Req extends APageReq {
 
-	// 代理编号 （选填）
-	private String agentCode;
-	// 排序字段  （选填）
-	private String orderColumn;
-	// 排序方式 （选填）
-	private String orderDir;
-	// 每页数量 （选填，默认20）
-	private String limit;
-	// 页码 （必填）
-	private String start;
-	public String getAgentCode() {
-		return agentCode;
-	}
-	public void setAgentCode(String agentCode) {
-		this.agentCode = agentCode;
-	}
-	public String getOrderColumn() {
-		return orderColumn;
-	}
-	public void setOrderColumn(String orderColumn) {
-		this.orderColumn = orderColumn;
-	}
-	public String getOrderDir() {
-		return orderDir;
-	}
-	public void setOrderDir(String orderDir) {
-		this.orderDir = orderDir;
-	}
-	public String getLimit() {
-		return limit;
-	}
-	public void setLimit(String limit) {
-		this.limit = limit;
-	}
-	public String getStart() {
-		return start;
-	}
-	public void setStart(String start) {
-		this.start = start;
-	}
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = 7718579500140334339L;
+
+    // 代理编号 （选填）
+    private String agentCode;
+
+    public String getAgentCode() {
+        return agentCode;
+    }
+
+    public void setAgentCode(String agentCode) {
+        this.agentCode = agentCode;
+    }
+
 }

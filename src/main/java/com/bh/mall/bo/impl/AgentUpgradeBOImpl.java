@@ -24,6 +24,7 @@ public class AgentUpgradeBOImpl extends PaginableBOImpl<AgentUpgrade>
         AgentUpgrade condition = new AgentUpgrade();
         condition.setCode(data.getCode());
         condition.setAgentCode(data.getAgentCode());
+
         AgentUpgrade AUdata = agentUpgradeDAO.select(condition);
         if (AUdata == null) {
             throw new BizException("xn000", "该代理升级编号对应的代理不存在");

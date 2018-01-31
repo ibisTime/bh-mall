@@ -29,13 +29,16 @@ public class XN627015 extends AProcessor {
     public Object doBusiness() throws BizException {
         AgentImpower condition = new AgentImpower();
         condition.setAgentCode(req.getAgentCode());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IAgentImpowerAO.DEFAULT_ORDER_COLUMN;
         }
+
         condition.setOrder(column, req.getOrderDir());
-        int start = Integer.valueOf(req.getStart());
+        int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return agentImpowerAO.queryAgentImpowerListPage(start, limit,
             condition);
     }
@@ -43,8 +46,8 @@ public class XN627015 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN627015Req.class);
-        StringValidater.validateBlank(req.getStart());
-        StringValidater.validateNumber(req.getStart());
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
+
     }
 
 }

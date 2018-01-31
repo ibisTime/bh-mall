@@ -1,7 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.dto.req.XN627012Req;
 
@@ -31,17 +30,17 @@ public class AgentImpowerAOImpl implements IAgentImpowerAO {
         agentImpowerBO.getAgentImpower(req.getCode());
         AgentImpower data = new AgentImpower();
         data.setCode(req.getCode());
+
         data.setAgentCode(req.getAgentCode());
-        data.setImpowerAmount(
-            BigInteger.valueOf(Long.valueOf(req.getImpowerAmount())));
+        data.setImpowerAmount(StringValidater.toLong(req.getImpowerAmount()));
         data.setIsCompanyImpower(req.getIsCompanyImpower());
         data.setIsIntent(req.getIsIntent());
+
         data.setIsIntro(req.getIsIntro());
         data.setIsRealname(req.getIsRealName());
         data.setIsSummary(req.getIsSummary());
-        data.setMinCharge(BigInteger.valueOf(Long.valueOf(req.getMinCharge())));
-        data.setRedPercent(
-            BigDecimal.valueOf(Double.valueOf(req.getRedPercent())));
+        data.setMinCharge(StringValidater.toLong(req.getMinCharge()));
+        data.setRedPercent(StringValidater.toDouble(req.getRedPercent()));
         agentImpowerBO.editAgentImpower(data);
     }
 
