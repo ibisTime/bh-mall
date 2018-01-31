@@ -1,12 +1,23 @@
 package com.bh.mall.dto.req;
 
+/**
+ * 代理升级分页查询
+ * @author nyc
+ *
+ */
 public class XN627025Req {
 
+	// 代理编号 （选填）
 	private String agentCode;
+	// 每页数量 （选填）
 	private String limit;
+	// 排序字段 （选填）
 	private String orderColumn;
+	// 排序方式 （选填）
 	private String orderDir;
+	// 页码 （必填）
 	private String start;
+	
 	public String getAgentCode() {
 		return agentCode;
 	}

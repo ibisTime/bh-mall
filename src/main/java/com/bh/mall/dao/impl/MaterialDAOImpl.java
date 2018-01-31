@@ -2,10 +2,13 @@ package com.bh.mall.dao.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.bh.mall.dao.IMaterialDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.Material;
 
+@Repository("materialDAOImpl")
 public class MaterialDAOImpl extends AMybatisTemplate implements IMaterialDAO {
 
 	@Override
@@ -21,6 +24,12 @@ public class MaterialDAOImpl extends AMybatisTemplate implements IMaterialDAO {
 	@Override
 	public Material select(Material condition) {
 		return super.select(NAMESPACE.concat("select_material"), condition, Material.class);
+	}
+	
+
+	@Override
+	public int update(Material data) {
+		return super.update(NAMESPACE.concat("update_material"), data);
 	}
 
 	@Override

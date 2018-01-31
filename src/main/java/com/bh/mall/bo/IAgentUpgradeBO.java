@@ -9,7 +9,7 @@ public interface IAgentUpgradeBO extends IPaginableBO<AgentUpgrade> {
 
 	public int updateAgentUpgrade(AgentUpgrade data);
 	
-	public List<AgentUpgrade> queryList(String agentCode);
+	public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition);
 	
 	public AgentUpgrade getAgentUpgrade(String code);
 }

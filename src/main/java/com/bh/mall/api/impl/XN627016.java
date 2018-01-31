@@ -3,6 +3,7 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.dto.req.XN627016Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -10,7 +11,7 @@ import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 代理设置列表查询
+ * 代理授权列表查询
  * @author: chenshan 
  * @since: 2018年1月31日 上午9:53:37 
  * @history:
@@ -24,9 +25,9 @@ public class XN627016 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
-        return agentImpowerAO.queryAgentImpowerList(req.getCode(),
-            req.getAgentCode());
+    	AgentImpower condition = new AgentImpower();
+    	condition.setAgentCode(req.getAgentCode());
+        return agentImpowerAO.queryAgentImpowerList(condition);
     }
 
     @Override

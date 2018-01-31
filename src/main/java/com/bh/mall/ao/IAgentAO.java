@@ -36,9 +36,9 @@ public interface IAgentAO {
     public Agent getAgent(String code);
 
     /**
-     * 查询代理详情
+     * 列表查询代理
      * @param condition
      */
-    public List<Agent> queryAgentList(String level, String name);
+    public List<Agent> queryAgentList(Agent condition);
 
 }

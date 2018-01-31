@@ -29,9 +29,7 @@ public class AgentImpowerBOImpl extends PaginableBOImpl<AgentImpower> implements
 	}
 
 	@Override
-	public List<AgentImpower> queryList(String agentCode) {
-		AgentImpower condition = new AgentImpower();
-		condition.setAgentCode(agentCode);
+	public List<AgentImpower> queryAgentImpowerList(AgentImpower condition) {
 		return agentImPowerDAO.selectList(condition);
 	}
 	

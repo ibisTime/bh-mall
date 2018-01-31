@@ -1,18 +1,14 @@
 package com.bh.mall.dto.req;
 
+/**
+ * 代理升级列表查询
+ * @author nyc
+ *
+ */
 public class XN627026Req {
 
-	private String code;
+	// 代理编号 （选填）
 	private String agentCode;
-	
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
 
 	public String getAgentCode() {
 		return agentCode;

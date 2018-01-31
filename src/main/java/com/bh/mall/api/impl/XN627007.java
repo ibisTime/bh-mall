@@ -8,7 +8,11 @@ import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
-
+/**
+ * 查询代理详情
+ * @author nyc
+ *
+ */
 public class XN627007 extends AProcessor {
 
 	private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);

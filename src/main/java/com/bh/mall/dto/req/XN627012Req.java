@@ -1,26 +1,31 @@
 package com.bh.mall.dto.req;
 
+/**
+ * 修改代理授权
+ * @author nyc
+ *
+ */
 public class XN627012Req {
 	
-	// 编号
+	// 编号  （必填）
 	private String code;
-	// 代理编号
+	// 代理编号   （必填）
 	private String agentCode;
-	//授权金额
+	// 授权金额   （必填）
 	private String impowerAmount;
-	// 本等级是否可以被意向
+	// 本等级是否可以被意向   （必填）
 	private String isIntent;
-	// 是否可以被介绍
+	// 是否可以被介绍  （必填）
 	private String isIntro;
-	// 是否需要公司审核
+	// 是否需要公司审核   （必填）
 	private String isCompanyImpower; 
-	// 是否需要实名
+	// 是否需要实名  （必填）
 	private String isRealName;
-	// 本等级授权单是否汇总
+	// 本等级授权单是否汇总   （必填）
 	private String isSummary;
-	// 本等级充值门槛
+	// 本等级充值门槛   （必填）
 	private String minCharge;
-	// 红线设置
+	// 红线设置   （必填）
 	private String redPercent;
 	
 	

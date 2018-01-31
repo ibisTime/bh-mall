@@ -1,7 +1,7 @@
 package com.bh.mall.dto.req;
 
 /**
- * 代理设置列表查询
+ * 代理授权列表查询
  * @author: chenshan 
  * @since: 2018年1月31日 上午9:53:16 
  * @history:

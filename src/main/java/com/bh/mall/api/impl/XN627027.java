@@ -9,6 +9,11 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 代理升级详情查询
+ * @author nyc
+ *
+ */
 public class XN627027 extends AProcessor{
 
 	private IAgentUpgradeAO gentUpgradeAO = SpringContextHolder.getBean(IAgentUpgradeAO.class);

@@ -1,13 +1,25 @@
 package com.bh.mall.dto.req;
 
+/**
+ * 代理升级更新
+ * @author nyc
+ *
+ */
 public class XN627022Req {
 
+	// 代理编号 （必填）
 	private String agentCode;
+	// 编号 （必填）
 	private String code;
+	// 本等级升级是否公司审核 （必填）
 	private String isCompanyApprove;
+	// 本等级升级是否余额清零 （必填）
 	private String isReset;
+	// 半门槛推荐人数 （必填）
 	private String recommendNumber;
+	// 本等级升级首单总额（必填）
 	private String upgradeFirstAmount;
+	
 	public String getAgentCode() {
 		return agentCode;
 	}

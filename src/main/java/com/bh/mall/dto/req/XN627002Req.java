@@ -1,11 +1,17 @@
 package com.bh.mall.dto.req;
 
+/**
+ * 修改代理
+ * @author nyc
+ *
+ */
 public class XN627002Req {
 
+	// 编码  （必填）
 	private String code;
-	
+	// 等级 （必填）
 	private String level;
-	
+	// 等级名称 （必填）
 	private String name;
 
 	public String getCode() {

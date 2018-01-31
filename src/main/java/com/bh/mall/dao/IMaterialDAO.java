@@ -7,5 +7,11 @@ public interface IMaterialDAO extends IBaseDAO<Material> {
 	
 	String NAMESPACE = IMaterialDAO.class.getName().concat(".");
 	
-
+	/**
+	 * 更新
+	 * @param data
+	 * @return
+	 */
+	public int update(Material data);
+	
 }

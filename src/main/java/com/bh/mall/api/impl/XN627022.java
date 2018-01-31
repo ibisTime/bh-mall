@@ -13,6 +13,11 @@ import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 代理升级更新
+ * @author nyc
+ *
+ */
 public class XN627022 extends AProcessor {
 
 	private IAgentUpgradeAO agentUpgradeAO = SpringContextHolder.getBean(IAgentUpgradeAO.class);
@@ -33,7 +38,8 @@ public class XN627022 extends AProcessor {
 	@Override
 	public void doCheck(String inputparams) throws ParaException {
 		req = JsonUtil.json2Bean(inputparams, XN627022Req.class);
-		StringValidater.validateBlank(req.getAgentCode(), req.getCode(),req.getIsCompanyApprove(), req.getIsReset());
+		StringValidater.validateBlank(req.getAgentCode(), req.getCode(),req.getIsCompanyApprove(), req.getIsReset(),
+				req.getRecommendNumber(), req.getUpgradeFirstAmount());
 		StringValidater.validateNumber(req.getRecommendNumber(), req.getUpgradeFirstAmount());
 	}
 

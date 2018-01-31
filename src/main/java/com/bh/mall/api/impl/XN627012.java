@@ -13,6 +13,11 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 修改代理授权
+ * @author nyc
+ *
+ */
 public class XN627012 extends AProcessor {
 
 	private IAgentImpowerAO agentImpowerAO = SpringContextHolder.getBean(IAgentImpowerAO.class);
@@ -37,7 +42,8 @@ public class XN627012 extends AProcessor {
 	public void doCheck(String inputparams) throws ParaException {
 		req = JsonUtils.json2Bean(inputparams, XN627012Req.class);
 		StringValidater.validateBlank(req.getAgentCode(),  req.getIsCompanyImpower(), req.getIsIntent(),
-				req.getIsIntro(), req.getIsRealName(),req.getIsSummary());
+				req.getIsIntro(), req.getIsRealName(),req.getIsSummary(),req.getImpowerAmount(), 
+				req.getMinCharge(), req.getRedPercent());
 		StringValidater.validateNumber(req.getImpowerAmount(), req.getMinCharge(), req.getRedPercent());
 	}
 

@@ -9,7 +9,11 @@ import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
-
+/**
+ * 修改代理
+ * @author nyc
+ *
+ */
 public class XN627002 extends AProcessor {
 
     private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);

@@ -11,7 +11,7 @@ public interface IAgentBO extends IPaginableBO<Agent>{
 
 	public Agent getAgent(String code);
 
-	public List<Agent> queryAgentList(String level, String name);
+	public List<Agent> queryAgentList(Agent condition);
 
 	
 }

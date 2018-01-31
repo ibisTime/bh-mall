@@ -14,7 +14,7 @@ public interface IAgentImpowerAO {
 	public int editAgentImpower(AgentImpower data);
 	
 	/**
-	 * 分页查询代理
+	 * 分页查询代理授权
 	 * @param condition
 	 * @param start
 	 * @param pageSize
@@ -22,13 +22,15 @@ public interface IAgentImpowerAO {
 	public Paginable<AgentImpower> queryAgentImpowerListPage(AgentImpower condition, int pageNO, int pageSize);
 	
 	/**
-	 * 查询代理详情
-	 * @param string
+	 * 代理授权列表查询
+	 * @param code
+	 * @param agentCode
+	 * @return
 	 */
-	public List<AgentImpower> queryAgentImpowerList(String code, String agentCode);
+	public List<AgentImpower> queryAgentImpowerList(AgentImpower condition);
 	
 	/**
-	 * 查询代理详情
+	 * 查询代理授权详情
 	 * @param code
 	 * @return
 	 */

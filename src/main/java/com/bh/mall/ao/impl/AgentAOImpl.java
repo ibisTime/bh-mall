@@ -34,7 +34,7 @@ public class AgentAOImpl implements IAgentAO {
     }
 
     @Override
-    public List<Agent> queryAgentList(String level, String name) {
-        return agentBO.queryAgentList(level, name);
+    public List<Agent> queryAgentList(Agent condition) {
+        return agentBO.queryAgentList(condition);
     }
 }

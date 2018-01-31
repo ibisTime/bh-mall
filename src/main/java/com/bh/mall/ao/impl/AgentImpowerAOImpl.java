@@ -27,12 +27,8 @@ public class AgentImpowerAOImpl implements IAgentImpowerAO {
 
 	@Override
 	@Transactional
-	public List<AgentImpower> queryAgentImpowerList(String code, String agentCode) {
-		AgentImpower data = agentImpowerBO.getAgentImpower(code);
-		if(data == null) {
-			throw new BizException("xn0000", "该代理不存在");
-		}
-		return agentImpowerBO.queryList(agentCode);
+	public List<AgentImpower> queryAgentImpowerList(AgentImpower condition) {
+		return agentImpowerBO.queryAgentImpowerList(condition);
 	}
 
 	@Override

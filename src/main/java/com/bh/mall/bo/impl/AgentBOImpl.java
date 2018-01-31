@@ -40,10 +40,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public List<Agent> queryAgentList(String level, String name) {
-        Agent condition = new Agent();
-        condition.setLevel(level);
-        condition.setName(name);
+    public List<Agent> queryAgentList(Agent condition) {
         return agentDAO.selectList(condition);
     }
 

@@ -1,14 +1,24 @@
 package com.bh.mall.dto.req;
 
+/**
+ * 分页查询代理
+ * @author nyc
+ *
+ */
 public class XN627005Req {
 
+	// 等级  （选填）
 	private String level;
+	// 等级  （选填）
 	private String name;
-	
+	// 每页数量  （选填，默认20）
 	private String limit;
+	// 页码  （必填）
 	private String start;
 	
+	// 排序字段  选填
 	private String orderColumn;
+	// 排序方式  选填
 	private String orderDir;
 	public String getLevel() {
 		return level;

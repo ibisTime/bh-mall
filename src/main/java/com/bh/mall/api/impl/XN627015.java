@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.api.AProcessor;
+import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.dto.req.XN627015Req;
@@ -12,6 +13,11 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 分页查询代理授权
+ * @author nyc
+ *
+ */
 public class XN627015 extends AProcessor {
 
 	private IAgentImpowerAO agentImpowerAO = SpringContextHolder.getBean(IAgentImpowerAO.class);
@@ -27,15 +33,20 @@ public class XN627015 extends AProcessor {
 		}
 		condition.setOrder(column, req.getOrderDir());
 		int start = Integer.valueOf(req.getStart());
-		int limit = Integer.valueOf(req.getStart());
-		
+		int limit = 0;
+		if(StringUtils.isNotBlank(req.getLimit())) {
+	        limit = StringValidater.toInteger(req.getLimit());
+	    }else {
+	        limit = Paginable.DEFAULT_PAGE_SIZE;
+	    }
 		return agentImpowerAO.queryAgentImpowerListPage(condition, start, limit);
 	}
 
 	@Override
 	public void doCheck(String inputparams) throws ParaException {
 		req = JsonUtils.json2Bean(inputparams, XN627015Req.class);
-		StringValidater.validateNumber(req.getLimit()+"", req.getStart()+"");
+		StringValidater.validateBlank(req.getStart());
+		StringValidater.validateNumber(req.getStart());
 	}
 
 }

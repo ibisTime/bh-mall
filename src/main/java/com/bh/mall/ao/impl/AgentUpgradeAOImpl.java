@@ -27,12 +27,8 @@ public class AgentUpgradeAOImpl implements IAgentUpgradeAO {
 
 	@Override
 	@Transactional
-	public List<AgentUpgrade> queryAgentUpgradeList(String agentCode, String code) {
-		AgentUpgrade data = agentUpgradeBO.getAgentUpgrade(code);
-		if(data == null) {
-			throw new BizException("xn000", "该代理升级信息不存在");
-		}
-		return agentUpgradeBO.queryList(agentCode);
+	public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition) {
+		return agentUpgradeBO.queryAgentUpgradeList(condition);
 	}
 
 	@Override

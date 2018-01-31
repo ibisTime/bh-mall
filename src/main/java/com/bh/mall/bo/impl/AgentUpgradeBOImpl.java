@@ -23,9 +23,7 @@ public class AgentUpgradeBOImpl extends PaginableBOImpl<AgentUpgrade> implements
 	}
 
 	@Override
-	public List<AgentUpgrade> queryList(String agentCode) {
-		AgentUpgrade condition = new AgentUpgrade();
-		condition.setAgentCode(agentCode);
+	public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition) {
 		return agentUpgradeDAO.selectList(condition);
 	}
 
