@@ -1,14 +1,8 @@
-package com.bh.mall.dto.res;
+package com.bh.mall.dto.req;
 
-public class XN805050Res {
+public class XN627230Req {
+    // userId（必填）
     private String userId;
-
-    public XN805050Res() {
-    }
-
-    public XN805050Res(String userId) {
-        this.userId = userId;
-    }
 
     public String getUserId() {
         return userId;
@@ -17,5 +11,4 @@ public class XN805050Res {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 }

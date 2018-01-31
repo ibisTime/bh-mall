@@ -1,12 +1,12 @@
 package com.bh.mall.dto.res;
 
-public class XN805042Res {
+public class XN627200Res {
     private String userId;
 
-    public XN805042Res() {
+    public XN627200Res() {
     }
 
-    public XN805042Res(String userId) {
+    public XN627200Res(String userId) {
         this.userId = userId;
     }
 
@@ -17,4 +17,5 @@ public class XN805042Res {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 }

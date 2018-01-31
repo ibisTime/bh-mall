@@ -33,7 +33,7 @@ import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN805042Req;
+import com.bh.mall.dto.req.XN627201Req;
 import com.bh.mall.dto.req.XN805043Req;
 import com.bh.mall.dto.req.XN805095Req;
 import com.bh.mall.dto.req.XN805170Req;
@@ -169,7 +169,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doAddUser(XN805042Req req) {
+    public String doAddUser(XN627201Req req) {
         String userId = null;
         if (ESystemCode.BH.getCode().equals(req.getSystemCode())) {
             userId = doAddUserBH(req);
@@ -179,7 +179,7 @@ public class UserAOImpl implements IUserAO {
         return userId;
     }
 
-    private String doAddUserBH(XN805042Req req) {
+    private String doAddUserBH(XN627201Req req) {
         String userId = null;
         if (EUserKind.Customer.getCode().equals(req.getKind())
                 || EUserKind.Merchant.getCode().equals(req.getKind())) {

@@ -1,6 +1,6 @@
 package com.bh.mall.dto.req;
 
-public class XN805042Req {
+public class XN627201Req {
     // 登录名（必填）
     private String loginName;
 
@@ -25,12 +25,6 @@ public class XN805042Req {
     // 用户类型(必填)
     private String kind;
 
-    // 附件(选填)
-    private String pdf;
-
-    // 分成比例(选填)
-    private String divRate;
-
     // 角色编号(选填)
     private String roleCode;
 
@@ -45,12 +39,6 @@ public class XN805042Req {
 
     // 地址(选填)
     private String address;
-
-    // 经度(选填)
-    private String longitude;
-
-    // 维度(选填)
-    private String latitude;
 
     // 更新人(必填)
     private String updater;
@@ -128,22 +116,6 @@ public class XN805042Req {
         this.kind = kind;
     }
 
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
-    }
-
-    public String getDivRate() {
-        return divRate;
-    }
-
-    public void setDivRate(String divRate) {
-        this.divRate = divRate;
-    }
-
     public String getRoleCode() {
         return roleCode;
     }
@@ -182,22 +154,6 @@ public class XN805042Req {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
     }
 
     public String getUpdater() {

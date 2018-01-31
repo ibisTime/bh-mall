@@ -26,7 +26,7 @@
 		<result column="id_card_hand" property="idCardHand" />
 		<result column="real_name" property="realName" />
 		<result column="role_code" property="roleCode" />
-		<result column="intend_status" property="intendStatus" />
+		<result column="status" property="status" />
 		<result column="source" property="source" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="manager" property="manager" />
@@ -104,8 +104,8 @@
 			<if test="roleCode != null and roleCode != '' ">
 				AND t.role_code = #{roleCode}
 			</if>
-			<if test="intendStatus != null and intendStatus != '' ">
-				AND t.intend_status = #{intendStatus}
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
 			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
@@ -179,7 +179,7 @@
 		,t.id_card_hand
 		,t.real_name
 		,t.role_code
-		,t.intend_status
+		,t.status
 		,t.source
 		,t.apply_datetime
 		,t.manager
@@ -242,7 +242,7 @@
 		,id_card_hand
 		,real_name
 		,role_code
-		,intend_status
+		,status
 		,source
 		,apply_datetime
 		,manager
@@ -289,7 +289,7 @@
 		,#{idCardHand}
 		,#{realName}
 		,#{roleCode}
-		,#{intendStatus}
+		,#{status}
 		,#{source}
 		,#{applyDatetime}
 		,#{manager}
@@ -339,7 +339,7 @@
 		,id_card_hand = #{idCardHand}
 		,real_name = #{realName}
 		,role_code = #{roleCode}
-		,intend_status = #{intendStatus}
+		,status = #{status}
 		,source = #{source}
 		,apply_datetime = #{applyDatetime}
 		,manager = #{manager}

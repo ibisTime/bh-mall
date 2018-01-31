@@ -12,7 +12,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN805042Req;
+import com.bh.mall.dto.req.XN627201Req;
 import com.bh.mall.dto.req.XN805043Req;
 import com.bh.mall.enums.EUserStatus;
 
@@ -55,7 +55,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo, String gender);
 
-    public String doAddUser(XN805042Req req);
+    public String doAddUser(XN627201Req req);
 
     public String doApplyRegUser(XN805043Req req, String roleCode);
 
