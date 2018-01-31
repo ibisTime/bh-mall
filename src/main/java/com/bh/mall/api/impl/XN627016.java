@@ -9,19 +9,30 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 代理设置列表查询
+ * @author: chenshan 
+ * @since: 2018年1月31日 上午9:53:37 
+ * @history:
+ */
 public class XN627016 extends AProcessor {
 
-	private IAgentImpowerAO agentImpowerAO = SpringContextHolder.getBean(IAgentImpowerAO.class);
-	private XN627016Req req;
-	@Override
-	public Object doBusiness() throws BizException {
-		return agentImpowerAO.queryAgentImpowerList(req.getCode(), req.getAgentCode());
-	}
+    private IAgentImpowerAO agentImpowerAO = SpringContextHolder
+        .getBean(IAgentImpowerAO.class);
 
-	@Override
-	public void doCheck(String inputparams) throws ParaException {
-		req = JsonUtils.json2Bean(inputparams, XN627016Req.class);
-		StringValidater.validateBlank(req.getCode());
-	}
+    private XN627016Req req;
+
+    @Override
+    public Object doBusiness() throws BizException {
+
+        return agentImpowerAO.queryAgentImpowerList(req.getCode(),
+            req.getAgentCode());
+    }
+
+    @Override
+    public void doCheck(String inputparams) throws ParaException {
+        req = JsonUtils.json2Bean(inputparams, XN627016Req.class);
+        StringValidater.validateBlank(req.getCode());
+    }
 
 }
