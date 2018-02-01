@@ -49,14 +49,4 @@ public interface IAgentAO {
      */
     public List<Agent> queryAgentList(Agent condition);
 
-    /**
-     * 根据名称和等级查询
-     * @param name
-     * @param Level
-     * @return 
-     * @create: 2018年2月1日 下午6:48:43 nyc
-     * @history:
-     */
-    public Agent checkByNameOrLevel(String name, String level);
-
 }

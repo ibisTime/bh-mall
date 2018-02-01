@@ -28,8 +28,8 @@ public class MaterialAOImpl implements IMaterialAO {
     public String addMaterial(XN627030Req req) {
         this.checkLevelList(req.getLevelList());
         Material data = new Material();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.MATERIAL.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.MATERIAL
+            .getCode());
 
         data.setCode(code);
         data.setLevelList(req.getLevelList());
@@ -59,8 +59,8 @@ public class MaterialAOImpl implements IMaterialAO {
 
     private void checkLevelList(String levelList) {
         String[] codeList = levelList.split(",");
-        for (String level : codeList) {
-            agentBO.checkByNameOrLevel(null, level);
+        for (String code : codeList) {
+            agentBO.getAgent(code);
         }
     }
 
