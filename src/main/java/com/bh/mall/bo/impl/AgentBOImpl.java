@@ -44,4 +44,20 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return agentDAO.selectList(condition);
     }
 
+    @Override
+    public Agent checkByNameOrLevel(String name, String level) {
+        Agent condition = new Agent();
+        if (StringUtils.isBlank(name)) {
+            condition.setName(name);
+        }
+        if (StringUtils.isNotBlank(level)) {
+            condition.setLevel(level);
+        }
+        Agent data = agentDAO.select(condition);
+        if (data == null) {
+            throw new BizException("xn000", "代理不存在");
+        }
+        return data;
+    }
+
 }

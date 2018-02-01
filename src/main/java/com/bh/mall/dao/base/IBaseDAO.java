@@ -16,6 +16,7 @@ import java.util.List;
  * @history:
  */
 public interface IBaseDAO<T> {
+
     public int insert(T data);
 
     public int delete(T data);

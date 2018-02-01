@@ -17,10 +17,16 @@
 				AND t.code = #{code}
 			</if>
 			<if test="type != null and type != ''">
-				AND t.type = #{type}
+				AND t.type like "%"#{type}"%"
 			</if>
 			<if test="title != null and title != ''">
 				AND t.title like "%"#{title}"%"
+			</if>
+			<if test="pic != null and pic != ''">
+				AND t.pic = #{pic}
+			</if>
+			<if test="orderNo != null and orderNo != ''">
+				AND t.order_no = #{orderNo}
 			</if>
 			<if test="status != null and status != ''">
 				AND t.status = #{status}
@@ -32,14 +38,14 @@
 	</sql>
 	<select id="select_material" parameterType="material" resultMap="material_DB_Result">
 		SELECT 
-		t.code,
-		t.title,
-		t.type,
-		t.pic,
-		t.order_no,
-		t.status,
-		t.level_list
-		FROM tbh_material m
+			t.code,
+			t.title,
+			t.type,
+			t.pic,
+			t.order_no,
+			t.status,
+			t.level_list
+		FROM tbh_material t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
 			<if test="order != null and order != '' ">
@@ -55,9 +61,9 @@
 	
 	<delete id="delete_material" parameterType="material">
 		DELETE FROM 
-		tbh_material 
+			tbh_material 
 		WHERE 
-		code=#{code}
+			code=#{code}
 	</delete>
 	
 	<insert id="insert_material" parameterType="material">

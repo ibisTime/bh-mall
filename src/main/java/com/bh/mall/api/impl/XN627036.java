@@ -27,8 +27,8 @@ public class XN627036 extends AProcessor {
         Material condition = new Material();
         condition.setStatus(req.getStatus());
         condition.setTitle(req.getTitle());
-        condition.setTitle(req.getType());
-        return materilAO.queryMaterialListPage(condition);
+        condition.setType(req.getType());
+        return materilAO.queryMaterialList(condition);
     }
 
     @Override

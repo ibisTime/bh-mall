@@ -25,6 +25,7 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public Paginable<Agent> queryAgentListPage(int start, int limit,
             Agent condition) {
+        agentBO.checkByNameOrLevel(condition.getName(), condition.getLevel());
         return agentBO.getPaginable(start, limit, condition);
     }
 
@@ -35,6 +36,11 @@ public class AgentAOImpl implements IAgentAO {
 
     @Override
     public List<Agent> queryAgentList(Agent condition) {
+        agentBO.checkByNameOrLevel(condition.getName(), condition.getLevel());
         return agentBO.queryAgentList(condition);
+    }
+
+    public Agent checkByNameOrLevel(String name, String level) {
+        return agentBO.checkByNameOrLevel(name, level);
     }
 }

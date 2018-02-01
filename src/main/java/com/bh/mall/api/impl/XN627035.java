@@ -23,7 +23,7 @@ public class XN627035 extends AProcessor {
     private IMaterialAO materialAO = SpringContextHolder
         .getBean(IMaterialAO.class);
 
-    private XN627035Req req = null;
+    private XN627035Req req;
 
     @Override
     public Object doBusiness() throws BizException {

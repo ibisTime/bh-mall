@@ -8,23 +8,23 @@ package com.bh.mall.dto.req;
  */
 public class XN627030Req {
 
-    // 查看等级（必填）
-    private String levelList;
-
-    // 排序（必填）
-    private String orderNo;
-
-    // 图片（必填）
-    private String pic;
-
-    // 状态（必填 0 未发布， 1发布）
-    private String status;
+    // 类型（必填）
+    private String type;
 
     // 标题（必填）
     private String title;
 
-    // 类型（必填）
-    private String type;
+    // 图片（必填）
+    private String pic;
+
+    // 排序（必填）
+    private String orderNo;
+
+    // 状态（必填 0 未发布， 1发布）
+    private String status;
+
+    // 查看等级（必填）
+    private String levelList;
 
     public String getLevelList() {
         return levelList;

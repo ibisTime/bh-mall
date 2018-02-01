@@ -11,23 +11,23 @@ public class XN627031Req {
     // 编号 （必填）
     private String code;
 
-    // 查看等级 （必填）
-    private String levelList;
+    // 类型 （必填）
+    private String type;
 
     // 标题 （必填）
     private String title;
 
-    // 状态 （必填）
-    private String status;
+    // 图片 （必填）
+    private String pic;
 
     // 排序 （必填）
     private String orderNo;
 
-    // 图片 （必填）
-    private String pic;
+    // 状态 （必填）
+    private String status;
 
-    // 类型 （必填）
-    private String type;
+    // 查看等级 （必填）
+    private String levelList;
 
     public String getCode() {
         return code;
@@ -37,12 +37,12 @@ public class XN627031Req {
         this.code = code;
     }
 
-    public String getLevelList() {
-        return levelList;
+    public String getType() {
+        return type;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTitle() {
@@ -53,12 +53,12 @@ public class XN627031Req {
         this.title = title;
     }
 
-    public String getStatus() {
-        return status;
+    public String getPic() {
+        return pic;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     public String getOrderNo() {
@@ -69,20 +69,20 @@ public class XN627031Req {
         this.orderNo = orderNo;
     }
 
-    public String getPic() {
-        return pic;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getType() {
-        return type;
+    public String getLevelList() {
+        return levelList;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setLevelList(String levelList) {
+        this.levelList = levelList;
     }
 
 }

@@ -28,8 +28,8 @@ public class MaterialAOImpl implements IMaterialAO {
     public String addMaterial(XN627030Req req) {
         this.checkLevelList(req.getLevelList());
         Material data = new Material();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.MATERIAL
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.MATERIAL.getCode());
 
         data.setCode(code);
         data.setLevelList(req.getLevelList());
@@ -59,8 +59,8 @@ public class MaterialAOImpl implements IMaterialAO {
 
     private void checkLevelList(String levelList) {
         String[] codeList = levelList.split(",");
-        for (String code : codeList) {
-            agentBO.getAgent(code);
+        for (String level : codeList) {
+            agentBO.checkByNameOrLevel(null, level);
         }
     }
 
@@ -72,11 +72,15 @@ public class MaterialAOImpl implements IMaterialAO {
     @Override
     public Paginable<Material> queryMaterialListPage(int start, int limit,
             Material condition) {
+        materialBO.checkCondition(condition.getType(), condition.getTitle(),
+            condition.getStatus());
         return materialBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Material> queryMaterialListPage(Material condition) {
+    public List<Material> queryMaterialList(Material condition) {
+        materialBO.checkCondition(condition.getType(), condition.getTitle(),
+            condition.getStatus());
         return materialBO.queryMaterialList(condition);
     }
 

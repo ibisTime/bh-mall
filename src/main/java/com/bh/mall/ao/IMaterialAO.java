@@ -55,7 +55,7 @@ public interface IMaterialAO {
      * @create: 2018年2月1日 下午12:00:18 nyc
      * @history:
      */
-    public List<Material> queryMaterialListPage(Material condition);
+    public List<Material> queryMaterialList(Material condition);
 
     /**
      * 素材详情
@@ -65,4 +65,5 @@ public interface IMaterialAO {
      * @history:
      */
     public Material getMaterial(String code);
+
 }

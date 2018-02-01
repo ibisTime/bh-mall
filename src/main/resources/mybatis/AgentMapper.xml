@@ -16,7 +16,7 @@
 				AND t.name like "%"#{name}"%"
 			</if>
 			<if test="level != null and level !=''">
-				AND t.level = #{level}
+				AND t.level like "%"#{level}"%"
 			</if>
 		</trim>
 	</sql>

@@ -13,8 +13,8 @@ import com.bh.mall.domain.Material;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class MaterialBOImpl extends PaginableBOImpl<Material> implements
-        IMaterialBO {
+public class MaterialBOImpl extends PaginableBOImpl<Material>
+        implements IMaterialBO {
 
     @Autowired
     private IMaterialDAO materialDAO;
@@ -53,6 +53,27 @@ public class MaterialBOImpl extends PaginableBOImpl<Material> implements
     @Override
     public List<Material> queryMaterialList(Material condition) {
         return materialDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Material> checkCondition(String type, String title,
+            String status) {
+        Material condition = new Material();
+        if (StringUtils.isNotBlank(type)) {
+            condition.setType(type);
+        }
+        if (StringUtils.isNotBlank(title)) {
+            condition.setTitle(title);
+        }
+
+        if (StringUtils.isNotBlank(status)) {
+            condition.setStatus(status);
+        }
+        List<Material> data = materialDAO.selectList(condition);
+        if (data == null) {
+            throw new BizException("xn000", "素材不存在");
+        }
+        return data;
     }
 
 }
