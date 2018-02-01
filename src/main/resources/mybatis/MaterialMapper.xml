@@ -11,37 +11,34 @@
 		<result column="status" property="status"/>
 		<result column="level_list" property="levelList"/>
 	</resultMap>
-	
-	
 	<sql id="where_condition">
 		<trim prefix="where" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
-			AND m.code=#{code}
-			</if>
-			<if test="levelList != null and levelList != ''">
-			AND m.levelList=#{levelList}
-			</if>
-			<if test="title != null and title != ''">
-			AND m.title=#{title}
-			</if>
-			<if test="status != null and status != ''">
-			AND m.status=#{status}
+				AND t.code = #{code}
 			</if>
 			<if test="type != null and type != ''">
-			AND m.type=#{type}
+				AND t.type = #{type}
+			</if>
+			<if test="title != null and title != ''">
+				AND t.title like "%"#{title}"%"
+			</if>
+			<if test="status != null and status != ''">
+				AND t.status = #{status}
+			</if>
+			<if test="levelList != null and levelList != ''">
+				AND t.level_list like "%"#{levelList}"%"
 			</if>
 		</trim>
 	</sql>
-	
 	<select id="select_material" parameterType="material" resultMap="material_DB_Result">
 		SELECT 
-			m.code,
-			m.title,
-			m.type,
-			m.pic,
-			m.order_no,
-			m.status,
-			m.level_list
+		t.code,
+		t.title,
+		t.type,
+		t.pic,
+		t.order_no,
+		t.status,
+		t.level_list
 		FROM tbh_material m
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
@@ -52,12 +49,15 @@
 	</select>
 	
 	<select id="select_count" parameterType="material" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_material
+		SELECT count(1) FROM tbh_material t
 		<include refid="where_condition"/>
 	</select>
 	
 	<delete id="delete_material" parameterType="material">
-		DELETE FROM tbh_material WHERE code=#{code}
+		DELETE FROM 
+		tbh_material 
+		WHERE 
+		code=#{code}
 	</delete>
 	
 	<insert id="insert_material" parameterType="material">
