@@ -15,5 +15,6 @@
 	    <typeAlias alias="agent" type="com.bh.mall.domain.Agent"/>
 	    <typeAlias alias="agentImpower" type="com.bh.mall.domain.AgentImpower"/>
 	    <typeAlias alias="agentUpgrade" type="com.bh.mall.domain.AgentUpgrade"/>
+	    <typeAlias alias="material" type="com.bh.mall.domain.Material"/>
 	</typeAliases>
 </configuration>	

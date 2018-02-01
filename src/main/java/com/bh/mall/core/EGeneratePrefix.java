@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum EGeneratePrefix {
-    DH("DH", "导航"), YQ("YQ", "邀请"), AD("AD", "用户地址"), Auth("A", "认证");
+    DH("DH", "导航"), YQ("YQ", "邀请"), AD("AD", "用户地址"), MATERIAL("MA", "素材编码");
 
     public static Map<String, EGeneratePrefix> getOrderTypeMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

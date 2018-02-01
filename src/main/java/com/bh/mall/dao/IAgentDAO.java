@@ -21,4 +21,13 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
      * 代理列表
      */
     public List<Agent> selectList(Agent condition);
+
+    /**
+     * 根据代理等级查找代理
+     * @param condition
+     * @return 
+     * @create: 2018年1月31日 下午6:19:48 nyc
+     * @history:
+     */
+    public Agent selectByLevel(Agent condition);
 }

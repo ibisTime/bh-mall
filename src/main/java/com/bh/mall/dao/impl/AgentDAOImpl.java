@@ -41,6 +41,12 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     }
 
     @Override
+    public Agent selectByLevel(Agent condition) {
+        return super.select(NAMESPACE.concat("select_agent"), condition,
+            Agent.class);
+    }
+
+    @Override
     public int insert(Agent data) {
         return 0;
     }
