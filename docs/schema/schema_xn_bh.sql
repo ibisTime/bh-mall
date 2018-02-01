@@ -106,7 +106,7 @@ CREATE TABLE `tbh_user` (
   `real_name` varchar(32) DEFAULT NULL COMMENT '真实姓名',
   `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',
   
-  `intend_status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `source` varchar(32) DEFAULT NULL COMMENT '来源',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `manager` varchar(32) DEFAULT NULL COMMENT '关联管理员',

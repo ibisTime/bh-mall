@@ -2,9 +2,10 @@
 package com.bh.mall.dto.req;
 
 /**
- * 列表查询代理
- * @author nyc
- *
+ * 查询代理列表
+ * @author: nyc 
+ * @since: 2018年1月31日 下午2:53:07 
+ * @history:
  */
 public class XN627006Req {
 
