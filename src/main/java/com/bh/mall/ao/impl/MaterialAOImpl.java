@@ -67,7 +67,7 @@ public class MaterialAOImpl implements IMaterialAO {
 
     @Override
     public List<Material> queryMaterialListPage(Material condition) {
-        return materialBO.selectMateroalList(condition);
+        return materialBO.queryMateroalList(condition);
     }
 
     @Override

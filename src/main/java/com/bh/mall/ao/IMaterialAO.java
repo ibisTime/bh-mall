@@ -37,12 +37,14 @@ public interface IMaterialAO {
     public void dropMaterial(String code);
 
     /**
-     * 素材分页查询
-     * @param condition
-     * @return 
-     * @create: 2018年2月1日 上午11:03:25 nyc
-     * @history:
-     */
+    * 素材分页查询
+    * @param start
+    * @param limit
+    * @param condition
+    * @return 
+    * @create: 2018年2月1日 下午4:47:44 nyc
+    * @history:
+    */
     public Paginable<Material> queryMaterialListPage(int start, int limit,
             Material condition);
 

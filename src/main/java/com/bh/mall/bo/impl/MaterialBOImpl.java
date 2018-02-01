@@ -70,7 +70,7 @@ public class MaterialBOImpl extends PaginableBOImpl<Material>
     }
 
     @Override
-    public List<Material> selectMateroalList(Material condition) {
+    public List<Material> queryMaterialList(Material condition) {
         return materialDAO.selectList(condition);
     }
 

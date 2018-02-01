@@ -12,6 +12,12 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 素材分页查询
+ * @author: nyc 
+ * @since: 2018年2月1日 下午4:50:45 
+ * @history:
+ */
 public class XN627035 extends AProcessor {
 
     private IMaterialAO materialAO = SpringContextHolder

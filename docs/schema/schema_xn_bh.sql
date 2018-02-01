@@ -223,3 +223,19 @@ CREATE TABLE `tbh_agent_upgrade` (
   `is_reset` char(1) DEFAULT NULL COMMENT '本等级升级是否余额清零',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- ----------------------------
+--  Table structure for table `tbh_material`
+-- ----------------------------
+DROP TABLE IF EXISTS `tbh_material`;
+CREATE TABLE `tbh_material` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型',
+  `title` varchar(64) DEFAULT NULL COMMENT '标题',
+  `pic` varchar(255) DEFAULT NULL COMMENT '图片',
+  `order_no` int(11) DEFAULT NULL COMMENT '排序',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0未发布 1发布）',
+  `level_list` varchar(32) DEFAULT NULL COMMENT '查看等级',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

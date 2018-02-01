@@ -15,6 +15,6 @@ public interface IMaterialBO extends IPaginableBO<Material> {
 
     public void dropMaterial(String code);
 
-    public List<Material> selectMateroalList(Material condition);
+    public List<Material> queryMaterialList(Material condition);
 
 }
