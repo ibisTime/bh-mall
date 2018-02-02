@@ -39,7 +39,7 @@
 		</trim>
 	</select>
 	
-	<select id="select_agentImpower_count" parameterType="agentUpgrade" resultType="java.lang.Long">
+	<select id="select_agentUpgrade_count" parameterType="agentUpgrade" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_agent_upgrade t
 		<include refid="where_condition"></include>
 	</select>

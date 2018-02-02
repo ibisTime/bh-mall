@@ -47,6 +47,7 @@
 		,t.type
 		,t.pic
 		,t.order_no
+		
 		,t.status
 		,t.level_list
 		FROM tbh_material t
@@ -77,6 +78,7 @@
 		,title
 		,pic
 		,order_no
+		
 		,status
 		,level_list
 		) 
@@ -86,6 +88,7 @@
 		,#{title}
 		,#{pic}
 		,#{orderNo}
+		
 		,#{status}
 		,#{levelList}
 		)
@@ -99,6 +102,7 @@
 		,pic=#{pic}
 		,order_no=#{orderNo}
 		,status=#{status}
+		
 		,level_list=#{levelList}
 		WHERE code=#{code}
 	</update>

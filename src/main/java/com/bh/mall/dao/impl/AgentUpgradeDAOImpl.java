@@ -9,13 +9,13 @@ import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.AgentUpgrade;
 
 @Repository("agentUpgradeDAOImpl")
-public class AgentUpgradeDAOImpl extends AMybatisTemplate
-        implements IAgentUpgradeDAO {
+public class AgentUpgradeDAOImpl extends AMybatisTemplate implements
+        IAgentUpgradeDAO {
 
     @Override
     public long selectTotalCount(AgentUpgrade condition) {
         return super.selectTotalCount(
-            NAMESPACE.concat("select_agentImpower_count"), condition);
+            NAMESPACE.concat("select_agentUpgrade_count"), condition);
     }
 
     @Override

@@ -34,8 +34,8 @@ public class MaterialDAOImpl extends AMybatisTemplate implements IMaterialDAO {
 
     @Override
     public long selectTotalCount(Material condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_count_material"),
-            condition);
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_material_count"), condition);
     }
 
     @Override
