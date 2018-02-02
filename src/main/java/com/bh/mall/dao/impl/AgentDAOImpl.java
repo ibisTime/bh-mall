@@ -19,7 +19,7 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
 
     @Override
     public long selectTotalCount(Agent condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_count"),
+        return super.selectTotalCount(NAMESPACE.concat("select_agent_count"),
             condition);
     }
 

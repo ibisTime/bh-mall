@@ -28,6 +28,7 @@ public class XN627036 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setTitle(req.getTitle());
         condition.setType(req.getType());
+        condition.setLevelList(req.getLevelList());
         return materilAO.queryMaterialList(condition);
     }
 

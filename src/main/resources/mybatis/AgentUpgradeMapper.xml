@@ -39,18 +39,19 @@
 		</trim>
 	</select>
 	
-	<select id="select_count" parameterType="agentUpgrade" resultType="java.lang.Long">
+	<select id="select_agentImpower_count" parameterType="agentUpgrade" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_agent_upgrade t
 		<include refid="where_condition"></include>
 	</select>
 
 	<update id="update_agentUpgrade" parameterType="agentUpgrade">
-		UPDATE tbh_agent_upgrade SET
-		agent_code=#{agentCode},
-		is_company_approve=#{isCompanyApprove},
-		upgrade_first_amount=#{upgradeFirstAmount},
-		recommend_number=#{recommendNumber},
-		is_reset=#{isReset}
+		UPDATE tbh_agent_upgrade 
+		SET
+		agent_code=#{agentCode}
+		,is_company_approve=#{isCompanyApprove}
+		,upgrade_first_amount=#{upgradeFirstAmount}
+		,recommend_number=#{recommendNumber}
+		,is_reset=#{isReset}
 		WHERE code=#{code}
 	</update>
 </mapper>

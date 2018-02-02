@@ -7,10 +7,12 @@
 		<result column="type" property="type"/>
 		<result column="title" property="title"/>
 		<result column="pic" property="pic"/>
+		
 		<result column="order_no" property="orderNo"/>
 		<result column="status" property="status"/>
 		<result column="level_list" property="levelList"/>
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="where" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
@@ -22,6 +24,7 @@
 			<if test="title != null and title != ''">
 				AND t.title like "%"#{title}"%"
 			</if>
+			
 			<if test="pic != null and pic != ''">
 				AND t.pic = #{pic}
 			</if>
@@ -36,15 +39,16 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_material" parameterType="material" resultMap="material_DB_Result">
 		SELECT 
-			t.code,
-			t.title,
-			t.type,
-			t.pic,
-			t.order_no,
-			t.status,
-			t.level_list
+		t.code
+		,t.title
+		,t.type
+		,t.pic
+		,t.order_no
+		,t.status
+		,t.level_list
 		FROM tbh_material t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
@@ -54,46 +58,48 @@
 		</trim>
 	</select>
 	
-	<select id="select_count" parameterType="material" resultType="java.lang.Long">
+	<select id="select_material_count" parameterType="material" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_material t
 		<include refid="where_condition"/>
 	</select>
 	
 	<delete id="delete_material" parameterType="material">
 		DELETE FROM 
-			tbh_material 
+		tbh_material 
 		WHERE 
-			code=#{code}
+		code=#{code}
 	</delete>
 	
 	<insert id="insert_material" parameterType="material">
 		INSERT INTO tbh_material (
-			code,
-			type,
-			title,
-			pic,
-			order_no,
-			status,
-			level_list
-		) VALUES(
-			#{code},
-			#{type},
-			#{title},
-			#{pic},
-			#{orderNo},
-			#{status},
-			#{levelList}
+		code
+		,type
+		,title
+		,pic
+		,order_no
+		,status
+		,level_list
+		) 
+		VALUES(
+		#{code}
+		,#{type}
+		,#{title}
+		,#{pic}
+		,#{orderNo}
+		,#{status}
+		,#{levelList}
 		)
 	</insert>
 	
 	<update id="update_material" parameterType="material">
-		UPDATE tbh_material SET
-			type=#{type},
-			title=#{title},
-			pic=#{pic},
-			order_no=#{orderNo},
-			status=#{status},
-			level_list=#{levelList}
+		UPDATE tbh_material 
+		SET
+		type=#{type}
+		,title=#{title}
+		,pic=#{pic}
+		,order_no=#{orderNo}
+		,status=#{status}
+		,level_list=#{levelList}
 		WHERE code=#{code}
 	</update>
 </mapper>

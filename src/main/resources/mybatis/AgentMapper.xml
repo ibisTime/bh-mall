@@ -7,6 +7,7 @@
 		<result column="name" property="name"/>
 		<result column="level" property="level"/>
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
@@ -20,6 +21,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_agent" parameterType="agent" resultMap="aegnt_DB_Result">
 		SELECT 
 		t.code
@@ -35,15 +37,16 @@
 	</select>
 	
 	
-	<select id="select_count" parameterType="agent" resultType="java.lang.Long">
+	<select id="select_agent_count" parameterType="agent" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_agent t
 		<include refid="where_condition"/>
 	</select>
 	
 	<update id="update_agent" parameterType="agent">
-		UPDATE tbh_agent SET 
-		name=#{name},
-		level=#{level}
+		UPDATE tbh_agent 
+		SET 
+		name=#{name}
+		,level=#{level}
 		WHERE code=#{code}
 	</update>
 </mapper>

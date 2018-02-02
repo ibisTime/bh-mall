@@ -8,12 +8,14 @@
 		<result column="is_intent" property="isIntent"/>
 		<result column="is_intro" property="isIntro"/>
 		<result column="is_realname" property="isRealname"/>
+		
 		<result column="is_company_impower" property="isCompanyImpower"/>
 		<result column="impower_amount" property="impowerAmount"/>
 		<result column="min_charge" property="minCharge"/>
 		<result column="red_percent" property="redPercent"/>
 		<result column="is_summary" property="isSummary"/>
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
@@ -24,19 +26,20 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_agentImpower" parameterType="agentImpower" resultMap="agentImpower_DB_Result">
 		SELECT 
-		t.code, 
-		t.agent_code, 
-		t.is_intent, 
-		t.is_intro,
-		t.is_realname,
-		t.is_company_impower,
+		t.code 
+		,t.agent_code
+		,t.is_intent 
+		,t.is_intro
+		,t.is_realname
+		,t.is_company_impower
 		
-		t.impower_amount,
-		t.min_charge,
-		t.red_percent,
-		t.is_summary
+		,t.impower_amount
+		,t.min_charge
+		,t.red_percent
+		,t.is_summary
 		FROM tbh_agent_impower t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
@@ -46,7 +49,7 @@
 		</trim>
 	</select>
 	
-	<select id="select_count" parameterType="agentImpower" resultType="java.lang.Long">
+	<select id="select_agentImpower_count" parameterType="agentImpower" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_agent_impower t
 		<include refid="where_condition"/>
 	</select>
@@ -54,16 +57,16 @@
 	<update id="update_agentImpower" parameterType="agentImpower">
 		UPDATE tbh_agent_impower 
 		SET
-		agent_code=#{agentCode},
-		is_intent=#{isIntent},
-		is_intro=#{isIntro},
-		is_realname=#{isRealname},
-		is_company_impower=#{isCompanyImpower},
+		agent_code=#{agentCode}
+		,is_intent=#{isIntent}
+		,is_intro=#{isIntro}
+		,is_realname=#{isRealname}
+		,is_company_impower=#{isCompanyImpower}
 		
-		impower_amount=#{impowerAmount},
-		min_charge=#{minCharge},
-		red_percent=#{redPercent},
-		is_summary=#{isSummary}
+		,impower_amount=#{impowerAmount}
+		,min_charge=#{minCharge}
+		,red_percent=#{redPercent}
+		,is_summary=#{isSummary}
 		WHERE code=#{code}
 	</update>
 	

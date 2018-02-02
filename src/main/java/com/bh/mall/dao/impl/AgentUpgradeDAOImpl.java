@@ -14,8 +14,8 @@ public class AgentUpgradeDAOImpl extends AMybatisTemplate
 
     @Override
     public long selectTotalCount(AgentUpgrade condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_count"),
-            condition);
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_agentImpower_count"), condition);
     }
 
     @Override

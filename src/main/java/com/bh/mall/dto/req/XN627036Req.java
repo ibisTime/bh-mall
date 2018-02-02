@@ -18,6 +18,9 @@ public class XN627036Req {
     // 状态 （选填）
     private String status;
 
+    // 查看等级（选填）
+    private String levelList;
+
     public String getType() {
         return type;
     }
@@ -40,6 +43,14 @@ public class XN627036Req {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLevelList() {
+        return levelList;
+    }
+
+    public void setLevelList(String levelList) {
+        this.levelList = levelList;
     }
 
 }

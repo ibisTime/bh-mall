@@ -20,8 +20,8 @@ public class AgentImpowerDAOImpl extends AMybatisTemplate
 
     @Override
     public long selectTotalCount(AgentImpower condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_count"),
-            condition);
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_agentImpower_count"), condition);
     }
 
     @Override
