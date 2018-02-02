@@ -13,23 +13,15 @@ import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class AgentImpowerBOImpl extends PaginableBOImpl<AgentImpower>
-        implements IAgentImpowerBO {
+public class AgentImpowerBOImpl extends PaginableBOImpl<AgentImpower> implements
+        IAgentImpowerBO {
 
     @Autowired
     private IAgentImPowerDAO agentImPowerDAO;
 
     @Override
     public void editAgentImpower(AgentImpower data) {
-        AgentImpower condition = new AgentImpower();
-        condition.setCode(data.getCode());
-        condition.setAgentCode(data.getAgentCode());
-        AgentImpower AIdata = agentImPowerDAO.select(condition);
-        if (AIdata == null) {
-            throw new BizException("xn0000", "该代理授权对应的代理不存在");
-        }
         agentImPowerDAO.update(data);
-
     }
 
     @Override

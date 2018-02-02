@@ -17,15 +17,4 @@ public interface IMaterialBO extends IPaginableBO<Material> {
 
     public List<Material> queryMaterialList(Material condition);
 
-    /**
-    * 判断分页查询输入的条件是否存在
-    * @param type
-    * @param title
-    * @param status
-    * @return 
-    * @create: 2018年2月1日 下午7:10:02 nyc
-    * @history:
-    */
-    public List<Material> checkCondition(String type, String title,
-            String status);
 }

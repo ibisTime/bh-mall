@@ -27,7 +27,7 @@ public class Material extends ABaseDO {
     private String pic;
 
     // 排序
-    private String orderNo;
+    private Integer orderNo;
 
     // 状态
     private String status;
@@ -67,11 +67,11 @@ public class Material extends ABaseDO {
         this.pic = pic;
     }
 
-    public String getOrderNo() {
+    public Integer getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(String orderNo) {
+    public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
 

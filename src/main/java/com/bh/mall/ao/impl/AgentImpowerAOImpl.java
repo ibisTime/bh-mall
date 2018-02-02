@@ -27,9 +27,7 @@ public class AgentImpowerAOImpl implements IAgentImpowerAO {
     @Transactional
     public void editAgentImpower(XN627012Req req) {
         agentBO.getAgent(req.getAgentCode());
-        agentImpowerBO.getAgentImpower(req.getCode());
-        AgentImpower data = new AgentImpower();
-        data.setCode(req.getCode());
+        AgentImpower data = agentImpowerBO.getAgentImpower(req.getCode());
 
         data.setAgentCode(req.getAgentCode());
         data.setImpowerAmount(StringValidater.toLong(req.getImpowerAmount()));

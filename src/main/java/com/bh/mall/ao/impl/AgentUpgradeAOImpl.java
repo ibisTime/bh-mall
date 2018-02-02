@@ -27,17 +27,15 @@ public class AgentUpgradeAOImpl implements IAgentUpgradeAO {
     @Transactional
     public void editAgentUpgrade(XN627022Req req) {
         agentBO.getAgent(req.getAgentCode());
-        agentUpgradeBO.getAgentUpgrade(req.getCode());
-        AgentUpgrade data = new AgentUpgrade();
+        AgentUpgrade data = agentUpgradeBO.getAgentUpgrade(req.getCode());
         data.setAgentCode(req.getAgentCode());
-        data.setCode(req.getCode());
 
         data.setIsCompanyApprove(req.getIsCompanyApprove());
         data.setIsReset(req.getIsReset());
-        data.setRecommendNumber(
-            StringValidater.toInteger(req.getRecommendNumber()));
-        data.setUpgradeFirstAmount(
-            StringValidater.toLong(req.getUpgradeFirstAmount()));
+        data.setRecommendNumber(StringValidater.toInteger(req
+            .getRecommendNumber()));
+        data.setUpgradeFirstAmount(StringValidater.toLong(req
+            .getUpgradeFirstAmount()));
 
         agentUpgradeBO.editAgentUpgrade(data);
     }
