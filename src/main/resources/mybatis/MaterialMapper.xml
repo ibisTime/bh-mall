@@ -7,8 +7,8 @@
 		<result column="type" property="type"/>
 		<result column="title" property="title"/>
 		<result column="pic" property="pic"/>
-		
 		<result column="order_no" property="orderNo"/>
+		
 		<result column="status" property="status"/>
 		<result column="level_list" property="levelList"/>
 	</resultMap>
@@ -24,13 +24,13 @@
 			<if test="title != null and title != ''">
 				AND t.title like "%"#{title}"%"
 			</if>
-			
 			<if test="pic != null and pic != ''">
 				AND t.pic = #{pic}
 			</if>
 			<if test="orderNo != null and orderNo != ''">
 				AND t.order_no = #{orderNo}
 			</if>
+			
 			<if test="status != null and status != ''">
 				AND t.status = #{status}
 			</if>

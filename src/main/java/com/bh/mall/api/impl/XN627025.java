@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.ao.IAgentUpgradeAO;
 import com.bh.mall.api.AProcessor;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentUpgrade;
 import com.bh.mall.dto.req.XN627025Req;
@@ -39,14 +40,15 @@ public class XN627025 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentUpgradeAO.queryAgentUpgradeListPage(start, limit,
-            condition);
+        return agentUpgradeAO
+            .queryAgentUpgradeListPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN627025Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
+        ObjValidater.validateReq(req);
     }
 
 }
