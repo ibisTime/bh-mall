@@ -19,6 +19,7 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public void editAgent(String code, String level, String name) {
         Agent data = agentBO.getAgent(code);
+
         agentBO.editAgent(data, level, name);
     }
 
