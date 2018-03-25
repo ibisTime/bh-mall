@@ -1,45 +1,86 @@
 package com.bh.mall.dto.req;
 
-/**
- * 新增素材
- * @author: nyc 
- * @since: 2018年1月31日 下午5:10:05 
- * @history:
- */
+import org.hibernate.validator.constraints.NotBlank;
+
 public class XN627030Req {
 
+    // 名字（必填）
+    @NotBlank
+    private String name;
+
     // 类型（必填）
+    @NotBlank
     private String type;
 
-    // 标题（必填）
-    private String title;
+    // 访问Url（必填）
+    @NotBlank
+    private String url;
 
-    // 图片（必填）
+    // 图片（选填）
+    @NotBlank
     private String pic;
 
-    // 排序（必填）
-    private String orderNo;
-
-    // 状态（必填 0 未发布， 1发布）
+    // 状态（必填）
+    @NotBlank
     private String status;
 
-    // 查看等级（必填）
-    private String levelList;
+    // 位置（选填）
+    private String location;
 
-    public String getLevelList() {
-        return levelList;
+    // 相对位置编号（必填）
+    @NotBlank
+    private String orderNo;
+
+    // 属于（选填）
+    private String belong;
+
+    // 父编号（选填）
+    private String parentCode;
+
+    // 内容源类型（选填）
+    private String contentType;
+
+    // 备注(选填)
+    private String remark;
+
+    // 公司编号（必填）
+    @NotBlank
+    private String companyCode;
+
+    // 系统编号(必填)
+    @NotBlank
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getName() {
+        return name;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getPic() {
@@ -58,20 +99,59 @@ public class XN627030Req {
         this.status = status;
     }
 
-    public String getTitle() {
-        return title;
+    public String getLocation() {
+        return location;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public String getType() {
-        return type;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
+    public String getBelong() {
+        return belong;
+    }
+
+    public void setBelong(String belong) {
+        this.belong = belong;
+    }
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

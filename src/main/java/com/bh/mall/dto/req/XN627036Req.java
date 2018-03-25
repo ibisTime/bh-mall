@@ -1,25 +1,31 @@
 package com.bh.mall.dto.req;
 
-/**
- * 素材详情查询
- * @author: nyc 
- * @since: 2018年2月1日 上午11:53:49 
- * @history:
- */
 public class XN627036Req {
-
-    // TODO
-    // 类型 （选填）
+    // 类型（选填）
     private String type;
 
-    // 标题 （选填）
-    private String title;
+    // 属于（选填）全局+地方默认(没修改)+地方修改过的
+    private String belong;
 
-    // 状态 （选填）
-    private String status;
+    // UI位置（选填）
+    private String location;
 
-    // 查看等级（选填）
-    private String levelList;
+    // 父编号（选填）
+    private String parentCode;
+
+    // 公司编号（必填）
+    private String companyCode;
+
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getType() {
         return type;
@@ -29,28 +35,35 @@ public class XN627036Req {
         this.type = type;
     }
 
-    public String getTitle() {
-        return title;
+    public String getBelong() {
+        return belong;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setBelong(String belong) {
+        this.belong = belong;
     }
 
-    public String getStatus() {
-        return status;
+    public String getParentCode() {
+        return parentCode;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
     }
 
-    public String getLevelList() {
-        return levelList;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }

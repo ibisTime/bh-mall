@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Material;
-import com.bh.mall.dto.req.XN627030Req;
-import com.bh.mall.dto.req.XN627031Req;
+import com.bh.mall.dto.req.XN627420Req;
+import com.bh.mall.dto.req.XN627421Req;
 
 public interface IMaterialAO {
 
@@ -18,7 +18,7 @@ public interface IMaterialAO {
      * @create: 2018年2月1日 上午11:01:40 nyc
      * @history:
      */
-    public String addMaterial(XN627030Req req);
+    public String addMaterial(XN627420Req req);
 
     /**
      * 修改素材
@@ -26,7 +26,7 @@ public interface IMaterialAO {
      * @create: 2018年2月1日 上午11:01:53 nyc
      * @history:
      */
-    public void editMaterial(XN627031Req req);
+    public void editMaterial(XN627421Req req);
 
     /**
      * 删除素材

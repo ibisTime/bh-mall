@@ -1,38 +1,39 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IMaterialAO;
+import com.bh.mall.ao.ICNavigateAO;
 import com.bh.mall.api.AProcessor;
-import com.bh.mall.core.StringValidater;
+import com.bh.mall.api.converter.CNavigateConverter;
+import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
+import com.bh.mall.domain.CNavigate;
 import com.bh.mall.dto.req.XN627030Req;
+import com.bh.mall.dto.res.PKCodeRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
-import com.bh.mall.http.JsonUtils;
 import com.bh.mall.spring.SpringContextHolder;
 
-/**
- * 新增素材
- * @author: nyc 
- * @since: 2018年1月31日 下午5:16:16 
+/** 
+ * 新增导航
+ * @author: zuixian 
+ * @since: 2016年10月10日 下午3:58:13 
  * @history:
  */
 public class XN627030 extends AProcessor {
-
-    private IMaterialAO materialAO = SpringContextHolder
-        .getBean(IMaterialAO.class);
+    private ICNavigateAO cNavigateAO = SpringContextHolder
+        .getBean(ICNavigateAO.class);
 
     private XN627030Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return materialAO.addMaterial(req);
+        CNavigate data = CNavigateConverter.converter(req);
+        String code = cNavigateAO.addCNavigate(data);
+        return new PKCodeRes(code);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtils.json2Bean(inputparams, XN627030Req.class);
-        StringValidater.validateBlank(req.getLevelList(), req.getPic(),
-            req.getStatus(), req.getTitle(), req.getType());
-        StringValidater.validateNumber(req.getOrderNo());
+        req = JsonUtil.json2Bean(inputparams, XN627030Req.class);
+        ObjValidater.validateReq(req);
     }
-
 }

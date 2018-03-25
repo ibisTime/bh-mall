@@ -1,52 +1,50 @@
 package com.bh.mall.dto.req;
 
-/**
- * 素材分页查询
- * @author: nyc 
- * @since: 2018年2月1日 上午11:04:25 
- * @history:
- */
 public class XN627035Req extends APageReq {
 
-    /** 
-     * @Fields serialVersionUID : XXX(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = -1370292147897079233L;
+    private static final long serialVersionUID = 1L;
+
+    // 名字（选填）
+    private String name;
 
     // 类型（选填）
     private String type;
 
-    // 标题 （选填）
-    private String title;
-
     // 状态（选填）
     private String status;
 
-    // 查看等级 （选填）
-    private String levelList;
+    // 位置（选填）
+    private String location;
 
-    public String getLevelList() {
-        return levelList;
+    // 属于（选填）
+    private String belong;
+
+    // 父编号（选填）
+    private String parentCode;
+
+    // 内容源类型（选填）
+    private String contentType;
+
+    // 公司编号（必填）
+    private String companyCode;
+
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {
@@ -57,4 +55,51 @@ public class XN627035Req extends APageReq {
         this.type = type;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getBelong() {
+        return belong;
+    }
+
+    public void setBelong(String belong) {
+        this.belong = belong;
+    }
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
 }

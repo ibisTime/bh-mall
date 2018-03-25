@@ -13,8 +13,8 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Material;
-import com.bh.mall.dto.req.XN627030Req;
-import com.bh.mall.dto.req.XN627031Req;
+import com.bh.mall.dto.req.XN627420Req;
+import com.bh.mall.dto.req.XN627421Req;
 
 @Service
 public class MaterialAOImpl implements IMaterialAO {
@@ -26,7 +26,7 @@ public class MaterialAOImpl implements IMaterialAO {
     private IAgentBO agentBO;
 
     @Override
-    public String addMaterial(XN627030Req req) {
+    public String addMaterial(XN627420Req req) {
         this.checkLevelList(req.getLevelList());
         Material data = new Material();
         String code = OrderNoGenerater
@@ -45,7 +45,7 @@ public class MaterialAOImpl implements IMaterialAO {
     }
 
     @Override
-    public void editMaterial(XN627031Req req) {
+    public void editMaterial(XN627421Req req) {
         this.checkLevelList(req.getLevelList());
         Material data = materialBO.getMaterial(req.getCode());
         data.setLevelList(req.getLevelList());

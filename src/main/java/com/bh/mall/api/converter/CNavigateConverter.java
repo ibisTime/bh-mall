@@ -2,14 +2,14 @@ package com.bh.mall.api.converter;
 
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.CNavigate;
-import com.bh.mall.dto.req.XN805800Req;
-import com.bh.mall.dto.req.XN805802Req;
-import com.bh.mall.dto.req.XN805805Req;
+import com.bh.mall.dto.req.XN627030Req;
+import com.bh.mall.dto.req.XN627032Req;
+import com.bh.mall.dto.req.XN627035Req;
 
 public class CNavigateConverter {
 
     // 新增导航
-    public static CNavigate converter(XN805800Req req) {
+    public static CNavigate converter(XN627030Req req) {
         CNavigate result = new CNavigate();
         result.setName(req.getName());
         result.setType(req.getType());
@@ -28,7 +28,7 @@ public class CNavigateConverter {
     }
 
     // 修改导航
-    public static CNavigate converter(XN805802Req req) {
+    public static CNavigate converter(XN627032Req req) {
         CNavigate result = new CNavigate();
         result.setCode(req.getCode());
         result.setName(req.getName());
@@ -47,7 +47,7 @@ public class CNavigateConverter {
     }
 
     // 分页查询导航
-    public static CNavigate converter(XN805805Req req) {
+    public static CNavigate converter(XN627035Req req) {
         CNavigate result = new CNavigate();
         result.setName(req.getName());
         result.setType(req.getType());

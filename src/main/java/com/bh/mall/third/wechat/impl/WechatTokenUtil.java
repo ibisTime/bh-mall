@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.SysConstant;
-import com.bh.mall.dto.res.XN807910Res;
+import com.bh.mall.dto.res.XN627092Res;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.HttpsUtil;
@@ -30,7 +30,7 @@ public class WechatTokenUtil {
 
     private Map<String, String> map = new HashMap<>();
 
-    public XN807910Res getSign(String systemCode, String companyCode, String url) {
+    public XN627092Res getSign(String systemCode, String companyCode, String url) {
         getMap(systemCode, companyCode);
         String prefixStr = systemCode + "." + companyCode;
         String jsapiTicket = map.get(prefixStr + ".jsapi_token");
@@ -40,7 +40,7 @@ public class WechatTokenUtil {
             url);
         logger.info("jsapiTicket:" + jsapiTicket + ";timestamp" + timestamp
                 + ";nonceStr:" + nonceStr + ";sign:" + sign);
-        return new XN807910Res(map.get("appId"), timestamp, nonceStr, sign);
+        return new XN627092Res(map.get("appId"), timestamp, nonceStr, sign);
     }
 
     public Map<String, String> getMap(String systemCode, String companyCode) {
