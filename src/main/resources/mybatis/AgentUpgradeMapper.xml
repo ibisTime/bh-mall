@@ -4,11 +4,14 @@
 <mapper namespace="com.bh.mall.dao.IAgentUpgradeDAO">
 	<resultMap id="aegnt_DB_Result" type="agentUpgrade">
 		<result column="code" property="code"/>
-		<result column="agent_code" property="agentCode"/>
+		<result column="level" property="level"/>
 		<result column="is_company_approve" property="isCompanyApprove"/>
-		<result column="upgrade_first_amount" property="upgradeFirstAmount"/>
-		<result column="recommend_number" property="recommendNumber"/>
+		<result column="re_number" property="reNumber"/>
 		<result column="is_reset" property="isReset"/>
+		
+		<result column="updater" property="updater"/>
+		<result column="update_datetime" property="updateDatetime"/>
+		<result column="remark" property="remark"/>
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -16,8 +19,8 @@
 			<if test="code != null and code != ''">
 				AND t.code=#{code}
 			</if>
-			<if test="agentCode != null and agentCode != ''">
-				AND t.agent_code=#{agentCode}
+			<if test="level != null and level != ''">
+				AND t.level=#{level}
 			</if>
 		</trim>
 	</sql>
@@ -25,11 +28,14 @@
 	<select id="select_agentUpgrade" parameterType="agentUpgrade" resultMap="aegnt_DB_Result">
 		SELECT 
 		t.code
-		,t.agent_code
+		,t.level
 		,t.is_company_approve
-		,t.upgrade_first_amount
-		,t.recommend_number
+		,t.re_number
 		,t.is_reset
+		
+		,t.updater
+		,t.update_datetime
+		,t.remark
 		FROM tbh_agent_upgrade t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
@@ -47,11 +53,14 @@
 	<update id="update_agentUpgrade" parameterType="agentUpgrade">
 		UPDATE tbh_agent_upgrade 
 		SET
-		agent_code=#{agentCode}
+		level=#{level}
 		,is_company_approve=#{isCompanyApprove}
-		,upgrade_first_amount=#{upgradeFirstAmount}
-		,recommend_number=#{recommendNumber}
+		,re_number=#{reNumber}
 		,is_reset=#{isReset}
+		
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
 		WHERE code=#{code}
 	</update>
 </mapper>

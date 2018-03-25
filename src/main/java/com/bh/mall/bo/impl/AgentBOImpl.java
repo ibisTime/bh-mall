@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,18 +20,25 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     private IAgentDAO agentDAO;
 
     @Override
-    public void editAgent(Agent data, String level, String name) {
-        data.setLevel(level);
+    public void editAgent(Agent data, String name, String amount,
+            String minChargeAmount, String redAmount, String updater,
+            String remark) {
         data.setName(name);
+        data.setAmount(Long.valueOf(amount));
+        data.setMinChargeAmount(Long.valueOf(minChargeAmount));
+        data.setRedAmount(Long.valueOf(redAmount));
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
         agentDAO.update(data);
     }
 
     @Override
-    public Agent getAgent(String code) {
+    public Agent getAgent(String level) {
         Agent data = null;
-        if (StringUtils.isNotBlank(code)) {
+        if (StringUtils.isNotBlank(level)) {
             Agent condition = new Agent();
-            condition.setCode(code);
+            condition.setLevel(Integer.valueOf(level));
             data = agentDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理编号不存在");

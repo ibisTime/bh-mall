@@ -24,9 +24,9 @@
     <bean id="springContextHolder" class="com.bh.mall.spring.SpringContextHolder"></bean>
     
     <!-- 参数验证 -->
-    <!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
         <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
-    </bean>  -->   
+    </bean>    
 
 	<!-- mybatis写 -->
     <bean id="sqlSessionFactoryMaster" class="org.mybatis.spring.SqlSessionFactoryBean">

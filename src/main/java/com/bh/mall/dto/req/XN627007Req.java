@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 查询代理详情
  * @author: nyc 
@@ -9,13 +11,15 @@ package com.bh.mall.dto.req;
 public class XN627007Req {
 
     // 编号 （必填）
-    private String code;
+    @NotBlank(message = "等级不能为空")
+    private String level;
 
-    public String getCode() {
-        return code;
+    public String getLevel() {
+        return level;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setLevel(String level) {
+        this.level = level;
     }
+
 }

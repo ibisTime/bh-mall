@@ -20,12 +20,14 @@ public class XN627026 extends AProcessor {
     private IAgentUpgradeAO agentUpgradeAO = SpringContextHolder
         .getBean(IAgentUpgradeAO.class);
 
-    private XN627026Req req;
+    private XN627026Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         AgentUpgrade condition = new AgentUpgrade();
-        condition.setAgentCode(req.getAgentCode());
+        condition.setLevel(Integer.valueOf(req.getLevel()));
+        condition.setIsCompanyApprove(req.getIsCompanyApprove());
+        condition.setIsReset(req.getIsReset());
         return agentUpgradeAO.queryAgentUpgradeList(condition);
     }
 

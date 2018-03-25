@@ -27,14 +27,14 @@ public class XN627005 extends AProcessor {
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
         condition.setName(req.getName());
-        condition.setLevel(req.getLevel());
+        condition.setLevel(Integer.valueOf(req.getLevel()));
 
-        String cloumn = req.getOrderColumn();
-        if (StringUtils.isBlank(cloumn)) {
-            cloumn = IAgentAO.DEFAULT_ORDER_COLUMN;
+        String orderColumn = req.getOrderColumn();
+        if (StringUtils.isBlank(orderColumn)) {
+            orderColumn = IAgentAO.DEFAULT_ORDER_COLUMN;
         }
 
-        condition.setOrder(cloumn, req.getOrderDir());
+        condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 

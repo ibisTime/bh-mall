@@ -1,6 +1,6 @@
 package com.bh.mall.domain;
 
-import java.math.BigInteger;
+import java.util.Date;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -21,19 +21,25 @@ public class AgentUpgrade extends ABaseDO {
     private String code;
 
     // 代理编号
-    private String agentCode;
+    private Integer level;
 
     // 本等级升级是否公司审核
     private String isCompanyApprove;
 
-    // 本等级升级首单总额
-     private Long upgradeFirstAmount;
-
     // 半门槛推荐人数
-    private Integer recommendNumber;
+    private Integer reNumber;
 
     // 本等级升级是否余额清零
     private String isReset;
+
+    // 更新人
+    private String updater;
+
+    // 更新时间
+    private Date updateDatetime;
+
+    // 备注
+    private String remark;
 
     public String getCode() {
         return code;
@@ -41,14 +47,6 @@ public class AgentUpgrade extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getAgentCode() {
-        return agentCode;
-    }
-
-    public void setAgentCode(String agentCode) {
-        this.agentCode = agentCode;
     }
 
     public String getIsCompanyApprove() {
@@ -59,27 +57,52 @@ public class AgentUpgrade extends ABaseDO {
         this.isCompanyApprove = isCompanyApprove;
     }
 
-    public Long getUpgradeFirstAmount() {
-        return upgradeFirstAmount;
-    }
-  public void setUpgradeFirstAmount(Long upgradeFirstAmount) {
-        this.upgradeFirstAmount = upgradeFirstAmount;
-    }
-
-   public Integer getRecommendNumber() {
-        return recommendNumber;
-    }
-
-    public void setRecommendNumber(Integer recommendNumber) {
-        this.recommendNumber = recommendNumber;
-    }
-
     public String getIsReset() {
         return isReset;
     }
 
     public void setIsReset(String isReset) {
         this.isReset = isReset;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getReNumber() {
+        return reNumber;
+    }
+
+    public void setReNumber(Integer reNumber) {
+        this.reNumber = reNumber;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

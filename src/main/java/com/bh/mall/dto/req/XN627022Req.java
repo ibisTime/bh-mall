@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 代理升级更新
  * @author nyc
@@ -8,30 +10,31 @@ package com.bh.mall.dto.req;
 public class XN627022Req {
 
     // 编号 （必填）
+    @NotBlank
     private String code;
 
     // 代理编号 （必填）
-    private String agentCode;
+    @NotBlank
+    private String level;
 
     // 本等级升级是否公司审核 （必填）
+    @NotBlank
     private String isCompanyApprove;
 
-    // 本等级升级首单总额（必填）
-    private String upgradeFirstAmount;
-
     // 半门槛推荐人数 （必填）
-    private String recommendNumber;
+    @NotBlank
+    private String reNumber;
 
     // 本等级升级是否余额清零 （必填）
+    @NotBlank
     private String isReset;
 
-    public String getAgentCode() {
-        return agentCode;
-    }
+    // 更新人 （必填）
+    @NotBlank
+    private String updater;
 
-    public void setAgentCode(String agentCode) {
-        this.agentCode = agentCode;
-    }
+    // 备注 （必填）
+    private String remark;
 
     public String getCode() {
         return code;
@@ -57,20 +60,36 @@ public class XN627022Req {
         this.isReset = isReset;
     }
 
-    public String getRecommendNumber() {
-        return recommendNumber;
+    public String getLevel() {
+        return level;
     }
 
-    public void setRecommendNumber(String recommendNumber) {
-        this.recommendNumber = recommendNumber;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
-    public String getUpgradeFirstAmount() {
-        return upgradeFirstAmount;
+    public String getReNumber() {
+        return reNumber;
     }
 
-    public void setUpgradeFirstAmount(String upgradeFirstAmount) {
-        this.upgradeFirstAmount = upgradeFirstAmount;
+    public void setReNumber(String reNumber) {
+        this.reNumber = reNumber;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

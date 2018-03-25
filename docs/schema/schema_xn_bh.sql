@@ -186,9 +186,14 @@ CREATE TABLE `tsys_role` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tbh_agent`;
 CREATE TABLE `tbh_agent` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
+  `level` bigint(32) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL COMMENT '等级名称',
-  `level` varchar(32) DEFAULT NULL COMMENT '等级',
+  `amount` bigint(32) DEFAULT NULL COMMENT '首次授权发送金额',
+  `red_amount` bigint(32) DEFAULT NULL COMMENT '红线金额',
+  `min_charge_amount` bigint(32) DEFAULT NULL COMMENT '本等级每次最低充值金额',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -198,15 +203,16 @@ CREATE TABLE `tbh_agent` (
 DROP TABLE IF EXISTS `tbh_agent_impower`;
 CREATE TABLE `tbh_agent_impower` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `agent_code` varchar(32) DEFAULT NULL COMMENT '代理编号',
+  `level` bigint(32) DEFAULT NULL COMMENT '代理等级',
   `is_intent` char(1) DEFAULT NULL COMMENT '是否被意向（0否 1是）',
   `is_intro` char(1) DEFAULT NULL COMMENT '是否可被介绍（0否 1是）',
-  `is_realname` char(1) DEFAULT NULL COMMENT '是否实名（0否 1是）',
+  `is_real_name` char(1) DEFAULT NULL COMMENT '是否实名（0否 1是）',
   `is_company_impower` char(1) DEFAULT NULL COMMENT '是否需要公司审核（0否 1是）',
   `impower_amount` bigint(20) DEFAULT NULL COMMENT '授权单金额',
   `min_charge` bigint(20) DEFAULT NULL COMMENT '充值门槛',
-  `red_percent` decimal(10,0) DEFAULT NULL COMMENT '红线金额百分比',
-  `is_summary` char(1) DEFAULT NULL COMMENT '授权是否汇总（0否 1是）',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -216,11 +222,13 @@ CREATE TABLE `tbh_agent_impower` (
 DROP TABLE IF EXISTS `tbh_agent_upgrade`;
 CREATE TABLE `tbh_agent_upgrade` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `agent_code` varchar(32) DEFAULT NULL COMMENT '代理编号',
+  `level` varchar(32) DEFAULT NULL COMMENT '代理等级',
   `is_company_approve` char(1) DEFAULT NULL COMMENT '本等级升级是否公司审核',
-  `upgrade_first_amount` bigint(20) DEFAULT NULL COMMENT '本等级升级首单总额',
-  `recommend_number` int(11) DEFAULT NULL COMMENT '半门槛推荐人数',
+  `re_number` int(11) DEFAULT NULL COMMENT '半门槛推荐人数',
   `is_reset` char(1) DEFAULT NULL COMMENT '本等级升级是否余额清零',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -239,3 +247,19 @@ CREATE TABLE `tbh_material` (
   `level_list` varchar(32) DEFAULT NULL COMMENT '查看等级',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for table `tbh_intro`
+-- ----------------------------
+DROP TABLE IF EXISTS `tbh_intro`;
+CREATE TABLE `tbh_material` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `level` varchar(4) DEFAULT NULL COMMENT '类型',
+  `percent` varchar(64) DEFAULT NULL COMMENT '标题',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

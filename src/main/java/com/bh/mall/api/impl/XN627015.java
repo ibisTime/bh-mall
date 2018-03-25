@@ -28,19 +28,23 @@ public class XN627015 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentImpower condition = new AgentImpower();
-        condition.setAgentCode(req.getAgentCode());
+        condition.setLevel(Integer.valueOf(req.getLevel()));
+        condition.setIsIntent(req.getIsIntent());
+        condition.setIsIntro(req.getIsIntro());
+        condition.setIsCompanyImpower(req.getIsCompanyImpower());
+        condition.setIsRealName(req.getIsRealName());
 
-        String column = req.getOrderColumn();
-        if (StringUtils.isBlank(column)) {
-            column = IAgentImpowerAO.DEFAULT_ORDER_COLUMN;
+        String orderColumn = req.getOrderColumn();
+        if (StringUtils.isBlank(orderColumn)) {
+            orderColumn = IAgentImpowerAO.DEFAULT_ORDER_COLUMN;
         }
 
-        condition.setOrder(column, req.getOrderDir());
+        condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentImpowerAO.queryAgentImpowerListPage(start, limit,
-            condition);
+        return agentImpowerAO
+            .queryAgentImpowerListPage(start, limit, condition);
     }
 
     @Override

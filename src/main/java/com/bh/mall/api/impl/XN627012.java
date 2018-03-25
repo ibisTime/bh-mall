@@ -2,7 +2,7 @@ package com.bh.mall.api.impl;
 
 import com.bh.mall.ao.IAgentImpowerAO;
 import com.bh.mall.api.AProcessor;
-import com.bh.mall.core.StringValidater;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627012Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
@@ -21,7 +21,7 @@ public class XN627012 extends AProcessor {
     private IAgentImpowerAO agentImpowerAO = SpringContextHolder
         .getBean(IAgentImpowerAO.class);
 
-    private XN627012Req req;
+    private XN627012Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -32,12 +32,7 @@ public class XN627012 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN627012Req.class);
-        StringValidater.validateBlank(req.getAgentCode(),
-            req.getIsCompanyImpower(), req.getIsIntent(), req.getIsIntro(),
-            req.getIsRealName(), req.getIsSummary(), req.getImpowerAmount(),
-            req.getMinCharge(), req.getRedPercent());
-        StringValidater.validateNumber(req.getImpowerAmount(),
-            req.getMinCharge(), req.getRedPercent());
+        ObjValidater.validateReq(req);
     }
 
 }

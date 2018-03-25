@@ -7,17 +7,23 @@ import com.bh.mall.domain.Agent;
 
 public interface IAgentAO {
 
-    String DEFAULT_ORDER_COLUMN = "code";
+    String DEFAULT_ORDER_COLUMN = "level";
 
     /**
      * 修改代理
-     * @param code
      * @param level
      * @param name 
+     * @param amount 
+     * @param minChargeAmount 
+     * @param redAmount 
+     * @param updater 
+     * @param remark
      * @create: 2018年1月31日 上午9:45:54 chenshan
      * @history:
      */
-    public void editAgent(String code, String level, String name);
+    public void editAgent(String level, String name, String amount,
+            String minChargeAmount, String redAmount, String updater,
+            String remark);
 
     /**
      * 分页查询代理
@@ -33,12 +39,12 @@ public interface IAgentAO {
 
     /**
      * 查询代理详情
-     * @param code
+     * @param level
      * @return 
      * @create: 2018年1月31日 下午2:31:14 nyc
      * @history:
      */
-    public Agent getAgent(String code);
+    public Agent getAgent(String level);
 
     /**
      * 列表查询代理

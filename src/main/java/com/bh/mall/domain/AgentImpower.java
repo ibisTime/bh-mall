@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.sql.Date;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -19,7 +21,7 @@ public class AgentImpower extends ABaseDO {
     private String code;
 
     // 代理编号
-    private String agentCode;
+    private Integer level;
 
     // 本等级是够可被意向
     private String isIntent;
@@ -28,22 +30,22 @@ public class AgentImpower extends ABaseDO {
     private String isIntro;
 
     // 本等级是否需要实名
-    private String isRealname;
+    private String isRealName;
+
+    // 本等级最低充值门槛
+    private Long minCharge;
 
     // 本等级是否需要公司审核(授权)
     private String isCompanyImpower;
 
-    // 本等级授权单金额
-    private Long impowerAmount;
+    // 更新人
+    private String updater;
 
-    // 本等级充值门槛
-    private Long minCharge;
+    // 更新时间
+    private Date updateDatetime;
 
-    // 红线金额百分比
-    private Double redPercent;
-
-    // 本等级授权是否汇总
-    private String isSummary;
+    // 备注
+    private String remark;
 
     public String getCode() {
         return code;
@@ -51,14 +53,6 @@ public class AgentImpower extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getAgentCode() {
-        return agentCode;
-    }
-
-    public void setAgentCode(String agentCode) {
-        this.agentCode = agentCode;
     }
 
     public String getIsIntent() {
@@ -77,14 +71,6 @@ public class AgentImpower extends ABaseDO {
         this.isIntro = isIntro;
     }
 
-    public String getIsRealname() {
-        return isRealname;
-    }
-
-    public void setIsRealname(String isRealname) {
-        this.isRealname = isRealname;
-    }
-
     public String getIsCompanyImpower() {
         return isCompanyImpower;
     }
@@ -93,12 +79,44 @@ public class AgentImpower extends ABaseDO {
         this.isCompanyImpower = isCompanyImpower;
     }
 
-    public Long getImpowerAmount() {
-        return impowerAmount;
+    public Integer getLevel() {
+        return level;
     }
 
-    public void setImpowerAmount(Long impowerAmount) {
-        this.impowerAmount = impowerAmount;
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public String getIsRealName() {
+        return isRealName;
+    }
+
+    public void setIsRealName(String isRealName) {
+        this.isRealName = isRealName;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Long getMinCharge() {
@@ -107,22 +125,6 @@ public class AgentImpower extends ABaseDO {
 
     public void setMinCharge(Long minCharge) {
         this.minCharge = minCharge;
-    }
-
-    public Double getRedPercent() {
-        return redPercent;
-    }
-
-    public void setRedPercent(Double redPercent) {
-        this.redPercent = redPercent;
-    }
-
-    public String getIsSummary() {
-        return isSummary;
-    }
-
-    public void setIsSummary(String isSummary) {
-        this.isSummary = isSummary;
     }
 
 }

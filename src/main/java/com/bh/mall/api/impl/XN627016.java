@@ -25,7 +25,11 @@ public class XN627016 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentImpower condition = new AgentImpower();
-        condition.setAgentCode(req.getAgentCode());
+        condition.setLevel(Integer.valueOf(req.getLevel()));
+        condition.setIsIntent(req.getIsIntent());
+        condition.setIsIntro(req.getIsIntro());
+        condition.setIsCompanyImpower(req.getIsCompanyImpower());
+        condition.setIsRealName(req.getIsRealName());
         return agentImpowerAO.queryAgentImpowerList(condition);
     }
 

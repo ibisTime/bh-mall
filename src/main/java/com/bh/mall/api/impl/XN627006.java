@@ -24,7 +24,7 @@ public class XN627006 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
-        condition.setLevel(req.getLevel());
+        condition.setLevel(Integer.valueOf(req.getLevel()));
         condition.setName(req.getName());
         return agentAO.queryAgentList(condition);
     }

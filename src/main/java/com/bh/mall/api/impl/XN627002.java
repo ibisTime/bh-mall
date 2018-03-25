@@ -3,7 +3,7 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627002Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
@@ -24,15 +24,16 @@ public class XN627002 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.editAgent(req.getCode(), req.getLevel(), req.getName());
+        agentAO.editAgent(req.getLevel(), req.getName(), req.getAmount(),
+            req.getMinChargeAmount(), req.getRedAmount(), req.getUpdater(),
+            req.getRemark());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627002Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getLevel(),
-            req.getName());
+        ObjValidater.validateReq(req);
     }
 
 }

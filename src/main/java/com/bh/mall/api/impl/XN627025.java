@@ -29,14 +29,16 @@ public class XN627025 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentUpgrade condition = new AgentUpgrade();
-        condition.setAgentCode(req.getAgentCode());
+        condition.setLevel(Integer.valueOf(req.getLevel()));
+        condition.setIsCompanyApprove(req.getIsCompanyApprove());
+        condition.setIsReset(req.getIsReset());
 
-        String column = req.getOrderColumn();
-        if (StringUtils.isBlank(column)) {
-            column = IAgentImpowerAO.DEFAULT_ORDER_COLUMN;
+        String orderColumn = req.getOrderColumn();
+        if (StringUtils.isBlank(orderColumn)) {
+            orderColumn = IAgentImpowerAO.DEFAULT_ORDER_COLUMN;
         }
 
-        condition.setOrder(column, req.getOrderDir());
+        condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 

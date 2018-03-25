@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 修改代理授权
  * @author nyc
@@ -8,34 +10,39 @@ package com.bh.mall.dto.req;
 public class XN627012Req {
 
     // 编号 （必填）
+    @NotBlank
     private String code;
 
     // 代理编号 （必填）
-    private String agentCode;
-
-    // 授权金额 （必填）
-    private String impowerAmount;
+    @NotBlank
+    private String level;
 
     // 本等级是否可以被意向 （必填）
+    @NotBlank
     private String isIntent;
 
     // 是否可以被介绍 （必填）
+    @NotBlank
     private String isIntro;
 
     // 是否需要公司审核 （必填）
+    @NotBlank
     private String isCompanyImpower;
 
     // 是否需要实名 （必填）
+    @NotBlank
     private String isRealName;
 
-    // 本等级授权单是否汇总 （必填）
-    private String isSummary;
-
     // 本等级充值门槛 （必填）
+    @NotBlank
     private String minCharge;
 
-    // 红线设置 （必填）
-    private String redPercent;
+    // 更新人 （必填）
+    @NotBlank
+    private String updater;
+
+    // 备注
+    private String remark;
 
     public String getCode() {
         return code;
@@ -43,22 +50,6 @@ public class XN627012Req {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getAgentCode() {
-        return agentCode;
-    }
-
-    public void setAgentCode(String agentCode) {
-        this.agentCode = agentCode;
-    }
-
-    public String getImpowerAmount() {
-        return impowerAmount;
-    }
-
-    public void setImpowerAmount(String impowerAmount) {
-        this.impowerAmount = impowerAmount;
     }
 
     public String getIsIntent() {
@@ -93,14 +84,6 @@ public class XN627012Req {
         this.isRealName = isRealName;
     }
 
-    public String getIsSummary() {
-        return isSummary;
-    }
-
-    public void setIsSummary(String isSummary) {
-        this.isSummary = isSummary;
-    }
-
     public String getMinCharge() {
         return minCharge;
     }
@@ -109,12 +92,28 @@ public class XN627012Req {
         this.minCharge = minCharge;
     }
 
-    public String getRedPercent() {
-        return redPercent;
+    public String getLevel() {
+        return level;
     }
 
-    public void setRedPercent(String redPercent) {
-        this.redPercent = redPercent;
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }
