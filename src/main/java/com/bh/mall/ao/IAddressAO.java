@@ -48,17 +48,6 @@ public interface IAddressAO {
     public int setDefaultAddress(String code);
 
     /**
-     * 修改默认地址
-     * @param userId
-     * @param code
-     * @param isDefault
-     * @return 
-     * @create: 2016年5月23日 下午9:15:31 xieyj
-     * @history:
-     */
-    public int refreshAddressDef(String userId, String code, String isDefault);
-
-    /**
      * 查询收件地址
      * @param condition
      * @return 

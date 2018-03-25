@@ -3,9 +3,9 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.ISYSRoleAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.domain.SYSRole;
-import com.bh.mall.dto.req.XN627926Req;
+import com.bh.mall.dto.req.XN627046Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -16,11 +16,11 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2016年4月17日 上午8:24:46 
  * @history:
  */
-public class XN627926 extends AProcessor {
+public class XN627046 extends AProcessor {
     private ISYSRoleAO sysRoleAO = SpringContextHolder
         .getBean(ISYSRoleAO.class);
 
-    private XN627926Req req = null;
+    private XN627046Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -34,7 +34,7 @@ public class XN627926 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627926Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
+        req = JsonUtil.json2Bean(inputparams, XN627046Req.class);
+        ObjValidater.validateReq(req);
     }
 }

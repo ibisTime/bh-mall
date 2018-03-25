@@ -1,37 +1,48 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /** 
  * @author: xieyj 
  * @since: 2015年8月19日 下午7:41:26 
  * @history:
  */
-public class XN627050Req {
+public class XN627400Req {
 
     // 用户编号（必填）
+    @NotBlank
     private String userId;
 
     // 类型（必填）
+    @NotBlank
     private String type;
 
     // 收件人名称（必填）
+    @NotBlank
     private String receiver;
 
     // 手机号（必填）
+    @NotBlank
     private String mobile;
 
     // 省份（必填）
+    @NotBlank
     private String province;
 
     // 城市（必填）
+    @NotBlank
     private String city;
 
     // 区（必填）
-    private String district;
+    @NotBlank
+    private String area;
 
     // 具体地址（必填）
-    private String detailAddress;
+    @NotBlank
+    private String address;
 
-    // 是否默认地址（选填）
+    // 是否默认地址
+    @NotBlank
     private String isDefault;
 
     public String getUserId() {
@@ -66,30 +77,6 @@ public class XN627050Req {
         this.city = city;
     }
 
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getDetailAddress() {
-        return detailAddress;
-    }
-
-    public void setDetailAddress(String detailAddress) {
-        this.detailAddress = detailAddress;
-    }
-
-    public String getIsDefault() {
-        return isDefault;
-    }
-
-    public void setIsDefault(String isDefault) {
-        this.isDefault = isDefault;
-    }
-
     public String getType() {
         return type;
     }
@@ -104,5 +91,29 @@ public class XN627050Req {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
     }
 }

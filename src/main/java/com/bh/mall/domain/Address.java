@@ -35,24 +35,13 @@ public class Address extends ABaseDO {
     private String city;
 
     // 区
-    private String district;
+    private String area;
 
     // 具体地址
-    private String detailAddress;
+    private String address;
 
     // 是否默认地址
     private String isDefault;
-
-    // 系统编号
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getCode() {
         return code;
@@ -94,22 +83,6 @@ public class Address extends ABaseDO {
         this.city = city;
     }
 
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getDetailAddress() {
-        return detailAddress;
-    }
-
-    public void setDetailAddress(String detailAddress) {
-        this.detailAddress = detailAddress;
-    }
-
     public String getIsDefault() {
         return isDefault;
     }
@@ -132,5 +105,21 @@ public class Address extends ABaseDO {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

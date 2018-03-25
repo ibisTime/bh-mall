@@ -1,14 +1,17 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
- * 删除角色
- * @author: xieyj 
- * @since: 2016年5月16日 下午10:06:08 
+ * 角色-详情
+ * @author: Gejin 
+ * @since: 2016年4月16日 下午5:24:01 
  * @history:
  */
-public class XN627921Req {
+public class XN627047Req {
 
     // 角色编号(必填)
+    @NotBlank
     private String code;
 
     public String getCode() {
@@ -18,5 +21,4 @@ public class XN627921Req {
     public void setCode(String code) {
         this.code = code;
     }
-
 }

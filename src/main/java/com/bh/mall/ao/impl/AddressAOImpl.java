@@ -10,7 +10,6 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import com.bh.mall.ao.IAddressAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.domain.Address;
-import com.bh.mall.domain.User;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
 
@@ -39,7 +37,7 @@ public class AddressAOImpl implements IAddressAO {
     @Override
     @Transactional
     public String addAddress(Address data) {
-        User user = userBO.getUser(data.getUserId());
+        userBO.getUser(data.getUserId());
         String code = null;
         if (data != null) {
             // 用户没有地址，则第一条地址为默认地址
@@ -52,7 +50,6 @@ public class AddressAOImpl implements IAddressAO {
                         EBoolean.NO.getCode());
                 }
             }
-            data.setSystemCode(user.getSystemCode());
             code = addressBO.saveAddress(data);
         }
         return code;
@@ -71,25 +68,6 @@ public class AddressAOImpl implements IAddressAO {
             }
             count = addressBO.refreshAddress(data);
         }
-        return count;
-    }
-
-    @Override
-    public int refreshAddressDef(String userId, String code, String isDefault) {
-        if (StringUtils.isBlank(userId)) {
-            throw new BizException("ZC000001", "用户编号不能为空");
-        }
-        if (StringUtils.isBlank(code)) {
-            throw new BizException("ZC000001", "收件地址编号不能为空");
-        }
-        if (StringUtils.isBlank(isDefault)) {
-            throw new BizException("ZC000001", "地址默认值不能为空");
-        }
-        // 将原先的默认地址设置为非默认
-        Address condition = new Address();
-        condition.setUserId(userId);
-        int count = addressBO.refreshAddressDefByUser(userId, isDefault);
-        count = addressBO.refreshAddressDef(code, isDefault);
         return count;
     }
 
@@ -132,5 +110,5 @@ public class AddressAOImpl implements IAddressAO {
     public Address getAddress(String code) {
         return addressBO.getAddress(code);
     }
-    
+
 }

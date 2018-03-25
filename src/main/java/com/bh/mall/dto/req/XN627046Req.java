@@ -1,12 +1,14 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 列表查询角色
  * @author: xieyj 
  * @since: 2016年5月16日 下午9:51:10 
  * @history:
  */
-public class XN627926Req {
+public class XN627046Req {
 
     // 角色名称(选填)
     private String name;
@@ -18,6 +20,7 @@ public class XN627926Req {
     private String updater;
 
     // 系统编号（必填）
+    @NotBlank
     private String systemCode;
 
     public String getSystemCode() {

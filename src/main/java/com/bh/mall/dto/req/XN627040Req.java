@@ -1,26 +1,24 @@
 package com.bh.mall.dto.req;
 
 /**
- * 分页查询角色
+ * 增加角色
  * @author: xieyj 
- * @since: 2016年5月16日 下午9:49:45 
+ * @since: 2016年5月16日 下午10:53:50 
  * @history:
  */
-public class XN627925Req extends APageReq {
+public class XN627040Req {
 
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1L;
-
-    // 角色名称(选填)
+    // 角色名称(必填)
     private String name;
 
-    // 角色等级(选填)
+    // 角色等级(必填)
     private String level;
 
-    // 更新人(选填)
+    // 更新人(必填)
     private String updater;
+
+    // 备注(选填)
+    private String remark;
 
     // 系统编号（必填）
     private String systemCode;
@@ -56,4 +54,13 @@ public class XN627925Req extends APageReq {
     public void setUpdater(String updater) {
         this.updater = updater;
     }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
 }

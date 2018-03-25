@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 注销/激活用户
  * @author: chenshan 
@@ -8,9 +10,11 @@ package com.bh.mall.dto.req;
  */
 public class XN627303Req {
     // 用户编号
+    @NotBlank
     private String userId;
 
     // 更新人
+    @NotBlank
     private String updater;
 
     // 备注

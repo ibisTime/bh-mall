@@ -1,12 +1,15 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /** 
  * @author: xieyj 
  * @since: 2015年8月19日 下午7:41:26 
  * @history:
  */
-public class XN627056Req {
+public class XN627411Req {
     // 用户编号
+    @NotBlank
     private String userId;
 
     // 是否默认地址

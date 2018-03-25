@@ -4,31 +4,32 @@ import com.bh.mall.ao.ISYSRoleAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.dto.req.XN627927Req;
+import com.bh.mall.dto.req.XN627042Req;
+import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 角色-详情
+ * 角色-删除
  * @author: xieyj 
- * @since: 2016年4月17日 上午8:26:30 
+ * @since: 2016年4月17日 上午8:25:51 
  * @history:
  */
-public class XN627927 extends AProcessor {
+public class XN627042 extends AProcessor {
     private ISYSRoleAO sysRoleAO = SpringContextHolder
         .getBean(ISYSRoleAO.class);
 
-    private XN627927Req req = null;
+    private XN627042Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return sysRoleAO.getSYSRole(req.getCode());
+        return new BooleanRes(sysRoleAO.dropSYSRole(req.getCode()));
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627927Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627042Req.class);
         StringValidater.validateBlank(req.getCode());
     }
 }

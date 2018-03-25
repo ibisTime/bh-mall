@@ -5,9 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.bh.mall.ao.ISYSRoleAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SYSRole;
-import com.bh.mall.dto.req.XN627925Req;
+import com.bh.mall.dto.req.XN627045Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -18,12 +19,12 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2016年4月17日 上午8:23:16 
  * @history:
  */
-public class XN627925 extends AProcessor {
+public class XN627045 extends AProcessor {
 
     private ISYSRoleAO sysRoleAO = SpringContextHolder
         .getBean(ISYSRoleAO.class);
 
-    private XN627925Req req = null;
+    private XN627045Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -44,8 +45,8 @@ public class XN627925 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627925Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627045Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode());
+        ObjValidater.validateReq(req);
     }
 }

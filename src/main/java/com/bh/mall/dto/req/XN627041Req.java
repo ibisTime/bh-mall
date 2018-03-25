@@ -1,34 +1,40 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
- * 增加角色
- * @author: xieyj 
- * @since: 2016年5月16日 下午10:53:50 
+ * 修改角色
+ * @author: Gejin 
+ * @since: 2016年4月16日 下午5:24:01 
  * @history:
  */
-public class XN627920Req {
+public class XN627041Req {
+
+    // 角色编号(必填)
+    @NotBlank
+    private String code;
 
     // 角色名称(必填)
+    @NotBlank
     private String name;
 
     // 角色等级(必填)
+    @NotBlank
     private String level;
 
     // 更新人(必填)
+    @NotBlank
     private String updater;
 
     // 备注(选填)
     private String remark;
 
-    // 系统编号（必填）
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
