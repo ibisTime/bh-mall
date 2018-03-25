@@ -19,41 +19,14 @@ import com.bh.mall.domain.User;
 public interface IUserDAO extends IBaseDAO<User> {
     String NAMESPACE = IUserDAO.class.getName().concat(".");
 
-    // 更改姓名
-    public int updateRealName(User data);
-
-    // 实名认证
-    public int updateIdentity(User data);
-
-    // 实名认证芝麻分
-    public int updateIdentityZmscore(User data);
-
-    // 芝麻分
-    public int updateZmscore(User data);
-
-    // 毕业时间
-    public int updateGradDatetime(User data);
-
-    // 设置支付密码
-    public int updateTradePwd(User data);
-
     // 设置登录密码
     public int updateLoginPwd(User data);
-
-    // 更新手机号
-    public int updateMobile(User data);
-
-    // 绑定手机号
-    public int updateBindMobile(User data);
 
     // 更新状态
     public int updateStatus(User data);
 
     // 更新角色
     public int updateRole(User data);
-
-    // 更新Pdf
-    public int updatePdf(User data);
 
     // 更新用户名
     public int updateLoginName(User data);
@@ -63,9 +36,6 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     // 更新头像
     public int updatePhoto(User data);
-
-    // 更新公司编号
-    public int updateCompany(User data);
 
     public int update(User data);
 
@@ -79,7 +49,7 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     public int approveUser(User data);
 
-    public int updateDivRate(User data);
+    public void setTradePwd(User user);
 
-    public int updateNameAddress(User data);
+    public void resetBindMobile(User user);
 }

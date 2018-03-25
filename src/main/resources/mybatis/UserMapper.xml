@@ -6,43 +6,51 @@
 		<result column="user_id" property="userId" />
 		<result column="login_name" property="loginName" />
 		<result column="mobile" property="mobile" />
-		<result column="weixin_id" property="weixinId" />
+		<result column="wx_id" property="wxId" />
 		<result column="photo" property="photo" />
+		
 		<result column="nickname" property="nickname" />
 		<result column="login_pwd" property="loginPwd" />
 		<result column="login_pwd_strength" property="loginPwdStrength" />
+		<result column="trade_pwd" property="tradePwd" />
+		<result column="trade_pwd_strength" property="tradePwdStrength" />
+		
 		<result column="kind" property="kind" />
-		<result column="now_level" property="nowLevel" />
+		<result column="level" property="level" />
 		<result column="apply_level" property="applyLevel" />
 		<result column="user_referee" property="userReferee" />
 		<result column="introducer" property="introducer" />
-		<result column="high_level" property="highLevel" />
-		<result column="pur_user" property="purUser" />
+		
+		<result column="high_user_id" property="highUserId" />
 		<result column="team_name" property="teamName" />
 		<result column="id_kind" property="idKind" />
 		<result column="id_no" property="idNo" />
-		<result column="id_card_reverse" property="idCardReverse" />
-		<result column="id_card_front" property="idCardFront" />
-		<result column="id_card_hand" property="idCardHand" />
+		<result column="id_front" property="idFront" />
+		
+		<result column="id_behind" property="idBehind" />
+		<result column="id_hand" property="idHand" />
 		<result column="real_name" property="realName" />
 		<result column="role_code" property="roleCode" />
 		<result column="status" property="status" />
+		
 		<result column="source" property="source" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="manager" property="manager" />
 		<result column="red_amount" property="redAmount" />
 		<result column="union_id" property="unionId" />
+		
 		<result column="h5_open_id" property="h5OpenId" />
 		<result column="app_open_id" property="appOpenId" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
 		<result column="area" property="area" />
+		
 		<result column="address" property="address" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
-		<result column="cash_pdf" property="cashPdf" />
 		<result column="approver" property="approver" />
+		
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="last_agent_log" property="lastAgentLog" />
 		<result column="remark" property="remark" />
@@ -77,8 +85,8 @@
 				  AND 1 = 1
 				 </otherwise>
 			</choose>	
-			<if test="nowLevel != null and nowLevel != '' ">
-				AND t.now_level = #{nowLevel}
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
 			</if>	
 			<if test="userReferee != null and userReferee != '' ">
 				AND t.user_referee = #{userReferee}
@@ -154,48 +162,53 @@
 			</if>
 		</trim>
 	</sql>
-		<select id="select_user" parameterType="user" resultMap="user_DB_Result">
+	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
 		SELECT
 		t.user_id
 		,t.login_name
 		,t.mobile
-		,t.weixin_id
+		,t.wx_id
 		,t.photo
+		
 		,t.nickname
-		,t.login_pwd
-		,t.login_pwd_strength
+		,t.trade_pwd
+		
 		,t.kind
-		,t.now_level
+		,t.level
 		,t.apply_level
 		,t.user_referee
 		,t.introducer
-		,t.high_level
-		,t.pur_user
+		
+		,t.high_user_id
 		,t.team_name
 		,t.id_kind
 		,t.id_no
-		,t.id_card_reverse
-		,t.id_card_front
-		,t.id_card_hand
+		,t.id_front
+		
+		,t.id_behind
+		,t.id_hand
 		,t.real_name
 		,t.role_code
 		,t.status
+		
 		,t.source
 		,t.apply_datetime
 		,t.manager
 		,t.red_amount
 		,t.union_id
+		
 		,t.h5_open_id
 		,t.app_open_id
 		,t.province
 		,t.city
 		,t.area
+		
 		,t.address
 		,t.create_datetime
 		,t.updater
 		,t.update_datetime
-		,t.cash_pdf
 		,t.approver
+		
 		,t.approve_datetime
 		,t.last_agent_log
 		,t.remark
@@ -222,45 +235,51 @@
 		user_id
 		,login_name
 		,mobile
-		,weixin_id
+		,wx_id
 		,photo
+		
 		,nickname
 		,login_pwd
 		,login_pwd_strength
 		,kind
-		,now_level
+		,level
+		
 		,apply_level
 		,user_referee
 		,introducer
-		,high_level
-		,pur_user
+		,high_user_id
 		,team_name
+		
 		,id_kind
 		,id_no
-		,id_card_reverse
-		,id_card_front
-		,id_card_hand
+		,id_front
+		,id_behind
+		,id_hand
+		
 		,real_name
 		,role_code
 		,status
 		,source
 		,apply_datetime
+		
 		,manager
 		,red_amount
 		,union_id
 		,h5_open_id
 		,app_open_id
+		
 		,province
 		,city
 		,area
 		,address
 		,create_datetime
+		
 		,updater
 		,update_datetime
-		,cash_pdf
 		,approver
 		,approve_datetime
 		,last_agent_log
+		
 		,remark
 		,company_code
 		,system_code
@@ -269,45 +288,51 @@
 		#{userId}
 		,#{loginName}
 		,#{mobile}
-		,#{weixinId}
+		,#{wxId}
 		,#{photo}
+		
 		,#{nickname}
 		,#{loginPwd}
 		,#{loginPwdStrength}
 		,#{kind}
-		,#{nowLevel}
+		,#{level}
+		
 		,#{applyLevel}
 		,#{userReferee}
 		,#{introducer}
-		,#{highLevel}
-		,#{purUser}
+		,#{highUserId}
 		,#{teamName}
+		
 		,#{idKind}
 		,#{idNo}
-		,#{idCardReverse}
-		,#{idCardFront}
-		,#{idCardHand}
+		,#{idFront}
+		,#{idBehind}
+		,#{idHand}
+		
 		,#{realName}
 		,#{roleCode}
 		,#{status}
 		,#{source}
 		,#{applyDatetime}
+		
 		,#{manager}
 		,#{redAmount}
 		,#{unionId}
 		,#{h5OpenId}
 		,#{appOpenId}
+		
 		,#{province}
 		,#{city}
 		,#{area}
 		,#{address}
 		,#{createDatetime}
+		
 		,#{updater}
 		,#{updateDatetime}
-		,#{cashPdf}
 		,#{approver}
 		,#{approveDatetime}
 		,#{lastAgentLog}
+		
 		,#{remark}
 		,#{companyCode}
 		,#{systemCode}
@@ -365,7 +390,7 @@
 	</update>
 	
 	<update id="update_login_pwd" parameterType="user">
-		UPDATE tstd_user
+		UPDATE tbh_user
 		SET
 		 login_pwd = #{loginPwd}
 		,login_pwd_strength = #{loginPwdStrength}
@@ -373,27 +398,42 @@
 		user_id = #{userId}	
 	</update>	
 	
-	<update id="update_user_loginName" parameterType="user">
-		UPDATE tstd_user
+	<update id="update_trade_pwd" parameterType="user">
+		UPDATE tbh_user
 		SET
-		 login_name = #{loginName}
+		 trade_pwd = #{tradePwd}
+		,trade_pwd_strength = #{tradePwdStrength}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user_loginName" parameterType="user">
+		UPDATE tbh_user
+		SET
+		login_name = #{loginName}
 		WHERE
 		user_id = #{userId}	
 	</update>
 	
 	<update id="update_user_nickname" parameterType="user">
-		UPDATE tstd_user
+		UPDATE tbh_user
 		SET
-		 nickname = #{nickname}
+		nickname = #{nickname}
 		WHERE
 		user_id = #{userId}	
 	</update>
 	
 	<update id="update_user_photo" parameterType="user">
-		UPDATE tstd_user
+		UPDATE tbh_user
 		SET
 		photo = #{photo}
 		WHERE user_id = #{userId}
 	</update>
 	
+	<update id="update_mobile" parameterType="user">
+		UPDATE tbh_user
+		SET
+		mobile = #{mobile}
+		WHERE user_id = #{userId}
+	</update>
 </mapper>

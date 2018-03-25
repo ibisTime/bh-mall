@@ -4,12 +4,9 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN627201Req;
-import com.bh.mall.dto.req.XN805043Req;
-import com.bh.mall.dto.req.XN805095Req;
-import com.bh.mall.dto.req.XN805170Req;
-import com.bh.mall.dto.res.XN805041Res;
-import com.bh.mall.dto.res.XN805170Res;
+import com.bh.mall.dto.req.XN627301Req;
+import com.bh.mall.dto.req.XN627302Req;
+import com.bh.mall.dto.res.XN627302Res;
 
 /**
  * @author: xieyj 
@@ -23,36 +20,37 @@ public interface IUserAO {
     public String doLogin(String loginName, String loginPwd, String kind,
             String companyCode, String systemCode);
 
-    // 注册前端用户
-    public XN805041Res doRegister(String mobile, String loginPwd,
-            String userReferee, String userRefereeKind, String smsCaptcha,
-            String kind, String isRegHx, String province, String city,
-            String area, String companyCode, String systemCode);
+    // 管理端代注册
+    public String doAddUser(XN627301Req req);
 
-    // 代注册
-    public String doAddUser(XN627201Req req);
+    // C端微信注册/登录
+    public XN627302Res doLoginWeChat(XN627302Req req);
 
-    // 申请注册
-    public String doApplyRegUser(XN805043Req req);
+    // 注销/激活用户
+    public void doCloseOpen(String userId, String updater, String remark);
 
-    // 微信注册/登录
-    public XN805170Res doLoginWeChat(XN805170Req req);
+    // 设置角色
+    public void doRoleUser(String userId, String roleCode, String updater,
+            String remark);
 
-    // 验证码登录注册
-    public String doCaptchaLoginReg(String mobile, String kind,
-            String smsCaptcha, String companyCode, String systemCode);
+    // 重置登录密码
+    public void resetAdminLoginPwd(String userId, String newLoginPwd);
 
-    // 检查登录密码是否正确
-    public void doCheckLoginPwd(String userId, String password);
+    // 设置交易密码
+    public void setTradePwd(String userId, String smsCaptcha, String tradePwd);
 
     // 修改头像
     public void doModifyPhoto(String userId, String photo);
 
+    // 检查登录密码是否正确
+    public void doCheckLoginPwd(String userId, String password);
+
+    // 更换绑定手机号
+    public void resetBindMobile(String userId, String kind,
+            String oldSmsCaptcha, String newMobile, String newSmsCaptcha);
+
     // 修改用户等级
     public void doUpLevel(String userId, String level);
-
-    // 修改用户信息
-    public void doModifyUser(XN805095Req req);
 
     public Paginable<User> queryUserPage(int start, int limit, User condition);
 

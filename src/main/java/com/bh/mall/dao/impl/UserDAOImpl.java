@@ -59,53 +59,8 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     }
 
     @Override
-    public int updateIdentity(User data) {
-        return super.update(NAMESPACE.concat("update_identity"), data);
-    }
-
-    @Override
-    public int updateIdentityZmscore(User data) {
-        return super.update(NAMESPACE.concat("update_identity_zmscore"), data);
-    }
-
-    @Override
-    public int updateZmscore(User data) {
-        return super.update(NAMESPACE.concat("update_zmscore"), data);
-    }
-
-    @Override
-    public int updateGradDatetime(User data) {
-        return super.update(NAMESPACE.concat("update_gradDatetime"), data);
-    }
-
-    @Override
-    public int updateRealName(User data) {
-        return super.update(NAMESPACE.concat("update_real_name"), data);
-    }
-
-    @Override
-    public int updateDivRate(User data) {
-        return super.update(NAMESPACE.concat("update_div_rate"), data);
-    }
-
-    @Override
-    public int updateTradePwd(User data) {
-        return super.update(NAMESPACE.concat("update_trade_pwd"), data);
-    }
-
-    @Override
     public int updateLoginPwd(User data) {
         return super.update(NAMESPACE.concat("update_login_pwd"), data);
-    }
-
-    @Override
-    public int updateMobile(User data) {
-        return super.update(NAMESPACE.concat("update_mobile"), data);
-    }
-
-    @Override
-    public int updateBindMobile(User data) {
-        return super.update(NAMESPACE.concat("update_bind_mobile"), data);
     }
 
     @Override
@@ -116,15 +71,6 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     @Override
     public int updateRole(User data) {
         return super.update(NAMESPACE.concat("update_role"), data);
-    }
-
-    /** 
-     * @see com.bh.mall.dao.IUserDAO#updatePdf(com.bh.mall.domain.User)
-     */
-    @Override
-    public int updatePdf(User data) {
-        return super.update(NAMESPACE.concat("update_user_pdf"), data);
-
     }
 
     /** 
@@ -145,11 +91,6 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
         return super.update(NAMESPACE.concat("update_user_photo"), data);
     }
 
-    @Override
-    public int updateCompany(User data) {
-        return super.update(NAMESPACE.concat("update_user_company"), data);
-    }
-
     /** 
      * @see com.bh.mall.dao.IUserDAO#update(com.bh.mall.domain.User)
      */
@@ -164,11 +105,6 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     @Override
     public int updateMobileIds(User data) {
         return super.update(NAMESPACE.concat("update_user_mobileIds"), data);
-    }
-
-    @Override
-    public int updateNameAddress(User data) {
-        return super.update(NAMESPACE.concat("update_nameAddress"), data);
     }
 
     /** 
@@ -187,5 +123,15 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     @Override
     public int approveUser(User data) {
         return super.update(NAMESPACE.concat("approve_user"), data);
+    }
+
+    @Override
+    public void setTradePwd(User user) {
+        super.update(NAMESPACE.concat("update_trade_pwd"), user);
+    }
+
+    @Override
+    public void resetBindMobile(User user) {
+        super.update(NAMESPACE.concat("update_mobile"), user);
     }
 }

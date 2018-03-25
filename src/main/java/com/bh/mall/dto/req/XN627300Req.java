@@ -1,19 +1,26 @@
 package com.bh.mall.dto.req;
 
-public class XN627200Req {
+import org.hibernate.validator.constraints.NotBlank;
+
+public class XN627300Req {
     // 登陆名（必填）
+    @NotBlank
     private String loginName;
 
     // 登陆密码（必填）
+    @NotBlank
     private String loginPwd;
 
     // 用户类型（选填）
+    @NotBlank
     private String kind;
 
     // 公司编号（选填）
+    @NotBlank
     private String companyCode;
 
     // 系统编号（必填）
+    @NotBlank
     private String systemCode;
 
     public String getSystemCode() {

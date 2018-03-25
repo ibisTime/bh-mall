@@ -7,9 +7,9 @@ public class SysConstant {
     public static String WX_H5_SECRET_KEY = "wx_h5_secret_key";
 
     // 微信APP配置
-    public static String WX_APP_ACCESS_KEY = "wx_app_access_key";
+    public static String WX_XCX_ACCESS_KEY = "wx_xcx_access_key";
 
-    public static String WX_APP_SECRET_KEY = "wx_app_secret_key";
+    public static String WX_XCX_SECRET_KEY = "wx_xcx_secret_key";
 
     // 七牛云图片配置
     public static String QINIU_ACCESS_KEY = "qiniu_access_key";

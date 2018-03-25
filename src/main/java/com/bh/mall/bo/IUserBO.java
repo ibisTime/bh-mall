@@ -12,8 +12,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN627201Req;
-import com.bh.mall.dto.req.XN805043Req;
+import com.bh.mall.dto.req.XN627301Req;
 import com.bh.mall.enums.EUserStatus;
 
 /** 
@@ -24,8 +23,8 @@ import com.bh.mall.enums.EUserStatus;
 public interface IUserBO extends IPaginableBO<User> {
 
     //
-    public User doGetUserByOpenId(String appOpenId, String h5OpenId,
-            String companyCode, String systemCode);
+    public User doGetUserByOpenId(String h5OpenId, String companyCode,
+            String systemCode);
 
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile, String kind, String companyCode,
@@ -49,15 +48,13 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
-            String photo, String gender, String userReferee,
-            String companyCode, String systemCode);
+            String photo, String userReferee, String companyCode,
+            String systemCode);
 
     public void refreshWxInfo(String userId, String type, String unionId,
-            String openId, String nickname, String photo, String gender);
+            String openId, String nickname, String photo);
 
-    public String doAddUser(XN627201Req req);
-
-    public String doApplyRegUser(XN805043Req req, String roleCode);
+    public String doAddUser(XN627301Req req);
 
     public String saveUser(String mobile, String kind, String companyCode,
             String systemCode);
@@ -81,12 +78,7 @@ public interface IUserBO extends IPaginableBO<User> {
     // 判断推荐人是否存在(手机号)
     public void checkUserReferee(String userReferee, String systemCode);
 
-    public int refreshIdentity(String userId, String realName, String idKind,
-            String idNo);
-
-    public int refreshRealName(String userId, String realName);
-
-    public int refreshLoginPwd(String userId, String loginPwd);
+    public void resetAdminLoginPwd(User user, String loginPwd);
 
     public User getUser(String userId);
 
@@ -113,5 +105,12 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
+
+    public void refreshRole(String userId, String roleCode, String updater,
+            String remark);
+
+    public void setTradePwd(User user, String tradePwd);
+
+    public void resetBindMobile(User user, String newMobile);
 
 }

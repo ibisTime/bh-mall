@@ -1,36 +1,20 @@
 package com.bh.mall.dto.res;
 
-public class XN805170Res {
+public class XN627302Res {
     // 用户编号
     private String userId;
 
     // 是否绑定手机号
     private String isNeedMobile;
 
-    // 送积分
-    private Long jfAmount;
-
-    public Long getJfAmount() {
-        return jfAmount;
+    public XN627302Res() {
     }
 
-    public void setJfAmount(Long jfAmount) {
-        this.jfAmount = jfAmount;
-    }
-
-    public XN805170Res() {
-    }
-
-    public XN805170Res(String userId) {
+    public XN627302Res(String userId) {
         this.userId = userId;
     }
 
-    public XN805170Res(String userId, Long jfAmount) {
-        this.userId = userId;
-        this.jfAmount = jfAmount;
-    }
-
-    public XN805170Res(String userId, String isNeedMobile) {
+    public XN627302Res(String userId, String isNeedMobile) {
         this.userId = userId;
         this.isNeedMobile = isNeedMobile;
     }

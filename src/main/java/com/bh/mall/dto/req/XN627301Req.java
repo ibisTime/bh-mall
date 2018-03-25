@@ -1,7 +1,10 @@
 package com.bh.mall.dto.req;
 
-public class XN627201Req {
+import org.hibernate.validator.constraints.NotBlank;
+
+public class XN627301Req {
     // 登录名（必填）
+    @NotBlank
     private String loginName;
 
     // 登录密码（选填）
@@ -10,46 +13,26 @@ public class XN627201Req {
     // 手机号（选填）
     private String mobile;
 
-    // 证件类型（选填）
-    private String idKind;
-
-    // 证件号码（选填）
-    private String idNo;
-
-    // 真实姓名（选填）
-    private String realName;
-
-    // 推荐人（选填）
-    private String userReferee;
-
     // 用户类型(必填)
+    @NotBlank
     private String kind;
 
     // 角色编号(选填)
     private String roleCode;
 
-    // 省(选填)
-    private String province;
-
-    // 市(选填)
-    private String city;
-
-    // 区(选填)
-    private String area;
-
-    // 地址(选填)
-    private String address;
-
     // 更新人(必填)
+    @NotBlank
     private String updater;
 
     // 备注(选填)
     private String remark;
 
     // 公司编号(必填)
+    @NotBlank
     private String companyCode;
 
     // 系统编号(必填)
+    @NotBlank
     private String systemCode;
 
     public String getLoginName() {
@@ -76,38 +59,6 @@ public class XN627201Req {
         this.mobile = mobile;
     }
 
-    public String getIdKind() {
-        return idKind;
-    }
-
-    public void setIdKind(String idKind) {
-        this.idKind = idKind;
-    }
-
-    public String getIdNo() {
-        return idNo;
-    }
-
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getUserReferee() {
-        return userReferee;
-    }
-
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
-    }
-
     public String getKind() {
         return kind;
     }
@@ -122,38 +73,6 @@ public class XN627201Req {
 
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getUpdater() {

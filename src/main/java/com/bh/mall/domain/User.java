@@ -14,6 +14,9 @@ public class User extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
+    // userId,登陆名,手机号,微信号,头像,
+    // userId,login_name,mobile,wx_id,photo,
+
     // userId
     private String userId;
 
@@ -24,10 +27,13 @@ public class User extends ABaseDO {
     private String mobile;
 
     // 微信号
-    private String weixinId;
+    private String wxId;
 
     // 头像
     private String photo;
+
+    // 昵称,登陆密码,登陆密码强度,交易密码，交易密码强度，
+    // nickname,password,pwd_strength,trade_pwd,trade_pwd_strength,
 
     // 昵称
     private String nickname;
@@ -38,11 +44,20 @@ public class User extends ABaseDO {
     // 登陆密码强度
     private String loginPwdStrength;
 
+    // 交易密码
+    private String tradePwd;
+
+    // 交易密码强度
+    private String tradePwdStrength;
+
+    // 身份标识,目前用户等级,需升等级，推荐人,介绍人，
+    // kind,level,apply_level,user_referee,introducer,
+
     // 身份标识
     private String kind;
 
     // 目前用户等级
-    private String nowLevel;
+    private String level;
 
     // 需升等级
     private String applyLevel;
@@ -53,11 +68,11 @@ public class User extends ABaseDO {
     // 介绍人
     private String introducer;
 
-    // 上级用户编号
-    private String highLevel;
+    // 上级用户编号，团队名称，证件类型,证件号码,身份证正面照片，
+    // high_user_id,team_name,id_kind,id_no,id_front,
 
-    // 意向归属用户
-    private String purUser;
+    // 上级用户编号
+    private String highUserId;
 
     // 团队名称
     private String teamName;
@@ -69,13 +84,16 @@ public class User extends ABaseDO {
     private String idNo;
 
     // 身份证正面照片
-    private String idCardReverse;
+    private String idFront;
+
+    // 身份证背面照片，手持身份证照片，真实姓名,角色编号,状态，
+    // id_behind,id_hand,real_name,role_code,status,
 
     // 身份证背面照片
-    private String idCardFront;
+    private String idBehind;
 
     // 手持身份证照片
-    private String idCardHand;
+    private String idHand;
 
     // 真实姓名
     private String realName;
@@ -85,6 +103,9 @@ public class User extends ABaseDO {
 
     // 状态
     private String status;
+
+    // 来源，最开始申请时间，关联管理员，红线金额，开放平台和公众平台唯一号,
+    // source,apply_datetime,manager,red_amount,union_id,
 
     // 来源
     private String source;
@@ -101,6 +122,9 @@ public class User extends ABaseDO {
     // 开放平台和公众平台唯一号
     private String unionId;
 
+    // 微信h5第三方登录开放编号,微信app第三方登录开放编号,省,市,区(县),
+    // h5_open_id,app_open_id,province,city,area,
+
     // 微信h5第三方登录开放编号
     private String h5OpenId;
 
@@ -116,6 +140,8 @@ public class User extends ABaseDO {
     // 区(县)
     private String area;
 
+    // 具体地址,注册时间,最后更新人,最后更新时间,最后审核人，
+    // address,create_datetime,updater,update_datetime,approver,
     // 具体地址
     private String address;
 
@@ -128,12 +154,11 @@ public class User extends ABaseDO {
     // 最后更新时间
     private Date updateDatetime;
 
-    // 最后一次保证金截图
-    private String cashPdf;
-
     // 最后审核人
     private String approver;
 
+    // 最后审核时间，最后一条代理轨迹记录，备注
+    // approv_datetime,last_agent_log,remark
     // 最后审核时间
     private Date approveDatetime;
 
@@ -183,356 +208,388 @@ public class User extends ABaseDO {
     // 县区
     private String areaForQuery;
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getUserId() {
         return userId;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getLoginName() {
         return loginName;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getMobile() {
         return mobile;
     }
 
-    public void setWeixinId(String weixinId) {
-        this.weixinId = weixinId;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public String getWeixinId() {
-        return weixinId;
+    public String getWxId() {
+        return wxId;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
     }
 
     public String getPhoto() {
         return photo;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getNickname() {
         return nickname;
     }
 
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getLoginPwd() {
         return loginPwd;
     }
 
-    public void setLoginPwdStrength(String loginPwdStrength) {
-        this.loginPwdStrength = loginPwdStrength;
+    public void setLoginPwd(String loginPwd) {
+        this.loginPwd = loginPwd;
     }
 
     public String getLoginPwdStrength() {
         return loginPwdStrength;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setLoginPwdStrength(String loginPwdStrength) {
+        this.loginPwdStrength = loginPwdStrength;
+    }
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
+    public String getTradePwdStrength() {
+        return tradePwdStrength;
+    }
+
+    public void setTradePwdStrength(String tradePwdStrength) {
+        this.tradePwdStrength = tradePwdStrength;
     }
 
     public String getKind() {
         return kind;
     }
 
-    public void setNowLevel(String nowLevel) {
-        this.nowLevel = nowLevel;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
-    public String getNowLevel() {
-        return nowLevel;
+    public String getLevel() {
+        return level;
     }
 
-    public void setApplyLevel(String applyLevel) {
-        this.applyLevel = applyLevel;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getApplyLevel() {
         return applyLevel;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setApplyLevel(String applyLevel) {
+        this.applyLevel = applyLevel;
     }
 
     public String getUserReferee() {
         return userReferee;
     }
 
-    public void setIntroducer(String introducer) {
-        this.introducer = introducer;
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 
     public String getIntroducer() {
         return introducer;
     }
 
-    public void setHighLevel(String highLevel) {
-        this.highLevel = highLevel;
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
     }
 
-    public String getHighLevel() {
-        return highLevel;
+    public String getHighUserId() {
+        return highUserId;
     }
 
-    public void setPurUser(String purUser) {
-        this.purUser = purUser;
-    }
-
-    public String getPurUser() {
-        return purUser;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
+    public void setHighUserId(String highUserId) {
+        this.highUserId = highUserId;
     }
 
     public String getTeamName() {
         return teamName;
     }
 
-    public void setIdKind(String idKind) {
-        this.idKind = idKind;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
     public String getIdKind() {
         return idKind;
     }
 
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
     }
 
     public String getIdNo() {
         return idNo;
     }
 
-    public void setIdCardReverse(String idCardReverse) {
-        this.idCardReverse = idCardReverse;
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
     }
 
-    public String getIdCardReverse() {
-        return idCardReverse;
+    public String getIdFront() {
+        return idFront;
     }
 
-    public void setIdCardFront(String idCardFront) {
-        this.idCardFront = idCardFront;
+    public void setIdFront(String idFront) {
+        this.idFront = idFront;
     }
 
-    public String getIdCardFront() {
-        return idCardFront;
+    public String getIdBehind() {
+        return idBehind;
     }
 
-    public void setIdCardHand(String idCardHand) {
-        this.idCardHand = idCardHand;
+    public void setIdBehind(String idBehind) {
+        this.idBehind = idBehind;
     }
 
-    public String getIdCardHand() {
-        return idCardHand;
+    public String getIdHand() {
+        return idHand;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setIdHand(String idHand) {
+        this.idHand = idHand;
     }
 
     public String getRealName() {
         return realName;
     }
 
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getRoleCode() {
         return roleCode;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getSource() {
         return source;
     }
 
-    public void setApplyDatetime(Date applyDatetime) {
-        this.applyDatetime = applyDatetime;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public Date getApplyDatetime() {
         return applyDatetime;
     }
 
-    public void setManager(String manager) {
-        this.manager = manager;
+    public void setApplyDatetime(Date applyDatetime) {
+        this.applyDatetime = applyDatetime;
     }
 
     public String getManager() {
         return manager;
     }
 
-    public void setRedAmount(Long redAmount) {
-        this.redAmount = redAmount;
+    public void setManager(String manager) {
+        this.manager = manager;
     }
 
     public Long getRedAmount() {
         return redAmount;
     }
 
-    public void setUnionId(String unionId) {
-        this.unionId = unionId;
+    public void setRedAmount(Long redAmount) {
+        this.redAmount = redAmount;
     }
 
     public String getUnionId() {
         return unionId;
     }
 
-    public void setH5OpenId(String h5OpenId) {
-        this.h5OpenId = h5OpenId;
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 
     public String getH5OpenId() {
         return h5OpenId;
     }
 
-    public void setAppOpenId(String appOpenId) {
-        this.appOpenId = appOpenId;
+    public void setH5OpenId(String h5OpenId) {
+        this.h5OpenId = h5OpenId;
     }
 
     public String getAppOpenId() {
         return appOpenId;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setAppOpenId(String appOpenId) {
+        this.appOpenId = appOpenId;
     }
 
     public String getProvince() {
         return province;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getArea() {
         return area;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getCreateDatetime() {
         return createDatetime;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
     public String getUpdater() {
         return updater;
     }
 
-    public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
     public Date getUpdateDatetime() {
         return updateDatetime;
     }
 
-    public void setCashPdf(String cashPdf) {
-        this.cashPdf = cashPdf;
-    }
-
-    public String getCashPdf() {
-        return cashPdf;
-    }
-
-    public void setApprover(String approver) {
-        this.approver = approver;
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
     }
 
     public String getApprover() {
         return approver;
     }
 
-    public void setApproveDatetime(Date approveDatetime) {
-        this.approveDatetime = approveDatetime;
+    public void setApprover(String approver) {
+        this.approver = approver;
     }
 
     public Date getApproveDatetime() {
         return approveDatetime;
     }
 
-    public void setLastAgentLog(String lastAgentLog) {
-        this.lastAgentLog = lastAgentLog;
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
     }
 
     public String getLastAgentLog() {
         return lastAgentLog;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setLastAgentLog(String lastAgentLog) {
+        this.lastAgentLog = lastAgentLog;
     }
 
     public String getRemark() {
         return remark;
     }
 
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getCompanyCode() {
         return companyCode;
     }
 
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {
         return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
     public User getRefereeUser() {
@@ -597,38 +654,6 @@ public class User extends ABaseDO {
 
     public void setAreaForQuery(String areaForQuery) {
         this.areaForQuery = areaForQuery;
-    }
-
-    public String getLoginType() {
-        return loginType;
-    }
-
-    public void setLoginType(String loginType) {
-        this.loginType = loginType;
-    }
-
-    public Date getCreateDatetimeStart() {
-        return createDatetimeStart;
-    }
-
-    public void setCreateDatetimeStart(Date createDatetimeStart) {
-        this.createDatetimeStart = createDatetimeStart;
-    }
-
-    public Date getCreateDatetimeEnd() {
-        return createDatetimeEnd;
-    }
-
-    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
-        this.createDatetimeEnd = createDatetimeEnd;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
 }
