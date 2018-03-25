@@ -1,6 +1,8 @@
 package com.bh.mall.dto.req;
 
-public class XN627900Req extends APageReq {
+import org.hibernate.validator.constraints.NotBlank;
+
+public class XN627055Req extends APageReq {
 
     private static final long serialVersionUID = 5138736221155343722L;
 
@@ -17,6 +19,7 @@ public class XN627900Req extends APageReq {
     private String updater;
 
     // 系统编号（必填）
+    @NotBlank
     private String systemCode;
 
     public String getSystemCode() {

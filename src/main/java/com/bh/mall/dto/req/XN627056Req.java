@@ -1,6 +1,8 @@
 package com.bh.mall.dto.req;
 
-public class XN627901Req {
+import org.hibernate.validator.constraints.NotBlank;
+
+public class XN627056Req {
     // 菜单名称(选填)
     private String name;
 
@@ -11,6 +13,7 @@ public class XN627901Req {
     private String parentCode;
 
     // 系统编号（必填）
+    @NotBlank
     private String systemCode;
 
     public String getSystemCode() {

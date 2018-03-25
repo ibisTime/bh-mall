@@ -9,11 +9,10 @@
 		<result column="mobile" property="mobile" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
-		<result column="district" property="district" />
-		<result column="detail_address" property="detailAddress" />
+		<result column="area" property="area" />
+		<result column="address" property="address" />
 		<result column="is_default" property="isDefault" />
 		<result column="user_id" property="userId" />
-		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -29,9 +28,6 @@
 			<if test="isDefault != null and isDefault != '' ">
 				AND t.is_default = #{isDefault}
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_address" parameterType="address" resultMap="address_DB_Result">
@@ -42,11 +38,10 @@
 		mobile,
 		province,
 		city,
-		district,
-		detail_address,
+		area,
+		address,
 		is_default,
-		user_id,
-		system_code
+		user_id
 		FROM
 		tbh_address t
 		<include refid="where_condition" />
@@ -66,39 +61,39 @@
 	<insert id="insert_address" parameterType="address">
 		INSERT INTO tbh_address(
 		code
-		,addressee
+		,type
+		,receiver
 		,mobile
 		,province
 		,city
 		,district
-		,detail_address
+		,address
 		,is_default
 		,user_id
-		,system_code
 		)
 		VALUES(
 		#{code}
-		,#{addressee}
+		,#{type}
+		,#{receiver}
 		,#{mobile}
 		,#{province}
 		,#{city}
 		,#{district}
-		,#{detailAddress}
+		,#{address}
 		,#{isDefault}
 		,#{userId}
-		,#{systemCode}
 		)
 	</insert>
 
 	<update id="update_address" parameterType="address">
 		UPDATE tbh_address
 		SET
-		addressee=#{addressee},
+		receiver=#{receiver},
 		mobile=#{mobile},
 		province=#{province},
 		city=#{city},
 		district=#{district},
-		detail_address=#{detailAddress},
+		address=#{address},
 		is_default=#{isDefault}
 		WHERE
 		code = #{code}

@@ -3,9 +3,9 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.ISYSMenuAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.domain.SYSMenu;
-import com.bh.mall.dto.req.XN627905Req;
+import com.bh.mall.dto.req.XN627052Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -17,11 +17,11 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2016年5月16日 下午9:46:32 
  * @history:
  */
-public class XN627905 extends AProcessor {
+public class XN627052 extends AProcessor {
     private ISYSMenuAO sysMenuAO = SpringContextHolder
         .getBean(ISYSMenuAO.class);
 
-    private XN627905Req req = null;
+    private XN627052Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -40,9 +40,7 @@ public class XN627905 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627905Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getType(), req.getUrl(), req.getParentCode(), req.getOrderNo(),
-            req.getUpdater());
+        req = JsonUtil.json2Bean(inputparams, XN627052Req.class);
+        ObjValidater.validateReq(req);
     }
 }

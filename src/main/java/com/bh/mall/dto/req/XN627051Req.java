@@ -1,7 +1,10 @@
 package com.bh.mall.dto.req;
 
-public class XN627904Req {
+import org.hibernate.validator.constraints.NotBlank;
+
+public class XN627051Req {
     // 编号(必填)
+    @NotBlank
     private String code;
 
     public String getCode() {

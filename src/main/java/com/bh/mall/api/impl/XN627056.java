@@ -3,9 +3,9 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.ISYSMenuAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.domain.SYSMenu;
-import com.bh.mall.dto.req.XN627901Req;
+import com.bh.mall.dto.req.XN627056Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -16,11 +16,11 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2016年5月16日 下午9:38:06 
  * @history:
  */
-public class XN627901 extends AProcessor {
+public class XN627056 extends AProcessor {
     private ISYSMenuAO sysMenuAO = SpringContextHolder
         .getBean(ISYSMenuAO.class);
 
-    private XN627901Req req = null;
+    private XN627056Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -35,7 +35,7 @@ public class XN627901 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627901Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
+        req = JsonUtil.json2Bean(inputparams, XN627056Req.class);
+        ObjValidater.validateReq(req);
     }
 }

@@ -78,8 +78,6 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
         if (!sysMenuBO.isSYSMenuExist(code)) {
             throw new BizException("lh0000", "菜单编号不存在！");
         }
-        SYSMenu condition = new SYSMenu();
-        condition.setCode(code);
         return sysMenuBO.getSYSMenu(code);
     }
 }
