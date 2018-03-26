@@ -34,4 +34,5 @@ public class XN627302Res {
     public void setIsNeedMobile(String isNeedMobile) {
         this.isNeedMobile = isNeedMobile;
     }
+
 }

@@ -17,7 +17,7 @@ import java.util.Map;
  * @history:
  */
 public enum ESystemCode {
-    BH("CD-CBH000019", "报货系统");
+    BH("CD-CBH000020", "报货系统");
 
     public static Map<String, ESystemCode> getCurrencyMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();

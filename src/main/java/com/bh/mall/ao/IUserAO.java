@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.User;
+import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.dto.req.XN627301Req;
 import com.bh.mall.dto.req.XN627302Req;
 import com.bh.mall.dto.res.XN627302Res;
@@ -59,4 +60,7 @@ public interface IUserAO {
     public User doGetUser(String userId);
 
     public List<User> getUserRefereeList(String userId);
+
+    // 代理申请
+    public XN627302Res applyIntent(XN627250Req req);
 }
