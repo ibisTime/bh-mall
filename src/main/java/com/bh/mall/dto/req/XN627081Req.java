@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -9,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627081Req {
     // 编号
-    @NotBlank
+    @NotNull
     private Long id;
 
     // 值（必填）

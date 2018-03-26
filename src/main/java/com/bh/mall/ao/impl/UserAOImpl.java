@@ -105,6 +105,9 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn805050", "登录密码错误");
         }
         User user = userList2.get(0);
+        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+            throw new BizException("xn805050", "该用户操作存在异常");
+        }
         return user.getUserId();
     }
 

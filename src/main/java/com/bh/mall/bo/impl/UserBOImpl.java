@@ -187,6 +187,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
         user.setKind(req.getKind());
         user.setRoleCode(req.getRoleCode());
+        user.setStatus(EUserStatus.NORMAL.getCode());
 
         Date date = new Date();
         user.setCreateDatetime(date);
