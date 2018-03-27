@@ -42,13 +42,15 @@ public interface IUserBO extends IPaginableBO<User> {
             String appOpenId, String companyCode, String systemCode);
 
     // 前端用户注册
-    public String doRegister(String mobile, String loginPwd,
-            String userReferee, String kind, String province, String city,
-            String area, String companyCode, String systemCode);
-
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
-            String photo, String userReferee, String companyCode,
+            String photo, String companyCode, String systemCode);
+
+    public String doRegister(String wxId, String level, String realName,
+            String province, String city, String area, String address,
+            String unionId, String h5OpenId, String appOpenId, String mobile,
+            String kind, String loginPwd, String nickname, String photo,
+            String userReferee, String lastAgentLog, String companyCode,
             String systemCode);
 
     public void refreshWxInfo(String userId, String type, String unionId,

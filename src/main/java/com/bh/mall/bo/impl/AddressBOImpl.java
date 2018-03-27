@@ -118,4 +118,21 @@ public class AddressBOImpl extends PaginableBOImpl<Address> implements
         }
         return result;
     }
+
+    @Override
+    public void saveAddress(String userId, String realName, String province,
+            String city, String area, String address, String isDefault) {
+        String code = OrderNoGenerater.generate(EGeneratePrefix.AD.getCode());
+        Address data = new Address();
+        data.setCode(code);
+        data.setType("2");
+        data.setUserId(userId);
+        data.setReceiver(realName);
+        data.setProvince(province);
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
+        data.setIsDefault(isDefault);
+        addressDAO.insert(data);
+    }
 }

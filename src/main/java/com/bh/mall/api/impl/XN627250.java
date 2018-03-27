@@ -1,0 +1,36 @@
+package com.bh.mall.api.impl;
+
+import com.bh.mall.ao.IUserAO;
+import com.bh.mall.api.AProcessor;
+import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
+import com.bh.mall.dto.req.XN627250Req;
+import com.bh.mall.dto.res.BooleanRes;
+import com.bh.mall.exception.BizException;
+import com.bh.mall.exception.ParaException;
+import com.bh.mall.spring.SpringContextHolder;
+
+/**
+ * 
+ * @author: chenshan 
+ * @since: 2018年3月26日 下午3:24:00 
+ * @history:
+ */
+public class XN627250 extends AProcessor {
+    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+
+    private XN627250Req req = null;
+
+    @Override
+    public Object doBusiness() throws BizException {
+        userAO.applyIntent(req);
+        return new BooleanRes(true);
+    }
+
+    @Override
+    public void doCheck(String inputparams) throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN627250Req.class);
+        ObjValidater.validateReq(req);
+    }
+
+}

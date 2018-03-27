@@ -243,6 +243,7 @@ public class ProductAOImpl implements IProductAO {
             User data = userAO.doGetUser(condition.getUserId());
             condition.setLevel(data.getLevel());
         }
+
         long count = productBO.selectTotalCount(condition);
         Paginable<Product> page = new Page<Product>(start, limit, count);
         List<Product> list = productBO.selectProductPageByFront(condition,
