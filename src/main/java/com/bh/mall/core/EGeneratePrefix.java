@@ -9,14 +9,11 @@ import java.util.Map;
  * @history:
  */
 public enum EGeneratePrefix {
-     BankCard(
-            "BC", "银行卡"), Withdraw("W", "取现"), Account("A", "账户"), AJour("AJ",
-            "流水"),
-    DH("DH", "导航"), YQ("YQ", "邀请"), AD("AD", "用户地址"), MATERIAL("MA",
-            "素材编码"), PRODUCT("P", "产品编码"), ProductSpecs("PS",
-                    "产品规格编码"), ProductSpecsPrice("PSP",
-                            "规格定价编号"), ProductLog("PL", "产品库存记录"), Award("AW",
-                                    "奖励编号"), InnerProduct("IP", "内购产品编号");
+    BankCard("BC", "银行卡"), Withdraw("W", "取现"), Account("A", "账户"), AJour("AJ",
+            "流水"), DH("DH", "导航"), YQ("YQ", "邀请"), AD("AD", "用户地址"), MATERIAL(
+            "MA", "素材编码"), PRODUCT("P", "产品编码"), ProductSpecs("PS", "产品规格编码"), ProductSpecsPrice(
+            "PSP", "规格定价编号"), ProductLog("PL", "产品库存记录"), Award("AW", "奖励编号"), InnerProduct(
+            "IP", "内购产品编号"), Charge("CO", "充值订单");
 
     public static Map<String, EGeneratePrefix> getOrderTypeMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

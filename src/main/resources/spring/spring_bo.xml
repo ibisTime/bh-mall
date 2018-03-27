@@ -96,4 +96,8 @@
 	<bean id="innerProductBO" class="com.bh.mall.bo.impl.InnerProductBOImpl">
 		<property name="paginableDAO" ref="innerProductDAOImpl"></property>
 	</bean>
+	
+	<bean id="chargeBO" class="com.bh.mall.bo.impl.ChargeBOImpl">
+		<property name="paginableDAO" ref="chargeDAOImpl"></property>
+	</bean>
 </beans>
