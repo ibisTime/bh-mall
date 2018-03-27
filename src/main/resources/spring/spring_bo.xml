@@ -56,4 +56,29 @@
 	<bean id="materialBO" class="com.bh.mall.bo.impl.MaterialBOImpl">
 		<property name="paginableDAO" ref="materialDAOImpl"></property>
 	</bean>
+	
+	<bean id="productBO" class="com.bh.mall.bo.impl.ProductBOImpl">
+		<property name="paginableDAO" ref="productDAOImpl"></property>
+	</bean>
+	
+	<bean id="productSpecsBO" class="com.bh.mall.bo.impl.ProductSpecsBOImpl">
+		<property name="paginableDAO" ref="productSpecsDAOImpl"></property>
+	</bean>
+	
+	<bean id="productSpecsPriceBO" class="com.bh.mall.bo.impl.ProductSpecsPriceBOImpl">
+		<property name="paginableDAO" ref="productSpecsPriceDAOImpl"></property>
+	</bean>
+	
+	<bean id="productLogBO" class="com.bh.mall.bo.impl.ProductLogBOImpl">
+		<property name="paginableDAO" ref="productLogDAOImpl"></property>
+	</bean>
+	
+	<bean id="awardBO" class="com.bh.mall.bo.impl.AwardBOImpl">
+		<property name="paginableDAO" ref="awardDAOImpl"></property>
+	</bean>
+	
+	<bean id="innerProductBO" class="com.bh.mall.bo.impl.InnerProductBOImpl">
+		<property name="paginableDAO" ref="innerProductDAOImpl"></property>
+	</bean>
+	
 </beans>

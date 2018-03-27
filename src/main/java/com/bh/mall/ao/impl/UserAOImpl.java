@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IUserAO;
-import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
@@ -74,8 +73,8 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     ISmsOutBO smsOutBO;
 
-    @Autowired
-    IAccountBO accountBO;
+    // @Autowired
+    // IAccountBO accountBO;
 
     @Autowired
     protected ISYSConfigBO sysConfigBO;
@@ -159,8 +158,8 @@ public class UserAOImpl implements IUserAO {
             res = getMapFromResponse(response);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
-                throw new BizException("XN000000", "微信登录失败原因："
-                        + res.get("error"));
+                throw new BizException("XN000000",
+                    "微信登录失败原因：" + res.get("error"));
             }
             if (StringUtils.isBlank(accessToken)) {
                 throw new BizException("XN000000", "accessToken不能为空");
@@ -173,8 +172,8 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("access_token", accessToken);
             queryParas.put("openid", openId);
             queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
-                WechatConstant.WX_USER_INFO_URL, queryParas));
+            wxRes = getMapFromResponse(PostSimulater
+                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = (String) wxRes.get("openid");
             // Step4：根据openId，unionId从数据库中查询用户信息
@@ -190,8 +189,8 @@ public class UserAOImpl implements IUserAO {
                     result = doWxLoginRegMobile(req, companyCode, systemCode,
                         unionId, null, h5OpenId, nickname, photo);
                 } else {
-                    result = doWxLoginReg(req, companyCode, systemCode,
-                        unionId, null, h5OpenId, nickname, photo);
+                    result = doWxLoginReg(req, companyCode, systemCode, unionId,
+                        null, h5OpenId, nickname, photo);
                 }
             }
         } catch (Exception e) {
@@ -255,8 +254,8 @@ public class UserAOImpl implements IUserAO {
                     EUserKind.Customer.getCode(), companyCode, systemCode);
                 result = new XN627302Res(userId);
             } else {
-                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId,
-                    appOpenId, nickname, photo);
+                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, appOpenId,
+                    nickname, photo);
                 result = new XN627302Res(mobileUserId);
             }
         } else {
@@ -292,8 +291,8 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.YC_CNY.getCode());
             currencyList.add(ECurrency.MK_CNY.getCode());
         }
-        accountBO.distributeAccountList(userId, mobile, kind, currencyList,
-            companyCode, systemCode);
+        // accountBO.distributeAccountList(userId, mobile, kind, currencyList,
+        // companyCode, systemCode);
     }
 
     @Override
@@ -320,9 +319,9 @@ public class UserAOImpl implements IUserAO {
         if (!EUserKind.Plat.getCode().equals(user.getKind())
                 && PhoneUtil.isMobile(mobile)) {
             // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + smsContent, "805091", user.getCompanyCode(),
-                user.getSystemCode());
+            smsOutBO.sendSmsOut(mobile,
+                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091",
+                user.getCompanyCode(), user.getSystemCode());
         }
     }
 

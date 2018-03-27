@@ -9,8 +9,8 @@
 		<result column="pic" property="pic"/>
 		<result column="order_no" property="orderNo"/>
 		
+		<result column="level" property="level"/>
 		<result column="status" property="status"/>
-		<result column="level_list" property="levelList"/>
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -19,7 +19,7 @@
 				AND t.code = #{code}
 			</if>
 			<if test="type != null and type != ''">
-				AND t.type like "%"#{type}"%"
+				AND t.type = #{type}
 			</if>
 			<if test="title != null and title != ''">
 				AND t.title like "%"#{title}"%"
@@ -27,15 +27,12 @@
 			<if test="pic != null and pic != ''">
 				AND t.pic = #{pic}
 			</if>
-			<if test="orderNo != null and orderNo != ''">
-				AND t.order_no = #{orderNo}
-			</if>
 			
 			<if test="status != null and status != ''">
 				AND t.status = #{status}
 			</if>
-			<if test="levelList != null and levelList != ''">
-				AND t.level_list like "%"#{levelList}"%"
+			<if test="level != null and level != ''">
+				AND t.level like "%"#{level}"%"
 			</if>
 		</trim>
 	</sql>
@@ -49,7 +46,7 @@
 		,t.order_no
 		
 		,t.status
-		,t.level_list
+		,t.level
 		FROM tbh_material t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
@@ -80,7 +77,7 @@
 		,order_no
 		
 		,status
-		,level_list
+		,level
 		) 
 		VALUES(
 		#{code}
@@ -90,7 +87,7 @@
 		,#{orderNo}
 		
 		,#{status}
-		,#{levelList}
+		,#{level}
 		)
 	</insert>
 	
@@ -103,7 +100,7 @@
 		,order_no=#{orderNo}
 		,status=#{status}
 		
-		,level_list=#{levelList}
+		,level=#{level}
 		WHERE code=#{code}
 	</update>
 </mapper>

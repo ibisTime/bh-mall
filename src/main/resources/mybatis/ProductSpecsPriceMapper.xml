@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IProductSpecsPriceDAO">
+	<resultMap id="productSpecsPrice_DB_Result" type="productSpecsPrice">
+		<result column="code" property="code"/>
+		<result column="product_specs_code" property="productSpecsCode"/>
+		<result column="level" property="level"/>
+		<result column="price" property="price"/>
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != ''">
+				AND t.code = #{code}
+			</if>
+			<if test="productSpecsCode != null and productSpecsCode != ''">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
+			<if test="level != null and level !=''">
+				AND t.level  = #{level}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_productSpecsPrice" parameterType="productSpecsPrice" resultMap="productSpecsPrice_DB_Result">
+		SELECT 
+		t.code
+		,t.product_specs_code
+		,t.level
+		,t.price
+		FROM tbh_product_specs_price t
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	
+	<select id="select_productSpecsPrice_count" parameterType="productSpecsPrice" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_product_specs_price t
+		<include refid="where_condition"/>
+	</select>
+	
+	<insert id="insert_productSpecsPrice" parameterType="productSpecsPrice">
+		INSERT INTO tbh_product_specs_price(
+		code
+		,product_specs_code
+		,level
+		,price
+		)
+		VALUES(
+		#{code}
+		,#{productSpecsCode}
+		,#{level}
+		,#{price}
+		)
+	</insert>
+	
+	<update id="update_productSpecsPrice" parameterType="productSpecsPrice">
+		UPDATE tbh_product_specs_price
+		SET 
+		product_specs_code = #{productSpecsCode}
+		,level = #{level}
+		,price = #{price}
+	</update>
+	
+	<delete id="delete_productSpecsPrice" parameterType="productSpecsPrice">
+		DELETE FROM 
+		tbh_product_specs_price 
+		WHERE
+		product_specs_code = #{productSpecsCode}
+	</delete>
+</mapper>

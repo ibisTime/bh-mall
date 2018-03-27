@@ -15,6 +15,7 @@ public class Material extends ABaseDO {
      */
     private static final long serialVersionUID = -8463329339507057225L;
 
+    // 编码
     private String code;
 
     // 类型
@@ -29,11 +30,11 @@ public class Material extends ABaseDO {
     // 排序
     private Integer orderNo;
 
+    // 查看等级
+    private String level;
+
     // 状态
     private String status;
-
-    // 查看等级
-    private String levelList;
 
     public String getCode() {
         return code;
@@ -83,12 +84,12 @@ public class Material extends ABaseDO {
         this.status = status;
     }
 
-    public String getLevelList() {
-        return levelList;
+    public String getLevel() {
+        return level;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

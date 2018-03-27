@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 新增素材
  * @author: nyc 
@@ -9,37 +7,30 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 public class XN627420Req {
-
-    // 类型（必填）
-    @NotBlank
+    // （必填）类型
     private String type;
 
-    // 标题（必填）
-    @NotBlank
+    // （必填）查看等级
+    private String level;
+
+    // （必填）标题
     private String title;
 
-    // 图片（必填）
-    @NotBlank
+    // （必填）图片
     private String pic;
 
-    // 排序（必填）
-    @NotBlank
-    private String orderNo;
-
-    // 状态（必填 0 未发布， 1发布）
-    @NotBlank
+    // （必填）状态
     private String status;
 
-    // 查看等级（必填）
-    @NotBlank
-    private String levelList;
+    // （必填）排序
+    private String orderNo;
 
-    public String getLevelList() {
-        return levelList;
+    public String getLevel() {
+        return level;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getOrderNo() {

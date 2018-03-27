@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2018年2月1日 上午11:53:49 
  * @history:
  */
-public class XN627426Req {
+public class XN627431Req {
 
     // TODO
     // 类型 （选填）
@@ -19,7 +19,7 @@ public class XN627426Req {
     private String status;
 
     // 查看等级（选填）
-    private String levelList;
+    private String level;
 
     public String getType() {
         return type;
@@ -45,12 +45,12 @@ public class XN627426Req {
         this.status = status;
     }
 
-    public String getLevelList() {
-        return levelList;
+    public String getLevel() {
+        return level;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setLeve(String level) {
+        this.level = level;
     }
 
 }
