@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IProductDAO">
+	<resultMap id="product_DB_Result" type="product">
+		<result column="code" property="code"/>
+		<result column="name" property="name"/>
+		<result column="adPrice" property="ad_price"/>
+		<result column="price" property="price"/>
+		<result column="vir_number" property="virNumber"/>
+		
+		<result column="real_number" property="realNumber"/>
+		<result column="order_no" property="orderNo"/>
+		<result column="pic" property="pic"/>
+		<result column="adv_pic" property="advPic"/>
+		<result column="slogan" property="slogan"/>
+		
+		<result column="is_total" property="isTotal"/>
+		<result column="status" property="status"/>
+		<result column="create_datetime" property="createDatetime"/>
+		<result column="updater" property="updater"/>
+		<result column="update_datetime" property="updateDatetime"/>
+		
+		<result column="remark" property="remark"/>
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != ''">
+				AND t.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND t.name like "%"#{name}"%"
+			</if>
+			<if test="status != null and status !=''">
+				AND t.status  = #{status}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_product" parameterType="product" resultMap="product_DB_Result">
+		SELECT 
+		t.code
+		,t.name
+		,t.ad_price
+		,t.price
+		,t.vir_number
+		
+		,t.real_number
+		,t.order_no
+		,t.pic
+		,t.adv_pic
+		,t.slogan
+		
+		,t.is_total
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		
+		,t.remark
+		FROM tbh_product t
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_front" parameterType="product" resultMap="product_DB_Result">
+		SELECT 
+		t.code
+		,t.name
+		,t.ad_price
+		,t.price
+		,t.vir_number
+		
+		,t.real_number
+		,t.order_no
+		,t.pic
+		,t.adv_pic
+		,t.slogan
+		
+		,t.is_total
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		
+		,t.remark
+		FROM tbh_product t,tbh_product_specs ps,tbh_product_specs_price psp WHERE
+		t.code = ps.product_code AND ps.code = psp.product_specs_code AND psp.level = #{level}
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_product_count" parameterType="product" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_product t
+		<include refid="where_condition"/>
+	</select>
+	
+	<insert id="insert_product" parameterType="product">
+		INSERT INTO tbh_product(
+		code
+		,name
+		,ad_price
+		,price
+		,vir_number
+		
+		,real_number
+		,pic
+		,adv_pic
+		,slogan
+		,is_total
+		
+		,status
+		,create_datetime
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{adPrice}
+		,#{price}
+		,#{virNumber}
+		
+		,#{realNumber}
+		,#{pic}
+		,#{advPic}
+		,#{slogan}
+		,#{isTotal}
+		
+		,#{price}
+		,#{createDatetime}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+		
+	</insert>
+	
+	
+	<update id="update_product" parameterType="product">
+		UPDATE tbh_product 
+		SET 
+		name = #{name}
+		,ad_price = #{adPrice}
+		,price = #{price}
+		,vir_number = #{virNumber}
+		,real_number = #{realNumber}
+		
+		,order_no = #{orderNo}
+		,pic = #{pic}
+		,adv_pic = #{advPic}
+		,slogan = #{slogan}
+		,is_total = #{isTotal}
+		
+		,status = #{status}
+		,create_datetime = #{createDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code=#{code}
+	</update>
+	
+	<update id="puton_product" parameterType="product">
+		UPDATE tbh_product 
+		SET 
+		order_no = #{orderNo}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code=#{code}
+	</update>
+	
+	<update id="putdown_product" parameterType="product">
+		UPDATE tbh_product 
+		SET 
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code=#{code}
+	</update>
+	
+	
+	<delete id="delete_product" parameterType="product">
+		DELETE FROM 
+		tbh_product 
+		WHERE
+		code = #{code}
+	</delete>
+</mapper>

@@ -22,5 +22,14 @@
 	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
 	    <typeAlias alias="companyChannel" type="com.bh.mall.domain.CompanyChannel"/>
 	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
+
+	    <typeAlias alias="product" type="com.bh.mall.domain.Product"/>
+	    
+	    <typeAlias alias="productSpecs" type="com.bh.mall.domain.ProductSpecs"/>
+	    <typeAlias alias="productSpecsPrice" type="com.bh.mall.domain.ProductSpecsPrice"/>
+	    <typeAlias alias="innerProduct" type="com.bh.mall.domain.InnerProduct"/>
+	    <typeAlias alias="productLog" type="com.bh.mall.domain.ProductLog"/>
+	    <typeAlias alias="award" type="com.bh.mall.domain.Award"/>
+
 	</typeAliases>
 </configuration>	

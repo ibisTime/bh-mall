@@ -35,7 +35,7 @@ public class XN627421Req {
 
     // 查看等级 （必填）
     @NotBlank
-    private String levelList;
+    private String level;
 
     public String getCode() {
         return code;
@@ -85,12 +85,12 @@ public class XN627421Req {
         this.status = status;
     }
 
-    public String getLevelList() {
-        return levelList;
+    public String getLevel() {
+        return level;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

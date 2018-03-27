@@ -1,14 +1,17 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
- * 素材详情
+ * 删除内购产品
  * @author: nyc 
- * @since: 2018年2月1日 下午1:44:47 
+ * @since: 2018年3月26日 下午3:14:53 
  * @history:
  */
-public class XN627427Req {
+public class XN627702Req {
 
-    // 编码 （必填）
+    // 编号
+    @NotBlank(message = "编号不能为空")
     private String code;
 
     public String getCode() {

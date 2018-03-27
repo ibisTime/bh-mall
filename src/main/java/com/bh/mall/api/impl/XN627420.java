@@ -4,6 +4,7 @@ import com.bh.mall.ao.IMaterialAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627420Req;
+import com.bh.mall.dto.res.PKCodeRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.http.JsonUtils;
@@ -24,7 +25,7 @@ public class XN627420 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return materialAO.addMaterial(req);
+        return new PKCodeRes(materialAO.addMaterial(req));
     }
 
     @Override

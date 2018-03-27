@@ -1,19 +1,22 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 素材分页查询
  * @author: nyc 
  * @since: 2018年2月1日 上午11:04:25 
  * @history:
  */
-public class XN627425Req extends APageReq {
+public class XN627430Req extends APageReq {
 
     /** 
      * @Fields serialVersionUID : XXX(用一句话描述这个变量表示什么) 
      */
     private static final long serialVersionUID = -1370292147897079233L;
 
-    // 类型（选填）
+    // 类型（必填）
+    @NotBlank(message = "类型不能为空")
     private String type;
 
     // 标题 （选填）
@@ -23,14 +26,14 @@ public class XN627425Req extends APageReq {
     private String status;
 
     // 查看等级 （选填）
-    private String levelList;
+    private String level;
 
     public String getLevelList() {
-        return levelList;
+        return level;
     }
 
-    public void setLevelList(String levelList) {
-        this.levelList = levelList;
+    public void setLevelList(String level) {
+        this.level = level;
     }
 
     public String getTitle() {

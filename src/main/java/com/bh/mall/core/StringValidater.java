@@ -8,6 +8,8 @@
  */
 package com.bh.mall.core;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.exception.BizException;
@@ -51,7 +53,8 @@ public class StringValidater {
         return !((codePoint == 0x0) || (codePoint == 0x9) || (codePoint == 0xA)
                 || (codePoint == 0xD)
                 || ((codePoint >= 0x20) && (codePoint <= 0xD7FF))
-                || ((codePoint >= 0xE000) && (codePoint <= 0xFFFD)) || ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF)));
+                || ((codePoint >= 0xE000) && (codePoint <= 0xFFFD))
+                || ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF)));
     }
 
     public static void validateNumber(String... params) {
@@ -141,8 +144,21 @@ public class StringValidater {
         return d;
     }
 
+    public static BigDecimal toBigDecimal(String string) {
+        BigDecimal bd = null;
+        try {
+            if (StringUtils.isNotBlank(string)) {
+                bd = new BigDecimal(string);
+            }
+        } catch (Exception e) {
+            throw new BizException("xn702000", "数字型入参，请按要求填写数字");
+        }
+        return bd;
+    }
+
     public static void main(String[] args) {
         String params = "1212《》";
         StringValidater.validateEmoji(params);
     }
+
 }

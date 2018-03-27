@@ -34,11 +34,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public Agent getAgent(String level) {
+    public Agent getAgent(String code) {
         Agent data = null;
-        if (StringUtils.isNotBlank(level)) {
+        if (StringUtils.isNotBlank(code)) {
             Agent condition = new Agent();
-            condition.setLevel(Integer.valueOf(level));
+            condition.setCode(code);
             data = agentDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理编号不存在");
