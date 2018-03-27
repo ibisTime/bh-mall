@@ -49,7 +49,6 @@ import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.http.PostSimulater;
-import com.bh.mall.third.hx.impl.InstantMsgImpl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -65,9 +64,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected IUserBO userBO;
-
-    @Autowired
-    protected InstantMsgImpl instantMsgImpl;
 
     @Autowired
     protected ISYSRoleBO sysRoleBO;

@@ -12,8 +12,7 @@ public enum EBizType {
     AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_REG_REF("RF", "推荐注册送积分"), AJ_SCTX_FIRST(
             "03", "首次上传头像"), AJ_ZLWS_FIRST("04", "首次完善资料"),
 
-    // 姚橙系统
-    YC_SCB("YC_SCB", "扫描二维码送橙券");
+    AJ_QX("11", "取现"), XXFK("XXFK", "提现回录"), AJ_CZ("AJ_CZ", "充值");
 
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();

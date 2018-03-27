@@ -20,18 +20,35 @@ public class SysConstant {
 
     public static String QINIU_DOMAIN = "qiniu_domain";
 
-    // 环信配置
-    public static String HX_ORG_NAME = "hx_org_name";
+    public static String IP = "192.168.1.1";
 
-    public static String HX_APP_NAME = "hx_app_name";
+    // C端用户取现倍数
+    public static String CUSERQXBS = "CUSERQXBS";
 
-    // 推广配置
-    public static String CUSER_REG_ADDJF = "cuser_reg_addjf"; // C端注册送积分
+    // C端用户取现费率
+    public static String CUSERQXFL = "CUSERQXFL";
 
-    public static String CUSER_LOGIN_ADDJF = "cuser_login_addjf"; // C端登录送积分
+    // C端用户取现时效
+    public static String CUSERQXSX = "CUSERQXSX";
 
-    public static String CUSER_SIGN_ADDJF = "cuser_sign_addjf"; // C端签到送积分
+    // B端用户取现倍数
+    public static String BUSERQXBS = "BUSERQXBS";
 
-    public static String CUSER_USERREF_ADDJF = "cuser_userref_addjf"; // C端推荐人加积分
+    // B端用户取现费率
+    public static String BUSERQXFL = "BUSERQXFL";
 
+    // B端用户取现时效
+    public static String BUSERQXSX = "BUSERQXSX";
+
+    // C端用户每月取现次数
+    public static String CUSERMONTIMES = "CUSERMONTIMES";
+
+    // B端用户每月取现次数
+    public static String BUSERMONTIMES = "BUSERMONTIMES";
+
+    // C端2C端转账金额倍数
+    public static String TRANSAMOUNTBS = "TRANSAMOUNTBS";
+
+    // 取现单笔最大金额
+    public static String QXDBZDJE = "QXDBZDJE";
 }
