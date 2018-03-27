@@ -9,7 +9,7 @@ import com.bh.mall.dto.req.XN627421Req;
 
 public interface IMaterialAO {
 
-    String DEFAULT_ORDER_COLUMN = "status";
+    String DEFAULT_ORDER_COLUMN = "code";
 
     String addMaterial(XN627420Req req);
 

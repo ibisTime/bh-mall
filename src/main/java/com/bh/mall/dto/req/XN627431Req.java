@@ -1,7 +1,7 @@
 package com.bh.mall.dto.req;
 
 /**
- * 素材详情查询
+ * 素材列表查询
  * @author: nyc 
  * @since: 2018年2月1日 上午11:53:49 
  * @history:

@@ -52,9 +52,11 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
-    public void putonProduct(Product data, String orderNo, String updater) {
+    public void putonProduct(Product data, String orderNo, String isFree,
+            String updater) {
         data.setOrderNo(StringValidater.toInteger(orderNo));
         data.setStatus(EProductStatus.Shelf_YES.getCode());
+        data.setIsFree(isFree);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         productDAO.putonProduct(data);

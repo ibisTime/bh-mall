@@ -23,5 +23,8 @@
 	    <typeAlias alias="innerProduct" type="com.bh.mall.domain.InnerProduct"/>
 	    <typeAlias alias="productLog" type="com.bh.mall.domain.ProductLog"/>
 	    <typeAlias alias="award" type="com.bh.mall.domain.Award"/>
+	    
+	    <typeAlias alias="cart" type="com.bh.mall.domain.Cart"/>
+	    <typeAlias alias="innerOrder" type="com.bh.mall.domain.InnerOrder"/>
 	</typeAliases>
 </configuration>	

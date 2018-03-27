@@ -27,7 +27,7 @@ public class XN627005 extends AProcessor {
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
         condition.setName(req.getName());
-        condition.setLevel(Integer.valueOf(req.getLevel()));
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

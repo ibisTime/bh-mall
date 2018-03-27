@@ -10,6 +10,7 @@ package com.bh.mall.bo;
 
 import java.util.List;
 
+import com.bh.mall.domain.Account;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
 
@@ -69,5 +70,5 @@ public interface IAccountBO {
      * @create: 2017年4月1日 下午4:46:46 asus
      * @history:
      */
-    public Long getAccountByUserId(String userId, ECurrency type);
+    public Account getAccountByUserId(String userId, ECurrency type);
 }

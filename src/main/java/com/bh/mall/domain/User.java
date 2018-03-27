@@ -57,7 +57,7 @@ public class User extends ABaseDO {
     private String kind;
 
     // 目前用户等级
-    private String level;
+    private Integer level;
 
     // 需升等级
     private String applyLevel;
@@ -302,11 +302,11 @@ public class User extends ABaseDO {
         this.kind = kind;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

@@ -23,6 +23,7 @@ import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IUserDAO;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627301Req;
@@ -140,7 +141,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setWxId(wxId);
         user.setPhoto(photo);
         user.setNickname(nickname);
-        user.setLevel(level);
+        user.setLevel(StringValidater.toInteger(level));
         user.setRealName(realName);
 
         user.setStatus(EUserStatus.TO_WILL.getCode());
@@ -176,14 +177,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setUserId(userId);
         user.setLoginName(req.getLoginName());
         user.setMobile(req.getMobile());
-        user.setNickname(userId.substring(userId.length() - 8, userId.length()));
+        user.setNickname(
+            userId.substring(userId.length() - 8, userId.length()));
 
         if (StringUtils.isBlank(req.getLoginPwd())) {
             req.setLoginPwd(EUserPwd.InitPwd.getCode());
         }
         user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
-            .getLoginPwd()));
+        user.setLoginPwdStrength(
+            PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
 
         user.setKind(req.getKind());
         user.setRoleCode(req.getRoleCode());
@@ -335,7 +337,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setTradePwd(MD5Util.md5(tradePwd));
@@ -350,7 +353,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -365,7 +369,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -392,14 +397,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         List<User> userList = userDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(userList)) {
             User data = userList.get(0);
-            throw new BizException("xn000001", "用户[" + data.getMobile()
-                    + "]已使用该身份信息，请重新填写");
+            throw new BizException("xn000001",
+                "用户[" + data.getMobile() + "]已使用该身份信息，请重新填写");
         }
     }
 
     @Override
-    public void refreshStatus(String userId, EUserStatus status,
-            String updater, String remark) {
+    public void refreshStatus(String userId, EUserStatus status, String updater,
+            String remark) {
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
@@ -485,8 +490,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.bh.mall.bo.IUserBO#doCheckOpenId(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public void doCheckOpenId(String unionId, String h5OpenId,
-            String appOpenId, String companyCode, String systemCode) {
+    public void doCheckOpenId(String unionId, String h5OpenId, String appOpenId,
+            String companyCode, String systemCode) {
         User condition = new User();
         condition.setUnionId(unionId);
         condition.setH5OpenId(h5OpenId);

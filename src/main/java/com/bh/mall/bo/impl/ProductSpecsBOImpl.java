@@ -62,7 +62,8 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                         .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
                     pspData.setCode(pspCode);
                     pspData.setProductSpecsCode(psCode);
-                    pspData.setLevel(specsPrice.getLevel());
+                    pspData.setLevel(
+                        StringValidater.toInteger(specsPrice.getLevel()));
                     pspData.setPrice(
                         StringValidater.toLong(specsPrice.getPrice()));
                     productSpecsPriceDAO.insert(pspData);

@@ -24,6 +24,10 @@ public class XN627540Req {
     @NotBlank(message = "市场价不能为空")
     private String price;
 
+    // （必填）换货价
+    @NotBlank(message = "换货价不能为空")
+    private String changePrice;
+
     // （必填）虚拟数量
     @NotBlank(message = "虚拟数量不能为空")
     private String virNumber;
@@ -82,6 +86,14 @@ public class XN627540Req {
 
     public String getName() {
         return name;
+    }
+
+    public String getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(String changePrice) {
+        this.changePrice = changePrice;
     }
 
     public void setName(String name) {

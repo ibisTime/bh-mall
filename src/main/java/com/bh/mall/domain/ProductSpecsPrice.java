@@ -21,7 +21,7 @@ public class ProductSpecsPrice extends ABaseDO {
     private String productSpecsCode;
 
     // 等级
-    private String level;
+    private Integer level;
 
     // 价格
     private Long price;
@@ -42,11 +42,11 @@ public class ProductSpecsPrice extends ABaseDO {
         this.productSpecsCode = productSpecsCode;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

@@ -17,6 +17,10 @@ public class XN627541Req {
     @NotBlank(message = "建议价不能为空")
     private String adPrice;
 
+    // （必填）换货价
+    @NotBlank(message = "换货价不能为空")
+    private String changePrice;
+
     // （必填）市场价
     @NotBlank(message = "市场价不能为空")
     private String price;
@@ -75,6 +79,14 @@ public class XN627541Req {
 
     public void setAdvPic(String advPic) {
         this.advPic = advPic;
+    }
+
+    public String getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(String changePrice) {
+        this.changePrice = changePrice;
     }
 
     public String getName() {

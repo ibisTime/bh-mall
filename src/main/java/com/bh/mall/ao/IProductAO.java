@@ -19,7 +19,8 @@ public interface IProductAO {
 
     void dropProduct(String code);
 
-    void putonProduct(String code, String orderNo, String updater);
+    void putonProduct(String code, String orderNo, String isFree,
+            String updater);
 
     void putdownProduct(String code, String updater);
 

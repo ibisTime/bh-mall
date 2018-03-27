@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IInnerOrderDAO">
+	<resultMap id="innerOrder_DB_Result" type="innerOrder">
+		<result column="code" property="code" />
+		<result column="product_code" property="productCode" />
+		<result column="product_name" property="productName" />
+		<result column="pic" property="pic" />
+		<result column="quantity" property="quantity" />
+		<result column="price" property="price" />
+		<result column="apply_user" property="applyUser" />
+		<result column="level" property="level" />
+		<result column="team_name" property="teamName" />
+		<result column="apply_note" property="applyNote" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="amount" property="amount" />
+		<result column="yunfei" property="yunfei" />
+		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="signer" property="signer" />
+		<result column="mobile" property="mobile" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="address" property="address" />
+		<result column="deliver" property="deliver" />
+		<result column="delive_datetime" property="deliveDatetime" />
+		<result column="logistics_code" property="logisticsCode" />
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="pdf" property="pdf" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_innerOrder" parameterType="innerOrder" resultMap="innerOrder_DB_Result">
+		SELECT
+		t.code
+		,t.product_code
+		,t.product_name
+		,t.pic
+		,t.quantity
+		,t.price
+		,t.apply_user
+		,t.level
+		,t.team_name
+		,t.apply_note
+		,t.apply_datetime
+		,t.amount
+		,t.yunfei
+		,t.status
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.pay_amount
+		,t.pay_datetime
+		,t.signer
+		,t.mobile
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+		,t.deliver
+		,t.delive_datetime
+		,t.logistics_code
+		,t.logistics_company
+		,t.pdf
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tbh_inner_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_innerOrder_count" parameterType="innerOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_inner_order t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_innerOrder" parameterType="innerOrder">
+		INSERT INTO
+		tbh_inner_order(
+		code
+		,product_code
+		,product_name
+		,pic
+		,quantity
+		,price
+		,apply_user
+		,level
+		,team_name
+		,apply_note
+		,apply_datetime
+		,amount
+		,yunfei
+		,status
+		,pay_type
+		,pay_group
+		,pay_code
+		,pay_amount
+		,pay_datetime
+		,signer
+		,mobile
+		,province
+		,city
+		,area
+		,address
+		,deliver
+		,delive_datetime
+		,logistics_code
+		,logistics_company
+		,pdf
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{productCode}
+		,#{productName}
+		,#{pic}
+		,#{quantity}
+		,#{price}
+		,#{applyUser}
+		,#{level}
+		,#{teamName}
+		,#{applyNote}
+		,#{applyDatetime}
+		,#{amount}
+		,#{yunfei}
+		,#{status}
+		,#{payType}
+		,#{payGroup}
+		,#{payCode}
+		,#{payAmount}
+		,#{payDatetime}
+		,#{signer}
+		,#{mobile}
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{address}
+		,#{deliver}
+		,#{deliveDatetime}
+		,#{logisticsCode}
+		,#{logisticsCompany}
+		,#{pdf}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_innerOrder" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		,signer = #{signer}
+		,mobile = #{mobile}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	
+	<update id="deliver_innerProduct" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		,deliver = #{deliver}
+		,delive_datetime = #{deliveDatetime}
+		,logistics_code = #{logisticsCode}
+		,logistics_company = #{logisticsCompany}
+		,pdf = #{pdf}
+		,status = #{status}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="cancel_innerProduct" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="approve_cancle" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

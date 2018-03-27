@@ -63,6 +63,7 @@ public class ProductAOImpl implements IProductAO {
         data.setName(req.getName());
         data.setAdPrice(StringValidater.toLong(req.getAdPrice()));
         data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
         data.setVirNumber(StringValidater.toInteger(req.getVirNumber()));
 
         data.setRealNumber(StringValidater.toInteger(req.getRealNumber()));
@@ -94,6 +95,7 @@ public class ProductAOImpl implements IProductAO {
         data.setName(req.getName());
         data.setAdPrice(StringValidater.toLong(req.getAdPrice()));
         data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
 
@@ -128,6 +130,7 @@ public class ProductAOImpl implements IProductAO {
     public Product getProduct(String code) {
         Product data = productBO.getProduct(code);
         ProductSpecs condition = new ProductSpecs();
+        condition.setProductCode(data.getCode());
         List<ProductSpecs> psList = productSpecsBO
             .queryProductSpecsList(condition);
 
@@ -160,12 +163,13 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
-    public void putonProduct(String code, String orderNo, String updater) {
+    public void putonProduct(String code, String isFree, String orderNo,
+            String updater) {
         Product data = productBO.getProduct(code);
         if (data.getStatus().equals(EProductStatus.Shelf_YES.getCode())) {
             throw new BizException("xn00000", "产品已上架");
         }
-        productBO.putonProduct(data, orderNo, updater);
+        productBO.putonProduct(data, orderNo, isFree, updater);
     }
 
     @Override
@@ -238,8 +242,7 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Paginable<Product> selectProductPageByFront(int start, int limit,
             Product condition) {
-        if (StringUtils.isBlank(condition.getLevel())
-                && StringUtils.isNotBlank(condition.getUserId())) {
+        if (StringUtils.isNotBlank(condition.getUserId())) {
             User data = userAO.doGetUser(condition.getUserId());
             condition.setLevel(data.getLevel());
         }

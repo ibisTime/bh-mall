@@ -15,7 +15,8 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     void removeProduct(Product data);
 
-    void putonProduct(Product data, String orderNo, String updater);
+    void putonProduct(Product data, String orderNo, String isFree,
+            String updater);
 
     void putdownProduct(Product data, String updater);
 

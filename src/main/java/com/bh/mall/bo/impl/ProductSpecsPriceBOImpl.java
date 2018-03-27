@@ -52,7 +52,7 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
         ProductSpecsPrice data = new ProductSpecsPrice();
         for (XN627547Req req : list) {
             data.setCode(req.getCode());
-            data.setLevel(req.getLevel());
+            data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setPrice(StringValidater.toLong(req.getPrice()));
             productSpecsPriceDAO.update(data);
         }
@@ -72,7 +72,7 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
             condition.setCode(code);
             data = productSpecsPriceDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "规格价格不存在");
             }
         }
         return data;

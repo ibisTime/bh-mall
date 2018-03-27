@@ -27,6 +27,9 @@ public class Product extends ABaseDO {
     // 市场价
     private Long price;
 
+    // 换货价
+    private Long changePrice;
+
     // 虚拟数量
     private Integer virNumber;
 
@@ -60,6 +63,9 @@ public class Product extends ABaseDO {
     // 更新时间
     private Date updateDatetime;
 
+    // 是否包邮
+    private String isFree;
+
     // 备注
     private String remark;
 
@@ -73,7 +79,7 @@ public class Product extends ABaseDO {
     private List<Award> awardList;
 
     // ***********************db******************
-    private String level;
+    private Integer level;
 
     private String userId;
 
@@ -99,6 +105,14 @@ public class Product extends ABaseDO {
 
     public void setAdPrice(Long adPrice) {
         this.adPrice = adPrice;
+    }
+
+    public Long getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(Long changePrice) {
+        this.changePrice = changePrice;
     }
 
     public Long getPrice() {
@@ -197,6 +211,14 @@ public class Product extends ABaseDO {
         this.updateDatetime = updateDatetime;
     }
 
+    public String getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(String isFree) {
+        this.isFree = isFree;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -229,11 +251,11 @@ public class Product extends ABaseDO {
         this.awardList = awardList;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
