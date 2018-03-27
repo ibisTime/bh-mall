@@ -38,29 +38,11 @@ public class Account extends ABaseDO {
     // 冻结金额
     private Long frozenAmount;
 
-    // md5
-    private String md5;
-
-    // 累计增加金额
-    private Long addAmount;
-
-    // 入金
-    private Long inAmount;
-
-    // 出金
-    private Long outAmount;
-
     // 创建时间
     private Date createDatetime;
 
     // 最近一次变动对应的流水编号
     private String lastOrder;
-
-    // 系统编号
-    private String systemCode;
-
-    // 公司编号
-    private String companyCode;
 
     // **************************db properties **************************
 
@@ -84,14 +66,6 @@ public class Account extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getAccountNumber() {
@@ -142,14 +116,6 @@ public class Account extends ABaseDO {
         this.frozenAmount = frozenAmount;
     }
 
-    public String getMd5() {
-        return md5;
-    }
-
-    public void setMd5(String md5) {
-        this.md5 = md5;
-    }
-
     public Date getCreateDatetime() {
         return createDatetime;
     }
@@ -180,38 +146,6 @@ public class Account extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public Long getAddAmount() {
-        return addAmount;
-    }
-
-    public void setAddAmount(Long addAmount) {
-        this.addAmount = addAmount;
-    }
-
-    public Long getInAmount() {
-        return inAmount;
-    }
-
-    public void setInAmount(Long inAmount) {
-        this.inAmount = inAmount;
-    }
-
-    public Long getOutAmount() {
-        return outAmount;
-    }
-
-    public void setOutAmount(Long outAmount) {
-        this.outAmount = outAmount;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
 }

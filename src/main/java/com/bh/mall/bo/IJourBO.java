@@ -6,7 +6,6 @@ import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Jour;
 import com.bh.mall.enums.EBizType;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 
 /**
@@ -21,20 +20,11 @@ public interface IJourBO extends IPaginableBO<Jour> {
             String channelOrder, String payGroup, String refNo,
             EBizType bizType, String bizNote, Long transAmount);
 
-    // 对账结果录入
-    public void doCheckJour(Jour jour, EBoolean checkResult, Long checkAmount,
-            String checkUser, String checkNote);
-
-    // 当前流水，调整不通过。即账其实是平的
-    public void adjustJourNO(Jour jour, String adjustUser, String adjustNote);
-
-    public void adjustJourYES(Jour jour, String adjustUser, String adjustNote);
-
     public List<Jour> queryJourList(Jour condition);
 
-    public Jour getJour(String code, String systemCode);
+    public Jour getJour(String code);
 
-    public Jour getJourNotException(String code, String systemCode);
+    public Jour getJourNotException(String code);
 
     public Long getTotalAmount(String bizType, String channelType,
             String accountNumber, String dateStart, String dateEnd);

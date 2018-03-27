@@ -24,6 +24,7 @@ import com.bh.mall.domain.ChannelBank;
 import com.bh.mall.domain.Withdraw;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EChannelType;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWithdrawStatus;
 import com.bh.mall.exception.BizException;
 
@@ -81,8 +82,6 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
 
         data.setApplyNote(applyNote);
         data.setApplyDatetime(new Date());
-        data.setSystemCode(account.getSystemCode());
-        data.setCompanyCode(account.getCompanyCode());
         withdrawDAO.insert(data);
         return code;
     }
@@ -116,12 +115,11 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
     }
 
     @Override
-    public Withdraw getWithdraw(String code, String systemCode) {
+    public Withdraw getWithdraw(String code) {
         Withdraw order = null;
         if (StringUtils.isNotBlank(code)) {
             Withdraw condition = new Withdraw();
             condition.setCode(code);
-            condition.setSystemCode(systemCode);
             order = withdrawDAO.select(condition);
         }
         return order;
@@ -134,7 +132,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
     public void doCheckTimes(Account account) {
         // 判断本月申请次数是否达到上限
         Map<String, String> argsMap = sysConfigBO.getConfigsMap(null,
-            account.getSystemCode(), account.getCompanyCode());
+            ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         String monthTimesKey = null;
         if (EAccountType.Customer.getCode().equals(account.getType())) {
             monthTimesKey = SysConstant.CUSERMONTIMES;
@@ -190,8 +188,6 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         data.setApplyNote(applyNote);
         data.setPayUser(applyUser);
         data.setPayDatetime(payDatetime);
-        data.setSystemCode(account.getSystemCode());
-        data.setCompanyCode(account.getCompanyCode());
         withdrawDAO.insertBackRecord(data);
         return code;
     }

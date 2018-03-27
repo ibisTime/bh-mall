@@ -24,7 +24,7 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
 
     List<Withdraw> queryWithdrawList(Withdraw condition);
 
-    Withdraw getWithdraw(String code, String systemCode);
+    Withdraw getWithdraw(String code);
 
     String backRecord(Account account, Long amount, Date payDatetime,
             String payCardInfo, String payCardNo, String applyUser,

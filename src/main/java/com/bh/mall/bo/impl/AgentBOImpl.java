@@ -38,7 +38,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         Agent data = null;
         if (StringUtils.isNotBlank(code)) {
             Agent condition = new Agent();
-            condition.setCode(code);
+            condition.setLevel(Integer.valueOf(code));
             data = agentDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理编号不存在");

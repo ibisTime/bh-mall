@@ -105,9 +105,4 @@ public class Agent extends ABaseDO {
         this.remark = remark;
     }
 
-    public void setCode(String code) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

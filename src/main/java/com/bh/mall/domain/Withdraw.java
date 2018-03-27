@@ -77,12 +77,6 @@ public class Withdraw extends ABaseDO {
     // 支付回录时间
     private Date payDatetime;
 
-    // 系统编号
-    private String systemCode;
-
-    // 公司编号
-    private String companyCode;
-
     // *******************************
     // 申请时间起
     private Date applyDatetimeStart;
@@ -337,19 +331,4 @@ public class Withdraw extends ABaseDO {
         this.payDatetime = payDatetime;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
 }

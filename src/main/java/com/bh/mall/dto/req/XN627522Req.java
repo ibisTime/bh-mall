@@ -5,7 +5,7 @@ package com.bh.mall.dto.req;
  * @since: 2017年1月18日 上午11:09:57 
  * @history:
  */
-public class XN802013Req {
+public class XN627522Req {
     // 编号(必填)
     private String code;
 
@@ -33,8 +33,21 @@ public class XN802013Req {
     // 备注（选填）
     private String remark;
 
-    // 交易密码
-    private String tradePwd;
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode;
+    }
 
     public String getCode() {
         return code;
@@ -44,28 +57,12 @@ public class XN802013Req {
         this.code = code;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
     public String getBankcardNumber() {
         return bankcardNumber;
     }
 
     public void setBankcardNumber(String bankcardNumber) {
         this.bankcardNumber = bankcardNumber;
-    }
-
-    public String getBankCode() {
-        return bankCode;
-    }
-
-    public void setBankCode(String bankCode) {
-        this.bankCode = bankCode;
     }
 
     public String getBankName() {
@@ -108,11 +105,4 @@ public class XN802013Req {
         this.remark = remark;
     }
 
-    public String getTradePwd() {
-        return tradePwd;
-    }
-
-    public void setTradePwd(String tradePwd) {
-        this.tradePwd = tradePwd;
-    }
 }

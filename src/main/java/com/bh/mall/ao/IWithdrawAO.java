@@ -17,17 +17,17 @@ public interface IWithdrawAO {
             String applyNote);
 
     public void approveOrder(String code, String approveUser,
-            String approveResult, String approveNote, String systemCode);
+            String approveResult, String approveNote);
 
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String channelOrder, String systemCode);
+            String payNote, String channelOrder);
 
     public Paginable<Withdraw> queryWithdrawPage(int start, int limit,
             Withdraw condition);
 
     public List<Withdraw> queryWithdrawList(Withdraw condition);
 
-    public Withdraw getWithdraw(String code, String systemCode);
+    public Withdraw getWithdraw(String code);
 
     public String backRecord(String accountNumber, Long amount,
             String payDatetime, String payCardInfo, String payCardNo,

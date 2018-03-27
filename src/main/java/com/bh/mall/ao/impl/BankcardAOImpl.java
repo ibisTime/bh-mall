@@ -13,8 +13,8 @@ import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Bankcard;
 import com.bh.mall.dto.req.XN627520Req;
-import com.bh.mall.dto.req.XN802012Req;
-import com.bh.mall.dto.req.XN802013Req;
+import com.bh.mall.dto.req.XN627522Req;
+import com.bh.mall.dto.req.XN627523Req;
 import com.bh.mall.exception.BizException;
 
 /**
@@ -62,7 +62,7 @@ public class BankcardAOImpl implements IBankcardAO {
     }
 
     @Override
-    public void editBankcard(XN802012Req req) {
+    public void editBankcard(XN627522Req req) {
         Bankcard bankcard = bankcardBO.getBankcard(req.getCode());
         if (!bankcard.getBankcardNumber().equals(req.getBankcardNumber())) { // 有修改就去判断是否唯一
             List<Bankcard> list = bankcardBO.queryBankcardList(bankcard
@@ -92,7 +92,7 @@ public class BankcardAOImpl implements IBankcardAO {
     }
 
     @Override
-    public void editBankcard(XN802013Req req) {
+    public void editBankcard(XN627523Req req) {
         Bankcard bankcard = bankcardBO.getBankcard(req.getCode());
         userBO.checkTradePwd(bankcard.getUserId(), req.getTradePwd());
         if (!bankcard.getBankcardNumber().equals(req.getBankcardNumber())) { // 有修改就去判断是否唯一

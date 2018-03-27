@@ -61,8 +61,8 @@ public class JourAOImpl implements IJourAO {
     }
 
     @Override
-    public Jour getJour(String code, String systemCode) {
-        return jourBO.getJour(code, systemCode);
+    public Jour getJour(String code) {
+        return jourBO.getJour(code);
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWithdrawStatus;
 import com.bh.mall.exception.BizException;
 
@@ -61,7 +62,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
         // 生成取现订单
         Long fee = doGetFee(dbAccount.getType(), amount,
-            dbAccount.getSystemCode(), dbAccount.getCompanyCode());
+            ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         // 取现总金额
         amount = amount + fee;
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
@@ -87,7 +88,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
         // 生成取现订单
         Long fee = doGetFee(dbAccount.getType(), amount,
-            dbAccount.getSystemCode(), dbAccount.getCompanyCode());
+            ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         // 取现总金额
         amount = amount + fee;
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
@@ -100,8 +101,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     @Transactional
     public void approveOrder(String code, String approveUser,
-            String approveResult, String approveNote, String systemCode) {
-        Withdraw data = withdrawBO.getWithdraw(code, systemCode);
+            String approveResult, String approveNote) {
+        Withdraw data = withdrawBO.getWithdraw(code);
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待审批状态，无法审批");
         }
@@ -115,8 +116,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     @Transactional
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String channelOrder, String systemCode) {
-        Withdraw data = withdrawBO.getWithdraw(code, systemCode);
+            String payNote, String channelOrder) {
+        Withdraw data = withdrawBO.getWithdraw(code);
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
@@ -162,9 +163,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())
                 || ECurrency.YC_CNY.getCode().equals(account.getCurrency())) {
             // 托管账户减钱
-            accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-                null, null, data.getCode(), EBizType.AJ_QX, "线下取现",
-                -data.getAmount());
+            accountBO.changeAmount(ESystemCode.BH.getCode(),
+                EChannelType.Offline, null, null, data.getCode(),
+                EBizType.AJ_QX, "线下取现", -data.getAmount());
         }
     }
 
@@ -196,8 +197,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
     }
 
     @Override
-    public Withdraw getWithdraw(String code, String systemCode) {
-        Withdraw withdraw = withdrawBO.getWithdraw(code, systemCode);
+    public Withdraw getWithdraw(String code) {
+        Withdraw withdraw = withdrawBO.getWithdraw(code);
         User user = userBO.getCheckUser(withdraw.getApplyUser());
         withdraw.setUser(user);
         return withdraw;

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.common.AccountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAccountDAO;
@@ -58,14 +57,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             data.setAmount(0L);
             data.setFrozenAmount(0L);
 
-            data.setMd5(AccountUtil.md5(data.getAmount()));
-            data.setAddAmount(0L);
-            data.setInAmount(0L);
-            data.setOutAmount(0L);
             data.setCreateDatetime(new Date());
-
-            data.setSystemCode(systemCode);
-            data.setCompanyCode(companyCode);
             accountDAO.insert(data);
         }
         return accountNumber;
@@ -90,18 +82,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         Account data = new Account();
         data.setAccountNumber(accountNumber);
         data.setAmount(nowAmount);
-        data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
-            nowAmount));
-        // 统计累计增加金额
-        data.setAddAmount(dbAccount.getAddAmount());
-        if (transAmount > 0) {
-            data.setAddAmount(dbAccount.getAddAmount() + transAmount);
-        }
-        // 统计累计充值金额
-        data.setInAmount(dbAccount.getInAmount());
-        if (EBizType.AJ_CZ.getCode().equals(bizType.getCode())) {
-            data.setInAmount(dbAccount.getInAmount() + transAmount);
-        }
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
     }
@@ -119,15 +99,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         Account data = new Account();
         data.setAccountNumber(accountNumber);
         data.setAmount(nowAmount);
-        data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
-            nowAmount));
-
-        // 更新统计金额
-        data.setAddAmount(dbAccount.getAddAmount());
-        if (transAmount > 0) {
-            data.setAddAmount(dbAccount.getAddAmount() + transAmount);
-        }
-        data.setInAmount(dbAccount.getInAmount());
         data.setLastOrder(lastOrder);
         accountDAO.updateAmount(data);
     }
@@ -150,8 +121,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(nowAmount);
         data.setFrozenAmount(nowFrozenAmount);
-        data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
-            nowAmount));
         data.setLastOrder(lastOrder);
         accountDAO.frozenAmount(data);
     }
@@ -174,8 +143,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(dbAccount.getAmount() + freezeAmount);
         data.setFrozenAmount(nowFrozenAmount);
-        data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
-            dbAccount.getAmount() + freezeAmount));
         data.setLastOrder(lastOrder);
         accountDAO.unfrozenAmount(data);
     }
@@ -192,8 +159,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setFrozenAmount(nowFrozenAmount);
-        // 统计累计取现金额
-        data.setOutAmount(dbAccount.getOutAmount() + freezeAmount);
         accountDAO.cutFrozenAmount(data);
     }
 
@@ -265,8 +230,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         Account condition = new Account();
         // 平台账户只有一类,类型+币种+公司+系统=唯一系统账户
         condition.setType(EAccountType.Plat.getCode());
-        condition.setSystemCode(systemCode);
-        condition.setCompanyCode(companyCode);
         condition.setCurrency(currency.getCode());
         return accountDAO.select(condition);
     }

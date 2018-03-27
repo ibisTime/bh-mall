@@ -25,7 +25,7 @@ public interface IJourAO {
 
     public List<Jour> queryJourList(Jour condition);
 
-    public Jour getJour(String code, String systemCode);
+    public Jour getJour(String code);
 
     public Long getTotalAmount(String bizType, String channelType,
             String accountNumber, String dateStart, String dateEnd);

@@ -20,9 +20,6 @@ public class Jour extends ABaseDO {
     // 流水编号
     private String code;
 
-    // 订单分组组号（信息代表）---核心字段1
-    private String payGroup;
-
     // 流水分组组号（橙账本代表）---核心字段2
     private String refNo;
 
@@ -68,35 +65,8 @@ public class Jour extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
-    // 拟对账时间
-    private String workDate;
-
-    // 对账人
-    private String checkUser;
-
-    // 对账说明
-    private String checkNote;
-
-    // 对账时间
-    private Date checkDatetime;
-
-    // 调账人
-    private String adjustUser;
-
-    // 调账说明
-    private String adjustNote;
-
-    // 调账时间
-    private Date adjustDatetime;
-
     // 支付渠道（线下/招商代付/支付宝/内部转账）
     private String channelType;
-
-    // 系统编号
-    private String systemCode;
-
-    // 公司编号
-    private String companyCode;
 
     // ***********************db properties *************************
     // 业务类型列表
@@ -146,14 +116,6 @@ public class Jour extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getCode() {
@@ -244,60 +206,12 @@ public class Jour extends ABaseDO {
         this.createDatetime = createDatetime;
     }
 
-    public String getWorkDate() {
-        return workDate;
-    }
-
-    public void setWorkDate(String workDate) {
-        this.workDate = workDate;
-    }
-
-    public String getCheckUser() {
-        return checkUser;
-    }
-
-    public void setCheckUser(String checkUser) {
-        this.checkUser = checkUser;
-    }
-
-    public Date getCheckDatetime() {
-        return checkDatetime;
-    }
-
-    public void setCheckDatetime(Date checkDatetime) {
-        this.checkDatetime = checkDatetime;
-    }
-
-    public String getAdjustUser() {
-        return adjustUser;
-    }
-
-    public void setAdjustUser(String adjustUser) {
-        this.adjustUser = adjustUser;
-    }
-
-    public Date getAdjustDatetime() {
-        return adjustDatetime;
-    }
-
-    public void setAdjustDatetime(Date adjustDatetime) {
-        this.adjustDatetime = adjustDatetime;
-    }
-
     public String getRemark() {
         return remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
     }
 
     public String getRefNo() {
@@ -314,30 +228,6 @@ public class Jour extends ABaseDO {
 
     public void setChannelOrder(String channelOrder) {
         this.channelOrder = channelOrder;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getCheckNote() {
-        return checkNote;
-    }
-
-    public void setCheckNote(String checkNote) {
-        this.checkNote = checkNote;
-    }
-
-    public String getAdjustNote() {
-        return adjustNote;
-    }
-
-    public void setAdjustNote(String adjustNote) {
-        this.adjustNote = adjustNote;
     }
 
     public String getChannelType() {

@@ -1,6 +1,6 @@
 package com.bh.mall.dto.req;
 
-public class XN802502Req {
+public class XN627452Req {
 
     // 账户编号(选填)
     private String accountNumber;

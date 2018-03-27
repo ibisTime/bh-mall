@@ -6,9 +6,8 @@ import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
-import com.bh.mall.dto.req.XN802501Req;
+import com.bh.mall.dto.req.XN627451Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -19,12 +18,12 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2016年12月23日 下午8:32:58 
  * @history:
  */
-public class XN802501 extends AProcessor {
+public class XN627451 extends AProcessor {
 
     private IAccountAO accountAO = SpringContextHolder
         .getBean(IAccountAO.class);
 
-    private XN802501Req req = null;
+    private XN627451Req req = null;
 
     /** 
     * @see com.xnjr.base.api.IProcessor#doBusiness()
@@ -42,8 +41,6 @@ public class XN802501 extends AProcessor {
             req.getDateStart(), false));
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
             true));
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -58,8 +55,6 @@ public class XN802501 extends AProcessor {
     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802501Req.class);
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
+        req = JsonUtil.json2Bean(inputparams, XN627451Req.class);
     }
 }
