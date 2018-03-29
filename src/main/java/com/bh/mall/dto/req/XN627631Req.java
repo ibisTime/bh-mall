@@ -12,14 +12,14 @@ public class XN627631Req {
 
     // 产品编号
     @NotBlank(message = "产品编号不能为空")
-    private String productCode;
+    private String productSpecsCode;
 
-    public String getProductCode() {
-        return productCode;
+    public String getProductSpecsCode() {
+        return productSpecsCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setProductSpecsCode(String productSpecsCode) {
+        this.productSpecsCode = productSpecsCode;
     }
 
 }

@@ -15,9 +15,6 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     void removeProduct(Product data);
 
-    void putonProduct(Product data, String orderNo, String isFree,
-            String updater);
-
     void putdownProduct(Product data, String updater);
 
     void refreshRepertory(Product data);
@@ -28,5 +25,7 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     List<Product> selectProductPageByFront(Product condition, int start,
             int pageSize);
+
+    void putOnProduct(Product data);
 
 }

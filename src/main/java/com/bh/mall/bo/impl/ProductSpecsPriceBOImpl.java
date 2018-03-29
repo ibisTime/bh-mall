@@ -78,4 +78,33 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
         return data;
     }
 
+    @Override
+    public ProductSpecsPrice getPriceBySpecsCode(String spcesCode) {
+        ProductSpecsPrice data = null;
+        if (StringUtils.isNotBlank(spcesCode)) {
+            ProductSpecsPrice condition = new ProductSpecsPrice();
+            condition.setProductSpecsCode(spcesCode);
+            data = productSpecsPriceDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "规格价格不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Long getPriceByLevel(String productSpecsCode, Integer level) {
+        ProductSpecsPrice data = null;
+        if (StringUtils.isNotBlank(productSpecsCode)) {
+            ProductSpecsPrice condition = new ProductSpecsPrice();
+            condition.setProductSpecsCode(productSpecsCode);
+            condition.setLevel(level);
+            data = productSpecsPriceDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "规格价格不存在");
+            }
+        }
+        return data.getPrice();
+    }
+
 }

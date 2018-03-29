@@ -93,7 +93,7 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     }
 
     /** 
-     * @see com.xnjr.account.dao.ibis.account.dao.IAccountDAO#sendProductOrder(com.ibis.account.domain.Account)
+     * @see com.xnjr.account.dao.ibis.account.dao.IAccountDAO#updateStatus(com.ibis.account.domain.Account)
      */
     @Override
     public int updateStatus(Account data) {
@@ -101,8 +101,17 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     }
 
     @Override
-    public Long selectTotalAmount(Account data) {
-        return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
-            data);
+    public int frozenAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_frozenAmount"), data);
+    }
+
+    @Override
+    public int unfrozenAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_unfrozenAmount"), data);
+    }
+
+    @Override
+    public int cutFrozenAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_cutFrozenAmount"), data);
     }
 }

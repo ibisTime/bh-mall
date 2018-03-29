@@ -72,9 +72,6 @@ public class Product extends ABaseDO {
     // 产品规格
     private List<ProductSpecs> specsList;
 
-    // 规格价格
-    private List<ProductSpecsPrice> priceList;
-
     // 奖励
     private List<Award> awardList;
 
@@ -233,14 +230,6 @@ public class Product extends ABaseDO {
 
     public void setSpecsList(List<ProductSpecs> specsList) {
         this.specsList = specsList;
-    }
-
-    public List<ProductSpecsPrice> getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(List<ProductSpecsPrice> priceList) {
-        this.priceList = priceList;
     }
 
     public List<Award> getAwardList() {

@@ -30,8 +30,6 @@ public class BizConnecter {
 
     public static final String SMS_URL = PropertiesUtil.Config.SMS_URL;
 
-    public static final String IDENTIFY_URL = PropertiesUtil.Config.IDENTIFY_URL;
-
     public static final String POST_URL = "...";
 
     public static <T> T getBizData(String code, String json, Class<T> clazz) {
@@ -70,8 +68,6 @@ public class BizConnecter {
         String postUrl = POST_URL;
         if (code.startsWith("799") || code.startsWith("804")) {
             postUrl = SMS_URL;
-        } else if (code.contains("798")) {
-            postUrl = IDENTIFY_URL;
         } else if (code.startsWith("802") || code.startsWith("002")) {
             postUrl = ACCOUNT_URL;
         } else {

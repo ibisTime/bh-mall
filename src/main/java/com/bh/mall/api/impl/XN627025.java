@@ -29,7 +29,7 @@ public class XN627025 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentUpgrade condition = new AgentUpgrade();
-        condition.setLevel(Integer.valueOf(req.getLevel()));
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setIsCompanyApprove(req.getIsCompanyApprove());
         condition.setIsReset(req.getIsReset());
 
@@ -42,8 +42,8 @@ public class XN627025 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentUpgradeAO
-            .queryAgentUpgradeListPage(start, limit, condition);
+        return agentUpgradeAO.queryAgentUpgradeListPage(start, limit,
+            condition);
     }
 
     @Override

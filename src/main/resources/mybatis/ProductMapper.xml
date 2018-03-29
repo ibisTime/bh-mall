@@ -134,7 +134,7 @@
 		,#{name}
 		,#{adPrice}
 		,#{price}
-		,#{chanegPrice}
+		,#{changePrice}
 		,#{virNumber}
 		
 		,#{realNumber}
@@ -168,6 +168,7 @@
 		,adv_pic = #{advPic}
 		,slogan = #{slogan}
 		,is_total = #{isTotal}
+		,is_free = #{isFree}
 		
 		,status = #{status}
 		,create_datetime = #{createDatetime}
@@ -181,6 +182,7 @@
 		UPDATE tbh_product 
 		SET 
 		order_no = #{orderNo}
+		,change_price #{changePrice}
 		,status = #{status}
 		,is_free = #{isFree}
 		,updater = #{updater}

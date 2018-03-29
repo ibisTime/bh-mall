@@ -14,9 +14,7 @@ package com.bh.mall.enums;
  * @history:
  */
 public enum EUserKind {
-    Customer("C", "C端用户"), Merchant("B", "B端用户"), Plat("P", "平台用户")
-
-    ;
+    Customer("C", "C端用户"), Merchant("B", "B端用户"), Plat("P", "平台用户");
     EUserKind(String code, String value) {
         this.code = code;
         this.value = value;

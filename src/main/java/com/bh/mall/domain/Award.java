@@ -26,7 +26,7 @@ public class Award extends ABaseDO {
     private String productCode;
 
     // 等级
-    private String level;
+    private Integer level;
 
     // 直接推荐/出货奖励
     private Double value1;
@@ -61,11 +61,11 @@ public class Award extends ABaseDO {
         this.productCode = productCode;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

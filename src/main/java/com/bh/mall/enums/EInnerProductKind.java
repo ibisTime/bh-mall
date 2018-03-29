@@ -1,7 +1,7 @@
 package com.bh.mall.enums;
 
 public enum EInnerProductKind {
-    Free_NO("0", "待支付"), Free_YES("1", "已支付待发货");
+    Free_NO("0", "包邮"), Free_YES("1", "不包邮");
 
     EInnerProductKind(String code, String value) {
         this.code = code;

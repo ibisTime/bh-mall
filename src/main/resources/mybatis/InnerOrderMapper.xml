@@ -42,6 +42,18 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+				<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+				<if test="teamName != null and teamName != '' ">
+				AND t.team_name = #{teamName}
+			</if>
+			<if test="startDatetime != null and startDatetime != ''">
+				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != ''">
+				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_innerOrder" parameterType="innerOrder" resultMap="innerOrder_DB_Result">
@@ -123,14 +135,7 @@
 		,city
 		,area
 		,address
-		,deliver
-		,delive_datetime
-		,logistics_code
-		,logistics_company
-		,pdf
-		,updater
-		,update_datetime
-		,remark
+		
 		)
 		VALUES(
 		#{code}
@@ -158,14 +163,7 @@
 		,#{city}
 		,#{area}
 		,#{address}
-		,#{deliver}
-		,#{deliveDatetime}
-		,#{logisticsCode}
-		,#{logisticsCompany}
-		,#{pdf}
-		,#{updater}
-		,#{updateDatetime}
-		,#{remark}
+		
 		)
 	</insert>
 
@@ -198,10 +196,20 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="cancel_innerProduct" parameterType="innerOrder">
+	<update id="update_status" parameterType="innerOrder">
 		UPDATE tbh_inner_order
 		SET
 		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="pay_order" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		payCode = #{payCode}
+		,payGroup = #{payGroup}
+		,payType = #{payType}
+		,status = #{status}
 		WHERE code = #{code}
 	</update>
 	

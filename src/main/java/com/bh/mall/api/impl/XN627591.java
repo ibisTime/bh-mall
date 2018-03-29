@@ -4,6 +4,7 @@ import com.bh.mall.ao.IAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Award;
 import com.bh.mall.dto.req.XN627591Req;
 import com.bh.mall.exception.BizException;
@@ -27,7 +28,7 @@ public class XN627591 extends AProcessor {
         Award condition = new Award();
         condition.setType(req.getType());
         condition.setProductCode(req.getProductCode());
-        condition.setLevel(req.getLevel());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         return awardAO.queryAwardList(condition);
     }
 

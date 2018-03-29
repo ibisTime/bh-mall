@@ -1,6 +1,6 @@
 package com.bh.mall.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 查询代理详情
@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627007Req {
 
     // 编号 （必填）
-    @NotBlank(message = "等级不能为空")
+    @NotNull(message = "等级不能为空")
     private String level;
 
     public String getLevel() {

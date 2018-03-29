@@ -10,28 +10,40 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627721Req {
 
-    // （必填）编号
-    @NotBlank(message = "编号不能为空")
-    private String code;
+    // （必填）渠道编号
+    @NotBlank(message = "渠道编号不能为空")
+    private String payCode;
 
-    // （必填）用户ID
-    @NotBlank(message = "用户ID不能为空")
-    private String userId;
+    // （必填）支付组号
+    @NotBlank(message = "支付组号不能为空")
+    private String payGroup;
 
-    public String getCode() {
-        return code;
+    // 支付渠道
+    @NotBlank(message = "支付渠道不能为空")
+    private String payType;
+
+    public String getPayCode() {
+        return payCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getPayGroup() {
+        return payGroup;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
 }

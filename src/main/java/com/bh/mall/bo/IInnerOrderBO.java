@@ -25,4 +25,6 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
     public void approveInnerOrder(InnerOrder data);
 
+    public void receiveInnerOrder(InnerOrder data);
+
 }

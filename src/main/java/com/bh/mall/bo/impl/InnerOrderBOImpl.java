@@ -64,11 +64,16 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
 
     @Override
     public void cancelInnerOrder(InnerOrder data) {
-        innerOrderDAO.cancelInnerOrder(data);
+        innerOrderDAO.updateStatus(data);
     }
 
     @Override
     public void approveInnerOrder(InnerOrder data) {
         innerOrderDAO.approveInnerOrder(data);
+    }
+
+    @Override
+    public void receiveInnerOrder(InnerOrder data) {
+        innerOrderDAO.updateStatus(data);
     }
 }

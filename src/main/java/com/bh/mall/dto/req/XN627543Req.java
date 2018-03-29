@@ -25,6 +25,18 @@ public class XN627543Req {
     @NotBlank(message = "是否包邮不能为空")
     private String isFree;
 
+    // 换货价
+    @NotBlank(message = "换货价不能为空")
+    private String changePrice;
+
+    public String getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(String changePrice) {
+        this.changePrice = changePrice;
+    }
+
     public String getCode() {
         return code;
     }

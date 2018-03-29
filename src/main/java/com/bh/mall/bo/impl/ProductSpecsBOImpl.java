@@ -30,8 +30,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
     private IProductSpecsPriceDAO productSpecsPriceDAO;
 
     @Override
-    public void saveProductSpecs(String code, List<XN627546Req> specList,
-            List<XN627547Req> specsPriceList) {
+    public void saveProductSpecs(String code, List<XN627546Req> specList) {
         String psCode = null;
         String pspCode = null;
 
@@ -51,25 +50,23 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             data.setIsNormalOrder(productSpec.getIsNormalOrder());
             productSpecsDAO.insert(data);
 
+            List<XN627547Req> specsPriceList = productSpec.getSpecsPriceList();
+
             // 新增价格体系
             for (XN627547Req specsPrice : specsPriceList) {
                 ProductSpecsPrice pspData = new ProductSpecsPrice();
+
+                pspCode = OrderNoGenerater
+                    .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
+                pspData.setCode(pspCode);
                 pspData.setProductSpecsCode(psCode);
-                long count = productSpecsPriceDAO.selectTotalCount(pspData);
-                // 确保产品规格和产品价格一一对应
-                if (count == 0) {
-                    pspCode = OrderNoGenerater
-                        .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
-                    pspData.setCode(pspCode);
-                    pspData.setProductSpecsCode(psCode);
-                    pspData.setLevel(
-                        StringValidater.toInteger(specsPrice.getLevel()));
-                    pspData.setPrice(
-                        StringValidater.toLong(specsPrice.getPrice()));
-                    productSpecsPriceDAO.insert(pspData);
-                }
+                pspData
+                    .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
+                pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
+                productSpecsPriceDAO.insert(pspData);
             }
         }
+
     }
 
     @Override
@@ -85,6 +82,16 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             data.setIsImpowerOrder(req.getIsPowerOrder());
             data.setIsNormalOrder(req.getIsNormalOrder());
             productSpecsDAO.update(data);
+            List<XN627547Req> specsPriceList = req.getSpecsPriceList();
+
+            for (XN627547Req specsPrice : specsPriceList) {
+                ProductSpecsPrice pspData = new ProductSpecsPrice();
+                pspData.setCode(specsPrice.getCode());
+                pspData
+                    .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
+                pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
+                productSpecsPriceDAO.update(pspData);
+            }
         }
     }
 

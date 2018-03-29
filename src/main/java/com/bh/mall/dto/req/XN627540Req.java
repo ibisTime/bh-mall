@@ -24,10 +24,6 @@ public class XN627540Req {
     @NotBlank(message = "市场价不能为空")
     private String price;
 
-    // （必填）换货价
-    @NotBlank(message = "换货价不能为空")
-    private String changePrice;
-
     // （必填）虚拟数量
     @NotBlank(message = "虚拟数量不能为空")
     private String virNumber;
@@ -59,9 +55,6 @@ public class XN627540Req {
     // (必填) 产品规格
     private List<XN627546Req> specList;
 
-    // (必填) 产品规格定价
-    private List<XN627547Req> specsPriceList;
-
     // (必填) 出货/推荐奖励
     private List<XN627548Req> awardList;
 
@@ -86,14 +79,6 @@ public class XN627540Req {
 
     public String getName() {
         return name;
-    }
-
-    public String getChangePrice() {
-        return changePrice;
-    }
-
-    public void setChangePrice(String changePrice) {
-        this.changePrice = changePrice;
     }
 
     public void setName(String name) {
@@ -170,14 +155,6 @@ public class XN627540Req {
 
     public void setSpecList(List<XN627546Req> specList) {
         this.specList = specList;
-    }
-
-    public List<XN627547Req> getSpecsPriceList() {
-        return specsPriceList;
-    }
-
-    public void setSpecsPriceList(List<XN627547Req> specsPriceList) {
-        this.specsPriceList = specsPriceList;
     }
 
     public List<XN627548Req> getAwardList() {

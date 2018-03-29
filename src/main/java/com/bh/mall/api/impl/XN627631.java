@@ -23,7 +23,7 @@ public class XN627631 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return cartAO.getCartProduct(req.getProductCode());
+        return cartAO.getCartProduct(req.getProductSpecsCode());
     }
 
     @Override

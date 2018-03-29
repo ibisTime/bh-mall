@@ -57,6 +57,22 @@
 		<property name="paginableDAO" ref="materialDAOImpl"></property>
 	</bean>
 	
+	<bean id="accountBO" class="com.bh.mall.bo.impl.AccountBOImpl">
+		<property name="paginableDAO" ref="accountDAOImpl"></property>
+	</bean>
+	
+	<bean id="withdrawBO" class="com.bh.mall.bo.impl.WithdrawBOImpl">
+		<property name="paginableDAO" ref="withdrawDAOImpl"></property>
+	</bean>
+	
+	<bean id="bankcardBO" class="com.bh.mall.bo.impl.BankcardBOImpl">
+		<property name="paginableDAO" ref="bankcardDAOImpl"></property>
+	</bean>
+	
+	<bean id="companyChannelBO" class="com.bh.mall.bo.impl.CompanyChannelBOImpl">
+		<property name="paginableDAO" ref="companyChannelDAOImpl"></property>
+	</bean>
+
 	<bean id="productBO" class="com.bh.mall.bo.impl.ProductBOImpl">
 		<property name="paginableDAO" ref="productDAOImpl"></property>
 	</bean>
@@ -81,4 +97,20 @@
 		<property name="paginableDAO" ref="innerProductDAOImpl"></property>
 	</bean>
 	
+	<bean id="innerOrderBO" class="com.bh.mall.bo.impl.InnerOrderBOImpl">
+		<property name="paginableDAO" ref="innerOrderDAOImpl"></property>
+	</bean>
+	
+	<bean id="afterSaleBO" class="com.bh.mall.bo.impl.AfterSaleBOImpl">
+		<property name="paginableDAO" ref="afterSaleDAOImpl"></property>
+	</bean>
+	
+	
+	<bean id="cartBO" class="com.bh.mall.bo.impl.CartBOImpl">
+		<property name="paginableDAO" ref="cartDAOImpl"></property>
+	</bean>
+	
+	<bean id="orderBO" class="com.bh.mall.bo.impl.OrderBOImpl">
+		<property name="paginableDAO" ref="orderDAOImpl"></property>
+	</bean>
 </beans>

@@ -59,6 +59,7 @@ public class InnerProductAOImpl implements IInnerProductAO {
         data.setPic(req.getPic());
         data.setPrice(StringValidater.toLong(req.getPrice()));
 
+        data.setIsFree(req.getIsFree());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -91,12 +92,14 @@ public class InnerProductAOImpl implements IInnerProductAO {
     }
 
     @Override
-    public void putOnInnerProduct(String code, String orderNo, String updater) {
+    public void putOnInnerProduct(String code, String orderNo, String isFree,
+            String updater) {
         InnerProduct data = innerProductBO.getInnerProduct(code);
         if (EInnerProductStatus.Shelf_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "产品已上架,请勿重复操作");
         }
         data.setOrderNo(StringValidater.toInteger(orderNo));
+        data.setIsFree(isFree);
         data.setStatus(EInnerProductStatus.Shelf_YES.getCode());
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());

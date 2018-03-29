@@ -26,5 +26,15 @@
 	    
 	    <typeAlias alias="cart" type="com.bh.mall.domain.Cart"/>
 	    <typeAlias alias="innerOrder" type="com.bh.mall.domain.InnerOrder"/>
+	
+		<typeAlias alias="account" type="com.bh.mall.domain.Account"/>
+	    <typeAlias alias="jour" type="com.bh.mall.domain.Jour"/>
+	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
+	    <typeAlias alias="companyChannel" type="com.bh.mall.domain.CompanyChannel"/>
+	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
+	
+		 <typeAlias alias="order" type="com.bh.mall.domain.Order"/>
+		<typeAlias alias="afterSale" type="com.bh.mall.domain.AfterSale"/>
+	
 	</typeAliases>
 </configuration>	

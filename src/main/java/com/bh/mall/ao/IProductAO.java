@@ -6,6 +6,7 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Product;
 import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
+import com.bh.mall.dto.req.XN627543Req;
 import com.bh.mall.dto.req.XN627545Req;
 
 public interface IProductAO {
@@ -19,9 +20,6 @@ public interface IProductAO {
 
     void dropProduct(String code);
 
-    void putonProduct(String code, String orderNo, String isFree,
-            String updater);
-
     void putdownProduct(String code, String updater);
 
     Paginable<Product> selectProductPage(int start, int limit,
@@ -33,4 +31,6 @@ public interface IProductAO {
 
     Paginable<Product> selectProductPageByFront(int start, int limit,
             Product condition);
+
+    void putOnProduct(XN627543Req req);
 }

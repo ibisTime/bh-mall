@@ -26,6 +26,6 @@ public interface ICartAO {
 
     void editCart(String code, String type, String quantity);
 
-    Product getCartProduct(String productCode);
+    Product getCartProduct(String productSpecsCode);
 
 }

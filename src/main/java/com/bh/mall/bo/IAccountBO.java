@@ -1,74 +1,68 @@
-/**
- * @Title IAccountBO.java 
- * @Package com.ibis.account.bo 
- * @Description 
- * @author miyb  
- * @date 2015-3-15 下午3:15:49 
- * @version V1.0   
- */
 package com.bh.mall.bo;
 
 import java.util.List;
 
+import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Account;
+import com.bh.mall.enums.EAccountStatus;
+import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 
 /**
- * @author: xieyj 
- * @since: 2016年12月24日 下午1:24:08 
+ * @author: xieyj
+ * @since: 2016年11月11日 上午11:23:06 
  * @history:
  */
-public interface IAccountBO {
-    /**
-     * 分配多个账户
-     * @param userId
-     * @param realName
-     * @param type
-     * @param currencyList
-     * @param companyCode
-     * @param systemCode 
-     * @create: 2017年7月14日 下午5:55:39 xieyj
-     * @history:
-     */
-    public void distributeAccountList(String userId, String realName,
-            String type, List<String> currencyList, String companyCode,
-            String systemCode);
+public interface IAccountBO extends IPaginableBO<Account> {
 
-    /**
-     * 更新户名
-     * @param userId
-     * @param realName
-     * @param systemCode 
-     * @create: 2017年1月4日 上午11:46:13 xieyj
-     * @history:
-     */
-    public void refreshRealName(String userId, String realName,
-            String systemCode);
+    // 分配账户
+    public String distributeAccount(String userId, String realName,
+            EAccountType accountType, String currency, String systemCode,
+            String companyCode);
 
-    /**
-     * 根据用户编号进行账户资金划转
-     * @param fromUserId
-     * @param toUserId
-     * @param currency
-     * @param amount
-     * @param bizType
-     * @param fromBizNote
-     * @param toBizNote 
-     * @create: 2017年3月26日 下午8:42:38 xieyj
-     * @history:
-     */
-    public void doTransferAmountRemote(String fromUserId, String toUserId,
-            ECurrency currency, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote);
+    // 变更账户余额：流水落地
+    public void changeAmount(String accountNumber, EChannelType channelType,
+            String channelOrder, String payGroup, String refNo,
+            EBizType bizType, String bizNote, Long transAmount);
 
-    /**
-     * 获取用户账户
-     * @param userId
-     * @param type
-     * @return 
-     * @create: 2017年4月1日 下午4:46:46 asus
-     * @history:
-     */
-    public Account getAccountByUserId(String userId, ECurrency type);
+    // 仅变更账户余额：流水不落地
+    public void changeAmountNotJour(String accountNumber, Long transAmount,
+            String lastOrder);
+
+    // 冻结金额（余额变动）
+    public void frozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode);
+
+    // 解冻账户(冻结金额原路返回)
+    public void unfrozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode);
+
+    // 扣减冻结金额
+    public void cutFrozenAmount(Account dbAccount, Long amount);
+
+    // 内部转账
+    public void transAmountCZB(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long transAmount,
+            EBizType bizType, String fromBizNote, String toBizNote, String refNo);
+
+    // 更新户名
+    public void refreshAccountName(String userId, String realName);
+
+    // 更新账户状态
+    public void refreshStatus(String accountNumber, EAccountStatus status);
+
+    // 获取账户
+    public Account getAccount(String accountNumber);
+
+    // 通过用户编号和币种获取币种
+    public Account getAccountByUser(String userId, String currency);
+
+    // 根据系统编号,公司编号和币种获取对应的系统账户(账户类型确定为系统账户)
+    public Account getSysAccountNumber(String systemCode, String companyCode,
+            ECurrency currency);
+
+    // 获取账户列表
+    public List<Account> queryAccountList(Account data);
 }

@@ -27,7 +27,7 @@ public interface IInnerOrderAO {
 
     public InnerOrder getInnerOrder(String code);
 
-    public void toPay(String code, String userId);
+    public void toPay(String payCode, String payGroup, String payType);
 
     public void deliverInnerProduct(XN627723Req req);
 
@@ -35,5 +35,7 @@ public interface IInnerOrderAO {
 
     public void approveInnerOrder(String code, String result, String updater,
             String remark);
+
+    public void receiveInnerOrder(String code);
 
 }

@@ -3,7 +3,7 @@ package com.bh.mall.enums;
 public enum EInnerOrderStatus {
 
     Unpaid("0", "待支付"), Paid("1", "已支付待发货"), TO_Deliver("2", "待收货"), Delivered(
-            "4", "已收货"), TO_Cancel("5", "申请取消"), Canceled("6", "已取消");
+            "3", "已收货"), TO_Cancel("4", "申请取消"), Canceled("5", "已取消");
 
     EInnerOrderStatus(String code, String value) {
         this.code = code;

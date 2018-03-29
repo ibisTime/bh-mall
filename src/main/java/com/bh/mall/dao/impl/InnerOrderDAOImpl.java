@@ -63,8 +63,8 @@ public class InnerOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
-    public void cancelInnerOrder(InnerOrder data) {
-        super.update(NAMESPACE.concat("cancel_innerProduct"), data);
+    public void updateStatus(InnerOrder data) {
+        super.update(NAMESPACE.concat("update_status"), data);
     }
 
     @Override

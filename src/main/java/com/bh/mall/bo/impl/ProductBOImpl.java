@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IProductDAO;
 import com.bh.mall.domain.Product;
 import com.bh.mall.enums.EProductStatus;
@@ -52,13 +51,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
-    public void putonProduct(Product data, String orderNo, String isFree,
-            String updater) {
-        data.setOrderNo(StringValidater.toInteger(orderNo));
-        data.setStatus(EProductStatus.Shelf_YES.getCode());
-        data.setIsFree(isFree);
-        data.setUpdater(updater);
-        data.setUpdateDatetime(new Date());
+    public void putOnProduct(Product data) {
         productDAO.putonProduct(data);
     }
 

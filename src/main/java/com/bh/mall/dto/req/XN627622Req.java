@@ -2,8 +2,6 @@ package com.bh.mall.dto.req;
 
 import java.util.List;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.bh.mall.domain.Cart;
 
 /**
@@ -15,7 +13,6 @@ import com.bh.mall.domain.Cart;
 public class XN627622Req {
 
     // 编号
-    @NotBlank(message = "编号不能为空")
     private List<Cart> codeList;
 
     public List<Cart> getCodeList() {

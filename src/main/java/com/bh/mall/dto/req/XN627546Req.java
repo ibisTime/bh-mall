@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -36,6 +38,17 @@ public class XN627546Req {
     // （必填）是否允许普通单下单
     @NotBlank(message = "是否允许普通单下单不能为空")
     private String isNormalOrder;
+
+    // (必填) 产品规格定价
+    private List<XN627547Req> specsPriceList;
+
+    public List<XN627547Req> getSpecsPriceList() {
+        return specsPriceList;
+    }
+
+    public void setSpecsPriceList(List<XN627547Req> specsPriceList) {
+        this.specsPriceList = specsPriceList;
+    }
 
     public String getCode() {
         return code;

@@ -339,29 +339,39 @@
 		)
 	</insert>
 	
+	<update id="update_status" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
 	<update id="update_user" parameterType="user">
 		UPDATE tbh_user
 		SET
 		login_name = #{loginName}
 		,mobile = #{mobile}
-		,weixin_id = #{weixinId}
+		,wx_id = #{wxId}
 		,photo = #{photo}
 		,nickname = #{nickname}
 		,login_pwd = #{loginPwd}
 		,login_pwd_strength = #{loginPwdStrength}
 		,kind = #{kind}
-		,now_level = #{nowLevel}
+		,level = #{level}
 		,apply_level = #{applyLevel}
 		,user_referee = #{userReferee}
 		,introducer = #{introducer}
-		,high_level = #{highLevel}
-		,pur_user = #{purUser}
+		,high_user_id = #{highUserId}
 		,team_name = #{teamName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
-		,id_card_reverse = #{idCardReverse}
-		,id_card_front = #{idCardFront}
-		,id_card_hand = #{idCardHand}
+		,id_front = #{idFront}
+		,id_behind = #{idBehind}
+		,id_hand = #{idHand}
 		,real_name = #{realName}
 		,role_code = #{roleCode}
 		,status = #{status}
@@ -379,14 +389,13 @@
 		,create_datetime = #{createDatetime}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,cash_pdf = #{cashPdf}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
 		,remark = #{remark}
 		,company_code = #{companyCode}
 		,system_code = #{systemCode}
-		WHERE code = #{code}
+		WHERE user_id = #{userId}
 	</update>
 	
 	<update id="update_login_pwd" parameterType="user">

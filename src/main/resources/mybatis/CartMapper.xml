@@ -14,6 +14,12 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="productSpecsCode != null and productSpecsCode != '' ">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_cart" parameterType="cart" resultMap="cart_DB_Result">
@@ -66,7 +72,7 @@
 
 
 	<delete id="delete_cart" parameterType="cart">
-		DELET FROM 
+		DELETE FROM 
 		tbh_cart
 		WHERE code = #{code}
 	</delete>

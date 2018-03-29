@@ -17,7 +17,6 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Account;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.InnerProduct;
 import com.bh.mall.domain.SYSConfig;
@@ -25,11 +24,13 @@ import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627720Req;
 import com.bh.mall.dto.req.XN627722Req;
 import com.bh.mall.dto.req.XN627723Req;
+import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EInnerOrderResult;
 import com.bh.mall.enums.EInnerOrderStatus;
-import com.bh.mall.enums.EInnerProductKind;
 import com.bh.mall.enums.EInnerProductStatus;
+import com.bh.mall.enums.EProductYunFei;
+import com.bh.mall.enums.EResult;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
@@ -72,14 +73,19 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             .generate(EGeneratePrefix.InnerOrder.getCode());
         data.setCode(code);
         data.setProductCode(req.getProductCode());
+        data.setProductName(ipData.getName());
+        data.setPic(ipData.getPic());
+        data.setPrice(ipData.getPrice());
+
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
 
         Long amount = AmountUtil.eraseLiUp(
             StringValidater.toInteger(req.getQuantity()) * ipData.getPrice());
         // 是否包邮
-        if (EInnerProductKind.Free_NO.getCode().equals(ipData.getIsFree())) {
+        if (EProductYunFei.YunFei_NO.getCode().equals(ipData.getIsFree())) {
             SYSConfig sysData = sysConfigAO.getSYSConfig(req.getProvince(),
                 ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            data.setYunfei(StringValidater.toLong(sysData.getCvalue()));
             amount = amount + StringValidater.toLong(sysData.getCvalue());
         }
 
@@ -91,7 +97,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
         data.setApplyDatetime(new Date());
         data.setApplyNote(req.getApplyNote());
-        data.setLevel(uData.getLevel());
         data.setProvince(req.getProvince());
 
         data.setArea(req.getArea());
@@ -106,19 +111,23 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     }
 
     @Override
-    public void toPay(String code, String userId) {
-        InnerOrder data = innerOrderBO.getInnerOrder(code);
+    public void toPay(String payCode, String payGroup, String payType) {
+        InnerOrder data = innerOrderBO.getInnerOrder(payGroup);
         if (EInnerProductStatus.Shelf_NO.getCode().equals(data.getCode())
                 || EInnerProductStatus.TO_Shelf.getCode()
                     .equals(data.getCode())) {
             throw new BizException("xn00000", "产品未上架，无法完成支付");
         }
-        Account aData = accountBO.getAccountByUserId(userId, ECurrency.YJ_CNY);
-        if (aData.getAmount() < data.getAmount()) {
-            throw new BizException("xn0000", "账户余额不足");
-        }
-        // 支付订单，更新订单状态TODO...........................
+        // 支付订单，更新订单状态
+        accountBO.transAmountCZB(data.getApplyUser(),
+            ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
+            ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
+            EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
+            data.getCode());
 
+        data.setPayCode(payCode);
+        data.setPayGroup(payGroup);
+        data.setPayType(payType);
         data.setStatus(EInnerOrderStatus.Paid.getCode());
         innerOrderBO.payOrder(data);
     }
@@ -211,8 +220,13 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             throw new BizException("xn0000", "订单不处于待审核状态");
         }
         // 审核通过取消订单，退钱
-        if (EInnerOrderResult.Result_YES.getCode().equals(result)) {
+        if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EInnerOrderStatus.Canceled.getCode());
+
+            accountBO.transAmountCZB(ESysUser.SYS_USER_BH.getCode(),
+                ECurrency.YJ_CNY.getCode(), data.getApplyUser(),
+                ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
+                null, null, data.getCode());
 
         } else {
             data.setStatus(EInnerOrderStatus.Unpaid.getCode());
@@ -222,4 +236,12 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setRemark(remark);
         innerOrderBO.approveInnerOrder(data);
     }
+
+    @Override
+    public void receiveInnerOrder(String code) {
+        InnerOrder data = innerOrderBO.getInnerOrder(code);
+        data.setStatus(EInnerOrderStatus.Delivered.getCode());
+        innerOrderBO.receiveInnerOrder(data);
+    }
+
 }

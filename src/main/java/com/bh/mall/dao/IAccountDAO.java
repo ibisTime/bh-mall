@@ -46,6 +46,9 @@ public interface IAccountDAO extends IBaseDAO<Account> {
      */
     public int updateStatus(Account data);
 
-    public Long selectTotalAmount(Account data);
+    public int frozenAmount(Account data);
 
+    public int unfrozenAmount(Account data);
+
+    public int cutFrozenAmount(Account data);
 }
