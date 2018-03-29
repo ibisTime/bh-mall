@@ -8,13 +8,15 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IInnerOrderDAO;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
-        implements IInnerOrderBO {
+public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder> implements
+        IInnerOrderBO {
 
     @Autowired
     private IInnerOrderDAO innerOrderDAO;
@@ -75,5 +77,29 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     @Override
     public void receiveInnerOrder(InnerOrder data) {
         innerOrderDAO.updateStatus(data);
+    }
+
+    @Override
+    public InnerOrder getInnerOrderByPayGroup(String payGroup) {
+        InnerOrder data = null;
+        if (StringUtils.isNotBlank(payGroup)) {
+            InnerOrder condition = new InnerOrder();
+            condition.setPayGroup(payGroup);
+            data = innerOrderDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "订单不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public String addPayGroup(InnerOrder data, String payType) {
+        String payGroup = OrderNoGenerater.generate(EGeneratePrefix.InnerOrder
+            .getCode());
+        data.setPayGroup(payGroup);
+        data.setPayType(payType);
+        innerOrderDAO.addPayGroup(data);
+        return payGroup;
     }
 }

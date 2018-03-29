@@ -11,6 +11,7 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN627462Req;
@@ -42,7 +43,8 @@ public class XN627462 extends AProcessor {
             return weChatAO.getPrepayIdH5(req.getApplyUser(),
                 req.getAccountNumber(), EBizType.AJ_CZ.getValue(),
                 EBizType.AJ_CZ.getValue(), EBizType.AJ_CZ.getCode(),
-                "微信H5支付充值", transAmount);
+                "微信H5支付充值", transAmount,
+                PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL);
         } else {
             throw new BizException("xn000000", "暂时不支持该渠道");
         }

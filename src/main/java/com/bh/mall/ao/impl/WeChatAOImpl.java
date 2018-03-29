@@ -26,7 +26,6 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWechatBO;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Charge;
@@ -76,7 +75,7 @@ public class WeChatAOImpl implements IWeChatAO {
     @Transactional
     public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
-            Long transAmount) {
+            Long transAmount, String backUrl) {
         User user = userBO.getCheckUser(applyUser);
 
         if (transAmount.longValue() == 0l) {
@@ -100,8 +99,7 @@ public class WeChatAOImpl implements IWeChatAO {
 
         // 获取微信公众号支付prepayid
         String prepayId = wechatBO.getPrepayIdH5(companyChannel, openId,
-            bizNote, chargeOrderCode, transAmount, SysConstant.IP,
-            PropertiesUtil.Config.WECHAT_H5_BACKURL);
+            bizNote, chargeOrderCode, transAmount, SysConstant.IP, backUrl);
         // 返回微信APP支付所需信息
         return wechatBO.getPayInfoH5(companyChannel, chargeOrderCode, prepayId);
     }

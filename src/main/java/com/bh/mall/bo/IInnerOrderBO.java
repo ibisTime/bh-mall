@@ -27,4 +27,8 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
     public void receiveInnerOrder(InnerOrder data);
 
+    public InnerOrder getInnerOrderByPayGroup(String payGroup);
+
+    public String addPayGroup(InnerOrder data, String payType);
+
 }

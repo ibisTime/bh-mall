@@ -15,14 +15,13 @@ import com.bh.mall.dto.req.XN627645Req;
 public interface IOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public List<String> addOrder(XN627640Req req);
+    public void addOrder(XN627640Req req);
 
     public void dropOrder(String code);
 
     public void editOrder(XN627643Req req);
 
-    public Paginable<Order> queryOrderPage(int start, int limit,
-            Order condition);
+    public Paginable<Order> queryOrderPage(int start, int limit, Order condition);
 
     public List<Order> queryOrderList(Order condition);
 

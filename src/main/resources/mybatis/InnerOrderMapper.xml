@@ -45,8 +45,11 @@
 				<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
-				<if test="teamName != null and teamName != '' ">
+			<if test="teamName != null and teamName != '' ">
 				AND t.team_name = #{teamName}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
@@ -207,9 +210,16 @@
 		UPDATE tbh_inner_order
 		SET
 		payCode = #{payCode}
-		,payGroup = #{payGroup}
 		,payType = #{payType}
 		,status = #{status}
+		,pay_amount=#{payAmount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="add_payGroup" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		payGroup = #{payGroup}
 		WHERE code = #{code}
 	</update>
 	

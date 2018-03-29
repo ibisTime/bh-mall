@@ -15,4 +15,6 @@ public interface IInnerOrderDAO extends IBaseDAO<InnerOrder> {
     void approveInnerOrder(InnerOrder data);
 
     void updateStatus(InnerOrder data);
+
+    void addPayGroup(InnerOrder data);
 }

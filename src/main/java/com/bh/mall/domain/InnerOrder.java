@@ -66,7 +66,7 @@ public class InnerOrder extends ABaseDO {
     private String payCode;
 
     // 支付金额
-    private String payAmount;
+    private Long payAmount;
 
     // 支付时间
     private Date payDatetime;
@@ -254,14 +254,6 @@ public class InnerOrder extends ABaseDO {
         this.payCode = payCode;
     }
 
-    public String getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
-    }
-
     public Date getPayDatetime() {
         return payDatetime;
     }
@@ -396,6 +388,14 @@ public class InnerOrder extends ABaseDO {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public Long getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
     }
 
 }

@@ -56,4 +56,5 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
             String systemCode) {
         return sysConfigBO.getConfigsMap(type, companyCode, systemCode);
     }
+
 }

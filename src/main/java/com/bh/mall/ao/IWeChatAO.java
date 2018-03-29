@@ -19,7 +19,7 @@ public interface IWeChatAO {
 
     public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
-            Long transAmount);
+            Long transAmount, String backUrl);
 
     public void doCallbackH5(String result);
 

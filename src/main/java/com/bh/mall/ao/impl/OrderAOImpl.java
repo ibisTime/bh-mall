@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -88,14 +87,12 @@ public class OrderAOImpl implements IOrderAO {
     private IAwardBO awardBO;
 
     @Override
-    public List<String> addOrder(XN627640Req req) {
-
-        List<String> codeList = new ArrayList<String>();
+    public void addOrder(XN627640Req req) {
         for (Cart cData : req.getCartList()) {
             Order data = new Order();
             Product pData = productBO.getProduct(cData.getProductCode());
-            ProductSpecs psData = productSpecsBO
-                .getProductSpecs(cData.getProductSpecsCode());
+            ProductSpecs psData = productSpecsBO.getProductSpecs(cData
+                .getProductSpecsCode());
             ProductSpecsPrice pspData = productSpecsPriceBO
                 .getPriceBySpecsCode(psData.getCode());
             User uData = userBO.getUser(req.getApplyUser());
@@ -105,8 +102,8 @@ public class OrderAOImpl implements IOrderAO {
             if (EUserKind.Merchant.getCode().equals(uData.getKind())) {
 
                 // 是否允许普通单下单
-                if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(psData.getIsNormalOrder())) {
+                if (EProductSpecsType.Apply_NO.getCode().equals(
+                    psData.getIsNormalOrder())) {
                     throw new BizException("xn0000", "该产品规格不予许普通单下单");
                 }
 
@@ -117,8 +114,8 @@ public class OrderAOImpl implements IOrderAO {
                 Long isImpower = orderBO.getTotalCount(condition);
                 if (isImpower == 0) {
                     // 是否允许授权单下单
-                    if (EProductSpecsKind.Apply_NO.getCode()
-                        .equals(psData.getIsImpowerOrder())) {
+                    if (EProductSpecsKind.Apply_NO.getCode().equals(
+                        psData.getIsImpowerOrder())) {
                         throw new BizException("xn0000", "该产品规格不予许授权单下单");
                     }
                     data.setKind(EOrderKind.Impower_Order.getCode());
@@ -131,8 +128,8 @@ public class OrderAOImpl implements IOrderAO {
                 Long isUpgrade = orderBO.getTotalCount(condition);
                 if (isUpgrade == 0) {
                     // 是否允许升级单下单
-                    if (EProductSpecsKind.Apply_NO.getCode()
-                        .equals(psData.getIsImpowerOrder())) {
+                    if (EProductSpecsKind.Apply_NO.getCode().equals(
+                        psData.getIsImpowerOrder())) {
                         throw new BizException("xn0000", "该产品规格不予许升级单下单");
                     }
                     data.setKind(EOrderKind.Upgrade_Order.getCode());
@@ -146,13 +143,13 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn0000", "产品库存不足");
             }
             if (EProductStatus.Shelf_NO.getCode().equals(pData.getStatus())
-                    || EProductStatus.Shelf_YES.getCode()
-                        .equals(pData.getStatus())) {
+                    || EProductStatus.Shelf_YES.getCode().equals(
+                        pData.getStatus())) {
                 throw new BizException("xn0000", "产品已下架无法下单");
             }
 
-            String code = OrderNoGenerater
-                .generate(EGeneratePrefix.Order.getCode());
+            String code = OrderNoGenerater.generate(EGeneratePrefix.Order
+                .getCode());
 
             data.setCode(code);
 
@@ -194,20 +191,17 @@ public class OrderAOImpl implements IOrderAO {
             data.setStatus(EOrderStatus.Unpaid.getCode());
             data.setIsSendHome(req.getIsSendHome());
             orderBO.saveOrder(data);
-            codeList.add(code);
             // 删除购物车记录，修改产品数量
             cartBO.removeCart(cData);
             pData.setRealNumber(pData.getRealNumber() - quantity);
             productBO.refreshRepertory(pData);
         }
-
-        return codeList;
     }
 
     @Override
     public String addOrderNoCart(XN627641Req req) {
-        ProductSpecs psData = productSpecsBO
-            .getProductSpecs(req.getProductSpecsCode());
+        ProductSpecs psData = productSpecsBO.getProductSpecs(req
+            .getProductSpecsCode());
         Product pData = productBO.getProduct(psData.getProductCode());
         ProductSpecsPrice pspData = productSpecsPriceBO
             .getPriceBySpecsCode(psData.getCode());
@@ -215,8 +209,8 @@ public class OrderAOImpl implements IOrderAO {
 
         // 判断是否允许：普通，授权，升级下单
         if (EUserKind.Customer.getCode().equals(uData.getKind())) {
-            if (EProductSpecsType.Apply_NO.getCode()
-                .equals(psData.getIsNormalOrder())) {
+            if (EProductSpecsType.Apply_NO.getCode().equals(
+                psData.getIsNormalOrder())) {
                 throw new BizException("xn0000", "该产品规格不予许普通单下单");
             }
         }
@@ -229,8 +223,7 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "产品库存不足");
         }
         if (EProductStatus.Shelf_NO.getCode().equals(pData.getStatus())
-                || EProductStatus.Shelf_YES.getCode()
-                    .equals(pData.getStatus())) {
+                || EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
             throw new BizException("xn0000", "产品已下架无法下单");
         }
 
@@ -346,11 +339,11 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
-    public Paginable<Order> queryOrderPage(int start, int limit,
-            Order condition) {
+    public Paginable<Order> queryOrderPage(int start, int limit, Order condition) {
         if (condition.getStartDatetime() != null
-                && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                && condition.getEndDatetime() != null
+                && condition.getStartDatetime().before(
+                    condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return orderBO.getPaginable(start, limit, condition);
@@ -359,8 +352,9 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public List<Order> queryOrderList(Order condition) {
         if (condition.getStartDatetime() != null
-                && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                && condition.getEndDatetime() != null
+                && condition.getStartDatetime().before(
+                    condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return orderBO.queryOrderList(condition);
@@ -451,7 +445,8 @@ public class OrderAOImpl implements IOrderAO {
                     if (thirdUser != null) {
                         Long value3 = AmountUtil.mul(data.getAmount(),
                             aData.getValue1());
-                        accountBO.transAmountCZB(ESysUser.SYS_USER_BH.getCode(),
+                        accountBO.transAmountCZB(
+                            ESysUser.SYS_USER_BH.getCode(),
                             ECurrency.YJ_CNY.getCode(), thirdUser.getUserId(),
                             ECurrency.YJ_CNY.getCode(), value3,
                             EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
@@ -506,8 +501,7 @@ public class OrderAOImpl implements IOrderAO {
         }
         Product pData = productBO.getProduct(data.getProductCode());
 
-        if (EOrderSendType.Company_YES.getCode()
-            .equals(req.getIsCompanySend())) {
+        if (EOrderSendType.Company_YES.getCode().equals(req.getIsCompanySend())) {
             if (EProductYunFei.YunFei_YES.getCode().equals(pData.getIsFree())) {
                 SYSConfig sysData = sysConfigBO.getConfig(data.getProvince(),
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
@@ -571,7 +565,7 @@ public class OrderAOImpl implements IOrderAO {
                 null, null, data.getCode());
 
         } else {
-            data.setStatus(EInnerOrderStatus.Unpaid.getCode());
+            data.setStatus(EInnerOrderStatus.toPay.getCode());
         }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());

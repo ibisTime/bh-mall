@@ -10,6 +10,12 @@ import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 修改收货地址以及运费
+ * @author: chenshan 
+ * @since: 2018年3月29日 下午7:57:14 
+ * @history:
+ */
 public class XN627722 extends AProcessor {
 
     private IInnerOrderAO innerOrderAO = SpringContextHolder
@@ -19,7 +25,7 @@ public class XN627722 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        innerOrderAO.editInnerOrder(req);
+        innerOrderAO.refreshAddress(req);
         return new BooleanRes(true);
     }
 

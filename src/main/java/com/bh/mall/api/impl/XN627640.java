@@ -5,6 +5,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627640Req;
+import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -23,7 +24,8 @@ public class XN627640 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return orderAO.addOrder(req);
+        orderAO.addOrder(req);
+        return new BooleanRes(true);
     }
 
     @Override
