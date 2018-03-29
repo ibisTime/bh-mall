@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -35,6 +37,17 @@ public class ProductSpecs extends ABaseDO {
 
     // 是否允许普通单下单
     private String isNormalOrder;
+
+    // 规格价格
+    private List<ProductSpecsPrice> priceList;
+
+    public List<ProductSpecsPrice> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(List<ProductSpecsPrice> priceList) {
+        this.priceList = priceList;
+    }
 
     public String getCode() {
         return code;

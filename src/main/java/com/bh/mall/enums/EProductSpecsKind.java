@@ -1,9 +1,10 @@
 package com.bh.mall.enums;
 
-public enum EProductType {
-    Virtual("0", "虚拟"), Real("1", "真实");
+public enum EProductSpecsKind {
 
-    EProductType(String code, String value) {
+    Apply_NO("0", "不允许下单"), Apply_YES("1", "允许下单");
+
+    EProductSpecsKind(String code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -27,5 +28,4 @@ public enum EProductType {
     public void setValue(String value) {
         this.value = value;
     }
-
 }

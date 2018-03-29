@@ -26,7 +26,7 @@ public class XN627703 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         innerProductAO.putOnInnerProduct(req.getCode(), req.getOrderNo(),
-            req.getUpdater());
+            req.getIsFree(), req.getUpdater());
         return new BooleanRes(true);
     }
 

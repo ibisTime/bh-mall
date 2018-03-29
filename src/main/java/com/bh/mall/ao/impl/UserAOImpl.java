@@ -33,6 +33,7 @@ import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627250Req;
@@ -163,8 +164,8 @@ public class UserAOImpl implements IUserAO {
             res = getMapFromResponse(response);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
-                throw new BizException("XN000000", "微信登录失败原因："
-                        + res.get("error"));
+                throw new BizException("XN000000",
+                    "微信登录失败原因：" + res.get("error"));
             }
             if (StringUtils.isBlank(accessToken)) {
                 throw new BizException("XN000000", "accessToken不能为空");
@@ -177,8 +178,8 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("access_token", accessToken);
             queryParas.put("openid", openId);
             queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
-                WechatConstant.WX_USER_INFO_URL, queryParas));
+            wxRes = getMapFromResponse(PostSimulater
+                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = (String) wxRes.get("openid");
             // Step4：根据openId，unionId从数据库中查询用户信息
@@ -194,8 +195,8 @@ public class UserAOImpl implements IUserAO {
                     result = doWxLoginRegMobile(req, companyCode, systemCode,
                         unionId, null, h5OpenId, nickname, photo);
                 } else {
-                    result = doWxLoginReg(req, companyCode, systemCode,
-                        unionId, null, h5OpenId, nickname, photo);
+                    result = doWxLoginReg(req, companyCode, systemCode, unionId,
+                        null, h5OpenId, nickname, photo);
                 }
             }
         } catch (Exception e) {
@@ -259,8 +260,8 @@ public class UserAOImpl implements IUserAO {
                     EUserKind.Customer.getCode(), companyCode, systemCode);
                 result = new XN627302Res(userId);
             } else {
-                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId,
-                    appOpenId, nickname, photo);
+                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, appOpenId,
+                    nickname, photo);
                 result = new XN627302Res(mobileUserId);
             }
         } else {
@@ -325,9 +326,9 @@ public class UserAOImpl implements IUserAO {
         if (!EUserKind.Plat.getCode().equals(user.getKind())
                 && PhoneUtil.isMobile(mobile)) {
             // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + smsContent, "805091", user.getCompanyCode(),
-                user.getSystemCode());
+            smsOutBO.sendSmsOut(mobile,
+                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091",
+                user.getCompanyCode(), user.getSystemCode());
         }
     }
 
@@ -498,7 +499,7 @@ public class UserAOImpl implements IUserAO {
     public void doUpLevel(String userId, String level) {
         User data = new User();
         data.setUserId(userId);
-        data.setLevel(level);
+        data.setLevel(StringValidater.toInteger(level));
         userBO.refreshLevel(data);
     }
 
@@ -549,17 +550,17 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("appid", appId);
         fromProperties.put("secret", appSecret);
         fromProperties.put("code", code);
-        logger.info("appId:" + appId + ",appSecret:" + appSecret + ",js_code:"
-                + code);
+        logger.info(
+            "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
         Map<String, String> wxRes = new HashMap<>();
         try {
-            String response = PostSimulater.requestPostForm(
-                WechatConstant.WX_TOKEN_URL, fromProperties);
+            String response = PostSimulater
+                .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
             res = getMapFromResponse(response);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
-                throw new BizException("XN000000", "微信登录失败原因："
-                        + res.get("error"));
+                throw new BizException("XN000000",
+                    "微信登录失败原因：" + res.get("error"));
             }
             if (StringUtils.isBlank(accessToken)) {
                 throw new BizException("XN000000", "accessToken不能为空");
@@ -571,8 +572,8 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("access_token", accessToken);
             queryParas.put("openid", openId);
             queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
-                WechatConstant.WX_USER_INFO_URL, queryParas));
+            wxRes = getMapFromResponse(PostSimulater
+                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
         }

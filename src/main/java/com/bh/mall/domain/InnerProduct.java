@@ -41,6 +41,9 @@ public class InnerProduct extends ABaseDO {
     // 排序
     private Integer orderNo;
 
+    // 是否包邮
+    private String isFree;
+
     // 状态
     private String status;
 
@@ -158,6 +161,14 @@ public class InnerProduct extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(String isFree) {
+        this.isFree = isFree;
     }
 
 }

@@ -24,7 +24,7 @@ public class XN627555 extends AProcessor {
         Product condition = new Product();
         condition.setStatus(req.getStatus());
         condition.setName(req.getName());
-        condition.setLevel(req.getLevel());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setUserId(req.getUserId());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

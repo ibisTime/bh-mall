@@ -17,6 +17,10 @@ public class XN627541Req {
     @NotBlank(message = "建议价不能为空")
     private String adPrice;
 
+    // （必填）换货价
+    @NotBlank(message = "换货价不能为空")
+    private String changePrice;
+
     // （必填）市场价
     @NotBlank(message = "市场价不能为空")
     private String price;
@@ -37,15 +41,16 @@ public class XN627541Req {
     @NotBlank(message = "是否计入出货不能为空")
     private String isTotal;
 
+    // （必填） 是否包邮
+    @NotBlank(message = "是否包邮不能为空")
+    private String isFree;
+
     // （必填）更新人
     @NotBlank(message = "更新人不能为空")
     private String updater;
 
     // (必填) 产品规格
     private List<XN627546Req> specList;
-
-    // (必填) 产品规格定价
-    private List<XN627547Req> specsPriceList;
 
     // (必填) 出货/推荐奖励
     private List<XN627548Req> awardList;
@@ -75,6 +80,14 @@ public class XN627541Req {
 
     public void setAdvPic(String advPic) {
         this.advPic = advPic;
+    }
+
+    public String getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(String changePrice) {
+        this.changePrice = changePrice;
     }
 
     public String getName() {
@@ -141,20 +154,20 @@ public class XN627541Req {
         this.specList = specList;
     }
 
-    public List<XN627547Req> getSpecsPriceList() {
-        return specsPriceList;
-    }
-
-    public void setSpecsPriceList(List<XN627547Req> specsPriceList) {
-        this.specsPriceList = specsPriceList;
-    }
-
     public List<XN627548Req> getAwardList() {
         return awardList;
     }
 
     public void setAwardList(List<XN627548Req> awardList) {
         this.awardList = awardList;
+    }
+
+    public String getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(String isFree) {
+        this.isFree = isFree;
     }
 
 }

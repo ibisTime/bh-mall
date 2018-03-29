@@ -16,15 +16,6 @@
 	    <typeAlias alias="agentImpower" type="com.bh.mall.domain.AgentImpower"/>
 	    <typeAlias alias="agentUpgrade" type="com.bh.mall.domain.AgentUpgrade"/>
 	    <typeAlias alias="material" type="com.bh.mall.domain.Material"/>
-	    
-	    <typeAlias alias="account" type="com.bh.mall.domain.Account"/>
-	    <typeAlias alias="jour" type="com.bh.mall.domain.Jour"/>
-	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
-	    <typeAlias alias="companyChannel" type="com.bh.mall.domain.CompanyChannel"/>
-	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
-		
-		<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
-
 	    <typeAlias alias="product" type="com.bh.mall.domain.Product"/>
 	    
 	    <typeAlias alias="productSpecs" type="com.bh.mall.domain.ProductSpecs"/>
@@ -32,6 +23,19 @@
 	    <typeAlias alias="innerProduct" type="com.bh.mall.domain.InnerProduct"/>
 	    <typeAlias alias="productLog" type="com.bh.mall.domain.ProductLog"/>
 	    <typeAlias alias="award" type="com.bh.mall.domain.Award"/>
-
+	    
+	    <typeAlias alias="cart" type="com.bh.mall.domain.Cart"/>
+	    <typeAlias alias="innerOrder" type="com.bh.mall.domain.InnerOrder"/>
+	
+		<typeAlias alias="account" type="com.bh.mall.domain.Account"/>
+	    <typeAlias alias="jour" type="com.bh.mall.domain.Jour"/>
+	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
+	    <typeAlias alias="companyChannel" type="com.bh.mall.domain.CompanyChannel"/>
+	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
+	
+		 <typeAlias alias="order" type="com.bh.mall.domain.Order"/>
+		<typeAlias alias="afterSale" type="com.bh.mall.domain.AfterSale"/>
+	
+	<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
 	</typeAliases>
 </configuration>	

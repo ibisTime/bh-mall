@@ -27,7 +27,6 @@
 				AND t.product_code = #{productCode}
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
-				AND t.product_code = #{startDatetime}
 				<![CDATA[AND t.update_datetime >= #{startDatetime} ]]>
 			</if>
 			<if test="endDatetime != null and endDatetime != ''">

@@ -34,7 +34,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
             data.setCode(aCode);
             data.setProductCode(code);
             data.setType(req.getType());
-            data.setLevel(req.getLevel());
+            data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setValue1(StringValidater.toDouble(req.getValue1()));
             data.setValue2(StringValidater.toDouble(req.getValue2()));
             data.setValue3(StringValidater.toDouble(req.getValue3()));
@@ -60,7 +60,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
             EAwardType.getAwardTypeMap().get(req.getType());
             Award data = new Award();
             data.setCode(req.getCode());
-            data.setLevel(req.getLevel());
+            data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setValue1(StringValidater.toDouble(req.getValue1()));
             data.setValue2(StringValidater.toDouble(req.getValue2()));
             data.setValue3(StringValidater.toDouble(req.getValue3()));
@@ -91,6 +91,20 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     @Override
     public void refreshAward(Award data) {
         awardDAO.update(data);
+    }
+
+    @Override
+    public Award getAwardByType(Integer level, String productCode,
+            String type) {
+        Award data = null;
+        if (level != 0 && StringUtils.isNotBlank(productCode)) {
+            Award condition = new Award();
+            condition.setLevel(level);
+            condition.setProductCode(productCode);
+            condition.setType(type);
+            data = awardDAO.select(condition);
+        }
+        return data;
     }
 
 }

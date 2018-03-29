@@ -11,11 +11,16 @@ import com.bh.mall.exception.BizException;
  * @history:
  */
 public enum EBizType {
-    AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_REG_REF("RF", "推荐注册送积分"), AJ_SCTX_FIRST(
-            "03", "首次上传头像"), AJ_ZLWS_FIRST("04", "首次完善资料"),
+    AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_REG_REF("RF",
+            "推荐注册送积分"), AJ_SCTX_FIRST("03",
+                    "首次上传头像"), AJ_ZLWS_FIRST("04", "首次完善资料"),
 
     AJ_QX("11", "取现"), XXFK("XXFK", "提现回录"), AJ_CZ("AJ_CZ", "充值"), AJ_KK(
-            "AJ_KK", "扣款");
+            "AJ_KK", "扣款"),
+    AJ_GMCP(
+            "AJ_GMCP", "购买内购产品"), AJ_GMYC("AJ_GMYC", "购买云仓"), AJ_CELR("AJ_CELR",
+                    "差额利润"), AJ_TJJL("AJ_TJJL",
+                            "推荐奖励"), AJ_CHJL("AJ_CHJL", "出货奖励");
 
     public static EBizType getBizType(String code) {
         Map<String, EBizType> map = getBizTypeMap();

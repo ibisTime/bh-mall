@@ -20,4 +20,6 @@ public interface IAwardBO extends IPaginableBO<Award> {
 
     public void refreshAward(Award data);
 
+    public Award getAwardByType(Integer level, String productCode, String type);
+
 }

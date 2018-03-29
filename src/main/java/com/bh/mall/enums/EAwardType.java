@@ -5,7 +5,8 @@ import java.util.Map;
 
 public enum EAwardType {
 
-    DirectAward("0", "直接出货奖励"), SendAward("1", "出货奖励");
+    DirectAward("0", "推荐奖励"), SendAward("1", "出货奖励"), IntroduceAward("2",
+            "介绍奖励");
     public static Map<String, EAwardType> getAwardTypeMap() {
         Map<String, EAwardType> map = new HashMap<String, EAwardType>();
         for (EAwardType awardType : EAwardType.values()) {

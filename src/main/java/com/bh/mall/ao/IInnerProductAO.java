@@ -26,7 +26,8 @@ public interface IInnerProductAO {
 
     InnerProduct getInnerProduct(String code);
 
-    void putOnInnerProduct(String code, String orderNo, String updater);
+    void putOnInnerProduct(String code, String orderNo, String isFree,
+            String updater);
 
     void putdownInnerProduct(String code, String updater);
 

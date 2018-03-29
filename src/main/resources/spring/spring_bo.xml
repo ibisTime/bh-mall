@@ -97,7 +97,24 @@
 		<property name="paginableDAO" ref="innerProductDAOImpl"></property>
 	</bean>
 	
+	<bean id="innerOrderBO" class="com.bh.mall.bo.impl.InnerOrderBOImpl">
+		<property name="paginableDAO" ref="innerOrderDAOImpl"></property>
+	</bean>
+	
+	<bean id="afterSaleBO" class="com.bh.mall.bo.impl.AfterSaleBOImpl">
+		<property name="paginableDAO" ref="afterSaleDAOImpl"></property>
+	</bean>
+	
+	
+	<bean id="cartBO" class="com.bh.mall.bo.impl.CartBOImpl">
+		<property name="paginableDAO" ref="cartDAOImpl"></property>
+	</bean>
+	
+	<bean id="orderBO" class="com.bh.mall.bo.impl.OrderBOImpl">
+		<property name="paginableDAO" ref="orderDAOImpl"></property>
+	</bean>
 	<bean id="chargeBO" class="com.bh.mall.bo.impl.ChargeBOImpl">
 		<property name="paginableDAO" ref="chargeDAOImpl"></property>
 	</bean>
+	
 </beans>

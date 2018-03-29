@@ -1,32 +1,36 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAwardAO;
+import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627581Req;
-import com.bh.mall.dto.res.BooleanRes;
+import com.bh.mall.dto.req.XN627664Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
-public class XN627581 extends AProcessor {
+/**
+ * 详情查订单
+ * @author: nyc 
+ * @since: 2018年3月28日 下午9:02:41 
+ * @history:
+ */
+public class XN627664 extends AProcessor {
 
-    private IAwardAO awardAO = SpringContextHolder.getBean(IAwardAO.class);
+    private IOrderAO orderAO = SpringContextHolder.getBean(IOrderAO.class);
 
-    private XN627581Req req = null;
+    private XN627664Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        awardAO.editAward(req.getCode(), req.getValue1(), req.getValue2(),
-            req.getValue3());
-        return new BooleanRes(true);
+        return orderAO.getOrder(req.getCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627581Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627664Req.class);
         ObjValidater.validateReq(req);
+
     }
 
 }

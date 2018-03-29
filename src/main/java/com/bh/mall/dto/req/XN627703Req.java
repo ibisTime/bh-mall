@@ -13,6 +13,10 @@ public class XN627703Req {
     @NotBlank(message = "编号不能为空")
     private String code;
 
+    // （必填）是否包邮
+    @NotBlank(message = "String不能为空")
+    private String isFree;
+
     // （必填）排序
     @NotBlank(message = "排序不能为空")
     private String orderNo;
@@ -35,6 +39,14 @@ public class XN627703Req {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(String isFree) {
+        this.isFree = isFree;
     }
 
     public String getUpdater() {

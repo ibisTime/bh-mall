@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 素材分页查询
  * @author: nyc 
@@ -16,7 +14,6 @@ public class XN627430Req extends APageReq {
     private static final long serialVersionUID = -1370292147897079233L;
 
     // 类型（必填）
-    @NotBlank(message = "类型不能为空")
     private String type;
 
     // 标题 （选填）

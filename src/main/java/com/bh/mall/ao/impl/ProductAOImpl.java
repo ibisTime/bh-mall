@@ -25,11 +25,12 @@ import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
+import com.bh.mall.dto.req.XN627543Req;
 import com.bh.mall.dto.req.XN627545Req;
 import com.bh.mall.dto.req.XN627546Req;
 import com.bh.mall.enums.EProductLogType;
+import com.bh.mall.enums.EProductNumberType;
 import com.bh.mall.enums.EProductStatus;
-import com.bh.mall.enums.EProductType;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -77,8 +78,7 @@ public class ProductAOImpl implements IProductAO {
         data.setUpdateDatetime(new Date());
         productBO.saveProduct(data);
 
-        productSpecsBO.saveProductSpecs(code, req.getSpecList(),
-            req.getSpecsPriceList());
+        productSpecsBO.saveProductSpecs(code, req.getSpecList());
         productLogBO.saveProductLog(code, req.getUpdater(),
             req.getRealNumber());
         awardBO.saveAward(code, req.getAwardList());
@@ -94,6 +94,7 @@ public class ProductAOImpl implements IProductAO {
         data.setName(req.getName());
         data.setAdPrice(StringValidater.toLong(req.getAdPrice()));
         data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
 
@@ -103,6 +104,7 @@ public class ProductAOImpl implements IProductAO {
         data.setIsTotal(req.getIsTotal());
         data.setUpdater(req.getUpdater());
 
+        data.setIsFree(req.getIsFree());
         data.setUpdateDatetime(new Date());
         productBO.refreshProduct(data);
 
@@ -113,11 +115,9 @@ public class ProductAOImpl implements IProductAO {
                 .getProductSpecs(psReq.getCode());
             if (psData == null) {
                 productSpecsBO.saveProductSpecs(data.getCode(),
-                    req.getSpecList(), req.getSpecsPriceList());
+                    req.getSpecList());
             } else {
                 productSpecsBO.refreshProductSpecs(req.getSpecList());
-                productSpecsPriceBO
-                    .refreshProductSpecsPrice(req.getSpecsPriceList());
             }
         }
         awardBO.refreshAwardList(req.getAwardList());
@@ -128,20 +128,23 @@ public class ProductAOImpl implements IProductAO {
     public Product getProduct(String code) {
         Product data = productBO.getProduct(code);
         ProductSpecs condition = new ProductSpecs();
+        condition.setProductCode(data.getCode());
         List<ProductSpecs> psList = productSpecsBO
             .queryProductSpecsList(condition);
 
         if (psList.size() > 0) {
-            data.setSpecsList(psList);
+            ProductSpecs psData = new ProductSpecs();
             for (ProductSpecs productSpecs : psList) {
                 ProductSpecsPrice pspConditon = new ProductSpecsPrice();
                 pspConditon.setProductSpecsCode(productSpecs.getCode());
+
                 List<ProductSpecsPrice> pspList = productSpecsPriceBO
                     .queryProductSpecsPriceList(pspConditon);
                 if (pspList.size() > 0) {
-                    data.setPriceList(pspList);
+                    psData.setPriceList(pspList);
                 }
             }
+            data.setSpecsList(psList);
         }
         return data;
     }
@@ -160,12 +163,17 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
-    public void putonProduct(String code, String orderNo, String updater) {
-        Product data = productBO.getProduct(code);
+    public void putOnProduct(XN627543Req req) {
+        Product data = productBO.getProduct(req.getCode());
         if (data.getStatus().equals(EProductStatus.Shelf_YES.getCode())) {
             throw new BizException("xn00000", "产品已上架");
         }
-        productBO.putonProduct(data, orderNo, updater);
+        data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
+        data.setIsFree(req.getIsFree());
+        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        productBO.putOnProduct(data);
     }
 
     @Override
@@ -192,7 +200,7 @@ public class ProductAOImpl implements IProductAO {
             .getVirNumber() < StringValidater.toInteger(req.getVirNumber())) {
 
         }
-        if (EProductType.Real.getCode().equals(req.getKind())) {
+        if (EProductNumberType.Real.getCode().equals(req.getKind())) {
             if (EProductLogType.Input.getCode().equals(req.getType())) {
                 data.setRealNumber(data.getRealNumber()
                         + StringValidater.toInteger(req.getRealNumber()));
@@ -202,7 +210,7 @@ public class ProductAOImpl implements IProductAO {
             }
 
         }
-        if (EProductType.Virtual.getCode().equals(req.getKind())) {
+        if (EProductNumberType.Virtual.getCode().equals(req.getKind())) {
             if (EProductLogType.Input.getCode().equals(req.getType())) {
                 data.setVirNumber(data.getVirNumber()
                         + StringValidater.toInteger(req.getVirNumber()));
@@ -216,7 +224,7 @@ public class ProductAOImpl implements IProductAO {
         data.setUpdateDatetime(new Date());
         productBO.refreshRepertory(data);
         // 修改库存记录
-        if (EProductType.Virtual.getCode().equals(req.getType())) {
+        if (EProductNumberType.Real.getCode().equals(req.getType())) {
             productLogBO.saveChangeLog(data, req.getType(),
                 data.getRealNumber(), req.getRealNumber(), req.getUpdater());
         }
@@ -238,8 +246,7 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Paginable<Product> selectProductPageByFront(int start, int limit,
             Product condition) {
-        if (StringUtils.isBlank(condition.getLevel())
-                && StringUtils.isNotBlank(condition.getUserId())) {
+        if (StringUtils.isNotBlank(condition.getUserId())) {
             User data = userAO.doGetUser(condition.getUserId());
             condition.setLevel(data.getLevel());
         }

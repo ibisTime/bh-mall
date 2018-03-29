@@ -52,7 +52,7 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
         ProductSpecsPrice data = new ProductSpecsPrice();
         for (XN627547Req req : list) {
             data.setCode(req.getCode());
-            data.setLevel(req.getLevel());
+            data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setPrice(StringValidater.toLong(req.getPrice()));
             productSpecsPriceDAO.update(data);
         }
@@ -72,10 +72,39 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
             condition.setCode(code);
             data = productSpecsPriceDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "规格价格不存在");
             }
         }
         return data;
+    }
+
+    @Override
+    public ProductSpecsPrice getPriceBySpecsCode(String spcesCode) {
+        ProductSpecsPrice data = null;
+        if (StringUtils.isNotBlank(spcesCode)) {
+            ProductSpecsPrice condition = new ProductSpecsPrice();
+            condition.setProductSpecsCode(spcesCode);
+            data = productSpecsPriceDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "规格价格不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public Long getPriceByLevel(String productSpecsCode, Integer level) {
+        ProductSpecsPrice data = null;
+        if (StringUtils.isNotBlank(productSpecsCode)) {
+            ProductSpecsPrice condition = new ProductSpecsPrice();
+            condition.setProductSpecsCode(productSpecsCode);
+            condition.setLevel(level);
+            data = productSpecsPriceDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "规格价格不存在");
+            }
+        }
+        return data.getPrice();
     }
 
 }

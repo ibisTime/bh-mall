@@ -55,9 +55,6 @@ public class XN627540Req {
     // (必填) 产品规格
     private List<XN627546Req> specList;
 
-    // (必填) 产品规格定价
-    private List<XN627547Req> specsPriceList;
-
     // (必填) 出货/推荐奖励
     private List<XN627548Req> awardList;
 
@@ -158,14 +155,6 @@ public class XN627540Req {
 
     public void setSpecList(List<XN627546Req> specList) {
         this.specList = specList;
-    }
-
-    public List<XN627547Req> getSpecsPriceList() {
-        return specsPriceList;
-    }
-
-    public void setSpecsPriceList(List<XN627547Req> specsPriceList) {
-        this.specsPriceList = specsPriceList;
     }
 
     public List<XN627548Req> getAwardList() {

@@ -6,7 +6,7 @@ import java.util.Map;
 public enum EUserStatus {
     NORMAL("0", "正常"), Li_Locked("1", "程序锁定"), Ren_Locked("2", "人工锁定"),
 
-    TO_WILL("1", "有意愿");
+    TO_WILL("3", "有意愿");
 
     EUserStatus(String code, String value) {
         this.code = code;

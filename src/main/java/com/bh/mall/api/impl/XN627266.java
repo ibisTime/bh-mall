@@ -30,7 +30,7 @@ public class XN627266 extends AProcessor {
         condition.setLoginNameForQuery(req.getLoginName());
         condition.setRoleCode(req.getRoleCode());
         condition.setMobile(req.getMobile());
-        condition.setLevel(req.getLevel());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setUserReferee(req.getUserReferee());
 
         condition.setRealName(req.getRealName());
@@ -40,15 +40,15 @@ public class XN627266 extends AProcessor {
         condition.setH5OpenId(req.getH5OpenId());
         condition.setAppOpenId(req.getAppOpenId());
 
-        condition.setApplyDatetimeStart(DateUtil.getFrontDate(
-            req.getApplyStartDatetime(), false));
-        condition.setApplyDatetimeEnd(DateUtil.getFrontDate(
-            req.getApplyEndDatetime(), true));
+        condition.setApplyDatetimeStart(
+            DateUtil.getFrontDate(req.getApplyStartDatetime(), false));
+        condition.setApplyDatetimeEnd(
+            DateUtil.getFrontDate(req.getApplyEndDatetime(), true));
 
-        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getCreateDatetimeStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
-            req.getCreateDatetimeEnd(), true));
+        condition.setCreateDatetimeStart(
+            DateUtil.getFrontDate(req.getCreateDatetimeStart(), false));
+        condition.setCreateDatetimeEnd(
+            DateUtil.getFrontDate(req.getCreateDatetimeEnd(), true));
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IUserAO.DEFAULT_ORDER_COLUMN;

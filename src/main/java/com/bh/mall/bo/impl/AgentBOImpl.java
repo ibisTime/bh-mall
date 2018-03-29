@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.exception.BizException;
@@ -34,11 +35,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public Agent getAgent(String code) {
+    public Agent getAgent(String level) {
         Agent data = null;
-        if (StringUtils.isNotBlank(code)) {
+        if (StringUtils.isNotBlank(level)) {
             Agent condition = new Agent();
-            condition.setLevel(Integer.valueOf(code));
+            condition.setLevel(StringValidater.toInteger(level));
             data = agentDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理编号不存在");

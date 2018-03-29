@@ -30,7 +30,7 @@ public class XN627590 extends AProcessor {
         Award condition = new Award();
         condition.setType(req.getType());
         condition.setProductCode(req.getProductCode());
-        condition.setLevel(req.getLevel());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IAwardAO.DEFAULT_ORDER_COLUMN;
