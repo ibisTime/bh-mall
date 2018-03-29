@@ -9,22 +9,17 @@ public interface IChargeAO {
 
     String DEFAULT_ORDER_COLUMN = "code";
 
-    public String applyOrder(String accountNumber, String jourBizType,
-            Long amount, String payCardInfo, String payCardNo,
-            String applyUser, String applyNote);
-
-    public String applyOrder(String accountNumber, String payAcountNumber,
-            String jourBizType, Long amount, String payCardInfo,
-            String payCardNo, String applyUser, String applyNote);
+    public String applyOrder(String accountNumber, Long amount,
+            String applyUser, String applyNote, String chhargePdf);
 
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String systemCode);
+            String payNote);
 
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition);
 
     public List<Charge> queryChargeList(Charge condition);
 
-    public Charge getCharge(String code, String systemCode);
+    public Charge getCharge(String code);
 
 }

@@ -1,16 +1,16 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 查询充值订单详情
  * @author: xieyj 
  * @since: 2017年5月12日 上午10:00:44 
  * @history:
  */
-public class XN802706Req {
+public class XN627472Req {
+    @NotBlank
     private String code;
-
-    // 系统编号
-    private String systemCode;
 
     public String getCode() {
         return code;
@@ -18,14 +18,6 @@ public class XN802706Req {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
 }

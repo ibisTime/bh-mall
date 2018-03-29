@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2017年5月12日 上午10:01:08 
  * @history:
  */
-public class XN802707Req extends AListReq {
+public class XN627471Req extends AListReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
@@ -25,12 +25,6 @@ public class XN802707Req extends AListReq {
     // 针对户名（手机号或其他）
     private String accountName;
 
-    // 付款账号
-    private String payAccountNumber;
-
-    // 付款户名（手机号或其他）
-    private String payAccountName;
-
     // 类型
     private String type;
 
@@ -39,9 +33,6 @@ public class XN802707Req extends AListReq {
 
     // 业务类型编号（因为什么业务类型而充值）
     private String bizType;
-
-    // 支付渠道账号（如银行卡号）
-    private String payCardNo;
 
     // 状态（待审核/审核不通过/审核通过）
     private String status;
@@ -123,14 +114,6 @@ public class XN802707Req extends AListReq {
         this.bizType = bizType;
     }
 
-    public String getPayCardNo() {
-        return payCardNo;
-    }
-
-    public void setPayCardNo(String payCardNo) {
-        this.payCardNo = payCardNo;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -195,19 +178,4 @@ public class XN802707Req extends AListReq {
         this.channelType = channelType;
     }
 
-    public String getPayAccountNumber() {
-        return payAccountNumber;
-    }
-
-    public void setPayAccountNumber(String payAccountNumber) {
-        this.payAccountNumber = payAccountNumber;
-    }
-
-    public String getPayAccountName() {
-        return payAccountName;
-    }
-
-    public void setPayAccountName(String payAccountName) {
-        this.payAccountName = payAccountName;
-    }
 }

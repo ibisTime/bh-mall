@@ -1,12 +1,10 @@
 package com.bh.mall.api.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import com.bh.mall.ao.IChargeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
-import com.bh.mall.dto.req.XN802701Req;
+import com.bh.mall.core.ObjValidater;
+import com.bh.mall.dto.req.XN627461Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -18,10 +16,10 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2017年5月3日 上午9:24:44 
  * @history:
  */
-public class XN802701 extends AProcessor {
+public class XN627461 extends AProcessor {
     private IChargeAO chargeAO = SpringContextHolder.getBean(IChargeAO.class);
 
-    private XN802701Req req = null;
+    private XN627461Req req = null;
 
     /** 
     * @see com.xnjr.base.api.IProcessor#doBusiness()
@@ -30,7 +28,7 @@ public class XN802701 extends AProcessor {
     public synchronized Object doBusiness() throws BizException {
         for (String code : req.getCodeList()) {
             chargeAO.payOrder(code, req.getPayUser(), req.getPayResult(),
-                req.getPayNote(), req.getSystemCode());
+                req.getPayNote());
         }
         return new BooleanRes(true);
     }
@@ -40,11 +38,7 @@ public class XN802701 extends AProcessor {
     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802701Req.class);
-        if (CollectionUtils.isEmpty(req.getCodeList())) {
-            throw new BizException("订单列表不能为空");
-        }
-        StringValidater.validateBlank(req.getPayUser(), req.getPayResult(),
-            req.getSystemCode());
+        req = JsonUtil.json2Bean(inputparams, XN627461Req.class);
+        ObjValidater.validateReq(req);
     }
 }

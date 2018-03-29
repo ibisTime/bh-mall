@@ -1,33 +1,34 @@
 package com.bh.mall.dto.req;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 线下充值申请
  * @author: xieyj 
  * @since: 2017年5月12日 上午9:58:02 
  * @history:
  */
-public class XN802700Req {
+public class XN627460Req {
 
     // 针对账号（必填）
+    @NotBlank
     private String accountNumber;
 
-    // 业务类型
-    private String bizType;
-
     // 充值金额（必填）
+    @NotNull
     private String amount;
 
-    // 支付渠道账号信息（如开户支行）（选填）
-    private String payCardInfo;
-
-    // 支付渠道账号（如银行卡号）（选填）
-    private String payCardNo;
-
     // 申请人（必填）
+    @NotBlank
     private String applyUser;
 
     // 申请说明（选填）
     private String applyNote;
+
+    // 打款pdf
+    private String chargePdf;
 
     public String getAccountNumber() {
         return accountNumber;
@@ -37,36 +38,12 @@ public class XN802700Req {
         this.accountNumber = accountNumber;
     }
 
-    public String getBizType() {
-        return bizType;
-    }
-
-    public void setBizType(String bizType) {
-        this.bizType = bizType;
-    }
-
     public String getAmount() {
         return amount;
     }
 
     public void setAmount(String amount) {
         this.amount = amount;
-    }
-
-    public String getPayCardInfo() {
-        return payCardInfo;
-    }
-
-    public void setPayCardInfo(String payCardInfo) {
-        this.payCardInfo = payCardInfo;
-    }
-
-    public String getPayCardNo() {
-        return payCardNo;
-    }
-
-    public void setPayCardNo(String payCardNo) {
-        this.payCardNo = payCardNo;
     }
 
     public String getApplyUser() {
@@ -83,6 +60,14 @@ public class XN802700Req {
 
     public void setApplyNote(String applyNote) {
         this.applyNote = applyNote;
+    }
+
+    public String getChargePdf() {
+        return chargePdf;
+    }
+
+    public void setChargePdf(String chargePdf) {
+        this.chargePdf = chargePdf;
     }
 
 }

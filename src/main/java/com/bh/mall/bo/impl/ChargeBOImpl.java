@@ -25,9 +25,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     private IChargeDAO chargeDAO;
 
     @Override
-    public String applyOrderOffline(Account account, Account payAccount,
-            EBizType bizType, Long amount, String payCardInfo,
-            String payCardNo, String applyUser, String applyNote) {
+    public String applyOrderOffline(Account account, EBizType bizType,
+            Long amount, String applyUser, String applyNote, String chargePdf) {
         if (amount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -35,14 +34,10 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             .getCode());
         Charge data = new Charge();
         data.setCode(code);
-        data.setPayGroup(null);
-        data.setRefNo(null);
         data.setAccountNumber(account.getAccountNumber());
-        data.setPayAccountNumber(payAccount.getAccountNumber());
-        data.setPayAccountName(payAccount.getRealName());
-        data.setAmount(amount);
-
         data.setAccountName(account.getRealName());
+        data.setChargeAmount(amount);
+
         data.setType(account.getType());
         data.setCurrency(account.getCurrency());
         data.setBizType(bizType.getCode());
@@ -51,8 +46,6 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         } else {
             data.setBizNote(applyNote);
         }
-        data.setPayCardInfo(payCardInfo);
-        data.setPayCardNo(payCardNo);
 
         data.setStatus(EChargeStatus.toPay.getCode());
         data.setApplyUser(applyUser);
@@ -73,18 +66,16 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             .getCode());
         Charge data = new Charge();
         data.setCode(code);
+        data.setAccountNumber(account.getAccountNumber());
+        data.setAccountName(account.getRealName());
         data.setPayGroup(payGroup);
         data.setRefNo(refNo);
-        data.setAccountNumber(account.getAccountNumber());
-        data.setAmount(transAmount);
+        data.setChargeAmount(transAmount);
 
-        data.setAccountName(account.getRealName());
         data.setType(account.getType());
         data.setCurrency(account.getCurrency());
         data.setBizType(bizType.getCode());
         data.setBizNote(bizNote);
-        data.setPayCardInfo(null);
-        data.setPayCardNo(null);
 
         data.setStatus(EChargeStatus.toPay.getCode());
         data.setApplyUser(applyUser);

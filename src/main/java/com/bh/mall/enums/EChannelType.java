@@ -8,7 +8,7 @@ import com.bh.mall.exception.BizException;
 //渠道类型分两大类：外部渠道和唯一的内部渠道（内部账）
 
 public enum EChannelType {
-    WeChat_H5("35", "微信公众号支付"), Offline("90", "人工线下")
+    WeChat_H5("35", "微信公众号支付"), Offline("90", "线下转账")
 
     , NBZ("0", "内部账");
 

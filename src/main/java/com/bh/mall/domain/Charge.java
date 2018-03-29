@@ -14,23 +14,8 @@ public class Charge extends ABaseDO {
     // 充值编号
     private String code;
 
-    // 订单分组组号（信息代表）---核心字段1
-    private String payGroup;
-
-    // 流水分组组号（橙账本代表）---核心字段2
-    private String refNo;
-
     // 针对账号---核心字段4
     private String accountNumber;
-
-    // 充值金额---核心字段5
-    private Long amount;
-
-    // 支付账号
-    private String payAccountNumber;
-
-    // 支付账号
-    private String payAccountName;
 
     // 针对户名
     private String accountName;
@@ -41,17 +26,23 @@ public class Charge extends ABaseDO {
     // 币种
     private String currency;
 
+    // 支付渠道
+    private String channelType;
+
+    // 充值金额---核心字段5
+    private Long chargeAmount;
+
     // 业务类型编号（因为什么业务类型而充值）
     private String bizType;
 
     // 业务类型说明（因为什么业务类型而充值）
     private String bizNote;
 
-    // 支付渠道账号信息（如开户支行）
-    private String payCardInfo;
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
 
-    // 支付渠道账号（如银行卡号）
-    private String payCardNo;
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
 
     // 状态（0 待审核/1 审核通过/2 审核不通过）
     private String status;
@@ -70,9 +61,6 @@ public class Charge extends ABaseDO {
 
     // 支付时间
     private Date payDatetime;
-
-    // 支付渠道
-    private String channelType;
 
     // *******************************
     // 申请时间起
@@ -98,36 +86,12 @@ public class Charge extends ABaseDO {
         this.code = code;
     }
 
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
-    }
-
-    public String getRefNo() {
-        return refNo;
-    }
-
-    public void setRefNo(String refNo) {
-        this.refNo = refNo;
-    }
-
     public String getAccountNumber() {
         return accountNumber;
     }
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
     }
 
     public String getAccountName() {
@@ -168,22 +132,6 @@ public class Charge extends ABaseDO {
 
     public void setBizNote(String bizNote) {
         this.bizNote = bizNote;
-    }
-
-    public String getPayCardInfo() {
-        return payCardInfo;
-    }
-
-    public void setPayCardInfo(String payCardInfo) {
-        this.payCardInfo = payCardInfo;
-    }
-
-    public String getPayCardNo() {
-        return payCardNo;
-    }
-
-    public void setPayCardNo(String payCardNo) {
-        this.payCardNo = payCardNo;
     }
 
     public String getStatus() {
@@ -234,14 +182,6 @@ public class Charge extends ABaseDO {
         this.payDatetime = payDatetime;
     }
 
-    public String getChannelType() {
-        return channelType;
-    }
-
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
-    }
-
     public Date getApplyDatetimeStart() {
         return applyDatetimeStart;
     }
@@ -282,20 +222,36 @@ public class Charge extends ABaseDO {
         this.user = user;
     }
 
-    public String getPayAccountNumber() {
-        return payAccountNumber;
+    public Long getChargeAmount() {
+        return chargeAmount;
     }
 
-    public void setPayAccountNumber(String payAccountNumber) {
-        this.payAccountNumber = payAccountNumber;
+    public void setChargeAmount(Long chargeAmount) {
+        this.chargeAmount = chargeAmount;
     }
 
-    public String getPayAccountName() {
-        return payAccountName;
+    public String getPayGroup() {
+        return payGroup;
     }
 
-    public void setPayAccountName(String payAccountName) {
-        this.payAccountName = payAccountName;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 
 }

@@ -7,18 +7,14 @@
 		<result column="pay_group" property="payGroup" />
 		<result column="ref_no" property="refNo" />
 		<result column="account_number" property="accountNumber" />
-		<result column="pay_account_number" property="payAccountNumber" />
 		<result column="amount" property="amount" />
 		
 		<result column="account_name" property="accountName" />
-		<result column="pay_account_name" property="payAccountName" />
 		<result column="type" property="type" />
 		<result column="currency" property="currency" />
 		<result column="biz_type" property="bizType" />
 		<result column="biz_note" property="bizNote" />
 		
-		<result column="pay_card_info" property="payCardInfo" />
-		<result column="pay_card_no" property="payCardNo" />
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_note" property="applyNote" />
@@ -43,14 +39,8 @@
 			<if test="accountNumber != null and accountNumber != '' ">
 				AND t.account_number = #{accountNumber}
 			</if>
-			<if test="payAccountNumber != null and payAccountNumber != '' ">
-				AND t.pay_account_number = #{payAccountNumber}
-			</if>
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
-			</if>
-			<if test="payAccountName != null and payAccountName != '' ">
-				AND t.pay_account_name like "%"#{payAccountName}"%"
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
@@ -60,9 +50,6 @@
 			</if>
 			<if test="bizType != null and bizType != '' ">
 				AND t.biz_type = #{bizType}
-			</if>
-			<if test="payCardNo != null and payCardNo != '' ">
-				AND t.pay_card_no = #{payCardNo}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -96,18 +83,14 @@
 		,t.pay_group
 		,t.ref_no
 		,t.account_number
-		,t.pay_account_number
 		,t.amount
 		
 		,t.account_name
-		,t.pay_account_name
 		,t.type
 		,t.currency
 		,t.biz_type
 		,t.biz_note
 		
-		,t.pay_card_info
-		,t.pay_card_no
 		,t.status
 		,t.apply_user
 		,t.apply_datetime
@@ -117,7 +100,7 @@
 		,t.pay_datetime
 		,t.channel_type
 		FROM
-		tstd_charge t
+		tbh_charge t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -127,32 +110,27 @@
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_charge t
+		SELECT count(1) FROM tbh_charge t
 		<include refid="where_condition" />
 	</select>
 	
 	<insert id="insert_charge" parameterType="charge" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO tstd_charge(
+		INSERT INTO tbh_charge(
 		code
 		,pay_group
 		,ref_no
 		,account_number
-		,pay_account_number
 		,amount
 		
 		,account_name
-		,pay_account_name
 		,type
 		,currency
 		,biz_type
 		,biz_note
 		
-		,pay_card_info
-		,pay_card_no
 		,status
 		,apply_user
 		,apply_datetime
-		
 		,channel_type
 		)
 		VALUES(
@@ -160,28 +138,23 @@
 		,#{payGroup}
 		,#{refNo}
 		,#{accountNumber}
-		,#{payAccountNumber}
 		,#{amount}
 		
 		,#{accountName}
-		,#{payAccountName}
 		,#{type}
 		,#{currency}
 		,#{bizType}
 		,#{bizNote}
 		
-		,#{payCardInfo}
-		,#{payCardNo}
 		,#{status}
 		,#{applyUser}
 		,#{applyDatetime}
-		
 		,#{channelType}
 		)
 	</insert>
 
 	<update id="pay_order" parameterType="charge">
-		UPDATE tstd_charge SET
+		UPDATE tbh_charge SET
 		status = #{status}
 		,pay_user = #{payUser}
 		,pay_note = #{payNote}

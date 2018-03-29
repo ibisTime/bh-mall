@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2017年5月12日 上午9:59:55 
  * @history:
  */
-public class XN802705Req extends APageReq {
+public class XN627470Req extends APageReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
@@ -25,12 +25,6 @@ public class XN802705Req extends APageReq {
     // 针对户名（手机号或其他）
     private String accountName;
 
-    // 付款账号
-    private String payAccountNumber;
-
-    // 付款户名（手机号或其他）
-    private String payAccountName;
-
     // 类型
     private String type;
 
@@ -39,9 +33,6 @@ public class XN802705Req extends APageReq {
 
     // 业务类型编号（因为什么业务类型而充值）
     private String bizType;
-
-    // 支付渠道账号（如银行卡号）
-    private String payCardNo;
 
     // 状态（待审核/审核不通过/审核通过）
     private String status;
@@ -107,14 +98,6 @@ public class XN802705Req extends APageReq {
         this.bizType = bizType;
     }
 
-    public String getPayCardNo() {
-        return payCardNo;
-    }
-
-    public void setPayCardNo(String payCardNo) {
-        this.payCardNo = payCardNo;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -171,14 +154,6 @@ public class XN802705Req extends APageReq {
         this.payDateEnd = payDateEnd;
     }
 
-    public String getChannelType() {
-        return channelType;
-    }
-
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
-    }
-
     public String getCurrency() {
         return currency;
     }
@@ -195,19 +170,12 @@ public class XN802705Req extends APageReq {
         this.type = type;
     }
 
-    public String getPayAccountNumber() {
-        return payAccountNumber;
+    public String getChannelType() {
+        return channelType;
     }
 
-    public void setPayAccountNumber(String payAccountNumber) {
-        this.payAccountNumber = payAccountNumber;
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
     }
 
-    public String getPayAccountName() {
-        return payAccountName;
-    }
-
-    public void setPayAccountName(String payAccountName) {
-        this.payAccountName = payAccountName;
-    }
 }

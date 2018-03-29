@@ -7,7 +7,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.domain.Charge;
-import com.bh.mall.dto.req.XN802707Req;
+import com.bh.mall.dto.req.XN627471Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -18,10 +18,10 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2017年5月13日 下午7:58:26 
  * @history:
  */
-public class XN802707 extends AProcessor {
+public class XN627471 extends AProcessor {
     private IChargeAO chargeAO = SpringContextHolder.getBean(IChargeAO.class);
 
-    private XN802707Req req = null;
+    private XN627471Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -31,12 +31,9 @@ public class XN802707 extends AProcessor {
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
 
-        condition.setPayAccountNumber(req.getPayAccountNumber());
-        condition.setPayAccountName(req.getPayAccountName());
         condition.setType(req.getType());
         condition.setCurrency(req.getCurrency());
         condition.setBizType(req.getBizType());
-        condition.setPayCardNo(req.getPayCardNo());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
 
@@ -62,6 +59,6 @@ public class XN802707 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802707Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627471Req.class);
     }
 }
