@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.ao.IUserAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.ISYSConfigBO;
@@ -76,6 +77,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected IAddressBO addressBO;
+
+    @Autowired
+    protected IAccountAO accountAO;
 
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
@@ -293,8 +297,8 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.YC_CNY.getCode());
             currencyList.add(ECurrency.MK_CNY.getCode());
         }
-        // accountBO.distributeAccountList(userId, mobile, kind, currencyList,
-        // companyCode, systemCode);
+        accountAO.distributeAccount(userId, mobile, kind, currencyList,
+            companyCode, systemCode);
     }
 
     @Override

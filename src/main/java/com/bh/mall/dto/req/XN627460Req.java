@@ -16,9 +16,12 @@ public class XN627460Req {
     @NotBlank
     private String accountNumber;
 
+    // 类型（必填）0_充值，1_扣款
+    private String type;
+
     // 充值金额（必填）
     @NotNull
-    private String amount;
+    private String chargeAmount;
 
     // 申请人（必填）
     @NotBlank
@@ -36,14 +39,6 @@ public class XN627460Req {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
     }
 
     public String getApplyUser() {
@@ -68,6 +63,22 @@ public class XN627460Req {
 
     public void setChargePdf(String chargePdf) {
         this.chargePdf = chargePdf;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getChargeAmount() {
+        return chargeAmount;
+    }
+
+    public void setChargeAmount(String chargeAmount) {
+        this.chargeAmount = chargeAmount;
     }
 
 }

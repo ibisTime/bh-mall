@@ -30,7 +30,7 @@ public class Charge extends ABaseDO {
     private String channelType;
 
     // 充值金额---核心字段5
-    private Long chargeAmount;
+    private Long amount;
 
     // 业务类型编号（因为什么业务类型而充值）
     private String bizType;
@@ -222,14 +222,6 @@ public class Charge extends ABaseDO {
         this.user = user;
     }
 
-    public Long getChargeAmount() {
-        return chargeAmount;
-    }
-
-    public void setChargeAmount(Long chargeAmount) {
-        this.chargeAmount = chargeAmount;
-    }
-
     public String getPayGroup() {
         return payGroup;
     }
@@ -252,6 +244,14 @@ public class Charge extends ABaseDO {
 
     public void setChannelType(String channelType) {
         this.channelType = channelType;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
 }

@@ -27,9 +27,10 @@ public class XN627460 extends AProcessor {
     */
     @Override
     public synchronized Object doBusiness() throws BizException {
-        Long amount = StringValidater.toLong(req.getAmount());
-        String code = chargeAO.applyOrder(req.getAccountNumber(), amount,
-            req.getApplyUser(), req.getApplyNote(), req.getChargePdf());
+        Long amount = StringValidater.toLong(req.getChargeAmount());
+        String code = chargeAO.applyOrder(req.getAccountNumber(),
+            req.getType(), amount, req.getApplyUser(), req.getApplyNote(),
+            req.getChargePdf());
         return new PKCodeRes(code);
     }
 

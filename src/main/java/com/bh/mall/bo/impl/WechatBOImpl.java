@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.IWechatBO;
 import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.domain.CompanyChannel;
-import com.bh.mall.dto.res.XN002501Res;
+import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EWeChatType;
 import com.bh.mall.util.wechat.MD5;
 import com.bh.mall.util.wechat.MD5Util;
@@ -56,7 +56,7 @@ public class WechatBOImpl implements IWechatBO {
     }
 
     @Override
-    public XN002501Res getPayInfoH5(CompanyChannel companyChannel,
+    public XN627462Res getPayInfoH5(CompanyChannel companyChannel,
             String payCode, String prepayId) {
         SortedMap<String, String> nativeObj = new TreeMap<String, String>();
         nativeObj.put("appId", companyChannel.getPrivateKey2());
@@ -71,7 +71,7 @@ public class WechatBOImpl implements IWechatBO {
         nativeObj.put("paySign",
             createSign(nativeObj, companyChannel.getPrivateKey1()));
 
-        XN002501Res res = new XN002501Res();
+        XN627462Res res = new XN627462Res();
         res.setPrepayId(prepayId);
         res.setPayCode(payCode);
         res.setAppId(nativeObj.get("appId"));

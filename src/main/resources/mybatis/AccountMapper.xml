@@ -12,16 +12,8 @@
 		<result column="currency" property="currency" />	
 		<result column="amount" property="amount" />
 		<result column="frozen_amount" property="frozenAmount" />
-		<result column="md5" property="md5" />	
-		<result column="add_amount" property="addAmount" />
-		
-		<result column="in_amount" property="inAmount" />
-		<result column="out_amount" property="outAmount" />
 		<result column="create_datetime" property="createDatetime" />	
 		<result column="last_order" property="lastOrder" />	
-		<result column="system_code" property="systemCode" />
-		
-		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">	
@@ -59,12 +51,6 @@
 			<if test="lastOrder != null and lastOrder != '' ">
 				AND t.last_order = #{lastOrder}
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
 		</trim>
 	</sql>
 	
@@ -79,16 +65,8 @@
 		,t.currency
 		,t.amount
 		,t.frozen_amount
-		,t.md5
-		,t.add_amount
-		
-		,t.in_amount
-		,t.out_amount
 		,t.create_datetime
-		
 		,t.last_order
-		,t.system_code
-		,t.company_code
 		FROM
 		tbh_account t
 		<include refid="where_condition"/>
@@ -115,14 +93,7 @@
 		,currency
 		,amount
 		,frozen_amount
-		,md5
-		,add_amount
-		
-		,in_amount
-		,out_amount
 		,create_datetime
-		,system_code
-		,company_code
 		)
 		VALUES(
 		#{accountNumber}
@@ -134,14 +105,7 @@
 		,#{currency}
 		,#{amount}
 		,#{frozenAmount}
-		,#{md5}
-		,#{addAmount}
-		
-		,#{inAmount}
-		,#{outAmount}
 		,#{createDatetime}
-		,#{systemCode}
-		,#{companyCode}
 		)
 	</insert>
 	
@@ -149,9 +113,6 @@
 		UPDATE tbh_account
 		SET
 		amount= #{amount}
-		,md5 = #{md5}
-		,add_amount= #{addAmount}
-		,in_amount = #{inAmount}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
@@ -178,7 +139,6 @@
 		SET
 		amount= #{amount}
 		,frozen_amount = #{frozenAmount}
-		,md5 = #{md5}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
@@ -189,7 +149,6 @@
 		SET
 		amount= #{amount}
 		,frozen_amount = #{frozenAmount}
-		,md5 = #{md5}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
@@ -199,7 +158,6 @@
 		UPDATE tbh_account
 		SET
 		frozen_amount = #{frozenAmount}
-		,out_amount = #{outAmount}
 		WHERE
 		account_number = #{accountNumber}
     </update>

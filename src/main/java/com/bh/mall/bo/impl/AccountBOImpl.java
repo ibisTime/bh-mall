@@ -41,9 +41,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             EAccountType accountType, String currency, String systemCode,
             String companyCode) {
         String accountNumber = null;
-        if (StringUtils.isNotBlank(systemCode)
-                && StringUtils.isNotBlank(companyCode)
-                && StringUtils.isNotBlank(userId)) {
+        if (StringUtils.isNotBlank(userId)) {
             accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
                 .getCode());
             Account data = new Account();

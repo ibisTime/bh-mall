@@ -35,15 +35,20 @@ public class ChargeAOImpl implements IChargeAO {
     private IUserBO userBO;
 
     @Override
-    public String applyOrder(String accountNumber, Long amount,
+    public String applyOrder(String accountNumber, String type, Long amount,
             String applyUser, String applyNote, String chargePdf) {
-        if (amount <= 0) {
-            throw new BizException("xn000000", "充值金额需大于零");
+        if (amount < 0) {
+            throw new BizException("xn000000", "金额需大于零");
         }
+
         Account account = accountBO.getAccount(accountNumber);
+        Long tranAmount = amount;
+        if (EBizType.AJ_KK.getCode().equals(type)) {
+            tranAmount = -amount;
+        }
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account,
-            EBizType.getBizType("AJ_CZ"), amount, applyUser, applyNote,
+            EBizType.getBizType(type), tranAmount, applyUser, applyNote,
             chargePdf);
         return code;
     }
@@ -73,14 +78,13 @@ public class ChargeAOImpl implements IChargeAO {
         // 账户加钱
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
             null, null, data.getCode(), EBizType.AJ_CZ,
-            EBizType.AJ_CZ.getValue(), data.getChargeAmount());
+            EBizType.AJ_CZ.getValue(), data.getAmount());
         if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())
                 || ECurrency.MK_CNY.getCode().equals(account.getCurrency())) {
             // 托管账户加钱
             accountBO.changeAmount(ESystemCode.BH.getCode(),
                 EChannelType.Offline, null, null, data.getCode(),
-                EBizType.AJ_CZ, EBizType.AJ_CZ.getValue(),
-                data.getChargeAmount());
+                EBizType.AJ_CZ, EBizType.AJ_CZ.getValue(), data.getAmount());
         }
     }
 
