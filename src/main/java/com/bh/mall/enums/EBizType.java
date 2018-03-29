@@ -3,6 +3,8 @@ package com.bh.mall.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.bh.mall.exception.BizException;
+
 /** 
  * @author: miyb 
  * @since: 2015-2-26 下午2:15:22 
@@ -17,6 +19,15 @@ public enum EBizType {
             "AJ_GMCP", "购买内购产品"), AJ_GMYC("AJ_GMYC", "购买云仓"), AJ_CELR("AJ_CELR",
                     "差额利润"), AJ_TJJL("AJ_TJJL",
                             "推荐奖励"), AJ_CHJL("AJ_CHJL", "出货奖励");
+
+    public static EBizType getBizType(String code) {
+        Map<String, EBizType> map = getBizTypeMap();
+        EBizType result = map.get(code);
+        if (result == null) {
+            throw new BizException("XN0000", code + "对应的bizType不存在");
+        }
+        return result;
+    }
 
     public static Map<String, EBizType> getBizTypeMap() {
         Map<String, EBizType> map = new HashMap<String, EBizType>();

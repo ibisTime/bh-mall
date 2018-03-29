@@ -20,6 +20,9 @@ public class Jour extends ABaseDO {
     // 流水编号
     private String code;
 
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
     // 流水分组组号（橙账本代表）---核心字段2
     private String refNo;
 
@@ -236,5 +239,13 @@ public class Jour extends ABaseDO {
 
     public void setChannelType(String channelType) {
         this.channelType = channelType;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
     }
 }

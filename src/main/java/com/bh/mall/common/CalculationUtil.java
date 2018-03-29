@@ -3,11 +3,16 @@ package com.bh.mall.common;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.bh.mall.exception.BizException;
 
 public class CalculationUtil {
 
     public static String multUp(String number) {
+        if (StringUtils.isBlank(number)) {
+            return "0";
+        }
         DecimalFormat df = new DecimalFormat(".00");
         df.setRoundingMode(RoundingMode.UP);
         Double money;
@@ -27,6 +32,9 @@ public class CalculationUtil {
     }
 
     public static String multDown(String number) {
+        if (StringUtils.isBlank(number)) {
+            return "0";
+        }
         DecimalFormat df = new DecimalFormat(".00");
         df.setRoundingMode(RoundingMode.DOWN);
         Double money;

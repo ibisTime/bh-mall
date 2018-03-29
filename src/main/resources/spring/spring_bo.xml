@@ -113,4 +113,8 @@
 	<bean id="orderBO" class="com.bh.mall.bo.impl.OrderBOImpl">
 		<property name="paginableDAO" ref="orderDAOImpl"></property>
 	</bean>
+	<bean id="chargeBO" class="com.bh.mall.bo.impl.ChargeBOImpl">
+		<property name="paginableDAO" ref="chargeDAOImpl"></property>
+	</bean>
+	
 </beans>

@@ -36,5 +36,6 @@
 		 <typeAlias alias="order" type="com.bh.mall.domain.Order"/>
 		<typeAlias alias="afterSale" type="com.bh.mall.domain.AfterSale"/>
 	
+	<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
 	</typeAliases>
 </configuration>	

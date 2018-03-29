@@ -11,7 +11,7 @@
 
 部署步骤：
 1、包上传
-scp -P22 ./std-user.war root@121.43.101.148:/home
+scp -P22 ./apache-tomcat-7.0.63.tar.gz root@47.98.107.162:/lost+found/
 cdkj123456Q
   
 2，部署
