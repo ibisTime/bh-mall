@@ -28,8 +28,8 @@ import com.bh.mall.exception.BizException;
  * @history:
  */
 @Component
-public class AccountBOImpl extends PaginableBOImpl<Account> implements
-        IAccountBO {
+public class AccountBOImpl extends PaginableBOImpl<Account>
+        implements IAccountBO {
     @Autowired
     private IAccountDAO accountDAO;
 
@@ -44,8 +44,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         if (StringUtils.isNotBlank(systemCode)
                 && StringUtils.isNotBlank(companyCode)
                 && StringUtils.isNotBlank(userId)) {
-            accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
-                .getCode());
+            accountNumber = OrderNoGenerater
+                .generate(EGeneratePrefix.Account.getCode());
             Account data = new Account();
             data.setAccountNumber(accountNumber);
             data.setUserId(userId);
@@ -114,8 +114,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             throw new BizException("xn000000", "账户余额不足");
         }
         // 记录流水
-        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EBizType.AJ_QX, "线下取现", -freezeAmount);
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline, null,
+            null, withdrawCode, EBizType.AJ_QX, "线下取现", -freezeAmount);
         Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
@@ -137,8 +137,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
 
         // 记录流水
-        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EBizType.AJ_QX, "线下取现失败退回", freezeAmount);
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline, null,
+            null, withdrawCode, EBizType.AJ_QX, "线下取现失败退回", freezeAmount);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(dbAccount.getAmount() + freezeAmount);
@@ -197,14 +197,15 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public Account getAccountByUser(String userId, String currency) {
         Account data = null;
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(currency)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(currency)) {
             Account condition = new Account();
             condition.setUserId(userId);
             condition.setCurrency(currency);
             data = accountDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn802000", "用户[" + userId + ";"
-                        + currency + "]无此类型账户");
+                throw new BizException("xn802000",
+                    "用户[" + userId + ";" + currency + "]无此类型账户");
             }
         }
         return data;
@@ -237,7 +238,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
-            EBizType bizType, String fromBizNote, String toBizNote, String refNo) {
+            EBizType bizType, String fromBizNote, String toBizNote,
+            String refNo) {
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
         transAmountCZB(fromAccount, toAccount, transAmount, bizType,

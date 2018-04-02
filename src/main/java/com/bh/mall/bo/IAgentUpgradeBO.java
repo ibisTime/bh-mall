@@ -12,4 +12,6 @@ public interface IAgentUpgradeBO extends IPaginableBO<AgentUpgrade> {
     public List<AgentUpgrade> queryAgentUpgradeList(AgentUpgrade condition);
 
     public AgentUpgrade getAgentUpgrade(String code);
+
+    public AgentUpgrade getAgentUpgradeByLevel(Integer integer);
 }

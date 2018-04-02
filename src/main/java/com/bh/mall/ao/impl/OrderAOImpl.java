@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.bo.IAccountBO;
@@ -165,18 +166,6 @@ public class OrderAOImpl implements IOrderAO {
             data.setQuantity(cData.getQuantity());
             data.setPrice(pspData.getPrice());
             Long amount = cData.getQuantity() * pspData.getPrice();
-            // 是否包邮
-            // Long amount = cData.getQuantity() * pspData.getPrice();
-            // if (EProduuctSend.Send_YES.getCode().equals(req.getIsSendHome()))
-            // {
-            // if (EProductKind.Free_YES.getCode().equals(pData.getIsFree())) {
-            // SYSConfig sysData = sysConfigBO.getConfig(req.getProvince(),
-            // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            // amount = amount
-            // + StringValidater.toLong(sysData.getCvalue());
-            // data.setYunfei(StringValidater.toLong(sysData.getCvalue()));
-            // }
-            // }
 
             data.setAmount(amount);
             data.setApplyUser(req.getApplyUser());
@@ -250,17 +239,8 @@ public class OrderAOImpl implements IOrderAO {
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
         data.setPrice(pspData.getPrice());
 
-        // 是否包邮
         Long amount = StringValidater.toInteger(req.getQuantity())
                 * pspData.getPrice();
-        // if (EProduuctSend.Send_YES.getCode().equals(req.getIsSendHome())) {
-        // if (EProductKind.Free_YES.getCode().equals(pData.getIsFree())) {
-        // SYSConfig sysData = sysConfigBO.getConfig(req.getProvince(),
-        // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-        // amount = amount + StringValidater.toLong(sysData.getCvalue());
-        // data.setYunfei(StringValidater.toLong(sysData.getCvalue()));
-        // }
-        // }
 
         data.setAmount(amount);
 
@@ -285,6 +265,7 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
+    @Transactional
     public void payOrder(String payCode, String payGroup, String payType) {
         String[] group = payGroup.split(",");
 

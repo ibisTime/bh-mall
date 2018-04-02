@@ -48,6 +48,12 @@
 				<if test="teamName != null and teamName != '' ">
 				AND t.team_name = #{teamName}
 			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="statusForQuery != null and statusForQuery != '' ">
+				AND t.status IN #{statusForQuery}
+			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
 			</if>

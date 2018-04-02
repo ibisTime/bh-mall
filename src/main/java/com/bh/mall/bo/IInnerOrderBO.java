@@ -27,4 +27,6 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
     public void receiveInnerOrder(InnerOrder data);
 
+    public long selectCount(InnerOrder ioCondition);
+
 }

@@ -91,4 +91,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return orderDAO.select(condition);
     }
 
+    @Override
+    public long selectCount(Order oCondition) {
+        return orderDAO.selectTotalCount(oCondition);
+    }
+
 }

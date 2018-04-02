@@ -27,6 +27,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IUserDAO;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627301Req;
+import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -530,6 +531,129 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public void resetBindMobile(User user, String newMobile) {
         user.setMobile(newMobile);
         userDAO.resetBindMobile(user);
+    }
+
+    @Override
+    public String doRegister(String realName, String level, String wxId,
+            String idBehind, String idFront, String introducer, String payPdf,
+            String fromInfo, String userReferee, String mobile, String province,
+            String city, String area, String address, String loginPwd,
+            String photo, String nickname, String unionId, String h5OpenId,
+            String companyCode, String systemCode) {
+        String userId = OrderNoGenerater.generate("U");
+        User data = new User();
+        data.setUserId(userId);
+        data.setRealName(realName);
+        data.setLevel(StringValidater.toInteger(level));
+        data.setIdBehind(idBehind);
+        data.setIdFront(idFront);
+
+        data.setLoginName(mobile);
+        data.setMobile(mobile);
+        data.setWxId(wxId);
+        data.setPhoto(photo);
+        data.setNickname(nickname);
+
+        data.setStatus(EUserStatus.TO_Approve.getCode());
+        data.setApplyDatetime(new Date());
+        data.setUnionId(unionId);
+        data.setH5OpenId(h5OpenId);
+
+        data.setKind(EUserKind.Merchant.getCode());
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+
+        data.setUserReferee(userReferee);
+        data.setProvince(province);
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
+
+        data.setCreateDatetime(new Date());
+        data.setCompanyCode(companyCode);
+        data.setSystemCode(systemCode);
+        userDAO.insert(data);
+
+        return userId;
+
+    }
+
+    @Override
+    public void allotAgency(User data) {
+        userDAO.allotAgency(data);
+    }
+
+    @Override
+    public void ignore(User data) {
+        data.setStatus(EUserStatus.Ignored.getCode());
+        userDAO.ignore(data);
+    }
+
+    @Override
+    public void updateInformation(User data) {
+        userDAO.updateInformation(data);
+    }
+
+    @Override
+    public void cancelImpower(User data) {
+        data.setStatus(EUserStatus.TO_Cancel.getCode());
+        userDAO.cancelImpower(data);
+    }
+
+    @Override
+    public void approveImpower(User data) {
+        userDAO.approveImpower(data);
+    }
+
+    @Override
+    public void approveCanenl(User data) {
+        userDAO.approveImpower(data);
+    }
+
+    @Override
+    public void refreshHighUser(User data, String highUser, String updater) {
+        data.setHighUserId(highUser);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        userDAO.updateHighUser(data);
+    }
+
+    @Override
+    public void refreshUserReferee(User data, String userReferee,
+            String updater) {
+        data.setHighUserId(userReferee);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        userDAO.updateUserReferee(data);
+
+    }
+
+    @Override
+    public void refreshManager(User data, String manager, String updater) {
+        data.setHighUserId(manager);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        userDAO.updateManager(data);
+    }
+
+    @Override
+    public void upgradeLevel(User data) {
+        userDAO.upgradeLevel(data);
+    }
+
+    @Override
+    public void approveUpgrade(User data) {
+        userDAO.approveUpgrade(data);
+    }
+
+    @Override
+    public List<User> selectList(User condition, int pageNo, int pageSize) {
+        return userDAO.selectList(condition, pageNo, pageSize);
+    }
+
+    @Override
+    public List<User> selectAgentFront(User condition, int start, int limit) {
+        return userDAO.selectAgentFront(condition, start, limit);
     }
 
 }

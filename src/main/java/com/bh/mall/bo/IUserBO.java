@@ -38,8 +38,8 @@ public interface IUserBO extends IPaginableBO<User> {
             String systemCode);
 
     // 查询openId
-    public void doCheckOpenId(String unionId, String h5OpenId,
-            String appOpenId, String companyCode, String systemCode);
+    public void doCheckOpenId(String unionId, String h5OpenId, String appOpenId,
+            String companyCode, String systemCode);
 
     // 前端用户注册
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
@@ -52,6 +52,14 @@ public interface IUserBO extends IPaginableBO<User> {
             String kind, String loginPwd, String nickname, String photo,
             String userReferee, String lastAgentLog, String companyCode,
             String systemCode);
+
+    // 含推荐人注册
+    public String doRegister(String realName, String level, String wxId,
+            String idBehind, String idFront, String introducer, String payPdf,
+            String fromInfo, String userReferee, String mobile, String province,
+            String city, String area, String address, String loginPwd,
+            String photo, String nickname, String unionId, String h5OpenId,
+            String companyCode, String systemCode);
 
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo);
@@ -92,8 +100,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public List<User> queryUserList(User condition);
 
-    public void refreshStatus(String userId, EUserStatus normal,
-            String updater, String remark);
+    public void refreshStatus(String userId, EUserStatus normal, String updater,
+            String remark);
 
     public void refreshLoginName(String userId, String loginName);
 
@@ -114,5 +122,40 @@ public interface IUserBO extends IPaginableBO<User> {
     public void setTradePwd(User user, String tradePwd);
 
     public void resetBindMobile(User user, String newMobile);
+
+    // 意向分配
+    public void allotAgency(User data);
+
+    // 忽略意向
+    public void ignore(User data);
+
+    public void updateInformation(User data);
+
+    // 取消授权
+    public void cancelImpower(User data);
+
+    // 审核授权
+    public void approveImpower(User data);
+
+    // 审核取消授权
+    public void approveCanenl(User data);
+
+    // 修改上级
+    public void refreshHighUser(User data, String highUser, String updater);
+
+    public void refreshUserReferee(User data, String userReferee,
+            String updater);
+
+    public void refreshManager(User data, String manager, String updater);
+
+    public void upgradeLevel(User data);
+
+    // 审核升级
+    public void approveUpgrade(User data);
+
+    public List<User> selectList(User condition, int pageNo, int pageSize);
+
+    public List<User> selectAgentFront(User condition, int pageNo,
+            int pageSize);
 
 }

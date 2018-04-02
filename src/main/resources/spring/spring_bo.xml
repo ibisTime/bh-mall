@@ -117,4 +117,8 @@
 		<property name="paginableDAO" ref="chargeDAOImpl"></property>
 	</bean>
 	
+	<bean id="agencyLogBO" class="com.bh.mall.bo.impl.AgencyLogBOImpl">
+		<property name="paginableDAO" ref="agencyLogImpl"></property>
+	</bean>
+	
 </beans>

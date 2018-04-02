@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -60,7 +61,7 @@ public class User extends ABaseDO {
     private Integer level;
 
     // 需升等级
-    private String applyLevel;
+    private Integer applyLevel;
 
     // 推荐人
     private String userReferee;
@@ -174,6 +175,10 @@ public class User extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    private List<User> userList;
+
+    private List<AgencyLog> logList;
+
     // ******db******
     // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
     private String loginType;
@@ -214,12 +219,30 @@ public class User extends ABaseDO {
     // 申请时间止(选填)
     private Date applyDatetimeEnd;
 
+    private String keyWord;
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public List<AgencyLog> getLogList() {
+        return logList;
+    }
+
+    public void setLogList(List<AgencyLog> logList) {
+        this.logList = logList;
     }
 
     public String getLoginName() {
@@ -310,12 +333,16 @@ public class User extends ABaseDO {
         this.level = level;
     }
 
-    public String getApplyLevel() {
+    public Integer getApplyLevel() {
         return applyLevel;
     }
 
-    public void setApplyLevel(String applyLevel) {
+    public void setApplyLevel(Integer applyLevel) {
         this.applyLevel = applyLevel;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
     public String getUserReferee() {
@@ -676,6 +703,14 @@ public class User extends ABaseDO {
 
     public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
         this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 
 }

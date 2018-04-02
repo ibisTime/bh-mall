@@ -63,4 +63,9 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
         afterSaleDAO.changeProduct(data);
 
     }
+
+    @Override
+    public long selectCount(AfterSale asCondition) {
+        return afterSaleDAO.selectTotalCount(asCondition);
+    }
 }

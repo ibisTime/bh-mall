@@ -134,4 +134,63 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public void resetBindMobile(User user) {
         super.update(NAMESPACE.concat("update_mobile"), user);
     }
+
+    @Override
+    public void allotAgency(User data) {
+        super.update(NAMESPACE.concat("allot_gency"), data);
+    }
+
+    @Override
+    public void ignore(User data) {
+        super.update(NAMESPACE.concat("ignore_gency"), data);
+
+    }
+
+    @Override
+    public void updateInformation(User data) {
+        super.update(NAMESPACE.concat("update_information"), data);
+    }
+
+    @Override
+    public void cancelImpower(User data) {
+        super.update(NAMESPACE.concat("cancel_impower"), data);
+    }
+
+    @Override
+    public void approveImpower(User data) {
+        super.update(NAMESPACE.concat("approve_impower"), data);
+
+    }
+
+    @Override
+    public void updateHighUser(User data) {
+        super.update(NAMESPACE.concat("update_highUser"), data);
+    }
+
+    @Override
+    public void updateUserReferee(User data) {
+        super.update(NAMESPACE.concat("update_userReferee"), data);
+    }
+
+    @Override
+    public void updateManager(User data) {
+        super.update(NAMESPACE.concat("update_manager"), data);
+
+    }
+
+    @Override
+    public void upgradeLevel(User data) {
+        super.update(NAMESPACE.concat("upgrade_level"), data);
+    }
+
+    @Override
+    public void approveUpgrade(User data) {
+        super.update(NAMESPACE.concat("approve_upgrade"), data);
+    }
+
+    @Override
+    public List<User> selectAgentFront(User condition, int start, int limit) {
+        return super.selectList(NAMESPACE.concat("select_agent_front"), start,
+            limit, condition, User.class);
+    }
 }

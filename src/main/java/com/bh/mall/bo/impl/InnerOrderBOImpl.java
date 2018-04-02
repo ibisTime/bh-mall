@@ -76,4 +76,9 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     public void receiveInnerOrder(InnerOrder data) {
         innerOrderDAO.updateStatus(data);
     }
+
+    @Override
+    public long selectCount(InnerOrder ioCondition) {
+        return innerOrderDAO.selectTotalCount(ioCondition);
+    }
 }

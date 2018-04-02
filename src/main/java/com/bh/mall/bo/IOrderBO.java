@@ -29,6 +29,8 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public void receivedOrder(Order data);
 
-    public Order getCheckOrder(String userId, String code);
+    public Order getCheckOrder(String userId, String kind);
+
+    public long selectCount(Order oCondition);
 
 }

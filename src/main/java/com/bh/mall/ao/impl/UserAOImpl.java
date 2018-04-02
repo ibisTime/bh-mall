@@ -9,6 +9,7 @@
 package com.bh.mall.ao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,30 +23,54 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IUserAO;
+import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
+import com.bh.mall.bo.IAfterSaleBO;
+import com.bh.mall.bo.IAgencyLogBO;
+import com.bh.mall.bo.IAgentImpowerBO;
+import com.bh.mall.bo.IAgentUpgradeBO;
+import com.bh.mall.bo.IInnerOrderBO;
+import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IUserBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Account;
+import com.bh.mall.domain.AfterSale;
+import com.bh.mall.domain.AgencyLog;
+import com.bh.mall.domain.AgentImpower;
+import com.bh.mall.domain.AgentUpgrade;
+import com.bh.mall.domain.InnerOrder;
+import com.bh.mall.domain.Order;
 import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627250Req;
+import com.bh.mall.dto.req.XN627251Req;
+import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.req.XN627301Req;
 import com.bh.mall.dto.req.XN627302Req;
+import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627302Res;
+import com.bh.mall.enums.EAfterSaleStatus;
+import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ELoginType;
+import com.bh.mall.enums.EOrderStatus;
+import com.bh.mall.enums.EResult;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserKind;
+import com.bh.mall.enums.EUserLevel;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -77,6 +102,30 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     protected IAddressBO addressBO;
+
+    @Autowired
+    protected IAgencyLogBO agencyLogBO;
+
+    @Autowired
+    private IAgentImpowerBO agentImpowerBO;
+
+    @Autowired
+    private IAccountBO accountBO;
+
+    @Autowired
+    private IOrderBO orderBO;
+
+    @Autowired
+    private IInnerOrderBO innerOrderBO;
+
+    @Autowired
+    private IAfterSaleBO afterSaleBO;
+
+    @Autowired
+    private IAgentUpgradeBO agentUpgradeBO;
+
+    @Autowired
+    // private Iintro awardBO;
 
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
@@ -404,6 +453,12 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public Paginable<User> queryUserPage(int start, int limit, User condition) {
+        if (condition.getApplyDatetimeStart() != null
+                && condition.getApplyDatetimeEnd() != null
+                && condition.getApplyDatetimeStart()
+                    .before(condition.getApplyDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
         Paginable<User> page = userBO.getPaginable(start, limit, condition);
         List<User> list = page.getList();
         for (User user : list) {
@@ -418,6 +473,12 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public List<User> queryUserList(User condition) {
+        if (condition.getApplyDatetimeStart() != null
+                && condition.getApplyDatetimeEnd() != null
+                && condition.getApplyDatetimeStart()
+                    .before(condition.getApplyDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
         return userBO.queryUserList(condition);
     }
 
@@ -514,9 +575,59 @@ public class UserAOImpl implements IUserAO {
         } else {
             String nickname = (String) wxRes.get("nickname");
             String photo = (String) wxRes.get("headimgurl");
+            // 是否可被意向
+            AgentImpower data = agentImpowerBO.getAgentImpowerByLevel(
+                StringValidater.toInteger(req.getLevel()));
+            if (EBoolean.NO.getCode().equals(data.getIsIntent())) {
+                throw new BizException("xn0000", "本等级不可被意向");
+            }
+
             result = doWxLoginReg(req, ESystemCode.BH.getCode(),
                 ESystemCode.BH.getCode(), unionId, null, h5OpenId, nickname,
                 photo);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public XN627302Res applyHaveUserReferee(XN627251Req req) {
+        XN627302Res result = null;
+        Map<String, String> wxRes = getUserInfo(req.getCode());
+        String unionId = (String) wxRes.get("unionId");
+        String h5OpenId = (String) wxRes.get("h5OpenId");
+        User dbUser = userBO.doGetUserByOpenId(h5OpenId,
+            ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+        if (null != dbUser) {
+            throw new BizException("xn0000", "您已经申请过代理");
+        } else {
+            String nickname = (String) wxRes.get("nickname");
+            String photo = (String) wxRes.get("photo");
+
+            userBO.doCheckOpenId(unionId, h5OpenId, null,
+                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            // 是否可被意向
+            AgentImpower data = agentImpowerBO.getAgentImpowerByLevel(
+                StringValidater.toInteger(req.getLevel()));
+            if (EBoolean.NO.getCode().equals(data.getIsIntent())) {
+                throw new BizException("xn0000", "本等级不可被意向");
+            }
+
+            String userId = userBO.doRegister(req.getRealName(), req.getLevel(),
+                req.getWxId(), req.getIdBehind(), req.getIdFront(),
+                req.getIntroducer(), req.getPayPdf(), req.getFromInfo(),
+                req.getUserReferee(), req.getMobile(), req.getProvince(),
+                req.getCity(), req.getArea(), req.getAddress(),
+                EUserPwd.InitPwd.getCode(), photo, nickname, unionId, h5OpenId,
+                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+
+            distributeAccount(userId, nickname, EUserKind.Merchant.getCode(),
+                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            addressBO.saveAddress(userId, req.getRealName(), req.getProvince(),
+                req.getCity(), req.getArea(), req.getAddress(),
+                EBoolean.YES.getCode());
+            result = new XN627302Res(userId, EBoolean.NO.getCode());
+
         }
         return result;
     }
@@ -596,4 +707,369 @@ public class UserAOImpl implements IUserAO {
         result = new XN627302Res(userId, EBoolean.NO.getCode());
         return result;
     }
+
+    @Override
+    public void allotAgency(String userId, String toUserId, String manager,
+            String approver) {
+        User data = userBO.getUser(userId);
+        User toUser = userBO.getUser(toUserId);
+        if (data.getLevel() >= toUser.getLevel()) {
+            throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
+        }
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setManager(manager);
+        String logCode = agencyLogBO.saveAgencyLog(toUserId);
+        data.setLastAgentLog(logCode);
+        userBO.allotAgency(data);
+    }
+
+    @Override
+    public void pass(String code, String approver, String remark) {
+        User data = userBO.getUser(code);
+        agencyLogBO.pass(data, approver, remark);
+
+    }
+
+    @Override
+    public void ignore(String userId, String aprrover) {
+        User data = userBO.getUser(userId);
+        data.setApprover(aprrover);
+        data.setApproveDatetime(new Date());
+        String logCode = agencyLogBO.ignore(data);
+        data.setLastAgentLog(logCode);
+        userBO.ignore(data);
+    }
+
+    @Override
+    public void updateInformation(XN627255Req req) {
+        User data = userBO.getUser(req.getUserId());
+        data.setLevel(StringValidater.toInteger(req.getLevel()));
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        data.setAddress(req.getAddress());
+
+        data.setWxId(req.getWxId());
+        data.setMobile(req.getMobile());
+        data.setRealName(req.getRealName());
+        userBO.updateInformation(data);
+    }
+
+    @Override
+    public void cancelImpower(String userId) {
+        User data = userBO.getUser(userId);
+        Account condition = new Account();
+        condition.setUserId(data.getUserId());
+
+        // 账户是否余额
+        List<Account> accountList = accountBO.queryAccountList(condition);
+        for (Account account : accountList) {
+            if (account.getAmount() != 0) {
+                throw new BizException("xn0000",
+                    "您的" + account.getCurrency() + "账户还有余额,请取出后再申请");
+            }
+        }
+        // 是否有未完成的订单
+        Order oCondition = new Order();
+        oCondition.setApplyUser(data.getUserId());
+        oCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
+        long count = orderBO.selectCount(oCondition);
+        if (count != 0) {
+            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
+        }
+
+        InnerOrder ioCondition = new InnerOrder();
+        ioCondition.setApplyUser(data.getUserId());
+        ioCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
+        long ioCount = innerOrderBO.selectCount(ioCondition);
+        if (ioCount != 0) {
+            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
+        }
+        AfterSale asCondition = new AfterSale();
+        asCondition.setApplyUser(data.getUserId());
+        asCondition.setStatus(EAfterSaleStatus.NO_CallOff.getCode());
+        long asCount = afterSaleBO.selectCount(asCondition);
+        if (asCount != 0) {
+            throw new BizException("xn000", "您还有未完成的售后单,请在订单完成后申请");
+        }
+
+        String logCode = agencyLogBO.cancelImpower(data);
+        data.setLastAgentLog(logCode);
+        userBO.cancelImpower(data);
+    }
+
+    @Override
+    public void approveImpower(String userId, String approver, String result,
+            String remark) {
+        User data = userBO.getUser(userId);
+        User approveUser = userBO.getUser(approver);
+        String status = EUserStatus.Impowered.getCode();
+        if (EResult.Result_YES.getCode().equals(result)) {
+            AgentImpower aiData = agentImpowerBO
+                .getAgentImpowerByLevel(data.getApplyLevel());
+            if (EBoolean.YES.getCode().equals(aiData.getIsRealName())) {
+                if (StringUtils.isBlank(data.getRealName())) {
+                    throw new BizException("xn000", "本等级授权需要实名，请实名后再授权");
+                }
+            }
+            // 是否需要公司授权
+            if (EBoolean.YES.getCode().equals(aiData.getIsCompanyImpower())) {
+                status = EUserStatus.TO_CompanyApprove.getCode();
+                // 审核人是否是平台
+                if (EUserKind.Customer.getCode()
+                    .equals(approveUser.getKind())) {
+                    status = EUserStatus.Impowered.getCode();
+                    // 介绍人不为空且等级低于被介绍人
+                    if (StringUtils.isNotBlank(data.getIntroducer())) {
+                        if (approveUser.getLevel() < data.getLevel()) {
+                            long amount = aiData.getMinCharge();
+                            if (data.getLevel() == StringValidater
+                                .toInteger(EUserLevel.ONE.getCode())) {
+                                // accountBO.transAmountCZB(
+                                // ESysUser.SYS_USER_BH.getCode(),
+                                // ECurrency.YJ_CNY.getCode(),
+                                // data.getIntroducer(),
+                                // ECurrency.YJ_CNY.getCode(), ,
+                                // bizType, fromBizNote, toBizNote, refNo);
+                            } else {
+                                // accountBO.transAmountCZB(
+                                // ESysUser.SYS_USER_BH.getCode(),
+                                // ECurrency.YJ_CNY.getCode(),
+                                // data.getIntroducer(),
+                                // ECurrency.YJ_CNY.getCode(), ,
+                                // bizType, fromBizNote, toBizNote, refNo);
+                            }
+                        }
+                    }
+                }
+            }
+
+        } else {
+            status = EUserStatus.NO_Through.getCode();
+        }
+        data.setApprover(approver);
+        data.setApplyDatetime(new Date());
+        data.setRemark(remark);
+        data.setStatus(status);
+        String logCode = agencyLogBO.approveImpower(data);
+        data.setLastAgentLog(logCode);
+
+        userBO.approveImpower(data);
+
+    }
+
+    @Override
+    public void approveCanenl(String userId, String approver, String result,
+            String remark) {
+        User data = userBO.getUser(userId);
+        String status = EUserStatus.NO_Through.getCode();
+        if (EResult.Result_YES.getCode().equals(result)) {
+            status = EUserStatus.Canceled.getCode();
+        }
+        data.setStatus(status);
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setRemark(remark);
+        String logCode = agencyLogBO.approveCanenl(data);
+        data.setLastAgentLog(logCode);
+        userBO.approveCanenl(data);
+    }
+
+    @Override
+    public void editHighUser(String userId, String highUser, String updater) {
+        User data = userBO.getUser(userId);
+        User highData = userBO.getUser(highUser);
+        if (data.getLevel() >= highData.getLevel()) {
+            throw new BizException("xn0000", "不能大于上级等级");
+        }
+        userBO.refreshHighUser(data, highUser, updater);
+
+    }
+
+    @Override
+    public void editUserReferee(String userId, String userReferee,
+            String updater) {
+        User data = userBO.getUser(userId);
+        userBO.getCheckUser(userReferee);
+        userBO.refreshUserReferee(data, userReferee, updater);
+    }
+
+    @Override
+    public void editManager(String userId, String manager, String updater) {
+        User data = userBO.getUser(userId);
+        userBO.getCheckUser(manager);
+        userBO.refreshManager(data, manager, updater);
+
+    }
+
+    @Override
+    public XN627262Res upgradeLevel(String userId, String highLevel,
+            String payPdf, String teamName) {
+        XN627262Res res = null;
+        User data = userBO.getUser(userId);
+        if (data.getLevel() > StringValidater.toInteger(highLevel)) {
+            throw new BizException("xn0000", "升级等级要大于当前等级");
+        }
+        if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == data
+            .getLevel()) {
+            throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
+        }
+
+        AgentUpgrade auData = agentUpgradeBO
+            .getAgentUpgradeByLevel(data.getLevel());
+        // 获取推荐人数
+        User condition = new User();
+        condition.setUserReferee(data.getUserId());
+        List<User> list = userBO.queryUserList(condition);
+
+        if (list.size() < auData.getReNumber()) {
+            throw new BizException("xn0000", "您所推荐人数不足,无法升级");
+        }
+        // 余额是否清零
+        if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
+            res = new XN627262Res("本等级余额将被清零，请确保您的账户中没有余额");
+        }
+
+        data.setApplyLevel(StringValidater.toInteger(highLevel));
+        data.setTeamName(teamName);
+        data.setStatus(EUserStatus.TO_Upgrade.getCode());
+        data.setApplyDatetime(new Date());
+        String logCode = agencyLogBO.upgradeLevel(data, payPdf);
+        data.setLastAgentLog(logCode);
+        userBO.upgradeLevel(data);
+        return res;
+    }
+
+    @Override
+    public void approveUpgrade(String userId, String approver, String remark,
+            String result) {
+        User data = userBO.getUser(userId);
+        String status = EUserStatus.NO_Through.getCode();
+        if (EBoolean.YES.getCode().equals(result)) {
+            status = EUserStatus.Upgraded.getCode();
+            AgentUpgrade auData = agentUpgradeBO
+                .getAgentUpgradeByLevel(data.getLevel());
+            Account condition = new Account();
+            condition.setUserId(data.getUserId());
+            List<Account> list = accountBO.queryAccountList(condition);
+            // 账户清零
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (Account account : list) {
+                    if (account.getAmount() > 0) {
+                        accountBO.transAmountCZB(data.getUserId(),
+                            account.getCurrency(),
+                            ESysUser.SYS_USER_BH.getCode(),
+                            account.getCurrency(), account.getAmount(),
+                            EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
+                            EBizType.AJ_QKYE.getValue(), null);
+                    }
+                }
+            }
+
+            if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
+                status = EUserStatus.TO_CompanyApprove.getCode();
+            }
+        }
+        data.setStatus(status);
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setRemark(remark);
+        String logCode = agencyLogBO.approveUpgrade(data);
+        data.setLastAgentLog(logCode);
+        userBO.approveUpgrade(data);
+    }
+
+    @Override
+    public Paginable<User> queryLowUser(int start, int limit, User condition) {
+        return userBO.getPaginable(start, limit, condition);
+    }
+
+    // **************************************
+    @Override
+    public Paginable<User> queryAllLowUser(int start, int limit,
+            User condition) {
+        long totalCount = userBO.getTotalCount(condition);
+        Page<User> page = new Page<User>(start, limit, totalCount);
+        List<User> list = userBO.selectList(condition, page.getPageNo(),
+            page.getPageSize());
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (User user : list) {
+                condition.setHighUserId(user.getUserId());
+                List<User> userList = userBO.selectList(condition,
+                    page.getPageNo(), page.getPageSize());
+                user.setUserList(userList);
+            }
+            this.queryAllLowUser(page.getPageNo(), page.getPageSize(),
+                condition);
+        }
+        return page;
+    }
+
+    @Override
+    public Paginable<User> queryAgentPage(int start, int limit,
+            User condition) {
+        Page<User> page = null;
+        for (int i = 1; i <= 5; i++) {
+            condition.setLevel(i);
+            long totalCount = userBO.getTotalCount(condition);
+            page = new Page<User>(start, limit, totalCount);
+            List<User> list = userBO.selectList(condition, page.getPageNo(),
+                page.getPageSize());
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (User user : list) {
+                    condition.setHighUserId(user.getUserId());
+                    List<User> userList = userBO.selectList(condition,
+                        page.getPageNo(), page.getPageSize());
+                    user.setUserList(userList);
+                }
+            } else {
+                break;
+            }
+        }
+        return page;
+    }
+
+    @Override
+    public Paginable<User> queryIntentionAgentPageFront(int start, int limit,
+            User condition) {
+        if (condition.getApplyDatetimeStart() != null
+                && condition.getApplyDatetimeEnd() != null
+                && condition.getApplyDatetimeStart()
+                    .before(condition.getApplyDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
+        condition.setKind(EUserKind.Merchant.getCode());
+        long totalCount = userBO.getTotalCount(condition);
+        Page<User> page = new Page<User>(start, limit, totalCount);
+        List<User> list = userBO.selectAgentFront(condition, page.getPageNo(),
+            page.getPageSize());
+        page.setList(list);
+        return page;
+    }
+
+    @Override
+    public Paginable<User> queryIntentionAgentPage(int start, int limit,
+            User condition) {
+        if (condition.getApplyDatetimeStart() != null
+                && condition.getApplyDatetimeEnd() != null
+                && condition.getApplyDatetimeStart()
+                    .before(condition.getApplyDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
+        condition.setKind(EUserKind.Merchant.getCode());
+        return userBO.getPaginable(start, limit, condition);
+    }
+
+    @Override
+    public User getUserHaveReferee(int start, int limit, String userId) {
+        User data = userBO.getUser(userId);
+        AgencyLog condition = new AgencyLog();
+        condition.setApplyUser(userId);
+        List<AgencyLog> list = agencyLogBO.queryAgencyLogPage(start, limit,
+            condition);
+        data.setLogList(list);
+        return data;
+    }
+
 }

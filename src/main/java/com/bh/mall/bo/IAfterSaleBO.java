@@ -19,4 +19,6 @@ public interface IAfterSaleBO extends IPaginableBO<AfterSale> {
 
     public void changeProduct(AfterSale data);
 
+    public long selectCount(AfterSale asCondition);
+
 }

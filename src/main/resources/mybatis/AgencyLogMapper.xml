@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IAgencyLogDAO">
+	<resultMap id="agencyLog_DB_Result" type="agencyLog">
+		<result column="code" property="code" />
+		<result column="to_user_id" property="toUserId" />
+		<result column="type" property="type" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="level" property="level" />
+		<result column="apply_level" property="applyLevel" />
+		<result column="high_level" property="highLevel" />
+		<result column="user_referee" property="userReferee" />
+		<result column="team_name" property="teamName" />
+		<result column="pay_pdf" property="payPdf" />
+		<result column="status" property="status" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="toUserId != null and toUserId != '' ">
+				AND t.to_user_id = #{code}
+			</if>
+			<if test="approver != null and approver != '' ">
+				AND t.approver = #{approver}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_agencyLog" parameterType="agencyLog" resultMap="agencyLog_DB_Result">
+		SELECT
+		t.code
+		,t.to_user_id
+		,t.type
+		,t.apply_user
+		,t.apply_datetime
+		,t.level
+		,t.apply_level
+		,t.high_level
+		,t.user_referee
+		,t.team_name
+		,t.pay_pdf
+		,t.status
+		,t.approver
+		,t.approve_datetime
+		,t.remark
+		FROM
+		tbh_agency_log t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_agencyLog_count" parameterType="agencyLog"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_agency_log t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_agencyLog" parameterType="agencyLog">
+		INSERT INTO
+		tbh_agency_log(
+		code
+		,to_user_id
+		,type
+		,apply_user
+		,apply_datetime
+		,level
+		,apply_level
+		,high_level
+		,user_referee
+		,team_name
+		,pay_pdf
+		,status
+		,approver
+		,approve_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{toUserId}
+		,#{type}
+		,#{applyUser}
+		,#{applyDatetime}
+		,#{level}
+		,#{applyLevel}
+		,#{highLevel}
+		,#{userReferee}
+		,#{teamName}
+		,#{payPdf}
+		,#{status}
+		,#{approver}
+		,#{approveDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_agencyLog" parameterType="agencyLog">
+		UPDATE tbh_agency_log
+		SET
+		to_user_id = #{toUserId}
+		,type = #{type}
+		,apply_user = #{applyUser}
+		,apply_datetime = #{applyDatetime}
+		,level = #{level}
+		,apply_level = #{applyLevel}
+		,high_level = #{highLevel}
+		,user_referee = #{userReferee}
+		,team_name = #{teamName}
+		,pay_pdf = #{payPdf}
+		,status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

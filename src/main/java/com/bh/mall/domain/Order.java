@@ -142,6 +142,8 @@ public class Order extends ABaseDO {
 
     private Date endDatetime;
 
+    private String statusForQuery;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -484,6 +486,14 @@ public class Order extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStatusForQuery() {
+        return statusForQuery;
+    }
+
+    public void setStatusForQuery(String statusForQuery) {
+        this.statusForQuery = statusForQuery;
     }
 
 }

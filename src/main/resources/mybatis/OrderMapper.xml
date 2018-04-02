@@ -62,6 +62,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="statusForQuery != null and statusForQuery != '' ">
+				AND t.status IN #{statusForQuery}
+			</if>
 			<if test="productName != null and productName != '' ">
 				AND t.product_name like "%"#{productName}"%"
 			</if>

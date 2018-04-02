@@ -47,4 +47,5 @@ public interface IAgentImpowerAO {
     
      */
     public AgentImpower getAgentImpower(String code);
+
 }

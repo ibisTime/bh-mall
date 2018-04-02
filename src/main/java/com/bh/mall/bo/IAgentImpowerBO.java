@@ -12,4 +12,6 @@ public interface IAgentImpowerBO extends IPaginableBO<AgentImpower> {
     public List<AgentImpower> queryAgentImpowerList(AgentImpower condition);
 
     public AgentImpower getAgentImpower(String code);
+
+    public AgentImpower getAgentImpowerByLevel(Integer integer);
 }

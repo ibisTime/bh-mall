@@ -13,8 +13,8 @@ import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class AgentImpowerBOImpl extends PaginableBOImpl<AgentImpower> implements
-        IAgentImpowerBO {
+public class AgentImpowerBOImpl extends PaginableBOImpl<AgentImpower>
+        implements IAgentImpowerBO {
 
     @Autowired
     private IAgentImPowerDAO agentImPowerDAO;
@@ -41,6 +41,14 @@ public class AgentImpowerBOImpl extends PaginableBOImpl<AgentImpower> implements
     @Override
     public List<AgentImpower> queryAgentImpowerList(AgentImpower condition) {
         return agentImPowerDAO.selectList(condition);
+    }
+
+    @Override
+    public AgentImpower getAgentImpowerByLevel(Integer level) {
+        AgentImpower condition = new AgentImpower();
+        condition.setLevel(level);
+        return agentImPowerDAO.select(condition);
+
     }
 
 }

@@ -160,6 +160,13 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="keyWord !=null and keyWord != '' ">
+				AND t.real_name like "%"#{keyWord}"%" or t.nickname like "%"#{keyWord}"%" or t.wx_id like "%"#{keyWord}"%" 
+					or t.mobile like "%"#{keyWord}"%" 
+			</if>
 		</trim>
 	</sql>
 	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
@@ -228,6 +235,70 @@
 		SELECT count(1) FROM tbh_user t 
 		<include refid="where_condition"/>
 	</select>
+
+	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
+		SELECT
+		t.user_id
+		,t.login_name
+		,t.mobile
+		,t.wx_id
+		,t.photo
+		
+		,t.nickname
+		,t.trade_pwd
+		
+		,t.kind
+		,t.level
+		,t.apply_level
+		,t.user_referee
+		,t.introducer
+		
+		,t.high_user_id
+		,t.team_name
+		,t.id_kind
+		,t.id_no
+		,t.id_front
+		
+		,t.id_behind
+		,t.id_hand
+		,t.real_name
+		,t.role_code
+		,t.status
+		
+		,t.source
+		,t.apply_datetime
+		,t.manager
+		,t.red_amount
+		,t.union_id
+		
+		,t.h5_open_id
+		,t.app_open_id
+		,t.province
+		,t.city
+		,t.area
+		
+		,t.address
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.approver
+		
+		,t.approve_datetime
+		,t.last_agent_log
+		,t.remark
+		,t.company_code
+		,t.system_code
+		FROM
+		tbh_user t, tbh_agency_log l 
+		<include refid="where_condition" />
+		AND t.user_id = l.to_user_id 
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
 
 	<insert id="insert_user" parameterType="user">
 		INSERT INTO
@@ -445,4 +516,114 @@
 		mobile = #{mobile}
 		WHERE user_id = #{userId}
 	</update>
+	
+	<update id="allot_gency" parameterType="user">
+		UPDATE tbh_user
+		SET
+		high_user_id = #{highUserId}
+		,manager = #{manager}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,last_agent_log = #{lastAgentLog}
+		,mobile = #{mobile}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="ignore_gency" parameterType="user">
+		UPDATE tbh_user
+		SET
+		updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,status = #{status}
+		,last_agent_log = #{lastAgentLog}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
+	<update id="update_information" parameterType="user">
+		UPDATE tbh_user
+		SET
+		level = #{level}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		
+		,mobile = #{mobile}
+		,wx_id = #{wxId}
+		,real_name = #{realName}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
+		
+	<update id="update_information" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,last_agent_log = #{lastAgentLog}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_information" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,last_agent_log = #{lastAgentLog}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_highUser" parameterType="user">
+		UPDATE tbh_user
+		SET
+		high_user_id = #{highUserId}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_userReferee" parameterType="user">
+		UPDATE tbh_user
+		SET
+		user_referee = #{userReferee}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_manager" parameterType="user">
+		UPDATE tbh_user
+		SET
+		manager = #{manager}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
+	<update id="upgrade_level" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,apply_level = #{applyLevel}
+		,team_name = #{teamName}
+		,last_agent_log = #{lastAgentLog}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="approve_upgrade" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,last_agent_log = #{lastAgentLog}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
 </mapper>

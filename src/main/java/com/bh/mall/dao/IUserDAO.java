@@ -8,6 +8,8 @@
  */
 package com.bh.mall.dao;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.IBaseDAO;
 import com.bh.mall.domain.User;
 
@@ -52,4 +54,26 @@ public interface IUserDAO extends IBaseDAO<User> {
     public void setTradePwd(User user);
 
     public void resetBindMobile(User user);
+
+    public void allotAgency(User data);
+
+    public void ignore(User data);
+
+    public void updateInformation(User data);
+
+    public void cancelImpower(User data);
+
+    public void approveImpower(User data);
+
+    public void updateHighUser(User data);
+
+    public void updateUserReferee(User data);
+
+    public void updateManager(User data);
+
+    public void upgradeLevel(User data);
+
+    public void approveUpgrade(User data);
+
+    public List<User> selectAgentFront(User condition, int start, int limit);
 }

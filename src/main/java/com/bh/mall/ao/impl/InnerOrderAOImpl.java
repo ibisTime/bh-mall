@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IInnerOrderAO;
 import com.bh.mall.ao.IInnerProductAO;
@@ -111,6 +112,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     }
 
     @Override
+    @Transactional
     public void toPay(String payCode, String payGroup, String payType) {
         InnerOrder data = innerOrderBO.getInnerOrder(payGroup);
         if (EInnerProductStatus.Shelf_NO.getCode().equals(data.getCode())
@@ -185,6 +187,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     }
 
     @Override
+
     public void deliverInnerProduct(XN627723Req req) {
         InnerOrder data = innerOrderBO.getInnerOrder(req.getCode());
         if (!EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
@@ -213,6 +216,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     }
 
     @Override
+    @Transactional
     public void approveInnerOrder(String code, String result, String updater,
             String remark) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);

@@ -45,7 +45,8 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 内部转账
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
-            EBizType bizType, String fromBizNote, String toBizNote, String refNo);
+            EBizType bizType, String fromBizNote, String toBizNote,
+            String refNo);
 
     // 更新户名
     public void refreshAccountName(String userId, String realName);
@@ -65,4 +66,5 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 获取账户列表
     public List<Account> queryAccountList(Account data);
+
 }

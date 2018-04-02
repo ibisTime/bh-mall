@@ -13,8 +13,8 @@ import com.bh.mall.domain.AgentUpgrade;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class AgentUpgradeBOImpl extends PaginableBOImpl<AgentUpgrade> implements
-        IAgentUpgradeBO {
+public class AgentUpgradeBOImpl extends PaginableBOImpl<AgentUpgrade>
+        implements IAgentUpgradeBO {
 
     @Autowired
     IAgentUpgradeDAO agentUpgradeDAO;
@@ -41,6 +41,13 @@ public class AgentUpgradeBOImpl extends PaginableBOImpl<AgentUpgrade> implements
             }
         }
         return data;
+    }
+
+    @Override
+    public AgentUpgrade getAgentUpgradeByLevel(Integer highLevel) {
+        AgentUpgrade condition = new AgentUpgrade();
+        condition.setLevel(highLevel);
+        return agentUpgradeDAO.select(condition);
     }
 
 }

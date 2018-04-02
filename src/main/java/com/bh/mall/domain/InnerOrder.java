@@ -118,6 +118,16 @@ public class InnerOrder extends ABaseDO {
 
     private Date endDatetime;
 
+    private String statusForQuery;
+
+    public String getStatusForQuery() {
+        return statusForQuery;
+    }
+
+    public void setStatusForQuery(String statusForQuery) {
+        this.statusForQuery = statusForQuery;
+    }
+
     public String getCode() {
         return code;
     }
