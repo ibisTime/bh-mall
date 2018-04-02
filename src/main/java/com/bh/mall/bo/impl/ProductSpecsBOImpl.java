@@ -20,8 +20,8 @@ import com.bh.mall.dto.req.XN627547Req;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
-        implements IProductSpecsBO {
+public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs> implements
+        IProductSpecsBO {
 
     @Autowired
     private IProductSpecsDAO productSpecsDAO;
@@ -30,20 +30,20 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
     private IProductSpecsPriceDAO productSpecsPriceDAO;
 
     @Override
-    public void saveProductSpecs(String code, List<XN627546Req> specList) {
-        String psCode = null;
+    public void saveProductSpecs(String productCode, List<XN627546Req> specList) {
+        String code = null;
         String pspCode = null;
 
         // 添加产品规格
         for (XN627546Req productSpec : specList) {
             ProductSpecs data = new ProductSpecs();
-            psCode = OrderNoGenerater
-                .generate(EGeneratePrefix.ProductSpecs.getCode());
-            data.setCode(psCode);
-            data.setProductCode(code);
+            code = OrderNoGenerater.generate(EGeneratePrefix.ProductSpecs
+                .getCode());
+            data.setCode(code);
+            data.setProductCode(productCode);
             data.setName(productSpec.getName());
             data.setNumber(StringValidater.toInteger(productSpec.getNumber()));
-            data.setWeight(StringValidater.toInteger(productSpec.getWeight()));
+            data.setWeight(StringValidater.toDouble(productSpec.getWeight()));
             data.setIsUpgradeOrder(productSpec.getIsUpgradeOrder());
 
             data.setIsImpowerOrder(productSpec.getIsPowerOrder());
@@ -54,16 +54,17 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
 
             // 新增价格体系
             for (XN627547Req specsPrice : specsPriceList) {
-                ProductSpecsPrice pspData = new ProductSpecsPrice();
+                ProductSpecsPrice productSpecsPrice = new ProductSpecsPrice();
 
                 pspCode = OrderNoGenerater
                     .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
-                pspData.setCode(pspCode);
-                pspData.setProductSpecsCode(psCode);
-                pspData
-                    .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
-                pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
-                productSpecsPriceDAO.insert(pspData);
+                productSpecsPrice.setCode(pspCode);
+                productSpecsPrice.setProductSpecsCode(code);
+                productSpecsPrice.setLevel(StringValidater.toInteger(specsPrice
+                    .getLevel()));
+                productSpecsPrice.setPrice(StringValidater.toLong(specsPrice
+                    .getPrice()));
+                productSpecsPriceDAO.insert(productSpecsPrice);
             }
         }
 
@@ -73,11 +74,10 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
     public void refreshProductSpecs(List<XN627546Req> list) {
 
         for (XN627546Req req : list) {
-            ProductSpecs data = new ProductSpecs();
-            data.setCode(req.getCode());
+            ProductSpecs data = this.getProductSpecs(req.getCode());
             data.setName(req.getName());
             data.setNumber(StringValidater.toInteger(req.getNumber()));
-            data.setWeight(StringValidater.toInteger(req.getWeight()));
+            data.setWeight(StringValidater.toDouble(req.getWeight()));
             data.setIsUpgradeOrder(req.getIsUpgradeOrder());
             data.setIsImpowerOrder(req.getIsPowerOrder());
             data.setIsNormalOrder(req.getIsNormalOrder());
@@ -87,8 +87,8 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             for (XN627547Req specsPrice : specsPriceList) {
                 ProductSpecsPrice pspData = new ProductSpecsPrice();
                 pspData.setCode(specsPrice.getCode());
-                pspData
-                    .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
+                pspData.setLevel(StringValidater.toInteger(specsPrice
+                    .getLevel()));
                 pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
                 productSpecsPriceDAO.update(pspData);
             }
@@ -101,18 +101,24 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             ProductSpecs data = new ProductSpecs();
             data.setProductCode(productCode);
             List<ProductSpecs> list = productSpecsDAO.selectList(data);
-            if (list.size() > 0) {
+            for (ProductSpecs productSpecs : list) {
                 ProductSpecsPrice pspData = new ProductSpecsPrice();
-                pspData.setProductSpecsCode(data.getCode());
-                productSpecsDAO.delete(data);
+                pspData.setProductSpecsCode(productSpecs.getCode());
                 productSpecsPriceDAO.delete(pspData);
             }
-
+            productSpecsDAO.delete(data);
         }
     }
 
     @Override
     public List<ProductSpecs> queryProductSpecsList(ProductSpecs condition) {
+        return productSpecsDAO.selectList(condition);
+    }
+
+    @Override
+    public List<ProductSpecs> queryProductSpecsList(String productCode) {
+        ProductSpecs condition = new ProductSpecs();
+        condition.setProductCode(productCode);
         return productSpecsDAO.selectList(condition);
     }
 

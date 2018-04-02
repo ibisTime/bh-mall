@@ -28,8 +28,8 @@ public class InnerProductAOImpl implements IInnerProductAO {
     @Override
     public String addInnerProduct(XN627700Req req) {
         InnerProduct data = new InnerProduct();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.InnerProduct.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.InnerProduct
+            .getCode());
         data.setCode(code);
         data.setName(req.getName());
         data.setSlogan(req.getSlogan());
@@ -59,7 +59,6 @@ public class InnerProductAOImpl implements IInnerProductAO {
         data.setPic(req.getPic());
         data.setPrice(StringValidater.toLong(req.getPrice()));
 
-        data.setIsFree(req.getIsFree());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -123,11 +122,11 @@ public class InnerProductAOImpl implements IInnerProductAO {
             String updater) {
         InnerProduct data = innerProductBO.getInnerProduct(code);
         if (EInnerProductType.ADD.getCode().equals(type)) {
-            data.setQuantity(
-                data.getQuantity() + StringValidater.toInteger(quantity));
+            data.setQuantity(data.getQuantity()
+                    + StringValidater.toInteger(quantity));
         } else {
-            data.setQuantity(
-                data.getQuantity() - StringValidater.toInteger(quantity));
+            data.setQuantity(data.getQuantity()
+                    - StringValidater.toInteger(quantity));
         }
         if (EInnerProductStatus.Shelf_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "请下架后再修改");

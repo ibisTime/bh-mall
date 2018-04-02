@@ -14,8 +14,17 @@ public class Charge extends ABaseDO {
     // 充值编号
     private String code;
 
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
+
     // 针对账号---核心字段4
     private String accountNumber;
+
+    // 充值金额---核心字段5
+    private Long amount;
 
     // 针对户名
     private String accountName;
@@ -26,23 +35,20 @@ public class Charge extends ABaseDO {
     // 币种
     private String currency;
 
+    // 充值pdf
+    private String chargePdf;
+
     // 支付渠道
     private String channelType;
 
-    // 充值金额---核心字段5
-    private Long amount;
+    // 支付渠道编号
+    private String channelOrder;
 
     // 业务类型编号（因为什么业务类型而充值）
     private String bizType;
 
     // 业务类型说明（因为什么业务类型而充值）
     private String bizNote;
-
-    // 订单分组组号（信息代表）---核心字段1
-    private String payGroup;
-
-    // 流水分组组号（橙账本代表）---核心字段2
-    private String refNo;
 
     // 状态（0 待审核/1 审核通过/2 审核不通过）
     private String status;
@@ -252,6 +258,22 @@ public class Charge extends ABaseDO {
 
     public void setAmount(Long amount) {
         this.amount = amount;
+    }
+
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
+    }
+
+    public String getChargePdf() {
+        return chargePdf;
+    }
+
+    public void setChargePdf(String chargePdf) {
+        this.chargePdf = chargePdf;
     }
 
 }

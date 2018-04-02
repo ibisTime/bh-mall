@@ -27,7 +27,7 @@ public class ProductSpecs extends ABaseDO {
     private Integer number;
 
     // 重量
-    private Integer weight;
+    private Double weight;
 
     // 是否允许授权单下单
     private String isImpowerOrder;
@@ -81,18 +81,6 @@ public class ProductSpecs extends ABaseDO {
         this.number = number;
     }
 
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
     public String getIsImpowerOrder() {
         return isImpowerOrder;
     }
@@ -115,6 +103,14 @@ public class ProductSpecs extends ABaseDO {
 
     public void setIsNormalOrder(String isNormalOrder) {
         this.isNormalOrder = isNormalOrder;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
 }

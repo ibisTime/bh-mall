@@ -51,6 +51,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setApplyUser(applyUser);
         data.setApplyDatetime(new Date());
         data.setChannelType(EChannelType.Offline.getCode());
+        data.setChargePdf(chargePdf);
         chargeDAO.insert(data);
         return code;
     }

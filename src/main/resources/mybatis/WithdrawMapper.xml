@@ -28,9 +28,6 @@
 		<result column="pay_group" property="payGroup" />
 		<result column="channel_order" property="channelOrder" />
 		<result column="pay_datetime" property="payDatetime" />
-		
-		<result column="system_code" property="systemCode" />
-		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -101,12 +98,6 @@
 			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
 				<![CDATA[AND t.pay_datetime <= #{payDatetimeEnd}]]>
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_withdraw" parameterType="withdraw" resultMap="withdraw_DB_Result">
@@ -136,9 +127,6 @@
 		,t.pay_group
 		,t.channel_order
 		,t.pay_datetime
-		
-		,t.system_code
-		,t.company_code
 		FROM
 		tbh_withdraw t
 		<include refid="where_condition" />
@@ -174,8 +162,6 @@
 		
 		,apply_note
 		,apply_datetime
-		,system_code
-		,company_code
 		)
 		VALUES(
 		#{code}
@@ -194,8 +180,6 @@
 		
 		,#{applyNote}
 		,#{applyDatetime}
-		,#{systemCode}
-		,#{companyCode}
 		)
 	</insert>
 
@@ -241,8 +225,6 @@
 		,apply_datetime
 		,pay_user
 		,pay_datetime
-		,system_code
-		,company_code
 		)
 		VALUES(
 		#{code}
@@ -263,8 +245,6 @@
 		,#{applyDatetime}
 		,#{payUser}
 		,#{payDatetime}
-		,#{systemCode}
-		,#{companyCode}
 		)
 	</insert>
 </mapper>

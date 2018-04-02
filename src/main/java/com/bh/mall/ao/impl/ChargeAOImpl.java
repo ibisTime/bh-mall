@@ -76,15 +76,19 @@ public class ChargeAOImpl implements IChargeAO {
         chargeBO.payOrder(data, true, payUser, payNote);
         Account account = accountBO.getAccount(data.getAccountNumber());
         // 账户加钱
-        accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
-            null, null, data.getCode(), EBizType.AJ_CZ,
-            EBizType.AJ_CZ.getValue(), data.getAmount());
+        accountBO
+            .changeAmount(data.getAccountNumber(), EChannelType.Offline, null,
+                null, data.getCode(), EBizType.getBizType(data.getBizType()),
+                EBizType.getBizType(data.getBizType()).getValue(),
+                data.getAmount());
         if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())
                 || ECurrency.MK_CNY.getCode().equals(account.getCurrency())) {
             // 托管账户加钱
             accountBO.changeAmount(ESystemCode.BH.getCode(),
                 EChannelType.Offline, null, null, data.getCode(),
-                EBizType.AJ_CZ, EBizType.AJ_CZ.getValue(), data.getAmount());
+                EBizType.getBizType(data.getBizType()),
+                EBizType.getBizType(data.getBizType()).getValue(),
+                data.getAmount());
         }
     }
 
@@ -95,8 +99,11 @@ public class ChargeAOImpl implements IChargeAO {
         if (CollectionUtils.isNotEmpty(page.getList())) {
             List<Charge> list = page.getList();
             for (Charge charge : list) {
-                User user = userBO.getCheckUser(charge.getApplyUser());
-                charge.setUser(user);
+                if (!"admin".equals(charge.getApplyUser())
+                        && charge.getApplyUser() != null) {
+                    User user = userBO.getCheckUser(charge.getApplyUser());
+                    charge.setUser(user);
+                }
                 if (!"admin".equals(charge.getPayUser())
                         && charge.getPayUser() != null) {
                     User payUser = userBO.getCheckUser(charge.getPayUser());
@@ -112,8 +119,11 @@ public class ChargeAOImpl implements IChargeAO {
         List<Charge> list = chargeBO.queryChargeList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (Charge charge : list) {
-                User user = userBO.getCheckUser(charge.getApplyUser());
-                charge.setUser(user);
+                if (!"admin".equals(charge.getApplyUser())
+                        && charge.getApplyUser() != null) {
+                    User user = userBO.getCheckUser(charge.getApplyUser());
+                    charge.setUser(user);
+                }
                 if (!"admin".equals(charge.getPayUser())
                         && charge.getPayUser() != null) {
                     User payUser = userBO.getCheckUser(charge.getPayUser());
@@ -127,8 +137,11 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Charge getCharge(String code) {
         Charge charge = chargeBO.getCharge(code);
-        User user = userBO.getCheckUser(charge.getApplyUser());
-        charge.setUser(user);
+        if (!"admin".equals(charge.getApplyUser())
+                && charge.getApplyUser() != null) {
+            User user = userBO.getCheckUser(charge.getApplyUser());
+            charge.setUser(user);
+        }
         if (!"admin".equals(charge.getPayUser()) && charge.getPayUser() != null) {
             User payUser = userBO.getCheckUser(charge.getPayUser());
             charge.setPayUser(payUser.getLoginName());

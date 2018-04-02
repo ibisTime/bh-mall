@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2017年5月12日 上午10:03:42 
  * @history:
  */
-public class XN627511Req {
+public class XN627512Req {
     @NotBlank
     private String code;
 

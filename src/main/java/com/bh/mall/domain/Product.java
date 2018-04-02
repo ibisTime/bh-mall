@@ -72,8 +72,11 @@ public class Product extends ABaseDO {
     // 产品规格
     private List<ProductSpecs> specsList;
 
-    // 奖励
-    private List<Award> awardList;
+    // 推荐奖励
+    private List<Award> directAwardList;
+
+    // 介绍奖励
+    private List<Award> sendAwardList;
 
     // ***********************db******************
     private Integer level;
@@ -232,14 +235,6 @@ public class Product extends ABaseDO {
         this.specsList = specsList;
     }
 
-    public List<Award> getAwardList() {
-        return awardList;
-    }
-
-    public void setAwardList(List<Award> awardList) {
-        this.awardList = awardList;
-    }
-
     public Integer getLevel() {
         return level;
     }
@@ -254,6 +249,22 @@ public class Product extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public List<Award> getDirectAwardList() {
+        return directAwardList;
+    }
+
+    public void setDirectAwardList(List<Award> directAwardList) {
+        this.directAwardList = directAwardList;
+    }
+
+    public List<Award> getSendAwardList() {
+        return sendAwardList;
+    }
+
+    public void setSendAwardList(List<Award> sendAwardList) {
+        this.sendAwardList = sendAwardList;
     }
 
 }

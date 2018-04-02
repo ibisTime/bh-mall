@@ -10,6 +10,12 @@ import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 添加库存
+ * @author: nyc 
+ * @since: 2018年3月25日 下午3:37:49 
+ * @history:
+ */
 public class XN627545 extends AProcessor {
 
     private IProductAO productAO = SpringContextHolder

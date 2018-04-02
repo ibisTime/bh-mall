@@ -65,6 +65,14 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
     }
 
     @Override
+    public List<ProductSpecsPrice> queryProductSpecsPriceList(
+            String productSpecsCode) {
+        ProductSpecsPrice condition = new ProductSpecsPrice();
+        condition.setProductSpecsCode(productSpecsCode);
+        return productSpecsPriceDAO.selectList(condition);
+    }
+
+    @Override
     public ProductSpecsPrice getProductSpecsPrice(String code) {
         ProductSpecsPrice data = null;
         if (StringUtils.isNotBlank(code)) {
