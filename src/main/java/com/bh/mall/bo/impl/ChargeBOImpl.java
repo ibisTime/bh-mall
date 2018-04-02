@@ -36,7 +36,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
         data.setAccountName(account.getRealName());
-        data.setChargeAmount(amount);
+        data.setAmount(amount);
 
         data.setType(account.getType());
         data.setCurrency(account.getCurrency());
@@ -51,6 +51,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setApplyUser(applyUser);
         data.setApplyDatetime(new Date());
         data.setChannelType(EChannelType.Offline.getCode());
+        data.setChargePdf(chargePdf);
         chargeDAO.insert(data);
         return code;
     }
@@ -70,7 +71,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setAccountName(account.getRealName());
         data.setPayGroup(payGroup);
         data.setRefNo(refNo);
-        data.setChargeAmount(transAmount);
+        data.setAmount(transAmount);
 
         data.setType(account.getType());
         data.setCurrency(account.getCurrency());

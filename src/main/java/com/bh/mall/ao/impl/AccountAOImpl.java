@@ -63,7 +63,7 @@ public class AccountAOImpl implements IAccountAO {
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
             String bizType, String fromBizNote, String toBizNote, String refNo) {
-        EBizType a = EBizType.getBizTypeMap().get(bizType);
+        EBizType a = EBizType.getBizType(bizType);
         accountBO.transAmountCZB(fromUserId, fromCurrency, toUserId,
             toCurrency, transAmount, a, fromBizNote, toBizNote, refNo);
     }

@@ -9,7 +9,7 @@ public interface IChargeAO {
 
     String DEFAULT_ORDER_COLUMN = "code";
 
-    public String applyOrder(String accountNumber, Long amount,
+    public String applyOrder(String accountNumber, String type, Long amount,
             String applyUser, String applyNote, String chhargePdf);
 
     public void payOrder(String code, String payUser, String payResult,

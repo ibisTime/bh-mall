@@ -18,7 +18,7 @@ public interface IInnerOrderAO {
 
     public void dropInnerOrder(String code);
 
-    public void editInnerOrder(XN627722Req req);
+    public void refreshAddress(XN627722Req req);
 
     public Paginable<InnerOrder> queryInnerOrderPage(int start, int limit,
             InnerOrder condition);
@@ -27,7 +27,7 @@ public interface IInnerOrderAO {
 
     public InnerOrder getInnerOrder(String code);
 
-    public void toPay(String payCode, String payGroup, String payType);
+    public Object toPay(String code, String payType);
 
     public void deliverInnerProduct(XN627723Req req);
 
@@ -37,5 +37,7 @@ public interface IInnerOrderAO {
             String remark);
 
     public void receiveInnerOrder(String code);
+
+    public void paySuccess(String payGroup, String payCode, Long amount);
 
 }

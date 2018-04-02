@@ -3,6 +3,7 @@ package com.bh.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Award;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
@@ -28,6 +30,7 @@ import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
 import com.bh.mall.dto.req.XN627545Req;
 import com.bh.mall.dto.req.XN627546Req;
+import com.bh.mall.enums.EAwardType;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductNumberType;
 import com.bh.mall.enums.EProductStatus;
@@ -57,13 +60,14 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public String addProduct(XN627540Req req) {
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.PRODUCT.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.PRODUCT
+            .getCode());
         Product data = new Product();
         data.setCode(code);
         data.setName(req.getName());
         data.setAdPrice(StringValidater.toLong(req.getAdPrice()));
         data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
         data.setVirNumber(StringValidater.toInteger(req.getVirNumber()));
 
         data.setRealNumber(StringValidater.toInteger(req.getRealNumber()));
@@ -79,8 +83,8 @@ public class ProductAOImpl implements IProductAO {
         productBO.saveProduct(data);
 
         productSpecsBO.saveProductSpecs(code, req.getSpecList());
-        productLogBO.saveProductLog(code, req.getUpdater(),
-            req.getRealNumber());
+        productLogBO
+            .saveProductLog(code, req.getUpdater(), req.getRealNumber());
         awardBO.saveAward(code, req.getAwardList());
         return code;
     }
@@ -99,7 +103,6 @@ public class ProductAOImpl implements IProductAO {
         data.setPic(req.getPic());
 
         data.setSlogan(req.getSlogan());
-        data.setCreateDatetime(new Date());
         data.setStatus(EProductStatus.TO_Shelf.getCode());
         data.setIsTotal(req.getIsTotal());
         data.setUpdater(req.getUpdater());
@@ -111,8 +114,8 @@ public class ProductAOImpl implements IProductAO {
         // 是否新加了规格以及规格价格
         List<XN627546Req> psList = req.getSpecList();
         for (XN627546Req psReq : psList) {
-            ProductSpecs psData = productSpecsBO
-                .getProductSpecs(psReq.getCode());
+            ProductSpecs psData = productSpecsBO.getProductSpecs(psReq
+                .getCode());
             if (psData == null) {
                 productSpecsBO.saveProductSpecs(data.getCode(),
                     req.getSpecList());
@@ -127,21 +130,23 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Product getProduct(String code) {
         Product data = productBO.getProduct(code);
-        ProductSpecs condition = new ProductSpecs();
-        condition.setProductCode(data.getCode());
-        List<ProductSpecs> psList = productSpecsBO
-            .queryProductSpecsList(condition);
+        List<ProductSpecs> psList = productSpecsBO.queryProductSpecsList(data
+            .getCode());
+        // 推荐奖励
+        List<Award> directAwardList = awardBO.queryAwardList(
+            EAwardType.DirectAward.getCode(), code);
 
-        if (psList.size() > 0) {
-            ProductSpecs psData = new ProductSpecs();
+        // 出货奖励
+        List<Award> sendAwardList = awardBO.queryAwardList(
+            EAwardType.SendAward.getCode(), code);
+        data.setDirectAwardList(directAwardList);
+        data.setSendAwardList(sendAwardList);
+        if (CollectionUtils.isNotEmpty(psList)) {
             for (ProductSpecs productSpecs : psList) {
-                ProductSpecsPrice pspConditon = new ProductSpecsPrice();
-                pspConditon.setProductSpecsCode(productSpecs.getCode());
-
                 List<ProductSpecsPrice> pspList = productSpecsPriceBO
-                    .queryProductSpecsPriceList(pspConditon);
-                if (pspList.size() > 0) {
-                    psData.setPriceList(pspList);
+                    .queryProductSpecsPriceList(productSpecs.getCode());
+                if (CollectionUtils.isNotEmpty(pspList)) {
+                    productSpecs.setPriceList(pspList);
                 }
             }
             data.setSpecsList(psList);
@@ -170,7 +175,6 @@ public class ProductAOImpl implements IProductAO {
         }
         data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         data.setIsFree(req.getIsFree());
-        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         productBO.putOnProduct(data);
@@ -189,36 +193,29 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public void editRepertory(XN627545Req req) {
         Product data = productBO.getProduct(req.getCode());
-        if (EProductStatus.Shelf_YES.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "产品已上架,请下架后再修改");
+        if (StringUtils.isNotBlank(req.getRealNumber())
+                && StringValidater.toInteger(req.getRealNumber()) < 0) {
+            throw new BizException("xn0000", "变动数量不能小于0");
         }
-        if (StringUtils.isNotBlank(req.getRealNumber()) && data
-            .getRealNumber() < StringValidater.toInteger(req.getRealNumber())) {
-            throw new BizException("xn0000", "变动数量大于剩余数量");
-        }
-        if (StringUtils.isNotBlank(req.getVirNumber()) && data
-            .getVirNumber() < StringValidater.toInteger(req.getVirNumber())) {
-
+        if (StringUtils.isNotBlank(req.getVirNumber())
+                && StringValidater.toInteger(req.getVirNumber()) < 0) {
+            throw new BizException("xn0000", "变动数量不能小于0");
         }
         if (EProductNumberType.Real.getCode().equals(req.getKind())) {
+            Integer realNumber = StringValidater.toInteger(req.getRealNumber());
             if (EProductLogType.Input.getCode().equals(req.getType())) {
-                data.setRealNumber(data.getRealNumber()
-                        + StringValidater.toInteger(req.getRealNumber()));
+                data.setRealNumber(data.getRealNumber() + realNumber);
             } else {
-                data.setRealNumber(data.getRealNumber()
-                        - StringValidater.toInteger(req.getRealNumber()));
+                data.setRealNumber(data.getRealNumber() - realNumber);
             }
-
         }
         if (EProductNumberType.Virtual.getCode().equals(req.getKind())) {
+            Integer virNumber = StringValidater.toInteger(req.getVirNumber());
             if (EProductLogType.Input.getCode().equals(req.getType())) {
-                data.setVirNumber(data.getVirNumber()
-                        + StringValidater.toInteger(req.getVirNumber()));
+                data.setVirNumber(data.getVirNumber() + virNumber);
             } else {
-                data.setVirNumber(data.getVirNumber()
-                        - StringValidater.toInteger(req.getVirNumber()));
+                data.setVirNumber(data.getVirNumber() - virNumber);
             }
-
         }
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
@@ -234,7 +231,6 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Paginable<Product> selectProductPage(int start, int limit,
             Product condition) {
-
         return productBO.getPaginable(start, limit, condition);
     }
 

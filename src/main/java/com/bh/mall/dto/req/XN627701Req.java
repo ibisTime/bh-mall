@@ -38,10 +38,6 @@ public class XN627701Req {
     @NotBlank(message = "数量不能为空")
     private String quantity;
 
-    // 是否包邮
-    @NotBlank(message = "是够包邮不能为空")
-    private String isFree;
-
     // （必填）更新人
     @NotBlank(message = "更新人不能为空")
     private String updater;
@@ -55,14 +51,6 @@ public class XN627701Req {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getIsFree() {
-        return isFree;
-    }
-
-    public void setIsFree(String isFree) {
-        this.isFree = isFree;
     }
 
     public String getName() {

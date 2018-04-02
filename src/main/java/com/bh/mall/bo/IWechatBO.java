@@ -9,7 +9,7 @@
 package com.bh.mall.bo;
 
 import com.bh.mall.domain.CompanyChannel;
-import com.bh.mall.dto.res.XN002501Res;
+import com.bh.mall.dto.res.XN627462Res;
 
 /** 
  * @author: haiqingzheng 
@@ -22,7 +22,7 @@ public interface IWechatBO {
             String bizNote, String code, Long transAmount, String ip,
             String bizBackUrl);
 
-    public XN002501Res getPayInfoH5(CompanyChannel companyChannel,
+    public XN627462Res getPayInfoH5(CompanyChannel companyChannel,
             String payCode, String prepayId);
 
 }

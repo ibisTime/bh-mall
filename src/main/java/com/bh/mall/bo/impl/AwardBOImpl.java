@@ -29,8 +29,8 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         for (XN627548Req req : awardList) {
             EAwardType.getAwardTypeMap().get(req.getType());
             Award data = new Award();
-            String aCode = OrderNoGenerater
-                .generate(EGeneratePrefix.Award.getCode());
+            String aCode = OrderNoGenerater.generate(EGeneratePrefix.Award
+                .getCode());
             data.setCode(aCode);
             data.setProductCode(code);
             data.setType(req.getType());
@@ -58,14 +58,12 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     public void refreshAwardList(List<XN627548Req> list) {
         for (XN627548Req req : list) {
             EAwardType.getAwardTypeMap().get(req.getType());
-            Award data = new Award();
-            data.setCode(req.getCode());
+            Award data = this.getAward(req.getCode());
             data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setValue1(StringValidater.toDouble(req.getValue1()));
             data.setValue2(StringValidater.toDouble(req.getValue2()));
             data.setValue3(StringValidater.toDouble(req.getValue3()));
             awardDAO.update(data);
-
         }
     }
 
@@ -94,8 +92,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     }
 
     @Override
-    public Award getAwardByType(Integer level, String productCode,
-            String type) {
+    public Award getAwardByType(Integer level, String productCode, String type) {
         Award data = null;
         if (level != 0 && StringUtils.isNotBlank(productCode)) {
             Award condition = new Award();
@@ -105,6 +102,14 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
             data = awardDAO.select(condition);
         }
         return data;
+    }
+
+    @Override
+    public List<Award> queryAwardList(String type, String productCode) {
+        Award condition = new Award();
+        condition.setType(type);
+        condition.setProductCode(productCode);
+        return awardDAO.selectList(condition);
     }
 
 }

@@ -8,13 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IInnerOrderAO;
-import com.bh.mall.ao.IInnerProductAO;
-import com.bh.mall.ao.ISYSConfigAO;
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IInnerOrderBO;
+import com.bh.mall.bo.IInnerProductBO;
+import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
+import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
@@ -25,7 +27,9 @@ import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627720Req;
 import com.bh.mall.dto.req.XN627722Req;
 import com.bh.mall.dto.req.XN627723Req;
+import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.enums.EInnerProductStatus;
@@ -42,59 +46,59 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     private IInnerOrderBO innerOrderBO;
 
     @Autowired
-    private IInnerProductAO innerProductAO;
+    private IInnerProductBO innerProductBO;
 
     @Autowired
     private IAccountBO accountBO;
 
     @Autowired
-    private IUserAO userAO;
+    private IUserBO userBO;
 
     @Autowired
-    private ISYSConfigAO sysConfigAO;
+    private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IWeChatAO weChatAO;
 
     @Override
     public String addInnerOrder(XN627720Req req) {
-        InnerOrder data = new InnerOrder();
-        User uData = userAO.doGetUser(req.getApplyUser());
+        User user = userBO.getCheckUser(req.getApplyUser());
 
-        InnerProduct ipData = innerProductAO
-            .getInnerProduct(req.getProductCode());
-        if (EInnerProductStatus.Shelf_NO.getCode().equals(data.getCode())
-                || EInnerProductStatus.TO_Shelf.getCode()
-                    .equals(data.getCode())) {
+        InnerProduct innerProduct = innerProductBO.getInnerProduct(req
+            .getProductCode());
+        if (!EInnerProductStatus.Shelf_YES.getCode().equals(
+            innerProduct.getStatus())) {
             throw new BizException("xn00000", "产品未上架，无法下单");
         }
-        if (ipData.getQuantity() < StringValidater
-            .toInteger(req.getQuantity())) {
-            throw new BizException("xn0000", "产品数量不足");
+        Integer quantity = StringValidater.toInteger(req.getQuantity());
+        if (innerProduct.getQuantity() < quantity) {
+            throw new BizException("xn0000", "产品库存不足");
         }
-
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.InnerOrder.getCode());
+        InnerOrder data = new InnerOrder();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.InnerOrder
+            .getCode());
         data.setCode(code);
         data.setProductCode(req.getProductCode());
-        data.setProductName(ipData.getName());
-        data.setPic(ipData.getPic());
-        data.setPrice(ipData.getPrice());
+        data.setProductName(innerProduct.getName());
+        data.setPic(innerProduct.getPic());
+        data.setPrice(innerProduct.getPrice());
 
-        data.setQuantity(StringValidater.toInteger(req.getQuantity()));
+        data.setQuantity(quantity);
 
-        Long amount = AmountUtil.eraseLiUp(
-            StringValidater.toInteger(req.getQuantity()) * ipData.getPrice());
+        Long amount = AmountUtil.eraseLiUp(quantity * innerProduct.getPrice());
         // 是否包邮
-        if (EProductYunFei.YunFei_NO.getCode().equals(ipData.getIsFree())) {
-            SYSConfig sysData = sysConfigAO.getSYSConfig(req.getProvince(),
+        if (EProductYunFei.YunFei_NO.getCode().equals(innerProduct.getIsFree())) {
+            SYSConfig sysConfig = sysConfigBO.getConfig(req.getProvince(),
                 ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            data.setYunfei(StringValidater.toLong(sysData.getCvalue()));
-            amount = amount + StringValidater.toLong(sysData.getCvalue());
+            data.setYunfei(StringValidater.toLong(sysConfig.getCvalue()));
+            amount = amount + StringValidater.toLong(sysConfig.getCvalue());
         }
 
         data.setAmount(amount);
 
         data.setApplyUser(req.getApplyUser());
-        data.setLevel(uData.getLevel());
-        data.setTeamName(uData.getTeamName());
+        data.setLevel(user.getLevel());
+        data.setTeamName(user.getTeamName());
 
         data.setApplyDatetime(new Date());
         data.setApplyNote(req.getApplyNote());
@@ -106,40 +110,66 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setMobile(req.getMobile());
         data.setSigner(req.getSigner());
 
-        data.setStatus(EInnerOrderStatus.Unpaid.getCode());
+        data.setStatus(EInnerOrderStatus.toPay.getCode());
         innerOrderBO.saveInnerOrder(data);
         return code;
     }
 
     @Override
     @Transactional
-    public void toPay(String payCode, String payGroup, String payType) {
-        InnerOrder data = innerOrderBO.getInnerOrder(payGroup);
-        if (EInnerProductStatus.Shelf_NO.getCode().equals(data.getCode())
-                || EInnerProductStatus.TO_Shelf.getCode()
-                    .equals(data.getCode())) {
+    public Object toPay(String code, String payType) {
+        Object result = null;
+        InnerOrder data = innerOrderBO.getInnerOrder(code);
+        InnerProduct innerProduct = innerProductBO.getInnerProduct(data
+            .getProductCode());
+        if (!EInnerProductStatus.Shelf_YES.getCode().equals(
+            innerProduct.getCode())) {
             throw new BizException("xn00000", "产品未上架，无法完成支付");
         }
-        // 支付订单，更新订单状态
-        accountBO.transAmountCZB(data.getApplyUser(),
-            ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
-            ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
-            EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
-            data.getCode());
+        if (EBoolean.NO.getCode().equals(payType)) {
+            // 支付订单，更新订单状态
+            accountBO.transAmountCZB(data.getApplyUser(),
+                ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
+                ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
+                EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
+                data.getCode());
+            data.setPayType(payType);
+            data.setStatus(EInnerOrderStatus.Paid.getCode());
+            data.setPayAmount(data.getAmount() + data.getYunfei());
+            data.setPayDatetime(new Date());
+            innerOrderBO.payOrder(data);
+            result = new BooleanRes(true);
+        } else if (EBoolean.YES.getCode().equals(payType)) {
+            return this.payWXH5(data);
+        }
+        return result;
+    }
 
+    private Object payWXH5(InnerOrder order) {
+        Long rmbAmount = order.getAmount() + order.getYunfei();
+        User user = userBO.getCheckUser(order.getApplyUser());
+        String payGroup = innerOrderBO.addPayGroup(order,
+            EBoolean.YES.getCode());
+        return weChatAO.getPrepayIdH5(user.getUserId(),
+            ESystemCode.BH.getCode(), payGroup, order.getCode(),
+            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
+            PropertiesUtil.Config.WECHAT_H5_BACKURL);
+    }
+
+    @Override
+    public void paySuccess(String payGroup, String payCode, Long amount) {
+        InnerOrder data = innerOrderBO.getInnerOrderByPayGroup(payGroup);
+        data.setPayDatetime(new Date());
         data.setPayCode(payCode);
-        data.setPayGroup(payGroup);
-        data.setPayType(payType);
-        data.setStatus(EInnerOrderStatus.Paid.getCode());
+        data.setPayAmount(amount);
         innerOrderBO.payOrder(data);
     }
 
     @Override
-    public void editInnerOrder(XN627722Req req) {
+    public void refreshAddress(XN627722Req req) {
         InnerOrder data = innerOrderBO.getInnerOrder(req.getCode());
-        if (EInnerOrderStatus.TO_Deliver.getCode().equals(data.getStatus())
-                || EInnerOrderStatus.Delivered.getCode()
-                    .equals(data.getStatus())) {
+        if (!EInnerOrderStatus.toPay.getCode().equals(data.getStatus())
+                || !EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已发货");
         }
         data.setSigner(req.getSigner());
@@ -164,8 +194,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     public Paginable<InnerOrder> queryInnerOrderPage(int start, int limit,
             InnerOrder condition) {
         if (condition.getStartDatetime() != null
-                && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                && condition.getEndDatetime() != null
+                && condition.getStartDatetime().before(
+                    condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return innerOrderBO.getPaginable(start, limit, condition);
@@ -174,8 +205,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public List<InnerOrder> queryInnerOrderList(InnerOrder condition) {
         if (condition.getStartDatetime() != null
-                && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                && condition.getEndDatetime() != null
+                && condition.getStartDatetime().before(
+                    condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return innerOrderBO.queryInnerOrderList(condition);
@@ -187,7 +219,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     }
 
     @Override
-
     public void deliverInnerProduct(XN627723Req req) {
         InnerOrder data = innerOrderBO.getInnerOrder(req.getCode());
         if (!EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
@@ -207,7 +238,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public void cancelInnerOrder(String code) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
-        if (!EInnerOrderStatus.Unpaid.getCode().equals(data.getStatus())
+        if (!EInnerOrderStatus.toPay.getCode().equals(data.getStatus())
                 || !EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该订单无法申请取消");
         }
@@ -216,7 +247,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     }
 
     @Override
-    @Transactional
     public void approveInnerOrder(String code, String result, String updater,
             String remark) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
@@ -226,14 +256,12 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         // 审核通过取消订单，退钱
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EInnerOrderStatus.Canceled.getCode());
-
             accountBO.transAmountCZB(ESysUser.SYS_USER_BH.getCode(),
                 ECurrency.YJ_CNY.getCode(), data.getApplyUser(),
                 ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
                 null, null, data.getCode());
-
         } else {
-            data.setStatus(EInnerOrderStatus.Unpaid.getCode());
+            data.setStatus(EInnerOrderStatus.toPay.getCode());
         }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());

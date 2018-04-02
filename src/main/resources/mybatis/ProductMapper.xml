@@ -182,7 +182,6 @@
 		UPDATE tbh_product 
 		SET 
 		order_no = #{orderNo}
-		,change_price #{changePrice}
 		,status = #{status}
 		,is_free = #{isFree}
 		,updater = #{updater}

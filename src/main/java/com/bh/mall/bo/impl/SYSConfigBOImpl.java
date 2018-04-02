@@ -81,4 +81,5 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
         return map;
 
     }
+
 }

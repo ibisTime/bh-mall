@@ -25,8 +25,7 @@ public class XN627721 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        innerOrderAO.toPay(req.getPayCode(), req.getPayGroup(),
-            req.getPayType());
+        innerOrderAO.toPay(req.getCode(), req.getPayType());
         return new BooleanRes(true);
     }
 

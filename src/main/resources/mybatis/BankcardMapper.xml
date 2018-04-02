@@ -20,7 +20,6 @@
 		<result column="create_datetime" property="createDatetime" />
 		<result column="remark" property="remark" />
 		<result column="last_order" property="lastOrder" />
-		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -45,9 +44,6 @@
 			<if test="bankName != null and bankName != '' ">
 				AND t.bank_name = #{bankName}
 			</if> 
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_bankcard" parameterType="bankcard" resultMap="bankcard_DB_Result">
@@ -69,7 +65,6 @@
 		,t.create_datetime
 		,t.remark
 		,t.last_order
-		,t.system_code
 		FROM
 		tbh_bankcard t
 		<include refid="where_condition" />
@@ -106,7 +101,6 @@
 		,create_datetime
 		,remark
 		,last_order
-		,system_code
 		)
 		VALUES(
 		#{code}
@@ -126,7 +120,6 @@
 		,#{createDatetime}
 		,#{remark}
 		,#{lastOrder}
-		,#{systemCode}
 		)
 	</insert>
 

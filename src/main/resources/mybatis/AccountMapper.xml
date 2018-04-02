@@ -12,7 +12,6 @@
 		<result column="currency" property="currency" />	
 		<result column="amount" property="amount" />
 		<result column="frozen_amount" property="frozenAmount" />
-		
 		<result column="create_datetime" property="createDatetime" />	
 		<result column="last_order" property="lastOrder" />	
 	</resultMap>
@@ -67,7 +66,6 @@
 		,t.amount
 		,t.frozen_amount
 		,t.create_datetime
-		
 		,t.last_order
 		FROM
 		tbh_account t
@@ -160,7 +158,6 @@
 		UPDATE tbh_account
 		SET
 		frozen_amount = #{frozenAmount}
-		,out_amount = #{outAmount}
 		WHERE
 		account_number = #{accountNumber}
     </update>

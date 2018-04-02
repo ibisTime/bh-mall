@@ -72,7 +72,7 @@
 		level=#{level}
 		,is_intent=#{isIntent}
 		,is_intro=#{isIntro}
-		,is_realname=#{isRealname}
+		,is_real_name=#{isRealName}
 		,is_company_impower=#{isCompanyImpower}
 		,min_charge=#{minCharge}
 		

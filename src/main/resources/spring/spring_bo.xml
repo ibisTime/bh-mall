@@ -61,6 +61,10 @@
 		<property name="paginableDAO" ref="accountDAOImpl"></property>
 	</bean>
 	
+	<bean id="jourBO" class="com.bh.mall.bo.impl.JourBOImpl">
+		<property name="paginableDAO" ref="jourDAOImpl"></property>
+	</bean>
+	
 	<bean id="withdrawBO" class="com.bh.mall.bo.impl.WithdrawBOImpl">
 		<property name="paginableDAO" ref="withdrawDAOImpl"></property>
 	</bean>

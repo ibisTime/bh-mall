@@ -9,8 +9,8 @@ import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.InnerOrder;
 
 @Repository("innerOrderDAOImpl")
-public class InnerOrderDAOImpl extends AMybatisTemplate
-        implements IInnerOrderDAO {
+public class InnerOrderDAOImpl extends AMybatisTemplate implements
+        IInnerOrderDAO {
 
     @Override
     public int insert(InnerOrder data) {
@@ -70,6 +70,11 @@ public class InnerOrderDAOImpl extends AMybatisTemplate
     @Override
     public void approveInnerOrder(InnerOrder data) {
         super.update(NAMESPACE.concat("approve_cancle"), data);
+    }
+
+    @Override
+    public void addPayGroup(InnerOrder data) {
+        super.update(NAMESPACE.concat("add_payGroup"), data);
     }
 
 }

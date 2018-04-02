@@ -13,7 +13,7 @@ package com.bh.mall.dto.res;
  * @since: 2016年12月26日 下午4:46:41 
  * @history:
  */
-public class XN002501Res {
+public class XN627462Res {
     // 微信预支付订单号
     private String prepayId;
 

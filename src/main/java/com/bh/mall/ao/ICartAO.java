@@ -13,7 +13,7 @@ public interface ICartAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    void dropCart(List<Cart> list);
+    void dropCart(List<String> list);
 
     public Paginable<Cart> queryCartPage(int start, int limit, Cart condition);
 

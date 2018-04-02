@@ -65,6 +65,7 @@
 		product_specs_code = #{productSpecsCode}
 		,level = #{level}
 		,price = #{price}
+		where code=#{code}
 	</update>
 	
 	<delete id="delete_productSpecsPrice" parameterType="productSpecsPrice">

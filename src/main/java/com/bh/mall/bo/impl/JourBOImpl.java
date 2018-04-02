@@ -61,6 +61,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setCode(code);
 
         data.setRefNo(refNo);
+        data.setPayGroup(payGroup);
         data.setChannelOrder(channelOrder);// 内部转账时为空，外部转账时必定有
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setTransAmount(transAmount);

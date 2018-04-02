@@ -41,5 +41,7 @@ public class PropertiesUtil {
         public static String WECHAT_H5_BACKURL = props
             .getProperty("WECHAT_H5_BACKURL");
 
+        public static String WECHAT_H5_CZ_BACKURL = props
+            .getProperty("WECHAT_H5_CZ_BACKURL");
     }
 }

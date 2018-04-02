@@ -28,10 +28,10 @@ import com.bh.mall.bo.IWechatBO;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.CompanyChannel;
-import com.bh.mall.dto.res.XN002501Res;
+import com.bh.mall.domain.User;
+import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
@@ -73,12 +73,15 @@ public class WeChatAOImpl implements IWeChatAO {
 
     @Override
     @Transactional
-    public XN002501Res getPrepayIdH5(String applyUser, String openId,
-            String accountNumber, String payGroup, String refNo,
-            String bizType, String bizNote, Long transAmount, String backUrl) {
+    public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
+            String payGroup, String refNo, String bizType, String bizNote,
+            Long transAmount, String backUrl) {
+        User user = userBO.getCheckUser(applyUser);
+
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
         }
+        String openId = user.getH5OpenId();
         if (StringUtils.isBlank(openId)) {
             throw new BizException("xn0000", "请先微信登录再支付");
         }
@@ -86,7 +89,7 @@ public class WeChatAOImpl implements IWeChatAO {
         Account toAccount = accountBO.getAccount(accountNumber);
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
-            refNo, EBizType.getBizTypeMap().get(bizType), bizNote, transAmount,
+            refNo, EBizType.getBizType(bizType), bizNote, transAmount,
             EChannelType.WeChat_H5, applyUser);
         // 获取支付宝支付配置参数
         String systemCode = ESystemCode.BH.getCode();
@@ -130,20 +133,20 @@ public class WeChatAOImpl implements IWeChatAO {
                     EChannelType.getEChannelType(order.getChannelType()),
                     wechatOrderNo, order.getPayGroup(), order.getRefNo(),
                     EBizType.getBizTypeMap().get(order.getBizType()),
-                    order.getBizNote(), order.getChargeAmount());
+                    order.getBizNote(), order.getAmount());
                 // 托管账户加钱
                 accountBO.changeAmount(ESystemCode.BH.getCode(),
                     EChannelType.getEChannelType(order.getChannelType()),
                     wechatOrderNo, order.getPayGroup(), order.getRefNo(),
                     EBizType.getBizTypeMap().get(order.getBizType()),
-                    order.getBizNote(), order.getChargeAmount());
+                    order.getBizNote(), order.getAmount());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);
             }
-            CallbackResult callbackResult = new CallbackResult(isSucc,
-                order.getBizType(), order.getCode(), order.getPayGroup(),
-                order.getChargeAmount(), systemCode, companyCode, bizBackUrl);
+            // CallbackResult callbackResult = new CallbackResult(isSucc,
+            // order.getBizType(), order.getCode(), order.getPayGroup(),
+            // order.getChargeAmount(), systemCode, companyCode, bizBackUrl);
             // 回调业务biz
             // doBizCallback(callbackResult);
         } catch (JDOMException | IOException e) {
