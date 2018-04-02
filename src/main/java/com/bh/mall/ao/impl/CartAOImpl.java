@@ -51,8 +51,8 @@ public class CartAOImpl implements ICartAO {
         String code = OrderNoGenerater.generate(EGeneratePrefix.Cart.getCode());
         if (data != null) {
             code = data.getCode();
-            data.setQuantity(
-                data.getQuantity() + StringValidater.toInteger(quantity));
+            data.setQuantity(data.getQuantity()
+                    + StringValidater.toInteger(quantity));
             cartBO.refreshCart(data);
         } else {
             data = new Cart();
@@ -77,19 +77,19 @@ public class CartAOImpl implements ICartAO {
             throw new BizException("xn00000", "产品数量不足或小于零");
         }
         if (ECartType.ADDQuantity.getCode().equals(type)) {
-            data.setQuantity(
-                data.getQuantity() + StringValidater.toInteger(quantity));
+            data.setQuantity(data.getQuantity()
+                    + StringValidater.toInteger(quantity));
         } else {
-            data.setQuantity(
-                data.getQuantity() - StringValidater.toInteger(quantity));
+            data.setQuantity(data.getQuantity()
+                    - StringValidater.toInteger(quantity));
         }
         cartBO.refreshCart(data);
     }
 
     @Override
-    public void dropCart(List<Cart> list) {
-        for (Cart cart : list) {
-            Cart data = cartBO.getCart(cart.getCode());
+    public void dropCart(List<String> list) {
+        for (String code : list) {
+            Cart data = cartBO.getCart(code);
             cartBO.removeCart(data);
         }
     }

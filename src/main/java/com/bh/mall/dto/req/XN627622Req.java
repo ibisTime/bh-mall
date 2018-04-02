@@ -2,8 +2,6 @@ package com.bh.mall.dto.req;
 
 import java.util.List;
 
-import com.bh.mall.domain.Cart;
-
 /**
  * 批量删除
  * @author: nyc 
@@ -13,13 +11,13 @@ import com.bh.mall.domain.Cart;
 public class XN627622Req {
 
     // 编号
-    private List<Cart> codeList;
+    private List<String> codeList;
 
-    public List<Cart> getCodeList() {
+    public List<String> getCodeList() {
         return codeList;
     }
 
-    public void setCodeList(List<Cart> codeList) {
+    public void setCodeList(List<String> codeList) {
         this.codeList = codeList;
     }
 
