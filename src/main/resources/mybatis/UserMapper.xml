@@ -169,7 +169,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
+	<!-- <select id="select_user" parameterType="user" resultMap="user_DB_Result">
 		SELECT
 		t.user_id
 		,t.login_name
@@ -229,7 +229,7 @@
 				t.${order}
 			</if>
 		</trim>
-	</select>
+	</select> -->
 
 	<select id="select_user_count" parameterType="user" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_user t 

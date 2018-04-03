@@ -248,18 +248,18 @@ CREATE TABLE `tbh_material` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 -- ----------------------------
 --  Table structure for table `tbh_intro`
 -- ----------------------------
 DROP TABLE IF EXISTS `tbh_intro`;
-CREATE TABLE `tbh_material` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `level` varchar(4) DEFAULT NULL COMMENT '类型',
-  `percent` varchar(64) DEFAULT NULL COMMENT '标题',
+CREATE TABLE `tbh_intro` (
+  `code` varchar(32) NOT NULL COMMENT'编号',
+  `level` varchar(255) DEFAULT NULL COMMENT '等级',
+  `percent` DECIMAL(5,2) DEFAULT NULL COMMENT '百分比',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
