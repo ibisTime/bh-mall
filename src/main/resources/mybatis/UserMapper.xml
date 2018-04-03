@@ -72,11 +72,8 @@
 				AND t.nickname like "%"#{nickname}"%"
 			</if>
 			<choose>
-				 <when test="kind == '07'">
-				  AND (t.kind = 05 or t.kind = 02)
-				 </when>
-				 <when test="kind == 'ff3'">
-				  AND (t.kind = 'f1' or t.kind = 'f2')
+				 <when test="kind == 'PB'">
+				  AND (t.kind = 'P' or t.kind = 'B')
 				 </when>
 				 <when test="kind != null and kind != '' ">
 				  AND t.kind = #{kind}
@@ -87,6 +84,9 @@
 			</choose>	
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
+			</if>	
+			<if test="highLevel != null and highLevel != '' ">
+				<![CDATA[AND t.level > #{highLevel}]]>
 			</if>	
 			<if test="userReferee != null and userReferee != '' ">
 				AND t.user_referee = #{userReferee}

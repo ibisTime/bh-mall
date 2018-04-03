@@ -18,6 +18,9 @@ public class XN627355Req extends APageReq {
     // （选填）等级
     private String level;
 
+    // (选填)上级代理
+    private String highLevel;
+
     // （选填）状态
     private String status;
 
@@ -65,6 +68,14 @@ public class XN627355Req extends APageReq {
 
     public void setUserReferee(String userReferee) {
         this.userReferee = userReferee;
+    }
+
+    public String getHighLevel() {
+        return highLevel;
+    }
+
+    public void setHighLevel(String highLevel) {
+        this.highLevel = highLevel;
     }
 
 }

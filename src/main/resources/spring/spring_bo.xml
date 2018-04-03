@@ -125,4 +125,7 @@
 		<property name="paginableDAO" ref="agencyLogImpl"></property>
 	</bean>
 	
+	<bean id="introBO" class="com.bh.mall.bo.impl.IntroBOImpl">
+		<property name="paginableDAO" ref="introImpl"></property>
+	</bean>
 </beans>
