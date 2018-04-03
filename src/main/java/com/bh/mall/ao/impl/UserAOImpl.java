@@ -126,7 +126,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     // private Iintro awardBO;
-
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
             String companyCode, String systemCode) {
@@ -209,8 +208,8 @@ public class UserAOImpl implements IUserAO {
             res = getMapFromResponse(response);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
-                throw new BizException("XN000000",
-                    "微信登录失败原因：" + res.get("error"));
+                throw new BizException("XN000000", "微信登录失败原因："
+                        + res.get("error"));
             }
             if (StringUtils.isBlank(accessToken)) {
                 throw new BizException("XN000000", "accessToken不能为空");
@@ -223,8 +222,8 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("access_token", accessToken);
             queryParas.put("openid", openId);
             queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater
-                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
+            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = (String) wxRes.get("openid");
             // Step4：根据openId，unionId从数据库中查询用户信息
@@ -240,8 +239,8 @@ public class UserAOImpl implements IUserAO {
                     result = doWxLoginRegMobile(req, companyCode, systemCode,
                         unionId, null, h5OpenId, nickname, photo);
                 } else {
-                    result = doWxLoginReg(req, companyCode, systemCode, unionId,
-                        null, h5OpenId, nickname, photo);
+                    result = doWxLoginReg(req, companyCode, systemCode,
+                        unionId, null, h5OpenId, nickname, photo);
                 }
             }
         } catch (Exception e) {
@@ -305,8 +304,8 @@ public class UserAOImpl implements IUserAO {
                     EUserKind.Customer.getCode(), companyCode, systemCode);
                 result = new XN627302Res(userId);
             } else {
-                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, appOpenId,
-                    nickname, photo);
+                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId,
+                    appOpenId, nickname, photo);
                 result = new XN627302Res(mobileUserId);
             }
         } else {
@@ -371,9 +370,9 @@ public class UserAOImpl implements IUserAO {
         if (!EUserKind.Plat.getCode().equals(user.getKind())
                 && PhoneUtil.isMobile(mobile)) {
             // 发送短信
-            smsOutBO.sendSmsOut(mobile,
-                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091",
-                user.getCompanyCode(), user.getSystemCode());
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + smsContent, "805091", user.getCompanyCode(),
+                user.getSystemCode());
         }
     }
 
@@ -455,8 +454,8 @@ public class UserAOImpl implements IUserAO {
     public Paginable<User> queryUserPage(int start, int limit, User condition) {
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .before(condition.getApplyDatetimeEnd())) {
+                && condition.getApplyDatetimeStart().before(
+                    condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         Paginable<User> page = userBO.getPaginable(start, limit, condition);
@@ -475,8 +474,8 @@ public class UserAOImpl implements IUserAO {
     public List<User> queryUserList(User condition) {
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .before(condition.getApplyDatetimeEnd())) {
+                && condition.getApplyDatetimeStart().before(
+                    condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return userBO.queryUserList(condition);
@@ -576,8 +575,9 @@ public class UserAOImpl implements IUserAO {
             String nickname = (String) wxRes.get("nickname");
             String photo = (String) wxRes.get("headimgurl");
             // 是否可被意向
-            AgentImpower data = agentImpowerBO.getAgentImpowerByLevel(
-                StringValidater.toInteger(req.getLevel()));
+            AgentImpower data = agentImpowerBO
+                .getAgentImpowerByLevel(StringValidater.toInteger(req
+                    .getLevel()));
             if (EBoolean.NO.getCode().equals(data.getIsIntent())) {
                 throw new BizException("xn0000", "本等级不可被意向");
             }
@@ -599,6 +599,9 @@ public class UserAOImpl implements IUserAO {
         User dbUser = userBO.doGetUserByOpenId(h5OpenId,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         if (null != dbUser) {
+            if (dbUser.getStatus().equals(EUserStatus.ALLOTED.getCode())) {
+
+            }
             throw new BizException("xn0000", "您已经申请过代理");
         } else {
             String nickname = (String) wxRes.get("nickname");
@@ -607,19 +610,21 @@ public class UserAOImpl implements IUserAO {
             userBO.doCheckOpenId(unionId, h5OpenId, null,
                 ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
             // 是否可被意向
-            AgentImpower data = agentImpowerBO.getAgentImpowerByLevel(
-                StringValidater.toInteger(req.getLevel()));
+            AgentImpower data = agentImpowerBO
+                .getAgentImpowerByLevel(StringValidater.toInteger(req
+                    .getLevel()));
             if (EBoolean.NO.getCode().equals(data.getIsIntent())) {
                 throw new BizException("xn0000", "本等级不可被意向");
             }
 
-            String userId = userBO.doRegister(req.getRealName(), req.getLevel(),
-                req.getWxId(), req.getIdBehind(), req.getIdFront(),
-                req.getIntroducer(), req.getPayPdf(), req.getFromInfo(),
-                req.getUserReferee(), req.getMobile(), req.getProvince(),
-                req.getCity(), req.getArea(), req.getAddress(),
-                EUserPwd.InitPwd.getCode(), photo, nickname, unionId, h5OpenId,
-                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            String userId = userBO.doRegister(req.getRealName(),
+                req.getLevel(), req.getWxId(), req.getIdBehind(),
+                req.getIdFront(), req.getIntroducer(), req.getPayPdf(),
+                req.getFromInfo(), req.getUserReferee(), req.getMobile(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress(), EUserPwd.InitPwd.getCode(), photo, nickname,
+                unionId, h5OpenId, ESystemCode.BH.getCode(),
+                ESystemCode.BH.getCode());
 
             distributeAccount(userId, nickname, EUserKind.Merchant.getCode(),
                 ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
@@ -657,17 +662,17 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("appid", appId);
         fromProperties.put("secret", appSecret);
         fromProperties.put("code", code);
-        logger.info(
-            "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
+        logger.info("appId:" + appId + ",appSecret:" + appSecret + ",js_code:"
+                + code);
         Map<String, String> wxRes = new HashMap<>();
         try {
-            String response = PostSimulater
-                .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
+            String response = PostSimulater.requestPostForm(
+                WechatConstant.WX_TOKEN_URL, fromProperties);
             res = getMapFromResponse(response);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
-                throw new BizException("XN000000",
-                    "微信登录失败原因：" + res.get("error"));
+                throw new BizException("XN000000", "微信登录失败原因："
+                        + res.get("error"));
             }
             if (StringUtils.isBlank(accessToken)) {
                 throw new BizException("XN000000", "accessToken不能为空");
@@ -679,8 +684,8 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("access_token", accessToken);
             queryParas.put("openid", openId);
             queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater
-                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
+            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WX_USER_INFO_URL, queryParas));
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
         }
@@ -766,8 +771,8 @@ public class UserAOImpl implements IUserAO {
         List<Account> accountList = accountBO.queryAccountList(condition);
         for (Account account : accountList) {
             if (account.getAmount() != 0) {
-                throw new BizException("xn0000",
-                    "您的" + account.getCurrency() + "账户还有余额,请取出后再申请");
+                throw new BizException("xn0000", "您的" + account.getCurrency()
+                        + "账户还有余额,请取出后再申请");
             }
         }
         // 是否有未完成的订单
@@ -804,10 +809,10 @@ public class UserAOImpl implements IUserAO {
             String remark) {
         User data = userBO.getUser(userId);
         User approveUser = userBO.getUser(approver);
-        String status = EUserStatus.Impowered.getCode();
+        String status = EUserStatus.IMPOWERED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            AgentImpower aiData = agentImpowerBO
-                .getAgentImpowerByLevel(data.getApplyLevel());
+            AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(data
+                .getApplyLevel());
             if (EBoolean.YES.getCode().equals(aiData.getIsRealName())) {
                 if (StringUtils.isBlank(data.getRealName())) {
                     throw new BizException("xn000", "本等级授权需要实名，请实名后再授权");
@@ -815,11 +820,10 @@ public class UserAOImpl implements IUserAO {
             }
             // 是否需要公司授权
             if (EBoolean.YES.getCode().equals(aiData.getIsCompanyImpower())) {
-                status = EUserStatus.TO_CompanyApprove.getCode();
+                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
                 // 审核人是否是平台
-                if (EUserKind.Customer.getCode()
-                    .equals(approveUser.getKind())) {
-                    status = EUserStatus.Impowered.getCode();
+                if (EUserKind.Customer.getCode().equals(approveUser.getKind())) {
+                    status = EUserStatus.IMPOWERED.getCode();
                     // 介绍人不为空且等级低于被介绍人
                     if (StringUtils.isNotBlank(data.getIntroducer())) {
                         if (approveUser.getLevel() < data.getLevel()) {
@@ -846,7 +850,7 @@ public class UserAOImpl implements IUserAO {
             }
 
         } else {
-            status = EUserStatus.NO_Through.getCode();
+            status = EUserStatus.NO_THROUGH.getCode();
         }
         data.setApprover(approver);
         data.setApplyDatetime(new Date());
@@ -863,9 +867,9 @@ public class UserAOImpl implements IUserAO {
     public void approveCanenl(String userId, String approver, String result,
             String remark) {
         User data = userBO.getUser(userId);
-        String status = EUserStatus.NO_Through.getCode();
+        String status = EUserStatus.NO_THROUGH.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            status = EUserStatus.Canceled.getCode();
+            status = EUserStatus.CANCELED.getCode();
         }
         data.setStatus(status);
         data.setApprover(approver);
@@ -916,8 +920,8 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
         }
 
-        AgentUpgrade auData = agentUpgradeBO
-            .getAgentUpgradeByLevel(data.getLevel());
+        AgentUpgrade auData = agentUpgradeBO.getAgentUpgradeByLevel(data
+            .getLevel());
         // 获取推荐人数
         User condition = new User();
         condition.setUserReferee(data.getUserId());
@@ -933,7 +937,7 @@ public class UserAOImpl implements IUserAO {
 
         data.setApplyLevel(StringValidater.toInteger(highLevel));
         data.setTeamName(teamName);
-        data.setStatus(EUserStatus.TO_Upgrade.getCode());
+        data.setStatus(EUserStatus.TO_UPGRADE.getCode());
         data.setApplyDatetime(new Date());
         String logCode = agencyLogBO.upgradeLevel(data, payPdf);
         data.setLastAgentLog(logCode);
@@ -945,11 +949,11 @@ public class UserAOImpl implements IUserAO {
     public void approveUpgrade(String userId, String approver, String remark,
             String result) {
         User data = userBO.getUser(userId);
-        String status = EUserStatus.NO_Through.getCode();
+        String status = EUserStatus.NO_THROUGH.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
-            status = EUserStatus.Upgraded.getCode();
-            AgentUpgrade auData = agentUpgradeBO
-                .getAgentUpgradeByLevel(data.getLevel());
+            status = EUserStatus.UPGRADED.getCode();
+            AgentUpgrade auData = agentUpgradeBO.getAgentUpgradeByLevel(data
+                .getLevel());
             Account condition = new Account();
             condition.setUserId(data.getUserId());
             List<Account> list = accountBO.queryAccountList(condition);
@@ -968,7 +972,7 @@ public class UserAOImpl implements IUserAO {
             }
 
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
-                status = EUserStatus.TO_CompanyApprove.getCode();
+                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             }
         }
         data.setStatus(status);
@@ -987,8 +991,7 @@ public class UserAOImpl implements IUserAO {
 
     // **************************************
     @Override
-    public Paginable<User> queryAllLowUser(int start, int limit,
-            User condition) {
+    public Paginable<User> queryAllLowUser(int start, int limit, User condition) {
         long totalCount = userBO.getTotalCount(condition);
         Page<User> page = new Page<User>(start, limit, totalCount);
         List<User> list = userBO.selectList(condition, page.getPageNo(),
@@ -1007,8 +1010,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public Paginable<User> queryAgentPage(int start, int limit,
-            User condition) {
+    public Paginable<User> queryAgentPage(int start, int limit, User condition) {
         Page<User> page = null;
         for (int i = 1; i <= 5; i++) {
             condition.setLevel(i);
@@ -1035,8 +1037,8 @@ public class UserAOImpl implements IUserAO {
             User condition) {
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .before(condition.getApplyDatetimeEnd())) {
+                && condition.getApplyDatetimeStart().before(
+                    condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         condition.setKind(EUserKind.Merchant.getCode());
@@ -1053,8 +1055,8 @@ public class UserAOImpl implements IUserAO {
             User condition) {
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .before(condition.getApplyDatetimeEnd())) {
+                && condition.getApplyDatetimeStart().before(
+                    condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         condition.setKind(EUserKind.Merchant.getCode());
