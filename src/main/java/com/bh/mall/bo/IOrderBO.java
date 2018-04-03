@@ -33,4 +33,7 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public long selectCount(Order oCondition);
 
+    public List<Order> queryToDealList(int pageNo, int pageSize,
+            Order condition);
+
 }

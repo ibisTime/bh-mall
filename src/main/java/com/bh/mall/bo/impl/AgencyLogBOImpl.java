@@ -1,6 +1,5 @@
 package com.bh.mall.bo.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,17 +26,23 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     private IAgencyLogDAO agencyLogDAO;
 
     @Override
-    public String saveAgencyLog(String toUserId) {
+    public String saveAgencyLog(User data, String toUserId) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
-        AgencyLog data = new AgencyLog();
-        data.setCode(code);
-        data.setToUserId(toUserId);
-        data.setType(EAgencyType.Allot.getCode());
-        data.setApprover(data.getApprover());
-        data.setApproveDatetime(data.getApproveDatetime());
-        data.setStatus(EUserStatus.Alloted.getCode());
-        agencyLogDAO.insert(data);
+        AgencyLog alData = new AgencyLog();
+        alData.setCode(code);
+        alData.setApplyLevel(data.getApplyLevel());
+        alData.setToUserId(toUserId);
+        alData.setType(EAgencyType.Allot.getCode());
+        alData.setTeamName(data.getTeamName());
+
+        alData.setUserReferee(data.getUserReferee());
+        alData.setApplyUser(data.getUserId());
+        alData.setApplyDatetime(data.getApplyDatetime());
+        alData.setApprover(data.getApprover());
+        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setStatus(EUserStatus.Alloted.getCode());
+        agencyLogDAO.insert(alData);
         return code;
     }
 
@@ -61,37 +66,46 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String pass(User data, String approver, String remark) {
-        AgencyLog agencyLog = this.getAgencyLog(data.getLastAgentLog());
+    public String acceptIntention(User data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
         alData.setCode(code);
         alData.setType(EAgencyType.Allot.getCode());
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(agencyLog.getApplyDatetime());
-        alData.setToUserId(agencyLog.getToUserId());
-        alData.setApprover(approver);
-        alData.setApproveDatetime(new Date());
-        alData.setStatus(EUserStatus.TO_Approve.getCode());
+        alData.setApplyDatetime(data.getApplyDatetime());
+        alData.setToUserId(data.getApprover());
+
+        alData.setApplyLevel(data.getApplyLevel());
+        alData.setTeamName(data.getTeamName());
+        alData.setUserReferee(data.getUserReferee());
+        alData.setApprover(data.getApprover());
+        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setStatus(data.getStatus());
         agencyLogDAO.insert(alData);
         return code;
     }
 
     @Override
     public String ignore(User data) {
-        AgencyLog agencyLog = this.getAgencyLog(data.getLastAgentLog());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
         alData.setCode(code);
         alData.setType(EAgencyType.Allot.getCode());
-        alData.setToUserId(agencyLog.getToUserId());
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(agencyLog.getApplyDatetime());
+        alData.setApplyDatetime(data.getApplyDatetime());
+        alData.setToUserId(data.getApprover());
+
+        alData.setApplyLevel(data.getApplyLevel());
+        alData.setTeamName(data.getTeamName());
+        alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setStatus(EUserStatus.Ignored.getCode());
+        alData.setStatus(data.getStatus());
+
+        alData.setApplyUser(data.getUserId());
+        alData.setStatus(data.getStatus());
         agencyLogDAO.insert(alData);
         return code;
 
@@ -99,16 +113,20 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
 
     @Override
     public String cancelImpower(User data) {
-        AgencyLog agencyLog = this.getAgencyLog(data.getLastAgentLog());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
         alData.setCode(code);
         alData.setType(EAgencyType.Imporder.getCode());
-        alData.setToUserId(agencyLog.getToUserId());
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(agencyLog.getApplyDatetime());
-        alData.setStatus(EUserStatus.TO_Approve.getCode());
+        alData.setApplyDatetime(data.getApplyDatetime());
+
+        alData.setApplyLevel(data.getApplyLevel());
+        alData.setTeamName(data.getTeamName());
+        alData.setUserReferee(data.getUserReferee());
+        alData.setApprover(data.getApprover());
+        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setStatus(data.getStatus());
         agencyLogDAO.insert(alData);
         return code;
 
@@ -116,18 +134,20 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
 
     @Override
     public String approveImpower(User data) {
-        AgencyLog agencyLog = this.getAgencyLog(data.getLastAgentLog());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
-        alData.setCode(code);
-        alData.setType(EAgencyType.Imporder.getCode());
-        alData.setToUserId(agencyLog.getToUserId());
-        alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(agencyLog.getApplyDatetime());
 
+        alData.setCode(code);
+        alData.setApplyUser(data.getUserId());
+        alData.setApplyDatetime(data.getApplyDatetime());
+        alData.setType(EAgencyType.Imporder.getCode());
+
+        alData.setApplyLevel(data.getApplyLevel());
+        alData.setTeamName(data.getTeamName());
+        alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApplyDatetime());
+        alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(data.getStatus());
         alData.setRemark(data.getRemark());
         agencyLogDAO.insert(alData);
@@ -136,19 +156,23 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
 
     @Override
     public String approveCanenl(User data) {
-        AgencyLog agencyLog = this.getAgencyLog(data.getLastAgentLog());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
-        alData.setCode(code);
-        alData.setType(EAgencyType.Imporder.getCode());
-        alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(agencyLog.getApplyDatetime());
 
+        alData.setCode(code);
+        alData.setApplyUser(data.getUserId());
+        alData.setApplyDatetime(data.getApplyDatetime());
+        alData.setType(EAgencyType.Imporder.getCode());
+
+        alData.setApplyLevel(data.getApplyLevel());
+        alData.setTeamName(data.getTeamName());
+        alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApplyDatetime());
+        alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(data.getStatus());
         alData.setRemark(data.getRemark());
+
         agencyLogDAO.insert(alData);
         return code;
     }

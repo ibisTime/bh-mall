@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAwardBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IOrderBO;
@@ -23,6 +24,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.AgencyLog;
 import com.bh.mall.domain.Award;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.Order;
@@ -53,6 +55,7 @@ import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserLevel;
+import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -84,6 +87,9 @@ public class OrderAOImpl implements IOrderAO {
 
     @Autowired
     private IAwardBO awardBO;
+
+    @Autowired
+    private IAgencyLogBO agencyLogBO;
 
     // C端下单
     @Override
@@ -133,6 +139,7 @@ public class OrderAOImpl implements IOrderAO {
             order.setArea(req.getArea());
             order.setCity(req.getCity());
 
+            order.setKind(EOrderKind.Normal_Order.getCode());
             order.setProvince(req.getProvince());
             order.setStatus(EOrderStatus.Unpaid.getCode());
             order.setIsSendHome(req.getIsSendHome());
@@ -151,6 +158,38 @@ public class OrderAOImpl implements IOrderAO {
         Product pData = productBO.getProduct(psData.getProductCode());
         ProductSpecsPrice pspData = productSpecsPriceBO
             .getPriceBySpecsCode(psData.getCode());
+
+        // 判断代理状态
+        String kind = EOrderKind.Normal_Order.getCode();
+        // 是否有过授权单
+        Order condition = new Order();
+        condition.setApplyUser(req.getApplyUser());
+        condition.setKind(EOrderKind.Impower_Order.getCode());
+        long count = orderBO.getTotalCount(condition);
+        if (count == 0) {
+            if (EProductSpecsType.Apply_NO.getCode()
+                .equals(psData.getIsImpowerOrder())) {
+                throw new BizException("xn0000", "该产品规格不予许授权单下单");
+            } else {
+                kind = EOrderKind.Impower_Order.getCode();
+            }
+        }
+        // 是否升级
+        User user = userBO.getUser(req.getApplyUser());
+        AgencyLog agencyLog = agencyLogBO.getAgencyLog(user.getLastAgentLog());
+
+        if (EUserStatus.Upgraded.getCode().equals(agencyLog.getStatus())) {
+            condition.setKind(EOrderKind.Upgrade_Order.getCode());
+            count = orderBO.getTotalCount(condition);
+            if (count == 0) {
+                if (EProductSpecsType.Apply_NO.getCode()
+                    .equals(psData.getIsUpgradeOrder())) {
+                    throw new BizException("xn0000", "该产品规格不予许升级单下单");
+                } else {
+                    kind = EOrderKind.Upgrade_Order.getCode();
+                }
+            }
+        }
 
         // 判断是否允许：普通，授权，升级下单
         if (EProductSpecsType.Apply_NO.getCode()
@@ -202,6 +241,7 @@ public class OrderAOImpl implements IOrderAO {
         data.setArea(req.getArea());
         data.setCity(req.getCity());
 
+        data.setKind(kind);
         data.setProvince(req.getProvince());
         data.setStatus(EOrderStatus.Unpaid.getCode());
         orderBO.saveOrder(data);
@@ -279,6 +319,10 @@ public class OrderAOImpl implements IOrderAO {
                     .getStartDatetime().before(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
+        String[] statusList = condition.getStatus().split(",");
+        if (statusList.length > 1) {
+            condition.setStatusList(condition.getStatus());
+        }
         return orderBO.getPaginable(start, limit, condition);
     }
 
@@ -288,6 +332,10 @@ public class OrderAOImpl implements IOrderAO {
                 && condition.getEndDatetime() != null && condition
                     .getStartDatetime().before(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
+        String[] statusList = condition.getStatus().split(",");
+        if (statusList.length > 1) {
+            condition.setStatusList(condition.getStatus());
         }
         return orderBO.queryOrderList(condition);
     }

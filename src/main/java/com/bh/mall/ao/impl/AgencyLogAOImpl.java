@@ -14,7 +14,7 @@ import com.bh.mall.domain.AgencyLog;
 public class AgencyLogAOImpl implements IAgencyLogAO {
 
     @Autowired
-    private IAgencyLogBO AgencyLogBO;
+    private IAgencyLogBO agencyLogBO;
 
     @Override
     public String addAgencyLog(AgencyLog data) {
@@ -24,17 +24,17 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
     @Override
     public Paginable<AgencyLog> queryAgencyLogPage(int start, int limit,
             AgencyLog condition) {
-        return AgencyLogBO.getPaginable(start, limit, condition);
+        return agencyLogBO.getPaginable(start, limit, condition);
     }
 
     @Override
     public List<AgencyLog> queryAgencyLogList(AgencyLog condition) {
-        return AgencyLogBO.queryAgencyLogList(condition);
+        return agencyLogBO.queryAgencyLogList(condition);
     }
 
     @Override
     public AgencyLog getAgencyLog(String code) {
-        return AgencyLogBO.getAgencyLog(code);
+        return agencyLogBO.getAgencyLog(code);
     }
 
 }

@@ -30,4 +30,7 @@ public interface IJourAO {
     public Long getTotalAmount(String bizType, String channelType,
             String accountNumber, String dateStart, String dateEnd);
 
+    public Paginable<Jour> queryDetailPage(int start, int limit, Jour condition,
+            String type);
+
 }

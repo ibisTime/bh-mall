@@ -84,4 +84,11 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
         super.update(NAMESPACE.concat("update_status"), data);
     }
 
+    @Override
+    public List<Order> queryToDealList(int pageNo, int pageSize,
+            Order condition) {
+        return super.selectList(NAMESPACE.concat("select_to_deal"), pageNo,
+            pageSize, condition, Order.class);
+    }
+
 }

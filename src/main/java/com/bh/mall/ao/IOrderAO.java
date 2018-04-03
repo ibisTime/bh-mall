@@ -21,7 +21,8 @@ public interface IOrderAO {
 
     public void editOrder(XN627643Req req);
 
-    public Paginable<Order> queryOrderPage(int start, int limit, Order condition);
+    public Paginable<Order> queryOrderPage(int start, int limit,
+            Order condition);
 
     public List<Order> queryOrderList(Order condition);
 

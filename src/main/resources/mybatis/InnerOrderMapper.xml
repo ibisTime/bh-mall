@@ -42,7 +42,7 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-				<if test="applyUser != null and applyUser != '' ">
+			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
 			<if test="teamName != null and teamName != '' ">
@@ -55,7 +55,7 @@
 				AND t.status = #{status}
 			</if>
 			<if test="statusForQuery != null and statusForQuery != '' ">
-				AND t.status IN #{statusForQuery}
+				AND t.status IN (1,2,3,5)
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>

@@ -75,7 +75,7 @@ public interface IUserAO {
             String approver);
 
     // 意向通过
-    public void pass(String code, String approver, String remark);
+    public void acceptIntention(String userId, String approver, String remark);
 
     // 忽略意向
     public void ignore(String userId, String updater);

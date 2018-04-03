@@ -38,8 +38,8 @@
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
-			<if test="type != null and type != '' ">
-				AND t.type = #{type}
+			<if test="saleType != null and saleType != '' ">
+				AND t.sale_type = #{saleType}
 			</if>
 			<if test="startDatetime != null and startDatetime != '' ">
 				<![CDATA[AND apply_datetime >=  startDatetime]]>

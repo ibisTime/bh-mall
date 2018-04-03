@@ -141,7 +141,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public void approveCanenl(User data);
 
     // 修改上级
-    public void refreshHighUser(User data, String highUser, String updater);
+    public void refreshHighUser(User data);
 
     public void refreshUserReferee(User data, String userReferee,
             String updater);
@@ -157,5 +157,7 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public List<User> selectAgentFront(User condition, int pageNo,
             int pageSize);
+
+    public void acceptIntention(User data);
 
 }

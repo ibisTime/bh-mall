@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627253Req {
     // （必填） 编号
     @NotBlank(message = "代理编号不能为空")
-    private String code;
+    private String userId;
 
     // （必填）审核人
     @NotBlank(message = "审核人不能为空")
@@ -20,12 +20,12 @@ public class XN627253Req {
     // （选填）备注
     private String remark;
 
-    public String getCode() {
-        return code;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getApprover() {

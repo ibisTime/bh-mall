@@ -6,7 +6,6 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627262Req;
-import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -25,9 +24,8 @@ public class XN627262 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.upgradeLevel(req.getUserId(), req.getHighLevel(),
+        return userAO.upgradeLevel(req.getUserId(), req.getHighLevel(),
             req.getPayPdf(), req.getTeamName());
-        return new BooleanRes(true);
     }
 
     @Override

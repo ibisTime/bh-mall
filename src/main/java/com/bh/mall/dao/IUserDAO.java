@@ -76,4 +76,6 @@ public interface IUserDAO extends IBaseDAO<User> {
     public void approveUpgrade(User data);
 
     public List<User> selectAgentFront(User condition, int start, int limit);
+
+    public void acceptIntention(User data);
 }

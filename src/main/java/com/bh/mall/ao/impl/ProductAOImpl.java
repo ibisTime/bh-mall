@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IProductAO;
-import com.bh.mall.ao.IUserAO;
 import com.bh.mall.bo.IAwardBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
+import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
@@ -55,13 +55,13 @@ public class ProductAOImpl implements IProductAO {
     private IAwardBO awardBO;
 
     @Autowired
-    private IUserAO userAO;
+    private IUserBO userBO;
 
     @Override
     public String addProduct(XN627540Req req) {
 
-        String code = OrderNoGenerater.generate(EGeneratePrefix.PRODUCT
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.PRODUCT.getCode());
         Product data = new Product();
         data.setCode(code);
         data.setName(req.getName());
@@ -83,8 +83,8 @@ public class ProductAOImpl implements IProductAO {
         productBO.saveProduct(data);
 
         productSpecsBO.saveProductSpecs(code, req.getSpecList());
-        productLogBO
-            .saveProductLog(code, req.getUpdater(), req.getRealNumber());
+        productLogBO.saveProductLog(code, req.getUpdater(),
+            req.getRealNumber());
         awardBO.saveAward(code, req.getAwardList());
         return code;
     }
@@ -114,8 +114,8 @@ public class ProductAOImpl implements IProductAO {
         // 是否新加了规格以及规格价格
         List<XN627546Req> psList = req.getSpecList();
         for (XN627546Req psReq : psList) {
-            ProductSpecs psData = productSpecsBO.getProductSpecs(psReq
-                .getCode());
+            ProductSpecs psData = productSpecsBO
+                .getProductSpecs(psReq.getCode());
             if (psData == null) {
                 productSpecsBO.saveProductSpecs(data.getCode(),
                     req.getSpecList());
@@ -130,15 +130,15 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Product getProduct(String code) {
         Product data = productBO.getProduct(code);
-        List<ProductSpecs> psList = productSpecsBO.queryProductSpecsList(data
-            .getCode());
+        List<ProductSpecs> psList = productSpecsBO
+            .queryProductSpecsList(data.getCode());
         // 推荐奖励
-        List<Award> directAwardList = awardBO.queryAwardList(
-            EAwardType.DirectAward.getCode(), code);
+        List<Award> directAwardList = awardBO
+            .queryAwardList(EAwardType.DirectAward.getCode(), code);
 
         // 出货奖励
-        List<Award> sendAwardList = awardBO.queryAwardList(
-            EAwardType.SendAward.getCode(), code);
+        List<Award> sendAwardList = awardBO
+            .queryAwardList(EAwardType.SendAward.getCode(), code);
         data.setDirectAwardList(directAwardList);
         data.setSendAwardList(sendAwardList);
         if (CollectionUtils.isNotEmpty(psList)) {
@@ -243,7 +243,7 @@ public class ProductAOImpl implements IProductAO {
     public Paginable<Product> selectProductPageByFront(int start, int limit,
             Product condition) {
         if (StringUtils.isNotBlank(condition.getUserId())) {
-            User data = userAO.doGetUser(condition.getUserId());
+            User data = userBO.getUser(condition.getUserId());
             condition.setLevel(data.getLevel());
         }
 

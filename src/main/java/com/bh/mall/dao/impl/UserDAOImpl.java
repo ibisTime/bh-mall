@@ -193,4 +193,9 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
         return super.selectList(NAMESPACE.concat("select_agent_front"), start,
             limit, condition, User.class);
     }
+
+    @Override
+    public void acceptIntention(User data) {
+        super.update(NAMESPACE.concat("accept_intention"), data);
+    }
 }

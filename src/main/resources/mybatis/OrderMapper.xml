@@ -45,6 +45,7 @@
 		<result column="approve_note" property="approveNote" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -63,7 +64,10 @@
 				AND t.status = #{status}
 			</if>
 			<if test="statusForQuery != null and statusForQuery != '' ">
-				AND t.status IN #{statusForQuery}
+				AND t.status IN (1,2,3,5)
+			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status IN (0,1)
 			</if>
 			<if test="productName != null and productName != '' ">
 				AND t.product_name like "%"#{productName}"%"
@@ -77,6 +81,8 @@
 			
 		</trim>
 	</sql>
+	
+	
 	<select id="select_order" parameterType="order" resultMap="order_DB_Result">
 		SELECT
 		t.code
@@ -129,6 +135,57 @@
 			</if>
 		</trim>
 	</select>
+	
+	
+	<select id="select_to_deal" parameterType="order" resultMap="order_DB_Result">
+		SELECT
+		t.code
+		,t.is_company_send
+		,t.is_send_home
+		,t.kind
+		,t.product_code
+		,t.product_name
+		,t.product_specs_code
+		,t.product_specs_name
+		,t.pic
+		,t.quantity
+		,t.price
+		,t.to_user
+		,t.amount
+		,t.yunfei
+		,t.status
+		,t.pay_type
+		,t.pay_group
+		,t.pay_amount
+		,t.pay_datetime
+		,t.pay_code
+		,t.apply_user
+		,t.apply_note
+		,t.apply_datetime
+		,t.signer
+		,t.mobile
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+		,t.deliver
+		,t.delive_datetime
+		,t.logistics_code
+		,t.logistics_company
+		,t.pdf
+		,t.updater
+		,t.update_datetime
+		,t.update_note
+		,t.approver
+		,t.approve_datetime
+		,t.approve_note
+		,t.remark
+		FROM
+		tbh_order t
+	</select>
+	
+	
+	
 
 	<select id="select_order_count" parameterType="order"
 		resultType="java.lang.Long">

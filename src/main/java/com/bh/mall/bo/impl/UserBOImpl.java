@@ -1,5 +1,5 @@
 /**
- * @Title UserBOImpl.java 
+refreshHighUser * @Title UserBOImpl.java 
  * @Package com.ibis.pz.impl 
  * @Description 
  * @author miyb  
@@ -544,7 +544,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         User data = new User();
         data.setUserId(userId);
         data.setRealName(realName);
-        data.setLevel(StringValidater.toInteger(level));
+
         data.setIdBehind(idBehind);
         data.setIdFront(idFront);
 
@@ -559,6 +559,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setUnionId(unionId);
         data.setH5OpenId(h5OpenId);
 
+        data.setApplyLevel(StringValidater.toInteger(level));
         data.setKind(EUserKind.Merchant.getCode());
         data.setLoginPwd(MD5Util.md5(loginPwd));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
@@ -611,10 +612,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshHighUser(User data, String highUser, String updater) {
-        data.setHighUserId(highUser);
-        data.setUpdater(updater);
-        data.setUpdateDatetime(new Date());
+    public void refreshHighUser(User data) {
         userDAO.updateHighUser(data);
     }
 
@@ -654,6 +652,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public List<User> selectAgentFront(User condition, int start, int limit) {
         return userDAO.selectAgentFront(condition, start, limit);
+    }
+
+    @Override
+    public void acceptIntention(User data) {
+        userDAO.acceptIntention(data);
     }
 
 }

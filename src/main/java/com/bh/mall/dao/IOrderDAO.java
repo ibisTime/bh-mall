@@ -1,5 +1,7 @@
 package com.bh.mall.dao;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.IBaseDAO;
 import com.bh.mall.domain.Order;
 
@@ -19,4 +21,6 @@ public interface IOrderDAO extends IBaseDAO<Order> {
     void approveCancel(Order data);
 
     void receivedOrder(Order data);
+
+    List<Order> queryToDealList(int pageNo, int pageSize, Order condition);
 }

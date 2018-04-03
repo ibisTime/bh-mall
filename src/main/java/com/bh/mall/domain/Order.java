@@ -144,6 +144,8 @@ public class Order extends ABaseDO {
 
     private String statusForQuery;
 
+    private String statusList;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -318,6 +320,14 @@ public class Order extends ABaseDO {
 
     public void setPayCode(String payCode) {
         this.payCode = payCode;
+    }
+
+    public String getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(String statusList) {
+        this.statusList = statusList;
     }
 
     public String getApplyUser() {

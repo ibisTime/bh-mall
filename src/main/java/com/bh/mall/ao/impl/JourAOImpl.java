@@ -3,15 +3,20 @@ package com.bh.mall.ao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IJourAO;
-import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IJourBO;
+import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IUserBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Jour;
+import com.bh.mall.enums.EAwardType;
+import com.bh.mall.enums.EBizType;
 
 /** 
  * @author: xieyj 
@@ -25,7 +30,10 @@ public class JourAOImpl implements IJourAO {
     private IJourBO jourBO;
 
     @Autowired
-    private IAccountBO accountBO;
+    private IOrderBO orderBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
@@ -61,8 +69,9 @@ public class JourAOImpl implements IJourAO {
     }
 
     @Override
-    public Jour getJour(String code) {
-        return jourBO.getJour(code);
+    public Jour getJour(String userId) {
+
+        return jourBO.getJour(userId);
     }
 
     @Override
@@ -70,6 +79,39 @@ public class JourAOImpl implements IJourAO {
             String accountNumber, String dateStart, String dateEnd) {
         return jourBO.getTotalAmount(bizType, channelType, accountNumber,
             dateStart, dateEnd);
+    }
+
+    @Override
+    public Paginable<Jour> queryDetailPage(int start, int limit, Jour condition,
+            String type) {
+        boolean flag = true;
+        String bizType = EBizType.AJ_JSJL.getCode();
+        if (EAwardType.DirectAward.getCode().equals(type)) {
+            flag = false;
+            bizType = EBizType.AJ_TJJL.getCode();
+        } else if (EAwardType.SendAward.getCode().equals(type)) {
+            flag = false;
+            bizType = EBizType.AJ_CHJL.getCode();
+        }
+        condition.setBizType(bizType);
+
+        long count = jourBO.getTotalCount(condition);
+        Page<Jour> page = new Page<Jour>(start, limit, count);
+        List<Jour> list = jourBO.queryJourList(condition);
+
+        // 补充关联编号的信息
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Jour jour : list) {
+                // 是否是推荐奖
+                if (flag) {
+                    jour.setUserInformation(userBO.getUser(jour.getRefNo()));
+                } else {
+                    jour.setOrderInformation(orderBO.getOrder(jour.getRefNo()));
+                }
+            }
+        }
+        page.setList(list);
+        return page;
     }
 
 }

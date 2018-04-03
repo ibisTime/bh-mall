@@ -62,6 +62,9 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="highUserId != null and highUserId != '' ">
+				AND t.high_user_id = #{highUserId}
+			</if>
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
 			</if>
@@ -236,7 +239,7 @@
 		<include refid="where_condition"/>
 	</select>
 
-	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
+	<select id="select_agent_front" parameterType="user" resultMap="user_DB_Result">
 		SELECT
 		t.user_id
 		,t.login_name
@@ -557,7 +560,7 @@
 	
 	
 		
-	<update id="update_information" parameterType="user">
+	<update id="cancel_impower" parameterType="user">
 		UPDATE tbh_user
 		SET
 		status = #{status}
@@ -565,7 +568,7 @@
 		WHERE user_id = #{userId}
 	</update>
 	
-	<update id="update_information" parameterType="user">
+	<update id="approve_impower" parameterType="user">
 		UPDATE tbh_user
 		SET
 		status = #{status}
@@ -625,5 +628,16 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+	
+	<update id="accept_intention" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,last_agent_log = #{lastAgentLog}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
 	
 </mapper>

@@ -96,4 +96,10 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return orderDAO.selectTotalCount(oCondition);
     }
 
+    @Override
+    public List<Order> queryToDealList(int pageNo, int pageSize,
+            Order condition) {
+        return orderDAO.queryToDealList(pageNo, pageSize, condition);
+    }
+
 }
