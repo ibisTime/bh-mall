@@ -178,15 +178,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setUserId(userId);
         user.setLoginName(req.getLoginName());
         user.setMobile(req.getMobile());
-        user.setNickname(
-            userId.substring(userId.length() - 8, userId.length()));
+        user.setNickname(userId.substring(userId.length() - 8, userId.length()));
 
         if (StringUtils.isBlank(req.getLoginPwd())) {
             req.setLoginPwd(EUserPwd.InitPwd.getCode());
         }
         user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        user.setLoginPwdStrength(
-            PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
+            .getLoginPwd()));
 
         user.setKind(req.getKind());
         user.setRoleCode(req.getRoleCode());
@@ -338,8 +337,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setTradePwd(MD5Util.md5(tradePwd));
@@ -354,8 +352,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -370,8 +367,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -398,14 +394,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         List<User> userList = userDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(userList)) {
             User data = userList.get(0);
-            throw new BizException("xn000001",
-                "用户[" + data.getMobile() + "]已使用该身份信息，请重新填写");
+            throw new BizException("xn000001", "用户[" + data.getMobile()
+                    + "]已使用该身份信息，请重新填写");
         }
     }
 
     @Override
-    public void refreshStatus(String userId, EUserStatus status, String updater,
-            String remark) {
+    public void refreshStatus(String userId, EUserStatus status,
+            String updater, String remark) {
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
@@ -492,8 +488,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.bh.mall.bo.IUserBO#doCheckOpenId(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public void doCheckOpenId(String unionId, String h5OpenId, String appOpenId,
-            String companyCode, String systemCode) {
+    public void doCheckOpenId(String unionId, String h5OpenId,
+            String appOpenId, String companyCode, String systemCode) {
         User condition = new User();
         condition.setUnionId(unionId);
         condition.setH5OpenId(h5OpenId);
@@ -536,10 +532,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String realName, String level, String wxId,
             String idBehind, String idFront, String introducer, String payPdf,
-            String fromInfo, String userReferee, String mobile, String province,
-            String city, String area, String address, String loginPwd,
-            String photo, String nickname, String unionId, String h5OpenId,
-            String companyCode, String systemCode) {
+            String fromInfo, String userReferee, String mobile,
+            String province, String city, String area, String address,
+            String loginPwd, String photo, String nickname, String unionId,
+            String h5OpenId, String companyCode, String systemCode) {
         String userId = OrderNoGenerater.generate("U");
         User data = new User();
         data.setUserId(userId);
@@ -554,7 +550,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setPhoto(photo);
         data.setNickname(nickname);
 
-        data.setStatus(EUserStatus.TO_Approve.getCode());
+        data.setStatus(EUserStatus.TO_APPROVE.getCode());
         data.setApplyDatetime(new Date());
         data.setUnionId(unionId);
         data.setH5OpenId(h5OpenId);
@@ -585,7 +581,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void ignore(User data) {
-        data.setStatus(EUserStatus.Ignored.getCode());
+        data.setStatus(EUserStatus.IGNORED.getCode());
         userDAO.ignore(data);
     }
 
@@ -596,7 +592,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void cancelImpower(User data) {
-        data.setStatus(EUserStatus.TO_Cancel.getCode());
+        data.setStatus(EUserStatus.TO_CANCEL.getCode());
         userDAO.cancelImpower(data);
     }
 
@@ -619,8 +615,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshUserReferee(User data, String userReferee,
-            String updater) {
+    public void refreshUserReferee(User data, String userReferee, String updater) {
         data.setHighUserId(userReferee);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
