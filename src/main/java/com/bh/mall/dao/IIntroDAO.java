@@ -5,5 +5,7 @@ import com.bh.mall.domain.Intro;
 
 //dao层 
 public interface IIntroDAO extends IBaseDAO<Intro> {
-	String NAMESPACE = IIntroDAO.class.getName().concat(".");
+    String NAMESPACE = IIntroDAO.class.getName().concat(".");
+
+    int update(Intro data);
 }

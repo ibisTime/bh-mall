@@ -33,6 +33,7 @@ public class XN627355 extends AProcessor {
         User condition = new User();
         condition.setTeamName(req.getTeamName());
         condition.setKeyWord(req.getKeyword());
+        condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStatus(req.getStatus());
         condition.setUserReferee(req.getUserReferee());

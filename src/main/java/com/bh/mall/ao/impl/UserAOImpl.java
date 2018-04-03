@@ -125,7 +125,6 @@ public class UserAOImpl implements IUserAO {
     private IAgentUpgradeBO agentUpgradeBO;
 
     // private Iintro awardBO;
-
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
             String companyCode, String systemCode) {
@@ -598,6 +597,9 @@ public class UserAOImpl implements IUserAO {
         User dbUser = userBO.doGetUserByOpenId(h5OpenId,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         if (null != dbUser) {
+            if (dbUser.getStatus().equals(EUserStatus.ALLOTED.getCode())) {
+
+            }
             throw new BizException("xn0000", "您已经申请过代理");
         } else {
             String nickname = (String) wxRes.get("nickname");
@@ -732,7 +734,7 @@ public class UserAOImpl implements IUserAO {
         data.setApprover(approver);
         data.setApplyDatetime(new Date());
         data.setRemark(remark);
-        data.setStatus(EUserStatus.TO_Approve.getCode());
+        data.setStatus(EUserStatus.TO_APPROVE.getCode());
         String logCode = agencyLogBO.acceptIntention(data);
         data.setLastAgentLog(logCode);
         userBO.acceptIntention(data);
@@ -747,7 +749,7 @@ public class UserAOImpl implements IUserAO {
         }
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.Ignored.getCode());
+        data.setStatus(EUserStatus.IGNORED.getCode());
         String logCode = agencyLogBO.ignore(data);
         data.setLastAgentLog(logCode);
         userBO.ignore(data);
@@ -815,14 +817,14 @@ public class UserAOImpl implements IUserAO {
     public void approveImpower(String userId, String approver, String result,
             String remark) {
         User data = userBO.getUser(userId);
-        if (!EUserStatus.TO_Approve.getCode().equals(data.getStatus())
-                || !EUserStatus.TO_Company_Impower.getCode()
+        if (!EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
+                || !EUserStatus.TO_COMPANYAPPROVE.getCode()
                     .equals(data.getStatus())) {
             throw new BizException("xn000", "该代理未处于待授权状态");
         }
 
         User approveUser = userBO.getUser(approver);
-        String status = EUserStatus.Impowered.getCode();
+        String status = EUserStatus.IMPOWERED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setHighUserId(approver);
             AgentImpower aiData = agentImpowerBO
@@ -834,11 +836,11 @@ public class UserAOImpl implements IUserAO {
             }
             // 是否需要公司授权
             if (EBoolean.YES.getCode().equals(aiData.getIsCompanyImpower())) {
-                status = EUserStatus.TO_Company_Impower.getCode();
+                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
                 // 审核人是否是平台
                 if (EUserKind.Customer.getCode()
                     .equals(approveUser.getKind())) {
-                    status = EUserStatus.Impowered.getCode();
+                    status = EUserStatus.IMPOWERED.getCode();
                     // 介绍人不为空且等级低于被介绍人
                     if (StringUtils.isNotBlank(data.getIntroducer())) {
                         if (approveUser.getLevel() < data.getLevel()) {
@@ -865,7 +867,7 @@ public class UserAOImpl implements IUserAO {
             }
 
         } else {
-            status = EUserStatus.NO_Through.getCode();
+            status = EUserStatus.NO_THROUGH.getCode();
         }
         data.setApprover(approver);
         data.setApplyDatetime(new Date());
@@ -882,13 +884,13 @@ public class UserAOImpl implements IUserAO {
     public void approveCanenl(String userId, String approver, String result,
             String remark) {
         User data = userBO.getUser(userId);
-        if (!EUserStatus.TO_Cancel.getCode().equals(data.getStatus())) {
+        if (!EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())) {
             throw new BizException("xn000", "该代理未处于申请取消状态");
         }
 
-        String status = EUserStatus.NO_Through.getCode();
+        String status = EUserStatus.NO_THROUGH.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            status = EUserStatus.Canceled.getCode();
+            status = EUserStatus.CANCELED.getCode();
             Account condition = new Account();
             condition.setUserId(data.getUserId());
             List<Account> list = accountBO.queryAccountList(condition);
@@ -956,8 +958,8 @@ public class UserAOImpl implements IUserAO {
         User data = userBO.getUser(userId);
 
         if (!EUserStatus.NORMAL.getCode().equals(data.getStatus())
-                || !EUserStatus.Impowered.getCode().equals(data.getStatus())
-                || !EUserStatus.Upgraded.getCode().equals(data.getStatus())) {
+                || !EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
+                || !EUserStatus.UPGRADED.getCode().equals(data.getStatus())) {
             throw new BizException("xn000", "您的状态无法申请升级");
         }
         if (data.getLevel() <= StringValidater.toInteger(highLevel)) {
@@ -985,7 +987,7 @@ public class UserAOImpl implements IUserAO {
 
         data.setApplyLevel(StringValidater.toInteger(highLevel));
         data.setTeamName(teamName);
-        data.setStatus(EUserStatus.TO_Upgrade.getCode());
+        data.setStatus(EUserStatus.TO_UPGRADE.getCode());
         data.setApplyDatetime(new Date());
         String logCode = agencyLogBO.upgradeLevel(data, payPdf);
         data.setLastAgentLog(logCode);
@@ -997,9 +999,9 @@ public class UserAOImpl implements IUserAO {
     public void approveUpgrade(String userId, String approver, String remark,
             String result) {
         User data = userBO.getUser(userId);
-        String status = EUserStatus.NO_Through.getCode();
+        String status = EUserStatus.NO_THROUGH.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
-            status = EUserStatus.Upgraded.getCode();
+            status = EUserStatus.UPGRADED.getCode();
             AgentUpgrade auData = agentUpgradeBO
                 .getAgentUpgradeByLevel(data.getLevel());
             Account condition = new Account();
@@ -1020,7 +1022,7 @@ public class UserAOImpl implements IUserAO {
             }
 
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
-                status = EUserStatus.TO_Company_Upgrade.getCode();
+                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             }
         }
         data.setStatus(status);

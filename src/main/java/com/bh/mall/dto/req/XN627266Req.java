@@ -33,6 +33,9 @@ public class XN627266Req extends APageReq {
     // （选填） 等级
     private String level;
 
+    // (选填)上级代理
+    private String highLevel;
+
     // （选填） 手机号
     private String mobile;
 
@@ -197,6 +200,14 @@ public class XN627266Req extends APageReq {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getHighLevel() {
+        return highLevel;
+    }
+
+    public void setHighLevel(String highLevel) {
+        this.highLevel = highLevel;
     }
 
 }

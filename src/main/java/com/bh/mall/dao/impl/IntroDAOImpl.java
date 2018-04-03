@@ -45,4 +45,9 @@ public class IntroDAOImpl extends AMybatisTemplate implements IIntroDAO {
             condition, Intro.class);
     }
 
+    @Override
+    public int update(Intro data) {
+        return super.update(NAMESPACE.concat("update_intro"), data);
+    }
+
 }

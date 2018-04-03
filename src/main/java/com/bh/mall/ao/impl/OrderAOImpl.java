@@ -178,7 +178,7 @@ public class OrderAOImpl implements IOrderAO {
         User user = userBO.getUser(req.getApplyUser());
         AgencyLog agencyLog = agencyLogBO.getAgencyLog(user.getLastAgentLog());
 
-        if (EUserStatus.Upgraded.getCode().equals(agencyLog.getStatus())) {
+        if (EUserStatus.UPGRADED.getCode().equals(agencyLog.getStatus())) {
             condition.setKind(EOrderKind.Upgrade_Order.getCode());
             count = orderBO.getTotalCount(condition);
             if (count == 0) {

@@ -1,81 +1,83 @@
 package com.bh.mall.domain;
 
+import java.util.Date;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
-* 售后单
+* 介绍奖
 * @author: chenshan 
-* @since: 2018-04-03 10:06:52
+* @since: 2018-04-03 18:57:33
 * @history:
 */
 public class Intro extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 编号
+    private String code;
 
-	// 等级
-	private String level;
+    // 等级
+    private String level;
 
-	// 奖励比例
-	private String percent;
+    // 奖励比例
+    private Double percent;
 
-	// 申请人
-	private String updater;
+    // 更新人
+    private String updater;
 
-	// 申请时间
-	private String updaterDatetime;
+    // 更新时间
+    private Date updateDatetime;
 
-	// 更新人
-	private String remark;
+    // 备注
+    private String remark;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public void setLevel(String level) {
-		this.level = level;
-	}
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
-	public String getLevel() {
-		return level;
-	}
+    public String getLevel() {
+        return level;
+    }
 
-	public void setPercent(String percent) {
-		this.percent = percent;
-	}
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
 
-	public String getPercent() {
-		return percent;
-	}
+    public String getUpdater() {
+        return updater;
+    }
 
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	public String getUpdater() {
-		return updater;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	public void setUpdaterDatetime(String updaterDatetime) {
-		this.updaterDatetime = updaterDatetime;
-	}
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
 
-	public String getUpdaterDatetime() {
-		return updaterDatetime;
-	}
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public Double getPercent() {
+        return percent;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setPercent(Double percent) {
+        this.percent = percent;
+    }
 
 }

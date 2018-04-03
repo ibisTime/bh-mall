@@ -213,6 +213,9 @@ public class User extends ABaseDO {
     // 县区
     private String areaForQuery;
 
+    // 上级代理
+    private Integer highLevel;
+
     // 申请时间起(选填)
     private Date applyDatetimeStart;
 
@@ -711,6 +714,14 @@ public class User extends ABaseDO {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public Integer getHighLevel() {
+        return highLevel;
+    }
+
+    public void setHighLevel(Integer highLevel) {
+        this.highLevel = highLevel;
     }
 
 }

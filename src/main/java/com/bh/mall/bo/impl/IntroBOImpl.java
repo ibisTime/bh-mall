@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IIntroBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IIntroDAO;
 import com.bh.mall.domain.Intro;
 import com.bh.mall.exception.BizException;
@@ -32,6 +34,7 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
     public String saveIntro(Intro data) {
         String code = null;
         if (data != null) {
+            code = OrderNoGenerater.generate(EGeneratePrefix.Intro.getCode());
             data.setCode(code);
             introDAO.insert(data);
         }
@@ -53,6 +56,7 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
     public int refreshIntro(Intro data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
+            count = introDAO.update(data);
         }
         return count;
     }
@@ -70,7 +74,7 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
             condition.setCode(code);
             data = introDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "推荐奖励不存在");
+                throw new BizException("xn0000", "�� ��Ų�����");
             }
         }
         return data;

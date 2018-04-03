@@ -7,7 +7,7 @@
 		<result column="level" property="level" />
 		<result column="percent" property="percent" />
 		<result column="updater" property="updater" />
-		<result column="updater_datetime" property="updaterDatetime" />
+		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
 	<sql id="where_condition">
@@ -23,7 +23,7 @@
 		,t.level
 		,t.percent
 		,t.updater
-		,t.updater_datetime
+		,t.update_datetime
 		,t.remark
 		FROM
 		tbh_intro t
@@ -48,7 +48,7 @@
 		,level
 		,percent
 		,updater
-		,updater_datetime
+		,update_datetime
 		,remark
 		)
 		VALUES(
@@ -56,7 +56,7 @@
 		,#{level}
 		,#{percent}
 		,#{updater}
-		,#{updaterDatetime}
+		,#{updateDatetime}
 		,#{remark}
 		)
 	</insert>
@@ -67,7 +67,7 @@
 		level = #{level}
 		,percent = #{percent}
 		,updater = #{updater}
-		,updater_datetime = #{updaterDatetime}
+		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
