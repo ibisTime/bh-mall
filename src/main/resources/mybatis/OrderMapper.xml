@@ -66,9 +66,17 @@
 			<if test="statusForQuery != null and statusForQuery != '' ">
 				AND t.status IN (1,2,3,5)
 			</if>
-			<if test="statusList != null and statusList != '' ">
-				AND t.status IN (0,1)
-			</if>
+			<choose>
+				<when test="statusList == '0,1' ">
+					AND t.status IN (0,1)
+				</when>
+				<when test="statusList == '0' ">
+					AND t.status = '0'
+				</when>
+				<when test="statusList == '1' ">
+					AND t.status = '1'
+				</when>
+			</choose>
 			<if test="productName != null and productName != '' ">
 				AND t.product_name like "%"#{productName}"%"
 			</if>

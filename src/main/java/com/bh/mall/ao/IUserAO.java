@@ -116,11 +116,11 @@ public interface IUserAO {
     public Paginable<User> queryLowUser(int start, int limit, User condition);
 
     // 代理结构
-    public Paginable<User> queryAllLowUser(int start, int limit,
+    public Paginable<User> queryMyLowUserPage(int start, int limit,
             User condition);
 
     // 代理结构OSS
-    public Paginable<User> queryAgentPage(int start, int limit, User condition);
+    public List<User> queryAgentPage(User condition);
 
     // 分页查询意向代理
     public Paginable<User> queryIntentionAgentPageFront(int start, int limit,

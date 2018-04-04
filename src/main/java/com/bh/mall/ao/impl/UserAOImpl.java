@@ -1041,47 +1041,38 @@ public class UserAOImpl implements IUserAO {
 
     // **************************************
     @Override
-    public Paginable<User> queryAllLowUser(int start, int limit,
+    public Paginable<User> queryMyLowUserPage(int start, int limit,
             User condition) {
         long totalCount = userBO.getTotalCount(condition);
         Page<User> page = new Page<User>(start, limit, totalCount);
         List<User> list = userBO.selectList(condition, page.getPageNo(),
             page.getPageSize());
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (User user : list) {
-                condition.setHighUserId(user.getUserId());
-                List<User> userList = userBO.selectList(condition,
-                    page.getPageNo(), page.getPageSize());
-                user.setUserList(userList);
-            }
-            this.queryAllLowUser(page.getPageNo(), page.getPageSize(),
-                condition);
-        }
+        list = doGetLowUser(page.getPageNo(), page.getPageSize(), list);
+        page.setList(list);
         return page;
     }
 
-    @Override
-    public Paginable<User> queryAgentPage(int start, int limit,
-            User condition) {
-        Page<User> page = null;
-        for (int i = 1; i <= 5; i++) {
-            condition.setLevel(i);
+    public List<User> doGetLowUser(int start, int limit, List<User> list) {
+        for (User user : list) {
+            User condition = new User();
+            condition.setHighUserId(user.getUserId());
             long totalCount = userBO.getTotalCount(condition);
-            page = new Page<User>(start, limit, totalCount);
-            List<User> list = userBO.selectList(condition, page.getPageNo(),
+            Page<User> page = new Page<User>(start, limit, totalCount);
+            List<User> userList = userBO.selectList(condition, page.getPageNo(),
                 page.getPageSize());
-            if (CollectionUtils.isNotEmpty(list)) {
-                for (User user : list) {
-                    condition.setHighUserId(user.getUserId());
-                    List<User> userList = userBO.selectList(condition,
-                        page.getPageNo(), page.getPageSize());
-                    user.setUserList(userList);
-                }
-            } else {
-                break;
+            if (CollectionUtils.isNotEmpty(userList)) {
+                user.setUserList(userList);
+                this.doGetLowUser(start, limit, list);
             }
         }
-        return page;
+        return list;
+    }
+
+    @Override
+    public List<User> queryAgentPage(User condition) {
+        condition.setKind(EUserKind.Plat.getCode());
+
+        return userBO.queryUserList(condition);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class XN627351 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return userAO.queryAllLowUser(start, limit, condition);
+        return userAO.queryMyLowUserPage(start, limit, condition);
     }
 
     @Override

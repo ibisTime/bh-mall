@@ -20,6 +20,9 @@ public class XN627662Req extends APageReq {
     // 订单状态
     private String status;
 
+    // 查询待处理订单
+    private String statusList;
+
     // 所属团队
     private String toUser;
 
@@ -67,6 +70,14 @@ public class XN627662Req extends APageReq {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
+    }
+
+    public String getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(String statusList) {
+        this.statusList = statusList;
     }
 
 }

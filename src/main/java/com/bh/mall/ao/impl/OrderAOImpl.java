@@ -319,10 +319,7 @@ public class OrderAOImpl implements IOrderAO {
                     .getStartDatetime().before(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        String[] statusList = condition.getStatus().split(",");
-        if (statusList.length > 1) {
-            condition.setStatusList(condition.getStatus());
-        }
+
         return orderBO.getPaginable(start, limit, condition);
     }
 

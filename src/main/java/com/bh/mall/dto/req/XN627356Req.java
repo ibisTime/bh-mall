@@ -29,6 +29,9 @@ public class XN627356Req {
     // 开始时间（选填）
     private String dateStart;
 
+    // 类型 (选填)
+    private String kind;
+
     public String getDateEnd() {
         return dateEnd;
     }
@@ -83,6 +86,14 @@ public class XN627356Req {
 
     public void setUserReferee(String userReferee) {
         this.userReferee = userReferee;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
 }

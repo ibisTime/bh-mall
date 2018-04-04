@@ -30,6 +30,9 @@ public class XN627355Req extends APageReq {
     // （选填）推荐人
     private String userReferee;
 
+    // 用户类型 （选填）
+    private String kind;
+
     public String getKeyword() {
         return keyword;
     }
@@ -78,4 +81,11 @@ public class XN627355Req extends APageReq {
         this.highLevel = highLevel;
     }
 
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 }
