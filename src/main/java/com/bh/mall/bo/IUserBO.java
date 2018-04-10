@@ -12,7 +12,6 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN627301Req;
 import com.bh.mall.enums.EUserStatus;
 
 /** 
@@ -63,8 +62,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo);
-
-    public String doAddUser(XN627301Req req);
 
     public String saveUser(String mobile, String kind, String companyCode,
             String systemCode);
@@ -159,5 +156,7 @@ public interface IUserBO extends IPaginableBO<User> {
             int pageSize);
 
     public void acceptIntention(User data);
+
+    public void applyIntent(User data);
 
 }

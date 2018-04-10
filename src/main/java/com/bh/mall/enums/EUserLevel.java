@@ -7,8 +7,8 @@ package com.bh.mall.enums;
  * @history:
  */
 public enum EUserLevel {
-    ONE("1", "新手上路"), TWO("2", "初级会员"), THREE("3", "中级会员"), FOUR("4", "高级会员"), FIVE(
-            "5", "金牌会员");
+    ONE("1", "合伙人"), TWO("2", "联创"), THREE("3", "官方"), FOUR("4",
+            "总代"), FIVE("5", "特约");
 
     EUserLevel(String code, String value) {
         this.code = code;

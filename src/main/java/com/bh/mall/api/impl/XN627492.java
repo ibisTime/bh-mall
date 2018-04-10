@@ -40,7 +40,7 @@ public class XN627492 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627492Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit(),
+        StringValidater.validateBlank(req.getStart(), req.getLimit(),
             req.getUserId());
     }
 }

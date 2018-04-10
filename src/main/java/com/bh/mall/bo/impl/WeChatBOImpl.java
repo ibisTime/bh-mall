@@ -17,7 +17,7 @@ import java.util.TreeMap;
 
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.IWechatBO;
+import com.bh.mall.bo.IWeChatBO;
 import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.domain.CompanyChannel;
 import com.bh.mall.dto.res.XN627462Res;
@@ -33,7 +33,7 @@ import com.bh.mall.util.wechat.WXPrepay;
  * @history:
  */
 @Component
-public class WechatBOImpl implements IWechatBO {
+public class WeChatBOImpl implements IWeChatBO {
 
     @Override
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
@@ -62,10 +62,10 @@ public class WechatBOImpl implements IWechatBO {
         nativeObj.put("appId", companyChannel.getPrivateKey2());
         nativeObj.put("timeStamp", OrderUtil.GetTimestamp());
         Random random = new Random();
-        String randomStr = MD5.GetMD5String(String.valueOf(random
-            .nextInt(10000)));
-        nativeObj.put("nonceStr", MD5Util.MD5Encode(randomStr, "utf-8")
-            .toLowerCase());
+        String randomStr = MD5
+            .GetMD5String(String.valueOf(random.nextInt(10000)));
+        nativeObj.put("nonceStr",
+            MD5Util.MD5Encode(randomStr, "utf-8").toLowerCase());
         nativeObj.put("package", "prepay_id=" + prepayId);
         nativeObj.put("signType", "MD5");
         nativeObj.put("paySign",

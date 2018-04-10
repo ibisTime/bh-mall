@@ -9,49 +9,42 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 public class XN627250Req {
-    // 微信编号
-    @NotBlank
-    private String code;
+
+    // （必填） 用户编号
+    @NotBlank(message = "用户编号不能为空")
+    private String userId;
 
     // （必填） 姓名
-    @NotBlank
+    @NotBlank(message = " 姓名不能为空")
     private String realName;
 
-    // （必填）
-    @NotBlank
+    // （必填）微信号
+    @NotBlank(message = "微信号不能为空")
     private String wxId;
 
     // (必填） 申请等级
-    @NotBlank
+    @NotBlank(message = "申请等级不能为空")
     private String level;
 
     // （必填） 电话
-    @NotBlank
+    @NotBlank(message = "电话不能为空")
     private String mobile;
 
     // （必填） 省
-    @NotBlank
+    @NotBlank(message = " 省不能为空")
     private String province;
 
     // （必填） 市
-    @NotBlank
+    @NotBlank(message = "市不能为空")
     private String city;
 
     // （必填） 区
-    @NotBlank
+    @NotBlank(message = "区不能为空")
     private String area;
 
     // （必填） 详细地址
-    @NotBlank
+    @NotBlank(message = "详细地址不能为空")
     private String address;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getRealName() {
         return realName;
@@ -115,6 +108,14 @@ public class XN627250Req {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

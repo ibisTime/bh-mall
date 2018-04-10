@@ -3,52 +3,36 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 public class XN627301Req {
-    // 登录名（必填）
+    // 开放编号（必填）
     @NotBlank
-    private String loginName;
+    private String code;
 
-    // 登录密码（选填）
-    private String loginPwd;
+    // 是否强制绑定手机号（必填）
+    private String isNeedMobile;
 
     // 手机号（选填）
     private String mobile;
 
-    // 用户类型(必填)
-    @NotBlank
-    private String kind;
+    // 短信验证码（选填）
+    private String smsCaptcha;
 
-    // 角色编号(选填)
-    private String roleCode;
+    // 是否(非微信登录)登录状态，是则无需验证手机号，否则传验证验证手机
+    private String isLoginStatus;
 
-    // 更新人(必填)
-    @NotBlank
-    private String updater;
-
-    // 备注(选填)
-    private String remark;
-
-    // 公司编号(必填)
-    @NotBlank
-    private String companyCode;
-
-    // 系统编号(必填)
-    @NotBlank
-    private String systemCode;
-
-    public String getLoginName() {
-        return loginName;
+    public String getCode() {
+        return code;
     }
 
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getLoginPwd() {
-        return loginPwd;
+    public String getIsNeedMobile() {
+        return isNeedMobile;
     }
 
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
+    public void setIsNeedMobile(String isNeedMobile) {
+        this.isNeedMobile = isNeedMobile;
     }
 
     public String getMobile() {
@@ -59,51 +43,20 @@ public class XN627301Req {
         this.mobile = mobile;
     }
 
-    public String getKind() {
-        return kind;
+    public String getSmsCaptcha() {
+        return smsCaptcha;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
     }
 
-    public String getRoleCode() {
-        return roleCode;
+    public String getIsLoginStatus() {
+        return isLoginStatus;
     }
 
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
+    public void setIsLoginStatus(String isLoginStatus) {
+        this.isLoginStatus = isLoginStatus;
     }
 
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 }

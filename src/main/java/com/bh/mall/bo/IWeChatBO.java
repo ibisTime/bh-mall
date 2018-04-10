@@ -16,7 +16,7 @@ import com.bh.mall.dto.res.XN627462Res;
  * @since: 2017年2月27日 下午3:14:48 
  * @history:
  */
-public interface IWechatBO {
+public interface IWeChatBO {
 
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
             String bizNote, String code, Long transAmount, String ip,

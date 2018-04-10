@@ -39,10 +39,10 @@ public class AccountAOImpl implements IAccountAO {
             if (null == eAccountType) {
                 new BizException("XN0000", "账户类型不存在");
             }
-            for (String currency : currencyList) {
-                accountBO.distributeAccount(userId, realName, eAccountType,
-                    currency, systemCode, companyCode);
-            }
+            // for (String currency : currencyList) {
+            // accountBO.distributeAccount(userId, realName, eAccountType,
+            // currency, systemCode, companyCode);
+            // }
         }
     }
 
@@ -62,10 +62,11 @@ public class AccountAOImpl implements IAccountAO {
     @Transactional
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
-            String bizType, String fromBizNote, String toBizNote, String refNo) {
+            String bizType, String fromBizNote, String toBizNote,
+            String refNo) {
         EBizType a = EBizType.getBizType(bizType);
-        accountBO.transAmountCZB(fromUserId, fromCurrency, toUserId,
-            toCurrency, transAmount, a, fromBizNote, toBizNote, refNo);
+        accountBO.transAmountCZB(fromUserId, fromCurrency, toUserId, toCurrency,
+            transAmount, a, fromBizNote, toBizNote, refNo);
     }
 
     @Override

@@ -215,8 +215,8 @@
 	<update id="pay_order" parameterType="innerOrder">
 		UPDATE tbh_inner_order
 		SET
-		payCode = #{payCode}
-		,payType = #{payType}
+		pay_code = #{payCode}
+		,pay_type = #{payType}
 		,status = #{status}
 		,pay_amount=#{payAmount}
 		WHERE code = #{code}
@@ -225,7 +225,8 @@
 	<update id="add_payGroup" parameterType="innerOrder">
 		UPDATE tbh_inner_order
 		SET
-		payGroup = #{payGroup}
+		pay_group = #{payGroup}
+		pay_type = #{payType}
 		WHERE code = #{code}
 	</update>
 	

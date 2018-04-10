@@ -85,6 +85,10 @@ public class Jour extends ABaseDO {
     // 查询条件2：创建终止时间
     private Date createDatetimeEnd;
 
+    private String outAmount;
+
+    private String inAmount;
+
     public String getCurrency() {
         return currency;
     }
@@ -179,6 +183,22 @@ public class Jour extends ABaseDO {
 
     public void setTransAmount(Long transAmount) {
         this.transAmount = transAmount;
+    }
+
+    public String getOutAmount() {
+        return outAmount;
+    }
+
+    public void setOutAmount(String outAmount) {
+        this.outAmount = outAmount;
+    }
+
+    public String getInAmount() {
+        return inAmount;
+    }
+
+    public void setInAmount(String inAmount) {
+        this.inAmount = inAmount;
     }
 
     public Long getPreAmount() {

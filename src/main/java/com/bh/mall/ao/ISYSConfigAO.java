@@ -26,4 +26,5 @@ public interface ISYSConfigAO {
 
     public Map<String, String> querySYSConfig(String type, String companyCode,
             String systemCode);
+
 }

@@ -26,7 +26,7 @@ public class XN627352 extends AProcessor {
     public Object doBusiness() throws BizException {
         User condition = new User();
         condition.setKeyWord(req.getKeyword());
-
+        condition.setHighUserId(req.getUserId());
         return userAO.queryAgentPage(condition);
     }
 

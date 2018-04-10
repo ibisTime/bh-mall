@@ -91,4 +91,10 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
             pageSize, condition, Order.class);
     }
 
+    @Override
+    public void addPayGroup(Order data) {
+        super.update(NAMESPACE.concat("add_payGroup"), data);
+
+    }
+
 }

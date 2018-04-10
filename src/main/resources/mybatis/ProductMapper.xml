@@ -7,7 +7,6 @@
 		<result column="name" property="name"/>
 		<result column="adPrice" property="ad_price"/>
 		<result column="price" property="price"/>
-		<result column="change_price" property="changePrice"/>
 		
 		<result column="vir_number" property="virNumber"/>
 		<result column="real_number" property="realNumber"/>
@@ -46,7 +45,6 @@
 		,t.name
 		,t.ad_price
 		,t.price
-		,t.change_price
 		
 		,t.vir_number
 		,t.real_number
@@ -114,7 +112,6 @@
 		,name
 		,ad_price
 		,price
-		,change_price
 		,vir_number
 		
 		,real_number
@@ -134,7 +131,6 @@
 		,#{name}
 		,#{adPrice}
 		,#{price}
-		,#{changePrice}
 		,#{virNumber}
 		
 		,#{realNumber}
@@ -159,7 +155,6 @@
 		name = #{name}
 		,ad_price = #{adPrice}
 		,price = #{price}
-		,change_price = #{changePrice}
 		,vir_number = #{virNumber}
 		,real_number = #{realNumber}
 		

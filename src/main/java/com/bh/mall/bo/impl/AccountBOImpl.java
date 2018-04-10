@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IJourBO;
+import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAccountDAO;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
@@ -28,35 +30,56 @@ import com.bh.mall.exception.BizException;
  * @history:
  */
 @Component
-public class AccountBOImpl extends PaginableBOImpl<Account> implements
-        IAccountBO {
+public class AccountBOImpl extends PaginableBOImpl<Account>
+        implements IAccountBO {
     @Autowired
     private IAccountDAO accountDAO;
 
     @Autowired
     private IJourBO jourBO;
 
+    @Autowired
+    private IWareHouseBO wareHouseBO;
+
     @Override
     public String distributeAccount(String userId, String realName,
-            EAccountType accountType, String currency, String systemCode,
-            String companyCode) {
+            EAccountType accountType, List<String> currencyList,
+            String systemCode, String companyCode) {
         String accountNumber = null;
+        String code = null;
         if (StringUtils.isNotBlank(userId)) {
-            accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
-                .getCode());
-            Account data = new Account();
-            data.setAccountNumber(accountNumber);
-            data.setUserId(userId);
-            data.setRealName(realName);
+            for (String currency : currencyList) {
+                if (ECurrency.YC_CNY.getCode().equals(currency)) {
+                    code = OrderNoGenerater
+                        .generate(EGeneratePrefix.WareHourse.getCode());
+                    WareHouse whData = new WareHouse();
+                    whData.setCode(code);
+                    whData.setType(accountType.getCode());
+                    whData.setCurrency(currency);
+                    whData.setUserId(userId);
+                    whData.setRealName(realName);
+                    whData.setStatus(EAccountStatus.NORMAL.getCode());
+                    whData.setCreateDatetime(new Date());
+                    wareHouseBO.saveWareHouse(whData, null);
+                } else {
+                    accountNumber = OrderNoGenerater
+                        .generate(EGeneratePrefix.Account.getCode());
+                    Account data = new Account();
+                    data.setAccountNumber(accountNumber);
+                    data.setUserId(userId);
+                    data.setRealName(realName);
 
-            data.setType(accountType.getCode());
-            data.setCurrency(currency);
-            data.setStatus(EAccountStatus.NORMAL.getCode());
-            data.setAmount(0L);
-            data.setFrozenAmount(0L);
+                    data.setType(accountType.getCode());
+                    data.setCurrency(currency);
+                    data.setStatus(EAccountStatus.NORMAL.getCode());
+                    data.setAmount(0L);
+                    data.setFrozenAmount(0L);
 
-            data.setCreateDatetime(new Date());
-            accountDAO.insert(data);
+                    data.setCreateDatetime(new Date());
+                    accountDAO.insert(data);
+                }
+
+            }
         }
         return accountNumber;
     }
@@ -112,8 +135,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             throw new BizException("xn000000", "账户余额不足");
         }
         // 记录流水
-        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EBizType.AJ_QX, "线下取现", -freezeAmount);
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline, null,
+            null, withdrawCode, EBizType.AJ_QX, "线下取现", -freezeAmount);
         Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
@@ -135,8 +158,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
 
         // 记录流水
-        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EBizType.AJ_QX, "线下取现失败退回", freezeAmount);
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline, null,
+            null, withdrawCode, EBizType.AJ_QX, "线下取现失败退回", freezeAmount);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(dbAccount.getAmount() + freezeAmount);
@@ -195,14 +218,15 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public Account getAccountByUser(String userId, String currency) {
         Account data = null;
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(currency)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(currency)) {
             Account condition = new Account();
             condition.setUserId(userId);
             condition.setCurrency(currency);
             data = accountDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn802000", "用户[" + userId + ";"
-                        + currency + "]无此类型账户");
+                throw new BizException("xn802000",
+                    "用户[" + userId + ";" + currency + "]无此类型账户");
             }
         }
         return data;
@@ -235,7 +259,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, Long transAmount,
-            EBizType bizType, String fromBizNote, String toBizNote, String refNo) {
+            EBizType bizType, String fromBizNote, String toBizNote,
+            String refNo) {
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
         transAmountCZB(fromAccount, toAccount, transAmount, bizType,

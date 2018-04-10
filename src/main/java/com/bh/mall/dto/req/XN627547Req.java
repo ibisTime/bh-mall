@@ -21,6 +21,10 @@ public class XN627547Req {
     @NotBlank(message = "价格不能为空")
     private String price;
 
+    // （必填）换货价
+    @NotBlank(message = "换货不能为空")
+    private String changePrice;
+
     public String getCode() {
         return code;
     }
@@ -43,6 +47,14 @@ public class XN627547Req {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(String changePrice) {
+        this.changePrice = changePrice;
     }
 
 }

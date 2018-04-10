@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOrderDAO;
 import com.bh.mall.domain.Order;
 import com.bh.mall.exception.BizException;
@@ -100,6 +102,17 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     public List<Order> queryToDealList(int pageNo, int pageSize,
             Order condition) {
         return orderDAO.queryToDealList(pageNo, pageSize, condition);
+    }
+
+    @Override
+    public String addPayGroup(Order order, String payType) {
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.Order.getCode());
+        Order data = new Order();
+        data.setPayCode(payGroup);
+        data.setPayType(payType);
+        orderDAO.addPayGroup(data);
+        return payGroup;
     }
 
 }

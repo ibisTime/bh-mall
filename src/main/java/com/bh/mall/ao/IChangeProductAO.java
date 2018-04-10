@@ -1,0 +1,28 @@
+package com.bh.mall.ao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.domain.ChangeProduct;
+import com.bh.mall.dto.req.XN627790Req;
+
+@Component
+public interface IChangeProductAO {
+    static final String DEFAULT_ORDER_COLUMN = "code";
+
+    public String addChangeProduct(XN627790Req req);
+
+    public int dropChangeProduct(String code);
+
+    public int editChangeProduct(ChangeProduct data);
+
+    public Paginable<ChangeProduct> queryChangeProductPage(int start, int limit,
+            ChangeProduct condition);
+
+    public List<ChangeProduct> queryChangeProductList(ChangeProduct condition);
+
+    public ChangeProduct getChangeProduct(String code);
+
+}

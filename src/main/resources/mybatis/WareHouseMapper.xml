@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IWareHouseDAO">
+	<resultMap id="wareHouse_DB_Result" type="wareHouse">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="currency" property="currency" />
+		<result column="product_code" property="productCode" />
+		<result column="product_name" property="productName" />
+		
+		<result column="product_specs_code" property="productSpecsCode" />
+		<result column="product_specs_name" property="productSpecsName" />
+		<result column="price" property="price" />
+		<result column="quantity" property="quantity" />
+		<result column="amount" property="amount" />
+		
+		<result column="user_id" property="userId" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />	
+		<result column="last_change_code" property="lastChangeCode" />
+		
+		
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				AND t.product_specs_name like  "%"#{keyword}"%" or t.real_name  like  "%"#{keyword}"%"
+			</if>
+			<if test="productSpecsCode != null and productSpecsCode != '' ">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_wareHouse" parameterType="wareHouse" resultMap="wareHouse_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.amount
+		,t.currency
+		,t.product_code
+		
+		,t.product_name
+		,t.product_specs_code
+		,t.product_specs_name
+		,t.price
+		,t.quantity
+		
+		,t.user_id
+		,t.status
+		,t.create_datetime
+		,t.last_change_code
+		
+		FROM
+		tbh_ware_house t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_wareHouse_count" parameterType="wareHouse"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_ware_house t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_wareHouse" parameterType="wareHouse">
+		INSERT INTO
+		tbh_ware_house(
+		code
+		,type
+		,currency
+		,product_code
+		,product_name
+		
+		,product_specs_code
+		,product_specs_name
+		,price
+		,quantity
+		
+		,amount
+		,user_id
+		,status
+		,create_datetime
+		,last_change_code
+		
+		)
+		VALUES(
+		#{code}
+		,#{type}
+		,#{currency}
+		,#{productCode}
+		,#{productName}
+		
+		,#{productSpecsCode}
+		,#{productSpecsName}
+		,#{price}
+		,#{quantity}
+		,#{amount}
+		
+		,#{userId}
+		,#{status}
+		,#{createDatetime}
+		,#{lastChangeCode}
+		
+		)
+	</insert>
+
+	<update id="update_wareHouse" parameterType="wareHouse">
+		UPDATE tbh_ware_house
+		SET
+		product_code = #{productCode}
+		,product_name = #{productName}
+		,product_specs_code = #{productSpecsCode}
+		,product_specs_name = #{productSpecsName}
+		,price = #{price}
+		,quantity = #{quantity}
+		,userId = #{userId}
+		,last_change_code = #{lastChangeCode}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

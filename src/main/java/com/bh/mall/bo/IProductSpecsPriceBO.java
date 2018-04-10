@@ -26,6 +26,7 @@ public interface IProductSpecsPriceBO extends IPaginableBO<ProductSpecsPrice> {
 
     public ProductSpecsPrice getPriceBySpecsCode(String spcesCode);
 
-    public Long getPriceByLevel(String productSpecsCode, Integer level);
+    public ProductSpecsPrice getPriceByLevel(String productSpecsCode,
+            Integer level);
 
 }

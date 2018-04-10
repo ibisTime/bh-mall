@@ -101,7 +101,8 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
     }
 
     @Override
-    public Long getPriceByLevel(String productSpecsCode, Integer level) {
+    public ProductSpecsPrice getPriceByLevel(String productSpecsCode,
+            Integer level) {
         ProductSpecsPrice data = null;
         if (StringUtils.isNotBlank(productSpecsCode)) {
             ProductSpecsPrice condition = new ProductSpecsPrice();
@@ -112,7 +113,7 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
                 throw new BizException("xn0000", "规格价格不存在");
             }
         }
-        return data.getPrice();
+        return data;
     }
 
 }

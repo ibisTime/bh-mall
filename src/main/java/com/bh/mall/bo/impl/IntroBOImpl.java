@@ -79,4 +79,11 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
         }
         return data;
     }
+
+    @Override
+    public Intro getIntroByLevel(Integer level) {
+        Intro condition = new Intro();
+        condition.setLevel(level);
+        return introDAO.select(condition);
+    }
 }

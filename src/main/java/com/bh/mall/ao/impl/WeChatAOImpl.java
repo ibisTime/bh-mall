@@ -24,7 +24,7 @@ import com.bh.mall.bo.ICompanyChannelBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
-import com.bh.mall.bo.IWechatBO;
+import com.bh.mall.bo.IWeChatBO;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
@@ -51,7 +51,7 @@ import com.bh.mall.util.wechat.XMLUtil;
 public class WeChatAOImpl implements IWeChatAO {
 
     @Autowired
-    IWechatBO wechatBO;
+    IWeChatBO weChatBO;
 
     @Autowired
     IJourBO jourBO;
@@ -98,10 +98,10 @@ public class WeChatAOImpl implements IWeChatAO {
             companyCode, systemCode, EChannelType.WeChat_H5.getCode());
 
         // 获取微信公众号支付prepayid
-        String prepayId = wechatBO.getPrepayIdH5(companyChannel, openId,
+        String prepayId = weChatBO.getPrepayIdH5(companyChannel, openId,
             bizNote, chargeOrderCode, transAmount, SysConstant.IP, backUrl);
         // 返回微信APP支付所需信息
-        return wechatBO.getPayInfoH5(companyChannel, chargeOrderCode, prepayId);
+        return weChatBO.getPayInfoH5(companyChannel, chargeOrderCode, prepayId);
     }
 
     @Override
@@ -183,10 +183,10 @@ public class WeChatAOImpl implements IWeChatAO {
         String attach = map.get("attach");
         System.out.println("attcah=" + attach);
         String[] codes = attach.split("\\|\\|");
-        System.out.println("companyCode=" + codes[0] + " systemCode="
-                + codes[1]);
-        CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
-            codes[0], codes[1], channelType);
+        System.out
+            .println("companyCode=" + codes[0] + " systemCode=" + codes[1]);
+        CompanyChannel companyChannel = companyChannelBO
+            .getCompanyChannel(codes[0], codes[1], channelType);
 
         // 此处需要密钥PartnerKey，此处直接写死，自己的业务需要从持久化中获取此密钥，否则会报签名错误
         orderQuery.setPartnerKey(companyChannel.getPrivateKey1());
@@ -195,8 +195,8 @@ public class WeChatAOImpl implements IWeChatAO {
         // 此处添加支付成功后，支付金额和实际订单金额是否等价，防止钓鱼
         if (orderMap.get("return_code") != null
                 && orderMap.get("return_code").equalsIgnoreCase("SUCCESS")) {
-            if (orderMap.get("trade_state") != null
-                    && orderMap.get("trade_state").equalsIgnoreCase("SUCCESS")) {
+            if (orderMap.get("trade_state") != null && orderMap
+                .get("trade_state").equalsIgnoreCase("SUCCESS")) {
                 String total_fee = map.get("total_fee");
                 String order_total_fee = map.get("total_fee");
                 if (Integer.parseInt(order_total_fee) >= Integer

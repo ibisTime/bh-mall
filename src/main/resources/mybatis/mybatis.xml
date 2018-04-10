@@ -39,5 +39,8 @@
 		<typeAlias alias="agencyLog" type="com.bh.mall.domain.AgencyLog"/>
 
 		<typeAlias alias="intro" type="com.bh.mall.domain.Intro"/>
+		<typeAlias alias="wareHouse" type="com.bh.mall.domain.WareHouse"/>
+		<typeAlias alias="wareHouseLog" type="com.bh.mall.domain.WareHouseLog"/>
+		<typeAlias alias="changeProduct" type="com.bh.mall.domain.ChangeProduct"/>
 	</typeAliases>
 </configuration>	

@@ -30,20 +30,24 @@ public interface IOrderAO {
 
     public String addOrderNoCart(XN627641Req req);
 
-    public void payOrder(String payCode, String payGroup, String payType);
+    // 付款
+    public Object payOrder(String payCode, String payGroup, String payType);
 
+    // 发货
     public void deliverOrder(XN627645Req req);
 
+    // 批量审单
     public void approveOrder(List<Order> codeList, String approver,
             String approveNote);
 
+    // 取消订单
     public void cancelOrder(String code);
 
+    // 审核取消
     public void approveCancel(String code, String result, String updater,
             String remark);
 
-    public void invalidOrder(String code, String updater, String updateNote);
-
+    // 确认收货
     public void receivedOrder(String code);
 
 }

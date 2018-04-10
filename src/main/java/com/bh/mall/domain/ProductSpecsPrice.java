@@ -26,6 +26,9 @@ public class ProductSpecsPrice extends ABaseDO {
     // 价格
     private Long price;
 
+    // 换货价
+    private Long changePrice;
+
     public String getCode() {
         return code;
     }
@@ -56,6 +59,14 @@ public class ProductSpecsPrice extends ABaseDO {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public Long getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(Long changePrice) {
+        this.changePrice = changePrice;
     }
 
 }

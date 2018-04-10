@@ -133,7 +133,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String approveImpower(User data) {
+    public String approveImpower(User data, String result) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
@@ -148,7 +148,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setStatus(data.getStatus());
+        alData.setStatus(result);
         alData.setRemark(data.getRemark());
         agencyLogDAO.insert(alData);
         return code;
@@ -196,7 +196,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String approveUpgrade(User data) {
+    public String approveUpgrade(User data, String status) {
         AgencyLog agencyLog = this.getAgencyLog(data.getLastAgentLog());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
@@ -208,7 +208,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
 
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setStatus(data.getStatus());
+        alData.setStatus(status);
         alData.setRemark(data.getRemark());
         agencyLogDAO.insert(alData);
         return code;

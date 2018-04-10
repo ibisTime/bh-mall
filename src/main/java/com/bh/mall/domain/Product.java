@@ -27,9 +27,6 @@ public class Product extends ABaseDO {
     // 市场价
     private Long price;
 
-    // 换货价
-    private Long changePrice;
-
     // 虚拟数量
     private Integer virNumber;
 
@@ -105,14 +102,6 @@ public class Product extends ABaseDO {
 
     public void setAdPrice(Long adPrice) {
         this.adPrice = adPrice;
-    }
-
-    public Long getChangePrice() {
-        return changePrice;
-    }
-
-    public void setChangePrice(Long changePrice) {
-        this.changePrice = changePrice;
     }
 
     public Long getPrice() {

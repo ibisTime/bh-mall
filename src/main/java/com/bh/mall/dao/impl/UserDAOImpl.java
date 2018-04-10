@@ -198,4 +198,10 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public void acceptIntention(User data) {
         super.update(NAMESPACE.concat("accept_intention"), data);
     }
+
+    @Override
+    public void applyIntent(User data) {
+        super.update(NAMESPACE.concat("apply_intent"), data);
+
+    }
 }

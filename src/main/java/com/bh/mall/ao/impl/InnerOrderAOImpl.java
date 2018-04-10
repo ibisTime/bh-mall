@@ -64,10 +64,10 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     public String addInnerOrder(XN627720Req req) {
         User user = userBO.getCheckUser(req.getApplyUser());
 
-        InnerProduct innerProduct = innerProductBO.getInnerProduct(req
-            .getProductCode());
-        if (!EInnerProductStatus.Shelf_YES.getCode().equals(
-            innerProduct.getStatus())) {
+        InnerProduct innerProduct = innerProductBO
+            .getInnerProduct(req.getProductCode());
+        if (!EInnerProductStatus.Shelf_YES.getCode()
+            .equals(innerProduct.getStatus())) {
             throw new BizException("xn00000", "产品未上架，无法下单");
         }
         Integer quantity = StringValidater.toInteger(req.getQuantity());
@@ -75,8 +75,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             throw new BizException("xn0000", "产品库存不足");
         }
         InnerOrder data = new InnerOrder();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.InnerOrder
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.InnerOrder.getCode());
         data.setCode(code);
         data.setProductCode(req.getProductCode());
         data.setProductName(innerProduct.getName());
@@ -86,8 +86,10 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setQuantity(quantity);
 
         Long amount = AmountUtil.eraseLiUp(quantity * innerProduct.getPrice());
+        data.setYunfei(0L);
         // 是否包邮
-        if (EProductYunFei.YunFei_NO.getCode().equals(innerProduct.getIsFree())) {
+        if (EProductYunFei.YunFei_NO.getCode()
+            .equals(innerProduct.getIsFree())) {
             SYSConfig sysConfig = sysConfigBO.getConfig(req.getProvince(),
                 ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
             data.setYunfei(StringValidater.toLong(sysConfig.getCvalue()));
@@ -120,10 +122,10 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     public Object toPay(String code, String payType) {
         Object result = null;
         InnerOrder data = innerOrderBO.getInnerOrder(code);
-        InnerProduct innerProduct = innerProductBO.getInnerProduct(data
-            .getProductCode());
-        if (!EInnerProductStatus.Shelf_YES.getCode().equals(
-            innerProduct.getCode())) {
+        InnerProduct innerProduct = innerProductBO
+            .getInnerProduct(data.getProductCode());
+        if (!EInnerProductStatus.Shelf_YES.getCode()
+            .equals(innerProduct.getCode())) {
             throw new BizException("xn00000", "产品未上架，无法完成支付");
         }
         if (EBoolean.NO.getCode().equals(payType)) {
@@ -133,15 +135,15 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                 ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
                 EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
                 data.getCode());
-            data.setPayType(payType);
-            data.setStatus(EInnerOrderStatus.Paid.getCode());
-            data.setPayAmount(data.getAmount() + data.getYunfei());
-            data.setPayDatetime(new Date());
-            innerOrderBO.payOrder(data);
             result = new BooleanRes(true);
         } else if (EBoolean.YES.getCode().equals(payType)) {
             return this.payWXH5(data);
         }
+        data.setPayType(payType);
+        data.setStatus(EInnerOrderStatus.Paid.getCode());
+        data.setPayAmount(data.getAmount() + data.getYunfei());
+        data.setPayDatetime(new Date());
+        innerOrderBO.payOrder(data);
         return result;
     }
 
@@ -162,6 +164,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setPayDatetime(new Date());
         data.setPayCode(payCode);
         data.setPayAmount(amount);
+        data.setStatus(EInnerOrderStatus.Paid.getCode());
         innerOrderBO.payOrder(data);
     }
 
@@ -194,9 +197,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     public Paginable<InnerOrder> queryInnerOrderPage(int start, int limit,
             InnerOrder condition) {
         if (condition.getStartDatetime() != null
-                && condition.getEndDatetime() != null
-                && condition.getStartDatetime().before(
-                    condition.getEndDatetime())) {
+                && condition.getEndDatetime() != null && condition
+                    .getStartDatetime().before(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return innerOrderBO.getPaginable(start, limit, condition);
@@ -205,9 +207,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public List<InnerOrder> queryInnerOrderList(InnerOrder condition) {
         if (condition.getStartDatetime() != null
-                && condition.getEndDatetime() != null
-                && condition.getStartDatetime().before(
-                    condition.getEndDatetime())) {
+                && condition.getEndDatetime() != null && condition
+                    .getStartDatetime().before(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return innerOrderBO.queryInnerOrderList(condition);

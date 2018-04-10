@@ -9,6 +9,7 @@ import com.bh.mall.ao.IAgencyLogAO;
 import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.AgencyLog;
+import com.bh.mall.exception.BizException;
 
 @Service
 public class AgencyLogAOImpl implements IAgencyLogAO {
@@ -35,6 +36,19 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
     @Override
     public AgencyLog getAgencyLog(String code) {
         return agencyLogBO.getAgencyLog(code);
+    }
+
+    @Override
+    public Paginable<AgencyLog> queryIntentionAgentPageFront(int start,
+            int limit, AgencyLog condition) {
+        if (condition.getApplyDatetimeStart() != null
+                && condition.getApplyDatetimeEnd() != null
+                && condition.getApplyDatetimeStart()
+                    .before(condition.getApplyDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
+
+        return agencyLogBO.getPaginable(start, limit, condition);
     }
 
 }

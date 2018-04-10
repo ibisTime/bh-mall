@@ -26,9 +26,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IUserDAO;
 import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN627301Req;
 import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -142,7 +140,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setWxId(wxId);
         user.setPhoto(photo);
         user.setNickname(nickname);
-        user.setLevel(StringValidater.toInteger(level));
+        user.setApplyLevel(StringValidater.toInteger(level));
         user.setRealName(realName);
 
         user.setStatus(EUserStatus.TO_WILL.getCode());
@@ -172,38 +170,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public String doAddUser(XN627301Req req) {
-        String userId = OrderNoGenerater.generate("U");
-        User user = new User();
-        user.setUserId(userId);
-        user.setLoginName(req.getLoginName());
-        user.setMobile(req.getMobile());
-        user.setNickname(userId.substring(userId.length() - 8, userId.length()));
-
-        if (StringUtils.isBlank(req.getLoginPwd())) {
-            req.setLoginPwd(EUserPwd.InitPwd.getCode());
-        }
-        user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
-            .getLoginPwd()));
-
-        user.setKind(req.getKind());
-        user.setRoleCode(req.getRoleCode());
-        user.setStatus(EUserStatus.NORMAL.getCode());
-
-        Date date = new Date();
-        user.setCreateDatetime(date);
-        user.setUpdater(req.getUpdater());
-        user.setUpdateDatetime(date);
-        user.setRemark(req.getRemark());
-
-        user.setCompanyCode(req.getCompanyCode());
-        user.setSystemCode(req.getSystemCode());
-        userDAO.insert(user);
-        return userId;
-    }
-
-    @Override
     public String saveUser(String mobile, String kind, String companyCode,
             String systemCode) {
         String userId = null;
@@ -227,6 +193,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             User condition = new User();
             condition.setUserId(userId);
             data = userDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "用户不存在");
+            }
         }
         return data;
     }
@@ -337,7 +306,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setTradePwd(MD5Util.md5(tradePwd));
@@ -352,7 +322,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -367,7 +338,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -394,14 +366,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         List<User> userList = userDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(userList)) {
             User data = userList.get(0);
-            throw new BizException("xn000001", "用户[" + data.getMobile()
-                    + "]已使用该身份信息，请重新填写");
+            throw new BizException("xn000001",
+                "用户[" + data.getMobile() + "]已使用该身份信息，请重新填写");
         }
     }
 
     @Override
-    public void refreshStatus(String userId, EUserStatus status,
-            String updater, String remark) {
+    public void refreshStatus(String userId, EUserStatus status, String updater,
+            String remark) {
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
@@ -488,8 +460,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @see com.bh.mall.bo.IUserBO#doCheckOpenId(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public void doCheckOpenId(String unionId, String h5OpenId,
-            String appOpenId, String companyCode, String systemCode) {
+    public void doCheckOpenId(String unionId, String h5OpenId, String appOpenId,
+            String companyCode, String systemCode) {
         User condition = new User();
         condition.setUnionId(unionId);
         condition.setH5OpenId(h5OpenId);
@@ -532,10 +504,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String realName, String level, String wxId,
             String idBehind, String idFront, String introducer, String payPdf,
-            String fromInfo, String userReferee, String mobile,
-            String province, String city, String area, String address,
-            String loginPwd, String photo, String nickname, String unionId,
-            String h5OpenId, String companyCode, String systemCode) {
+            String fromInfo, String userReferee, String mobile, String province,
+            String city, String area, String address, String loginPwd,
+            String photo, String nickname, String unionId, String h5OpenId,
+            String companyCode, String systemCode) {
         String userId = OrderNoGenerater.generate("U");
         User data = new User();
         data.setUserId(userId);
@@ -613,7 +585,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshUserReferee(User data, String userReferee, String updater) {
+    public void refreshUserReferee(User data, String userReferee,
+            String updater) {
         data.setHighUserId(userReferee);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
@@ -652,6 +625,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void acceptIntention(User data) {
         userDAO.acceptIntention(data);
+    }
+
+    @Override
+    public void applyIntent(User data) {
+        userDAO.applyIntent(data);
     }
 
 }

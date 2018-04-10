@@ -67,7 +67,6 @@ public class ProductAOImpl implements IProductAO {
         data.setName(req.getName());
         data.setAdPrice(StringValidater.toLong(req.getAdPrice()));
         data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
         data.setVirNumber(StringValidater.toInteger(req.getVirNumber()));
 
         data.setRealNumber(StringValidater.toInteger(req.getRealNumber()));
@@ -98,7 +97,6 @@ public class ProductAOImpl implements IProductAO {
         data.setName(req.getName());
         data.setAdPrice(StringValidater.toLong(req.getAdPrice()));
         data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setChangePrice(StringValidater.toLong(req.getChangePrice()));
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
 

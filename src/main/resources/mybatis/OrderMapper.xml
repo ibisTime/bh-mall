@@ -67,14 +67,17 @@
 				AND t.status IN (1,2,3,5)
 			</if>
 			<choose>
-				<when test="statusList == '0,1' ">
-					AND t.status IN (0,1)
-				</when>
-				<when test="statusList == '0' ">
-					AND t.status = '0'
+				<when test="statusList == '1,2,5' ">
+					AND t.status IN (1,2,5)
 				</when>
 				<when test="statusList == '1' ">
 					AND t.status = '1'
+				</when>
+				<when test="statusList == '2' ">
+					AND t.status = '2'
+				</when>
+				<when test="statusList == '5' ">
+					AND t.status = '5'
 				</when>
 			</choose>
 			<if test="productName != null and productName != '' ">
@@ -327,4 +330,12 @@
 		WHERE code = #{code}
 	</update>
 
+
+	<update id="add_payGroup" parameterType="innerOrder">
+		UPDATE tbh_order
+		SET
+		pay_group = #{payGroup}
+		pay_type = #{payType}
+		WHERE code = #{code}
+	</update>
 </mapper>

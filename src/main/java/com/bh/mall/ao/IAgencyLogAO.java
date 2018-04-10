@@ -20,4 +20,7 @@ public interface IAgencyLogAO {
 
     public AgencyLog getAgencyLog(String code);
 
+    public Paginable<AgencyLog> queryIntentionAgentPageFront(int start,
+            int limit, AgencyLog condition);
+
 }

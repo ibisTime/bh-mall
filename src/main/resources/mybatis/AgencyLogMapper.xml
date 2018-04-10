@@ -28,11 +28,25 @@
 				AND t.apply_user = #{applyUser}
 			</if>
 			<if test="toUserId != null and toUserId != '' ">
-				AND t.to_user_id = #{code}
+				AND t.to_user_id = #{toUserId}
 			</if>
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<choose>
+				<when test="status == '6,8,12' ">
+					AND t.status = '6' OR t.status = '8' OR t.status = '12'
+				</when>
+				<when test="status == '3,4,5' ">
+					AND t.status = '3' OR t.status = '4' OR t.status = '5' 
+				</when>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+			</choose>
 		</trim>
 	</sql>
 	<select id="select_agencyLog" parameterType="agencyLog" resultMap="agencyLog_DB_Result">

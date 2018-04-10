@@ -66,7 +66,6 @@
 		,mobile
 		,province
 		,city
-		,district
 		,address
 		,is_default
 		,user_id
@@ -78,7 +77,6 @@
 		,#{mobile}
 		,#{province}
 		,#{city}
-		,#{district}
 		,#{address}
 		,#{isDefault}
 		,#{userId}
@@ -88,13 +86,12 @@
 	<update id="update_address" parameterType="address">
 		UPDATE tbh_address
 		SET
-		receiver=#{receiver},
-		mobile=#{mobile},
-		province=#{province},
-		city=#{city},
-		district=#{district},
-		address=#{address},
-		is_default=#{isDefault}
+		receiver=#{receiver}
+		,mobile=#{mobile}
+		,province=#{province}
+		,city=#{city}
+		,address=#{address}
+		,is_default=#{isDefault}
 		WHERE
 		code = #{code}
 	</update>

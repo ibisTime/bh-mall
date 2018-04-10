@@ -20,13 +20,13 @@ public interface IAgencyLogBO extends IPaginableBO<AgencyLog> {
 
     public String cancelImpower(User data);
 
-    public String approveImpower(User data);
+    public String approveImpower(User data, String status);
 
     public String approveCanenl(User data);
 
     public String upgradeLevel(User data, String payPdf);
 
-    public String approveUpgrade(User data);
+    public String approveUpgrade(User data, String status);
 
     public List<AgencyLog> queryAgencyLogPage(int start, int limit,
             AgencyLog condition);

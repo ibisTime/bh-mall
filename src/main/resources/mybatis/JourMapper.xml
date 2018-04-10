@@ -24,6 +24,8 @@
 		
 		<result column="remark" property="remark" />
 		<result column="create_datetime" property="createDatetime" />
+		<result column="out_amount" property="outAmount"/>
+		<result column="in_amount" property="inAmount"/>
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -95,6 +97,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_jour" parameterType="jour" resultMap="jour_DB_Result">
 		SELECT
 		t.code
@@ -105,6 +108,10 @@
 		
 		,t.account_number
 		,t.trans_amount
+		
+		,SUM(CASE WHEN  <![CDATA[t.trans_amount > 0]]>  THEN t.trans_amount ELSE 0 END) AS out_amount
+    	,SUM(CASE WHEN <![CDATA[t.trans_amount < 0]]>  THEN t.trans_amount ELSE 0 END) AS in_amount 
+    	
 		,t.user_id
 		,t.real_name
 		,t.type
@@ -121,6 +128,7 @@
 		FROM
 		tbh_jour t
 		<include refid="where_condition" />
+		GROUP BY t.user_id
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

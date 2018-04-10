@@ -15,12 +15,23 @@ public class XN627352Req extends APageReq {
     // （选填）备注
     private String keyword;
 
+    // （选填） 用户Id
+    private String userId;
+
     public String getKeyword() {
         return keyword;
     }
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

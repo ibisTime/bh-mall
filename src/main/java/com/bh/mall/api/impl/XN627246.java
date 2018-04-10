@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.bh.mall.ao.IIntroAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Intro;
 import com.bh.mall.dto.req.XN627246Req;
 import com.bh.mall.exception.BizException;
@@ -26,7 +27,7 @@ public class XN627246 extends AProcessor {
     public Object doBusiness() throws BizException {
         Intro condition = new Intro();
         condition.setCode(req.getCode());
-        condition.setLevel(req.getLevel());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setUpdater(req.getUpdater());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isNotBlank(orderColumn)) {

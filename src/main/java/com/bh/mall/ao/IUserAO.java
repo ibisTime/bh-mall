@@ -7,8 +7,6 @@ import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627255Req;
-import com.bh.mall.dto.req.XN627301Req;
-import com.bh.mall.dto.req.XN627302Req;
 import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627302Res;
 
@@ -24,11 +22,11 @@ public interface IUserAO {
     public String doLogin(String loginName, String loginPwd, String kind,
             String companyCode, String systemCode);
 
-    // 管理端代注册
-    public String doAddUser(XN627301Req req);
+    // B端微信注册/登录
+    public XN627302Res doLoginWeChatByMerchant(String code, String userKind);
 
     // C端微信注册/登录
-    public XN627302Res doLoginWeChat(XN627302Req req);
+    public XN627302Res doLoginWeChatByCustomer(String code, String userKind);
 
     // 注销/激活用户
     public void doCloseOpen(String userId, String updater, String remark);
@@ -65,7 +63,7 @@ public interface IUserAO {
     public List<User> getUserRefereeList(String userId);
 
     // 代理申请
-    public XN627302Res applyIntent(XN627250Req req);
+    public void applyIntent(XN627250Req req);
 
     // 代理申请，包含推荐人
     public XN627302Res applyHaveUserReferee(XN627251Req req);

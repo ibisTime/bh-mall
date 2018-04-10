@@ -115,9 +115,17 @@
 			<if test="roleCode != null and roleCode != '' ">
 				AND t.role_code = #{roleCode}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
+			<choose>
+				<when test="status == '3,4'">
+					AND  (t.status = '3' or t.status = '4')
+				</when>
+				<when test="status == '11,14,15'">
+					AND  (t.status = '11'  or t.status = '14' or t.status = '15' )
+				</when>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+			</choose>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
@@ -574,6 +582,8 @@
 		SET
 		status = #{status}
 		,approver = #{approver}
+		,level = #{level}
+		,high_user_id = #{highUserId}
 		,approve_datetime = #{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
 		,remark = #{remark}
@@ -641,4 +651,20 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+	
+	<update id="apply_intent" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,wx_id = #{wxId}
+		,mobile = #{mobile}
+		,real_name = #{realName}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		,apply_level = #{applyLevel}	
+		,apply_datetime = #{applyDatetime}	
+		WHERE user_id = #{userId}
+	</update>
 </mapper>
