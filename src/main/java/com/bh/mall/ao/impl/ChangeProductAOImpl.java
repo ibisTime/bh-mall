@@ -13,6 +13,7 @@ import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
+import com.bh.mall.bo.IWareHouseLogBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
@@ -25,7 +26,12 @@ import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627790Req;
+import com.bh.mall.enums.EAccountStatus;
+import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
+import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -39,6 +45,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
     @Autowired
     private IWareHouseBO wareHouseBO;
+
+    @Autowired
+    private IWareHouseLogBO wareHouseLogBO;
 
     @Autowired
     private IProductSpecsBO productSpecsBO;
@@ -58,26 +67,29 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             .toInteger(req.getQuantity())) {
             throw new BizException("xn000", "该规格的产品数量不足");
         }
-        Product product = productBO.getProduct(req.getProductCode());
+
         ProductSpecs specs = productSpecsBO
             .getProductSpecs(req.getProductSpecsCode());
+        Product product = productBO.getProduct(specs.getProductCode());
+
         ProductSpecsPrice specsPrice = productSpecsPriceBO
             .getPriceByLevel(specs.getCode(), uData.getLevel());
 
-        Product changeProduct = productBO
-            .getProduct(req.getChangeProductCode());
         ProductSpecs changeSpecs = productSpecsBO
             .getProductSpecs(req.getChangeSpecsCode());
+        Product changeProduct = productBO
+            .getProduct(changeSpecs.getProductCode());
         ProductSpecsPrice changeSpecsPrice = productSpecsPriceBO
             .getPriceByLevel(changeSpecs.getCode(), uData.getLevel());
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ChangeProduct.getCode());
+
         ChangeProduct data = new ChangeProduct();
         data.setCode(code);
-        data.setProductCode(req.getProductCode());
+        data.setProductCode(product.getCode());
         data.setProductName(product.getName());
-        data.setProductSpecsCode(req.getProductSpecsCode());
+        data.setProductSpecsCode(specs.getCode());
         data.setProductSpecsName(specs.getName());
 
         data.setPrice(specsPrice.getPrice());
@@ -94,17 +106,25 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                     / changeSpecsPrice.getChangePrice());
         }
 
-        data.setChangeProductCode(req.getChangeProductCode());
+        data.setChangeProductCode(changeProduct.getCode());
         data.setChangeProductName(changeProduct.getName());
         data.setChangeSpecsName(changeSpecs.getName());
-        data.setChangeSpecsCode(req.getChangeProductCode());
+        data.setChangeSpecsCode(changeSpecs.getCode());
         data.setCanChangeQuantity(canChangeQuantity);
 
         data.setApplyUser(req.getApplyUser());
+        data.setRealName(uData.getRealName());
+        data.setLevel(uData.getLevel());
         data.setApplyDatetime(new Date());
         data.setApplyNote(req.getApplyNote());
+
         data.setStatus(EChangeProductStatus.TO_CHANGE.getCode());
         changeProductBO.saveChangeProduct(data);
+
+        wareHouseBO.changeWareHouse(whData.getCode(),
+            -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCZH,
+            "[" + product.getName() + "]申请置换为[" + changeProduct.getName() + "]",
+            code);
         return code;
 
     }
@@ -124,16 +144,129 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     @Override
     public Paginable<ChangeProduct> queryChangeProductPage(int start, int limit,
             ChangeProduct condition) {
+        if (condition.getApplyStartDatetime() != null
+                && condition.getApplyEndDatetime() != null
+                && condition.getApplyStartDatetime()
+                    .before(condition.getApplyEndDatetime())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
+
         return changeProductBO.getPaginable(start, limit, condition);
     }
 
     @Override
     public List<ChangeProduct> queryChangeProductList(ChangeProduct condition) {
+        if (condition.getApplyStartDatetime() != null
+                && condition.getApplyEndDatetime() != null
+                && condition.getApplyStartDatetime()
+                    .before(condition.getApplyEndDatetime())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
         return changeProductBO.queryChangeProductList(condition);
     }
 
     @Override
     public ChangeProduct getChangeProduct(String code) {
         return changeProductBO.getChangeProduct(code);
+    }
+
+    @Override
+    public void editChangePrice(String code, String changePrice,
+            String approver, String approveNote) {
+
+        ChangeProduct data = changeProductBO.getChangeProduct(code);
+        if (!EChangeProductStatus.TO_CHANGE.getCode()
+            .equals(data.getStatus())) {
+            throw new BizException("xn0000", "该置换单已经审核完成,无需修改换货价");
+        }
+        int canChangeQuantity = (int) (data.getAmount()
+                / StringValidater.toLong(changePrice));
+        WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
+            data.getApplyUser(), data.getProductSpecsCode());
+
+        String logCode = wareHouseLogBO.refreshChangePrice(data, whData,
+            StringValidater.toLong(changePrice), canChangeQuantity,
+            data.getStatus(), "[" + data.getChangeProductName() + "]的换货价由["
+                    + data.getChangePrice() + "]变为[" + changePrice + "]");
+        whData.setLastChangeCode(logCode);
+        wareHouseBO.refreshLogCode(whData);
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setApproveNote(approveNote);
+        data.setChangePrice(StringValidater.toLong(changePrice));
+
+        data.setCanChangeQuantity(canChangeQuantity);
+
+        changeProductBO.refreshChangePrice(data);
+    }
+
+    @Override
+    public void approveChange(String code, String approver, String approveNote,
+            String result) {
+        ChangeProduct data = changeProductBO.getChangeProduct(code);
+        if (!EChangeProductStatus.TO_CHANGE.getCode()
+            .equals(data.getStatus())) {
+            throw new BizException("xn000", "该置换单未处于待审核状态");
+        }
+        String status = EChangeProductStatus.THROUGH_NO.getCode();
+        // 审核通过
+        if (EBoolean.YES.getCode().equals(result)) {
+            status = EChangeProductStatus.THROUGH_YES.getCode();
+            Product pData = productBO.getProduct(data.getProductCode());
+
+            ProductSpecs psData = productSpecsBO
+                .getProductSpecs(data.getProductSpecsCode());
+
+            int quantity = data.getQuantity() * psData.getNumber();
+            pData.setRealNumber(pData.getRealNumber() - quantity);
+            productBO.refreshRepertory(pData);
+
+            // 云仓新增产品
+            WareHouse whData = wareHouseBO.getWareHouseByProductSpec(approver,
+                data.getChangeSpecsCode());
+            if (whData == null) {
+                String whCode = OrderNoGenerater
+                    .generate(EGeneratePrefix.WareHouse.getCode());
+                WareHouse wareHouse = new WareHouse();
+                wareHouse.setCode(whCode);
+                wareHouse.setProductCode(data.getChangeProductCode());
+                wareHouse.setProductName(data.getChangeProductName());
+                wareHouse.setProductSpecsCode(data.getChangeSpecsCode());
+                wareHouse.setProductSpecsName(data.getChangeSpecsName());
+
+                wareHouse.setCurrency(ECurrency.YC_CNY.getCode());
+                wareHouse.setUserId(data.getApplyUser());
+                wareHouse.setRealName(data.getRealName());
+                wareHouse.setCreateDatetime(new Date());
+                ProductSpecsPrice pspData = productSpecsPriceBO.getPriceByLevel(
+                    data.getChangeSpecsCode(), data.getLevel());
+
+                wareHouse.setPrice(pspData.getPrice());
+
+                wareHouse.setQuantity(data.getCanChangeQuantity());
+                Long amount = data.getCanChangeQuantity() * pspData.getPrice();
+                wareHouse.setAmount(amount);
+                wareHouse.setLastChangeCode(data.getCode());
+                wareHouse.setStatus(EAccountStatus.NORMAL.getCode());
+                wareHouse.setCompanyCode(ESystemCode.BH.getCode());
+                wareHouse.setSystemCode(ESystemCode.BH.getCode());
+                wareHouseBO.saveWareHouse(wareHouse, data.getQuantity(),
+                    EBizType.AJ_YCZH,
+                    "[" + data.getProductName() + "]置换为["
+                            + data.getChangeProductName() + "]",
+                    data.getCode());
+            } else {
+                wareHouseBO.changeWareHouse(whData.getCode(),
+                    data.getQuantity(), EBizType.AJ_GMYC,
+                    EBizType.AJ_GMYC.getValue(), data.getCode());
+            }
+
+        }
+
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setApproveNote(approveNote);
+        data.setStatus(status);
+        changeProductBO.approveChange(data);
     }
 }

@@ -53,17 +53,11 @@ public class WareHouseLog extends ABaseDO {
     // 总价
     private Long amount;
 
-    // 置换产品编号
-    private String changeProductCode;
+    // 申请时间
+    private Date applyDatetime;
 
-    // 置换产品名称
-    private String changeProductName;
-
-    // 置换产品规格编号
-    private String changeSpecsCode;
-
-    // 置换规格名称
-    private String changeSpecsName;
+    // 申请备注
+    private String applyNote;
 
     // 可置换数量
     private Integer changeNumber;
@@ -76,6 +70,12 @@ public class WareHouseLog extends ABaseDO {
 
     // 状态
     private String status;
+
+    // 用户编号
+    private String applyUser;
+
+    // 用户名称
+    private String realName;
 
     // 审核人
     private String approver;
@@ -91,6 +91,13 @@ public class WareHouseLog extends ABaseDO {
 
     // 业务说明
     private String bizNote;
+
+    // *************db**************
+    private Date startDatetime;
+
+    private Date endDatetime;
+
+    private String keyword;
 
     public void setCode(String code) {
         this.code = code;
@@ -140,6 +147,14 @@ public class WareHouseLog extends ABaseDO {
         return productName;
     }
 
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
     public String getProductSpecsCode() {
         return productSpecsCode;
     }
@@ -178,6 +193,22 @@ public class WareHouseLog extends ABaseDO {
 
     public void setAfterNumber(Integer afterNumber) {
         this.afterNumber = afterNumber;
+    }
+
+    public Date getStartDatetime() {
+        return startDatetime;
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public Date getEndDatetime() {
+        return endDatetime;
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
     }
 
     public Integer getChangeNumber() {
@@ -228,36 +259,20 @@ public class WareHouseLog extends ABaseDO {
         this.approveDatetime = approveDatetime;
     }
 
-    public void setChangeProductCode(String changeProductCode) {
-        this.changeProductCode = changeProductCode;
+    public Date getApplyDatetime() {
+        return applyDatetime;
     }
 
-    public String getChangeProductCode() {
-        return changeProductCode;
+    public void setApplyDatetime(Date applyDatetime) {
+        this.applyDatetime = applyDatetime;
     }
 
-    public void setChangeProductName(String changeProductName) {
-        this.changeProductName = changeProductName;
+    public String getApplyNote() {
+        return applyNote;
     }
 
-    public String getChangeProductName() {
-        return changeProductName;
-    }
-
-    public void setChangeSpecsCode(String changeSpecsCode) {
-        this.changeSpecsCode = changeSpecsCode;
-    }
-
-    public String getChangeSpecsCode() {
-        return changeSpecsCode;
-    }
-
-    public void setChangeSpecsName(String changeSpecsName) {
-        this.changeSpecsName = changeSpecsName;
-    }
-
-    public String getChangeSpecsName() {
-        return changeSpecsName;
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
     }
 
     public void setStatus(String status) {
@@ -298,6 +313,22 @@ public class WareHouseLog extends ABaseDO {
 
     public void setBizNote(String bizNote) {
         this.bizNote = bizNote;
+    }
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

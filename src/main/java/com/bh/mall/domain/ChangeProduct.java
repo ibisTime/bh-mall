@@ -56,6 +56,9 @@ public class ChangeProduct extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 姓名
+    private String realName;
+
     // 申请人等级
     private Integer level;
 
@@ -75,10 +78,20 @@ public class ChangeProduct extends ABaseDO {
     private String approver;
 
     // 审核时间
-    private String approveDatetime;
+    private Date approveDatetime;
 
     // 审核备注
     private String approveNote;
+
+    // ***************db****************
+
+    // 申请开始时间
+    private Date applyStartDatetime;
+
+    // 申请结束时间
+    private Date applyEndDatetime;
+
+    private String keyword;
 
     public void setCode(String code) {
         this.code = code;
@@ -104,6 +117,14 @@ public class ChangeProduct extends ABaseDO {
         return productName;
     }
 
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
     public String getProductSpecsCode() {
         return productSpecsCode;
     }
@@ -126,6 +147,14 @@ public class ChangeProduct extends ABaseDO {
 
     public void setChangeSpecsName(String changeSpecsName) {
         this.changeSpecsName = changeSpecsName;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public Integer getQuantity() {
@@ -240,12 +269,12 @@ public class ChangeProduct extends ABaseDO {
         return approver;
     }
 
-    public void setApproveDatetime(String approveDatetime) {
-        this.approveDatetime = approveDatetime;
+    public Date getApproveDatetime() {
+        return approveDatetime;
     }
 
-    public String getApproveDatetime() {
-        return approveDatetime;
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
     }
 
     public void setApproveNote(String approveNote) {
@@ -254,6 +283,22 @@ public class ChangeProduct extends ABaseDO {
 
     public String getApproveNote() {
         return approveNote;
+    }
+
+    public Date getApplyStartDatetime() {
+        return applyStartDatetime;
+    }
+
+    public void setApplyStartDatetime(Date applyStartDatetime) {
+        this.applyStartDatetime = applyStartDatetime;
+    }
+
+    public Date getApplyEndDatetime() {
+        return applyEndDatetime;
+    }
+
+    public void setApplyEndDatetime(Date applyEndDatetime) {
+        this.applyEndDatetime = applyEndDatetime;
     }
 
 }

@@ -8,33 +8,57 @@
 		<result column="ware_house_code" property="wareHouseCode" />
 		<result column="type" property="type" />
 		<result column="product_code" property="productCode" />
+		
 		<result column="product_name" property="productName" />
 		<result column="product_specs_code" property="productSpecsCode" />
 		<result column="product_specs_name" property="productSpecsName" />
 		<result column="tran_number" property="tranNumber" />
 		<result column="before_number" property="beforeNumber" />
+		
 		<result column="after_number" property="afterNumber" />
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
-		<result column="change_product_code" property="changeProductCode" />
-		<result column="change_product_name" property="changeProductName" />
-		<result column="change_specs_code" property="changeSpecsCode" />
-		<result column="change_specs_name" property="changeSpecsName" />
 		<result column="change_number" property="changeNumber" />
 		<result column="change_price" property="changePrice" />
-		<result column="change_amount" property="changeAmount" />
 		<result column="status" property="status" />
+		
+		<result column="apply_user" property="applyUser" />
+		<result column="real_name" property="realName" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="apply_note" property="applyNote" />
+	
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="approve_note" property="approveNote" />
 		<result column="biz_type" property="bizType" />	
-		
 		<result column="biz_note" property="bizNote" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="productSpecsCode != null and productSpecsCode != '' ">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				AND t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%"
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			
+			<if test="startDatetime != null and startDatetime != ''">
+				<![CDATA[AND t.apply_datetime >= #{startDatetime}]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != ''">
+				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
 			</if>
 		</trim>
 	</sql>
@@ -45,30 +69,29 @@
 		,t.ware_house_code
 		,t.type
 		,t.product_code
+		
 		,t.product_name
 		,t.product_specs_code
 		,t.product_specs_name
 		,t.tran_number
 		,t.before_number
+		
 		,t.after_number
 		,t.price
 		,t.amount
-		,t.change_product_code
-		,t.change_product_name
-		,t.change_specs_code
-		,t.change_specs_name
 		,t.change_number
 		,t.change_price
-		,t.change_amount
 		,t.status
+		
 		,t.apply_user
+		,t.real_name
 		,t.apply_datetime
 		,t.apply_note
+		
 		,t.approver
 		,t.approve_datetime
 		,t.approve_note
 		,t.biz_type
-		
 		,t.biz_note
 		FROM
 		tbh_ware_house_log t
@@ -94,30 +117,30 @@
 		,ware_house_code
 		,type
 		,product_code
+		
 		,product_name
 		,product_specs_code
 		,product_specs_name
 		,tran_number
 		,before_number
+		
 		,after_number
 		,price
 		,amount
-		,change_product_code
-		,change_product_name
-		,change_specs_code
-		,change_specs_name
 		,change_number
 		,change_price
-		,change_amount
 		,status
+		
+		
 		,apply_user
+		,real_name
 		,apply_datetime
 		,apply_note
+		
 		,approver
 		,approve_datetime
 		,approve_note
 		,biz_type
-		
 		,biz_note
 		)
 		VALUES(
@@ -126,25 +149,25 @@
 		,#{wareHouseCode}
 		,#{type}
 		,#{productCode}
+		
 		,#{productName}
 		,#{productSpecsCode}
 		,#{productSpecsName}
 		,#{tranNumber}
 		,#{beforeNumber}
+		
 		,#{afterNumber}
 		,#{price}
 		,#{amount}
-		,#{changeProductCode}
-		,#{changeProductName}
-		,#{changeSpecsCode}
-		,#{changeSpecsName}
 		,#{changeNumber}
 		,#{changePrice}
-		,#{changeAmount}
 		,#{status}
+		
 		,#{applyUser}
+		,#{realName}
 		,#{applyDatetime}
 		,#{applyNote}
+		
 		,#{approver}
 		,#{approveDatetime}
 		,#{approveNote}
@@ -165,13 +188,8 @@
 		,product_specs_name = #{productSpecsName}
 		,price = #{price}
 		,amount = #{amount}
-		,change_product_code = #{changeProductCode}
-		,change_product_name = #{changeProductName}
-		,change_specs_code = #{changeSpecsCode}
-		,change_specs_name = #{changeSpecsName}
 		,change_number = #{changeNumber}
 		,change_price = #{changePrice}
-		,change_amount = #{changeAmount}
 		,status = #{status}
 		,apply_user = #{applyUser}
 		,apply_datetime = #{applyDatetime}

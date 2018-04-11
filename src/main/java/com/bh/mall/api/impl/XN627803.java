@@ -3,38 +3,31 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.IChangeProductAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627791Req;
-import com.bh.mall.dto.res.BooleanRes;
+import com.bh.mall.dto.req.XN627803Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 修改换货价
+ *详情查询云仓
  * @author: nyc 
- * @since: 2018年4月10日 下午5:46:41 
+ * @since: 2018年4月10日 下午8:34:30 
  * @history:
  */
-public class XN627791 extends AProcessor {
-
+public class XN627803 extends AProcessor {
     private IChangeProductAO changeProductAO = SpringContextHolder
         .getBean(IChangeProductAO.class);
 
-    private XN627791Req req = null;
+    private XN627803Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        changeProductAO.editChangePrice(req.getCode(), req.getChangePrice(),
-            req.getApprover(), req.getApproveNote());
-        return new BooleanRes(true);
+        return changeProductAO.getChangeProduct(req.getCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627791Req.class);
-        ObjValidater.validateReq(req);
+        req = JsonUtil.json2Bean(inputparams, XN627803Req.class);
 
     }
-
 }

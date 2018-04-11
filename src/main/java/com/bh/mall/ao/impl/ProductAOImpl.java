@@ -105,7 +105,6 @@ public class ProductAOImpl implements IProductAO {
         data.setIsTotal(req.getIsTotal());
         data.setUpdater(req.getUpdater());
 
-        data.setIsFree(req.getIsFree());
         data.setUpdateDatetime(new Date());
         productBO.refreshProduct(data);
 

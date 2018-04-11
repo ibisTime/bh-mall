@@ -146,6 +146,8 @@ public class Order extends ABaseDO {
 
     private String statusList;
 
+    private String keyword;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -192,6 +194,14 @@ public class Order extends ABaseDO {
 
     public String getKind() {
         return kind;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public void setProductCode(String productCode) {

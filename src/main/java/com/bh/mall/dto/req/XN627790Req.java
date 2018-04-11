@@ -14,10 +14,6 @@ public class XN627790Req {
     @NotBlank(message = "申请人不能为空")
     private String applyUser;
 
-    // （必填）商品编号
-    @NotBlank(message = "商品编号不能为空")
-    private String productCode;
-
     // （必填）商品规格编号
     @NotBlank(message = "商品规格编号不能为空")
     private String productSpecsCode;
@@ -25,10 +21,6 @@ public class XN627790Req {
     // （必填）数量
     @NotBlank(message = "数量不能为空")
     private String quantity;
-
-    // （必填）置换商品编号
-    @NotBlank(message = "置换商品编号不能为空")
-    private String changeProductCode;
 
     // （必填）置换商品规格编号
     @NotBlank(message = "置换商品规格编号不能为空")
@@ -45,14 +37,6 @@ public class XN627790Req {
         this.applyUser = applyUser;
     }
 
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
-
     public String getProductSpecsCode() {
         return productSpecsCode;
     }
@@ -67,14 +51,6 @@ public class XN627790Req {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public String getChangeProductCode() {
-        return changeProductCode;
-    }
-
-    public void setChangeProductCode(String changeProductCode) {
-        this.changeProductCode = changeProductCode;
     }
 
     public String getChangeSpecsCode() {

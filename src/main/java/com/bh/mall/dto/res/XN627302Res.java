@@ -5,7 +5,7 @@ public class XN627302Res {
     private String userId;
 
     // 是否绑定手机号
-    private String isNeedMobile;
+    private String status;
 
     public XN627302Res() {
     }
@@ -14,9 +14,9 @@ public class XN627302Res {
         this.userId = userId;
     }
 
-    public XN627302Res(String userId, String isNeedMobile) {
+    public XN627302Res(String userId, String status) {
         this.userId = userId;
-        this.isNeedMobile = isNeedMobile;
+        this.status = status;
     }
 
     public String getUserId() {
@@ -27,12 +27,12 @@ public class XN627302Res {
         this.userId = userId;
     }
 
-    public String getIsNeedMobile() {
-        return isNeedMobile;
+    public String getStatus() {
+        return status;
     }
 
-    public void setIsNeedMobile(String isNeedMobile) {
-        this.isNeedMobile = isNeedMobile;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

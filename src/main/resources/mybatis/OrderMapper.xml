@@ -8,40 +8,48 @@
 		<result column="is_send_home" property="isSendHome"/>
 		<result column="kind" property="kind" />
 		<result column="product_code" property="productCode" />
+		
 		<result column="product_name" property="productName" />
 		<result column="product_specs_code" property="productSpecsCode" />
 		<result column="product_specs_name" property="productSpecsName" />
 		<result column="pic" property="pic" />
 		<result column="quantity" property="quantity" />
+		
 		<result column="price" property="price" />
 		<result column="to_user" property="toUser" />
 		<result column="amount" property="amount" />
 		<result column="yunfei" property="yunfei" />
 		<result column="status" property="status" />
+		
 		<result column="pay_type" property="payType" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_amount" property="payAmount" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="pay_code" property="payCode" />
+		
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_note" property="applyNote" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="signer" property="signer" />
+		
 		<result column="mobile" property="mobile" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
 		<result column="area" property="area" />
 		<result column="address" property="address" />
+		
 		<result column="deliver" property="deliver" />
 		<result column="delive_datetime" property="deliveDatetime" />
 		<result column="logistics_code" property="logisticsCode" />
 		<result column="logistics_company" property="logisticsCompany" />
 		<result column="pdf" property="pdf" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="update_note" property="updateNote" />
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
+		
 		<result column="approve_note" property="approveNote" />
 		<result column="remark" property="remark" />
 	</resultMap>
@@ -80,8 +88,8 @@
 					AND t.status = '5'
 				</when>
 			</choose>
-			<if test="productName != null and productName != '' ">
-				AND t.product_name like "%"#{productName}"%"
+			<if test="keyword != null and keyword != '' ">
+				AND t.product_name like "%"#{keyword}"%" or u.real_name like "%"#{keyword}"%" u.team_name like "%"#{keyword}"%" 
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
@@ -101,44 +109,52 @@
 		,t.is_send_home
 		,t.kind
 		,t.product_code
+		
 		,t.product_name
 		,t.product_specs_code
 		,t.product_specs_name
 		,t.pic
 		,t.quantity
+		
 		,t.price
 		,t.to_user
 		,t.amount
 		,t.yunfei
 		,t.status
+		
 		,t.pay_type
 		,t.pay_group
 		,t.pay_amount
 		,t.pay_datetime
 		,t.pay_code
+		
 		,t.apply_user
 		,t.apply_note
 		,t.apply_datetime
 		,t.signer
+		
 		,t.mobile
 		,t.province
 		,t.city
 		,t.area
 		,t.address
+		
 		,t.deliver
 		,t.delive_datetime
 		,t.logistics_code
 		,t.logistics_company
 		,t.pdf
+		
 		,t.updater
 		,t.update_datetime
 		,t.update_note
 		,t.approver
 		,t.approve_datetime
+		
 		,t.approve_note
 		,t.remark
 		FROM
-		tbh_order t
+		tbh_order t, tbh_user u
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -146,56 +162,6 @@
 			</if>
 		</trim>
 	</select>
-	
-	
-	<select id="select_to_deal" parameterType="order" resultMap="order_DB_Result">
-		SELECT
-		t.code
-		,t.is_company_send
-		,t.is_send_home
-		,t.kind
-		,t.product_code
-		,t.product_name
-		,t.product_specs_code
-		,t.product_specs_name
-		,t.pic
-		,t.quantity
-		,t.price
-		,t.to_user
-		,t.amount
-		,t.yunfei
-		,t.status
-		,t.pay_type
-		,t.pay_group
-		,t.pay_amount
-		,t.pay_datetime
-		,t.pay_code
-		,t.apply_user
-		,t.apply_note
-		,t.apply_datetime
-		,t.signer
-		,t.mobile
-		,t.province
-		,t.city
-		,t.area
-		,t.address
-		,t.deliver
-		,t.delive_datetime
-		,t.logistics_code
-		,t.logistics_company
-		,t.pdf
-		,t.updater
-		,t.update_datetime
-		,t.update_note
-		,t.approver
-		,t.approve_datetime
-		,t.approve_note
-		,t.remark
-		FROM
-		tbh_order t
-	</select>
-	
-	
 	
 
 	<select id="select_order_count" parameterType="order"
@@ -212,26 +178,28 @@
 		,kind
 		,product_code
 		,product_name
+		
 		,product_specs_code
 		,product_specs_name
 		,pic
 		,quantity
 		,price
+		
 		,to_user
 		,amount
 		,yunfei
 		,status
-		
 		,apply_user
+		
 		,apply_note
 		,apply_datetime
 		,signer
 		,mobile
+		
 		,province
 		,city
 		,area
 		,address
-		
 		)
 		VALUES(
 		#{code}
@@ -239,21 +207,24 @@
 		,#{kind}
 		,#{productCode}
 		,#{productName}
+		
 		,#{productSpecsCode}
 		,#{productSpecsName}
 		,#{pic}
 		,#{quantity}
 		,#{price}
+		
 		,#{toUser}
 		,#{amount}
 		,#{yunfei}
 		,#{status}
-		
 		,#{applyUser}
+		
 		,#{applyNote}
 		,#{applyDatetime}
 		,#{signer}
 		,#{mobile}
+		
 		,#{province}
 		,#{city}
 		,#{area}

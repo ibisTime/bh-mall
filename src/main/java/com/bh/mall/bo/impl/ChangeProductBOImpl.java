@@ -62,4 +62,14 @@ public class ChangeProductBOImpl extends PaginableBOImpl<ChangeProduct>
         }
         return data;
     }
+
+    @Override
+    public void refreshChangePrice(ChangeProduct data) {
+        changeProductDAO.updateChangePrice(data);
+    }
+
+    @Override
+    public void approveChange(ChangeProduct data) {
+        changeProductDAO.approveChange(data);
+    }
 }

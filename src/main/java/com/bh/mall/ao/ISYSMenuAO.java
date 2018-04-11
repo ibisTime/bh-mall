@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.SYSMenu;
+import com.bh.mall.dto.req.XN627050Req;
 
 /**
  * @author: Gejin 
@@ -16,12 +17,12 @@ public interface ISYSMenuAO {
 
     /**
      * 添加菜单
-     * @param data
+     * @param req
      * @return 
      * @create: 2016年4月16日 下午7:39:51 Gejin
      * @history:
      */
-    public String addSYSMenu(SYSMenu data);
+    public String addSYSMenu(XN627050Req req);
 
     /**
      * 删除菜单

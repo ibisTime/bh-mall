@@ -23,11 +23,8 @@ public class XN627662Req extends APageReq {
     // 查询待处理订单
     private String statusList;
 
-    // 所属团队
-    private String toUser;
-
     // 下单人
-    private String applyUser;
+    private String keyword;
 
     // 产品名称
     private String productName;
@@ -56,20 +53,12 @@ public class XN627662Req extends APageReq {
         this.status = status;
     }
 
-    public String getToUser() {
-        return toUser;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
-    }
-
-    public String getApplyUser() {
-        return applyUser;
-    }
-
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public String getStatusList() {

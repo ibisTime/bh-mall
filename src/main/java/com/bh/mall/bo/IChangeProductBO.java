@@ -17,4 +17,8 @@ public interface IChangeProductBO extends IPaginableBO<ChangeProduct> {
 
     public ChangeProduct getChangeProduct(String code);
 
+    public void refreshChangePrice(ChangeProduct data);
+
+    public void approveChange(ChangeProduct data);
+
 }

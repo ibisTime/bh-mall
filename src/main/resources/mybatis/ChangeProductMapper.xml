@@ -21,12 +21,13 @@
 		<result column="can_change_quantity" property="canChangeQuantity" />
 		<result column="apply_user" property="applyUser" />
 		
+		<result column="real_name" property="realName" />
 		<result column="level" property="level" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="apply_note" property="applyNote" />
 		<result column="status" property="status" />
-		<result column="approver" property="approver" />
 		
+		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="approve_note" property="approveNote" />
 	</resultMap>
@@ -35,6 +36,27 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="productSpecsCode != null and productSpecsCode != '' ">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				AND t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%"
+			</if>
+			<if test="applyStartDatetime != null and applyStartDatetime != ''">
+				<![CDATA[AND t.apply_datetime >= #{applyStartDatetime}]]>
+			</if>
+			<if test="applyEndDatetime != null and applyEndDatetime != ''">
+				<![CDATA[AND t.apply_datetime <= #{applyEndDatetime}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_changeProduct" parameterType="changeProduct" resultMap="changeProduct_DB_Result">
@@ -42,8 +64,8 @@
 		t.code
 		,t.product_code
 		,t.product_name
-		,t.specs_code
-		,t.specs_name
+		,t.product_specs_code
+		,t.product_specs_name
 		
 		,t.quantity
 		,t.price
@@ -87,8 +109,8 @@
 		code
 		,product_code
 		,product_name
-		,specs_code
-		,specs_name
+		,product_specs_code
+		,product_specs_name
 		
 		,quantity
 		,price
@@ -115,8 +137,8 @@
 		#{code}
 		,#{productCode}
 		,#{productName}
-		,#{specsCode}
-		,#{specsName}
+		,#{productSpecsCode}
+		,#{productSpecsName}
 		
 		,#{quantity}
 		,#{price}
@@ -145,8 +167,8 @@
 		SET
 		product_code = #{productCode}
 		,product_name = #{productName}
-		,specs_code = #{specsCode}
-		,specs_name = #{specsName}
+		,product_specs_code = #{productSpecsCode}
+		,product_specs_name = #{productSpecsName}
 		,quantity = #{quantity}
 		,price = #{price}
 		,change_product_code = #{changeProductCode}
@@ -164,5 +186,24 @@
 		WHERE code = #{code}
 	</update>
 
+	<update id="update_changePrice" parameterType="changeProduct">
+		UPDATE tbh_change_product
+		SET
+		change_price = #{changePrice}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,approve_note = #{approveNote}
+		WHERE code = #{code}
+	</update>
+
+	<update id="approve_change" parameterType="changeProduct">
+		UPDATE tbh_change_product
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,approve_note = #{approveNote}
+		WHERE code = #{code}
+	</update>
 
 </mapper>

@@ -194,14 +194,14 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("grant_type", "authorization_code");
         fromProperties.put("appid", appId);
         fromProperties.put("secret", appSecret);
-        // fromProperties.put("code", req.getCode());微信H5
-        fromProperties.put("js_code", code);// 微信小程序
+        fromProperties.put("code", code);// 微信H5
+        // fromProperties.put("js_code", code);// 微信小程序
         logger.info(
             "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
         XN627302Res result = null;
         try {
-            String response = PostSimulater.requestPostForm(
-                WechatConstant.WXXCX_TOKEN_URL, fromProperties);
+            String response = PostSimulater
+                .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
             res = getMapFromResponse(response);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
@@ -227,7 +227,8 @@ public class UserAOImpl implements IUserAO {
             User dbUser = userBO.doGetUserByOpenId(h5OpenId, companyCode,
                 systemCode);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                result = new XN627302Res(dbUser.getUserId());
+                result = new XN627302Res(dbUser.getUserId(),
+                    dbUser.getStatus());
             } else {
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
@@ -277,44 +278,28 @@ public class UserAOImpl implements IUserAO {
         return result;
     }
 
-    private XN627302Res doWxLoginRegMobile(String mobile, String isLoginStatus,
-            String smsCaptcha, String smsCaptchaNumber, String companyCode,
-            String systemCode, String unionId, String appOpenId,
-            String h5OpenId, String nickname, String photo, String userKind) {
-        XN627302Res result;
-        if (StringUtils.isNotBlank(mobile)) {
-            // 判断是否需要验证码验证码,登录前一定要验证
-            if (!EBoolean.YES.getCode().equals(isLoginStatus)) {
-                if (StringUtils.isBlank(smsCaptcha)) {
-                    throw new BizException("xn702002", "请输入短信验证码");
-                }
-                // 短信验证码是否正确
-                smsOutBO.checkCaptcha(mobile, smsCaptcha, smsCaptchaNumber,
-                    companyCode, systemCode);
-            }
-            String mobileUserId = userBO.getUserId(mobile, userKind,
-                companyCode, systemCode);
-            if (StringUtils.isBlank(mobileUserId)) {
-                userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
-                    systemCode);
-                // 插入用户信息
-                String userId = userBO.doRegister(unionId, h5OpenId, appOpenId,
-                    mobile, userKind, EUserPwd.InitPwd.getCode(), nickname,
-                    photo, companyCode, systemCode);
-                distributeAccount(userId, mobile, userKind, companyCode,
-                    systemCode);
-                result = new XN627302Res(userId);
-            } else {
-                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, appOpenId,
-                    nickname, photo);
-                result = new XN627302Res(mobileUserId);
-            }
-        } else {
-            result = new XN627302Res(null, EBoolean.YES.getCode());
-        }
-        return result;
-    }
-
+    /*
+     * private XN627302Res doWxLoginRegMobile(String mobile, String
+     * isLoginStatus, String smsCaptcha, String smsCaptchaNumber, String
+     * companyCode, String systemCode, String unionId, String appOpenId, String
+     * h5OpenId, String nickname, String photo, String userKind) { XN627302Res
+     * result; if (StringUtils.isNotBlank(mobile)) { // 判断是否需要验证码验证码,登录前一定要验证 if
+     * (!EBoolean.YES.getCode().equals(isLoginStatus)) { if
+     * (StringUtils.isBlank(smsCaptcha)) { throw new BizException("xn702002",
+     * "请输入短信验证码"); } // 短信验证码是否正确 smsOutBO.checkCaptcha(mobile, smsCaptcha,
+     * smsCaptchaNumber, companyCode, systemCode); } String mobileUserId =
+     * userBO.getUserId(mobile, userKind, companyCode, systemCode); if
+     * (StringUtils.isBlank(mobileUserId)) { userBO.doCheckOpenId(unionId,
+     * h5OpenId, appOpenId, companyCode, systemCode); // 插入用户信息 String userId =
+     * userBO.doRegister(unionId, h5OpenId, appOpenId, mobile, userKind,
+     * EUserPwd.InitPwd.getCode(), nickname, photo, companyCode, systemCode);
+     * distributeAccount(userId, mobile, userKind, companyCode, systemCode);
+     * result = new XN627302Res(userId); } else {
+     * userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, appOpenId,
+     * nickname, photo); result = new XN627302Res(mobileUserId); } } else {
+     * result = new XN627302Res(null, EBoolean.YES.getCode()); } return result;
+     * }
+     */
     private XN627302Res doWxLoginReg(String companyCode, String systemCode,
             String unionId, String appOpenId, String h5OpenId, String nickname,
             String photo, String userKind) {
@@ -328,7 +313,7 @@ public class UserAOImpl implements IUserAO {
             systemCode);
         // distributeAccount(userId, nickname, userKind, companyCode,
         // systemCode);
-        result = new XN627302Res(userId, EBoolean.NO.getCode());
+        result = new XN627302Res(userId, EUserStatus.TO_WILL.getCode());
         return result;
     }
 
@@ -569,6 +554,10 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn0000", "本等级不可被意向");
         }
         User data = userBO.getCheckUser(req.getUserId());
+        if (EUserStatus.TO_WILL.getCode().equals(data.getStatus())) {
+
+        }
+
         data.setRealName(req.getRealName());
         data.setWxId(req.getWxId());
         data.setMobile(req.getMobile());
@@ -1111,7 +1100,7 @@ public class UserAOImpl implements IUserAO {
                     .before(condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        condition.setKind(EUserKind.Merchant.getCode());
+
         return userBO.getPaginable(start, limit, condition);
     }
 

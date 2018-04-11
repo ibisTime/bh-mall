@@ -21,7 +21,7 @@ public enum EGeneratePrefix {
                     "内购产品订单编号"), Order("OA", "产品订单"), AfterSale("AS", "售后单编号"),
 
     Charge("CO", "充值订单"), AgencyLog("AL", "代理编号"), Intro("IT",
-            "介绍奖励"), WareHourse("WH", "云仓库编号"), WareHourseLog("WHL",
+            "介绍奖励"), WareHouse("WH", "云仓库编号"), WareHourseLog("WHL",
                     "云仓库记录编号"), ChangeProduct("CP", "置换单编号");
 
     public static Map<String, EGeneratePrefix> getOrderTypeMap() {

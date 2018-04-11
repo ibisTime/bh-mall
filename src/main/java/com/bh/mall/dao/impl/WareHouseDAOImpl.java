@@ -52,4 +52,9 @@ public class WareHouseDAOImpl extends AMybatisTemplate
         super.update(NAMESPACE.concat("update_quantity"), data);
     }
 
+    @Override
+    public void updateLogCode(WareHouse data) {
+        super.update(NAMESPACE.concat("update_logCode"), data);
+    }
+
 }

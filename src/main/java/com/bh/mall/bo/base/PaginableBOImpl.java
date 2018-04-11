@@ -10,8 +10,8 @@ import com.bh.mall.dao.base.IBaseDAO;
  * @author joe.chen
  * 
  */
-public abstract class PaginableBOImpl<T extends ABaseDO> implements
-        IPaginableBO<T> {
+public abstract class PaginableBOImpl<T extends ABaseDO>
+        implements IPaginableBO<T> {
 
     private IBaseDAO<T> paginableDAO;
 
@@ -26,10 +26,9 @@ public abstract class PaginableBOImpl<T extends ABaseDO> implements
         return getPaginable(start, Paginable.DEFAULT_PAGE_SIZE, condition);
     }
 
-	@Override
+    @Override
     public Paginable<T> getPaginable(int start, int pageSize, T condition) {
         prepare(condition);
-
         long totalCount = paginableDAO.selectTotalCount(condition);
 
         Paginable<T> page = new Page<T>(start, pageSize, totalCount);

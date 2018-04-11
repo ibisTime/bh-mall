@@ -30,7 +30,7 @@ public class XN627811 extends AProcessor {
         WareHouse condition = new WareHouse();
         condition.setType(req.getType());
         condition.setKeyword(req.getKeyword());
-
+        condition.setUserId(req.getUserId());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IWareHouseAO.DEFAULT_ORDER_COLUMN;
@@ -44,7 +44,7 @@ public class XN627811 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        JsonUtil.json2Bean(inputparams, XN627811Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627811Req.class);
         StringValidater.validateBlank(req.getStart(), req.getLimit(),
             req.getUserId());
     }

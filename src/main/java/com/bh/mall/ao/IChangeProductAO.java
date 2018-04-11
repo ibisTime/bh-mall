@@ -25,4 +25,10 @@ public interface IChangeProductAO {
 
     public ChangeProduct getChangeProduct(String code);
 
+    public void editChangePrice(String code, String changePrice,
+            String approver, String string);
+
+    public void approveChange(String code, String aprrover, String approveNote,
+            String result);
+
 }

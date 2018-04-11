@@ -16,10 +16,7 @@ public class XN627663Req {
     private String status;
 
     // 所属团队
-    private String toUser;
-
-    // 下单人
-    private String applyUser;
+    private String keyword;
 
     // 结束时间
     private String dateEnd;
@@ -54,20 +51,12 @@ public class XN627663Req {
         this.status = status;
     }
 
-    public String getToUser() {
-        return toUser;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
-    }
-
-    public String getApplyUser() {
-        return applyUser;
-    }
-
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public String getDateEnd() {

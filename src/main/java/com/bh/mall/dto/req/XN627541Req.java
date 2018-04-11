@@ -37,10 +37,6 @@ public class XN627541Req {
     @NotBlank(message = "是否计入出货不能为空")
     private String isTotal;
 
-    // （必填） 是否包邮
-    @NotBlank(message = "是否包邮不能为空")
-    private String isFree;
-
     // （必填）更新人
     @NotBlank(message = "更新人不能为空")
     private String updater;
@@ -148,14 +144,6 @@ public class XN627541Req {
 
     public void setAwardList(List<XN627548Req> awardList) {
         this.awardList = awardList;
-    }
-
-    public String getIsFree() {
-        return isFree;
-    }
-
-    public void setIsFree(String isFree) {
-        this.isFree = isFree;
     }
 
 }

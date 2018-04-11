@@ -11,9 +11,11 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareHouseLogDAO;
+import com.bh.mall.domain.ChangeProduct;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.domain.WareHouseLog;
+import com.bh.mall.enums.EBizType;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -39,9 +41,9 @@ public class WareHouseLogBOImpl extends PaginableBOImpl<WareHouseLog>
         logData.setProductSpecsName(data.getProductSpecsName());
         logData.setPrice(data.getPrice());
         logData.setTranNumber(tranNumber);
-        logData.setBeforeNumber(whData.getQuantity());
+        logData.setBeforeNumber(0);
 
-        logData.setAfterNumber(whData.getQuantity() + tranNumber);
+        logData.setAfterNumber(tranNumber);
         logData.setAmount(data.getAmount());
         logData.setBizType(bizType);
         logData.setBizNote(bizNote);
@@ -80,9 +82,74 @@ public class WareHouseLogBOImpl extends PaginableBOImpl<WareHouseLog>
             condition.setCode(code);
             data = wareHouseLogDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "仓库流水不存在");
             }
         }
         return data;
     }
+
+    @Override
+    public String saveWareHouseLog(WareHouse dbData, Integer quantity,
+            EBizType bizType, String bizNote, String refNo) {
+
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.WareHourseLog.getCode());
+        WareHouseLog logData = new WareHouseLog();
+        logData.setCode(code);
+        logData.setRefNo(refNo);
+        logData.setWareHouseCode(dbData.getCode());
+        logData.setProductCode(dbData.getProductCode());
+        logData.setProductName(dbData.getProductName());
+
+        logData.setProductSpecsCode(dbData.getProductSpecsCode());
+        logData.setProductSpecsName(dbData.getProductSpecsName());
+        logData.setPrice(dbData.getPrice());
+        logData.setTranNumber(quantity);
+        logData.setBeforeNumber(dbData.getQuantity());
+        logData.setStatus(dbData.getStatus());
+
+        logData.setApplyUser(dbData.getUserId());
+        logData.setRealName(dbData.getRealName());
+        logData.setStatus(dbData.getStatus());
+        logData.setAfterNumber(dbData.getQuantity() + quantity);
+        logData.setAmount(dbData.getAmount());
+        logData.setBizType(bizType.getCode());
+        logData.setBizNote(bizNote);
+        wareHouseLogDAO.insert(logData);
+        return code;
+    }
+
+    @Override
+    public String refreshChangePrice(ChangeProduct data, WareHouse dbData,
+            Long changePirce, int canChangeQuantity, String status,
+            String bizNote) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.WareHourseLog.getCode());
+        WareHouseLog logData = new WareHouseLog();
+        logData.setCode(code);
+        logData.setRefNo(data.getCode());
+        logData.setWareHouseCode(dbData.getCode());
+        logData.setProductCode(data.getProductCode());
+        logData.setProductName(data.getProductName());
+
+        logData.setProductSpecsCode(data.getProductSpecsCode());
+        logData.setProductSpecsName(data.getProductSpecsName());
+        logData.setPrice(data.getPrice());
+        logData.setTranNumber(0);
+        logData.setBeforeNumber(dbData.getQuantity());
+
+        logData.setAfterNumber(dbData.getQuantity());
+        logData.setChangeNumber(canChangeQuantity);
+        logData.setChangePrice(changePirce);
+        logData.setApplyUser(data.getApplyUser());
+        logData.setRealName(data.getRealName());
+
+        logData.setApplyDatetime(data.getApplyDatetime());
+        logData.setApplyNote(data.getApplyNote());
+        logData.setAmount(dbData.getAmount());
+        logData.setBizNote(bizNote);
+        wareHouseLogDAO.insert(logData);
+        return code;
+    }
+
 }

@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IJourBO;
-import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAccountDAO;
+import com.bh.mall.dao.IWareHouseDAO;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EAccountStatus;
@@ -39,7 +39,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     private IJourBO jourBO;
 
     @Autowired
-    private IWareHouseBO wareHouseBO;
+    private IWareHouseDAO wareHouseDAO;
 
     @Override
     public String distributeAccount(String userId, String realName,
@@ -51,7 +51,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             for (String currency : currencyList) {
                 if (ECurrency.YC_CNY.getCode().equals(currency)) {
                     code = OrderNoGenerater
-                        .generate(EGeneratePrefix.WareHourse.getCode());
+                        .generate(EGeneratePrefix.WareHouse.getCode());
                     WareHouse whData = new WareHouse();
                     whData.setCode(code);
                     whData.setType(accountType.getCode());
@@ -60,7 +60,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
                     whData.setRealName(realName);
                     whData.setStatus(EAccountStatus.NORMAL.getCode());
                     whData.setCreateDatetime(new Date());
-                    wareHouseBO.saveWareHouse(whData, null);
+                    wareHouseDAO.insert(whData);
                 } else {
                     accountNumber = OrderNoGenerater
                         .generate(EGeneratePrefix.Account.getCode());
@@ -280,4 +280,5 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
             bizType, toBizNote, transAmount);
     }
+
 }

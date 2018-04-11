@@ -19,7 +19,8 @@
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />	
 		<result column="last_change_code" property="lastChangeCode" />
-		
+		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 		
 	</resultMap>
 	<sql id="where_condition">
@@ -28,16 +29,23 @@
 				AND t.code = #{code}
 			</if>
 			<if test="keyword != null and keyword != '' ">
-				AND t.product_specs_name like  "%"#{keyword}"%" or t.real_name  like  "%"#{keyword}"%"
+				AND t.product_name like  "%"#{keyword}"%" or t.real_name  like  "%"#{keyword}"%"
 			</if>
 			<if test="productSpecsCode != null and productSpecsCode != '' ">
 				AND t.product_specs_code = #{productSpecsCode}
 			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_wareHouse" parameterType="wareHouse" resultMap="wareHouse_DB_Result">
 		SELECT
 		t.code
@@ -56,7 +64,6 @@
 		,t.status
 		,t.create_datetime
 		,t.last_change_code
-		
 		FROM
 		tbh_ware_house t
 		<include refid="where_condition" />
@@ -92,7 +99,8 @@
 		,status
 		,create_datetime
 		,last_change_code
-		
+		,system_code
+		,company_code
 		)
 		VALUES(
 		#{code}
@@ -111,21 +119,24 @@
 		,#{status}
 		,#{createDatetime}
 		,#{lastChangeCode}
-		
+		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
 
-	<update id="update_wareHouse" parameterType="wareHouse">
+	<update id="update_quantity" parameterType="wareHouse">
 		UPDATE tbh_ware_house
 		SET
-		product_code = #{productCode}
-		,product_name = #{productName}
-		,product_specs_code = #{productSpecsCode}
-		,product_specs_name = #{productSpecsName}
-		,price = #{price}
-		,quantity = #{quantity}
-		,userId = #{userId}
+		quantity = #{quantity}
+		,amount = #{amount}
 		,last_change_code = #{lastChangeCode}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_logCode" parameterType="wareHouse">
+		UPDATE tbh_ware_house
+		SET
+		last_change_code = #{lastChangeCode}
 		WHERE code = #{code}
 	</update>
 

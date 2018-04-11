@@ -139,7 +139,7 @@
 		,#{slogan}
 		,#{isTotal}
 		
-		,#{price}
+		,#{status}
 		,#{createDatetime}
 		,#{updater}
 		,#{updateDatetime}

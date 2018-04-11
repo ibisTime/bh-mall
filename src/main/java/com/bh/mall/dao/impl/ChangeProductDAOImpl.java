@@ -47,4 +47,14 @@ public class ChangeProductDAOImpl extends AMybatisTemplate
             count, condition, ChangeProduct.class);
     }
 
+    @Override
+    public void updateChangePrice(ChangeProduct data) {
+        super.update(NAMESPACE.concat("update_changePrice"), data);
+    }
+
+    @Override
+    public void approveChange(ChangeProduct data) {
+        super.update(NAMESPACE.concat("approve_change"), data);
+    }
+
 }

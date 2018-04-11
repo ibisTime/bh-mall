@@ -50,7 +50,7 @@ public class WareHouse extends ABaseDO {
     // 用户名称
     private String realName;
 
-    //
+    // 状态
     private String status;
 
     // 创建时间
@@ -58,6 +58,12 @@ public class WareHouse extends ABaseDO {
 
     // 最后一条置换记录
     private String lastChangeCode;
+
+    // 公司编号
+    private String companyCode;
+
+    // 公司编号
+    private String systemCode;
 
     // ****************db***************
     private String keyword;
@@ -188,6 +194,22 @@ public class WareHouse extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
 }
