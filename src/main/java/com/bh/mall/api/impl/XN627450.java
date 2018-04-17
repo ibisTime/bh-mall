@@ -9,6 +9,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.dto.req.XN627450Req;
+import com.bh.mall.enums.EAccountType;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -32,14 +33,19 @@ public class XN627450 extends AProcessor {
     public Object doBusiness() throws BizException {
         Account condition = new Account();
         condition.setRealName(req.getRealName());
-        condition.setType(req.getType());
+
+        if (StringUtils.isNotBlank(req.getType())) {
+            condition.setType(EAccountType.AllAccount.getCode());
+        } else {
+            condition.setType(req.getType());
+        }
         condition.setStatus(req.getStatus());
         condition.setCurrency(req.getCurrency());
         condition.setLastOrder(req.getLastOrder());
-        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
-            true));
+        condition.setCreateDatetimeStart(
+            DateUtil.getFrontDate(req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(
+            DateUtil.getFrontDate(req.getDateEnd(), true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IAccountAO.DEFAULT_ORDER_COLUMN;

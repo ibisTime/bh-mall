@@ -32,9 +32,10 @@ public class ProductLogAOImpl implements IProductLogAO {
             ProductLog condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
+
         return productLogBO.getPaginable(start, limit, condition);
     }
 
@@ -42,7 +43,7 @@ public class ProductLogAOImpl implements IProductLogAO {
     public List<ProductLog> queryProductLogList(ProductLog condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return productLogBO.queryProductLogList(condition);

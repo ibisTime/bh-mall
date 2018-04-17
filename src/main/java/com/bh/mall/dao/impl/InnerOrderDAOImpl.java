@@ -9,8 +9,8 @@ import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.InnerOrder;
 
 @Repository("innerOrderDAOImpl")
-public class InnerOrderDAOImpl extends AMybatisTemplate implements
-        IInnerOrderDAO {
+public class InnerOrderDAOImpl extends AMybatisTemplate
+        implements IInnerOrderDAO {
 
     @Override
     public int insert(InnerOrder data) {
@@ -48,11 +48,6 @@ public class InnerOrderDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public void payOrder(InnerOrder data) {
-        super.update(NAMESPACE.concat("pay_order"), data);
-    }
-
-    @Override
     public void update(InnerOrder data) {
         super.update(NAMESPACE.concat("update_innerOrder"), data);
     }
@@ -75,6 +70,20 @@ public class InnerOrderDAOImpl extends AMybatisTemplate implements
     @Override
     public void addPayGroup(InnerOrder data) {
         super.update(NAMESPACE.concat("add_payGroup"), data);
+    }
+
+    @Override
+    public void paySuccess(InnerOrder data) {
+        super.update(NAMESPACE.concat("pay_success"), data);
+
+    }
+
+    @Override
+    public List<InnerOrder> selectInnerOrderPage(int start, int pageSize,
+            InnerOrder condition) {
+
+        return super.selectList(NAMESPACE.concat("select_innerOrder"), start,
+            pageSize, condition, InnerOrder.class);
     }
 
 }

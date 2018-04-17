@@ -80,6 +80,7 @@
 		,t.apply_user
 		
 		,t.level
+		,t.real_name
 		,t.apply_datetime
 		,t.apply_note
 		,t.status
@@ -124,6 +125,7 @@
 		,can_change_quantity
 		,apply_user
 		
+		,real_name
 		,level
 		,apply_datetime
 		,apply_note
@@ -152,6 +154,7 @@
 		,#{canChangeQuantity}
 		
 		,#{applyUser}
+		,#{realName}
 		,#{level}
 		,#{applyDatetime}
 		,#{applyNote}

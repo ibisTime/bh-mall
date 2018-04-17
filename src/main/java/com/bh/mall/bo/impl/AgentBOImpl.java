@@ -53,4 +53,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return agentDAO.selectList(condition);
     }
 
+    @Override
+    public Agent getAgentByLevel(Integer applyLevel) {
+        Agent condition = new Agent();
+        condition.setLevel(applyLevel);
+        return agentDAO.select(condition);
+    }
+
 }

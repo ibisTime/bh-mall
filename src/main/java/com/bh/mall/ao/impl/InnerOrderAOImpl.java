@@ -3,6 +3,7 @@ package com.bh.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IInnerProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.PropertiesUtil;
@@ -37,6 +39,7 @@ import com.bh.mall.enums.EProductYunFei;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -139,11 +142,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         } else if (EBoolean.YES.getCode().equals(payType)) {
             return this.payWXH5(data);
         }
-        data.setPayType(payType);
-        data.setStatus(EInnerOrderStatus.Paid.getCode());
-        data.setPayAmount(data.getAmount() + data.getYunfei());
-        data.setPayDatetime(new Date());
-        innerOrderBO.payOrder(data);
         return result;
     }
 
@@ -165,7 +163,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setPayCode(payCode);
         data.setPayAmount(amount);
         data.setStatus(EInnerOrderStatus.Paid.getCode());
-        innerOrderBO.payOrder(data);
+        innerOrderBO.paySuccess(data);
     }
 
     @Override
@@ -198,25 +196,44 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             InnerOrder condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        return innerOrderBO.getPaginable(start, limit, condition);
+        long totalCount = innerOrderBO.getTotalCount(condition);
+
+        Page<InnerOrder> page = new Page<InnerOrder>(start, limit, totalCount);
+        List<InnerOrder> list = innerOrderBO.queryInnerOrderPage(
+            page.getStart(), page.getPageSize(), condition);
+        for (InnerOrder innerOrder : list) {
+            String updateName = this.getName(innerOrder.getUpdater());
+            innerOrder.setUpdater(updateName);
+        }
+        page.setList(list);
+
+        return page;
     }
 
     @Override
     public List<InnerOrder> queryInnerOrderList(InnerOrder condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        return innerOrderBO.queryInnerOrderList(condition);
+        List<InnerOrder> list = innerOrderBO.queryInnerOrderList(condition);
+        for (InnerOrder innerOrder : list) {
+            String updateName = this.getName(innerOrder.getUpdater());
+            innerOrder.setUpdater(updateName);
+        }
+        return list;
     }
 
     @Override
     public InnerOrder getInnerOrder(String code) {
-        return innerOrderBO.getInnerOrder(code);
+        InnerOrder data = innerOrderBO.getInnerOrder(code);
+        String updateName = this.getName(data.getUpdater());
+        data.setUpdater(updateName);
+        return data;
     }
 
     @Override
@@ -275,6 +292,23 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
         data.setStatus(EInnerOrderStatus.Delivered.getCode());
         innerOrderBO.receiveInnerOrder(data);
+    }
+
+    private String getName(String user) {
+
+        if (StringUtils.isBlank(user)) {
+            return null;
+        }
+        String name = null;
+        User data = userBO.getUserNoCheck(user);
+        if (data != null) {
+            name = data.getRealName();
+            if (EUserKind.Plat.getCode().equals(data.getKind())
+                    && StringUtils.isBlank(data.getRealName())) {
+                name = data.getNickname();
+            }
+        }
+        return name;
     }
 
 }

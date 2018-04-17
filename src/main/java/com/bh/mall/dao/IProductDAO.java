@@ -15,7 +15,6 @@ public interface IProductDAO extends IBaseDAO<Product> {
 
     void putdownProduct(Product data);
 
-    List<Product> selectProductPageByFront(Product condition, int limit,
-            int start);
+    List<Product> selectProductPage(Product condition, int start, int limit);
 
 }

@@ -27,4 +27,6 @@ public interface IWareHouseAO {
     public Paginable<WareHouse> queryWareHouseFrontPage(int start, int limit,
             WareHouse condition);
 
+    public WareHouse getWareHouseByUser(String userId);
+
 }

@@ -32,8 +32,9 @@ public class XN627353 extends AProcessor {
     public Object doBusiness() throws BizException {
         AgencyLog condition = new AgencyLog();
         condition.setKeyWord(req.getKeyword());
-        condition.setToUserId(req.getUserId());
+        condition.setUserIdForQuery(req.getUserId());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
+        condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         condition.setStatus(req.getStatus());
 
         Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),
@@ -52,7 +53,7 @@ public class XN627353 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agencyLogAO.queryIntentionAgentPageFront(start, limit,
+        return agencyLogAO.queryIntentionAgentFrontPage(start, limit,
             condition);
     }
 

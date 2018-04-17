@@ -18,19 +18,16 @@ public class XN627645Req {
     @NotBlank(message = "发货人不能为空")
     private String deliver;
 
-    // （必填）物流编号
-    @NotBlank(message = "物流编号不能为空")
+    // （选填）物流编号
     private String logisticsCode;
 
-    // （必填）物流公司
-    @NotBlank(message = "物流公司不能为空")
+    // （选填）物流公司
     private String logisticsCompany;
 
-    // （必填）物流单
-    @NotBlank(message = "物流单不能为空")
+    // （选填）物流单
     private String pdf;
 
-    // 是否云仓发货
+    // （必填）是否云仓发货
     @NotBlank(message = "是否云仓发货不能为空")
     private String isCompanySend;
 

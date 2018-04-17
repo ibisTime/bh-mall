@@ -20,6 +20,7 @@ public class AwardAOImpl implements IAwardAO {
     @Override
     public Paginable<Award> queryAwardPage(int start, int limit,
             Award condition) {
+
         return awardBO.getPaginable(start, limit, condition);
     }
 

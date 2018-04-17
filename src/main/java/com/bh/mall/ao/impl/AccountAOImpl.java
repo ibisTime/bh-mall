@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IJourBO;
+import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.User;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -25,7 +27,7 @@ public class AccountAOImpl implements IAccountAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private IJourBO jourBO;
+    private IUserBO userBO;
 
     @Override
     @Transactional
@@ -72,25 +74,58 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     public Paginable<Account> queryAccountPage(int start, int limit,
             Account condition) {
-        return accountBO.getPaginable(start, limit, condition);
+
+        Paginable<Account> page = accountBO.getPaginable(start, limit,
+            condition);
+        List<Account> list = page.getList();
+        for (Account account : list) {
+            if (!ESysUser.SYS_USER_BH.getCode().equals(account.getUserId())) {
+                User user = userBO.getUser(account.getUserId());
+                account.setUser(user);
+            }
+        }
+        page.setList(list);
+        return page;
     }
 
     @Override
     public Account getAccount(String accountNumber) {
-        return accountBO.getAccount(accountNumber);
+        Account data = accountBO.getAccount(accountNumber);
+        if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
+            User user = userBO.getUser(data.getUserId());
+            data.setUser(user);
+        }
+        return data;
     }
 
     @Override
     public List<Account> getAccountByUserId(String userId, String currency) {
         Account condition = new Account();
-        condition.setUserId(userId);
+        if (ESysUser.SYS_USER_BH.getCode().equals(userId)) {
+            condition.setType(EAccountType.Plat.getCode());
+        } else {
+            condition.setUserId(userId);
+        }
+
         condition.setCurrency(currency);
-        return accountBO.queryAccountList(condition);
+        List<Account> list = accountBO.queryAccountList(condition);
+        for (Account account : list) {
+            User user = userBO.getUser(account.getUserId());
+            account.setUser(user);
+        }
+        return list;
     }
 
     @Override
     public List<Account> queryAccountList(Account condition) {
-        return accountBO.queryAccountList(condition);
+        List<Account> list = accountBO.queryAccountList(condition);
+        for (Account account : list) {
+            if (!ESysUser.SYS_USER_BH.getCode().equals(account.getUserId())) {
+                User user = userBO.getUser(account.getUserId());
+                account.setUser(user);
+            }
+        }
+        return list;
     }
 
     public static void main(String[] args) {

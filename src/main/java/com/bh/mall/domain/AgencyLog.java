@@ -66,6 +66,36 @@ public class AgencyLog extends ABaseDO {
 
     private String keyWord;
 
+    private String userIdForQuery;
+
+    private Date approveDatetimeStart;
+
+    private Date approveDatetimeEnd;
+
+    private User user;
+
+    private String refereeName;
+
+    private String approvName;
+
+    private Long impowerAmount;
+
+    public String getRefereeName() {
+        return refereeName;
+    }
+
+    public void setRefereeName(String refereeName) {
+        this.refereeName = refereeName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -112,6 +142,14 @@ public class AgencyLog extends ABaseDO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getUserIdForQuery() {
+        return userIdForQuery;
+    }
+
+    public void setUserIdForQuery(String userIdForQuery) {
+        this.userIdForQuery = userIdForQuery;
     }
 
     public Integer getApplyLevel() {
@@ -208,6 +246,38 @@ public class AgencyLog extends ABaseDO {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public Date getApproveDatetimeStart() {
+        return approveDatetimeStart;
+    }
+
+    public void setApproveDatetimeStart(Date approveDatetimeStart) {
+        this.approveDatetimeStart = approveDatetimeStart;
+    }
+
+    public Date getApproveDatetimeEnd() {
+        return approveDatetimeEnd;
+    }
+
+    public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
+        this.approveDatetimeEnd = approveDatetimeEnd;
+    }
+
+    public Long getImpowerAmount() {
+        return impowerAmount;
+    }
+
+    public void setImpowerAmount(Long impowerAmount) {
+        this.impowerAmount = impowerAmount;
+    }
+
+    public String getApprovName() {
+        return approvName;
+    }
+
+    public void setApprovName(String approvName) {
+        this.approvName = approvName;
     }
 
 }

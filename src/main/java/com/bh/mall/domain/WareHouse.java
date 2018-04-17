@@ -68,6 +68,16 @@ public class WareHouse extends ABaseDO {
     // ****************db***************
     private String keyword;
 
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public String getKeyword() {
         return keyword;
     }

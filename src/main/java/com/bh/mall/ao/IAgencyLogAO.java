@@ -9,6 +9,7 @@ import com.bh.mall.domain.AgencyLog;
 
 @Component
 public interface IAgencyLogAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public String addAgencyLog(AgencyLog data);
@@ -20,7 +21,7 @@ public interface IAgencyLogAO {
 
     public AgencyLog getAgencyLog(String code);
 
-    public Paginable<AgencyLog> queryIntentionAgentPageFront(int start,
+    public Paginable<AgencyLog> queryIntentionAgentFrontPage(int start,
             int limit, AgencyLog condition);
 
 }

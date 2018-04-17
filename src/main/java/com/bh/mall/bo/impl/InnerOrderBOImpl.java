@@ -55,11 +55,6 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     }
 
     @Override
-    public void payOrder(InnerOrder data) {
-        innerOrderDAO.payOrder(data);
-    }
-
-    @Override
     public void deliverInnerProduct(InnerOrder data) {
         innerOrderDAO.deliverInnerProduct(data);
     }
@@ -83,8 +78,8 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     public long selectCount(InnerOrder ioCondition) {
         return innerOrderDAO.selectTotalCount(ioCondition);
     }
-    
-          @Override
+
+    @Override
     public InnerOrder getInnerOrderByPayGroup(String payGroup) {
         InnerOrder data = null;
         if (StringUtils.isNotBlank(payGroup)) {
@@ -100,12 +95,24 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
 
     @Override
     public String addPayGroup(InnerOrder data, String payType) {
-        String payGroup = OrderNoGenerater.generate(EGeneratePrefix.InnerOrder
-            .getCode());
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.InnerOrder.getCode());
         data.setPayGroup(payGroup);
         data.setPayType(payType);
         innerOrderDAO.addPayGroup(data);
         return payGroup;
     }
-    
+
+    @Override
+    public void paySuccess(InnerOrder data) {
+        innerOrderDAO.paySuccess(data);
+    }
+
+    @Override
+    public List<InnerOrder> queryInnerOrderPage(int start, int pageSize,
+            InnerOrder condition) {
+
+        return innerOrderDAO.selectInnerOrderPage(start, pageSize, condition);
+    }
+
 }

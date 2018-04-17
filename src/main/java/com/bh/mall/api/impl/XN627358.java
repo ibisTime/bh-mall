@@ -27,6 +27,7 @@ public class XN627358 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         User condition = new User();
+        condition.setUserId(req.getUserId());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
@@ -37,7 +38,7 @@ public class XN627358 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return userAO.getUserHaveReferee(start, limit, req.getUserId());
+        return userAO.getUserLog(start, limit, condition);
     }
 
     @Override

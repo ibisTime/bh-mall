@@ -22,10 +22,8 @@ public class XN627555 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Product condition = new Product();
-        condition.setStatus(req.getStatus());
         condition.setName(req.getName());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
-        condition.setUserId(req.getUserId());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IProductAO.DEFAULT_ORDER_COLUMN;
@@ -33,13 +31,14 @@ public class XN627555 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         condition.setOrder(column, req.getOrderDir());
-        return productAO.selectProductPageByFront(start, limit, condition);
+        return productAO.selectProductByFrontPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627555Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater.validateNumber(req.getStart(), req.getLimit(),
+            req.getLevel());
     }
 
 }

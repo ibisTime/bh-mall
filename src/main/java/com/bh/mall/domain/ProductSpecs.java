@@ -41,13 +41,8 @@ public class ProductSpecs extends ABaseDO {
     // 规格价格
     private List<ProductSpecsPrice> priceList;
 
-    public List<ProductSpecsPrice> getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(List<ProductSpecsPrice> priceList) {
-        this.priceList = priceList;
-    }
+    // 规格价格
+    private ProductSpecsPrice price;
 
     public String getCode() {
         return code;
@@ -111,6 +106,22 @@ public class ProductSpecs extends ABaseDO {
 
     public void setWeight(Double weight) {
         this.weight = weight;
+    }
+
+    public List<ProductSpecsPrice> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(List<ProductSpecsPrice> priceList) {
+        this.priceList = priceList;
+    }
+
+    public ProductSpecsPrice getPrice() {
+        return price;
+    }
+
+    public void setPrice(ProductSpecsPrice price) {
+        this.price = price;
     }
 
 }

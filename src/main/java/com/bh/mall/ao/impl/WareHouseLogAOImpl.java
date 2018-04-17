@@ -22,7 +22,7 @@ public class WareHouseLogAOImpl implements IWareHouseLogAO {
             WareHouseLog condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return wareHouseLogBO.getPaginable(start, limit, condition);
@@ -32,7 +32,7 @@ public class WareHouseLogAOImpl implements IWareHouseLogAO {
     public List<WareHouseLog> queryWareHouseLogList(WareHouseLog condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         return wareHouseLogBO.queryWareHouseLogList(condition);

@@ -97,4 +97,11 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
 
     }
 
+    @Override
+    public List<Order> selectOrderPage(int pageNO, int pageSize,
+            Order condition) {
+        return super.selectList(NAMESPACE.concat("select_order"), pageNO,
+            pageSize, condition, Order.class);
+    }
+
 }

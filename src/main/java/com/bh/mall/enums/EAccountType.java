@@ -10,11 +10,12 @@ import java.util.Map;
  */
 public enum EAccountType {
     Business("B", "B端账号"), Partner("PA", "合伙人账号"), Customer("C", "C端账号"), Plat(
-            "P", "平台账号"), JMS("JMS", "加盟商"),
+            "P", "平台账号"), JMS("JMS", "加盟商"), AllAccount("P,B", "B端和P端"),
 
     // 健康e购
-    JKEG_OPERATOR("operator", "市/区运营商"), JKEG_O2O("o2o", "o2o商家"), JKEG_SUPPLIER(
-            "supplier", "供应商"), JKEG_MINGSU("mingsu", "民宿主");
+    JKEG_OPERATOR("operator", "市/区运营商"), JKEG_O2O("o2o",
+            "o2o商家"), JKEG_SUPPLIER("supplier",
+                    "供应商"), JKEG_MINGSU("mingsu", "民宿主");
 
     public static Map<String, EAccountType> getAccountTypeResultMap() {
         Map<String, EAccountType> map = new HashMap<String, EAccountType>();

@@ -49,6 +49,8 @@ public class ProductLog extends ABaseDO {
 
     private Date endDatetime;
 
+    private String productName;
+
     public String getCode() {
         return code;
     }
@@ -135,6 +137,14 @@ public class ProductLog extends ABaseDO {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
 }

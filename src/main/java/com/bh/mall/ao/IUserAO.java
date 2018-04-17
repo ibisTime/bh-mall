@@ -8,6 +8,7 @@ import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.res.XN627262Res;
+import com.bh.mall.dto.res.XN627263Res;
 import com.bh.mall.dto.res.XN627302Res;
 
 /**
@@ -107,8 +108,8 @@ public interface IUserAO {
             String payPdf, String teamName);
 
     // 审核升级申请
-    public void approveUpgrade(String userId, String approver, String remark,
-            String result);
+    public XN627263Res approveUpgrade(String userId, String approver,
+            String remark, String result);
 
     // 我的下级
     public Paginable<User> queryLowUser(int start, int limit, User condition);
@@ -128,7 +129,9 @@ public interface IUserAO {
     public Paginable<User> queryIntentionAgentPage(int start, int limit,
             User condition);
 
-    // 韩代理轨迹
-    public User getUserHaveReferee(int start, int limit, String userId);
+    // 代理轨迹
+    public User getUserLog(int start, int limit, User condition);
+
+    public User getUserName(String userReferee);
 
 }

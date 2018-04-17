@@ -17,8 +17,6 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
     public InnerOrder getInnerOrder(String code);
 
-    public void payOrder(InnerOrder data);
-
     public void deliverInnerProduct(InnerOrder data);
 
     public void cancelInnerOrder(InnerOrder data);
@@ -32,5 +30,10 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
     public InnerOrder getInnerOrderByPayGroup(String payGroup);
 
     public String addPayGroup(InnerOrder data, String payType);
+
+    public void paySuccess(InnerOrder data);
+
+    public List<InnerOrder> queryInnerOrderPage(int start, int pageSize,
+            InnerOrder condition);
 
 }

@@ -41,6 +41,17 @@ public class Agent extends ABaseDO {
     // 备注
     private String remark;
 
+    // ***************db*************
+    private Integer lowLevel;
+
+    public Integer getLowLevel() {
+        return lowLevel;
+    }
+
+    public void setLowLevel(Integer lowLevel) {
+        this.lowLevel = lowLevel;
+    }
+
     public String getName() {
         return name;
     }

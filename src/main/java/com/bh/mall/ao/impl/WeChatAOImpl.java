@@ -10,6 +10,7 @@ package com.bh.mall.ao.impl;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdom2.JDOMException;
@@ -28,6 +29,7 @@ import com.bh.mall.bo.IWeChatBO;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.CompanyChannel;
 import com.bh.mall.domain.User;
@@ -37,6 +39,7 @@ import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
+import com.bh.mall.http.PostSimulater;
 import com.bh.mall.util.HttpsUtil;
 import com.bh.mall.util.wechat.TokenResponse;
 import com.bh.mall.util.wechat.WXOrderQuery;
@@ -98,8 +101,9 @@ public class WeChatAOImpl implements IWeChatAO {
             companyCode, systemCode, EChannelType.WeChat_H5.getCode());
 
         // 获取微信公众号支付prepayid
+        long amount = transAmount / 100;
         String prepayId = weChatBO.getPrepayIdH5(companyChannel, openId,
-            bizNote, chargeOrderCode, transAmount, SysConstant.IP, backUrl);
+            bizNote, chargeOrderCode, amount, SysConstant.IP, backUrl);
         // 返回微信APP支付所需信息
         return weChatBO.getPayInfoH5(companyChannel, chargeOrderCode, prepayId);
     }
@@ -135,11 +139,11 @@ public class WeChatAOImpl implements IWeChatAO {
                     EBizType.getBizTypeMap().get(order.getBizType()),
                     order.getBizNote(), order.getAmount());
                 // 托管账户加钱
-                accountBO.changeAmount(ESystemCode.BH.getCode(),
-                    EChannelType.getEChannelType(order.getChannelType()),
-                    wechatOrderNo, order.getPayGroup(), order.getRefNo(),
-                    EBizType.getBizTypeMap().get(order.getBizType()),
-                    order.getBizNote(), order.getAmount());
+                // accountBO.changeAmount(ESysUser.SYS_USER_BH.getCode(),
+                // EChannelType.getEChannelType(order.getChannelType()),
+                // wechatOrderNo, order.getPayGroup(), order.getRefNo(),
+                // EBizType.getBizTypeMap().get(order.getBizType()),
+                // order.getBizNote(), order.getAmount());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);
@@ -210,22 +214,22 @@ public class WeChatAOImpl implements IWeChatAO {
         return false;
     }
 
-    // @Override
-    // public void doBizCallback(CallbackResult callbackResult) {
-    // try {
-    // Properties formProperties = new Properties();
-    // formProperties.put("isSuccess", callbackResult.isSuccess());
-    // formProperties.put("systemCode", callbackResult.getSystemCode());
-    // formProperties.put("companyCode", callbackResult.getCompanyCode());
-    // formProperties.put("payGroup", callbackResult.getPayGroup());
-    // formProperties.put("payCode", callbackResult.getJourCode());
-    // formProperties.put("bizType", callbackResult.getBizType());
-    // formProperties.put("transAmount", callbackResult.getTransAmount());
-    // PostSimulater.requestPostForm(callbackResult.getUrl(),
-    // formProperties);
-    // } catch (Exception e) {
-    // throw new BizException("xn000000", "回调业务biz异常");
-    // }
-    // }
+    @Override
+    public void doBizCallback(CallbackResult callbackResult) {
+        try {
+            Properties formProperties = new Properties();
+            formProperties.put("isSuccess", callbackResult.isSuccess());
+            formProperties.put("systemCode", callbackResult.getSystemCode());
+            formProperties.put("companyCode", callbackResult.getCompanyCode());
+            formProperties.put("payGroup", callbackResult.getPayGroup());
+            formProperties.put("payCode", callbackResult.getJourCode());
+            formProperties.put("bizType", callbackResult.getBizType());
+            formProperties.put("transAmount", callbackResult.getTransAmount());
+            PostSimulater.requestPostForm(callbackResult.getUrl(),
+                formProperties);
+        } catch (Exception e) {
+            throw new BizException("xn000000", "回调业务biz异常");
+        }
+    }
 
 }

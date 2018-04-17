@@ -3,17 +3,20 @@ package com.bh.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IChangeProductAO;
 import com.bh.mall.bo.IChangeProductBO;
 import com.bh.mall.bo.IProductBO;
+import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseLogBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
@@ -31,7 +34,9 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -57,6 +62,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
     @Autowired
     private IProductSpecsPriceBO productSpecsPriceBO;
+
+    @Autowired
+    private IProductLogBO productLogBO;
 
     @Override
     public String addChangeProduct(XN627790Req req) {
@@ -147,11 +155,21 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         if (condition.getApplyStartDatetime() != null
                 && condition.getApplyEndDatetime() != null
                 && condition.getApplyStartDatetime()
-                    .before(condition.getApplyEndDatetime())) {
+                    .after(condition.getApplyEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        return changeProductBO.getPaginable(start, limit, condition);
+        long totalCount = changeProductBO.getTotalCount(condition);
+        Page<ChangeProduct> page = new Page<>(start, limit, totalCount);
+        List<ChangeProduct> list = changeProductBO.queryChangeProductPage(
+            page.getStart(), page.getPageSize(), condition);
+
+        for (ChangeProduct changeProduct : list) {
+            String approveName = this.getName(changeProduct.getApprover());
+            changeProduct.setApproveName(approveName);
+        }
+        page.setList(list);
+        return page;
     }
 
     @Override
@@ -159,15 +177,26 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         if (condition.getApplyStartDatetime() != null
                 && condition.getApplyEndDatetime() != null
                 && condition.getApplyStartDatetime()
-                    .before(condition.getApplyEndDatetime())) {
+                    .after(condition.getApplyEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        return changeProductBO.queryChangeProductList(condition);
+        List<ChangeProduct> list = changeProductBO
+            .queryChangeProductList(condition);
+
+        for (ChangeProduct changeProduct : list) {
+            String approveName = this.getName(changeProduct.getApprover());
+            changeProduct.setApproveName(approveName);
+        }
+
+        return list;
     }
 
     @Override
     public ChangeProduct getChangeProduct(String code) {
-        return changeProductBO.getChangeProduct(code);
+        ChangeProduct data = changeProductBO.getChangeProduct(code);
+        String approveName = this.getName(data.getApprover());
+        data.setApproveName(approveName);
+        return data;
     }
 
     @Override
@@ -179,6 +208,10 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             .equals(data.getStatus())) {
             throw new BizException("xn0000", "该置换单已经审核完成,无需修改换货价");
         }
+        if (StringValidater.toLong(changePrice) == 0) {
+            throw new BizException("xn000", "该产品的换货价不能等于0");
+        }
+
         int canChangeQuantity = (int) (data.getAmount()
                 / StringValidater.toLong(changePrice));
         WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
@@ -213,13 +246,21 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         if (EBoolean.YES.getCode().equals(result)) {
             status = EChangeProductStatus.THROUGH_YES.getCode();
             Product pData = productBO.getProduct(data.getProductCode());
-
+            Product changeData = productBO
+                .getProduct(data.getChangeProductCode());
             ProductSpecs psData = productSpecsBO
                 .getProductSpecs(data.getProductSpecsCode());
 
             int quantity = data.getQuantity() * psData.getNumber();
             pData.setRealNumber(pData.getRealNumber() - quantity);
             productBO.refreshRepertory(pData);
+
+            productLogBO.saveChangeProductLog(pData,
+                EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
+                quantity, approver);
+            productLogBO.saveChangeProductLog(changeData,
+                EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
+                -quantity, approver);
 
             // 云仓新增产品
             WareHouse whData = wareHouseBO.getWareHouseByProductSpec(approver,
@@ -268,5 +309,22 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         data.setApproveNote(approveNote);
         data.setStatus(status);
         changeProductBO.approveChange(data);
+    }
+
+    private String getName(String user) {
+
+        if (StringUtils.isBlank(user)) {
+            return null;
+        }
+        String name = null;
+        User data = userBO.getUserNoCheck(user);
+        if (data != null) {
+            name = data.getRealName();
+            if (EUserKind.Plat.getCode().equals(data.getKind())
+                    && StringUtils.isBlank(data.getRealName())) {
+                name = data.getLoginName();
+            }
+        }
+        return name;
     }
 }

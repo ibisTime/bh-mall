@@ -12,6 +12,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOrderDAO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -111,6 +112,30 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         Order data = new Order();
         data.setPayCode(payGroup);
         data.setPayType(payType);
+        orderDAO.addPayGroup(data);
+        return payGroup;
+    }
+
+    @Override
+    public Order getInnerOrderByPayGroup(String payGroup) {
+        Order data = null;
+        if (StringUtils.isNotBlank(payGroup)) {
+            Order condition = new Order();
+            condition.setPayGroup(payGroup);
+            data = orderDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "订单不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public String paySuccess(Order data) {
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.InnerOrder.getCode());
+        data.setPayGroup(payGroup);
+        data.setPayType(EBoolean.YES.getCode());
         orderDAO.addPayGroup(data);
         return payGroup;
     }

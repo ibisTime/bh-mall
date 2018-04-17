@@ -5,7 +5,7 @@
 	<resultMap id="product_DB_Result" type="product">
 		<result column="code" property="code"/>
 		<result column="name" property="name"/>
-		<result column="adPrice" property="ad_price"/>
+		<result column="ad_price" property="adPrice"/>
 		<result column="price" property="price"/>
 		
 		<result column="vir_number" property="virNumber"/>
@@ -39,6 +39,8 @@
 		</trim>
 	</sql>
 	
+	
+	
 	<select id="select_product" parameterType="product" resultMap="product_DB_Result">
 		SELECT 
 		t.code
@@ -70,42 +72,10 @@
 		</trim>
 	</select>
 	
-	<select id="select_front" parameterType="product" resultMap="product_DB_Result">
-		SELECT 
-		t.code
-		,t.name
-		,t.ad_price
-		,t.price
-		,t.vir_number
-		
-		,t.real_number
-		,t.order_no
-		,t.pic
-		,t.adv_pic
-		,t.slogan
-		
-		,t.is_total
-		,t.status
-		,t.create_datetime
-		,t.updater
-		,t.update_datetime
-		
-		,t.remark
-		FROM tbh_product t,tbh_product_specs ps,tbh_product_specs_price psp WHERE
-		t.code = ps.product_code AND ps.code = psp.product_specs_code AND psp.level = #{level}
-		<include refid="where_condition"/>
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				${order}
-			</if>
-		</trim>
-	</select>
-	
 	<select id="select_product_count" parameterType="product" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_product t
 		<include refid="where_condition"/>
 	</select>
-	
 	<insert id="insert_product" parameterType="product">
 		INSERT INTO tbh_product(
 		code

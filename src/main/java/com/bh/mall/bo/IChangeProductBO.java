@@ -21,4 +21,7 @@ public interface IChangeProductBO extends IPaginableBO<ChangeProduct> {
 
     public void approveChange(ChangeProduct data);
 
+    public List<ChangeProduct> queryChangeProductPage(int start, int pageSize,
+            ChangeProduct condition);
+
 }

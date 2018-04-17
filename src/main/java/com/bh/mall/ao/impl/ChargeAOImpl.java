@@ -20,11 +20,12 @@ import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 
 @Service
 public class ChargeAOImpl implements IChargeAO {
+
     @Autowired
     private IAccountBO accountBO;
 
@@ -58,8 +59,8 @@ public class ChargeAOImpl implements IChargeAO {
     public void payOrder(String code, String payUser, String payResult,
             String payNote) {
         Charge data = chargeBO.getCharge(code);
-        if (!EChargeStatus.toPay.getCode().equals(data.getStatus())) {
-            throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
+        if (!EChargeStatus.TO_Cancel.getCode().equals(data.getStatus())) {
+            throw new BizException("xn000000", "该充值单不是待审核状态");
         }
         if (EBoolean.YES.getCode().equals(payResult)) {
             payOrderYES(data, payUser, payNote);
@@ -76,15 +77,13 @@ public class ChargeAOImpl implements IChargeAO {
         chargeBO.payOrder(data, true, payUser, payNote);
         Account account = accountBO.getAccount(data.getAccountNumber());
         // 账户加钱
-        accountBO
-            .changeAmount(data.getAccountNumber(), EChannelType.Offline, null,
-                null, data.getCode(), EBizType.getBizType(data.getBizType()),
-                EBizType.getBizType(data.getBizType()).getValue(),
-                data.getAmount());
-        if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())
-                || ECurrency.MK_CNY.getCode().equals(account.getCurrency())) {
+        accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
+            null, null, data.getCode(), EBizType.getBizType(data.getBizType()),
+            EBizType.getBizType(data.getBizType()).getValue(),
+            data.getAmount());
+        if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())) {
             // 托管账户加钱
-            accountBO.changeAmount(ESystemCode.BH.getCode(),
+            accountBO.changeAmount(ESysUser.SYS_USER_BH.getCode(),
                 EChannelType.Offline, null, null, data.getCode(),
                 EBizType.getBizType(data.getBizType()),
                 EBizType.getBizType(data.getBizType()).getValue(),
@@ -142,7 +141,8 @@ public class ChargeAOImpl implements IChargeAO {
             User user = userBO.getCheckUser(charge.getApplyUser());
             charge.setUser(user);
         }
-        if (!"admin".equals(charge.getPayUser()) && charge.getPayUser() != null) {
+        if (!"admin".equals(charge.getPayUser())
+                && charge.getPayUser() != null) {
             User payUser = userBO.getCheckUser(charge.getPayUser());
             charge.setPayUser(payUser.getLoginName());
         }

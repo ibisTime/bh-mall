@@ -36,6 +36,8 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		
+		<result column="real_name" property="realName" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -45,8 +47,11 @@
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
+			<if test="applyName != null and applyName != '' ">
+				AND t.apply_user = #{applyName}
+			</if>
 			<if test="teamName != null and teamName != '' ">
-				AND t.team_name = #{teamName}
+				AND t.team_name like  "%"${teamName}"%"
 			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
@@ -212,21 +217,21 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="pay_order" parameterType="innerOrder">
-		UPDATE tbh_inner_order
-		SET
-		pay_code = #{payCode}
-		,pay_type = #{payType}
-		,status = #{status}
-		,pay_amount=#{payAmount}
-		WHERE code = #{code}
-	</update>
-	
 	<update id="add_payGroup" parameterType="innerOrder">
 		UPDATE tbh_inner_order
 		SET
 		pay_group = #{payGroup}
-		pay_type = #{payType}
+		,pay_type = #{payType}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="pay_success" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		status = #{status}
+		,pay_code = #{payCode}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>
 	

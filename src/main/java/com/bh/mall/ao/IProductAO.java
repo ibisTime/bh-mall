@@ -29,8 +29,9 @@ public interface IProductAO {
 
     void editRepertory(XN627545Req req);
 
-    Paginable<Product> selectProductPageByFront(int start, int limit,
+    void putOnProduct(XN627543Req req);
+
+    Paginable<Product> selectProductByFrontPage(int start, int limit,
             Product condition);
 
-    void putOnProduct(XN627543Req req);
 }

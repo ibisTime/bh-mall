@@ -148,6 +148,16 @@ public class Order extends ABaseDO {
 
     private String keyword;
 
+    private String realName;
+
+    private String approveName;
+
+    private String deliveName;
+
+    private String updateName;
+
+    private String toUserName;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -514,6 +524,46 @@ public class Order extends ABaseDO {
 
     public void setStatusForQuery(String statusForQuery) {
         this.statusForQuery = statusForQuery;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
+    }
+
+    public String getDeliveName() {
+        return deliveName;
+    }
+
+    public void setDeliveName(String deliveName) {
+        this.deliveName = deliveName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
     }
 
 }

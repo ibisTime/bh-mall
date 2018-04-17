@@ -61,10 +61,10 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     }
 
     @Override
-    public List<Product> selectProductPageByFront(Product condition, int start,
+    public List<Product> selectProductPage(Product condition, int start,
             int limit) {
-        return super.selectList(NAMESPACE.concat("select_front"), start, limit,
-            condition, Product.class);
+        return super.selectList(NAMESPACE.concat("select_product"), start,
+            limit, condition, Product.class);
     }
 
 }

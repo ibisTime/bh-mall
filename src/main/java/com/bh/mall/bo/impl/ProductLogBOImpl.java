@@ -76,24 +76,22 @@ public class ProductLogBOImpl extends PaginableBOImpl<ProductLog>
 
     @Override
     public void saveChangeLog(Product data, String type, Integer realNumber,
-            String changeNumber, String updater) {
+            Integer changeNumber, String updater) {
         ProductLog plData = new ProductLog();
         String plCode = OrderNoGenerater
             .generate(EGeneratePrefix.ProductLog.getCode());
         plData.setCode(plCode);
         plData.setType(type);
         plData.setProductCode(data.getCode());
-        plData.setTranCount(StringValidater.toInteger(changeNumber));
+        plData.setTranCount(changeNumber);
         if (EProductLogType.Input.getCode().equals(type)) {
-            plData.setPreCount(
-                data.getRealNumber() + StringValidater.toInteger(changeNumber));
+            plData.setPreCount(data.getRealNumber() + changeNumber);
             plData.setPostCount(data.getRealNumber());
         } else {
-            plData.setPreCount(
-                data.getRealNumber() - StringValidater.toInteger(changeNumber));
-
+            plData.setPreCount(data.getRealNumber() - changeNumber);
+            plData.setPostCount(data.getRealNumber());
         }
-        plData.setPostCount(data.getRealNumber());
+
         plData.setUpdater(updater);
         plData.setUpdateDatetime(new Date());
         productLogDAO.insert(plData);
@@ -101,9 +99,22 @@ public class ProductLogBOImpl extends PaginableBOImpl<ProductLog>
     }
 
     @Override
-    public String getProductLog(ProductLog data) {
-        // TODO Auto-generated method stub
-        return null;
+    public void saveChangeProductLog(Product data, String type,
+            Integer realNumber, Integer changeNumber, String approver) {
+        ProductLog plData = new ProductLog();
+        String plCode = OrderNoGenerater
+            .generate(EGeneratePrefix.ProductLog.getCode());
+        plData.setCode(plCode);
+        plData.setType(type);
+        plData.setProductCode(data.getCode());
+        plData.setTranCount(changeNumber);
+        plData.setPreCount(data.getRealNumber() + changeNumber);
+        plData.setPostCount(data.getRealNumber());
+
+        plData.setUpdater(approver);
+        plData.setUpdateDatetime(new Date());
+        productLogDAO.insert(plData);
+
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.SYSRole;
+import com.bh.mall.dto.req.XN627040Req;
 
 /**
  * @author: Gejin 
@@ -13,7 +14,7 @@ import com.bh.mall.domain.SYSRole;
 public interface ISYSRoleAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addSYSRole(SYSRole data);
+    public String addSYSRole(XN627040Req req);
 
     public boolean dropSYSRole(String roleCode);
 

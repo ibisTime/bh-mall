@@ -78,10 +78,4 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         return productDAO.selectTotalCount(condition);
     }
 
-    @Override
-    public List<Product> selectProductPageByFront(Product condition, int start,
-            int limit) {
-        return productDAO.selectProductPageByFront(condition, start, limit);
-    }
-
 }

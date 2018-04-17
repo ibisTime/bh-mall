@@ -23,9 +23,6 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     long selectTotalCount(Product condition);
 
-    List<Product> selectProductPageByFront(Product condition, int start,
-            int pageSize);
-
     void putOnProduct(Product data);
 
 }

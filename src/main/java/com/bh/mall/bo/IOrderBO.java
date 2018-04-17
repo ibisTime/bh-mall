@@ -38,4 +38,8 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public String addPayGroup(Order order, String code);
 
+    public Order getInnerOrderByPayGroup(String payGroup);
+
+    public String paySuccess(Order data);
+
 }

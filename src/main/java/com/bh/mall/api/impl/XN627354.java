@@ -4,14 +4,13 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IAgencyLogAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.User;
-import com.bh.mall.dto.req.XN627353Req;
-import com.bh.mall.enums.EUserKind;
+import com.bh.mall.domain.AgencyLog;
+import com.bh.mall.dto.req.XN627354Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -24,17 +23,18 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627354 extends AProcessor {
 
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private IAgencyLogAO agencyLogAO = SpringContextHolder
+        .getBean(IAgencyLogAO.class);
 
-    private XN627353Req req = null;
+    private XN627354Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        User condition = new User();
+        AgencyLog condition = new AgencyLog();
         condition.setKeyWord(req.getKeyword());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
+        condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         condition.setStatus(req.getStatus());
-        condition.setKind(EUserKind.Merchant.getCode());
         Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
         Date applyDatetimeEnd = DateUtil.strToDate(req.getDateEnd(),
@@ -44,19 +44,19 @@ public class XN627354 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IUserAO.DEFAULT_ORDER_COLUMN;
+            column = IAgencyLogAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return userAO.queryIntentionAgentPage(start, limit, condition);
+        return agencyLogAO.queryAgencyLogPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627353Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627354Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 

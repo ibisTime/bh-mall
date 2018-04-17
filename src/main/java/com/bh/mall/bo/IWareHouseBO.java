@@ -14,7 +14,7 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
 
     public List<WareHouse> queryWareHouseList(WareHouse condition);
 
-    public WareHouse getWareHouse(String userId);
+    public WareHouse getWareHouse(String code);
 
     public WareHouse getWareHouseByProductSpec(String userId,
             String productSpecsCode);
@@ -33,5 +33,7 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
             EBizType bizType, String bizNote, String refNo);
 
     public void refreshLogCode(WareHouse whData);
+
+    public WareHouse getWareHouseByUser(String userId);
 
 }

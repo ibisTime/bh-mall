@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -13,24 +11,25 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627460Req {
 
     // 针对账号（必填）
-    @NotBlank
+    @NotBlank(message = "针对账号不能为空")
     private String accountNumber;
 
     // 类型（必填）0_充值，1_扣款
     private String type;
 
     // 充值金额（必填）
-    @NotNull
+    @NotBlank(message = "充值金额不能为空")
     private String chargeAmount;
 
     // 申请人（必填）
-    @NotBlank
+    @NotBlank(message = "申请人不能为空")
     private String applyUser;
 
     // 申请说明（选填）
     private String applyNote;
 
     // 打款pdf
+    @NotBlank(message = "打款pdf不能为空")
     private String chargePdf;
 
     public String getAccountNumber() {

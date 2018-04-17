@@ -16,14 +16,8 @@ public class XN627555Req extends APageReq {
     // （选填）名称
     private String name;
 
-    // （选填）用户ID
-    private String userId;
-
-    // （选填） 用户等级
+    // （必填） 用户等级
     private String level;
-
-    // （选填）规格状态
-    private String status;
 
     public String getName() {
         return name;
@@ -33,28 +27,12 @@ public class XN627555Req extends APageReq {
         this.name = name;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getLevel() {
         return level;
     }
 
     public void setLevel(String level) {
         this.level = level;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
 }

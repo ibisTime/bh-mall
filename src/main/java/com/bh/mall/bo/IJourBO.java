@@ -31,4 +31,7 @@ public interface IJourBO extends IPaginableBO<Jour> {
 
     public Long getTotalAmount(String bizType, String accountNumber);
 
+    public List<Jour> queryJourByAccountPage(int pageNO, int pageSize,
+            Jour condition);
+
 }

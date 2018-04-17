@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
@@ -40,6 +41,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Autowired
     private IUserDAO userDAO;
+
+    @Autowired
+    private IAgencyLogBO agencyLogBO;
 
     @Override
     public User doGetUserByOpenId(String h5OpenId, String companyCode,
@@ -99,11 +103,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
-            String photo, String companyCode, String systemCode) {
+            String photo, String status, String companyCode,
+            String systemCode) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
-
+        /////
         user.setUnionId(unionId);
         user.setH5OpenId(h5OpenId);
         user.setAppOpenId(appOpenId);
@@ -115,12 +120,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         user.setNickname(nickname);
         user.setPhoto(photo);
-        user.setStatus(EUserStatus.NORMAL.getCode());
+        user.setStatus(status);
         Date date = new Date();
         user.setCreateDatetime(date);
 
         user.setCompanyCode(companyCode);
         user.setSystemCode(systemCode);
+        String logCode = agencyLogBO.acceptIntention(user);
+        user.setLastAgentLog(logCode);
         userDAO.insert(user);
         return userId;
     }
@@ -198,6 +205,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
         }
         return data;
+    }
+
+    @Override
+    public User getUserNoCheck(String userId) {
+        User condition = new User();
+        condition.setUserId(userId);
+        return userDAO.select(condition);
     }
 
     @Override
@@ -630,6 +644,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void applyIntent(User data) {
         userDAO.applyIntent(data);
+    }
+
+    @Override
+    public User getUserName(String userId) {
+        User condition = new User();
+        condition.setUserId(userId);
+        return userDAO.select(condition);
     }
 
 }

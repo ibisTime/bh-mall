@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -12,8 +13,10 @@ import com.bh.mall.bo.ISYSMenuRoleBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.User;
+import com.bh.mall.dto.req.XN627040Req;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -29,13 +32,18 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
     ISYSMenuRoleBO sysMenuRoleBO;
 
     @Override
-    public String addSYSRole(SYSRole data) {
-        if (data != null) {
-            sysRoleBO.saveSYSRole(data);
-        } else {
-            throw new BizException("lh4000", "角色编号已经存在！");
-        }
-        return data.getCode();
+    public String addSYSRole(XN627040Req req) {
+        String code = OrderNoGenerater.generate("SYSR");
+        SYSRole data = new SYSRole();
+        data.setCode(code);
+        data.setName(req.getName());
+        data.setLevel(req.getLevel());
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+        data.setSystemCode(req.getSystemCode());
+        sysRoleBO.saveSYSRole(data);
+        return code;
     }
 
     @Override

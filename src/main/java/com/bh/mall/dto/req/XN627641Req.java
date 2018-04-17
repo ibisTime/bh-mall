@@ -25,30 +25,6 @@ public class XN627641Req {
     @NotBlank(message = "订单归属人不能为空")
     private String toUser;
 
-    // （必填）收件人
-    @NotBlank(message = "收件人不能为空")
-    private String signer;
-
-    // （必填）收件人电话
-    @NotBlank(message = "收件人电话不能为空")
-    private String mobile;
-
-    // （必填）收货地址
-    @NotBlank(message = "收货地址不能为空")
-    private String address;
-
-    // （必填）区
-    @NotBlank(message = "区不能为空")
-    private String area;
-
-    // （必填）市
-    @NotBlank(message = "市不能为空")
-    private String city;
-
-    // （必填）省
-    @NotBlank(message = "省不能为空")
-    private String province;
-
     // 是否送货到家
     @NotBlank(message = "是否送货到家")
     private String isSendHome;
@@ -56,6 +32,24 @@ public class XN627641Req {
     // 数量
     @NotBlank(message = "数量不能为空")
     private String quantity;
+
+    // （选填）收件人
+    private String signer;
+
+    // （选填）收件人电话
+    private String mobile;
+
+    // （选填）收货地址
+    private String address;
+
+    // （选填）区
+    private String area;
+
+    // （选填）市
+    private String city;
+
+    // （选填）省
+    private String province;
 
     public String getQuantity() {
         return quantity;

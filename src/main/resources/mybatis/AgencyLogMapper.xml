@@ -37,6 +37,12 @@
 				AND t.type = #{type}
 			</if>
 			<choose>
+				<when test="status == '3,4'">
+					AND  (t.status = '3' or t.status = '4')
+				</when>
+				<when test="status == '11,14,15'">
+					AND  (t.status = '11'  or t.status = '14' or t.status = '15' )
+				</when>
 				<when test="status == '6,8,12' ">
 					AND t.status = '6' OR t.status = '8' OR t.status = '12'
 				</when>
@@ -46,9 +52,37 @@
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
 				</when>
+				<otherwise>
+					AND 1=1
+				</otherwise>
 			</choose>
+			
+			<if test="keyWord != null and keyWord != ''">
+				AND u.wx_id LIKE "%${keyWord}%" OR u.real_name LIKE "%${keyWord}%" OR t.team_name LIKE "%${keyWord}%"
+			</if>
+			
+			<if test="level != null and level != '' ">
+				AND u.level = #{level}
+			</if>
+			<if test="applyLevel != null and applyLevel != '' ">
+				AND t.apply_level = #{applyLevel}
+			</if>
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
+			
+			<if test="approveDatetimeStart != null and approveDatetimeStart != '' ">
+				<![CDATA[AND t.approve_datetime >= #{approveDatetimeStart}]]>
+			</if>
+			<if test="approveDatetimeEnd != null and approveDatetimeEnd != '' ">
+				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_agencyLog" parameterType="agencyLog" resultMap="agencyLog_DB_Result">
 		SELECT
 		t.code
@@ -67,7 +101,7 @@
 		,t.approve_datetime
 		,t.remark
 		FROM
-		tbh_agency_log t
+		tbh_agency_log t LEFT JOIN tbh_user u ON t.apply_user = u.user_id   
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -78,7 +112,7 @@
 
 	<select id="select_agencyLog_count" parameterType="agencyLog"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_agency_log t
+		SELECT count(1) FROM tbh_agency_log t LEFT JOIN tbh_user u ON t.apply_user = u.user_id   
 		<include refid="where_condition" />
 	</select>
 

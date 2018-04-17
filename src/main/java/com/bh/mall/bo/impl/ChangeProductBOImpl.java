@@ -72,4 +72,11 @@ public class ChangeProductBOImpl extends PaginableBOImpl<ChangeProduct>
     public void approveChange(ChangeProduct data) {
         changeProductDAO.approveChange(data);
     }
+
+    @Override
+    public List<ChangeProduct> queryChangeProductPage(int start, int pageSize,
+            ChangeProduct condition) {
+        return changeProductDAO.queryChangeProductPage(start, pageSize,
+            condition);
+    }
 }

@@ -29,8 +29,8 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         for (XN627548Req req : awardList) {
             EAwardType.getAwardTypeMap().get(req.getType());
             Award data = new Award();
-            String aCode = OrderNoGenerater.generate(EGeneratePrefix.Award
-                .getCode());
+            String aCode = OrderNoGenerater
+                .generate(EGeneratePrefix.Award.getCode());
             data.setCode(aCode);
             data.setProductCode(code);
             data.setType(req.getType());
@@ -58,6 +58,9 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     public void refreshAwardList(List<XN627548Req> list) {
         for (XN627548Req req : list) {
             EAwardType.getAwardTypeMap().get(req.getType());
+            if (StringUtils.isBlank(req.getCode())) {
+                throw new BizException("xn000", "编号不能为空");
+            }
             Award data = this.getAward(req.getCode());
             data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setValue1(StringValidater.toDouble(req.getValue1()));
@@ -92,7 +95,8 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     }
 
     @Override
-    public Award getAwardByType(Integer level, String productCode, String type) {
+    public Award getAwardByType(Integer level, String productCode,
+            String type) {
         Award data = null;
         if (level != 0 && StringUtils.isNotBlank(productCode)) {
             Award condition = new Award();
@@ -105,10 +109,12 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     }
 
     @Override
-    public List<Award> queryAwardList(String type, String productCode) {
+    public List<Award> queryAwardList(String type, String productCode,
+            Integer level) {
         Award condition = new Award();
         condition.setType(type);
         condition.setProductCode(productCode);
+        condition.setLevel(level);
         return awardDAO.selectList(condition);
     }
 

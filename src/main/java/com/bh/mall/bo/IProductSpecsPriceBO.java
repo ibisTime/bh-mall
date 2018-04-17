@@ -19,9 +19,6 @@ public interface IProductSpecsPriceBO extends IPaginableBO<ProductSpecsPrice> {
     public List<ProductSpecsPrice> queryProductSpecsPriceList(
             ProductSpecsPrice pspConditon);
 
-    public List<ProductSpecsPrice> queryProductSpecsPriceList(
-            String productSpecsCode);
-
     public ProductSpecsPrice getProductSpecsPrice(String code);
 
     public ProductSpecsPrice getPriceBySpecsCode(String spcesCode);

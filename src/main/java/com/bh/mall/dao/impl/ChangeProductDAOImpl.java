@@ -57,4 +57,11 @@ public class ChangeProductDAOImpl extends AMybatisTemplate
         super.update(NAMESPACE.concat("approve_change"), data);
     }
 
+    @Override
+    public List<ChangeProduct> queryChangeProductPage(int start, int pageSize,
+            ChangeProduct condition) {
+        return super.selectList(NAMESPACE.concat("select_changeProduct"), start,
+            pageSize, condition, ChangeProduct.class);
+    }
+
 }

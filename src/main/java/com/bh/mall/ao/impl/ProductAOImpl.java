@@ -14,8 +14,6 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
-import com.bh.mall.bo.IUserBO;
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -24,7 +22,6 @@ import com.bh.mall.domain.Award;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
-import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
@@ -54,9 +51,6 @@ public class ProductAOImpl implements IProductAO {
     @Autowired
     private IAwardBO awardBO;
 
-    @Autowired
-    private IUserBO userBO;
-
     @Override
     public String addProduct(XN627540Req req) {
 
@@ -81,7 +75,7 @@ public class ProductAOImpl implements IProductAO {
         data.setUpdateDatetime(new Date());
         productBO.saveProduct(data);
 
-        productSpecsBO.saveProductSpecs(code, req.getSpecList());
+        productSpecsBO.saveProductSpecsList(code, req.getSpecList());
         productLogBO.saveProductLog(code, req.getUpdater(),
             req.getRealNumber());
         awardBO.saveAward(code, req.getAwardList());
@@ -108,18 +102,28 @@ public class ProductAOImpl implements IProductAO {
         data.setUpdateDatetime(new Date());
         productBO.refreshProduct(data);
 
-        // 是否新加了规格以及规格价格
         List<XN627546Req> psList = req.getSpecList();
+
+        ProductSpecs psCondition = new ProductSpecs();
+        psCondition.setProductCode(data.getCode());
+        List<ProductSpecs> dbPsList = productSpecsBO
+            .queryProductSpecsList(psCondition);
+
+        for (ProductSpecs productSpecs : dbPsList) {
+            if (psList.contains(productSpecs)) {
+                productSpecsBO.removeProductSpecs(productSpecs.getCode());
+            }
+        }
+
         for (XN627546Req psReq : psList) {
             ProductSpecs psData = productSpecsBO
                 .getProductSpecs(psReq.getCode());
+            // 是否新增
             if (psData == null) {
-                productSpecsBO.saveProductSpecs(data.getCode(),
-                    req.getSpecList());
-            } else {
-                productSpecsBO.refreshProductSpecs(req.getSpecList());
+                productSpecsBO.saveProductSpecs(data.getCode(), psReq);
             }
         }
+
         awardBO.refreshAwardList(req.getAwardList());
 
     }
@@ -127,21 +131,31 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Product getProduct(String code) {
         Product data = productBO.getProduct(code);
+        ProductSpecs psCondition = new ProductSpecs();
+        psCondition.setProductCode(data.getCode());
+
         List<ProductSpecs> psList = productSpecsBO
-            .queryProductSpecsList(data.getCode());
+            .queryProductSpecsList(psCondition);
         // 推荐奖励
-        List<Award> directAwardList = awardBO
-            .queryAwardList(EAwardType.DirectAward.getCode(), code);
+        Award aCondition = new Award();
+        aCondition.setType(EAwardType.DirectAward.getCode());
+        aCondition.setProductCode(data.getCode());
+        List<Award> directAwardList = awardBO.queryAwardList(aCondition);
 
         // 出货奖励
-        List<Award> sendAwardList = awardBO
-            .queryAwardList(EAwardType.SendAward.getCode(), code);
+        aCondition.setType(EAwardType.SendAward.getCode());
+        List<Award> sendAwardList = awardBO.queryAwardList(aCondition);
         data.setDirectAwardList(directAwardList);
         data.setSendAwardList(sendAwardList);
         if (CollectionUtils.isNotEmpty(psList)) {
             for (ProductSpecs productSpecs : psList) {
+
+                ProductSpecsPrice pspCondition = new ProductSpecsPrice();
+                pspCondition.setProductSpecsCode(productSpecs.getCode());
+
                 List<ProductSpecsPrice> pspList = productSpecsPriceBO
-                    .queryProductSpecsPriceList(productSpecs.getCode());
+                    .queryProductSpecsPriceList(pspCondition);
+
                 if (CollectionUtils.isNotEmpty(pspList)) {
                     productSpecs.setPriceList(pspList);
                 }
@@ -174,6 +188,7 @@ public class ProductAOImpl implements IProductAO {
         data.setIsFree(req.getIsFree());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
+        data.setStatus(EProductStatus.Shelf_YES.getCode());
         productBO.putOnProduct(data);
     }
 
@@ -220,7 +235,9 @@ public class ProductAOImpl implements IProductAO {
         // 修改库存记录
         if (EProductNumberType.Real.getCode().equals(req.getType())) {
             productLogBO.saveChangeLog(data, req.getType(),
-                data.getRealNumber(), req.getRealNumber(), req.getUpdater());
+                data.getRealNumber(),
+                StringValidater.toInteger(req.getRealNumber()),
+                req.getUpdater());
         }
 
     }
@@ -228,27 +245,115 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Paginable<Product> selectProductPage(int start, int limit,
             Product condition) {
-        return productBO.getPaginable(start, limit, condition);
+
+        Paginable<Product> page = productBO.getPaginable(start, limit,
+            condition);
+        List<Product> list = page.getList();
+        for (Product product : list) {
+
+            ProductSpecs psCondition = new ProductSpecs();
+            psCondition.setProductCode(product.getCode());
+
+            List<ProductSpecs> psList = productSpecsBO
+                .queryProductSpecsList(psCondition);
+            // 推荐奖励
+            Award aCondition = new Award();
+            aCondition.setType(EAwardType.DirectAward.getCode());
+            aCondition.setProductCode(product.getCode());
+            List<Award> directAwardList = awardBO.queryAwardList(aCondition);
+
+            // 出货奖励
+            aCondition.setType(EAwardType.SendAward.getCode());
+            List<Award> sendAwardList = awardBO.queryAwardList(aCondition);
+            product.setDirectAwardList(directAwardList);
+            product.setSendAwardList(sendAwardList);
+
+            if (CollectionUtils.isNotEmpty(psList)) {
+                for (ProductSpecs productSpecs : psList) {
+
+                    ProductSpecsPrice pspCondition = new ProductSpecsPrice();
+                    pspCondition.setProductSpecsCode(productSpecs.getCode());
+
+                    List<ProductSpecsPrice> pspList = productSpecsPriceBO
+                        .queryProductSpecsPriceList(pspCondition);
+                    if (CollectionUtils.isNotEmpty(pspList)) {
+                        productSpecs.setPriceList(pspList);
+                    }
+                }
+                product.setSpecsList(psList);
+            }
+        }
+        return page;
     }
 
     @Override
     public List<Product> selectProductList(Product condition) {
-        return productBO.selectProductList(condition);
+        List<Product> list = productBO.selectProductList(condition);
+        for (Product product : list) {
+
+            ProductSpecs psCondition = new ProductSpecs();
+            psCondition.setProductCode(product.getCode());
+
+            List<ProductSpecs> psList = productSpecsBO
+                .queryProductSpecsList(psCondition);
+            // 推荐奖励
+            Award aCondition = new Award();
+            aCondition.setType(EAwardType.DirectAward.getCode());
+            aCondition.setProductCode(product.getCode());
+            List<Award> directAwardList = awardBO.queryAwardList(aCondition);
+
+            // 出货奖励
+            aCondition.setType(EAwardType.SendAward.getCode());
+            List<Award> sendAwardList = awardBO.queryAwardList(aCondition);
+            product.setDirectAwardList(directAwardList);
+            product.setSendAwardList(sendAwardList);
+
+            if (CollectionUtils.isNotEmpty(psList)) {
+                for (ProductSpecs productSpecs : psList) {
+
+                    ProductSpecsPrice pspCondition = new ProductSpecsPrice();
+                    pspCondition.setProductSpecsCode(productSpecs.getCode());
+                    pspCondition.setLevel(condition.getLevel());
+                    List<ProductSpecsPrice> pspList = productSpecsPriceBO
+                        .queryProductSpecsPriceList(pspCondition);
+                    if (CollectionUtils.isNotEmpty(pspList)) {
+                        productSpecs.setPriceList(pspList);
+                    }
+                }
+                product.setSpecsList(psList);
+            }
+        }
+        return list;
     }
 
     @Override
-    public Paginable<Product> selectProductPageByFront(int start, int limit,
+    public Paginable<Product> selectProductByFrontPage(int start, int limit,
             Product condition) {
-        if (StringUtils.isNotBlank(condition.getUserId())) {
-            User data = userBO.getUser(condition.getUserId());
-            condition.setLevel(data.getLevel());
-        }
 
-        long count = productBO.selectTotalCount(condition);
-        Paginable<Product> page = new Page<Product>(start, limit, count);
-        List<Product> list = productBO.selectProductPageByFront(condition,
-            page.getStart(), page.getPageSize());
-        page.setList(list);
+        Paginable<Product> page = productBO.getPaginable(start, limit,
+            condition);
+        List<Product> list = page.getList();
+        for (Product product : list) {
+            ProductSpecs psCondition = new ProductSpecs();
+            psCondition.setProductCode(product.getCode());
+            List<ProductSpecs> psList = productSpecsBO
+                .queryProductSpecsList(psCondition);
+
+            if (CollectionUtils.isNotEmpty(psList)) {
+                for (ProductSpecs productSpecs : psList) {
+
+                    ProductSpecsPrice pspCondition = new ProductSpecsPrice();
+                    pspCondition.setProductSpecsCode(productSpecs.getCode());
+                    pspCondition.setLevel(condition.getLevel());
+                    List<ProductSpecsPrice> pspList = productSpecsPriceBO
+                        .queryProductSpecsPriceList(pspCondition);
+                    if (CollectionUtils.isNotEmpty(pspList)) {
+                        productSpecs.setPriceList(pspList);
+                    }
+                }
+                product.setSpecsList(psList);
+            }
+        }
         return page;
     }
 

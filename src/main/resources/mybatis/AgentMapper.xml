@@ -21,6 +21,9 @@
 			<if test="level != null and level !=''">
 				AND t.level = #{level}
 			</if>
+			<if test="lowLevel != null and lowLevel !=''">
+				<![CDATA[AND t.level > #{lowLevel}]]>
+			</if>
 		</trim>
 	</sql>
 	

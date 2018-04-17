@@ -9,6 +9,7 @@ import com.bh.mall.ao.IWareHouseAO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 
 @Service
@@ -36,17 +37,33 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Override
     public Paginable<WareHouse> queryWareHousePage(int start, int limit,
             WareHouse condition) {
-        return wareHouseBO.getPaginable(start, limit, condition);
+        Paginable<WareHouse> page = wareHouseBO.getPaginable(start, limit,
+            condition);
+        List<WareHouse> list = page.getList();
+        for (WareHouse wareHouse : list) {
+            User user = userBO.getUser(wareHouse.getUserId());
+            wareHouse.setUser(user);
+        }
+        page.setList(list);
+        return page;
     }
 
     @Override
     public List<WareHouse> queryWareHouseList(WareHouse condition) {
-        return wareHouseBO.queryWareHouseList(condition);
+        List<WareHouse> list = wareHouseBO.queryWareHouseList(condition);
+        for (WareHouse wareHouse : list) {
+            User user = userBO.getUser(wareHouse.getUserId());
+            wareHouse.setUser(user);
+        }
+        return list;
     }
 
     @Override
     public WareHouse getWareHouse(String code) {
-        return wareHouseBO.getWareHouse(code);
+        WareHouse data = wareHouseBO.getWareHouse(code);
+        User user = userBO.getUser(data.getUserId());
+        data.setUser(user);
+        return data;
     }
 
     @Override
@@ -54,5 +71,11 @@ public class WareHouseAOImpl implements IWareHouseAO {
             WareHouse condition) {
         userBO.getCheckUser(condition.getUserId());
         return wareHouseBO.getPaginable(start, limit, condition);
+    }
+
+    @Override
+    public WareHouse getWareHouseByUser(String userId) {
+
+        return wareHouseBO.getWareHouseByUser(userId);
     }
 }

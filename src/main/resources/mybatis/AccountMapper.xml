@@ -30,6 +30,9 @@
 			     <when test='type == "NOT_P"'>
 				 	AND t.type not in('P')
 				 </when>
+				  <when test='type == "P,B"'>
+				 	AND t.type IN ('P','B')
+				 </when>
 				 <otherwise>
 					<if test="type != null and type != '' ">
 						AND t.type = #{type}

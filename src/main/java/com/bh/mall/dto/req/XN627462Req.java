@@ -18,14 +18,15 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627462Req {
 
     // 发起人(必填)
-    @NotBlank
+    @NotBlank(message = "不能为空")
     private String applyUser;
 
     // 充值账户(必填)
-    @NotBlank
+    @NotBlank(message = "不能为空")
     private String accountNumber;
 
     // 支付资金(必填)
+    @NotBlank(message = "不能为空")
     private String amount;
 
     // 线上充值渠道

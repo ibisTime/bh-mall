@@ -16,6 +16,7 @@ import com.bh.mall.bo.IAwardBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
+import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
@@ -42,6 +43,7 @@ import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
 import com.bh.mall.dto.req.XN627645Req;
+import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EAwardType;
 import com.bh.mall.enums.EBizType;
@@ -51,8 +53,8 @@ import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
-import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductIsTotal;
+import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductSpecsType;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EProductYunFei;
@@ -102,6 +104,9 @@ public class OrderAOImpl implements IOrderAO {
 
     @Autowired
     private IWeChatAO weChatAO;
+
+    @Autowired
+    private IProductLogBO productLogBO;
 
     // C端下单
     @Override
@@ -162,14 +167,16 @@ public class OrderAOImpl implements IOrderAO {
             order.setStatus(EOrderStatus.Unpaid.getCode());
             order.setIsSendHome(req.getIsSendHome());
             orderBO.saveOrder(order);
-            // 删除购物车记录，修改产品数量
+            // 删除购物车记录
             cartBO.removeCart(cart);
             User user = userBO.getUser(req.getToUser());
+
             WareHouse whData = wareHouseBO
                 .getWareHouseByProductSpec(user.getUserId(), psData.getCode());
 
             wareHouseBO.changeWareHouse(whData.getCode(), cart.getQuantity(),
                 EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), code);
+            // 修改产品数量
             productBO.refreshRepertory(pData);
         }
     }
@@ -283,9 +290,12 @@ public class OrderAOImpl implements IOrderAO {
             if (quantity > pData.getRealNumber()) {
                 throw new BizException("xn0000", "产品库存不足");
             }
-
+            // 修改产品库存记录
+            productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
+                pData.getRealNumber(), quantity, null);
             pData.setRealNumber(pData.getRealNumber() - quantity);
             productBO.refreshRepertory(pData);
+
             WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
                 user.getUserId(), req.getProductSpecsCode());
 
@@ -306,10 +316,10 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
-    public Object payOrder(String payCode, String payGroup, String payType) {
-        String[] group = payGroup.split(",");
-        StringBuffer result = new StringBuffer();
-        if (StringUtils.isNotBlank(payGroup)) {
+    public Object payOrder(String codeList, String payType) {
+        Object result = null;
+        if (StringUtils.isNotBlank(codeList)) {
+            String[] group = codeList.split(",");
             for (String code : group) {
                 Order data = orderBO.getOrder(code);
                 if (!EOrderStatus.Paid.getCode().equals(data.getStatus())) {
@@ -322,27 +332,26 @@ public class OrderAOImpl implements IOrderAO {
 
                 if (EUserKind.Customer.getCode().equals(uData.getKind())) {
                     Object payResult = this.payWXH5(data);
-                    result.append(payResult);
+                    result = payResult;
 
                 } else if (EBoolean.NO.getCode().equals(payType)) {
+                    User toUser = userBO.getUser(data.getToUser());
+                    String toUserId = toUser.getUserId();
+                    if (isOne(toUser.getLevel())) {
+                        toUserId = ESysUser.SYS_USER_BH.getCode();
+                    }
+
                     accountBO.transAmountCZB(data.getApplyUser(),
-                        ECurrency.MK_CNY.getCode(), ESystemCode.BH.getCode(),
+                        ECurrency.MK_CNY.getCode(), toUserId,
                         ECurrency.MK_CNY.getCode(), data.getAmount(),
                         EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
                         EBizType.AJ_GMYC.getValue(), data.getCode());
-                    result.append(true);
+                    result = new BooleanRes(true);
                 } else if (EBoolean.YES.getCode().equals(payType)) {
                     Object payResult = this.payWXH5(data);
-                    result.append(payResult);
+                    result = payResult;
                 }
 
-                data.setPayCode(payCode);
-                data.setPayGroup(code);
-                data.setPayType(EPayType.RMB_YE.getCode());
-                data.setPayDatetime(new Date());
-                data.setPayAmount(data.getAmount());
-                data.setStatus(EOrderStatus.Paid.getCode());
-                orderBO.payOrder(data);
                 // 进价
                 User toUser = userBO.getUser(data.getToUser());
                 ProductSpecsPrice inPrice = productSpecsPriceBO.getPriceByLevel(
@@ -375,6 +384,16 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
+    public void paySuccess(String payCode, String payGroup, Long amount) {
+        Order data = orderBO.getInnerOrderByPayGroup(payGroup);
+        data.setPayDatetime(new Date());
+        data.setPayCode(payCode);
+        data.setPayAmount(amount);
+        data.setStatus(EInnerOrderStatus.Paid.getCode());
+        orderBO.paySuccess(data);
+    }
+
+    @Override
     public void dropOrder(String code) {
     }
 
@@ -383,36 +402,63 @@ public class OrderAOImpl implements IOrderAO {
             Order condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        return orderBO.getPaginable(start, limit, condition);
+        Paginable<Order> page = orderBO.getPaginable(start, limit, condition);
+        List<Order> list = page.getList();
+        for (Order order : list) {
+            String approveUser = this.getName(order.getApprover());
+            order.setApproveName(approveUser);
+            String deliveName = this.getName(order.getDeliver());
+            order.setDeliveName(deliveName);
+            String updateName = this.getName(order.getUpdater());
+            order.setUpdater(updateName);
+            String toUserName = this.getName(order.getToUser());
+            order.setToUserName(toUserName);
+        }
+        page.setList(list);
+        return page;
     }
 
     @Override
     public List<Order> queryOrderList(Order condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
-                    .getStartDatetime().before(condition.getEndDatetime())) {
+                    .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        String[] statusList = condition.getStatus().split(",");
-        if (statusList.length > 1) {
-            condition.setStatusList(condition.getStatus());
+        List<Order> list = orderBO.queryOrderList(condition);
+        for (Order order : list) {
+            String approveUser = this.getName(order.getApprover());
+            order.setApproveName(approveUser);
+            String deliveName = this.getName(order.getDeliver());
+            order.setDeliveName(deliveName);
+            String updateName = this.getName(order.getUpdater());
+            order.setUpdater(updateName);
         }
-        return orderBO.queryOrderList(condition);
+        return list;
     }
 
     @Override
     public Order getOrder(String code) {
-
-        return orderBO.getOrder(code);
+        Order order = orderBO.getOrder(code);
+        String approveUser = this.getName(order.getApprover());
+        order.setApproveName(approveUser);
+        String deliveName = this.getName(order.getDeliver());
+        order.setDeliveName(deliveName);
+        String updateName = this.getName(order.getUpdater());
+        order.setUpdater(updateName);
+        return order;
     }
 
     @Override
     public void editOrder(XN627643Req req) {
         Order data = orderBO.getOrder(req.getCode());
+        if (EBoolean.NO.getCode().equals(data.getIsSendHome())) {
+            throw new BizException("xn0000", "该订单是代理购买的存仓产品,地址无法修改");
+        }
         if (EOrderStatus.TO_Deliver.getCode().equals(data.getStatus())
                 || EOrderStatus.Received.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已发货");
@@ -439,7 +485,7 @@ public class OrderAOImpl implements IOrderAO {
         if (isOne(user.getLevel())) {
             Account aData = accountBO.getSysAccountNumber(
                 ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
-                ECurrency.YC_CNY);
+                ECurrency.YJ_CNY);
             fromUser = aData.getUserId();
         }
         // 出货奖励,且产品计入出货
@@ -633,4 +679,23 @@ public class OrderAOImpl implements IOrderAO {
         return flag;
     }
 
+    private String getName(String user) {
+
+        if (StringUtils.isBlank(user)) {
+            return null;
+        }
+        if ("admin".equals(user)) {
+            return user;
+        }
+        String name = null;
+        User data = userBO.getUserNoCheck(user);
+        if (data != null) {
+            name = data.getRealName();
+            if (EUserKind.Plat.getCode().equals(data.getKind())
+                    && StringUtils.isBlank(data.getRealName())) {
+                name = data.getLoginName();
+            }
+        }
+        return name;
+    }
 }

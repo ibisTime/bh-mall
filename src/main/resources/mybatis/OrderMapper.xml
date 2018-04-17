@@ -52,6 +52,7 @@
 		
 		<result column="approve_note" property="approveNote" />
 		<result column="remark" property="remark" />
+		<result column="real_name" property="realName" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -78,18 +79,12 @@
 				<when test="statusList == '1,2,5' ">
 					AND t.status IN (1,2,5)
 				</when>
-				<when test="statusList == '1' ">
-					AND t.status = '1'
-				</when>
-				<when test="statusList == '2' ">
-					AND t.status = '2'
-				</when>
-				<when test="statusList == '5' ">
-					AND t.status = '5'
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
 				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
-				AND t.product_name like "%"#{keyword}"%" or u.real_name like "%"#{keyword}"%" u.team_name like "%"#{keyword}"%" 
+				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" u.team_name like "%"${keyword}"%" 
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
@@ -153,8 +148,9 @@
 		
 		,t.approve_note
 		,t.remark
+		,u.real_name
 		FROM
-		tbh_order t, tbh_user u
+		tbh_order t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

@@ -16,11 +16,12 @@ public interface IProductLogBO extends IPaginableBO<ProductLog> {
 
     public ProductLog getProductLog(String code);
 
-    public String getProductLog(ProductLog data);
-
     public void saveProductLog(String code, String updater, String virNumber);
 
     public void saveChangeLog(Product data, String type, Integer realNumber,
-            String changeNumber, String updater);
+            Integer changeNumber, String updater);
+
+    public void saveChangeProductLog(Product pData, String code,
+            Integer realNumber, Integer quantity, String approver);
 
 }

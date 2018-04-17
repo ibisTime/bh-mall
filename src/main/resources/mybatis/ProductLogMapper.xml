@@ -13,6 +13,8 @@
 		<result column="updater" property="updater"/>
 		<result column="update_datetime" property="updateDatetime"/>
 		<result column="remark" property="remark"/>
+		
+		<result column="name" property="productName" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -47,7 +49,8 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
-		FROM tbh_product_log t
+		,p.name
+		FROM tbh_product_log t LEFT JOIN tbh_product p ON t.product_code = p.code
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

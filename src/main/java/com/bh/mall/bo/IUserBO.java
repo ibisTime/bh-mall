@@ -43,7 +43,7 @@ public interface IUserBO extends IPaginableBO<User> {
     // 前端用户注册
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
-            String photo, String companyCode, String systemCode);
+            String photo, String status, String systemCode, String companyCode);
 
     public String doRegister(String wxId, String level, String realName,
             String province, String city, String area, String address,
@@ -158,5 +158,9 @@ public interface IUserBO extends IPaginableBO<User> {
     public void acceptIntention(User data);
 
     public void applyIntent(User data);
+
+    User getUserNoCheck(String userId);
+
+    public User getUserName(String userReferee);
 
 }

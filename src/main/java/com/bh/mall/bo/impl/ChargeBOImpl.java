@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
@@ -24,14 +25,17 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Autowired
     private IChargeDAO chargeDAO;
 
+    @Autowired
+    private IAccountBO accountBO;
+
     @Override
     public String applyOrderOffline(Account account, EBizType bizType,
             Long amount, String applyUser, String applyNote, String chargePdf) {
         if (amount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Charge.getCode());
         Charge data = new Charge();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
@@ -47,7 +51,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             data.setBizNote(applyNote);
         }
 
-        data.setStatus(EChargeStatus.toPay.getCode());
+        data.setStatus(EChargeStatus.TO_Cancel.getCode());
         data.setApplyUser(applyUser);
         data.setApplyDatetime(new Date());
         data.setChannelType(EChannelType.Offline.getCode());
@@ -63,8 +67,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         if (transAmount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Charge.getCode());
         Charge data = new Charge();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
@@ -103,7 +107,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Override
     public void callBackChange(Charge dbCharge, boolean booleanFlag) {
         if (booleanFlag) {
-            dbCharge.setStatus(EChargeStatus.Pay_YES.getCode());
+
         } else {
             dbCharge.setStatus(EChargeStatus.Pay_NO.getCode());
         }

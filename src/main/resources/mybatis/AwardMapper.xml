@@ -11,7 +11,9 @@
 		
 		<result column="value2" property="value2" />
 		<result column="value3" property="value3" />
+		<result column="name" property ="productName" ></result>
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -28,6 +30,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_award" parameterType="award" resultMap="award_DB_Result">
 		SELECT
 		t.code
@@ -38,7 +41,8 @@
 		,t.value2
 		
 		,t.value3
-		FROM tbh_award t
+		,p.name
+		FROM tbh_award t LEFT JOIN tbh_product p ON t.product_code = p.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

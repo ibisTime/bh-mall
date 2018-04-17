@@ -24,6 +24,7 @@
 		<result column="pay_note" property="payNote" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="channel_type" property="channelType" />
+		
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -100,7 +101,7 @@
 		,t.pay_datetime
 		,t.channel_type
 		FROM
-		tbh_charge t
+		tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

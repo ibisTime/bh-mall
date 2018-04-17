@@ -13,14 +13,16 @@ public class XN627005Req extends APageReq {
      */
     private static final long serialVersionUID = -3263503860757346138L;
 
-
     // 等级 （选填）
     private String level;
+
+    // 低于自己等级的等级（寻爱他那）
+    private String lowLevel;
 
     // 等级 （选填）
     private String name;
 
-   public String getLevel() {
+    public String getLevel() {
         return level;
     }
 
@@ -35,6 +37,13 @@ public class XN627005Req extends APageReq {
     public void setName(String name) {
         this.name = name;
     }
-  
+
+    public String getLowLevel() {
+        return lowLevel;
+    }
+
+    public void setLowLevel(String lowLevel) {
+        this.lowLevel = lowLevel;
+    }
 
 }

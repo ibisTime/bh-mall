@@ -49,7 +49,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
             }
         }
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
-            throw new BizException("xn000000", "新增流水流水分组不能为空");
+            throw new BizException("xn000000", "新增流关联编号不能为空");
         }
         if (transAmount == 0) {
             throw new BizException("xn000000", "新增流水变动金额不能为0");
@@ -135,4 +135,11 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         long a = jourDAO.selectTotalAmount(jour);
         return Math.abs(a);
     }
+
+    @Override
+    public List<Jour> queryJourByAccountPage(int pageNO, int pageSize,
+            Jour condition) {
+        return jourDAO.selectJourByAccountPage(pageNO, pageSize, condition);
+    }
+
 }

@@ -37,6 +37,10 @@ public class Award extends ABaseDO {
     // 次推荐奖励
     private Double value3;
 
+    // *******************db*****************
+
+    private String productName;
+
     public String getCode() {
         return code;
     }
@@ -91,6 +95,14 @@ public class Award extends ABaseDO {
 
     public void setValue3(Double value3) {
         this.value3 = value3;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
 }

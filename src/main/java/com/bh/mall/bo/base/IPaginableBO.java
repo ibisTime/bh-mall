@@ -25,11 +25,11 @@ public interface IPaginableBO<T extends ABaseDO> {
     /**
      * 获取分页结果
      * 
-     * @param start
-     * @param pageSize
      * @param condition
+     * @param pageSize
+     * @param start
      * @return
-     */
+    */
     public Paginable<T> getPaginable(int start, int pageSize, T condition);
 
 }

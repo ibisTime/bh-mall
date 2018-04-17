@@ -1,12 +1,12 @@
 package com.bh.mall.dao;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.IBaseDAO;
 import com.bh.mall.domain.InnerOrder;
 
 public interface IInnerOrderDAO extends IBaseDAO<InnerOrder> {
     String NAMESPACE = IInnerOrderDAO.class.getName().concat(".");
-
-    void payOrder(InnerOrder data);
 
     void update(InnerOrder data);
 
@@ -17,4 +17,9 @@ public interface IInnerOrderDAO extends IBaseDAO<InnerOrder> {
     void updateStatus(InnerOrder data);
 
     void addPayGroup(InnerOrder data);
+
+    void paySuccess(InnerOrder data);
+
+    List<InnerOrder> selectInnerOrderPage(int start, int pageSize,
+            InnerOrder condition);
 }

@@ -1,5 +1,7 @@
 package com.bh.mall.dao;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.IBaseDAO;
 import com.bh.mall.domain.Jour;
 
@@ -30,4 +32,7 @@ public interface IJourDAO extends IBaseDAO<Jour> {
     public int adjustJour(Jour data);
 
     public long selectTotalAmount(Jour data);
+
+    public List<Jour> selectJourByAccountPage(int pageNO, int pageSize,
+            Jour condition);
 }

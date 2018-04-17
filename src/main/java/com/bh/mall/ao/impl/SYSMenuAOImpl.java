@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,7 @@ import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.SYSMenu;
-import com.bh.mall.domain.SYSMenuRole;
-import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627050Req;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -51,19 +47,9 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
         data.setRemark(req.getRemark());
         data.setSystemCode(req.getSystemCode());
         sysMenuBO.saveSYSMenu(data);
-        List<User> userList = userBO.queryUserList(null,
-            EUserKind.Plat.getCode(), req.getSystemCode());
-        for (User user : userList) {
-            SYSMenuRole sysMenuRole = new SYSMenuRole();
-            sysMenuRole.setMenuCode(code);
-            sysMenuRole.setRoleCode(user.getUserId());
-            sysMenuRole.setUpdater(data.getUpdater());
-            sysMenuRole.setUpdateDatetime(new Date());
-            sysMenuRole.setRemark(data.getRemark());
-            sysMenuRole.setSystemCode(data.getSystemCode());
-            sysMenuRoleBO.saveSYSMenuRole(sysMenuRole);
-        }
+
         return code;
+
     }
 
     @Override

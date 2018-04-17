@@ -93,6 +93,8 @@ public class ChangeProduct extends ABaseDO {
 
     private String keyword;
 
+    private String approveName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -299,6 +301,14 @@ public class ChangeProduct extends ABaseDO {
 
     public void setApplyEndDatetime(Date applyEndDatetime) {
         this.applyEndDatetime = applyEndDatetime;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
     }
 
 }

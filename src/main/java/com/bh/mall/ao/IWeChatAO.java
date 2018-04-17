@@ -8,6 +8,7 @@
  */
 package com.bh.mall.ao;
 
+import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.dto.res.XN627462Res;
 
 /** 
@@ -25,6 +26,6 @@ public interface IWeChatAO {
 
     public String getAccessToken(String appId, String appSecret);
 
-    // public void doBizCallback(CallbackResult callbackResult);
+    public void doBizCallback(CallbackResult callbackResult);
 
 }

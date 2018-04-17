@@ -216,6 +216,8 @@ public class User extends ABaseDO {
     // 上级代理
     private Integer highLevel;
 
+    private User highUser;
+
     // 申请时间起(选填)
     private Date applyDatetimeStart;
 
@@ -223,6 +225,13 @@ public class User extends ABaseDO {
     private Date applyDatetimeEnd;
 
     private String keyWord;
+
+    // 介绍人姓名
+    private String introduceName;
+
+    private String manageName;
+
+    private Long impowerAmount;
 
     public String getUserId() {
         return userId;
@@ -254,6 +263,14 @@ public class User extends ABaseDO {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public Long getImpowerAmount() {
+        return impowerAmount;
+    }
+
+    public void setImpowerAmount(Long impowerAmount) {
+        this.impowerAmount = impowerAmount;
     }
 
     public String getMobile() {
@@ -722,6 +739,30 @@ public class User extends ABaseDO {
 
     public void setHighLevel(Integer highLevel) {
         this.highLevel = highLevel;
+    }
+
+    public User getHighUser() {
+        return highUser;
+    }
+
+    public void setHighUser(User highUser) {
+        this.highUser = highUser;
+    }
+
+    public String getIntroduceName() {
+        return introduceName;
+    }
+
+    public void setIntroduceName(String introduceName) {
+        this.introduceName = introduceName;
+    }
+
+    public String getManageName() {
+        return manageName;
+    }
+
+    public void setManageName(String manageName) {
+        this.manageName = manageName;
     }
 
 }

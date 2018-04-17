@@ -27,6 +27,12 @@ public class Cart extends ABaseDO {
     // 数量
     private Integer quantity;
 
+    // 价格
+    private Long price;
+
+    // ***********************db****************
+    private String productName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -65,6 +71,22 @@ public class Cart extends ABaseDO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
 }

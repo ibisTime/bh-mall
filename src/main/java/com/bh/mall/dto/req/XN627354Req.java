@@ -15,6 +15,9 @@ public class XN627354Req extends APageReq {
     // （选填）等级
     private String level;
 
+    // （选填）申请等级
+    private String applyLevel;
+
     // 状态（选填）
     private String status;
 
@@ -47,6 +50,14 @@ public class XN627354Req extends APageReq {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getApplyLevel() {
+        return applyLevel;
+    }
+
+    public void setApplyLevel(String applyLevel) {
+        this.applyLevel = applyLevel;
     }
 
 }

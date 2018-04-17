@@ -22,6 +22,7 @@ public interface IAwardBO extends IPaginableBO<Award> {
 
     public Award getAwardByType(Integer level, String productCode, String type);
 
-    public List<Award> queryAwardList(String type, String productCode);
+    public List<Award> queryAwardList(String type, String productCode,
+            Integer level);
 
 }

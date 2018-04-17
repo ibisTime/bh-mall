@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bh.mall.ao.IInnerOrderAO;
+import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.enums.EBizType;
 
 /**
@@ -27,6 +28,9 @@ public class CallbackBzdhConroller {
 
     @Autowired
     IInnerOrderAO innerOrderAO;
+
+    @Autowired
+    IOrderAO orderAO;
 
     // 自身支付回调
     @RequestMapping("/bzdh/callback")
@@ -46,12 +50,16 @@ public class CallbackBzdhConroller {
             // 处理业务开始
             // ------------------------------
             try {
-                if (EBizType.AJ_GMCP.getCode().equals(bizType)) {
+                if (EBizType.AJ_GMNP.getCode().equals(bizType)) {
                     System.out.println("**** 进入内购产品售卖，服务器回调 start****");
                     innerOrderAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入内购产品购买售卖，服务器回调 end****");
                 } else if (EBizType.AJ_MKCZ.getCode().equals(bizType)) {
 
+                } else if (EBizType.AJ_GMCP.getCode().equals(bizType)) {
+                    System.out.println("**** 进入产品售卖，服务器回调 start****");
+                    orderAO.paySuccess(payGroup, payCode, amount);
+                    System.out.println("**** 进入产品购买售卖，服务器回调 end****");
                 }
             } catch (Exception e) {
                 logger.info("支付回调异常,原因：" + e.getMessage());
