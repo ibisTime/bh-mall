@@ -84,6 +84,8 @@ public class Charge extends ABaseDO {
     // 用户信息
     private User user;
 
+    private String highUserId;
+
     public String getCode() {
         return code;
     }
@@ -162,6 +164,14 @@ public class Charge extends ABaseDO {
 
     public void setApplyDatetime(Date applyDatetime) {
         this.applyDatetime = applyDatetime;
+    }
+
+    public String getHighUserId() {
+        return highUserId;
+    }
+
+    public void setHighUserId(String highUserId) {
+        this.highUserId = highUserId;
     }
 
     public String getPayUser() {

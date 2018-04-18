@@ -153,7 +153,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         return weChatAO.getPrepayIdH5(user.getUserId(),
             ESystemCode.BH.getCode(), payGroup, order.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            PropertiesUtil.Config.WECHAT_H5_BACKURL);
+            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL);
     }
 
     @Override

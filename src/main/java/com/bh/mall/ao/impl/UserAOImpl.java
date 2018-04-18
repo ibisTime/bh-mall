@@ -926,7 +926,7 @@ public class UserAOImpl implements IUserAO {
 
             // 需要公司授权
             if (EBoolean.YES.getCode().equals(aiData.getIsCompanyImpower())
-                    && EUser.ADMIN.getCode().equals(approver)) {
+                    && !EUser.ADMIN.getCode().equals(approver)) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
                 status = EUserStatus.NORMAL.getCode();
@@ -941,7 +941,7 @@ public class UserAOImpl implements IUserAO {
                 String fromUser = null;
                 if (EUser.ADMIN.getCode().equals(approver)) {
                     fromUser = ESysUser.SYS_USER_BH.getCode();
-                    highUserId = null;
+                    highUserId = EUser.ADMIN.getCode();
                 } else {
                     User approveUser = userBO.getUser(approver);
                     fromUser = approveUser.getUserId();
@@ -1145,7 +1145,6 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public Paginable<User> queryLowUser(int start, int limit, User condition) {
-
         return userBO.getPaginable(start, limit, condition);
     }
 

@@ -76,8 +76,12 @@
 			<if test="channelType != null and channelType != '' ">
 				AND t.channel_type = #{channelType}
 			</if>
+			<if test="highUserId != null and highUserId != '' ">
+				AND u.high_user_id = #{highUserId}
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_charge" parameterType="charge" resultMap="charge_DB_Result">
 		SELECT
 		t.code
@@ -111,7 +115,7 @@
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_charge t
+		SELECT count(1) FROM tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user
 		<include refid="where_condition" />
 	</select>
 	

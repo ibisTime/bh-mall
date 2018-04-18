@@ -54,8 +54,6 @@ public class CallbackBzdhConroller {
                     System.out.println("**** 进入内购产品售卖，服务器回调 start****");
                     innerOrderAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入内购产品购买售卖，服务器回调 end****");
-                } else if (EBizType.AJ_MKCZ.getCode().equals(bizType)) {
-
                 } else if (EBizType.AJ_GMCP.getCode().equals(bizType)) {
                     System.out.println("**** 进入产品售卖，服务器回调 start****");
                     orderAO.paySuccess(payGroup, payCode, amount);
