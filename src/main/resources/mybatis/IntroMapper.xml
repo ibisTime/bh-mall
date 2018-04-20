@@ -15,6 +15,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_intro" parameterType="intro" resultMap="intro_DB_Result">

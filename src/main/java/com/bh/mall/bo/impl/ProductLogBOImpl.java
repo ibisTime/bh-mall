@@ -84,14 +84,8 @@ public class ProductLogBOImpl extends PaginableBOImpl<ProductLog>
         plData.setType(type);
         plData.setProductCode(data.getCode());
         plData.setTranCount(changeNumber);
-        if (EProductLogType.Input.getCode().equals(type)) {
-            plData.setPreCount(data.getRealNumber() + changeNumber);
-            plData.setPostCount(data.getRealNumber());
-        } else {
-            plData.setPreCount(data.getRealNumber() - changeNumber);
-            plData.setPostCount(data.getRealNumber());
-        }
-
+        plData.setPreCount(realNumber);
+        plData.setPostCount(realNumber + changeNumber);
         plData.setUpdater(updater);
         plData.setUpdateDatetime(new Date());
         productLogDAO.insert(plData);

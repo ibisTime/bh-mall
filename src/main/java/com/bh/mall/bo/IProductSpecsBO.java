@@ -20,4 +20,6 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
 
     void saveProductSpecsList(String code, List<XN627546Req> specList);
 
+    List<ProductSpecs> getProductSpecsByProduct(String productCode);
+
 }

@@ -653,4 +653,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userDAO.select(condition);
     }
 
+    @Override
+    public User getSysUser() {
+        User condition = new User();
+        condition.setKind(EUserKind.Plat.getCode());
+        List<User> list = userDAO.selectList(condition);
+        return list.get(0);
+    }
+
 }

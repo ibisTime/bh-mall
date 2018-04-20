@@ -146,6 +146,10 @@ public class WareHouseLogBOImpl extends PaginableBOImpl<WareHouseLog>
 
         logData.setApplyDatetime(data.getApplyDatetime());
         logData.setApplyNote(data.getApplyNote());
+        logData.setApprover(data.getApprover());
+        logData.setApproveDatetime(data.getApproveDatetime());
+
+        logData.setApproveNote(data.getApproveNote());
         logData.setAmount(dbData.getAmount());
         logData.setBizNote(bizNote);
         wareHouseLogDAO.insert(logData);

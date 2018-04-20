@@ -64,11 +64,6 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
-    public void refreshRepertory(Product data) {
-        productDAO.update(data);
-    }
-
-    @Override
     public List<Product> selectProductList(Product condition) {
         return productDAO.selectList(condition);
     }
@@ -76,6 +71,18 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     @Override
     public long selectTotalCount(Product condition) {
         return productDAO.selectTotalCount(condition);
+    }
+
+    @Override
+    public void refreshRealNumber(Product data) {
+        productDAO.updateRealNumber(data);
+
+    }
+
+    @Override
+    public void refreshVirNumber(Product data) {
+        productDAO.updateVirNumber(data);
+
     }
 
 }

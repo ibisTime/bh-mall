@@ -148,8 +148,6 @@ public class Order extends ABaseDO {
 
     private String keyword;
 
-    private String realName;
-
     private String approveName;
 
     private String deliveName;
@@ -157,6 +155,12 @@ public class Order extends ABaseDO {
     private String updateName;
 
     private String toUserName;
+
+    private Integer level;
+
+    private User user;
+
+    private Product product;
 
     public Date getStartDatetime() {
         return startDatetime;
@@ -192,6 +196,14 @@ public class Order extends ABaseDO {
 
     public void setIsCompanySend(String isCompanySend) {
         this.isCompanySend = isCompanySend;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getIsCompanySend() {
@@ -526,14 +538,6 @@ public class Order extends ABaseDO {
         this.statusForQuery = statusForQuery;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
     public String getApproveName() {
         return approveName;
     }
@@ -564,6 +568,22 @@ public class Order extends ABaseDO {
 
     public void setToUserName(String toUserName) {
         this.toUserName = toUserName;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

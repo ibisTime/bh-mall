@@ -137,9 +137,9 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
-    public List<Jour> queryJourByAccountPage(int pageNO, int pageSize,
+    public List<Jour> queryDetailPage(int pageNO, int pageSize,
             Jour condition) {
-        return jourDAO.selectJourByAccountPage(pageNO, pageSize, condition);
+        return jourDAO.selectJourDetailPage(pageNO, pageSize, condition);
     }
 
 }

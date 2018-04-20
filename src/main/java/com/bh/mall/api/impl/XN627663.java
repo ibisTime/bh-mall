@@ -4,6 +4,7 @@ import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Order;
 import com.bh.mall.dto.req.XN627663Req;
 import com.bh.mall.exception.BizException;
@@ -29,6 +30,7 @@ public class XN627663 extends AProcessor {
         condition.setKind(req.getKind());
         condition.setStatus(req.getStatus());
         condition.setProductName(req.getProductName());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(

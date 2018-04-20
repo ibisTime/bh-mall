@@ -67,9 +67,9 @@ public class JourDAOImpl extends AMybatisTemplate implements IJourDAO {
     }
 
     @Override
-    public List<Jour> selectJourByAccountPage(int pageNO, int pageSize,
+    public List<Jour> selectJourDetailPage(int pageNO, int pageSize,
             Jour condition) {
-        return super.selectList(NAMESPACE.concat("select_jour_account"), pageNO,
+        return super.selectList(NAMESPACE.concat("select_jour_detail"), pageNO,
             pageSize, condition, Jour.class);
     }
 }

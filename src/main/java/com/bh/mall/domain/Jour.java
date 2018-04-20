@@ -89,6 +89,9 @@ public class Jour extends ABaseDO {
 
     private String inAmount;
 
+    // 判断支出与收入
+    private String kind;
+
     public String getCurrency() {
         return currency;
     }
@@ -287,6 +290,14 @@ public class Jour extends ABaseDO {
 
     public void setUserInformation(User userInformation) {
         this.userInformation = userInformation;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
 }

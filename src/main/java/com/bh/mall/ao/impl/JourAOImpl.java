@@ -37,10 +37,32 @@ public class JourAOImpl implements IJourAO {
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
-        long totalCount = jourBO.getTotalCount(condition);
-        Page<Jour> page = new Page<Jour>(start, limit, totalCount);
-        List<Jour> list = jourBO.queryJourByAccountPage(page.getPageNO(),
-            page.getPageSize(), condition);
+        boolean flag = true;
+        String bizType = EBizType.AJ_JSJL.getCode();
+        if (EAwardType.DirectAward.getCode().equals(condition.getType())) {
+            flag = false;
+            bizType = EBizType.AJ_TJJL.getCode();
+        } else if (EAwardType.SendAward.getCode().equals(condition.getType())) {
+            flag = false;
+            bizType = EBizType.AJ_CHJL.getCode();
+        }
+        condition.setBizType(bizType);
+
+        long count = jourBO.getTotalCount(condition);
+        Page<Jour> page = new Page<Jour>(start, limit, count);
+        List<Jour> list = jourBO.queryJourList(condition);
+
+        // 补充关联编号的信息
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Jour jour : list) {
+                // 是否是推荐奖
+                if (flag) {
+                    jour.setUserInformation(userBO.getUser(jour.getRefNo()));
+                } else {
+                    jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
+                }
+            }
+        }
         page.setList(list);
         return page;
     }
@@ -89,14 +111,15 @@ public class JourAOImpl implements IJourAO {
     }
 
     @Override
-    public Paginable<Jour> queryDetailPage(int start, int limit, Jour condition,
-            String type) {
+    public Paginable<Jour> queryDetailPage(int start, int limit,
+            Jour condition) {
         boolean flag = true;
         String bizType = EBizType.AJ_JSJL.getCode();
-        if (EAwardType.DirectAward.getCode().equals(type)) {
+        if (EAwardType.DirectAward.getCode().equals(condition.getBizType())) {
             flag = false;
             bizType = EBizType.AJ_TJJL.getCode();
-        } else if (EAwardType.SendAward.getCode().equals(type)) {
+        } else if (EAwardType.SendAward.getCode()
+            .equals(condition.getBizType())) {
             flag = false;
             bizType = EBizType.AJ_CHJL.getCode();
         }
@@ -104,7 +127,8 @@ public class JourAOImpl implements IJourAO {
 
         long count = jourBO.getTotalCount(condition);
         Page<Jour> page = new Page<Jour>(start, limit, count);
-        List<Jour> list = jourBO.queryJourList(condition);
+        List<Jour> list = jourBO.queryDetailPage(page.getStart(),
+            page.getPageSize(), condition);
 
         // 补充关联编号的信息
         if (CollectionUtils.isNotEmpty(list)) {

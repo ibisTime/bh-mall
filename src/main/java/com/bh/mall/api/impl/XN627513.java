@@ -12,26 +12,26 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Withdraw;
-import com.bh.mall.dto.req.XN627510Req;
+import com.bh.mall.dto.req.XN627513Req;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 分页查询取现订单
+ * 分页查询取现订单（front）
  * @author: xieyj 
  * @since: 2017年5月17日 下午5:17:47 
  * @history:
  */
-public class XN627510 extends AProcessor {
+public class XN627513 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);
 
     private IAccountAO accountAO = SpringContextHolder
         .getBean(IAccountAO.class);
 
-    private XN627510Req req = null;
+    private XN627513Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -47,17 +47,8 @@ public class XN627510 extends AProcessor {
             } catch (Exception e) {
             }
         }
-        condition.setAccountNumber(req.getAccountNumber());
-        condition.setAccountName(req.getAccountName());
-        condition.setType(req.getType());
-        condition.setChannelType(req.getChannelType());
         condition.setStatus(req.getStatus());
-        condition.setApplyUser(req.getApplyUser());
-
-        condition.setApproveUser(req.getApproveUser());
-        condition.setPayUser(req.getPayUser());
-        condition.setPayGroup(req.getPayGroup());
-        condition.setChannelOrder(req.getChannelOrder());
+        condition.setApplyUser(req.getUserId());
 
         condition.setApplyDatetimeStart(
             DateUtil.getFrontDate(req.getApplyDateStart(), false));
@@ -84,7 +75,7 @@ public class XN627510 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627510Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627513Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 

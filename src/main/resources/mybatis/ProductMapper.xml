@@ -163,6 +163,25 @@
 		WHERE code=#{code}
 	</update>
 	
+	<update id="update_realNumber" parameterType="product">
+		UPDATE tbh_product 
+		SET 
+		real_number = #{realNumber}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code=#{code}
+	</update>
+	
+	
+	<update id="update_virNumber" parameterType="product">
+		UPDATE tbh_product 
+		SET 
+		vir_number = #{virNumber}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code=#{code}
+	</update>
+	
 	
 	<delete id="delete_product" parameterType="product">
 		DELETE FROM 

@@ -167,6 +167,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         for (ChangeProduct changeProduct : list) {
             String approveName = this.getName(changeProduct.getApprover());
             changeProduct.setApproveName(approveName);
+            // 补充下单代理的信息
+            User user = userBO.getCheckUser(changeProduct.getApplyUser());
+            changeProduct.setUser(user);
         }
         page.setList(list);
         return page;
@@ -186,6 +189,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         for (ChangeProduct changeProduct : list) {
             String approveName = this.getName(changeProduct.getApprover());
             changeProduct.setApproveName(approveName);
+            User user = userBO.getCheckUser(changeProduct.getApplyUser());
+            changeProduct.setUser(user);
         }
 
         return list;
@@ -196,6 +201,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         ChangeProduct data = changeProductBO.getChangeProduct(code);
         String approveName = this.getName(data.getApprover());
         data.setApproveName(approveName);
+        User user = userBO.getCheckUser(data.getApplyUser());
+        data.setUser(user);
         return data;
     }
 
@@ -253,7 +260,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
             int quantity = data.getQuantity() * psData.getNumber();
             pData.setRealNumber(pData.getRealNumber() - quantity);
-            productBO.refreshRepertory(pData);
+            productBO.refreshRealNumber(pData);
 
             productLogBO.saveChangeProductLog(pData,
                 EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),

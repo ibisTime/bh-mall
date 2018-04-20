@@ -42,5 +42,7 @@
 		<typeAlias alias="wareHouse" type="com.bh.mall.domain.WareHouse"/>
 		<typeAlias alias="wareHouseLog" type="com.bh.mall.domain.WareHouseLog"/>
 		<typeAlias alias="changeProduct" type="com.bh.mall.domain.ChangeProduct"/>
+		
+		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
 	</typeAliases>
 </configuration>	

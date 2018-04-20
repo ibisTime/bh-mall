@@ -52,7 +52,6 @@
 		
 		<result column="approve_note" property="approveNote" />
 		<result column="remark" property="remark" />
-		<result column="real_name" property="realName" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -93,6 +92,13 @@
 				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
 			</if>
 			
+			<if test="statusForQuery != null and statusForQuery != '' ">
+				AND t.status IN (1,2,3,5)
+			</if>
+			
+		<if test="level != null and level != '' ">
+				AND u.level = #{level}
+			</if>
 		</trim>
 	</sql>
 	
@@ -148,7 +154,6 @@
 		
 		,t.approve_note
 		,t.remark
-		,u.real_name
 		FROM
 		tbh_order t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
 		<include refid="where_condition" />
@@ -162,7 +167,7 @@
 
 	<select id="select_order_count" parameterType="order"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_order t
+		SELECT count(1) FROM tbh_order t  LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
 		<include refid="where_condition" />
 	</select>
 

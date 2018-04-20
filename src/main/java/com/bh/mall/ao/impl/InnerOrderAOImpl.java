@@ -207,6 +207,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         for (InnerOrder innerOrder : list) {
             String updateName = this.getName(innerOrder.getUpdater());
             innerOrder.setUpdater(updateName);
+            String deliveName = this.getName(innerOrder.getDeliver());
+            innerOrder.setDeliveName(deliveName);
         }
         page.setList(list);
 
@@ -224,6 +226,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         for (InnerOrder innerOrder : list) {
             String updateName = this.getName(innerOrder.getUpdater());
             innerOrder.setUpdater(updateName);
+            String deliveName = this.getName(innerOrder.getDeliver());
+            innerOrder.setDeliveName(deliveName);
         }
         return list;
     }
@@ -233,6 +237,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
         String updateName = this.getName(data.getUpdater());
         data.setUpdater(updateName);
+        String deliveName = this.getName(data.getDeliver());
+        data.setDeliveName(deliveName);
         return data;
     }
 

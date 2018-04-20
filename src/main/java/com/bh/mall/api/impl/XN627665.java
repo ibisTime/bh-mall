@@ -15,7 +15,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 分页查询待处理订单
+ * 分页查询待处理订单front
  * @author: nyc 
  * @since: 2018年3月28日 下午9:02:41 
  * @history:
@@ -29,9 +29,8 @@ public class XN627665 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Order condition = new Order();
-        condition.setKind(req.getKind());
+        condition.setToUser(req.getToUserId());
         condition.setStatus(req.getStatus());
-        condition.setProductName(req.getProductName());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(
@@ -45,13 +44,14 @@ public class XN627665 extends AProcessor {
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return null;
+        return orderAO.queryOrderPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627665Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getToUserId());
 
     }
 

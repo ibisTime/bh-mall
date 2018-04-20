@@ -26,11 +26,9 @@ public class XN627245 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Intro condition = new Intro();
-        condition.setCode(req.getCode());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
-        condition.setUpdater(req.getUpdater());
         String orderColumn = req.getOrderColumn();
-        if (StringUtils.isNotBlank(orderColumn)) {
+        if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IIntroAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());

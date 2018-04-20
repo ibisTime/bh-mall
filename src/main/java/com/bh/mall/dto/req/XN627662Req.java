@@ -15,7 +15,7 @@ public class XN627662Req extends APageReq {
     private static final long serialVersionUID = 1153648985518580126L;
 
     // 类型
-    private String type;
+    private String kind;
 
     // 订单状态
     private String status;
@@ -29,6 +29,9 @@ public class XN627662Req extends APageReq {
     // 产品名称
     private String productName;
 
+    // 下单代理等级
+    private String level;
+
     public String getProductName() {
         return productName;
     }
@@ -37,12 +40,12 @@ public class XN627662Req extends APageReq {
         this.productName = productName;
     }
 
-    public String getType() {
-        return type;
+    public String getKind() {
+        return kind;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getStatus() {
@@ -67,6 +70,14 @@ public class XN627662Req extends APageReq {
 
     public void setStatusList(String statusList) {
         this.statusList = statusList;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

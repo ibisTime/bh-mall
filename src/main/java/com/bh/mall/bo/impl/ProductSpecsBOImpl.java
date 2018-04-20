@@ -173,4 +173,11 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         }
     }
 
+    @Override
+    public List<ProductSpecs> getProductSpecsByProduct(String productCode) {
+        ProductSpecs condition = new ProductSpecs();
+        condition.setProductCode(productCode);
+        return productSpecsDAO.selectList(condition);
+    }
+
 }

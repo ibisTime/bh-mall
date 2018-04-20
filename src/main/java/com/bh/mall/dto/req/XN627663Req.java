@@ -27,6 +27,9 @@ public class XN627663Req {
     // 产品名称
     private String productName;
 
+    // 下单代理等级
+    private String level;
+
     public String getProductName() {
         return productName;
     }
@@ -73,6 +76,14 @@ public class XN627663Req {
 
     public void setDateStart(String dateStart) {
         this.dateStart = dateStart;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.WareHouse;
+import com.bh.mall.dto.res.XN627814Res;
 
 @Component
 public interface IWareHouseAO {
@@ -27,6 +28,6 @@ public interface IWareHouseAO {
     public Paginable<WareHouse> queryWareHouseFrontPage(int start, int limit,
             WareHouse condition);
 
-    public WareHouse getWareHouseByUser(String userId);
+    public XN627814Res getWareHouseByUser(String userId);
 
 }

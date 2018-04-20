@@ -17,12 +17,14 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     void putdownProduct(Product data, String updater);
 
-    void refreshRepertory(Product data);
-
     List<Product> selectProductList(Product condition);
 
     long selectTotalCount(Product condition);
 
     void putOnProduct(Product data);
+
+    void refreshRealNumber(Product data);
+
+    void refreshVirNumber(Product data);
 
 }

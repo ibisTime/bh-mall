@@ -17,4 +17,8 @@ public interface IProductDAO extends IBaseDAO<Product> {
 
     List<Product> selectProductPage(Product condition, int start, int limit);
 
+    void updateRealNumber(Product data);
+
+    void updateVirNumber(Product data);
+
 }

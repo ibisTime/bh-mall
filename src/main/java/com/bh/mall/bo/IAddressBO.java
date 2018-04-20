@@ -94,7 +94,8 @@ public interface IAddressBO extends IPaginableBO<Address> {
      */
     public boolean isHaveAddress(String userId);
 
-    public void saveAddress(String userId, String realName, String province,
-            String city, String area, String address, String isDefault);
+    void saveAddress(String userId, String type, String mobile, String realName,
+            String province, String city, String area, String address,
+            String isDefault);
 
 }

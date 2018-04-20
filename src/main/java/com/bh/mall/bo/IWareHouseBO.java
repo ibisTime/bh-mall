@@ -34,6 +34,6 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
 
     public void refreshLogCode(WareHouse whData);
 
-    public WareHouse getWareHouseByUser(String userId);
+    public List<WareHouse> getWareHouseByUser(String userId);
 
 }

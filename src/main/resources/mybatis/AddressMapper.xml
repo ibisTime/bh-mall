@@ -66,6 +66,7 @@
 		,mobile
 		,province
 		,city
+		,area
 		,address
 		,is_default
 		,user_id
@@ -77,6 +78,7 @@
 		,#{mobile}
 		,#{province}
 		,#{city}
+		,#{area}
 		,#{address}
 		,#{isDefault}
 		,#{userId}
@@ -90,6 +92,7 @@
 		,mobile=#{mobile}
 		,province=#{province}
 		,city=#{city}
+		,area=#{area}
 		,address=#{address}
 		,is_default=#{isDefault}
 		WHERE

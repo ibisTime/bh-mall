@@ -57,7 +57,7 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         WareHouse data = null;
         if (StringUtils.isNotBlank(code)) {
             WareHouse condition = new WareHouse();
-            condition.setCode(code);
+            condition.setProductCode(code);
             data = wareHouseDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "云仓不存在");
@@ -138,17 +138,10 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
     }
 
     @Override
-    public WareHouse getWareHouseByUser(String userId) {
-        WareHouse data = null;
-        if (StringUtils.isNotBlank(userId)) {
-            WareHouse condition = new WareHouse();
-            condition.setUserId(userId);
-            data = wareHouseDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "云仓不存在");
-            }
-        }
-        return data;
+    public List<WareHouse> getWareHouseByUser(String userId) {
+        WareHouse condition = new WareHouse();
+        condition.setUserId(userId);
+        return wareHouseDAO.selectList(condition);
     }
 
 }

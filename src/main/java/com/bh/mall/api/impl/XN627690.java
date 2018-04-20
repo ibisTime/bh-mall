@@ -30,9 +30,9 @@ public class XN627690 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AfterSale condition = new AfterSale();
-        condition.setApplyUser(req.getApplyUser());
         condition.setStatus(req.getStatus());
         condition.setSaleType(req.getType());
+        condition.setKeyword(req.getKeyword());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(

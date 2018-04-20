@@ -38,15 +38,15 @@ public class XN627470 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
 
-        condition.setApplyDatetimeStart(DateUtil.getFrontDate(
-            req.getApplyDateStart(), false));
-        condition.setApplyDatetimeEnd(DateUtil.getFrontDate(
-            req.getApplyDateEnd(), true));
+        condition.setApplyDatetimeStart(
+            DateUtil.getFrontDate(req.getApplyDateStart(), false));
+        condition.setApplyDatetimeEnd(
+            DateUtil.getFrontDate(req.getApplyDateEnd(), true));
         condition.setPayUser(req.getPayUser());
-        condition.setPayDatetimeStart(DateUtil.getFrontDate(
-            req.getPayDateStart(), false));
-        condition.setPayDatetimeEnd(DateUtil.getFrontDate(req.getPayDateEnd(),
-            true));
+        condition.setPayDatetimeStart(
+            DateUtil.getFrontDate(req.getPayDateStart(), false));
+        condition.setPayDatetimeEnd(
+            DateUtil.getFrontDate(req.getPayDateEnd(), true));
 
         condition.setChannelType(req.getChannelType());
         String orderColumn = req.getOrderColumn();

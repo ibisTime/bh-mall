@@ -95,6 +95,18 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
+			
+			<choose>
+			     <when test='kind ==  "0" '>
+				 	<![CDATA[AND t.trans_amount < 0]]>
+				 </when>
+				  <when test='kind ==  "1" '>
+				 	<![CDATA[AND t.trans_amount > 0]]>
+				 </when>
+				 <otherwise>
+					and 1=1
+				 </otherwise>
+			</choose>
 		</trim>
 	</sql>
 	
@@ -109,8 +121,8 @@
 		,t.account_number
 		,t.trans_amount
 		
-		,SUM(CASE WHEN  <![CDATA[t.trans_amount > 0]]>  THEN t.trans_amount ELSE 0 END) AS out_amount
-    	,SUM(CASE WHEN <![CDATA[t.trans_amount < 0]]>  THEN t.trans_amount ELSE 0 END) AS in_amount 
+		,SUM(CASE WHEN  <![CDATA[t.trans_amount < 0]]>  THEN t.trans_amount ELSE 0 END) AS out_amount
+    	,SUM(CASE WHEN <![CDATA[t.trans_amount > 0]]>  THEN t.trans_amount ELSE 0 END) AS in_amount 
     	
 		,t.user_id
 		,t.real_name
@@ -145,7 +157,7 @@
 	</select>
 
 
-	<select id="select_jour_account" parameterType="jour" resultMap="jour_DB_Result">
+	<select id="select_jour_detail" parameterType="jour" resultMap="jour_DB_Result">
 		SELECT
 		t.code
 		,t.pay_group
@@ -175,7 +187,6 @@
 		FROM
 		tbh_jour t
 		<include refid="where_condition" />
-		GROUP BY t.user_id
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

@@ -26,7 +26,7 @@ public class XN627691 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AfterSale condition = new AfterSale();
-        condition.setApplyUser(req.getApplyUser());
+        condition.setKeyword(req.getKeyword());
         condition.setStatus(req.getStatus());
         condition.setSaleType(req.getType());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),

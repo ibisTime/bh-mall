@@ -14,6 +14,7 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
+import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -50,6 +51,9 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     private IAwardBO awardBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String addProduct(XN627540Req req) {
@@ -162,6 +166,7 @@ public class ProductAOImpl implements IProductAO {
             }
             data.setSpecsList(psList);
         }
+
         return data;
     }
 
@@ -205,6 +210,9 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public void editRepertory(XN627545Req req) {
         Product data = productBO.getProduct(req.getCode());
+        Integer changeNumber = 0;
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
         if (StringUtils.isNotBlank(req.getRealNumber())
                 && StringValidater.toInteger(req.getRealNumber()) < 0) {
             throw new BizException("xn0000", "变动数量不能小于0");
@@ -214,30 +222,26 @@ public class ProductAOImpl implements IProductAO {
             throw new BizException("xn0000", "变动数量不能小于0");
         }
         if (EProductNumberType.Real.getCode().equals(req.getKind())) {
-            Integer realNumber = StringValidater.toInteger(req.getRealNumber());
-            if (EProductLogType.Input.getCode().equals(req.getType())) {
-                data.setRealNumber(data.getRealNumber() + realNumber);
-            } else {
-                data.setRealNumber(data.getRealNumber() - realNumber);
+            changeNumber = StringValidater.toInteger(req.getRealNumber());
+
+            if (EProductLogType.Output.getCode().equals(req.getType())) {
+                changeNumber = -changeNumber;
             }
+            productLogBO.saveChangeLog(data, req.getType(),
+                data.getRealNumber(), changeNumber, req.getUpdater());
+            data.setRealNumber(data.getRealNumber() + changeNumber);
+            productBO.refreshRealNumber(data);
         }
         if (EProductNumberType.Virtual.getCode().equals(req.getKind())) {
-            Integer virNumber = StringValidater.toInteger(req.getVirNumber());
-            if (EProductLogType.Input.getCode().equals(req.getType())) {
-                data.setVirNumber(data.getVirNumber() + virNumber);
-            } else {
-                data.setVirNumber(data.getVirNumber() - virNumber);
+            changeNumber = StringValidater.toInteger(req.getVirNumber());
+            if (EProductLogType.Output.getCode().equals(req.getType())) {
+                changeNumber = -changeNumber;
             }
-        }
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(new Date());
-        productBO.refreshRepertory(data);
-        // 修改库存记录
-        if (EProductNumberType.Real.getCode().equals(req.getType())) {
-            productLogBO.saveChangeLog(data, req.getType(),
-                data.getRealNumber(),
-                StringValidater.toInteger(req.getRealNumber()),
-                req.getUpdater());
+            // productLogBO.saveChangeLog(data, req.getType(),
+            // data.getVirNumber(),
+            // changeNumber, req.getUpdater());
+            data.setVirNumber(data.getVirNumber() + changeNumber);
+            productBO.refreshVirNumber(data);
         }
 
     }
@@ -355,6 +359,23 @@ public class ProductAOImpl implements IProductAO {
             }
         }
         return page;
+    }
+
+    @Override
+    public Product getProduct(String code, Integer level) {
+        Product data = productBO.getProduct(code);
+        List<ProductSpecs> list = productSpecsBO
+            .getProductSpecsByProduct(data.getCode());
+        for (ProductSpecs productSpecs : list) {
+            ProductSpecsPrice condition = new ProductSpecsPrice();
+            condition.setLevel(level);
+            ProductSpecsPrice price = productSpecsPriceBO
+                .getPriceByLevel(productSpecs.getCode(), level);
+            productSpecs.setPrice(price);
+        }
+        data.setSpecsList(list);
+
+        return data;
     }
 
 }

@@ -41,6 +41,10 @@
 			<if test="saleType != null and saleType != '' ">
 				AND t.sale_type = #{saleType}
 			</if>
+			<if test="keyword != null and keyword != '' ">
+				AND o.product_name LIKE "%"#{keyword}"%" OR  u.real_name LIKE "%"#{keyword}"%"
+			</if>
+			
 			<if test="startDatetime != null and startDatetime != '' ">
 				<![CDATA[AND apply_datetime >=  startDatetime]]>
 			</if>
@@ -75,7 +79,7 @@
 		,t.address
 		,t.remark
 		FROM
-		tbh_after_sale t
+		tbh_after_sale t LEFT JOIN tbh_order o LEFT JOIN tbh_user u ON o.apply_user = u.user_id ON t.ref_no = o.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -86,7 +90,7 @@
 
 	<select id="select_afterSale_count" parameterType="afterSale"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_after_sale t
+		SELECT count(1) FROM tbh_after_sale t LEFT JOIN tbh_order o LEFT JOIN tbh_user u ON o.apply_user = u.user_id ON t.ref_no = o.code
 		<include refid="where_condition" />
 	</select>
 

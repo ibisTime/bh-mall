@@ -33,6 +33,6 @@ public interface IJourDAO extends IBaseDAO<Jour> {
 
     public long selectTotalAmount(Jour data);
 
-    public List<Jour> selectJourByAccountPage(int pageNO, int pageSize,
+    public List<Jour> selectJourDetailPage(int pageNO, int pageSize,
             Jour condition);
 }

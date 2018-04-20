@@ -27,10 +27,6 @@ public class XN627680Req {
     @NotBlank(message = "关联订单不能为空")
     private String refNo;
 
-    // （必填）图片
-    @NotBlank(message = "图片不能为空")
-    private String pic;
-
     // （必填）换货类型
     @NotBlank(message = "换货类型不能为空")
     private String type;
@@ -65,14 +61,6 @@ public class XN627680Req {
 
     public void setRefNo(String refNo) {
         this.refNo = refNo;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
     }
 
     public String getType() {

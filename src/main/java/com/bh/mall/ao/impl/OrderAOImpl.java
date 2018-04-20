@@ -177,7 +177,7 @@ public class OrderAOImpl implements IOrderAO {
             wareHouseBO.changeWareHouse(whData.getCode(), cart.getQuantity(),
                 EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), code);
             // 修改产品数量
-            productBO.refreshRepertory(pData);
+            productBO.refreshRealNumber(pData);
         }
     }
 
@@ -294,7 +294,7 @@ public class OrderAOImpl implements IOrderAO {
             productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
                 pData.getRealNumber(), quantity, null);
             pData.setRealNumber(pData.getRealNumber() - quantity);
-            productBO.refreshRepertory(pData);
+            productBO.refreshRealNumber(pData);
 
             WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
                 user.getUserId(), req.getProductSpecsCode());
@@ -335,9 +335,8 @@ public class OrderAOImpl implements IOrderAO {
                     result = payResult;
 
                 } else if (EBoolean.NO.getCode().equals(payType)) {
-                    User toUser = userBO.getUser(data.getToUser());
-                    String toUserId = toUser.getUserId();
-                    if (isOne(toUser.getLevel())) {
+                    String toUserId = data.getToUser();
+                    if (isPlat(data.getToUser())) {
                         toUserId = ESysUser.SYS_USER_BH.getCode();
                     }
 
@@ -409,6 +408,8 @@ public class OrderAOImpl implements IOrderAO {
         Paginable<Order> page = orderBO.getPaginable(start, limit, condition);
         List<Order> list = page.getList();
         for (Order order : list) {
+            User user = userBO.getCheckUser(order.getApplyUser());
+            order.setUser(user);
             String approveUser = this.getName(order.getApprover());
             order.setApproveName(approveUser);
             String deliveName = this.getName(order.getDeliver());
@@ -417,6 +418,9 @@ public class OrderAOImpl implements IOrderAO {
             order.setUpdater(updateName);
             String toUserName = this.getName(order.getToUser());
             order.setToUserName(toUserName);
+
+            Product product = productBO.getProduct(order.getProductCode());
+            order.setProduct(product);
         }
         page.setList(list);
         return page;
@@ -431,6 +435,8 @@ public class OrderAOImpl implements IOrderAO {
         }
         List<Order> list = orderBO.queryOrderList(condition);
         for (Order order : list) {
+            User user = userBO.getCheckUser(order.getApplyUser());
+            order.setUser(user);
             String approveUser = this.getName(order.getApprover());
             order.setApproveName(approveUser);
             String deliveName = this.getName(order.getDeliver());
@@ -444,6 +450,8 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public Order getOrder(String code) {
         Order order = orderBO.getOrder(code);
+        User user = userBO.getCheckUser(order.getApplyUser());
+        order.setUser(user);
         String approveUser = this.getName(order.getApprover());
         order.setApproveName(approveUser);
         String deliveName = this.getName(order.getDeliver());
@@ -480,13 +488,9 @@ public class OrderAOImpl implements IOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
         User user = userBO.getUser(data.getToUser());
         // 获取出货人的上级
-        User highUser = userBO.getUser(user.getHighUserId());
-        String fromUser = highUser.getUserId();
-        if (isOne(user.getLevel())) {
-            Account aData = accountBO.getSysAccountNumber(
-                ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
-                ECurrency.YJ_CNY);
-            fromUser = aData.getUserId();
+        String fromUser = user.getHighUserId();
+        if (isPlat(fromUser)) {
+            fromUser = ESysUser.SYS_USER_BH.getCode();
         }
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
@@ -668,12 +672,15 @@ public class OrderAOImpl implements IOrderAO {
     public void receivedOrder(String code) {
         Order data = orderBO.getOrder(code);
         data.setStatus(EOrderStatus.Received.getCode());
+        Product product = productBO.getProduct(data.getProductCode());
+        data.setProduct(product);
         orderBO.receivedOrder(data);
     }
 
-    private boolean isOne(Integer level) {
+    private boolean isPlat(String userId) {
         boolean flag = false;
-        if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == level) {
+        User user = userBO.getCheckUser(userId);
+        if (EUserKind.Plat.getCode().equals(user.getKind())) {
             flag = true;
         }
         return flag;

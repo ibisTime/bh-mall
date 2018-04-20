@@ -88,6 +88,11 @@ public class AfterSale extends ABaseDO {
 
     private Date endDatetime;
 
+    // 关键字模糊查询
+    private String keyword;
+
+    private Order orderList;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -286,6 +291,22 @@ public class AfterSale extends ABaseDO {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public Order getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(Order orderList) {
+        this.orderList = orderList;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 }

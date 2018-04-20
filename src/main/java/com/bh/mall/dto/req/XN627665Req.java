@@ -17,27 +17,11 @@ public class XN627665Req extends APageReq {
     // 订单状态
     private String status;
 
-    // 产品名称
-    private String productName;
+    // 订单归属人
+    private String toUserId;
 
     // 类型
-    private String kind;
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
+    private String keyword;
 
     public String getStatus() {
         return status;
@@ -45,6 +29,22 @@ public class XN627665Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 }

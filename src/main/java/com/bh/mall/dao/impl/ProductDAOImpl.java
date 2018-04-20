@@ -67,4 +67,14 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
             limit, condition, Product.class);
     }
 
+    @Override
+    public void updateRealNumber(Product data) {
+        super.update(NAMESPACE.concat("update_realNumber"), data);
+    }
+
+    @Override
+    public void updateVirNumber(Product data) {
+        super.update(NAMESPACE.concat("update_virNumber"), data);
+    }
+
 }

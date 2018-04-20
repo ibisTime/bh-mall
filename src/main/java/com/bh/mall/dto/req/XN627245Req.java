@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import com.bh.mall.dto.req.APageReq;
-
 /**
  * 分页查询介绍奖励
  * @author: chenshan 
@@ -14,22 +12,8 @@ public class XN627245Req extends APageReq {
      */
     private static final long serialVersionUID = -1602819369609298450L;
 
-    // 编号
-    private String code;
-
     // 等级
     private String level;
-
-    // 更新人
-    private String updater;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getLevel() {
         return level;
@@ -39,11 +23,4 @@ public class XN627245Req extends APageReq {
         this.level = level;
     }
 
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
 }

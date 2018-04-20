@@ -30,10 +30,11 @@ public class XN627662 extends AProcessor {
     public Object doBusiness() throws BizException {
         Order condition = new Order();
         condition.setKeyword(req.getKeyword());
-        condition.setKind(req.getType());
+        condition.setKind(req.getKind());
         condition.setStatus(req.getStatus());
         condition.setStatusList(req.getStatusList());
         condition.setProductName(req.getProductName());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(

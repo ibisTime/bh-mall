@@ -27,8 +27,8 @@ import com.bh.mall.domain.Address;
  * @history:
  */
 @Component
-public class AddressBOImpl extends PaginableBOImpl<Address> implements
-        IAddressBO {
+public class AddressBOImpl extends PaginableBOImpl<Address>
+        implements IAddressBO {
     @Autowired
     private IAddressDAO addressDAO;
 
@@ -120,12 +120,14 @@ public class AddressBOImpl extends PaginableBOImpl<Address> implements
     }
 
     @Override
-    public void saveAddress(String userId, String realName, String province,
-            String city, String area, String address, String isDefault) {
+    public void saveAddress(String userId, String type, String mobile,
+            String realName, String province, String city, String area,
+            String address, String isDefault) {
         String code = OrderNoGenerater.generate(EGeneratePrefix.AD.getCode());
         Address data = new Address();
         data.setCode(code);
-        data.setType("2");
+        data.setType(type);
+        data.setMobile(mobile);
         data.setUserId(userId);
         data.setReceiver(realName);
         data.setProvince(province);

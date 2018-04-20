@@ -163,4 +163,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public User getUserName(String userReferee);
 
+    User getSysUser();
+
 }

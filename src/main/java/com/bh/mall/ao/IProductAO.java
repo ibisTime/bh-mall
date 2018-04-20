@@ -34,4 +34,6 @@ public interface IProductAO {
     Paginable<Product> selectProductByFrontPage(int start, int limit,
             Product condition);
 
+    Product getProduct(String code, Integer integer);
+
 }

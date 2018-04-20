@@ -3,6 +3,7 @@ package com.bh.mall.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESysUser;
+import com.bh.mall.enums.EUser;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -94,16 +96,21 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {
+        if (StringUtils.isBlank(condition.getHighUserId())) {
+            User sysUser = userBO.getSysUser();
+            condition.setHighUserId(sysUser.getUserId());
+        }
+
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
         if (CollectionUtils.isNotEmpty(page.getList())) {
             List<Charge> list = page.getList();
             for (Charge charge : list) {
-                if (!"admin".equals(charge.getApplyUser())
+                if (!EUser.ADMIN.getCode().equals(charge.getApplyUser())
                         && charge.getApplyUser() != null) {
                     User user = userBO.getCheckUser(charge.getApplyUser());
                     charge.setUser(user);
                 }
-                if (!"admin".equals(charge.getPayUser())
+                if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
                         && charge.getPayUser() != null) {
                     User payUser = userBO.getCheckUser(charge.getPayUser());
                     charge.setPayUser(payUser.getLoginName());

@@ -48,7 +48,7 @@
 				AND t.apply_user = #{applyUser}
 			</if>
 			<if test="applyName != null and applyName != '' ">
-				AND t.apply_user = #{applyName}
+				AND t.apply_user like "%"${applyName}
 			</if>
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name like  "%"${teamName}"%"
@@ -105,8 +105,9 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,u.real_name
 		FROM
-		tbh_inner_order t
+		tbh_inner_order t LEFT JOIN tbh_user u ON t.apply_user = u.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -117,7 +118,7 @@
 
 	<select id="select_innerOrder_count" parameterType="innerOrder"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_inner_order t
+		SELECT count(1) FROM tbh_inner_order t LEFT JOIN tbh_user u ON t.apply_user = u.user_id
 		<include refid="where_condition" />
 	</select>
 

@@ -14,13 +14,7 @@ public class XN627690Req extends APageReq {
     private static final long serialVersionUID = -4549169981177254437L;
 
     // （选填）申请人
-    private String applyUser;
-
-    // （选填）申请结束时间
-    private String dateEnd;
-
-    // （选填）申请结束时间
-    private String dateStart;
+    private String keyword;
 
     // （选填）状态
     private String status;
@@ -28,28 +22,12 @@ public class XN627690Req extends APageReq {
     // （选填）售后类型
     private String type;
 
-    public String getApplyUser() {
-        return applyUser;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
-    }
-
-    public String getDateEnd() {
-        return dateEnd;
-    }
-
-    public void setDateEnd(String dateEnd) {
-        this.dateEnd = dateEnd;
-    }
-
-    public String getDateStart() {
-        return dateStart;
-    }
-
-    public void setDateStart(String dateStart) {
-        this.dateStart = dateStart;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public String getStatus() {

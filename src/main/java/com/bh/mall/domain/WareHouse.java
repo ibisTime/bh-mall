@@ -70,6 +70,10 @@ public class WareHouse extends ABaseDO {
 
     private User user;
 
+    private Product product;
+
+    private Long allAmount;
+
     public User getUser() {
         return user;
     }
@@ -220,6 +224,22 @@ public class WareHouse extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Long getAllAmount() {
+        return allAmount;
+    }
+
+    public void setAllAmount(Long allAmount) {
+        this.allAmount = allAmount;
     }
 
 }

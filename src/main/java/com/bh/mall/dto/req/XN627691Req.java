@@ -9,7 +9,7 @@ package com.bh.mall.dto.req;
 public class XN627691Req {
 
     // （选填）申请人
-    private String applyUser;
+    private String keyword;
 
     // （选填）申请结束时间
     private String dateEnd;
@@ -23,12 +23,12 @@ public class XN627691Req {
     // （选填）售后类型
     private String type;
 
-    public String getApplyUser() {
-        return applyUser;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public String getDateEnd() {

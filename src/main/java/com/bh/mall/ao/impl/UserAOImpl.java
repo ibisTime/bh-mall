@@ -40,6 +40,7 @@ import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
@@ -63,6 +64,7 @@ import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627263Res;
 import com.bh.mall.dto.res.XN627302Res;
 import com.bh.mall.enums.EAccountType;
+import com.bh.mall.enums.EAddressType;
 import com.bh.mall.enums.EAfterSaleStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
@@ -438,16 +440,26 @@ public class UserAOImpl implements IUserAO {
     public void resetBindMobile(String userId, String kind,
             String oldSmsCaptcha, String newMobile, String newSmsCaptcha) {
         User user = userBO.getCheckUser(userId);
+        String oldMobile = user.getMobile();
+        if (newMobile.equals(oldMobile)) {
+            throw new BizException("xn000000", "新手机与原手机一致");
+        }
         // 根据手机号和类型判断手机号是否存在
         userBO.isMobileExist(newMobile, kind, user.getCompanyCode(),
             user.getSystemCode());
-        // 旧手机号验证
-        smsOutBO.checkCaptcha(user.getMobile(), oldSmsCaptcha, "627310",
-            user.getCompanyCode(), user.getSystemCode());
         // 新手机号验证
         smsOutBO.checkCaptcha(newMobile, newSmsCaptcha, "627310",
             user.getCompanyCode(), user.getSystemCode());
         userBO.resetBindMobile(user, newMobile);
+        // 发送短信
+        smsOutBO.sendSmsOut(oldMobile,
+            "尊敬的" + PhoneUtil.hideMobile(oldMobile) + "用户，您于"
+                    + DateUtil.dateToStr(new Date(),
+                        DateUtil.DATA_TIME_PATTERN_1)
+                    + "提交的更改绑定手机号码服务已审核通过，现绑定手机号码为" + newMobile
+                    + "，请妥善保管您的账户相关信息。",
+            "805061", user.getCompanyCode(), user.getSystemCode());
+
     }
 
     @Override
@@ -666,9 +678,10 @@ public class UserAOImpl implements IUserAO {
         data.setApplyLevel(StringValidater.toInteger(req.getLevel()));
         data.setApplyDatetime(new Date());
         userBO.applyIntent(data);
-        addressBO.saveAddress(data.getUserId(), req.getRealName(),
-            req.getProvince(), req.getCity(), req.getArea(), req.getAddress(),
-            EBoolean.YES.getCode());
+        addressBO.saveAddress(data.getUserId(),
+            EAddressType.User_Address.getCode(), req.getMobile(),
+            req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
+            req.getAddress(), EBoolean.YES.getCode());
 
         // XN627302Res result = null;
         // Map<String, String> wxRes = getUserInfo(req.getCode());
@@ -725,7 +738,8 @@ public class UserAOImpl implements IUserAO {
 
             // distributeAccount(userId, nickname, EUserKind.Merchant.getCode(),
             // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            addressBO.saveAddress(userId, req.getRealName(), req.getProvince(),
+            addressBO.saveAddress(userId, EAddressType.User_Address.getCode(),
+                req.getMobile(), req.getRealName(), req.getProvince(),
                 req.getCity(), req.getArea(), req.getAddress(),
                 EBoolean.YES.getCode());
             result = new XN627302Res(userId, EBoolean.NO.getCode());
@@ -816,6 +830,12 @@ public class UserAOImpl implements IUserAO {
         if (!EUserStatus.TO_WILL.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
+
+        if (EUser.ADMIN.getCode().equals(approver)) {
+            User highUser = userBO.getSysUser();
+            approver = highUser.getUserId();
+        }
+
         data.setApprover(approver);
         data.setApplyDatetime(new Date());
         data.setRemark(remark);
@@ -1223,6 +1243,34 @@ public class UserAOImpl implements IUserAO {
         alCondition.setApplyUser(data.getUserId());
         List<AgencyLog> list = agencyLogBO.queryAgencyLogPage(start, limit,
             alCondition);
+        for (AgencyLog agencyLog : list) {
+            User userReferee = null;
+            User user = userBO.getUser(agencyLog.getApplyUser());
+            if (user != null) {
+                agencyLog.setUser(user);
+                if (StringUtils.isNotBlank(user.getUserReferee())) {
+                    userReferee = userBO.getUser(user.getUserReferee());
+                }
+                if (userReferee != null) {
+                    agencyLog.setRefereeName(userReferee.getRealName());
+                }
+            }
+            // 审核人
+            if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
+                agencyLog.setApprovName(agencyLog.getApprover());
+            } else {
+                if (StringUtils.isNotBlank(agencyLog.getApprover())) {
+                    User aprrvoeName = userBO.getUser(agencyLog.getApprover());
+                    if (null != aprrvoeName) {
+                        userReferee = userBO.getUser(aprrvoeName.getUserId());
+                        if (userReferee != null) {
+                            agencyLog.setApprovName(userReferee.getRealName());
+                        }
+                    }
+                }
+            }
+
+        }
         data.setLogList(list);
         return data;
     }

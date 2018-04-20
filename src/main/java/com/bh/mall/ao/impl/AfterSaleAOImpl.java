@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IAfterSaleAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
+import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.Address;
 import com.bh.mall.domain.AfterSale;
+import com.bh.mall.domain.Order;
 import com.bh.mall.dto.req.XN627680Req;
 import com.bh.mall.dto.req.XN627682Req;
 import com.bh.mall.enums.EAfterSaleStatus;
@@ -29,11 +32,19 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     @Autowired
     private IAddressBO addressBO;
 
+    @Autowired
+    private IOrderBO orderBO;
+
+    @Autowired
+    private IUserBO userBO;
+
     @Override
     public String addAfterSale(XN627680Req req) {
+        Order order = orderBO.getOrder(req.getRefNo());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AfterSale.getCode());
         AfterSale data = new AfterSale();
+
         data.setCode(code);
         data.setRefNo(req.getRefNo());
         data.setApplyUser(req.getApplyUser());
@@ -43,7 +54,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
         data.setStatus(EAfterSaleStatus.TO_Approve.getCode());
         data.setAddress(req.getAddressCode());
-        data.setPic(req.getPic());
+        data.setPic(order.getPic());
         data.setSaleType(req.getType());
         afterSaleBO.saveAfterSale(data);
         return code;
@@ -65,7 +76,16 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        return afterSaleBO.getPaginable(start, limit, condition);
+        Paginable<AfterSale> page = afterSaleBO.getPaginable(start, limit,
+            condition);
+        List<AfterSale> list = page.getList();
+        for (AfterSale afterSale : list) {
+            Order order = orderBO.getOrder(afterSale.getRefNo());
+            afterSale.setOrderList(order);
+        }
+        page.setList(list);
+
+        return page;
     }
 
     @Override
