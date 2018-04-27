@@ -71,6 +71,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         User uData = userBO.getUser(req.getApplyUser());
         WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
             uData.getUserId(), req.getProductSpecsCode());
+        if (whData == null) {
+            throw new BizException("xn000", "您的仓库中没有该规格的产品");
+        }
         if (whData.getQuantity() < StringValidater
             .toInteger(req.getQuantity())) {
             throw new BizException("xn000", "该规格的产品数量不足");
@@ -333,5 +336,48 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             }
         }
         return name;
+    }
+
+    @Override
+    public ChangeProduct getChangeProductMessage(XN627790Req req) {
+        User uData = userBO.getUser(req.getApplyUser());
+        WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
+            uData.getUserId(), req.getProductSpecsCode());
+        if (whData == null) {
+            throw new BizException("xn000", "您的云仓中该规格的茶品不存在");
+        }
+        if (whData.getQuantity() < StringValidater
+            .toInteger(req.getQuantity())) {
+            throw new BizException("xn000", "该规格的产品数量不足");
+        }
+
+        ProductSpecs specs = productSpecsBO
+            .getProductSpecs(req.getProductSpecsCode());
+
+        ProductSpecsPrice specsPrice = productSpecsPriceBO
+            .getPriceByLevel(specs.getCode(), uData.getLevel());
+
+        ProductSpecs changeSpecs = productSpecsBO
+            .getProductSpecs(req.getChangeSpecsCode());
+        ProductSpecsPrice changeSpecsPrice = productSpecsPriceBO
+            .getPriceByLevel(changeSpecs.getCode(), uData.getLevel());
+
+        ChangeProduct cpData = new ChangeProduct();
+        cpData.setPrice(specsPrice.getPrice());
+        cpData.setQuantity(StringValidater.toInteger(req.getQuantity()));
+        Long amount = AmountUtil.eraseLiUp(specsPrice.getPrice()
+                * StringValidater.toInteger(req.getQuantity()));
+        cpData.setAmount(amount);
+        int canChangeQuantity = 0;
+        if (changeSpecsPrice.getChangePrice() == null
+                || changeSpecsPrice.getChangePrice() == 0) {
+            throw new BizException("xn000", "该产品的换货价为空");
+        } else {
+            canChangeQuantity = (int) (amount
+                    / changeSpecsPrice.getChangePrice());
+        }
+        cpData.setCanChangeQuantity(canChangeQuantity);
+
+        return cpData;
     }
 }

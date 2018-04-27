@@ -85,7 +85,7 @@
 	
 	<root>
 		<!-- <priority value="debug" /> -->
-		<priority value="DEBUG" />
+		<priority value="ALL" />
 		<appender-ref ref="STDOUT" />
 <!--		<appender-ref  ref="logfile"/>-->
 	</root>

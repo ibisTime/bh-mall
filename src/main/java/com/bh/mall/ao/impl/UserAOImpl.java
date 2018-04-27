@@ -437,8 +437,8 @@ public class UserAOImpl implements IUserAO {
 
     // 更换绑定手机号
     @Override
-    public void resetBindMobile(String userId, String kind,
-            String oldSmsCaptcha, String newMobile, String newSmsCaptcha) {
+    public void doResetMoblie(String userId, String kind, String newMobile,
+            String smsCaptcha) {
         User user = userBO.getCheckUser(userId);
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
@@ -448,7 +448,7 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(newMobile, kind, user.getCompanyCode(),
             user.getSystemCode());
         // 新手机号验证
-        smsOutBO.checkCaptcha(newMobile, newSmsCaptcha, "627310",
+        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627310",
             user.getCompanyCode(), user.getSystemCode());
         userBO.resetBindMobile(user, newMobile);
         // 发送短信

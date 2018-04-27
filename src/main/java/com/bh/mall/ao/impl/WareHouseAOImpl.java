@@ -2,11 +2,12 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bh.mall.ao.IProductAO;
 import com.bh.mall.ao.IWareHouseAO;
-import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.Paginable;
@@ -26,7 +27,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
     private IUserBO userBO;
 
     @Autowired
-    private IProductBO productBO;
+    private IProductAO productAO;
 
     @Override
     public String addWareHouse(WareHouse data) {
@@ -50,7 +51,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
         for (WareHouse wareHouse : list) {
             User user = userBO.getUser(wareHouse.getUserId());
             wareHouse.setUser(user);
-            Product product = productBO.getProduct(wareHouse.getProductCode());
+            Product product = productAO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
         }
         page.setList(list);
@@ -63,20 +64,28 @@ public class WareHouseAOImpl implements IWareHouseAO {
         for (WareHouse wareHouse : list) {
             User user = userBO.getUser(wareHouse.getUserId());
             wareHouse.setUser(user);
-            Product product = productBO.getProduct(wareHouse.getProductCode());
+            Product product = productAO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
         }
         return list;
     }
 
     @Override
-    public WareHouse getWareHouse(String code) {
-        WareHouse data = wareHouseBO.getWareHouse(code);
-        User user = userBO.getUser(data.getUserId());
-        data.setUser(user);
-        Product product = productBO.getProduct(data.getCode());
-        data.setProduct(product);
-        return data;
+    public List<WareHouse> getWareHouse(String code) {
+        WareHouse condition = new WareHouse();
+        condition.setProductCode(code);
+
+        List<WareHouse> list = wareHouseBO.queryWareHouseList(condition);
+        for (WareHouse wareHouse : list) {
+            if (StringUtils.isNotBlank(wareHouse.getUserId())) {
+                User user = userBO.getUser(wareHouse.getUserId());
+                wareHouse.setUser(user);
+            }
+            Product product = productAO.getProduct(wareHouse.getCode());
+            wareHouse.setProduct(product);
+        }
+
+        return list;
     }
 
     @Override
@@ -86,7 +95,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
             condition);
         List<WareHouse> list = page.getList();
         for (WareHouse wareHouse : list) {
-            Product product = productBO.getProduct(wareHouse.getProductCode());
+            Product product = productAO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
         }
         page.setList(list);
@@ -100,7 +109,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
         Long allAmount = 0L;
         List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
         for (WareHouse wareHouse : list) {
-            Product product = productBO.getProduct(wareHouse.getProductCode());
+            Product product = productAO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
             allAmount = allAmount + wareHouse.getAmount();
         }

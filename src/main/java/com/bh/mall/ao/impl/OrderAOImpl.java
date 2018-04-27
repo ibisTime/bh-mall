@@ -121,7 +121,7 @@ public class OrderAOImpl implements IOrderAO {
             ProductSpecs psData = productSpecsBO
                 .getProductSpecs(cart.getProductSpecsCode());
             ProductSpecsPrice pspData = productSpecsPriceBO
-                .getPriceBySpecsCode(psData.getCode());
+                .getPriceBySpecsCode(psData.getCode(), null);
             order.setKind(EOrderKind.Normal_Order.getCode());
 
             String code = OrderNoGenerater
@@ -190,8 +190,13 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
 
+        User uLevel = userBO.getUser(req.getApplyUser());
+        if (null == uLevel.getLevel()) {
+            throw new BizException("xn0000", "该代理无等级");
+        }
+
         ProductSpecsPrice pspData = productSpecsPriceBO
-            .getPriceBySpecsCode(psData.getCode());
+            .getPriceBySpecsCode(psData.getCode(), uLevel.getLevel());
 
         // 判断代理状态
         String kind = EOrderKind.Normal_Order.getCode();

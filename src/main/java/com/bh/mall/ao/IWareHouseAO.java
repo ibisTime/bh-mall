@@ -23,7 +23,7 @@ public interface IWareHouseAO {
 
     public List<WareHouse> queryWareHouseList(WareHouse condition);
 
-    public WareHouse getWareHouse(String code);
+    public List<WareHouse> getWareHouse(String code);
 
     public Paginable<WareHouse> queryWareHouseFrontPage(int start, int limit,
             WareHouse condition);

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.ICompanyChannelBO;
 import com.bh.mall.bo.IJourBO;
@@ -29,6 +30,7 @@ import com.bh.mall.bo.IWeChatBO;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.CompanyChannel;
@@ -74,12 +76,21 @@ public class WeChatAOImpl implements IWeChatAO {
     @Autowired
     ISYSConfigBO sysConfigBO;
 
+    @Autowired
+    IAgentBO agentBO;
+
     @Override
     @Transactional
     public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl) {
         User user = userBO.getCheckUser(applyUser);
+        Agent aData = agentBO.getAgentByLevel(user.getLevel());
+        if (null != aData.getMinChargeAmount()
+                && aData.getMinChargeAmount() > transAmount) {
+            throw new BizException("xn000000",
+                "充值金额不能低于[" + aData.getMinChargeAmount() + "]");
+        }
 
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");

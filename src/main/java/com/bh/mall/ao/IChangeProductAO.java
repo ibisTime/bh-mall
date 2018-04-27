@@ -31,4 +31,6 @@ public interface IChangeProductAO {
     public void approveChange(String code, String aprrover, String approveNote,
             String result);
 
+    public ChangeProduct getChangeProductMessage(XN627790Req req);
+
 }

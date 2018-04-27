@@ -12,10 +12,9 @@ import com.bh.mall.dto.res.PKCodeRes;
 import com.bh.mall.http.BizConnecter;
 import com.bh.mall.http.JsonUtils;
 
-/**
- * 对接短信机
+/** 
  * @author: xieyj 
- * @since: 2017年2月1日 下午3:24:12 
+ * @since: 2016年5月25日 上午8:15:46 
  * @history:
  */
 @Component

@@ -48,9 +48,9 @@ public interface IUserAO {
     // 检查登录密码是否正确
     public void doCheckLoginPwd(String userId, String password);
 
-    // 更换绑定手机号
-    public void resetBindMobile(String userId, String kind,
-            String oldSmsCaptcha, String newMobile, String newSmsCaptcha);
+    // 更换手机号
+    void doResetMoblie(String userId, String kind, String newMobile,
+            String smsCaptcha);
 
     // 修改用户等级
     public void doUpLevel(String userId, String level);
