@@ -661,4 +661,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return list.get(0);
     }
 
+    @Override
+    public void doSaveUser(User data) {
+        userDAO.insert(data);
+    }
+
 }

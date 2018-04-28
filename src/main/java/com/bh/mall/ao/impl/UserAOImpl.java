@@ -43,8 +43,10 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
+import com.bh.mall.common.PwdUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AfterSale;
@@ -854,7 +856,7 @@ public class UserAOImpl implements IUserAO {
         }
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.NO_THROUGH.getCode());
+        data.setStatus(EUserStatus.IGNORED.getCode());
         String logCode = agencyLogBO.ignore(data);
         data.setLastAgentLog(logCode);
         userBO.ignore(data);
@@ -1278,6 +1280,30 @@ public class UserAOImpl implements IUserAO {
     @Override
     public User getUserName(String userReferee) {
         return userBO.getUserName(userReferee);
+    }
+
+    @Override
+    public String addUser(String kind, String mobile, String loginPwd,
+            String userReferee, String fromInfo) {
+        userBO.isMobileExist(mobile, kind, ESystemCode.BH.getCode(),
+            ESystemCode.BH.getCode());
+        User data = new User();
+        String userId = OrderNoGenerater.generate("U");
+        String status = EUserStatus.NORMAL.getCode();
+        if (EUserKind.Merchant.getCode().equals(kind)) {
+            status = EUserStatus.TO_WILL.getCode();
+        }
+        data.setUserId(userId);
+        data.setMobile(mobile);
+        data.setLoginName(mobile);
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+
+        data.setUserReferee(userReferee);
+        data.setSource(fromInfo);
+        data.setStatus(status);
+        userBO.doSaveUser(data);
+        return userId;
     }
 
 }

@@ -134,4 +134,7 @@ public interface IUserAO {
 
     public User getUserName(String userReferee);
 
+    public String addUser(String type, String mobile, String loginPwd,
+            String userReferee, String fromInfo);
+
 }

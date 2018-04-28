@@ -165,4 +165,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     User getSysUser();
 
+    public void doSaveUser(User data);
+
 }
