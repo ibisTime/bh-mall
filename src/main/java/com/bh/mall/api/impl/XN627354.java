@@ -5,11 +5,12 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.ao.IAgencyLogAO;
+import com.bh.mall.ao.IUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.AgencyLog;
+import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627354Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -23,14 +24,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627354 extends AProcessor {
 
-    private IAgencyLogAO agencyLogAO = SpringContextHolder
-        .getBean(IAgencyLogAO.class);
+    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
     private XN627354Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        AgencyLog condition = new AgencyLog();
+        User condition = new User();
         condition.setKeyWord(req.getKeyword());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
@@ -50,8 +50,7 @@ public class XN627354 extends AProcessor {
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-
-        return agencyLogAO.queryAgencyLogPage(start, limit, condition);
+        return userAO.queryIntentionAgentPage(start, limit, condition);
     }
 
     @Override
