@@ -818,10 +818,10 @@ public class UserAOImpl implements IUserAO {
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setManager(manager);
+
         String logCode = agencyLogBO.saveAgencyLog(data, toUserId,
             EUserStatus.ALLOTED.getCode());
-        agencyLogBO.saveAgencyLog(data, toUserId,
-            EUserStatus.TO_WILL.getCode());
+        data.setStatus(EUserStatus.ALLOTED.getCode());
         data.setLastAgentLog(logCode);
         userBO.allotAgency(data);
     }
