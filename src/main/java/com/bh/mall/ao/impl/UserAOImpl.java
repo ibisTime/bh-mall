@@ -1302,6 +1302,7 @@ public class UserAOImpl implements IUserAO {
         data.setUserReferee(userReferee);
         data.setSource(fromInfo);
         data.setStatus(status);
+        data.setKind(kind);
         userBO.doSaveUser(data);
         return userId;
     }

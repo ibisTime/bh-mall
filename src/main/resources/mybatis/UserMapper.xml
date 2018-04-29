@@ -116,7 +116,7 @@
 				AND t.role_code = #{roleCode}
 			</if>
 			<choose>
-			<when test="status == '3,4'">
+				<when test="status == '3,4'">
 					AND  (t.status = '3' or t.status = '4')
 				</when>
 				<when test="status == '11,14,15'">
