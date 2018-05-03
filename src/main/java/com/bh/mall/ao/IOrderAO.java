@@ -50,6 +50,7 @@ public interface IOrderAO {
     // 确认收货
     public void receivedOrder(String code);
 
-    void paySuccess(String payCode, String payGroup, Long amount);
+    void paySuccess(String result);
+    // void paySuccess(String payCode, String payGroup, Long amount);
 
 }

@@ -68,19 +68,17 @@
 			<if test="toUser != null and toUser != '' ">
 				AND t.to_user = #{toUser}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
 			<if test="statusForQuery != null and statusForQuery != '' ">
 				AND t.status IN (1,2,3,5)
 			</if>
 			<choose>
-				<when test="statusList == '1,2,5' ">
-					AND t.status IN (1,2,5)
+				<when test="status == '1,2'">
+					AND t.status = '1' or t.status = '2'
 				</when>
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
 				</when>
+				
 			</choose>
 			<if test="keyword != null and keyword != '' ">
 				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" u.team_name like "%"${keyword}"%" 

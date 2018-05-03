@@ -258,6 +258,5 @@ public class DateUtil {
         // FRONT_DATE_FORMAT_STRING));
         // }
 
-        System.out.println(getFrontDate("2017-06-26", true));
     }
 }

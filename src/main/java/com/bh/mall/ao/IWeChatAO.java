@@ -8,6 +8,8 @@
  */
 package com.bh.mall.ao;
 
+import java.util.Map;
+
 import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.dto.res.XN627462Res;
 
@@ -31,5 +33,7 @@ public interface IWeChatAO {
     public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl);
+
+    boolean reqOrderquery(Map<String, String> map, String channelType);
 
 }

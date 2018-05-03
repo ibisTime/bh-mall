@@ -1,10 +1,13 @@
 package com.bh.mall.ao.impl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAwardBO;
 import com.bh.mall.bo.ICartBO;
+import com.bh.mall.bo.ICompanyChannelBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
@@ -34,6 +38,7 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AgencyLog;
 import com.bh.mall.domain.Award;
 import com.bh.mall.domain.Cart;
+import com.bh.mall.domain.CompanyChannel;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
@@ -67,6 +72,8 @@ import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserLevel;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
+import com.bh.mall.util.wechat.WXOrderQuery;
+import com.bh.mall.util.wechat.XMLUtil;
 
 @Service
 public class OrderAOImpl implements IOrderAO {
@@ -111,6 +118,9 @@ public class OrderAOImpl implements IOrderAO {
 
     @Autowired
     private IProductLogBO productLogBO;
+
+    @Autowired
+    private ICompanyChannelBO companyChannelBO;
 
     // C端下单
     @Override
@@ -392,27 +402,72 @@ public class OrderAOImpl implements IOrderAO {
         return weChatAO.getPrepayIdH5(user.getUserId(),
             account.getAccountNumber(), payGroup, order.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL);
+            PropertiesUtil.Config.WECHAT_H5_BACKURL);
     }
 
     @Override
-    public void paySuccess(String payCode, String payGroup, Long amount) {
-        Order data = orderBO.getInnerOrderByPayGroup(payGroup);
-        data.setPayDatetime(new Date());
-        data.setPayCode(payCode);
-        data.setPayAmount(amount);
-        data.setStatus(EInnerOrderStatus.Paid.getCode());
-        User user = userBO.getUser(data.getToUser());
-        logger.info("toUser:" + user.getUserId());
-        Account account = accountBO.getAccountByUser(user.getUserId(),
-            ECurrency.YJ_CNY.getCode());
-        if (StringUtils.isBlank(account.getAccountNumber())) {
-            throw new BizException("xn0000", "收款人账户不存在");
+    public void paySuccess(String result) {
+        Map<String, String> map = null;
+        try {
+            map = XMLUtil.doXMLParse(result);
+            String attach = map.get("attach");
+            String[] codes = attach.split("\\|\\|");
+            String systemCode = codes[0];
+            String companyCode = codes[1];
+            String bizBackUrl = codes[2];
+            String wechatOrderNo = map.get("transaction_id");
+            String outTradeNo = map.get("out_trade_no");
+
+            // 此处调用订单查询接口验证是否交易成功
+            boolean isSucc = weChatAO.reqOrderquery(map,
+                EChannelType.WeChat_H5.getCode());
+            if (isSucc) {
+
+                Order data = orderBO.getInnerOrderByPayGroup(outTradeNo);
+                data.setPayDatetime(new Date());
+                data.setPayCode(wechatOrderNo);
+                data.setPayAmount(data.getAmount());
+                data.setStatus(EInnerOrderStatus.Paid.getCode());
+                User user = userBO.getUser(data.getToUser());
+                logger.info("toUser:" + user.getUserId());
+                Account account = accountBO.getAccountByUser(user.getUserId(),
+                    ECurrency.YJ_CNY.getCode());
+                if (StringUtils.isBlank(account.getAccountNumber())) {
+                    throw new BizException("xn0000", "收款人账户不存在");
+                }
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.WeChat_H5, null, data.getPayGroup(),
+                    data.getCode(), EBizType.AJ_YCCH,
+                    EBizType.AJ_YCCH.getValue(), data.getAmount());
+                orderBO.paySuccess(data);
+            }
+
+        } catch (JDOMException | IOException e) {
+            throw new BizException("xn000000", "回调结果XML解析失败");
         }
-        accountBO.changeAmount(account.getAccountNumber(),
-            EChannelType.WeChat_H5, null, payGroup, data.getCode(),
-            EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), amount);
-        orderBO.paySuccess(data);
+
+        // accountBO.changeAmount(account.getAccountNumber(),
+        // EChannelType.WeChat_H5, null, payGroup, data.getCode(),
+        // EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), amount);
+        // orderBO.paySuccess(data);
+        //
+        // Order data = orderBO.getInnerOrderByPayGroup(payGroup);
+        // data.setPayDatetime(new Date());
+        // data.setPayCode(payCode);
+        // data.setPayAmount(amount);
+        // data.setStatus(EInnerOrderStatus.Paid.getCode());
+        // User user = userBO.getUser(data.getToUser());
+        // logger.info("toUser:" + user.getUserId());
+        // Account account = accountBO.getAccountByUser(user.getUserId(),
+        // ECurrency.YJ_CNY.getCode());
+        // if (StringUtils.isBlank(account.getAccountNumber())) {
+        // throw new BizException("xn0000", "收款人账户不存在");
+        // }
+        // accountBO.changeAmount(account.getAccountNumber(),
+        // EChannelType.WeChat_H5, null, payGroup, data.getCode(),
+        // EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), amount);
+        // orderBO.paySuccess(data);
+
     }
 
     @Override
@@ -728,4 +783,44 @@ public class OrderAOImpl implements IOrderAO {
         }
         return name;
     }
+
+    public boolean reqOrderquery(Map<String, String> map, String channelType) {
+        System.out.println("******* 开始订单查询 ******");
+        WXOrderQuery orderQuery = new WXOrderQuery();
+        orderQuery.setAppid(map.get("appid"));
+        orderQuery.setMch_id(map.get("mch_id"));
+        orderQuery.setTransaction_id(map.get("transaction_id"));
+        orderQuery.setOut_trade_no(map.get("out_trade_no"));
+        orderQuery.setNonce_str(map.get("nonce_str"));
+
+        String attach = map.get("attach");
+        System.out.println("attcah=" + attach);
+        String[] codes = attach.split("\\|\\|");
+        System.out
+            .println("companyCode=" + codes[0] + " systemCode=" + codes[1]);
+        CompanyChannel companyChannel = companyChannelBO
+            .getCompanyChannel(codes[0], codes[1], channelType);
+
+        // 此处需要密钥PartnerKey，此处直接写死，自己的业务需要从持久化中获取此密钥，否则会报签名错误
+        orderQuery.setPartnerKey(companyChannel.getPrivateKey1());
+
+        Map<String, String> orderMap = orderQuery.reqOrderquery();
+        // 此处添加支付成功后，支付金额和实际订单金额是否等价，防止钓鱼
+        if (orderMap.get("return_code") != null
+                && orderMap.get("return_code").equalsIgnoreCase("SUCCESS")) {
+            if (orderMap.get("trade_state") != null && orderMap
+                .get("trade_state").equalsIgnoreCase("SUCCESS")) {
+                String total_fee = map.get("total_fee");
+                String order_total_fee = map.get("total_fee");
+                if (Integer.parseInt(order_total_fee) >= Integer
+                    .parseInt(total_fee)) {
+                    System.out.println("******* 开订单查询结束，结果正确 ******");
+                    return true;
+                }
+            }
+        }
+        System.out.println("******* 开订单查询结束，结果不正确 ******");
+        return false;
+    }
+
 }

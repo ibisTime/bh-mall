@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bh.mall.ao.IInnerOrderAO;
+import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 
 /** 
@@ -30,6 +32,12 @@ public class CallbackConroller {
     @Autowired
     IWeChatAO weChatAO;
 
+    @Autowired
+    IInnerOrderAO innerOrderAO;
+
+    @Autowired
+    IOrderAO orderAO;
+
     // 微信H5支付回调
     @RequestMapping("/wechat/H5/callback")
     public synchronized void doCallbackWechatH5(HttpServletRequest request,
@@ -42,6 +50,7 @@ public class CallbackConroller {
             logger.info("**** 公众号支付回调结果 ****：" + result);
             // 解析回调结果并通知业务biz
             weChatAO.doCallbackH5(result);
+            orderAO.paySuccess(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(

@@ -6,12 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bh.mall.ao.IInnerOrderAO;
-import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.enums.EBizType;
 
 /**
@@ -26,27 +23,16 @@ public class CallbackBzdhConroller {
     private static Logger logger = Logger
         .getLogger(CallbackBzdhConroller.class);
 
-    @Autowired
-    IInnerOrderAO innerOrderAO;
-
-    @Autowired
-    IOrderAO orderAO;
-
     // 自身支付回调
     @RequestMapping("/bzdh/callback")
     public synchronized void doCallbackPay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
         boolean isSuccess = Boolean.valueOf(request.getParameter("isSuccess"));
-        logger.info("isSuccess：" + isSuccess);
         String payGroup = request.getParameter("payGroup");
-        logger.info("payGroup：" + payGroup);
         String payCode = request.getParameter("payCode");
-        logger.info("payCode：" + payCode);
         Long amount = Long.valueOf(request.getParameter("transAmount"));
-        logger.info("amount：" + amount);
         String bizType = request.getParameter("bizType");
-        logger.info("bizType：" + bizType);
         // 支付成功，商户处理后同步返回给微信参数
         if (!isSuccess) {
             logger.info("支付失败");
@@ -70,4 +56,24 @@ public class CallbackBzdhConroller {
             }
         }
     }
+
+    // private String getReqResult(PrintWriter out, InputStream inStream)
+    // throws IOException {
+    // ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+    // byte[] buffer = new byte[1024];
+    // int len = 0;
+    // while ((len = inStream.read(buffer)) != -1) {
+    // outSteam.write(buffer, 0, len);
+    // }
+    // outSteam.close();
+    // inStream.close();
+    // return new String(outSteam.toByteArray(), "utf-8");
+    // }
+    //
+    // public String setXML(String return_code, String return_msg) {
+    // return "<xml><return_code><![CDATA[" + return_code
+    // + "]]></return_code><return_msg><![CDATA[" + return_msg
+    // + "]]></return_msg></xml>";
+    // }
+
 }

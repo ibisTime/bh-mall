@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bh.mall.base.ABizTest;
-import com.bh.mall.bo.IUserBO;
 
 /** 
  * @author: miyb 
@@ -29,5 +28,6 @@ public class IUserBOTest extends ABizTest {
         // "127.0.0.1",
         // "", 0L);
         // logger.info("doRegister : {}", userId);
+
     }
 }
