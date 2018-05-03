@@ -44,6 +44,8 @@ public class Agent extends ABaseDO {
     // ***************db*************
     private Integer lowLevel;
 
+    private String levelForQuery;
+
     public Integer getLowLevel() {
         return lowLevel;
     }
@@ -114,6 +116,14 @@ public class Agent extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getLevelForQuery() {
+        return levelForQuery;
+    }
+
+    public void setLevelForQuery(String levelForQuery) {
+        this.levelForQuery = levelForQuery;
     }
 
 }

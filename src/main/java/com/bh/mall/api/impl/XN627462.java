@@ -40,10 +40,11 @@ public class XN627462 extends AProcessor {
     public Object doBusiness() throws BizException {
         Long transAmount = StringValidater.toLong(req.getAmount());
         if (EChannelType.WeChat_H5.getCode().equals(req.getChannelType())) {
-            return weChatAO.getPrepayIdH5(req.getApplyUser(),
+            return weChatAO.toPrepayIdH5(req.getApplyUser(),
                 req.getAccountNumber(), EBizType.AJ_CZ.getValue(),
                 EBizType.AJ_CZ.getValue(), EBizType.AJ_CZ.getCode(), "微信H5支付充值",
-                transAmount, PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL);
+                transAmount, PropertiesUtil.Config.WECHAT_H5_BACKURL);
+
         } else {
             throw new BizException("xn000000", "暂时不支持该渠道");
         }

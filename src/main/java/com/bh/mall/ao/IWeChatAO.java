@@ -28,4 +28,8 @@ public interface IWeChatAO {
 
     public void doBizCallback(CallbackResult callbackResult);
 
+    public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
+            String payGroup, String refNo, String bizType, String bizNote,
+            Long transAmount, String backUrl);
+
 }

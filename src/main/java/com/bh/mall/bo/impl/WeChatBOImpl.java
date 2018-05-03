@@ -15,10 +15,11 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IWeChatBO;
-import com.bh.mall.common.PropertiesUtil;
+import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.domain.CompanyChannel;
 import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EWeChatType;
@@ -35,10 +36,14 @@ import com.bh.mall.util.wechat.WXPrepay;
 @Component
 public class WeChatBOImpl implements IWeChatBO {
 
+    private static Logger logger = Logger
+        .getLogger(CallbackBzdhConroller.class);
+
     @Override
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
             String bizNote, String code, Long transAmount, String ip,
             String bizBackUrl) {
+        logger.info(bizBackUrl);
         WXPrepay prePay = new WXPrepay();
         prePay.setAppid(companyChannel.getPrivateKey2());// 微信支付分配的公众账号ID
         prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
@@ -47,7 +52,7 @@ public class WeChatBOImpl implements IWeChatBO {
         prePay.setTotal_fee(Long.toString(transAmount / 10)); // 订单总金额，厘转化成分
         prePay.setSpbill_create_ip(ip); // 用户IP
         prePay.setTrade_type(EWeChatType.JSAPI.getCode()); // 交易类型
-        prePay.setNotify_url(PropertiesUtil.Config.WECHAT_H5_BACKURL);// 回调地址
+        prePay.setNotify_url(bizBackUrl);// 回调地址
         prePay.setPartnerKey(companyChannel.getPrivateKey1()); // 商户秘钥
         prePay.setOpenid(openId); // 支付者openid
         prePay.setAttach(companyChannel.getSystemCode() + "||"

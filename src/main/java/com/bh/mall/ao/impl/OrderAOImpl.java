@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.core.EGeneratePrefix;
@@ -68,6 +70,8 @@ import com.bh.mall.exception.BizException;
 
 @Service
 public class OrderAOImpl implements IOrderAO {
+    private static Logger logger = Logger
+        .getLogger(CallbackBzdhConroller.class);
 
     @Autowired
     private IOrderBO orderBO;
@@ -191,55 +195,85 @@ public class OrderAOImpl implements IOrderAO {
         }
 
         User uLevel = userBO.getUser(req.getApplyUser());
-        if (null == uLevel.getLevel()) {
-            throw new BizException("xn0000", "该代理无等级");
-        }
 
         ProductSpecsPrice pspData = productSpecsPriceBO
             .getPriceBySpecsCode(psData.getCode(), uLevel.getLevel());
-
         // 判断代理状态
         String kind = EOrderKind.Normal_Order.getCode();
-        // 是否有过授权单
-        Order condition = new Order();
-        condition.setApplyUser(req.getApplyUser());
-        condition.setKind(EOrderKind.Impower_Order.getCode());
-        long count = orderBO.getTotalCount(condition);
-        if (count == 0) {
-            if (EProductSpecsType.Apply_NO.getCode()
-                .equals(psData.getIsImpowerOrder())) {
-                throw new BizException("xn0000", "该产品规格不予许授权单下单");
-            } else {
-                kind = EOrderKind.Impower_Order.getCode();
-            }
-        }
-        // 是否升级
-        User user = userBO.getUser(req.getApplyUser());
-        AgencyLog agencyLog = agencyLogBO.getAgencyLog(user.getLastAgentLog());
+        if (EUserKind.Plat.getCode().equals(uLevel.getKind())) {
 
-        if (EUserStatus.UPGRADED.getCode().equals(agencyLog.getStatus())) {
-            condition.setKind(EOrderKind.Upgrade_Order.getCode());
-            count = orderBO.getTotalCount(condition);
+            // 是否有过授权单
+            Order condition = new Order();
+            condition.setApplyUser(req.getApplyUser());
+            condition.setKind(EOrderKind.Impower_Order.getCode());
+            long count = orderBO.getTotalCount(condition);
             if (count == 0) {
                 if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(psData.getIsUpgradeOrder())) {
-                    throw new BizException("xn0000", "该产品规格不予许升级单下单");
+                    .equals(psData.getIsImpowerOrder())) {
+                    throw new BizException("xn0000", "该产品规格不予许授权单下单");
                 } else {
-                    kind = EOrderKind.Upgrade_Order.getCode();
+                    kind = EOrderKind.Impower_Order.getCode();
                 }
             }
-        }
+            // 是否升级
+            User user = userBO.getUser(req.getApplyUser());
+            AgencyLog agencyLog = agencyLogBO
+                .getAgencyLog(user.getLastAgentLog());
 
-        // 判断是否允许：普通，授权，升级下单
-        if (EProductSpecsType.Apply_NO.getCode()
-            .equals(psData.getIsNormalOrder())) {
-            throw new BizException("xn0000", "该产品规格不予许普通单下单");
-        }
+            if (EUserStatus.UPGRADED.getCode().equals(agencyLog.getStatus())) {
+                condition.setKind(EOrderKind.Upgrade_Order.getCode());
+                count = orderBO.getTotalCount(condition);
+                if (count == 0) {
+                    if (EProductSpecsType.Apply_NO.getCode()
+                        .equals(psData.getIsUpgradeOrder())) {
+                        throw new BizException("xn0000", "该产品规格不予许升级单下单");
+                    } else {
+                        kind = EOrderKind.Upgrade_Order.getCode();
+                    }
+                }
+            }
 
-        if (EProductStatus.Shelf_NO.getCode().equals(pData.getStatus())
-                || EProductStatus.Shelf_YES.getCode()
-                    .equals(pData.getStatus())) {
-            throw new BizException("xn0000", "产品已下架无法下单");
+            // 判断是否允许：普通，授权，升级下单
+            if (EProductSpecsType.Apply_NO.getCode()
+                .equals(psData.getIsNormalOrder())) {
+                throw new BizException("xn0000", "该产品规格不予许普通单下单");
+            }
+
+            // 下单代理是一级
+            if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == user
+                .getLevel()) {
+                // 产品总数量
+                int quantity = StringValidater.toInteger(req.getQuantity())
+                        * psData.getNumber();
+
+                if (quantity > pData.getRealNumber()) {
+                    throw new BizException("xn0000", "产品库存不足");
+                }
+                // 修改产品库存记录
+                productLogBO.saveChangeLog(pData,
+                    EProductLogType.Order.getCode(), pData.getRealNumber(),
+                    quantity, null);
+                pData.setRealNumber(pData.getRealNumber() - quantity);
+                productBO.refreshRealNumber(pData);
+
+                // WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
+                // user.getUserId(), req.getProductSpecsCode());
+                //
+                // wareHouseBO.changeWareHouse(whData.getCode(),
+                // StringValidater.toInteger(req.getQuantity()),
+                // EBizType.AJ_GMYC,
+                // EBizType.AJ_GMYC.getValue(), code);
+            } else {
+                // User fromUser = userBO.getCheckUser(req.getToUser());
+                // User toUser = userBO.getCheckUser(req.getApplyUser());
+                // wareHouseBO.transQuantity(fromUser.getUserId(),
+                // psData.getCode(),
+                // toUser.getUserId(), psData.getCode(),
+                // StringValidater.toInteger(req.getQuantity()),
+                // EBizType.AJ_GMYC,
+                // EBizType.AJ_YCCH, EBizType.AJ_GMYC.getValue(),
+                // EBizType.AJ_YCCH.getValue(), code);
+            }
         }
 
         String code = OrderNoGenerater
@@ -285,37 +319,6 @@ public class OrderAOImpl implements IOrderAO {
         data.setStatus(EOrderStatus.Unpaid.getCode());
 
         orderBO.saveOrder(data);
-        // 下单代理是一级
-        if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == user
-            .getLevel()) {
-            // 产品总数量
-            int quantity = StringValidater.toInteger(req.getQuantity())
-                    * psData.getNumber();
-
-            if (quantity > pData.getRealNumber()) {
-                throw new BizException("xn0000", "产品库存不足");
-            }
-            // 修改产品库存记录
-            productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
-                pData.getRealNumber(), quantity, null);
-            pData.setRealNumber(pData.getRealNumber() - quantity);
-            productBO.refreshRealNumber(pData);
-
-            WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
-                user.getUserId(), req.getProductSpecsCode());
-
-            wareHouseBO.changeWareHouse(whData.getCode(),
-                StringValidater.toInteger(req.getQuantity()), EBizType.AJ_GMYC,
-                EBizType.AJ_GMYC.getValue(), code);
-        } else {
-            User fromUser = userBO.getCheckUser(req.getToUser());
-            User toUser = userBO.getCheckUser(req.getApplyUser());
-            wareHouseBO.transQuantity(fromUser.getUserId(), psData.getCode(),
-                toUser.getUserId(), psData.getCode(),
-                StringValidater.toInteger(req.getQuantity()), EBizType.AJ_GMYC,
-                EBizType.AJ_YCCH, EBizType.AJ_GMYC.getValue(),
-                EBizType.AJ_YCCH.getValue(), code);
-        }
         return code;
 
     }
@@ -327,23 +330,42 @@ public class OrderAOImpl implements IOrderAO {
             String[] group = codeList.split(",");
             for (String code : group) {
                 Order data = orderBO.getOrder(code);
-                if (!EOrderStatus.Paid.getCode().equals(data.getStatus())) {
+                if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                     throw new BizException("xn0000", "订单未处于待支付状态");
                 }
 
                 User uData = userBO.getUser(data.getApplyUser());
-                Account accountData = accountBO.getAccountByUser(
-                    data.getApplyUser(), ECurrency.YJ_CNY.getCode());
-
+                Account accountData = null;
                 if (EUserKind.Customer.getCode().equals(uData.getKind())) {
                     Object payResult = this.payWXH5(data);
                     result = payResult;
 
                 } else if (EBoolean.NO.getCode().equals(payType)) {
+                    accountBO.getAccountByUser(data.getApplyUser(),
+                        ECurrency.MK_CNY.getCode());
                     String toUserId = data.getToUser();
                     if (isPlat(data.getToUser())) {
                         toUserId = ESysUser.SYS_USER_BH.getCode();
                     }
+
+                    // 进价
+                    User toUser = userBO.getUser(data.getToUser());
+                    ProductSpecsPrice inPrice = productSpecsPriceBO
+                        .getPriceByLevel(data.getProductSpecsCode(),
+                            toUser.getLevel());
+
+                    // 总利润
+                    Long awardAmount = (data.getPrice() - inPrice.getPrice())
+                            * data.getQuantity();
+                    awardAmount = AmountUtil.eraseLiUp(awardAmount);
+                    // 差价利润
+                    accountBO.changeAmount(accountData.getAccountNumber(),
+                        EChannelType.NBZ, null, data.getCode(), data.getCode(),
+                        EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(),
+                        awardAmount);
+
+                    // 出货以及推荐奖励
+                    this.payAward(data);
 
                     accountBO.transAmountCZB(data.getApplyUser(),
                         ECurrency.MK_CNY.getCode(), toUserId,
@@ -356,22 +378,6 @@ public class OrderAOImpl implements IOrderAO {
                     result = payResult;
                 }
 
-                // 进价
-                User toUser = userBO.getUser(data.getToUser());
-                ProductSpecsPrice inPrice = productSpecsPriceBO.getPriceByLevel(
-                    data.getProductSpecsCode(), toUser.getLevel());
-
-                // 总利润
-                Long awardAmount = (data.getPrice() - inPrice.getPrice())
-                        * data.getQuantity();
-                awardAmount = AmountUtil.eraseLiUp(awardAmount);
-                // 差价利润
-                accountBO.changeAmount(accountData.getAccountNumber(),
-                    EChannelType.NBZ, null, data.getCode(), data.getCode(),
-                    EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(), awardAmount);
-
-                // 出货以及推荐奖励
-                this.payAward(data);
             }
         }
         return result;
@@ -381,10 +387,12 @@ public class OrderAOImpl implements IOrderAO {
         Long rmbAmount = order.getAmount() + order.getYunfei();
         User user = userBO.getCheckUser(order.getApplyUser());
         String payGroup = orderBO.addPayGroup(order, EBoolean.YES.getCode());
+        Account account = accountBO.getAccountByUser(order.getToUser(),
+            ECurrency.YJ_CNY.getCode());
         return weChatAO.getPrepayIdH5(user.getUserId(),
-            ESystemCode.BH.getCode(), payGroup, order.getCode(),
+            account.getAccountNumber(), payGroup, order.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            PropertiesUtil.Config.WECHAT_H5_BACKURL);
+            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL);
     }
 
     @Override
@@ -394,6 +402,16 @@ public class OrderAOImpl implements IOrderAO {
         data.setPayCode(payCode);
         data.setPayAmount(amount);
         data.setStatus(EInnerOrderStatus.Paid.getCode());
+        User user = userBO.getUser(data.getToUser());
+        logger.info("toUser:" + user.getUserId());
+        Account account = accountBO.getAccountByUser(user.getUserId(),
+            ECurrency.YJ_CNY.getCode());
+        if (StringUtils.isBlank(account.getAccountNumber())) {
+            throw new BizException("xn0000", "收款人账户不存在");
+        }
+        accountBO.changeAmount(account.getAccountNumber(),
+            EChannelType.WeChat_H5, null, payGroup, data.getCode(),
+            EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), amount);
         orderBO.paySuccess(data);
     }
 

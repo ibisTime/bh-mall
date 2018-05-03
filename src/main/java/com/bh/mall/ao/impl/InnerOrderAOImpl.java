@@ -22,6 +22,7 @@ import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Account;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.InnerProduct;
 import com.bh.mall.domain.SYSConfig;
@@ -32,6 +33,7 @@ import com.bh.mall.dto.req.XN627723Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.enums.EInnerProductStatus;
@@ -163,6 +165,12 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setPayCode(payCode);
         data.setPayAmount(amount);
         data.setStatus(EInnerOrderStatus.Paid.getCode());
+        Account account = accountBO.getSysAccountNumber(
+            ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
+            ECurrency.YJ_CNY);
+        accountBO.changeAmount(account.getAccountNumber(),
+            EChannelType.WeChat_H5, null, payGroup, data.getCode(),
+            EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), amount);
         innerOrderBO.paySuccess(data);
     }
 

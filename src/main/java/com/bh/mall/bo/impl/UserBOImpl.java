@@ -103,12 +103,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
-            String photo, String status, String companyCode,
+            String photo, String level, String status, String companyCode,
             String systemCode) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
-        /////
         user.setUnionId(unionId);
         user.setH5OpenId(h5OpenId);
         user.setAppOpenId(appOpenId);
@@ -125,6 +124,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setCreateDatetime(date);
 
         user.setCompanyCode(companyCode);
+        user.setLevel(StringValidater.toInteger(level));
         user.setSystemCode(systemCode);
         String logCode = agencyLogBO.acceptIntention(user);
         user.setLastAgentLog(logCode);

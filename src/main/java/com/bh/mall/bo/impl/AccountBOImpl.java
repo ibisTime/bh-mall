@@ -89,7 +89,11 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             String channelOrder, String payGroup, String refNo,
             EBizType bizType, String bizNote, Long transAmount) {
         Account dbAccount = this.getAccount(accountNumber);
-        Long nowAmount = dbAccount.getAmount() + transAmount;
+        Long dbAmount = dbAccount.getAmount();
+        if (null == dbAmount) {
+            dbAmount = 0L;
+        }
+        Long nowAmount = dbAmount + transAmount;
         // 特定账户余额可为负
         if (!dbAccount.getUserId().contains(ESysUser.SYS_USER.getCode())
                 && nowAmount < 0) {

@@ -44,8 +44,8 @@ public class CallbackConroller {
             weChatAO.doCallbackH5(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
-            out.print(new ByteArrayInputStream(noticeStr.getBytes(Charset
-                .forName("UTF-8"))));
+            out.print(new ByteArrayInputStream(
+                noticeStr.getBytes(Charset.forName("UTF-8"))));
         } catch (Exception e) {
             logger.info("公众号支付回调异常,原因：" + e.getMessage());
         }

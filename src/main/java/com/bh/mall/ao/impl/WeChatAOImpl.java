@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWeChatBO;
+import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
@@ -54,6 +56,8 @@ import com.bh.mall.util.wechat.XMLUtil;
  */
 @Service
 public class WeChatAOImpl implements IWeChatAO {
+    private static Logger logger = Logger
+        .getLogger(CallbackBzdhConroller.class);
 
     @Autowired
     IWeChatBO weChatBO;
@@ -80,17 +84,26 @@ public class WeChatAOImpl implements IWeChatAO {
     IAgentBO agentBO;
 
     @Override
-    @Transactional
-    public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
+    public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl) {
-        User user = userBO.getCheckUser(applyUser);
+        User user = userBO.getUser(applyUser);
         Agent aData = agentBO.getAgentByLevel(user.getLevel());
         if (null != aData.getMinChargeAmount()
                 && aData.getMinChargeAmount() > transAmount) {
             throw new BizException("xn000000",
                 "充值金额不能低于[" + aData.getMinChargeAmount() + "]");
         }
+        return this.getPrepayIdH5(applyUser, accountNumber, payGroup, refNo,
+            bizType, bizNote, transAmount, backUrl);
+    }
+
+    @Override
+    @Transactional
+    public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
+            String payGroup, String refNo, String bizType, String bizNote,
+            Long transAmount, String backUrl) {
+        User user = userBO.getCheckUser(applyUser);
 
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
@@ -114,6 +127,7 @@ public class WeChatAOImpl implements IWeChatAO {
         // 获取微信公众号支付prepayid
         String prepayId = weChatBO.getPrepayIdH5(companyChannel, openId,
             bizNote, chargeOrderCode, transAmount, SysConstant.IP, backUrl);
+        logger.info("prepayId:" + prepayId);
         // 返回微信APP支付所需信息
         return weChatBO.getPayInfoH5(companyChannel, chargeOrderCode, prepayId);
     }
@@ -128,8 +142,13 @@ public class WeChatAOImpl implements IWeChatAO {
             String systemCode = codes[0];
             String companyCode = codes[1];
             String bizBackUrl = codes[2];
+            logger.info("bizBackUrl:" + bizBackUrl);
             String wechatOrderNo = map.get("transaction_id");
+            logger.info("wechatOrderNo:" + wechatOrderNo);
             String outTradeNo = map.get("out_trade_no");
+            logger.info("outTradeNo:" + outTradeNo);
+
+            logger.info("map:" + map);
             // 取到订单信息
             Charge order = chargeBO.getCharge(outTradeNo);
             if (!EChargeStatus.toPay.getCode().equals(order.getStatus())) {
@@ -138,11 +157,14 @@ public class WeChatAOImpl implements IWeChatAO {
             // 此处调用订单查询接口验证是否交易成功
             boolean isSucc = reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
+            logger.info("isSucc:" + isSucc);
             // 支付成功，商户处理后同步返回给微信参数
             if (isSucc) {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, true);
                 // 收款方账户加钱
+                logger.info("AccountNumber：" + order.getAccountNumber()
+                        + "ChannelType：" + order.getChannelType());
                 accountBO.changeAmount(order.getAccountNumber(),
                     EChannelType.getEChannelType(order.getChannelType()),
                     wechatOrderNo, order.getPayGroup(), order.getRefNo(),

@@ -172,16 +172,102 @@ public class UserAOImpl implements IUserAO {
     @Override
     public XN627302Res doLoginWeChatByMerchant(String code, String userKind) {
 
-        return doLoginWeChat(code, userKind);
+        return doLoginWeChatH(code, userKind);
     }
 
     @Override
     public XN627302Res doLoginWeChatByCustomer(String code, String userKind) {
-        return doLoginWeChat(code, userKind);
+        return doLoginWeChatM(code, userKind);
     }
 
     @Transactional
-    private XN627302Res doLoginWeChat(String code, String userKind) {
+    private XN627302Res doLoginWeChatM(String code, String userKind) {
+        String companyCode = ESystemCode.BH.getCode();
+        String systemCode = ESystemCode.BH.getCode();
+        // Step1：获取密码参数信息
+        Map<String, String> configPwd = sysConfigBO.getConfigsMap(
+            EConfigType.WEIXIN_XCX.getCode(), companyCode, systemCode);
+
+        String appId = configPwd.get(SysConstant.WX_XCX_ACCESS_KEY);
+        String appSecret = configPwd.get(SysConstant.WX_XCX_SECRET_KEY);
+
+        if (StringUtils.isBlank(appId)) {
+            throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
+        }
+        if (StringUtils.isBlank(appSecret)) {
+            throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
+        }
+
+        // Step2：通过Authorization Code获取Access Token
+        String sessionKey = "";
+        Map<String, String> res = new HashMap<>();
+        Properties fromProperties = new Properties();
+        fromProperties.put("grant_type", "authorization_code");
+        fromProperties.put("appid", appId);
+        fromProperties.put("secret", appSecret);
+        // fromProperties.put("code", code);// 微信H5
+        fromProperties.put("js_code", code);// 微信小程序
+        logger.info(
+            "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
+        XN627302Res result = null;
+        try {
+            String response = PostSimulater.requestPostForm(
+                WechatConstant.WXXCX_TOKEN_URL, fromProperties);
+            res = getMapFromResponse(response);
+            sessionKey = (String) res.get("session_key");
+            if (res.get("error") != null) {
+                throw new BizException("XN000000",
+                    "微信登录失败原因：" + res.get("error"));
+            }
+            if (StringUtils.isBlank(sessionKey)) {
+                throw new BizException("XN000000", "sessionKey不能为空");
+            }
+            // Step3：使用Access Token来获取用户的OpenID
+            String openId = (String) res.get("openid");
+            // // 获取unionid
+            // Map<String, String> wxRes = new HashMap<>();
+            // Properties queryParas = new Properties();
+            // queryParas.put("session_key", sessionKey);
+            // queryParas.put("openid", openId);
+            // queryParas.put("lang", "zh_CN");
+            // wxRes = getMapFromResponse(PostSimulater
+            // .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
+            // // String unionId = (String) wxRes.get("unionid");
+            // String h5OpenId = (String) wxRes.get("openid");
+            if (StringUtils.isBlank(openId)) {
+                throw new BizException("XN000000", "opind不能为空");
+            }
+            // Step4：根据openId，unionId从数据库中查询用户信息
+            User dbUser = userBO.doGetUserByOpenId(openId, companyCode,
+                systemCode);
+            if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                result = new XN627302Res(dbUser.getUserId(),
+                    dbUser.getStatus());
+            } else {
+                // String nickname = (String) wxRes.get("nickname");
+                // String photo = (String) wxRes.get("headimgurl");
+                // Step5：判断注册是否传手机号，有则注册，无则反馈
+                // if (EBoolean.YES.getCode().equals(isNeedMobile)) {
+                //
+                // doWxLoginRegMobile(mobile, isLoginStatus, smsCaptcha,
+                // smsCaptchaNumber, companyCode, systemCode, unionId,
+                // null, h5OpenId, nickname, photo, userKind);
+                //
+                // } else {
+                //
+                // }
+
+                result = doWxLoginReg(companyCode, systemCode, null, null,
+                    openId, null, null, userKind);
+            }
+        } catch (Exception e) {
+            throw new BizException("xn000000", e.getMessage());
+        }
+        return result;
+    }
+
+    @Transactional
+    private XN627302Res doLoginWeChatH(String code, String userKind) {
         String companyCode = ESystemCode.BH.getCode();
         String systemCode = ESystemCode.BH.getCode();
         // Step1：获取密码参数信息
@@ -318,17 +404,19 @@ public class UserAOImpl implements IUserAO {
         userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
             systemCode);
         String status = null;
+        String level = null;
         // 插入用户信息
         if (EUserKind.Customer.getCode().equals(userKind)) {
             status = EUserStatus.NORMAL.getCode();
             result.setStatus(status);
+            level = "6";
         } else {
             status = EUserStatus.TO_WILL.getCode();
             result.setStatus(status);
         }
         String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
             userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status,
-            companyCode, systemCode);
+            level, companyCode, systemCode);
         // distributeAccount(userId, nickname, userKind, companyCode,
         // systemCode);
         result.setUserId(userId);

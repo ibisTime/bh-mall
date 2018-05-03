@@ -17,7 +17,8 @@ public class XN627252Req {
     @NotBlank(message = "管理员不能为空")
     private String manager;
 
-    // （选填）分配给谁
+    // （必填）分配给谁
+    @NotBlank(message = "分配给谁不能为空")
     private String toUserId;
 
     // （必填）更新人

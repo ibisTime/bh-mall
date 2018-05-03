@@ -35,15 +35,15 @@
 	<select id="select_sysDict" parameterType="sysDict" resultMap="sysDict_DB_Result">
 		SELECT
 		id
-		,type
-		,parent_key
-		,dkey
+		,t.type
+		,t.parent_key
+		,t.dkey
 		
-		,dvalue
-		,updater
-		,update_datetime
-		,remark
-		,system_code
+		,t.dvalue
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.system_code
 		FROM
 		tsys_dict t 
 		<include refid="where_condition" />

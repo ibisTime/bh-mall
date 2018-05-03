@@ -109,10 +109,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     public String addPayGroup(Order order, String payType) {
         String payGroup = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
-        Order data = new Order();
-        data.setPayCode(payGroup);
-        data.setPayType(payType);
-        orderDAO.addPayGroup(data);
+        order.setPayGroup(payGroup);
+        order.setPayType(payType);
+        orderDAO.addPayGroup(order);
         return payGroup;
     }
 

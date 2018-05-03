@@ -31,6 +31,7 @@ public class XN627665 extends AProcessor {
         Order condition = new Order();
         condition.setToUser(req.getToUserId());
         condition.setStatus(req.getStatus());
+        condition.setApplyUser(req.getApplyUser());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(
@@ -51,7 +52,6 @@ public class XN627665 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627665Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getToUserId());
 
     }
 

@@ -23,6 +23,9 @@ public class XN627665Req extends APageReq {
     // 类型
     private String keyword;
 
+    // 下单人
+    private String applyUser;
+
     public String getStatus() {
         return status;
     }
@@ -45,6 +48,14 @@ public class XN627665Req extends APageReq {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
     }
 
 }

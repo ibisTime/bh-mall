@@ -19,6 +19,9 @@ public class XN627555Req extends APageReq {
     // （必填） 用户等级
     private String level;
 
+    // 状态
+    private String status;
+
     public String getName() {
         return name;
     }
@@ -33,6 +36,14 @@ public class XN627555Req extends APageReq {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

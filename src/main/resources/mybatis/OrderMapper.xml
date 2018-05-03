@@ -307,7 +307,7 @@
 		UPDATE tbh_order
 		SET
 		pay_group = #{payGroup}
-		pay_type = #{payType}
+		,pay_type = #{payType}
 		WHERE code = #{code}
 	</update>
 </mapper>

@@ -24,6 +24,7 @@ public class XN627555 extends AProcessor {
         Product condition = new Product();
         condition.setName(req.getName());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
+        condition.setStatus(req.getStatus());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IProductAO.DEFAULT_ORDER_COLUMN;

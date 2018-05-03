@@ -54,6 +54,10 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         if (transAmount == 0) {
             throw new BizException("xn000000", "新增流水变动金额不能为0");
         }
+        Long amount = dbAccount.getAmount();
+        if (null == amount) {
+            amount = 0L;
+        }
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());
 
@@ -73,8 +77,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setBizType(bizType.getCode());
 
         data.setBizNote(bizNote);
-        data.setPreAmount(dbAccount.getAmount());
-        data.setPostAmount(dbAccount.getAmount() + transAmount);
+        data.setPreAmount(amount);
+        data.setPostAmount(amount + transAmount);
         data.setStatus(EJourStatus.todoCheck.getCode());
         data.setRemark("记得对账哦");
 

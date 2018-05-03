@@ -14,7 +14,6 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -51,9 +50,6 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     private IAwardBO awardBO;
-
-    @Autowired
-    private IUserBO userBO;
 
     @Override
     public String addProduct(XN627540Req req) {

@@ -36,11 +36,17 @@ public class CallbackBzdhConroller {
     @RequestMapping("/bzdh/callback")
     public synchronized void doCallbackPay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
+
         boolean isSuccess = Boolean.valueOf(request.getParameter("isSuccess"));
+        logger.info("isSuccess：" + isSuccess);
         String payGroup = request.getParameter("payGroup");
+        logger.info("payGroup：" + payGroup);
         String payCode = request.getParameter("payCode");
+        logger.info("payCode：" + payCode);
         Long amount = Long.valueOf(request.getParameter("transAmount"));
+        logger.info("amount：" + amount);
         String bizType = request.getParameter("bizType");
+        logger.info("bizType：" + bizType);
         // 支付成功，商户处理后同步返回给微信参数
         if (!isSuccess) {
             logger.info("支付失败");

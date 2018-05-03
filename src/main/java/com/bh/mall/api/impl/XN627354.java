@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IAgencyLogAO;
 import com.bh.mall.ao.IUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
@@ -44,7 +43,7 @@ public class XN627354 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IAgencyLogAO.DEFAULT_ORDER_COLUMN;
+            column = IUserAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
