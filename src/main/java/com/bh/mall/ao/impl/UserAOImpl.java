@@ -171,7 +171,6 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public XN627302Res doLoginWeChatByMerchant(String code, String userKind) {
-
         return doLoginWeChatH(code, userKind);
     }
 
@@ -283,7 +282,6 @@ public class UserAOImpl implements IUserAO {
         if (StringUtils.isBlank(appSecret)) {
             throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
         }
-
         // Step2：通过Authorization Code获取Access Token
         String accessToken = "";
         Map<String, String> res = new HashMap<>();
@@ -293,6 +291,7 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("secret", appSecret);
         fromProperties.put("code", code);// 微信H5
         // fromProperties.put("js_code", code);// 微信小程序
+        System.out.println("appId:" + appId + ",appSecret:" + appSecret);
         logger.info(
             "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
         XN627302Res result = null;
@@ -534,8 +533,8 @@ public class UserAOImpl implements IUserAO {
         if (newMobile.equals(oldMobile)) {
             throw new BizException("xn000000", "新手机与原手机一致");
         }
-        // 根据手机号和类型判断手机号是否存在
-        userBO.isMobileExist(newMobile, kind, user.getCompanyCode(),
+        // 判断手机号是否存在
+        userBO.isMobileExist(newMobile, user.getCompanyCode(),
             user.getSystemCode());
         // 新手机号验证
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627310",
@@ -546,9 +545,9 @@ public class UserAOImpl implements IUserAO {
             "尊敬的" + PhoneUtil.hideMobile(oldMobile) + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
                         DateUtil.DATA_TIME_PATTERN_1)
-                    + "提交的更改绑定手机号码服务已审核通过，现绑定手机号码为" + newMobile
+                    + "已将手机号码改为" + newMobile + "，您的登录名更改为" + newMobile
                     + "，请妥善保管您的账户相关信息。",
-            "805061", user.getCompanyCode(), user.getSystemCode());
+            "631072", user.getCompanyCode(), user.getSystemCode());
 
     }
 
@@ -693,41 +692,37 @@ public class UserAOImpl implements IUserAO {
     @Override
     public User doGetUser(String userId) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", userId + "用户不存在");
-        } else {
-            // 推荐人、上级、介绍人转义
-            if (StringUtils.isNotBlank(user.getUserReferee())) {
-                User userReferee = userBO.getUserName(user.getUserReferee());
-                if (userReferee != null) {
-                    user.setRefereeUser(userReferee);
-                }
+        // 推荐人、上级、介绍人转义
+        if (StringUtils.isNotBlank(user.getUserReferee())) {
+            User userReferee = userBO.getUserName(user.getUserReferee());
+            if (userReferee != null) {
+                user.setRefereeUser(userReferee);
             }
+        }
 
-            if (StringUtils.isNotBlank(user.getHighUserId())) {
-                User highUser = userBO.getUserName(user.getHighUserId());
-                if (highUser != null) {
-                    user.setHighUser(highUser);
-                }
+        if (StringUtils.isNotBlank(user.getHighUserId())) {
+            User highUser = userBO.getUserName(user.getHighUserId());
+            if (highUser != null) {
+                user.setHighUser(highUser);
             }
-            if (StringUtils.isNotBlank(user.getIntroducer())) {
-                User introduceName = userBO.getUserName(user.getIntroducer());
-                if (introduceName != null) {
-                    user.setIntroduceName(introduceName.getRealName());
-                }
+        }
+        if (StringUtils.isNotBlank(user.getIntroducer())) {
+            User introduceName = userBO.getUserName(user.getIntroducer());
+            if (introduceName != null) {
+                user.setIntroduceName(introduceName.getRealName());
             }
-            // 关联管理员
-            if (StringUtils.isNotBlank(user.getManager())) {
-                User manageName = userBO.getUserName(user.getManager());
-                if (manageName != null) {
-                    user.setManageName(manageName.getLoginName());
-                }
+        }
+        // 关联管理员
+        if (StringUtils.isNotBlank(user.getManager())) {
+            User manageName = userBO.getUserName(user.getManager());
+            if (manageName != null) {
+                user.setManageName(manageName.getLoginName());
             }
-            // 授权金额
-            if (null != user.getApplyLevel()) {
-                Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
-                user.setImpowerAmount(agent.getAmount());
-            }
+        }
+        // 授权金额
+        if (null != user.getApplyLevel()) {
+            Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
+            user.setImpowerAmount(agent.getAmount());
         }
         return user;
     }
@@ -898,18 +893,23 @@ public class UserAOImpl implements IUserAO {
     public void allotAgency(String userId, String toUserId, String manager,
             String approver) {
         User data = userBO.getUser(userId);
-        User toUser = userBO.getUser(toUserId);
-        if (data.getApplyLevel() <= toUser.getLevel()) {
-            throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
+        String status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+        if (!EUserKind.Merchant.getCode().equals(data.getKind())) {
+            throw new BizException("xn0000", "该用户不是代理，无法分配");
         }
-
+        if (StringUtils.isNotBlank(toUserId)) {
+            User toUser = userBO.getUser(toUserId);
+            if (data.getApplyLevel() <= toUser.getLevel()) {
+                throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
+            }
+            status = EUserStatus.ALLOTED.getCode();
+        }
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setManager(manager);
 
-        String logCode = agencyLogBO.saveAgencyLog(data, toUserId,
-            EUserStatus.ALLOTED.getCode());
-        data.setStatus(EUserStatus.ALLOTED.getCode());
+        String logCode = agencyLogBO.saveAgencyLog(data, toUserId, status);
+        data.setStatus(status);
         data.setLastAgentLog(logCode);
         userBO.allotAgency(data);
     }
@@ -961,7 +961,7 @@ public class UserAOImpl implements IUserAO {
 
         data.setWxId(req.getWxId());
         data.setMobile(req.getMobile());
-        data.setRealName(req.getRealName());
+        data.setTeamName(req.getTeamName());
         userBO.updateInformation(data);
     }
 
@@ -1021,8 +1021,7 @@ public class UserAOImpl implements IUserAO {
 
         String status = EUserStatus.IMPOWERED.getCode();
         String manager = null;
-        AgencyLog alData = agencyLogBO.getAgencyLog(data.getLastAgentLog());
-        String highUserId = alData.getToUserId();
+        String highUserId = log.getToUserId();
 
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setHighUserId(approver);
@@ -1039,7 +1038,6 @@ public class UserAOImpl implements IUserAO {
                     && !EUser.ADMIN.getCode().equals(approver)) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
-                status = EUserStatus.NORMAL.getCode();
                 // 根据用户类型获取账户列表
                 List<String> currencyList = distributeAccount(data.getUserId(),
                     data.getRealName(), EUserKind.Merchant.getCode(),
@@ -1371,26 +1369,23 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public String addUser(String kind, String mobile, String loginPwd,
-            String userReferee, String fromInfo) {
-        userBO.isMobileExist(mobile, kind, ESystemCode.BH.getCode(),
+    public String addUser(String mobile, String loginPwd, String realName) {
+        userBO.isMobileExist(mobile, ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
         User data = new User();
         String userId = OrderNoGenerater.generate("U");
-        String status = EUserStatus.NORMAL.getCode();
-        if (EUserKind.Merchant.getCode().equals(kind)) {
-            status = EUserStatus.TO_WILL.getCode();
-        }
         data.setUserId(userId);
         data.setMobile(mobile);
+
         data.setLoginName(mobile);
         data.setLoginPwd(MD5Util.md5(loginPwd));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        data.setStatus(EUserStatus.NORMAL.getCode());
+        data.setKind(EUserKind.Plat.getCode());
 
-        data.setUserReferee(userReferee);
-        data.setSource(fromInfo);
-        data.setStatus(status);
-        data.setKind(kind);
+        data.setRealName(realName);
+        data.setSystemCode(ESystemCode.BH.getCode());
+        data.setCompanyCode(ESystemCode.BH.getCode());
         userBO.doSaveUser(data);
         return userId;
     }

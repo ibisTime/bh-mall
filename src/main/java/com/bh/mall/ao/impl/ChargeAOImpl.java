@@ -3,17 +3,18 @@ package com.bh.mall.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IChargeAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.User;
 import com.bh.mall.enums.EBizType;
@@ -29,19 +30,29 @@ import com.bh.mall.exception.BizException;
 public class ChargeAOImpl implements IChargeAO {
 
     @Autowired
-    private IAccountBO accountBO;
+    IAccountBO accountBO;
 
     @Autowired
-    private IChargeBO chargeBO;
+    IChargeBO chargeBO;
 
     @Autowired
-    private IUserBO userBO;
+    IUserBO userBO;
+
+    @Autowired
+    IAgentBO agentBO;
 
     @Override
     public String applyOrder(String accountNumber, String type, Long amount,
             String applyUser, String applyNote, String chargePdf) {
         if (amount < 0) {
             throw new BizException("xn000000", "金额需大于零");
+        }
+        User user = userBO.getUser(applyUser);
+        Agent aData = agentBO.getAgentByLevel(user.getLevel());
+        if (null != aData.getMinChargeAmount()
+                && (aData.getMinChargeAmount() / 1000) > amount) {
+            throw new BizException("xn000000",
+                "充值金额不能低于[" + aData.getMinChargeAmount() + "]");
         }
 
         Account account = accountBO.getAccount(accountNumber);
@@ -96,25 +107,22 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {
-        if (StringUtils.isBlank(condition.getHighUserId())) {
-            User sysUser = userBO.getSysUser();
-            condition.setHighUserId(sysUser.getUserId());
-        }
+        // if (StringUtils.isBlank(condition.getHighUserId())) {
+        // User sysUser = userBO.getSysUser();
+        // condition.setHighUserId(sysUser.getUserId());
+        // }
 
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
-        if (CollectionUtils.isNotEmpty(page.getList())) {
-            List<Charge> list = page.getList();
-            for (Charge charge : list) {
-                if (!EUser.ADMIN.getCode().equals(charge.getApplyUser())
-                        && charge.getApplyUser() != null) {
-                    User user = userBO.getCheckUser(charge.getApplyUser());
-                    charge.setUser(user);
-                }
-                if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
-                        && charge.getPayUser() != null) {
-                    User payUser = userBO.getCheckUser(charge.getPayUser());
-                    charge.setPayUser(payUser.getLoginName());
-                }
+        for (Charge charge : page.getList()) {
+            if (!EUser.ADMIN.getCode().equals(charge.getApplyUser())
+                    && charge.getApplyUser() != null) {
+                User user = userBO.getCheckUser(charge.getApplyUser());
+                charge.setUser(user);
+            }
+            if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
+                    && charge.getPayUser() != null) {
+                User payUser = userBO.getCheckUser(charge.getPayUser());
+                charge.setPayUser(payUser.getLoginName());
             }
         }
         return page;

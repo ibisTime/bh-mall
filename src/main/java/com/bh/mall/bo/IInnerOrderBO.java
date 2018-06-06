@@ -36,4 +36,6 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
     public List<InnerOrder> queryInnerOrderPage(int start, int pageSize,
             InnerOrder condition);
 
+    public void payNo(InnerOrder data);
+
 }

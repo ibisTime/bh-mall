@@ -38,7 +38,6 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AgencyLog;
 import com.bh.mall.domain.Award;
 import com.bh.mall.domain.Cart;
-import com.bh.mall.domain.CompanyChannel;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
@@ -60,6 +59,7 @@ import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
+import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductIsTotal;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductSpecsType;
@@ -72,7 +72,6 @@ import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserLevel;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
-import com.bh.mall.util.wechat.WXOrderQuery;
 import com.bh.mall.util.wechat.XMLUtil;
 
 @Service
@@ -347,10 +346,11 @@ public class OrderAOImpl implements IOrderAO {
                 User uData = userBO.getUser(data.getApplyUser());
                 Account accountData = null;
                 if (EUserKind.Customer.getCode().equals(uData.getKind())) {
+                    data.setPayType(EPayType.WEIXIN_XCX.getCode());
                     Object payResult = this.payWXH5(data);
                     result = payResult;
 
-                } else if (EBoolean.NO.getCode().equals(payType)) {
+                } else if (EPayType.RMB_YE.getCode().equals(payType)) {
                     accountBO.getAccountByUser(data.getApplyUser(),
                         ECurrency.MK_CNY.getCode());
                     String toUserId = data.getToUser();
@@ -383,7 +383,8 @@ public class OrderAOImpl implements IOrderAO {
                         EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
                         EBizType.AJ_GMYC.getValue(), data.getCode());
                     result = new BooleanRes(true);
-                } else if (EBoolean.YES.getCode().equals(payType)) {
+                } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+                    data.setPayType(payType);
                     Object payResult = this.payWXH5(data);
                     result = payResult;
                 }
@@ -393,22 +394,24 @@ public class OrderAOImpl implements IOrderAO {
         return result;
     }
 
-    private Object payWXH5(Order order) {
-        Long rmbAmount = order.getAmount() + order.getYunfei();
-        User user = userBO.getCheckUser(order.getApplyUser());
-        String payGroup = orderBO.addPayGroup(order, EBoolean.YES.getCode());
-        Account account = accountBO.getAccountByUser(order.getToUser(),
+    private Object payWXH5(Order data) {
+        Long rmbAmount = data.getAmount() + data.getYunfei();
+        User user = userBO.getCheckUser(data.getApplyUser());
+        String payGroup = orderBO.addPayGroup(data);
+        Account account = accountBO.getAccountByUser(data.getToUser(),
             ECurrency.YJ_CNY.getCode());
         return weChatAO.getPrepayIdH5(user.getUserId(),
-            account.getAccountNumber(), payGroup, order.getCode(),
+            account.getAccountNumber(), payGroup, data.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            PropertiesUtil.Config.WECHAT_H5_BACKURL);
+            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
+            EChannelType.WeChat_H5.getCode());
     }
 
     @Override
     public void paySuccess(String result) {
         Map<String, String> map = null;
         try {
+            logger.info("========回调信息=================");
             map = XMLUtil.doXMLParse(result);
             String attach = map.get("attach");
             String[] codes = attach.split("\\|\\|");
@@ -418,18 +421,20 @@ public class OrderAOImpl implements IOrderAO {
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
 
+            Order data = orderBO.getOrder(outTradeNo);
+            if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+                throw new BizException("xn0000", "订单已支付");
+            }
+
             // 此处调用订单查询接口验证是否交易成功
             boolean isSucc = weChatAO.reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
             if (isSucc) {
-
-                Order data = orderBO.getInnerOrderByPayGroup(outTradeNo);
                 data.setPayDatetime(new Date());
                 data.setPayCode(wechatOrderNo);
                 data.setPayAmount(data.getAmount());
                 data.setStatus(EInnerOrderStatus.Paid.getCode());
                 User user = userBO.getUser(data.getToUser());
-                logger.info("toUser:" + user.getUserId());
                 Account account = accountBO.getAccountByUser(user.getUserId(),
                     ECurrency.YJ_CNY.getCode());
                 if (StringUtils.isBlank(account.getAccountNumber())) {
@@ -440,6 +445,10 @@ public class OrderAOImpl implements IOrderAO {
                     data.getCode(), EBizType.AJ_YCCH,
                     EBizType.AJ_YCCH.getValue(), data.getAmount());
                 orderBO.paySuccess(data);
+            } else {
+                data.setStatus(EOrderStatus.Pay_NO.getCode());
+                data.setPayDatetime(new Date());
+                orderBO.payNo(data);
             }
 
         } catch (JDOMException | IOException e) {
@@ -706,19 +715,7 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public void cancelOrder(String code) {
         Order data = orderBO.getOrder(code);
-        User user = userBO.getCheckUser(data.getApplyUser());
-        if (EUserKind.Customer.getCode().equals(user.getKind())) {
-            if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
-                throw new BizException("xn0000", "该订单无法申请取消");
-            }
-            data.setStatus(EOrderStatus.Canceled.getCode());
-        } else {
-            if (EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
-                data.setStatus(EOrderStatus.Canceled.getCode());
-            } else
-                data.setStatus(EOrderStatus.TO_Cancel.getCode());
-        }
-
+        data.setStatus(EOrderStatus.TO_Cancel.getCode());
         orderBO.cancelOrder(data);
     }
 
@@ -782,45 +779,6 @@ public class OrderAOImpl implements IOrderAO {
             }
         }
         return name;
-    }
-
-    public boolean reqOrderquery(Map<String, String> map, String channelType) {
-        System.out.println("******* 开始订单查询 ******");
-        WXOrderQuery orderQuery = new WXOrderQuery();
-        orderQuery.setAppid(map.get("appid"));
-        orderQuery.setMch_id(map.get("mch_id"));
-        orderQuery.setTransaction_id(map.get("transaction_id"));
-        orderQuery.setOut_trade_no(map.get("out_trade_no"));
-        orderQuery.setNonce_str(map.get("nonce_str"));
-
-        String attach = map.get("attach");
-        System.out.println("attcah=" + attach);
-        String[] codes = attach.split("\\|\\|");
-        System.out
-            .println("companyCode=" + codes[0] + " systemCode=" + codes[1]);
-        CompanyChannel companyChannel = companyChannelBO
-            .getCompanyChannel(codes[0], codes[1], channelType);
-
-        // 此处需要密钥PartnerKey，此处直接写死，自己的业务需要从持久化中获取此密钥，否则会报签名错误
-        orderQuery.setPartnerKey(companyChannel.getPrivateKey1());
-
-        Map<String, String> orderMap = orderQuery.reqOrderquery();
-        // 此处添加支付成功后，支付金额和实际订单金额是否等价，防止钓鱼
-        if (orderMap.get("return_code") != null
-                && orderMap.get("return_code").equalsIgnoreCase("SUCCESS")) {
-            if (orderMap.get("trade_state") != null && orderMap
-                .get("trade_state").equalsIgnoreCase("SUCCESS")) {
-                String total_fee = map.get("total_fee");
-                String order_total_fee = map.get("total_fee");
-                if (Integer.parseInt(order_total_fee) >= Integer
-                    .parseInt(total_fee)) {
-                    System.out.println("******* 开订单查询结束，结果正确 ******");
-                    return true;
-                }
-            }
-        }
-        System.out.println("******* 开订单查询结束，结果不正确 ******");
-        return false;
     }
 
 }

@@ -10,7 +10,7 @@
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="level" property="level" />
 		<result column="apply_level" property="applyLevel" />
-		<result column="high_level" property="highLevel" />
+		<result column="high_user_id" property="highUserId" />
 		<result column="user_referee" property="userReferee" />
 		<result column="team_name" property="teamName" />
 		<result column="pay_pdf" property="payPdf" />
@@ -86,7 +86,7 @@
 		,t.apply_datetime
 		,t.level
 		,t.apply_level
-		,t.high_level
+		,t.high_user_id
 		,t.user_referee
 		,t.team_name
 		,t.pay_pdf
@@ -120,7 +120,7 @@
 		,apply_datetime
 		,level
 		,apply_level
-		,high_level
+		,high_user_id
 		,user_referee
 		,team_name
 		,pay_pdf
@@ -137,7 +137,7 @@
 		,#{applyDatetime}
 		,#{level}
 		,#{applyLevel}
-		,#{highLevel}
+		,#{highUserId}
 		,#{userReferee}
 		,#{teamName}
 		,#{payPdf}
@@ -157,7 +157,7 @@
 		,apply_datetime = #{applyDatetime}
 		,level = #{level}
 		,apply_level = #{applyLevel}
-		,high_level = #{highLevel}
+		,high_user_id = #{highUserId}
 		,user_referee = #{userReferee}
 		,team_name = #{teamName}
 		,pay_pdf = #{payPdf}

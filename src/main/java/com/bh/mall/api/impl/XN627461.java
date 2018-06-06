@@ -21,9 +21,6 @@ public class XN627461 extends AProcessor {
 
     private XN627461Req req = null;
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doBusiness()
-    */
     @Override
     public synchronized Object doBusiness() throws BizException {
         for (String code : req.getCodeList()) {
@@ -33,9 +30,6 @@ public class XN627461 extends AProcessor {
         return new BooleanRes(true);
     }
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
-    */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627461Req.class);

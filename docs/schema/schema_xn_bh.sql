@@ -1,6 +1,4 @@
 
-
-
 DROP TABLE IF EXISTS `tbh_account`;
 CREATE TABLE `tbh_account` (
   `account_number` varchar(32) NOT NULL DEFAULT '' COMMENT '账号',
@@ -19,9 +17,6 @@ CREATE TABLE `tbh_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-/*Table structure for table `tbh_address` */
-
 DROP TABLE IF EXISTS `tbh_address`;
 CREATE TABLE `tbh_address` (
   `code` varchar(32) NOT NULL COMMENT '收件编号',
@@ -39,9 +34,6 @@ CREATE TABLE `tbh_address` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-/*Table structure for table `tbh_after_sale` */
 
 DROP TABLE IF EXISTS `tbh_after_sale`;
 CREATE TABLE `tbh_after_sale` (
@@ -72,7 +64,6 @@ CREATE TABLE `tbh_after_sale` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_agency_log` */
 DROP TABLE IF EXISTS `tbh_agency_log`;
 CREATE TABLE `tbh_agency_log` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -93,8 +84,6 @@ CREATE TABLE `tbh_agency_log` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-/*Table structure for table `tbh_agent` */
 DROP TABLE IF EXISTS `tbh_agent`;
 CREATE TABLE `tbh_agent` (
   `level` bigint(32) NOT NULL AUTO_INCREMENT,
@@ -106,10 +95,9 @@ CREATE TABLE `tbh_agent` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(64) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`level`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_agent_impower` */
 DROP TABLE IF EXISTS `tbh_agent_impower`;
 CREATE TABLE `tbh_agent_impower` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -127,7 +115,6 @@ CREATE TABLE `tbh_agent_impower` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_agent_upgrade` */
 DROP TABLE IF EXISTS `tbh_agent_upgrade`;
 CREATE TABLE `tbh_agent_upgrade` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -142,7 +129,6 @@ CREATE TABLE `tbh_agent_upgrade` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_award` */
 DROP TABLE IF EXISTS `tbh_award`;
 CREATE TABLE `tbh_award` (
   `code` varchar(32) NOT NULL,
@@ -156,7 +142,6 @@ CREATE TABLE `tbh_award` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_bankcard` */
 DROP TABLE IF EXISTS `tbh_bankcard`;
 CREATE TABLE `tbh_bankcard` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -181,8 +166,6 @@ CREATE TABLE `tbh_bankcard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_cart` */
-
 DROP TABLE IF EXISTS `tbh_cart`;
 CREATE TABLE `tbh_cart` (
   `code` varchar(32) NOT NULL,
@@ -194,8 +177,6 @@ CREATE TABLE `tbh_cart` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-/*Table structure for table `tbh_change_product` */
 DROP TABLE IF EXISTS `tbh_change_product`;
 CREATE TABLE `tbh_change_product` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -225,7 +206,6 @@ CREATE TABLE `tbh_change_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_channel_bank` */
 DROP TABLE IF EXISTS `tbh_channel_bank`;
 CREATE TABLE `tbh_channel_bank` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
@@ -240,10 +220,9 @@ CREATE TABLE `tbh_channel_bank` (
   `month_amount` bigint(32) DEFAULT NULL COMMENT '每月限额',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_charge` */
 DROP TABLE IF EXISTS `tbh_charge`;
 CREATE TABLE `tbh_charge` (
   `code` varchar(32) NOT NULL COMMENT '针对编号',
@@ -265,12 +244,15 @@ CREATE TABLE `tbh_charge` (
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
+  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `remark` text COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   PRIMARY KEY (`code`) COMMENT '充值订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Table structure for table `tbh_cnavigate` */
+
 DROP TABLE IF EXISTS `tbh_cnavigate`;
 CREATE TABLE `tbh_cnavigate` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -291,7 +273,6 @@ CREATE TABLE `tbh_cnavigate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_company_channel` */
 DROP TABLE IF EXISTS `tbh_company_channel`;
 CREATE TABLE `tbh_company_channel` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
@@ -312,10 +293,9 @@ CREATE TABLE `tbh_company_channel` (
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_inner_order` */
 DROP TABLE IF EXISTS `tbh_inner_order`;
 CREATE TABLE `tbh_inner_order` (
   `code` varchar(32) NOT NULL,
@@ -355,7 +335,6 @@ CREATE TABLE `tbh_inner_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_inner_product` */
 DROP TABLE IF EXISTS `tbh_inner_product`;
 CREATE TABLE `tbh_inner_product` (
   `code` varchar(32) NOT NULL,
@@ -376,7 +355,6 @@ CREATE TABLE `tbh_inner_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_intro` */
 DROP TABLE IF EXISTS `tbh_intro`;
 CREATE TABLE `tbh_intro` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -389,7 +367,6 @@ CREATE TABLE `tbh_intro` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_jour` */
 DROP TABLE IF EXISTS `tbh_jour`;
 CREATE TABLE `tbh_jour` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -414,7 +391,6 @@ CREATE TABLE `tbh_jour` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_material` */
 DROP TABLE IF EXISTS `tbh_material`;
 CREATE TABLE `tbh_material` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -428,7 +404,6 @@ CREATE TABLE `tbh_material` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_order` */
 DROP TABLE IF EXISTS `tbh_order`;
 CREATE TABLE `tbh_order` (
   `code` varchar(32) NOT NULL,
@@ -477,7 +452,6 @@ CREATE TABLE `tbh_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_product` */
 DROP TABLE IF EXISTS `tbh_product`;
 CREATE TABLE `tbh_product` (
   `is_free` varchar(4) DEFAULT NULL COMMENT '是否包邮',
@@ -501,7 +475,6 @@ CREATE TABLE `tbh_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_product_log` */
 DROP TABLE IF EXISTS `tbh_product_log`;
 CREATE TABLE `tbh_product_log` (
   `code` varchar(32) NOT NULL,
@@ -517,7 +490,6 @@ CREATE TABLE `tbh_product_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_product_specs` */
 DROP TABLE IF EXISTS `tbh_product_specs`;
 CREATE TABLE `tbh_product_specs` (
   `code` varchar(32) NOT NULL,
@@ -532,7 +504,6 @@ CREATE TABLE `tbh_product_specs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_product_specs_price` */
 DROP TABLE IF EXISTS `tbh_product_specs_price`;
 CREATE TABLE `tbh_product_specs_price` (
   `change_price` bigint(20) DEFAULT NULL COMMENT '换货价',
@@ -544,7 +515,6 @@ CREATE TABLE `tbh_product_specs_price` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_user` */
 DROP TABLE IF EXISTS `tbh_user`;
 CREATE TABLE `tbh_user` (
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
@@ -596,10 +566,8 @@ CREATE TABLE `tbh_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_ware_house` */
 DROP TABLE IF EXISTS `tbh_ware_house`;
 CREATE TABLE `tbh_ware_house` (
-  `real_name` varchar(255) DEFAULT NULL COMMENT '代理名称',
   `code` varchar(32) NOT NULL,
   `type` varchar(4) DEFAULT NULL COMMENT '类型（B/P）',
   `currency` varchar(64) DEFAULT NULL COMMENT '币种',
@@ -616,11 +584,11 @@ CREATE TABLE `tbh_ware_house` (
   `last_change_code` varchar(32) DEFAULT NULL COMMENT '最后一条流水',
   `system_code` varchar(32) DEFAULT NULL,
   `company_code` varbinary(32) DEFAULT NULL,
+  `real_name` varchar(255) DEFAULT NULL COMMENT '代理名称',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tbh_ware_house_log` */
 DROP TABLE IF EXISTS `tbh_ware_house_log`;
 CREATE TABLE `tbh_ware_house_log` (
   `code` varchar(32) NOT NULL COMMENT '编号',
@@ -652,8 +620,6 @@ CREATE TABLE `tbh_ware_house_log` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-/*Table structure for table `tbh_withdraw` */
 DROP TABLE IF EXISTS `tbh_withdraw`;
 CREATE TABLE `tbh_withdraw` (
   `code` varchar(32) NOT NULL COMMENT '针对编号',
@@ -683,7 +649,6 @@ CREATE TABLE `tbh_withdraw` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tsys_config` */
 DROP TABLE IF EXISTS `tsys_config`;
 CREATE TABLE `tsys_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
@@ -696,10 +661,9 @@ CREATE TABLE `tsys_config` (
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tsys_dict` */
 DROP TABLE IF EXISTS `tsys_dict`;
 CREATE TABLE `tsys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
@@ -713,11 +677,16 @@ CREATE TABLE `tsys_dict` (
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8;
 
+/*Data for the table `tsys_dict` */
+
+insert  into `tsys_dict`(`id`,`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) values (1,'0',NULL,'user_status','用户状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(2,'1','user_status','0','正常','admin','2018-04-28 11:09:23','','CD-CBH000020','CD-CBH000020'),(3,'1','user_status','1','程序锁定','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(4,'1','user_status','2','人工锁定','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(5,'0',NULL,'id_kind','证件类型','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(6,'1','id_kind','1','身份证','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(7,'0',NULL,'role_level','角色等级','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(8,'1','role_level','1','运维','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(9,'1','role_level','2','运营','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(10,'1','role_level','3','客户','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(11,'0',NULL,'res_type','资源类型','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(12,'1','res_type','1','菜单','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(13,'1','res_type','2','按钮','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(14,'0',NULL,'lock_direction','锁定方向','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(15,'1','lock_direction','1','锁定','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(16,'1','lock_direction','2','解锁','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(17,'0',NULL,'notice_status','公告状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(18,'1','notice_status','0','未发布','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(19,'1','notice_status','1','已发布','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(20,'1','notice_status','2','已下架','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(21,'0',NULL,'kd_company','物流公司','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(22,'1','kd_company','EMS','邮政EMShhh','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(23,'1','kd_company','STO','申通快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(24,'1','kd_company','ZTO','中通快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(25,'1','kd_company','YTO','圆通快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(26,'1','kd_company','HTKY','汇通快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(27,'1','kd_company','SF','顺丰快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(28,'1','kd_company','TTKD','天天快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(29,'1','kd_company','ZJS','宅急送','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(30,'1','kd_company','BSHT','百世汇通','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(31,'1','kd_company','YDKD','韵达快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(32,'1','kd_company','DBKD','德邦快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(33,'1','kd_company','QFKD','全峰快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(34,'1','kd_company','GTKD','国通快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(35,'1','kd_company','TDHY','天地华宇','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(36,'1','kd_company','JJWL','佳吉物流','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(37,'1','kd_company','JJKD','快捷快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(38,'1','kd_company','YSKD','优速快递','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(39,'1','kd_company','QTKD','其他','admin','2018-03-28 13:58:15','','CD-CBH000020','CD-CBH000020'),(40,'0',NULL,'user_kind','针对人群','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(41,'1','user_kind','C','C端用户','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(42,'1','user_kind','B','代理','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(43,'1','user_kind','P','平台所有用户','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(44,'0',NULL,'material_type','素材类型','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(45,'1','material_type','0','产品素材','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(46,'1','material_type','1','培训素材','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(48,'0',NULL,'inner_status','内购产品状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(49,'1','inner_status','1','待上架','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(50,'1','inner_status','2','已上架','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(51,'1','inner_status','3','已下架','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(52,'0',NULL,'product_status','产品状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(53,'1','product_status','1','待上架','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(54,'1','product_status','2','已上架','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(55,'1','product_status','3','已下架','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(56,'0',NULL,'award','奖励','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(57,'1','award','0','推荐奖励','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(58,'1','award','1','出货奖励','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(59,'1','award','2','介绍奖励','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(60,'0',NULL,'charge_status','充值订单状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(61,'1','charge_status','1','代支付','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(62,'1','charge_status','2','支付失败','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(63,'1','charge_status','3','支付成功','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(64,'0',NULL,'inner_order_status','内购产品订单状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(65,'1','inner_order_status','0','待支付','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(66,'1','inner_order_status','1','已支付待发货','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(67,'1','inner_order_status','2','待收货','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(68,'1','inner_order_status','3','已收货','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(69,'1','inner_order_status','4','申请取消','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(70,'1','inner_order_status','5','已取消','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(71,'0',NULL,'jour_status','流水状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(72,'1','jour_status','1','待对账','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(73,'1','jour_status','3','已对账且账已平','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(74,'1','jour_status','4','帐不平待调账审批','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(75,'0',NULL,'channel_type','渠道类型','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(76,'1','channel_type','90','线下支付','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(77,'1','channel_type','35','微信充值','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(78,'0',NULL,'biz_type','业务类型','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(79,'1','biz_type','11','取现','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(80,'1','biz_type','XXFK','体现回录','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(81,'1','biz_type','AJ_CZ','充值','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(82,'1','biz_type','AJ_KK','扣款','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(83,'1','biz_type','AJ_MKCZ','门槛充值','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(84,'1','biz_type','AJ_GMNP','购买内购商品','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(85,'1','biz_type','AJ_GMYC','购买云仓','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(86,'1','biz_type','AJ_CELR','差额利润','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(87,'1','biz_type','AJ_TJJL','推荐奖励','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(88,'1','biz_type','AJ_CHJL','出货奖励','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(89,'1','jour_status','5','已对账且账不平','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(90,'1','jour_status','6','无需对账','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(91,'0',NULL,'withdraw_status','取现状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(92,'1','withdraw_status','1','待审批','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(93,'1','withdraw_status','2','审批不通过','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(94,'1','withdraw_status','3','审批通过待支付','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(95,'1','withdraw_status','4','支付失败','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(96,'1','withdraw_status','5','支付成功','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(97,'0','','order_status','普通订单状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(98,'1','order_status','0','待支付','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(99,'1','order_status','1','已支付待审核','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(100,'1','order_status','2','已审单待发货','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(101,'1','order_status','3','待收货','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(102,'1','order_status','4','已收货','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(103,'1','order_status','5','申请取消','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(104,'1','order_status','6','已取消','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(106,'0',NULL,'agent_status','代理状态','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(107,'1','agent_status','0','正常','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(108,'1','agent_status','1','程序锁定','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(109,'1','agent_status','2','人工锁定','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(110,'1','agent_status','3','有意愿','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(111,'1','agent_status','4','已忽略','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(112,'1','agent_status','5','已分配','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(113,'1','agent_status','6','授权待审核','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(114,'1','agent_status','7','已授权','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(115,'1','agent_status','8','取消授权待审核','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(116,'1','agent_status','9','授权已取消','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(117,'1','agent_status','10','审核未通过','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(118,'1','agent_status','11','授权待公司审核','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(119,'1','agent_status','12','升级待审核','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(120,'1','agent_status','13','已升级','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(121,'1','agent_status','14','升级待公司审核','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(122,'1','agent_status','15','授权取消待公司审核','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(123,'0',NULL,'agent_type','代理轨迹类型','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(124,'1','agent_type','0','意向分配','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(125,'1','agent_type','1','授权','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(126,'1','agent_type','2','升级','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(128,'0',NULL,'order_type','订单类型','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(129,'1','order_type','0','普通单','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(130,'1','order_type','1','升级单','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(131,'1','order_type','2','授权单','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(132,'1','biz_type','AJ_JSJL','介绍奖励','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(133,'0',NULL,'currency','币种','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(134,'1','currency','YJ_CNY','可提现账户','admin','2018-03-28 13:58:15',NULL,NULL,'CD-CBH000020'),(135,'1','currency','TC_CNY','云仓账户','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(136,'1','currency','MK_CNY','门槛账户','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(137,'0',NULL,'change_product_status','置换单','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(138,'1','change_product_status','0','申请换货','admin','2018-03-28 13:58:15',NULL,'CD-CBH000020','CD-CBH000020'),(139,'1','change_product_status','1','申请通过','admin','2018-04-12 10:22:52',NULL,'CD-CBH000020','CD-CBH000020'),(140,'1','change_product_status','2','申请未通过','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(141,'1','biz_type','AJ_GMCP','购买产品','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(142,'0',NULL,'product_log_type','产品库存记录类型','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(143,'1','product_log_type','0','出库','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(144,'1','product_log_type','1','入库','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(145,'1','product_log_type','2','代理下单','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(146,'1','product_log_type','3','代理换货','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(147,'0',NULL,'agnecy_log_type','代理轨迹类型','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(148,'1','agnecy_log_type','0','意向分配','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(149,'1','agnecy_log_type','1','授权','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(150,'1','agnecy_log_type','2','升级','admin','2018-04-12 10:22:55',NULL,'CD-CBH000020','CD-CBH000020'),(151,'1','agnecy_log_type','3','退出','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(152,'0',NULL,'account_status','账户状态','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(153,'1','account_status','0','正常','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(154,'1','account_status','1','程序锁定','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(155,'1','account_status','2','人工锁定','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(156,'0',NULL,'address_type','地址类型','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(157,'1','address_type','1','用户地址','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(158,'1','address_type','2','售后地址','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(162,'0',NULL,'after_sale_type','售后类型','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(163,'1','after_sale_type','1','换货','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(164,'1','after_sale_type','2','退货','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(166,'0',NULL,'after_sale_status','售后单状态','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(167,'1','after_sale_status','0','待审核','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(168,'1','after_sale_status','1','审核通过','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(169,'1','after_sale_status','2','审核不通过','admin','2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(170,'1','after_sale_status','3','已回寄',NULL,'2018-04-13 16:49:02',NULL,'CD-CBH000020','CD-CBH000020'),(172,'1','after_sale_type','3','赔偿','admin','2018-04-19 09:35:53','222',NULL,'CD-CBH000020');
 
 /*Table structure for table `tsys_menu` */
+
 DROP TABLE IF EXISTS `tsys_menu`;
+
 CREATE TABLE `tsys_menu` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `name` varchar(32) DEFAULT NULL COMMENT '名称',
@@ -733,7 +702,6 @@ CREATE TABLE `tsys_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tsys_menu_role` */
 DROP TABLE IF EXISTS `tsys_menu_role`;
 CREATE TABLE `tsys_menu_role` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT,
@@ -747,7 +715,6 @@ CREATE TABLE `tsys_menu_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
-/*Table structure for table `tsys_role` */
 DROP TABLE IF EXISTS `tsys_role`;
 CREATE TABLE `tsys_role` (
   `code` varchar(32) NOT NULL COMMENT '角色编号',

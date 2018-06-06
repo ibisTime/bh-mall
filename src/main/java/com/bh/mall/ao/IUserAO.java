@@ -11,11 +11,6 @@ import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627263Res;
 import com.bh.mall.dto.res.XN627302Res;
 
-/**
- * @author: xieyj 
- * @since: 2017年7月16日 下午2:46:32 
- * @history:
- */
 public interface IUserAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
@@ -134,7 +129,6 @@ public interface IUserAO {
 
     public User getUserName(String userReferee);
 
-    public String addUser(String type, String mobile, String loginPwd,
-            String userReferee, String fromInfo);
+    public String addUser(String mobile, String loginPwd, String realName);
 
 }

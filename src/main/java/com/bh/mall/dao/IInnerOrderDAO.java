@@ -22,4 +22,6 @@ public interface IInnerOrderDAO extends IBaseDAO<InnerOrder> {
 
     List<InnerOrder> selectInnerOrderPage(int start, int pageSize,
             InnerOrder condition);
+
+    void payNo(InnerOrder data);
 }

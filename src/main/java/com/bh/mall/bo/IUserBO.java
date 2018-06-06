@@ -26,7 +26,7 @@ public interface IUserBO extends IPaginableBO<User> {
             String systemCode);
 
     // 根据手机号和类型判断手机号是否存在
-    public void isMobileExist(String mobile, String kind, String companyCode,
+    public void isMobileExist(String mobile, String companyCode,
             String systemCode);
 
     // 判断登录名是否存在

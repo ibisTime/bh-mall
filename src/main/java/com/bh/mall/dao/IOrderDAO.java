@@ -27,4 +27,8 @@ public interface IOrderDAO extends IBaseDAO<Order> {
     void addPayGroup(Order data);
 
     List<Order> selectOrderPage(int pageNO, int pageSize, Order condition);
+
+    void payNo(Order data);
+
+    void paySuccess(Order data);
 }

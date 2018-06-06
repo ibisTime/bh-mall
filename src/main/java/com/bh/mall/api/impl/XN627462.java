@@ -33,9 +33,6 @@ public class XN627462 extends AProcessor {
 
     private XN627462Req req = null;
 
-    /** 
-     * @see com.std.account.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         Long transAmount = StringValidater.toLong(req.getAmount());
@@ -50,9 +47,6 @@ public class XN627462 extends AProcessor {
         }
     }
 
-    /** 
-     * @see com.std.account.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627462Req.class);

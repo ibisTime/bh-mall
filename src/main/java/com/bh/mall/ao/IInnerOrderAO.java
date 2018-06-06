@@ -38,6 +38,6 @@ public interface IInnerOrderAO {
 
     public void receiveInnerOrder(String code);
 
-    public void paySuccess(String payGroup, String payCode, Long amount);
+    public void paySuccess(String result);
 
 }

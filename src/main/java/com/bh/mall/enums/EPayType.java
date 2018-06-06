@@ -6,7 +6,8 @@ package com.bh.mall.enums;
  * @history:
  */
 public enum EPayType {
-    RMB_YE("0", "余额支付"), WEIXIN_H5("1", "微信h5"), DBHZ("dbhz", "单一币种划转");
+    RMB_YE("0", "余额支付"), WEIXIN_H5("1", "微信h5"), DBHZ("dbhz",
+            "单一币种划转"), WEIXIN_XCX("2", "微信小程序支付");
 
     EPayType(String code, String value) {
         this.code = code;

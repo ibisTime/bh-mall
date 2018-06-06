@@ -3,6 +3,7 @@ package com.bh.mall.dto.req;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 批量审批线下充值订单
@@ -13,7 +14,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627461Req {
 
     // 充值订单编号(必填)
-    @NotBlank(message = "充值订单编号不能为空")
+    @NotEmpty(message = "充值订单编号不能为空")
     private List<String> codeList;
 
     // 支付回录人(必填)

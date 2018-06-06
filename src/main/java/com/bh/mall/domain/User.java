@@ -216,6 +216,7 @@ public class User extends ABaseDO {
     // 上级代理
     private Integer highLevel;
 
+    // 上级用户
     private User highUser;
 
     // 申请时间起(选填)

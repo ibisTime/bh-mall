@@ -60,18 +60,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return user;
     }
 
-    /** 
-     * @see com.bh.mall.bo.IUserBO#isMobileExist(java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
-    public void isMobileExist(String mobile, String kind, String companyCode,
+    public void isMobileExist(String mobile, String companyCode,
             String systemCode) {
         if (StringUtils.isNotBlank(mobile)) {
             // 判断格式
             PhoneUtil.checkMobile(mobile);
             User condition = new User();
             condition.setMobile(mobile);
-            condition.setKind(kind);
             condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);

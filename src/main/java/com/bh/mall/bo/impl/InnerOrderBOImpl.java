@@ -115,4 +115,10 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
         return innerOrderDAO.selectInnerOrderPage(start, pageSize, condition);
     }
 
+    @Override
+    public void payNo(InnerOrder data) {
+        innerOrderDAO.payNo(data);
+
+    }
+
 }

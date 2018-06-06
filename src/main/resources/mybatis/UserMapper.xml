@@ -74,6 +74,7 @@
 			<if test="nickname != null and nickname != '' ">
 				AND t.nickname like "%"#{nickname}"%"
 			</if>
+			
 			<choose>
 				 <when test="kind == 'PB'">
 				  AND (t.kind = 'P' or t.kind = 'B')
@@ -88,9 +89,13 @@
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
 			</if>	
+			<if test="applyLevel != null and applyLevel != '' ">
+				AND t.apply_level = #{applyLevel}
+			</if>	
 			<if test="highLevel != null and highLevel != '' ">
 				<![CDATA[AND t.level < #{highLevel}]]>
 			</if>	
+			
 			<if test="userReferee != null and userReferee != '' ">
 				AND t.user_referee = #{userReferee}
 			</if>	
@@ -106,6 +111,7 @@
 			<if test="idNo != null and idNo != '' ">
 				AND t.id_no = #{idNo}
 			</if>
+			
 			<if test="realName != null and realName != '' ">
 				AND t.real_name = #{realName}
 			</if>
@@ -129,6 +135,7 @@
 					AND 1=1
 				</otherwise>
 			</choose>
+			
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
@@ -144,6 +151,7 @@
 			<if test="appOpenId != null and appOpenId != '' ">
 				AND t.app_open_id = #{appOpenId}
 			</if>
+			
 			<if test="province != null and province != '' ">
 				AND t.province = #{province}
 			</if>
@@ -159,6 +167,7 @@
 			<if test="area != null and area != '' ">
 				AND t.area = #{area}
 			</if>
+			
 			<if test="areaForQuery != null and areaForQuery != '' ">
 				AND t.area like "%"#{areaForQuery}"%"
 			</if>
@@ -177,6 +186,7 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
+			
 			<if test="keyWord !=null and keyWord != '' ">
 				AND t.real_name like "%"#{keyWord}"%" or t.nickname like "%"#{keyWord}"%" or t.wx_id like "%"#{keyWord}"%" 
 					or t.mobile like "%"#{keyWord}"%" 
@@ -535,7 +545,8 @@
 	<update id="allot_gency" parameterType="user">
 		UPDATE tbh_user
 		SET
-		manager = #{manager}
+		status = #{status}
+		,manager = #{manager}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,last_agent_log = #{lastAgentLog}
@@ -564,7 +575,7 @@
 		
 		,mobile = #{mobile}
 		,wx_id = #{wxId}
-		,real_name = #{realName}
+		,team_name = #{teamName}
 		WHERE user_id = #{userId}
 	</update>
 	

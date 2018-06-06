@@ -19,16 +19,16 @@ import com.bh.mall.ao.IInnerOrderAO;
 import com.bh.mall.ao.IOrderAO;
 
 /**
- * 币种兑换回调控制层
+ * 内购订单回调
  * @author: xieyj 
  * @since: 2017年4月20日 下午5:00:52 
  * @history:
  */
 @Controller
-public class CallbackBzdhConroller {
+public class CallbackInnerOrderConroller {
 
     private static Logger logger = Logger
-        .getLogger(CallbackBzdhConroller.class);
+        .getLogger(CallbackInnerOrderConroller.class);
 
     @Autowired
     IInnerOrderAO innerOrderAO;
@@ -37,7 +37,7 @@ public class CallbackBzdhConroller {
     IOrderAO orderAO;
 
     // 自身支付回调
-    @RequestMapping("/bzdh/callback")
+    @RequestMapping("/order/callback")
     public synchronized void doCallbackPay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
@@ -47,12 +47,10 @@ public class CallbackBzdhConroller {
             InputStream inStream = request.getInputStream();
             String result = getReqResult(out, inStream);
             logger.info("**** 公众号支付回调结果 ****：" + result);
-
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
-
             String noticeStr = setXML("SUCCESS", "");
             // 解析回调结果并通知业务biz
-            orderAO.paySuccess(result);
+            innerOrderAO.paySuccess(result);
             out.print(new ByteArrayInputStream(
                 noticeStr.getBytes(Charset.forName("UTF-8"))));
         } catch (Exception e) {

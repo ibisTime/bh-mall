@@ -3,6 +3,7 @@ package com.bh.mall.dto.req;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bh.mall.domain.Order;
 
@@ -14,7 +15,7 @@ import com.bh.mall.domain.Order;
  */
 public class XN627644Req {
     // （必填）编号List
-    @NotBlank(message = "编号不能为空")
+    @NotEmpty(message = "编号不能为空")
     private List<Order> codeList;
 
     // （必填）审核人

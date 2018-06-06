@@ -1,9 +1,12 @@
 package com.bh.mall.ao.impl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +40,14 @@ import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.enums.EInnerProductStatus;
+import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductYunFei;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
+import com.bh.mall.util.wechat.XMLUtil;
 
 @Service
 public class InnerOrderAOImpl implements IInnerOrderAO {
@@ -155,23 +160,50 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         return weChatAO.getPrepayIdH5(user.getUserId(),
             ESystemCode.BH.getCode(), payGroup, order.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL);
+            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
+            EPayType.WEIXIN_H5.getCode());
     }
 
     @Override
-    public void paySuccess(String payGroup, String payCode, Long amount) {
-        InnerOrder data = innerOrderBO.getInnerOrderByPayGroup(payGroup);
-        data.setPayDatetime(new Date());
-        data.setPayCode(payCode);
-        data.setPayAmount(amount);
-        data.setStatus(EInnerOrderStatus.Paid.getCode());
-        Account account = accountBO.getSysAccountNumber(
-            ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
-            ECurrency.YJ_CNY);
-        accountBO.changeAmount(account.getAccountNumber(),
-            EChannelType.WeChat_H5, null, payGroup, data.getCode(),
-            EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), amount);
-        innerOrderBO.paySuccess(data);
+    public void paySuccess(String result) {
+        Map<String, String> map = null;
+        try {
+            map = XMLUtil.doXMLParse(result);
+            String attach = map.get("attach");
+            String[] codes = attach.split("\\|\\|");
+            String systemCode = codes[0];
+            String companyCode = codes[1];
+            String bizBackUrl = codes[2];
+            String wechatOrderNo = map.get("transaction_id");
+            String outTradeNo = map.get("out_trade_no");
+            InnerOrder data = null;
+            boolean isSuccess = weChatAO.reqOrderquery(map,
+                EChannelType.WeChat_H5.getCode());
+            if (isSuccess) {
+                data = innerOrderBO.getInnerOrderByPayGroup(outTradeNo);
+                data.setPayDatetime(new Date());
+                data.setPayCode(wechatOrderNo);
+                data.setPayAmount(data.getAmount());
+
+                data.setStatus(EInnerOrderStatus.Paid.getCode());
+                Account account = accountBO.getSysAccountNumber(
+                    ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
+                    ECurrency.YJ_CNY);
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.WeChat_H5, null, outTradeNo, data.getCode(),
+                    EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                    data.getAmount());
+                innerOrderBO.paySuccess(data);
+            } else {
+                data.setPayDatetime(new Date());
+                data.setStatus(EInnerOrderStatus.Pay_No.getCode());
+                innerOrderBO.payNo(data);
+            }
+
+        } catch (JDOMException | IOException e) {
+            throw new BizException("xn000000", "回调结果XML解析失败");
+        }
+
     }
 
     @Override

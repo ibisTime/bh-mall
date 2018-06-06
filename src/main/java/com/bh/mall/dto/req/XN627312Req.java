@@ -10,23 +10,17 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627312Req {
 
-    // （必填）类型
+    // （必填）手机号
     @NotBlank(message = "不能为空")
-    private String kind;
+    private String mobile;
 
     // （必填）登录密码
     @NotBlank(message = "不能为空")
     private String loginPwd;
 
-    // （必填）手机号
-    @NotBlank(message = "不能为空")
-    private String mobile;
-
-    // （选填） 推荐人
-    private String userReferee;
-
-    // 意向来源
-    private String fromInfo;
+    // （必填）真实姓名
+    @NotBlank(message = "真实姓名不能为空")
+    private String realName;
 
     public String getLoginPwd() {
         return loginPwd;
@@ -44,28 +38,12 @@ public class XN627312Req {
         this.mobile = mobile;
     }
 
-    public String getKind() {
-        return kind;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getUserReferee() {
-        return userReferee;
-    }
-
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
-    }
-
-    public String getFromInfo() {
-        return fromInfo;
-    }
-
-    public void setFromInfo(String fromInfo) {
-        this.fromInfo = fromInfo;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

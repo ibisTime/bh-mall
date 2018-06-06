@@ -86,4 +86,10 @@ public class InnerOrderDAOImpl extends AMybatisTemplate
             pageSize, condition, InnerOrder.class);
     }
 
+    @Override
+    public void payNo(InnerOrder data) {
+        super.update(NAMESPACE.concat("pay_no"), data);
+
+    }
+
 }

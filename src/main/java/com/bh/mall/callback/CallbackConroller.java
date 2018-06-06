@@ -50,7 +50,6 @@ public class CallbackConroller {
             logger.info("**** 公众号支付回调结果 ****：" + result);
             // 解析回调结果并通知业务biz
             weChatAO.doCallbackH5(result);
-            orderAO.paySuccess(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(

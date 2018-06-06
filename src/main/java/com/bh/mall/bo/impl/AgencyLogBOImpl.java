@@ -121,7 +121,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setLevel(data.getLevel());
 
-        alData.setHighLevel(data.getHighUserId());
+        alData.setHighUserId(data.getHighUserId());
         alData.setApplyLevel(data.getApplyLevel());
         alData.setTeamName(data.getTeamName());
         alData.setUserReferee(data.getUserReferee());
@@ -150,7 +150,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
         alData.setLevel(data.getLevel());
-        alData.setHighLevel(data.getHighUserId());
+        alData.setHighUserId(data.getHighUserId());
 
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(result);
@@ -170,7 +170,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setType(EAgencyType.OUT.getCode());
         alData.setLevel(data.getLevel());
-        alData.setHighLevel(data.getHighUserId());
+        alData.setHighUserId(data.getHighUserId());
 
         alData.setApplyLevel(data.getApplyLevel());
         alData.setTeamName(data.getTeamName());
@@ -197,7 +197,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setApplyDatetime(agencyLog.getApplyDatetime());
 
         alData.setLevel(data.getLevel());
-        alData.setHighLevel(data.getHighUserId());
+        alData.setHighUserId(data.getHighUserId());
         alData.setStatus(data.getStatus());
         alData.setRemark(data.getRemark());
         agencyLogDAO.insert(alData);
@@ -216,7 +216,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setApplyDatetime(agencyLog.getApplyDatetime());
 
         alData.setLevel(data.getLevel());
-        alData.setHighLevel(data.getHighUserId());
+        alData.setHighUserId(data.getHighUserId());
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(status);

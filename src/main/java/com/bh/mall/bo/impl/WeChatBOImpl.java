@@ -43,7 +43,7 @@ public class WeChatBOImpl implements IWeChatBO {
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
             String bizNote, String code, Long transAmount, String ip,
             String bizBackUrl) {
-        logger.info(bizBackUrl);
+        logger.info("code:" + code);
         WXPrepay prePay = new WXPrepay();
         prePay.setAppid(companyChannel.getPrivateKey2());// 微信支付分配的公众账号ID
         prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号

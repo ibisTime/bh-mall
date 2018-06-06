@@ -42,8 +42,8 @@ public class XN627255Req {
     @NotBlank(message = "电话不能为空")
     private String mobile;
 
-    // （选填）姓名
-    private String realName;
+    // （必填）团队名称
+    private String teamName;
 
     public String getUserId() {
         return userId;
@@ -109,12 +109,12 @@ public class XN627255Req {
         this.mobile = mobile;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }

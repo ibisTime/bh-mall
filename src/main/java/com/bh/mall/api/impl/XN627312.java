@@ -11,7 +11,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 代理端代注册
+ * 新增用户
  * @author: nyc 
  * @since: 2018年4月26日 下午6:14:01 
  * @history:
@@ -23,8 +23,8 @@ public class XN627312 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN627312Res(userAO.addUser(req.getKind(), req.getMobile(),
-            req.getLoginPwd(), req.getUserReferee(), req.getFromInfo()));
+        return new XN627312Res(userAO.addUser(req.getMobile(),
+            req.getLoginPwd(), req.getRealName()));
     }
 
     @Override

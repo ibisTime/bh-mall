@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWeChatBO;
+import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
@@ -55,6 +57,9 @@ import com.bh.mall.util.wechat.XMLUtil;
 @Service
 public class WeChatAOImpl implements IWeChatAO {
 
+    private static Logger logger = Logger
+        .getLogger(CallbackBzdhConroller.class);
+
     @Autowired
     IWeChatBO weChatBO;
 
@@ -80,13 +85,14 @@ public class WeChatAOImpl implements IWeChatAO {
     IAgentBO agentBO;
 
     @Override
+    @Transactional
     public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl) {
         User user = userBO.getUser(applyUser);
         Agent aData = agentBO.getAgentByLevel(user.getLevel());
         if (null != aData.getMinChargeAmount()
-                && aData.getMinChargeAmount() > transAmount) {
+                && (aData.getMinChargeAmount() / 1000) > transAmount) {
             throw new BizException("xn000000",
                 "充值金额不能低于[" + aData.getMinChargeAmount() + "]");
         }
@@ -97,14 +103,15 @@ public class WeChatAOImpl implements IWeChatAO {
             refNo, EBizType.getBizType(bizType), bizNote, transAmount,
             EChannelType.WeChat_H5, applyUser);
         return this.getPrepayIdH5(applyUser, accountNumber, payGroup,
-            chargeOrderCode, bizType, bizNote, transAmount, backUrl);
+            chargeOrderCode, bizType, bizNote, transAmount, backUrl,
+            EChannelType.WeChat_H5.getCode());
     }
 
     @Override
     @Transactional
     public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
-            Long transAmount, String backUrl) {
+            Long transAmount, String backUrl, String payType) {
         User user = userBO.getCheckUser(applyUser);
 
         if (transAmount.longValue() == 0l) {
@@ -114,15 +121,16 @@ public class WeChatAOImpl implements IWeChatAO {
         if (StringUtils.isBlank(openId)) {
             throw new BizException("xn0000", "请先微信登录再支付");
         }
-        // 获取支付宝支付配置参数
+        // 获取微信支付配置参数
         String systemCode = ESystemCode.BH.getCode();
         String companyCode = ESystemCode.BH.getCode();
-        CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
-            companyCode, systemCode, EChannelType.WeChat_H5.getCode());
-
+        CompanyChannel companyChannel = companyChannelBO
+            .getCompanyChannel(companyCode, systemCode, payType);
+        System.out.println("openId:" + openId);
         // 获取微信公众号支付prepayid
         String prepayId = weChatBO.getPrepayIdH5(companyChannel, openId,
             bizNote, refNo, transAmount, SysConstant.IP, backUrl);
+        System.out.println("=prepayid========" + prepayId);
         // 返回微信APP支付所需信息
         return weChatBO.getPayInfoH5(companyChannel, refNo, prepayId);
     }
@@ -204,6 +212,8 @@ public class WeChatAOImpl implements IWeChatAO {
         orderQuery.setTransaction_id(map.get("transaction_id"));
         orderQuery.setOut_trade_no(map.get("out_trade_no"));
         orderQuery.setNonce_str(map.get("nonce_str"));
+
+        logger.info("out_trade_no：" + map.get("out_trade_no"));
 
         String attach = map.get("attach");
         System.out.println("attcah=" + attach);

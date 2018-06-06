@@ -36,10 +36,12 @@ public interface IOrderBO extends IPaginableBO<Order> {
     public List<Order> queryToDealList(int pageNo, int pageSize,
             Order condition);
 
-    public String addPayGroup(Order order, String code);
+    public String addPayGroup(Order order);
 
     public Order getInnerOrderByPayGroup(String payGroup);
 
-    public String paySuccess(Order data);
+    public void paySuccess(Order data);
+
+    public void payNo(Order data);
 
 }

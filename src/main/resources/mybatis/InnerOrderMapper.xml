@@ -246,4 +246,12 @@
 		WHERE code = #{code}
 	</update>
 
+	<update id="pay_no" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		status = #{status}
+		,pay_datetime = #{payDatetime}
+		WHERE code = #{code}
+	</update>
+
 </mapper>

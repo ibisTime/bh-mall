@@ -36,7 +36,7 @@ public class AgencyLog extends ABaseDO {
     private Integer applyLevel;
 
     // 上级
-    private String highLevel;
+    private String highUserId;
 
     // 推荐人
     private String userReferee;
@@ -164,12 +164,12 @@ public class AgencyLog extends ABaseDO {
         this.approveDatetime = approveDatetime;
     }
 
-    public void setHighLevel(String highLevel) {
-        this.highLevel = highLevel;
+    public String getHighUserId() {
+        return highUserId;
     }
 
-    public String getHighLevel() {
-        return highLevel;
+    public void setHighUserId(String highUserId) {
+        this.highUserId = highUserId;
     }
 
     public void setUserReferee(String userReferee) {

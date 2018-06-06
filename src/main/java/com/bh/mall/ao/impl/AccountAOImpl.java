@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -128,11 +127,4 @@ public class AccountAOImpl implements IAccountAO {
         return list;
     }
 
-    public static void main(String[] args) {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-
-        System.out.println(String.valueOf(year) + "_" + String.valueOf(month));
-    }
 }
