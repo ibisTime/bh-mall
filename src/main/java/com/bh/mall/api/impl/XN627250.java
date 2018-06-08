@@ -11,9 +11,9 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 
- * @author: chenshan 
- * @since: 2018年3月26日 下午3:24:00 
+ * 申请代理
+ * @author: nyc 
+ * @since: 2018年6月7日 下午8:45:11 
  * @history:
  */
 public class XN627250 extends AProcessor {

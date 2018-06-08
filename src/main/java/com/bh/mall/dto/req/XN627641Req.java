@@ -21,8 +21,7 @@ public class XN627641Req {
     // （选填）下单备注
     private String applyNote;
 
-    // （必填）订单归属人
-    @NotBlank(message = "订单归属人不能为空")
+    // （选填）订单归属人
     private String toUser;
 
     // 是否送货到家

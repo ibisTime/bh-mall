@@ -19,7 +19,8 @@ public interface IUserAO {
             String companyCode, String systemCode);
 
     // B端微信注册/登录
-    public XN627302Res doLoginWeChatByMerchant(String code, String userKind);
+    public XN627302Res doLoginWeChatByMerchant(String code, String userKind,
+            String userReferee);
 
     // C端微信注册/登录
     public XN627302Res doLoginWeChatByCustomer(String code, String userKind);

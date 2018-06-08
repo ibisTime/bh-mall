@@ -36,6 +36,7 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
+			
 			<choose>
 				<when test="status == '6,8,12' ">
 					AND t.status = '6' OR t.status = '8' OR t.status = '12'

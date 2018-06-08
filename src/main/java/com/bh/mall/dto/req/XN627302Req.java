@@ -5,8 +5,11 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627302Req {
 
     // 开放编号（必填）
-    @NotBlank
+    @NotBlank(message = "微信开放编号不能为空")
     private String code;
+
+    // 推荐人
+    private String userReferee;
 
     // 是否强制绑定手机号（必填）
     private String isNeedMobile;
@@ -58,6 +61,14 @@ public class XN627302Req {
 
     public void setIsLoginStatus(String isLoginStatus) {
         this.isLoginStatus = isLoginStatus;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 
 }

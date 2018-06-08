@@ -122,6 +122,12 @@
 				AND t.role_code = #{roleCode}
 			</if>
 			<choose>
+				<when test="statusList != null and statusList.size() >0 ">
+					AND t.status IN
+					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
 				<when test="status == '3,4'">
 					AND  (t.status = '3' or t.status = '4')
 				</when>
@@ -677,6 +683,34 @@
 		,address = #{address}
 		,apply_level = #{applyLevel}	
 		,apply_datetime = #{applyDatetime}	
+		WHERE user_id = #{userId}
+	</update>
+	
+		
+	<update id="to_apply" parameterType="user">
+		UPDATE tbh_user
+		SET
+		mobile = #{mobile}
+		,apply_level = #{applyLevel}
+		,user_referee = #{userReferee}
+		,introducer = #{introducer}
+		,high_user_id = #{highUserId}
+		,team_name = #{teamName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		,id_front = #{idFront}
+		,id_behind = #{idBehind}
+		,id_hand = #{idHand}
+		,real_name = #{realName}
+		,status = #{status}
+		,source = #{source}
+		,apply_datetime = #{applyDatetime}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		,last_agent_log = #{lastAgentLog}
+		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
 </mapper>

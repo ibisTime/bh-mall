@@ -23,8 +23,9 @@ public class XN627301 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+        System.out.println("userReferee:" + req.getUserReferee());
         return userAO.doLoginWeChatByMerchant(req.getCode(),
-            EUserKind.Merchant.getCode());
+            EUserKind.Merchant.getCode(), req.getUserReferee());
     }
 
     @Override
@@ -32,4 +33,5 @@ public class XN627301 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN627301Req.class);
         ObjValidater.validateReq(req);
     }
+
 }

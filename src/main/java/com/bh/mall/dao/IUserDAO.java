@@ -71,13 +71,20 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     public void updateManager(User data);
 
+    // 申请升级
     public void upgradeLevel(User data);
 
+    // 审核升级
     public void approveUpgrade(User data);
 
     public List<User> selectAgentFront(User condition, int start, int limit);
 
+    // 意向通过
     public void acceptIntention(User data);
 
+    // 意向分配
     public void applyIntent(User data);
+
+    // 申请代理
+    public void toApply(User data);
 }

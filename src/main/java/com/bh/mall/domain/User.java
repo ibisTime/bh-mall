@@ -175,6 +175,7 @@ public class User extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // ********************DB*************
     private List<User> userList;
 
     private List<AgencyLog> logList;
@@ -233,6 +234,9 @@ public class User extends ABaseDO {
     private String manageName;
 
     private Long impowerAmount;
+
+    // 状态List
+    private List<String> statusList;
 
     public String getUserId() {
         return userId;
@@ -764,6 +768,14 @@ public class User extends ABaseDO {
 
     public void setManageName(String manageName) {
         this.manageName = manageName;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

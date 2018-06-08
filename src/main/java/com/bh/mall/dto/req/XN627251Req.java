@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627251Req {
     // 微信编号
     @NotBlank(message = "微信编号不能为空")
-    private String code;
+    private String userId;
 
     // （必填） 姓名
     @NotBlank(message = "姓名不能为空")
@@ -23,7 +23,7 @@ public class XN627251Req {
 
     // (必填） 申请等级
     @NotBlank(message = "申请等级不能为空")
-    private String level;
+    private String applyLevel;
 
     // （选填）身份证反面
     private String idBehind;
@@ -43,10 +43,6 @@ public class XN627251Req {
     // （必填）来源
     @NotBlank(message = "来源不能为空")
     private String fromInfo;
-
-    // （必填） 推荐人
-    @NotBlank(message = "推荐人不能为空")
-    private String userReferee;
 
     // （必填） 电话
     @NotBlank(message = "电话不能为空")
@@ -68,12 +64,12 @@ public class XN627251Req {
     @NotBlank(message = "详细地址不能为空")
     private String address;
 
-    public String getCode() {
-        return code;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getRealName() {
@@ -92,12 +88,12 @@ public class XN627251Req {
         this.wxId = wxId;
     }
 
-    public String getLevel() {
-        return level;
+    public String getApplyLevel() {
+        return applyLevel;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setApplyLevel(String applyLevel) {
+        this.applyLevel = applyLevel;
     }
 
     public String getIdBehind() {
@@ -146,14 +142,6 @@ public class XN627251Req {
 
     public void setFromInfo(String fromInfo) {
         this.fromInfo = fromInfo;
-    }
-
-    public String getUserReferee() {
-        return userReferee;
-    }
-
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
     }
 
     public String getMobile() {

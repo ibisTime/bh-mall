@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查意向代理
  * @author: nyc 
@@ -23,6 +25,9 @@ public class XN627354Req extends APageReq {
 
     // 关键字 （选填）
     private String keyword;
+
+    // 状态（选填）
+    private List<String> statusList;
 
     public static long getSerialversionuid() {
         return serialVersionUID;
@@ -58,6 +63,14 @@ public class XN627354Req extends APageReq {
 
     public void setApplyLevel(String applyLevel) {
         this.applyLevel = applyLevel;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

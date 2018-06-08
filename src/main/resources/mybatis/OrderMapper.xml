@@ -277,8 +277,9 @@
 	<update id="approve_order" parameterType="order">
 		UPDATE tbh_order
 		SET
-		approver = #{approver}
-		,approve_datetime = #{approve_datetime}
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
 		,approve_note = #{approveNote}
 		,status = #{status}
 		WHERE code = #{code}

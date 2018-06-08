@@ -5,7 +5,7 @@ public class XN627302Res {
     private String userId;
 
     // 是否绑定手机号
-    private String status;
+    private String subscribe;
 
     public XN627302Res() {
     }
@@ -14,9 +14,9 @@ public class XN627302Res {
         this.userId = userId;
     }
 
-    public XN627302Res(String userId, String status) {
+    public XN627302Res(String userId, String subscribe) {
         this.userId = userId;
-        this.status = status;
+        this.subscribe = subscribe;
     }
 
     public String getUserId() {
@@ -27,12 +27,12 @@ public class XN627302Res {
         this.userId = userId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getSubscribe() {
+        return subscribe;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSubscribe(String subscribe) {
+        this.subscribe = subscribe;
     }
 
 }

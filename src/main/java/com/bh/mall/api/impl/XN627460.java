@@ -22,21 +22,14 @@ public class XN627460 extends AProcessor {
 
     private XN627460Req req = null;
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doBusiness()
-    */
     @Override
     public synchronized Object doBusiness() throws BizException {
         Long amount = StringValidater.toLong(req.getChargeAmount());
-        String code = chargeAO.applyOrder(req.getAccountNumber(),
-            req.getType(), amount, req.getApplyUser(), req.getApplyNote(),
-            req.getChargePdf());
+        String code = chargeAO.applyOrder(req.getAccountNumber(), req.getType(),
+            amount, req.getApplyUser(), req.getApplyNote(), req.getChargePdf());
         return new PKCodeRes(code);
     }
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
-    */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627460Req.class);

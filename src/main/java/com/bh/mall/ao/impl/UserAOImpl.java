@@ -1,11 +1,3 @@
-/**
- * @Title UserAOImpl.java 
- * @Package com.ibis.pz.user.impl 
- * @Description 
- * @author miyb  
- * @date 2015-3-8 上午10:52:06 
- * @version V1.0   
- */
 package com.bh.mall.ao.impl;
 
 import java.util.ArrayList;
@@ -87,57 +79,52 @@ import com.bh.mall.http.PostSimulater;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-/** 
- * @author: miyb 
- * @since: 2015-3-8 上午10:52:06 
- * @history:
- */
 @Service
 public class UserAOImpl implements IUserAO {
 
     private static Logger logger = Logger.getLogger(UserAOImpl.class);
 
     @Autowired
-    protected IUserBO userBO;
+    IUserBO userBO;
 
     @Autowired
-    protected ISYSRoleBO sysRoleBO;
+    ISYSRoleBO sysRoleBO;
 
     @Autowired
     ISmsOutBO smsOutBO;
 
     @Autowired
-    protected ISYSConfigBO sysConfigBO;
+    ISYSConfigBO sysConfigBO;
 
     @Autowired
-    protected IAddressBO addressBO;
+    IAddressBO addressBO;
 
     @Autowired
-    protected IAgencyLogBO agencyLogBO;
+    IAgencyLogBO agencyLogBO;
 
     @Autowired
-    private IAgentImpowerBO agentImpowerBO;
+    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
-    private IAccountBO accountBO;
+    IAccountBO accountBO;
 
     @Autowired
-    private IOrderBO orderBO;
+    IOrderBO orderBO;
 
     @Autowired
-    private IInnerOrderBO innerOrderBO;
+    IInnerOrderBO innerOrderBO;
 
     @Autowired
-    private IAfterSaleBO afterSaleBO;
+    IAfterSaleBO afterSaleBO;
 
     @Autowired
-    private IAgentUpgradeBO agentUpgradeBO;
+    IAgentUpgradeBO agentUpgradeBO;
 
     @Autowired
-    private IIntroBO introBO;
+    IIntroBO introBO;
 
     @Autowired
-    private IAgentBO agentBO;
+    IAgentBO agentBO;
 
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
@@ -170,8 +157,9 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public XN627302Res doLoginWeChatByMerchant(String code, String userKind) {
-        return doLoginWeChatH(code, userKind);
+    public XN627302Res doLoginWeChatByMerchant(String code, String userKind,
+            String userReferee) {
+        return doLoginWeChatH(code, userKind, userReferee);
     }
 
     @Override
@@ -199,7 +187,7 @@ public class UserAOImpl implements IUserAO {
 
         // Step2：通过Authorization Code获取Access Token
         String sessionKey = "";
-        Map<String, String> res = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
         Properties fromProperties = new Properties();
         fromProperties.put("grant_type", "authorization_code");
         fromProperties.put("appid", appId);
@@ -223,16 +211,6 @@ public class UserAOImpl implements IUserAO {
             }
             // Step3：使用Access Token来获取用户的OpenID
             String openId = (String) res.get("openid");
-            // // 获取unionid
-            // Map<String, String> wxRes = new HashMap<>();
-            // Properties queryParas = new Properties();
-            // queryParas.put("session_key", sessionKey);
-            // queryParas.put("openid", openId);
-            // queryParas.put("lang", "zh_CN");
-            // wxRes = getMapFromResponse(PostSimulater
-            // .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
-            // // String unionId = (String) wxRes.get("unionid");
-            // String h5OpenId = (String) wxRes.get("openid");
             if (StringUtils.isBlank(openId)) {
                 throw new BizException("XN000000", "opind不能为空");
             }
@@ -243,21 +221,8 @@ public class UserAOImpl implements IUserAO {
                 result = new XN627302Res(dbUser.getUserId(),
                     dbUser.getStatus());
             } else {
-                // String nickname = (String) wxRes.get("nickname");
-                // String photo = (String) wxRes.get("headimgurl");
-                // Step5：判断注册是否传手机号，有则注册，无则反馈
-                // if (EBoolean.YES.getCode().equals(isNeedMobile)) {
-                //
-                // doWxLoginRegMobile(mobile, isLoginStatus, smsCaptcha,
-                // smsCaptchaNumber, companyCode, systemCode, unionId,
-                // null, h5OpenId, nickname, photo, userKind);
-                //
-                // } else {
-                //
-                // }
-
                 result = doWxLoginReg(companyCode, systemCode, null, null,
-                    openId, null, null, userKind);
+                    openId, null, null, userKind, null);
             }
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
@@ -266,7 +231,8 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Transactional
-    private XN627302Res doLoginWeChatH(String code, String userKind) {
+    private XN627302Res doLoginWeChatH(String code, String userKind,
+            String userReferee) {
         String companyCode = ESystemCode.BH.getCode();
         String systemCode = ESystemCode.BH.getCode();
         // Step1：获取密码参数信息
@@ -284,17 +250,15 @@ public class UserAOImpl implements IUserAO {
         }
         // Step2：通过Authorization Code获取Access Token
         String accessToken = "";
-        Map<String, String> res = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
         Properties fromProperties = new Properties();
         fromProperties.put("grant_type", "authorization_code");
         fromProperties.put("appid", appId);
         fromProperties.put("secret", appSecret);
         fromProperties.put("code", code);// 微信H5
-        // fromProperties.put("js_code", code);// 微信小程序
-        System.out.println("appId:" + appId + ",appSecret:" + appSecret);
         logger.info(
             "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
-        XN627302Res result = null;
+        XN627302Res result = new XN627302Res();
         try {
             String response = PostSimulater
                 .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
@@ -309,8 +273,9 @@ public class UserAOImpl implements IUserAO {
             }
             // Step3：使用Access Token来获取用户的OpenID
             String openId = (String) res.get("openid");
+
             // 获取unionid
-            Map<String, String> wxRes = new HashMap<>();
+            Map<String, Object> wxRes = new HashMap<>();
             Properties queryParas = new Properties();
             queryParas.put("access_token", accessToken);
             queryParas.put("openid", openId);
@@ -319,29 +284,45 @@ public class UserAOImpl implements IUserAO {
                 .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = (String) wxRes.get("openid");
+            System.out.println("unionId:" + unionId);
             // Step4：根据openId，unionId从数据库中查询用户信息
             User dbUser = userBO.doGetUserByOpenId(h5OpenId, companyCode,
                 systemCode);
+
+            // 用户是否关注了公众号
+            // 1、获取全局token
+            Map<String, Object> resMap1 = new HashMap<>();
+            Properties properties1 = new Properties();
+            properties1.put("grant_type", "client_credential");
+            properties1.put("appid", appId);
+            properties1.put("secret", appSecret);
+            resMap1 = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WXXCX_GLOBAL_TOKEN_URL, properties1));
+            String token = (String) resMap1.get("access_token");
+            if (StringUtils.isBlank(token)) {
+                throw new BizException("XN000000", "accessToken不能为空");
+            }
+
+            Map<String, Object> resMap2 = new HashMap<>();
+            Properties properties2 = new Properties();
+            properties2.put("access_token", token);
+            properties2.put("openid", openId);
+            resMap2 = getMapFromResponse(PostSimulater
+                .requestPostForm(WechatConstant.WX_USER_CGI_URL, properties2));
+
+            String subscribe = String.valueOf(resMap2.get("subscribe"));
+            System.out.println("subscribe:" + subscribe);
+
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                result = new XN627302Res(dbUser.getUserId(),
-                    dbUser.getStatus());
+                result = new XN627302Res(dbUser.getUserId());
             } else {
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
-                // Step5：判断注册是否传手机号，有则注册，无则反馈
-                // if (EBoolean.YES.getCode().equals(isNeedMobile)) {
-                //
-                // doWxLoginRegMobile(mobile, isLoginStatus, smsCaptcha,
-                // smsCaptchaNumber, companyCode, systemCode, unionId,
-                // null, h5OpenId, nickname, photo, userKind);
-                //
-                // } else {
-                //
-                // }
 
                 result = doWxLoginReg(companyCode, systemCode, unionId, null,
-                    h5OpenId, nickname, photo, userKind);
+                    h5OpenId, nickname, photo, userKind, userReferee);
             }
+            result.setSubscribe(subscribe);
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
         }
@@ -353,11 +334,11 @@ public class UserAOImpl implements IUserAO {
      *          eg：urlParas：access_token=xxx&expires_in=7776000&refresh_token=xxx
      * @return
      */
-    public Map<String, String> getMapFromResponse(String response) {
+    public Map<String, Object> getMapFromResponse(String response) {
         if (StringUtils.isBlank(response)) {
             return new HashMap<>();
         }
-        Map<String, String> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         int begin = response.indexOf("{");
         int end = response.lastIndexOf("}") + 1;
         if (begin >= 0 && end > 0) {
@@ -396,30 +377,26 @@ public class UserAOImpl implements IUserAO {
      * result = new XN627302Res(null, EBoolean.YES.getCode()); } return result;
      * }
      */
+
     private XN627302Res doWxLoginReg(String companyCode, String systemCode,
             String unionId, String appOpenId, String h5OpenId, String nickname,
-            String photo, String userKind) {
+            String photo, String userKind, String userReferee) {
         XN627302Res result = new XN627302Res();
         userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
             systemCode);
         String status = null;
-        String level = null;
+        Integer level = 0;
         // 插入用户信息
         if (EUserKind.Customer.getCode().equals(userKind)) {
             status = EUserStatus.NORMAL.getCode();
-            result.setStatus(status);
-            level = "6";
+            level = 6;
         } else {
             status = EUserStatus.TO_WILL.getCode();
-            result.setStatus(status);
         }
         String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
             userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status,
-            level, companyCode, systemCode);
-        // distributeAccount(userId, nickname, userKind, companyCode,
-        // systemCode);
+            level, companyCode, systemCode, userReferee);
         result.setUserId(userId);
-
         return result;
     }
 
@@ -727,9 +704,6 @@ public class UserAOImpl implements IUserAO {
         return user;
     }
 
-    /** 
-     * @see com.bh.mall.ao.IUserAO#doUpLevel(java.lang.String, java.lang.String)
-     */
     @Override
     public void doUpLevel(String userId, String level) {
         User data = new User();
@@ -742,98 +716,86 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public void applyIntent(XN627250Req req) {
 
-        AgentImpower aiData = agentImpowerBO
-            .getAgentImpowerByLevel(StringValidater.toInteger(req.getLevel()));
+        AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
+            StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
             throw new BizException("xn0000", "本等级不可被意向");
         }
         User data = userBO.getCheckUser(req.getUserId());
-        if (EUserStatus.TO_WILL.getCode().equals(data.getStatus())) {
-
-        }
 
         data.setRealName(req.getRealName());
         data.setWxId(req.getWxId());
         data.setMobile(req.getMobile());
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
+
         data.setArea(req.getArea());
         data.setAddress(req.getAddress());
         data.setStatus(EUserStatus.TO_WILL.getCode());
-        data.setApplyLevel(StringValidater.toInteger(req.getLevel()));
+        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setApplyDatetime(new Date());
+
         userBO.applyIntent(data);
         addressBO.saveAddress(data.getUserId(),
             EAddressType.User_Address.getCode(), req.getMobile(),
             req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
             req.getAddress(), EBoolean.YES.getCode());
-
-        // XN627302Res result = null;
-        // Map<String, String> wxRes = getUserInfo(req.getCode());
-        // String unionId = (String) wxRes.get("unionid");
-        // String h5OpenId = (String) wxRes.get("openid");
-        // // Step4：根据openId，unionId从数据库中查询用户信息
-        // User dbUser = userBO.doGetUserByOpenId(h5OpenId,
-        // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-        // if (null != dbUser) {// 如果user存在
-        // throw new BizException("xn0000", "您已经申请过代理");
-        // } else {
-        // String nickname = (String) wxRes.get("nickname");
-        // String photo = (String) wxRes.get("headimgurl");
-        // // 是否可被意向
-        //
-        //
-        // result = doWxLoginReg(req, ESystemCode.BH.getCode(),
-        // ESystemCode.BH.getCode(), unionId, null, h5OpenId, nickname,
-        // photo);
-        // }
     }
 
     @Override
     @Transactional
     public XN627302Res applyHaveUserReferee(XN627251Req req) {
         XN627302Res result = null;
-        Map<String, String> wxRes = getUserInfo(req.getCode());
-        String unionId = (String) wxRes.get("unionId");
-        String h5OpenId = (String) wxRes.get("h5OpenId");
-        User dbUser = userBO.doGetUserByOpenId(h5OpenId,
-            ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-        if (null != dbUser) {
-            throw new BizException("xn0000", "您已经申请过代理");
-        } else {
-            String nickname = (String) wxRes.get("nickname");
-            String photo = (String) wxRes.get("photo");
-
-            userBO.doCheckOpenId(unionId, h5OpenId, null,
-                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            // 是否可被意向
-            AgentImpower data = agentImpowerBO.getAgentImpowerByLevel(
-                StringValidater.toInteger(req.getLevel()));
-            if (EBoolean.NO.getCode().equals(data.getIsIntent())) {
-                throw new BizException("xn0000", "本等级不可被意向");
-            }
-
-            String userId = userBO.doRegister(req.getRealName(), req.getLevel(),
-                req.getWxId(), req.getIdBehind(), req.getIdFront(),
-                req.getIntroducer(), req.getPayPdf(), req.getFromInfo(),
-                req.getUserReferee(), req.getMobile(), req.getProvince(),
-                req.getCity(), req.getArea(), req.getAddress(),
-                EUserPwd.InitPwd.getCode(), photo, nickname, unionId, h5OpenId,
-                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-
-            // distributeAccount(userId, nickname, EUserKind.Merchant.getCode(),
-            // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            addressBO.saveAddress(userId, EAddressType.User_Address.getCode(),
-                req.getMobile(), req.getRealName(), req.getProvince(),
-                req.getCity(), req.getArea(), req.getAddress(),
-                EBoolean.YES.getCode());
-            result = new XN627302Res(userId, EBoolean.NO.getCode());
-
+        // 是否可被意向
+        AgentImpower impower = agentImpowerBO.getAgentImpowerByLevel(
+            StringValidater.toInteger(req.getApplyLevel()));
+        if (EBoolean.NO.getCode().equals(impower.getIsIntent())) {
+            throw new BizException("xn0000", "本等级不可被意向");
         }
+        User data = userBO.getUser(req.getUserId());
+        // 添加代理轨迹
+        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
+        data.setRealName(req.getRealName());
+        data.setIdBehind(req.getIdBehind());
+        data.setIdFront(req.getIdFront());
+        data.setIdHand(req.getIdHand());
+
+        User highUser = userBO.getUser(data.getUserReferee());
+        data.setHighUserId(highUser.getUserId());
+        data.setTeamName(highUser.getTeamName());
+
+        data.setIntroducer(req.getIntroducer());
+        data.setUserReferee(data.getUserReferee());
+        data.setMobile(req.getMobile());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+
+        data.setArea(req.getArea());
+        data.setAddress(req.getAddress());
+        data.setSource(req.getFromInfo());
+        String logCode = agencyLogBO.toApply(data, req.getPayPdf());
+        data.setLastAgentLog(logCode);
+
+        userBO.toApply(data);
+        addressBO.saveAddress(data.getUserId(),
+            EAddressType.User_Address.getCode(), req.getMobile(),
+            req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
+            req.getAddress(), EBoolean.YES.getCode());
+        result = new XN627302Res(data.getUserId(), EBoolean.NO.getCode());
         return result;
+        // XN627302Res result = null;
+        // Map<String, String> wxRes = getUserInfo(req.getCode());
+        // String unionId = (String) wxRes.get("unionId");
+        // String h5OpenId = (String) wxRes.get("h5OpenId");
+        // User dbUser = userBO.doGetUserByOpenId(h5OpenId,
+        // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+        // if (null != dbUser) {
+        // throw new BizException("xn0000", "您已经申请过代理");
+        // } else {
+
     }
 
-    private Map<String, String> getUserInfo(String code) {
+    private Map<String, Object> getUserInfo(String code) {
         String companyCode = ESystemCode.BH.getCode();
         String systemCode = ESystemCode.BH.getCode();
         // Step1：获取密码参数信息
@@ -852,7 +814,7 @@ public class UserAOImpl implements IUserAO {
 
         // Step2：通过Authorization Code获取Access Token
         String accessToken = "";
-        Map<String, String> res = new HashMap<>();
+        Map<String, Object> res = new HashMap<>();
         Properties fromProperties = new Properties();
         fromProperties.put("grant_type", "authorization_code");
         fromProperties.put("appid", appId);
@@ -860,7 +822,7 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("code", code);
         logger.info(
             "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
-        Map<String, String> wxRes = new HashMap<>();
+        Map<String, Object> wxRes = new HashMap<>();
         try {
             String response = PostSimulater
                 .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);

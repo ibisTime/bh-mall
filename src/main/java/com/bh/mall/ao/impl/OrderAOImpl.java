@@ -18,7 +18,6 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAwardBO;
 import com.bh.mall.bo.ICartBO;
-import com.bh.mall.bo.ICompanyChannelBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
@@ -69,7 +68,6 @@ import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EUserLevel;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
@@ -117,9 +115,6 @@ public class OrderAOImpl implements IOrderAO {
 
     @Autowired
     private IProductLogBO productLogBO;
-
-    @Autowired
-    private ICompanyChannelBO companyChannelBO;
 
     // C端下单
     @Override
@@ -203,14 +198,13 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
 
-        User uLevel = userBO.getUser(req.getApplyUser());
+        User applyUser = userBO.getUser(req.getApplyUser());
 
         ProductSpecsPrice pspData = productSpecsPriceBO
-            .getPriceBySpecsCode(psData.getCode(), uLevel.getLevel());
+            .getPriceBySpecsCode(psData.getCode(), applyUser.getLevel());
         // 判断代理状态
         String kind = EOrderKind.Normal_Order.getCode();
-        if (EUserKind.Plat.getCode().equals(uLevel.getKind())) {
-
+        if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
             // 是否有过授权单
             Order condition = new Order();
             condition.setApplyUser(req.getApplyUser());
@@ -248,41 +242,39 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn0000", "该产品规格不予许普通单下单");
             }
 
-            // 下单代理是一级
-            if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == user
-                .getLevel()) {
-                // 产品总数量
-                int quantity = StringValidater.toInteger(req.getQuantity())
-                        * psData.getNumber();
+            if (StringUtils.isBlank(applyUser.getHighUserId())) {
 
-                if (quantity > pData.getRealNumber()) {
-                    throw new BizException("xn0000", "产品库存不足");
-                }
-                // 修改产品库存记录
-                productLogBO.saveChangeLog(pData,
-                    EProductLogType.Order.getCode(), pData.getRealNumber(),
-                    quantity, null);
-                pData.setRealNumber(pData.getRealNumber() - quantity);
-                productBO.refreshRealNumber(pData);
-
-                // WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
-                // user.getUserId(), req.getProductSpecsCode());
-                //
-                // wareHouseBO.changeWareHouse(whData.getCode(),
-                // StringValidater.toInteger(req.getQuantity()),
-                // EBizType.AJ_GMYC,
-                // EBizType.AJ_GMYC.getValue(), code);
-            } else {
-                // User fromUser = userBO.getCheckUser(req.getToUser());
-                // User toUser = userBO.getCheckUser(req.getApplyUser());
-                // wareHouseBO.transQuantity(fromUser.getUserId(),
-                // psData.getCode(),
-                // toUser.getUserId(), psData.getCode(),
-                // StringValidater.toInteger(req.getQuantity()),
-                // EBizType.AJ_GMYC,
-                // EBizType.AJ_YCCH, EBizType.AJ_GMYC.getValue(),
-                // EBizType.AJ_YCCH.getValue(), code);
             }
+
+            // 不考虑上级代理仓库中是否有货
+            int quantity = StringValidater.toInteger(req.getQuantity())
+                    * psData.getNumber();
+
+            if (quantity > pData.getRealNumber()) {
+                throw new BizException("xn0000", "产品库存不足");
+            }
+            // 修改产品库存记录
+            productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
+                pData.getRealNumber(), quantity, null);
+            pData.setRealNumber(pData.getRealNumber() - quantity);
+            productBO.refreshRealNumber(pData);
+            // 下单代理是一级
+            /*
+             * if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == user
+             * .getLevel()) { WareHouse whData =
+             * wareHouseBO.getWareHouseByProductSpec( user.getUserId(),
+             * req.getProductSpecsCode());
+             * wareHouseBO.changeWareHouse(whData.getCode(),
+             * StringValidater.toInteger(req.getQuantity()), EBizType.AJ_GMYC,
+             * EBizType.AJ_GMYC.getValue(), code); } else { User fromUser =
+             * userBO.getCheckUser(req.getToUser()); User toUser =
+             * userBO.getCheckUser(req.getApplyUser());
+             * wareHouseBO.transQuantity(fromUser.getUserId(), psData.getCode(),
+             * toUser.getUserId(), psData.getCode(),
+             * StringValidater.toInteger(req.getQuantity()), EBizType.AJ_GMYC,
+             * EBizType.AJ_YCCH, EBizType.AJ_GMYC.getValue(),
+             * EBizType.AJ_YCCH.getValue(), code); }
+             */
         }
 
         String code = OrderNoGenerater
@@ -637,25 +629,29 @@ public class OrderAOImpl implements IOrderAO {
         if (!EOrderStatus.TO_Apprvoe.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单未支付或已发货");
         }
-
-        User toUser = userBO.getUser(data.getApplyUser());
-        User fromUser = userBO.getUser(data.getToUser());
+        User fromUser = userBO.getUser(data.getApplyUser());
         WareHouse fromData = wareHouseBO.getWareHouseByProductSpec(
             fromUser.getUserId(), data.getProductSpecsCode());
-        WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
-            toUser.getUserId(), data.getProductSpecsCode());
-        if (fromData == null) {
-            throw new BizException("xn000", toData.getUserId() + ",您仓库中没有该产品");
-        }
-        if (fromData.getQuantity() < 0) {
-            throw new BizException("xn000",
-                toData.getRealName() + ",您仓库中该改规格测产品不足");
+
+        // 订单归属人是代理
+        if (StringUtils.isNotBlank(data.getToUser())) {
+            User toUser = userBO.getUser(data.getToUser());
+            WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
+                toUser.getUserId(), data.getProductSpecsCode());
+            if (fromData == null) {
+                throw new BizException("xn000",
+                    toData.getUserId() + ",您仓库中没有该产品");
+            }
+            if (fromData.getQuantity() < 0) {
+                throw new BizException("xn000",
+                    toData.getRealName() + ",您仓库中该改规格测产品不足");
+            }
         }
         // 代理购买云仓
-        if (EUserKind.Merchant.getCode().equals(toUser.getKind())
+        if (EUserKind.Merchant.getCode().equals(fromUser.getKind())
                 && EBoolean.NO.getCode().equals(data.getIsSendHome())) {
             // 没有该产品
-            if (toData == null) {
+            if (fromData == null) {
                 String code = OrderNoGenerater
                     .generate(EGeneratePrefix.WareHouse.getCode());
                 WareHouse whData = new WareHouse();
@@ -666,8 +662,8 @@ public class OrderAOImpl implements IOrderAO {
                 whData.setProductSpecsName(data.getProductSpecsName());
 
                 whData.setCurrency(ECurrency.YC_CNY.getCode());
-                whData.setUserId(toUser.getUserId());
-                whData.setRealName(toUser.getRealName());
+                whData.setUserId(fromUser.getUserId());
+                whData.setRealName(fromUser.getRealName());
                 whData.setCreateDatetime(new Date());
                 whData.setPrice(data.getPrice());
 
@@ -694,16 +690,20 @@ public class OrderAOImpl implements IOrderAO {
         data.setLogisticsCode(req.getLogisticsCode());
         data.setLogisticsCompany(req.getLogisticsCompany());
         data.setPdf(req.getPdf());
-        data.setStatus(EInnerOrderStatus.TO_Deliver.getCode());
+        data.setStatus(EOrderStatus.TO_Deliver.getCode());
         data.setRemark(req.getRemark());
         orderBO.deliverOrder(data);
     }
 
     @Override
-    public void approveOrder(List<Order> codeList, String approver,
+    public void approveOrder(List<String> codeList, String approver,
             String approveNote) {
-        for (Order order : codeList) {
-            Order data = orderBO.getOrder(order.getCode());
+        for (String code : codeList) {
+            Order data = orderBO.getOrder(code);
+            if (!EOrderStatus.Paid.getCode().equals(data.getStatus())) {
+                throw new BizException("xn00000", "该订单不处于待审核状态");
+            }
+            data.setStatus(EOrderStatus.TO_Apprvoe.getCode());
             data.setApprover(approver);
             data.setApproveDatetime(new Date());
             data.setApproveNote(approveNote);

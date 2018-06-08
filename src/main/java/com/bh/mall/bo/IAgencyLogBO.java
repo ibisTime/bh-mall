@@ -31,4 +31,6 @@ public interface IAgencyLogBO extends IPaginableBO<AgencyLog> {
     public List<AgencyLog> queryAgencyLogPage(int start, int limit,
             AgencyLog condition);
 
+    public String toApply(User dbUser, String payPdf);
+
 }

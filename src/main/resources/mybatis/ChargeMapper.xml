@@ -37,6 +37,7 @@
 			<if test="refNo != null and refNo != '' ">
 				AND t.ref_no = #{refNo}
 			</if>
+			
 			<if test="accountNumber != null and accountNumber != '' ">
 				AND t.account_number = #{accountNumber}
 			</if>

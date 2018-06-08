@@ -99,17 +99,19 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
-            String photo, String level, String status, String companyCode,
-            String systemCode) {
+            String photo, String status, Integer level, String systemCode,
+            String companyCode, String userReferee) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
         user.setUnionId(unionId);
         user.setH5OpenId(h5OpenId);
+
         user.setAppOpenId(appOpenId);
         user.setLoginName(mobile);
         user.setMobile(mobile);
         user.setKind(kind);
+        user.setUserReferee(userReferee);
 
         user.setLoginPwd(MD5Util.md5(loginPwd));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
@@ -120,7 +122,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setCreateDatetime(date);
 
         user.setCompanyCode(companyCode);
-        user.setLevel(StringValidater.toInteger(level));
+        user.setLevel(level);
         user.setSystemCode(systemCode);
         String logCode = agencyLogBO.acceptIntention(user);
         user.setLastAgentLog(logCode);
@@ -513,11 +515,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public String doRegister(String realName, String level, String wxId,
-            String idBehind, String idFront, String introducer, String payPdf,
-            String fromInfo, String userReferee, String mobile, String province,
-            String city, String area, String address, String loginPwd,
-            String photo, String nickname, String unionId, String h5OpenId,
-            String companyCode, String systemCode) {
+            String idBehind, String idFront, String introducer, String fromInfo,
+            String userReferee, String mobile, String province, String city,
+            String area, String address, String loginPwd, String photo,
+            String nickname, String unionId, String h5OpenId,
+            String companyCode, String systemCode, String logCode) {
         String userId = OrderNoGenerater.generate("U");
         User data = new User();
         data.setUserId(userId);
@@ -551,6 +553,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setCreateDatetime(new Date());
         data.setCompanyCode(companyCode);
         data.setSystemCode(systemCode);
+        data.setLastAgentLog(logCode);
         userDAO.insert(data);
 
         return userId;
@@ -660,6 +663,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void doSaveUser(User data) {
         userDAO.insert(data);
+    }
+
+    @Override
+    public void toApply(User data) {
+        userDAO.toApply(data);
     }
 
 }

@@ -43,8 +43,8 @@ public interface IUserBO extends IPaginableBO<User> {
     // 前端用户注册
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
-            String photo, String status, String level, String systemCode,
-            String companyCode);
+            String photo, String status, Integer level, String systemCode,
+            String companyCode, String userReferee);
 
     public String doRegister(String wxId, String level, String realName,
             String province, String city, String area, String address,
@@ -55,11 +55,11 @@ public interface IUserBO extends IPaginableBO<User> {
 
     // 含推荐人注册
     public String doRegister(String realName, String level, String wxId,
-            String idBehind, String idFront, String introducer, String payPdf,
-            String fromInfo, String userReferee, String mobile, String province,
-            String city, String area, String address, String loginPwd,
-            String photo, String nickname, String unionId, String h5OpenId,
-            String companyCode, String systemCode);
+            String idBehind, String idFront, String introducer, String fromInfo,
+            String userReferee, String mobile, String province, String city,
+            String area, String address, String loginPwd, String photo,
+            String nickname, String unionId, String h5OpenId,
+            String companyCode, String systemCode, String logCode);
 
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo);
@@ -120,6 +120,9 @@ public interface IUserBO extends IPaginableBO<User> {
     public void setTradePwd(User user, String tradePwd);
 
     public void resetBindMobile(User user, String newMobile);
+
+    // 申请代理
+    public void toApply(User dbUser);
 
     // 意向分配
     public void allotAgency(User data);

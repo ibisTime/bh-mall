@@ -54,6 +54,7 @@ public class DateUtil {
         try {
             calendar.setTime(startDate);
             calendar.add(Calendar.SECOND, second);
+
             return calendar.getTime();
         } catch (Exception e) {
             return startDate;
@@ -250,13 +251,5 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        // System.out.println(getCurrentMonthLastDay());
-        // List<Date> arrayDate = getDatesArray("2014-01-01", "2014-03-01", 2);
-        //
-        // for (int i = 0; i < arrayDate.size(); i++) {
-        // System.out.println(dateToStr(arrayDate.get(i),
-        // FRONT_DATE_FORMAT_STRING));
-        // }
-
     }
 }

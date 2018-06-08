@@ -91,25 +91,16 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
         return super.update(NAMESPACE.concat("update_user_photo"), data);
     }
 
-    /** 
-     * @see com.bh.mall.dao.IUserDAO#update(com.bh.mall.domain.User)
-     */
     @Override
     public int update(User data) {
         return super.update(NAMESPACE.concat("update_user"), data);
     }
 
-    /** 
-     * @see com.bh.mall.dao.IUserDAO#updateMobileIds(com.bh.mall.domain.User)
-     */
     @Override
     public int updateMobileIds(User data) {
         return super.update(NAMESPACE.concat("update_user_mobileIds"), data);
     }
 
-    /** 
-     * @see com.bh.mall.dao.IUserDAO#updateLevel(com.bh.mall.domain.User)
-     */
     @Override
     public int updateLevel(User data) {
         return super.update(NAMESPACE.concat("update_level"), data);
@@ -202,6 +193,12 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     @Override
     public void applyIntent(User data) {
         super.update(NAMESPACE.concat("apply_intent"), data);
+
+    }
+
+    @Override
+    public void toApply(User data) {
+        super.update(NAMESPACE.concat("to_apply"), data);
 
     }
 }

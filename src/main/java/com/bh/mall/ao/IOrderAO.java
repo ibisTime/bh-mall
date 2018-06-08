@@ -37,7 +37,7 @@ public interface IOrderAO {
     public void deliverOrder(XN627645Req req);
 
     // 批量审单
-    public void approveOrder(List<Order> codeList, String approver,
+    public void approveOrder(List<String> codeList, String approver,
             String approveNote);
 
     // 取消订单

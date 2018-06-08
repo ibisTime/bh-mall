@@ -5,8 +5,6 @@ import java.util.List;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.bh.mall.domain.Order;
-
 /**
  * 修改收货地址以及运费
  * @author: nyc 
@@ -16,7 +14,7 @@ import com.bh.mall.domain.Order;
 public class XN627644Req {
     // （必填）编号List
     @NotEmpty(message = "编号不能为空")
-    private List<Order> codeList;
+    private List<String> codeList;
 
     // （必填）审核人
     @NotBlank(message = "审核人不能为空")
@@ -25,11 +23,11 @@ public class XN627644Req {
     // （选填）审核备注
     private String approveNote;
 
-    public List<Order> getCodeList() {
+    public List<String> getCodeList() {
         return codeList;
     }
 
-    public void setCodeList(List<Order> codeList) {
+    public void setCodeList(List<String> codeList) {
         this.codeList = codeList;
     }
 

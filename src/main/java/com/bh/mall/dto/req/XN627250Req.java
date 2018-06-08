@@ -24,7 +24,7 @@ public class XN627250Req {
 
     // (必填） 申请等级
     @NotBlank(message = "申请等级不能为空")
-    private String level;
+    private String applyLevel;
 
     // （必填） 电话
     @NotBlank(message = "电话不能为空")
@@ -62,12 +62,12 @@ public class XN627250Req {
         this.wxId = wxId;
     }
 
-    public String getLevel() {
-        return level;
+    public String getApplyLevel() {
+        return applyLevel;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setApplyLevel(String applyLevel) {
+        this.applyLevel = applyLevel;
     }
 
     public String getMobile() {
@@ -116,6 +116,14 @@ public class XN627250Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "XN627250Req [userId=" + userId + ", realName=" + realName
+                + ", wxId=" + wxId + ", applyLevel=" + applyLevel + ", mobile="
+                + mobile + ", province=" + province + ", city=" + city
+                + ", area=" + area + ", address=" + address + "]";
     }
 
 }
