@@ -1,5 +1,7 @@
 package com.bh.mall.ao.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -178,23 +180,29 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
 
         Paginable<AgencyLog> page = agencyLogBO.getPaginable(start, limit,
             condition);
-        List<AgencyLog> list = page.getList();
+        User userReferee = null;
+        User user = null;
+        List<AgencyLog> chekcList = new ArrayList<AgencyLog>();
+        AgencyLog check = new AgencyLog();
+        AgencyLog agencyLog = null;
 
-        for (AgencyLog agencyLog : list) {
-            User userReferee = null;
-            User user = userAO.doGetUser(agencyLog.getApplyUser());
-            if (user != null) {
-                agencyLog.setUser(user);
-                if (StringUtils.isNotBlank(user.getUserReferee())) {
-                    userReferee = userAO.doGetUser(user.getUserReferee());
-                }
-                if (userReferee != null) {
-                    agencyLog.setRefereeName(userReferee.getRealName());
-                }
+        for (Iterator<AgencyLog> iterator = page.getList().iterator(); iterator
+            .hasNext();) {
+            agencyLog = iterator.next();
+            check.setApplyUser(agencyLog.getApplyUser());
+            chekcList = agencyLogBO.queryAgencyLogList(check);
+            if (chekcList.size() > 1) {
+                iterator.remove();
+                continue;
+            }
+            user = userAO.doGetUser(agencyLog.getApplyUser());
+            if (StringUtils.isNotBlank(user.getUserReferee())) {
+                userReferee = userAO.doGetUser(user.getUserReferee());
+                agencyLog.setRefereeName(userReferee.getRealName());
             }
             // 审核人
             if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
-                agencyLog.setApprovName(agencyLog.getApprover());
+                iterator.next().setApprovName(agencyLog.getApprover());
             } else {
                 if (StringUtils.isNotBlank(agencyLog.getApprover())) {
                     User aprrvoeName = userAO
@@ -210,9 +218,28 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
             }
 
         }
-        page.setList(list);
         return page;
+    }
 
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        list.add("5");
+
+        for (Iterator<String> iterator = list.iterator(); iterator.hasNext();) {
+            String string = iterator.next();
+            if ("2".equals(string)) {
+                iterator.remove();
+                continue;
+            }
+        }
+
+        for (String string : list) {
+            System.out.println(string);
+        }
     }
 
 }

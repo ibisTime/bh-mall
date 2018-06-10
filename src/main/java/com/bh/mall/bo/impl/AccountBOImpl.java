@@ -284,5 +284,4 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
             bizType, toBizNote, transAmount);
     }
-
 }

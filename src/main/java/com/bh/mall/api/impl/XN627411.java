@@ -22,9 +22,6 @@ public class XN627411 extends AProcessor {
 
     private XN627411Req req = null;
 
-    /** 
-     * @see com.xnjr.cpzc.service.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         Address condition = new Address();
@@ -33,9 +30,6 @@ public class XN627411 extends AProcessor {
         return addressAO.queryAddressList(condition);
     }
 
-    /** 
-     * @see com.xnjr.cpzc.service.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627411Req.class);

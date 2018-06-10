@@ -22,4 +22,7 @@ public interface IChargeAO {
 
     public Charge getCharge(String code);
 
+    public Paginable<Charge> queryFrontChargePage(int start, int limit,
+            Charge condition);
+
 }

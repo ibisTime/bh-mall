@@ -553,8 +553,8 @@
 		SET
 		status = #{status}
 		,manager = #{manager}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
@@ -694,8 +694,6 @@
 		,apply_level = #{applyLevel}
 		,user_referee = #{userReferee}
 		,introducer = #{introducer}
-		,high_user_id = #{highUserId}
-		,team_name = #{teamName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_front = #{idFront}

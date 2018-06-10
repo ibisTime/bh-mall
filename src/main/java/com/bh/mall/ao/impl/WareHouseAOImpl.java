@@ -81,7 +81,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
                 User user = userBO.getUser(wareHouse.getUserId());
                 wareHouse.setUser(user);
             }
-            Product product = productAO.getProduct(wareHouse.getCode());
+            Product product = productAO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
         }
 
@@ -93,12 +93,13 @@ public class WareHouseAOImpl implements IWareHouseAO {
             WareHouse condition) {
         Paginable<WareHouse> page = wareHouseBO.getPaginable(start, limit,
             condition);
-        List<WareHouse> list = page.getList();
-        for (WareHouse wareHouse : list) {
-            Product product = productAO.getProduct(wareHouse.getProductCode());
-            wareHouse.setProduct(product);
+        for (WareHouse wareHouse : page.getList()) {
+            if (StringUtils.isNotBlank(wareHouse.getProductCode())) {
+                Product product = productAO
+                    .getProduct(wareHouse.getProductCode());
+                wareHouse.setProduct(product);
+            }
         }
-        page.setList(list);
         userBO.getCheckUser(condition.getUserId());
         return wareHouseBO.getPaginable(start, limit, condition);
     }
@@ -109,9 +110,12 @@ public class WareHouseAOImpl implements IWareHouseAO {
         Long allAmount = 0L;
         List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
         for (WareHouse wareHouse : list) {
-            Product product = productAO.getProduct(wareHouse.getProductCode());
-            wareHouse.setProduct(product);
-            allAmount = allAmount + wareHouse.getAmount();
+            if (StringUtils.isNotBlank(wareHouse.getProductCode())) {
+                Product product = productAO
+                    .getProduct(wareHouse.getProductCode());
+                wareHouse.setProduct(product);
+                allAmount = allAmount + wareHouse.getAmount();
+            }
         }
         allAmount = AmountUtil.eraseLiUp(allAmount);
         res = new XN627814Res(list, allAmount);

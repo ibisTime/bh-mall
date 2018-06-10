@@ -715,7 +715,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void applyIntent(XN627250Req req) {
-
         AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
@@ -735,6 +734,8 @@ public class UserAOImpl implements IUserAO {
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setApplyDatetime(new Date());
 
+        String logCode = agencyLogBO.toApply(data, req.getPayPdf());
+        data.setLastAgentLog(logCode);
         userBO.applyIntent(data);
         addressBO.saveAddress(data.getUserId(),
             EAddressType.User_Address.getCode(), req.getMobile(),
@@ -761,9 +762,11 @@ public class UserAOImpl implements IUserAO {
         data.setIdHand(req.getIdHand());
 
         User highUser = userBO.getUser(data.getUserReferee());
-        data.setHighUserId(highUser.getUserId());
-        data.setTeamName(highUser.getTeamName());
+        if (null != highUser) {
+            data.setHighUserId(highUser.getUserId());
+            data.setTeamName(highUser.getTeamName());
 
+        }
         data.setIntroducer(req.getIntroducer());
         data.setUserReferee(data.getUserReferee());
         data.setMobile(req.getMobile());
@@ -869,9 +872,9 @@ public class UserAOImpl implements IUserAO {
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setManager(manager);
-
-        String logCode = agencyLogBO.saveAgencyLog(data, toUserId, status);
         data.setStatus(status);
+
+        String logCode = agencyLogBO.saveAgencyLog(data, toUserId);
         data.setLastAgentLog(logCode);
         userBO.allotAgency(data);
     }

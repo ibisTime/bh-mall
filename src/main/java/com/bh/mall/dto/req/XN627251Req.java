@@ -9,8 +9,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 public class XN627251Req {
-    // 微信编号
-    @NotBlank(message = "微信编号不能为空")
+    // 用户编号
+    @NotBlank(message = "251用户编号不能为空")
     private String userId;
 
     // （必填） 姓名

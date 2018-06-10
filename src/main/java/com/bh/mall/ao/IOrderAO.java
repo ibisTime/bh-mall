@@ -31,7 +31,7 @@ public interface IOrderAO {
     public String addOrderNoCart(XN627641Req req);
 
     // 付款
-    public Object payOrder(String codeList, String payType);
+    public Object payOrder(List<String> codeList, String payType);
 
     // 发货
     public void deliverOrder(XN627645Req req);

@@ -12,6 +12,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IUserBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -21,8 +22,6 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
-import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.EUser;
 import com.bh.mall.exception.BizException;
 
@@ -83,34 +82,32 @@ public class ChargeAOImpl implements IChargeAO {
     }
 
     private void payOrderNO(Charge data, String payUser, String payNote) {
-        chargeBO.payOrder(data, false, payUser, payNote);
+        chargeBO.payOrder(data, EChargeStatus.Cancel_NO.getCode(), payUser,
+            payNote);
     }
 
     private void payOrderYES(Charge data, String payUser, String payNote) {
-        chargeBO.payOrder(data, true, payUser, payNote);
-        Account account = accountBO.getAccount(data.getAccountNumber());
+        chargeBO.payOrder(data, EChargeStatus.Cancel_YES.getCode(), payUser,
+            payNote);
+        // Account account = accountBO.getAccount(data.getAccountNumber());
         // 账户加钱
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
             null, null, data.getCode(), EBizType.getBizType(data.getBizType()),
             EBizType.getBizType(data.getBizType()).getValue(),
             data.getAmount());
-        if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())) {
-            // 托管账户加钱
-            accountBO.changeAmount(ESysUser.SYS_USER_BH.getCode(),
-                EChannelType.Offline, null, null, data.getCode(),
-                EBizType.getBizType(data.getBizType()),
-                EBizType.getBizType(data.getBizType()).getValue(),
-                data.getAmount());
-        }
+        // if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())) {
+        // // 托管账户加钱
+        // accountBO.changeAmount(ESysUser.SYS_USER_BH.getCode(),
+        // EChannelType.Offline, null, null, data.getCode(),
+        // EBizType.getBizType(data.getBizType()),
+        // EBizType.getBizType(data.getBizType()).getValue(),
+        // data.getAmount());
+        // }
     }
 
     @Override
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {
-        // if (StringUtils.isBlank(condition.getHighUserId())) {
-        // User sysUser = userBO.getSysUser();
-        // condition.setHighUserId(sysUser.getUserId());
-        // }
 
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
         for (Charge charge : page.getList()) {
@@ -162,6 +159,31 @@ public class ChargeAOImpl implements IChargeAO {
             charge.setPayUser(payUser.getLoginName());
         }
         return charge;
+    }
+
+    @Override
+    public Paginable<Charge> queryFrontChargePage(int start, int limit,
+            Charge condition) {
+
+        long count = chargeBO.getFrontTotalCount(condition);
+        Page<Charge> page = new Page<Charge>(start, limit, count);
+        List<Charge> list = chargeBO.queryFrontChargePage(page.getStart(),
+            page.getPageSize(), condition);
+
+        for (Charge charge : list) {
+            if (!EUser.ADMIN.getCode().equals(charge.getApplyUser())
+                    && charge.getApplyUser() != null) {
+                User user = userBO.getCheckUser(charge.getApplyUser());
+                charge.setUser(user);
+            }
+            if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
+                    && charge.getPayUser() != null) {
+                User payUser = userBO.getCheckUser(charge.getPayUser());
+                charge.setPayUser(payUser.getLoginName());
+            }
+        }
+        page.setList(list);
+        return page;
     }
 
 }

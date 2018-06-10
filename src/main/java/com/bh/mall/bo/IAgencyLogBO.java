@@ -12,7 +12,7 @@ public interface IAgencyLogBO extends IPaginableBO<AgencyLog> {
 
     public AgencyLog getAgencyLog(String code);
 
-    public String saveAgencyLog(User data, String toUser, String status);
+    public String saveAgencyLog(User data, String toUser);
 
     public String acceptIntention(User data);
 

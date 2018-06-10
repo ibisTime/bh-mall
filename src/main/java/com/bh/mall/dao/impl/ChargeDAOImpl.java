@@ -42,12 +42,25 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
 
     @Override
     public List<Charge> selectList(Charge condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_charge"), start,
-            count, condition, Charge.class);
+        return super.selectList(NAMESPACE.concat("select_charge"), start, count,
+            condition, Charge.class);
     }
 
     @Override
     public void payOrder(Charge data) {
         super.update(NAMESPACE.concat("pay_order"), data);
+    }
+
+    @Override
+    public long getFrontTotalCount(Charge condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_front_count"),
+            condition);
+    }
+
+    @Override
+    public List<Charge> selectFrontChargePage(int pageNO, int pageSize,
+            Charge condition) {
+        return super.selectList(NAMESPACE.concat("select_front_charge"), pageNO,
+            pageSize, condition, Charge.class);
     }
 }

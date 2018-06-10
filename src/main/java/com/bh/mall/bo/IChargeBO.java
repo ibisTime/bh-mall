@@ -18,11 +18,15 @@ public interface IChargeBO extends IPaginableBO<Charge> {
     String applyOrderOffline(Account account, EBizType bizType, Long amount,
             String applyUser, String applyNote, String chargePdf);
 
-    void payOrder(Charge data, boolean booleanFlag, String payUser,
-            String payNote);
+    void payOrder(Charge data, String status, String payUser, String payNote);
 
     List<Charge> queryChargeList(Charge condition);
 
     Charge getCharge(String code);
+
+    long getFrontTotalCount(Charge condition);
+
+    List<Charge> queryFrontChargePage(int pageNO, int pageSize,
+            Charge condition);
 
 }

@@ -23,7 +23,6 @@ public class XN627814 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         return wareHouseAO.getWareHouseByUser(req.getUserId());
     }
 

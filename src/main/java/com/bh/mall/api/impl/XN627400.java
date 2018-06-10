@@ -23,9 +23,6 @@ public class XN627400 extends AProcessor {
 
     private XN627400Req req = null;
 
-    /**
-     * @see com.xnjr.mall.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         Address data = new Address();
@@ -41,9 +38,6 @@ public class XN627400 extends AProcessor {
         return new PKCodeRes(addressAO.addAddress(data));
     }
 
-    /**
-     * @see com.xnjr.mall.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627400Req.class);

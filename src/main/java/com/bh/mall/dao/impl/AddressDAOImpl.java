@@ -63,9 +63,6 @@ public class AddressDAOImpl extends AMybatisTemplate implements IAddressDAO {
         return super.update(NAMESPACE.concat("update_addressDef"), data);
     }
 
-    /** 
-     * @see com.xnjr.cpzc.IAddressDAO#updatDefByUser(com.xnjr.cpzc.domain.AddressDO)
-     */
     @Override
     public int updateAddressDefByUser(Address data) {
         return super.update(NAMESPACE.concat("update_addressDefByUser"), data);

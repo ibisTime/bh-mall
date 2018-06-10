@@ -87,13 +87,9 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     }
 
     @Override
-    public void payOrder(Charge data, boolean booleanFlag, String payUser,
+    public void payOrder(Charge data, String status, String payUser,
             String payNote) {
-        if (booleanFlag) {
-            data.setStatus(EChargeStatus.Pay_YES.getCode());
-        } else {
-            data.setStatus(EChargeStatus.Pay_NO.getCode());
-        }
+        data.setStatus(status);
         data.setPayUser(payUser);
         data.setPayNote(payNote);
         data.setPayDatetime(new Date());
@@ -131,5 +127,16 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             }
         }
         return order;
+    }
+
+    @Override
+    public long getFrontTotalCount(Charge condition) {
+        return chargeDAO.getFrontTotalCount(condition);
+    }
+
+    @Override
+    public List<Charge> queryFrontChargePage(int pageNO, int pageSize,
+            Charge condition) {
+        return chargeDAO.selectFrontChargePage(pageNO, pageSize, condition);
     }
 }

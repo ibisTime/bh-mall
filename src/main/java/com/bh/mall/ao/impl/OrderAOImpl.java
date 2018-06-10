@@ -250,9 +250,6 @@ public class OrderAOImpl implements IOrderAO {
             int quantity = StringValidater.toInteger(req.getQuantity())
                     * psData.getNumber();
 
-            if (quantity > pData.getRealNumber()) {
-                throw new BizException("xn0000", "产品库存不足");
-            }
             // 修改产品库存记录
             productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
                 pData.getRealNumber(), quantity, null);
@@ -325,65 +322,69 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
-    public Object payOrder(String codeList, String payType) {
+    public Object payOrder(List<String> codeList, String payType) {
         Object result = null;
-        if (StringUtils.isNotBlank(codeList)) {
-            String[] group = codeList.split(",");
-            for (String code : group) {
-                Order data = orderBO.getOrder(code);
-                if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
-                    throw new BizException("xn0000", "订单未处于待支付状态");
-                }
-
-                User uData = userBO.getUser(data.getApplyUser());
-                Account accountData = null;
-                if (EUserKind.Customer.getCode().equals(uData.getKind())) {
-                    data.setPayType(EPayType.WEIXIN_XCX.getCode());
-                    Object payResult = this.payWXH5(data);
-                    result = payResult;
-
-                } else if (EPayType.RMB_YE.getCode().equals(payType)) {
-                    accountBO.getAccountByUser(data.getApplyUser(),
-                        ECurrency.MK_CNY.getCode());
-                    String toUserId = data.getToUser();
-                    if (isPlat(data.getToUser())) {
-                        toUserId = ESysUser.SYS_USER_BH.getCode();
-                    }
-
-                    // 进价
-                    User toUser = userBO.getUser(data.getToUser());
-                    ProductSpecsPrice inPrice = productSpecsPriceBO
-                        .getPriceByLevel(data.getProductSpecsCode(),
-                            toUser.getLevel());
-
-                    // 总利润
-                    Long awardAmount = (data.getPrice() - inPrice.getPrice())
-                            * data.getQuantity();
-                    awardAmount = AmountUtil.eraseLiUp(awardAmount);
-                    // 差价利润
-                    accountBO.changeAmount(accountData.getAccountNumber(),
-                        EChannelType.NBZ, null, data.getCode(), data.getCode(),
-                        EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(),
-                        awardAmount);
-
-                    // 出货以及推荐奖励
-                    this.payAward(data);
-
-                    accountBO.transAmountCZB(data.getApplyUser(),
-                        ECurrency.MK_CNY.getCode(), toUserId,
-                        ECurrency.MK_CNY.getCode(), data.getAmount(),
-                        EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
-                        EBizType.AJ_GMYC.getValue(), data.getCode());
-                    result = new BooleanRes(true);
-                } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-                    data.setPayType(payType);
-                    Object payResult = this.payWXH5(data);
-                    result = payResult;
-                }
-
+        for (String code : codeList) {
+            Order data = orderBO.getOrder(code);
+            if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+                throw new BizException("xn0000", "订单未处于待支付状态");
             }
+
+            User uData = userBO.getUser(data.getApplyUser());
+            Account accountData = null;
+            if (EUserKind.Customer.getCode().equals(uData.getKind())) {
+                data.setPayType(EPayType.WEIXIN_XCX.getCode());
+                Object payResult = this.payWXH5(data);
+                result = payResult;
+
+            } else if (EPayType.RMB_YE.getCode().equals(payType)) {
+                accountData = accountBO.getAccountByUser(data.getApplyUser(),
+                    ECurrency.MK_CNY.getCode());
+
+                // 进价
+                ProductSpecsPrice inPrice = null;
+                if (StringUtils.isEmpty(data.getToUser())) {
+                    inPrice = productSpecsPriceBO.getPriceByLevel(
+                        data.getProductSpecsCode(), uData.getLevel());
+                } else {
+                    User toUser = userBO.getUser(data.getToUser());
+                    inPrice = productSpecsPriceBO.getPriceByLevel(
+                        data.getProductSpecsCode(), toUser.getLevel());
+                }
+
+                // 总利润
+                Long awardAmount = (data.getPrice() - inPrice.getPrice())
+                        * data.getQuantity();
+                awardAmount = AmountUtil.eraseLiUp(awardAmount);
+                // 差价利润
+                accountBO.changeAmount(accountData.getAccountNumber(),
+                    EChannelType.NBZ, null, data.getCode(), data.getCode(),
+                    EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(), awardAmount);
+
+                // 出货以及推荐奖励
+                this.payAward(data);
+                // 账户扣钱
+
+                String payGroup = orderBO.addPayGroup(data);
+                accountBO.changeAmount(data.getApplyUser(), EChannelType.NBZ,
+                    null, payGroup, data.getCode(), EBizType.AJ_GMYC,
+                    EBizType.AJ_GMYC.getValue(), data.getAmount());
+                data.setPayDatetime(new Date());
+                data.setPayCode(data.getCode());
+                data.setPayAmount(data.getAmount());
+                data.setStatus(EInnerOrderStatus.Paid.getCode());
+                orderBO.paySuccess(data);
+
+                result = new BooleanRes(true);
+            } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+                data.setPayType(payType);
+                Object payResult = this.payWXH5(data);
+                result = payResult;
+            }
+
         }
         return result;
+
     }
 
     private Object payWXH5(Order data) {
@@ -433,7 +434,7 @@ public class OrderAOImpl implements IOrderAO {
                     throw new BizException("xn0000", "收款人账户不存在");
                 }
                 accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.WeChat_H5, null, data.getPayGroup(),
+                    EChannelType.WeChat_H5, wechatOrderNo, data.getPayGroup(),
                     data.getCode(), EBizType.AJ_YCCH,
                     EBizType.AJ_YCCH.getValue(), data.getAmount());
                 orderBO.paySuccess(data);
@@ -565,53 +566,53 @@ public class OrderAOImpl implements IOrderAO {
 
     private void payAward(Order data) {
         Product product = productBO.getProduct(data.getProductCode());
-        User user = userBO.getUser(data.getToUser());
-        // 获取出货人的上级
-        String fromUser = user.getHighUserId();
-        if (isPlat(fromUser)) {
-            fromUser = ESysUser.SYS_USER_BH.getCode();
+        User applyUser = userBO.getUser(data.getApplyUser());
+        String toUser = applyUser.getHighUserId();
+        if (StringUtils.isBlank(applyUser.getHighUserId())) {
+            toUser = ESysUser.SYS_USER_BH.getCode();
         }
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
-            Award aData = awardBO.getAwardByType(user.getLevel(),
+            Award aData = awardBO.getAwardByType(applyUser.getLevel(),
                 data.getProductCode(), EAwardType.SendAward.getCode());
             Long awardAmount = AmountUtil.mul(data.getAmount(),
                 aData.getValue1());
-            accountBO.transAmountCZB(fromUser, ECurrency.YJ_CNY.getCode(),
-                data.getToUser(), ECurrency.YJ_CNY.getCode(), awardAmount,
-                EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
+            accountBO.transAmountCZB(applyUser.getUserId(),
+                ECurrency.YJ_CNY.getCode(), toUser, ECurrency.YJ_CNY.getCode(),
+                awardAmount, EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
                 EBizType.AJ_CHJL.getValue(), data.getCode());
         }
-
         // 直接推荐人
-        User firstUser = userBO.getUser(user.getUserReferee());
+        User firstUser = userBO.getUser(applyUser.getUserReferee());
 
-        Award aData = awardBO.getAwardByType(user.getLevel(),
+        Award aData = awardBO.getAwardByType(applyUser.getLevel(),
             data.getProductCode(), EAwardType.DirectAward.getCode());
 
         Long amount = 0L;
         // 直接推荐奖
         if (firstUser != null) {
             amount = AmountUtil.mul(data.getAmount(), aData.getValue1());
-            accountBO.transAmountCZB(fromUser, ECurrency.YJ_CNY.getCode(),
-                firstUser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
-                EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
-                EBizType.AJ_TJJL.getValue(), data.getCode());
+            accountBO.transAmountCZB(applyUser.getUserId(),
+                ECurrency.YJ_CNY.getCode(), firstUser.getUserId(),
+                ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_TJJL,
+                EBizType.AJ_TJJL.getValue(), EBizType.AJ_TJJL.getValue(),
+                data.getCode());
 
             // 间接推荐奖
             User secondUser = userBO.getUser(firstUser.getUserReferee());
             if (secondUser != null) {
                 amount = AmountUtil.mul(data.getAmount(), aData.getValue2());
-                accountBO.transAmountCZB(fromUser, ECurrency.YJ_CNY.getCode(),
-                    secondUser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
-                    EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
-                    EBizType.AJ_TJJL.getValue(), data.getCode());
+                accountBO.transAmountCZB(applyUser.getUserId(),
+                    ECurrency.YJ_CNY.getCode(), secondUser.getUserId(),
+                    ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_TJJL,
+                    EBizType.AJ_TJJL.getValue(), EBizType.AJ_TJJL.getValue(),
+                    data.getCode());
                 // 次推荐奖
                 User thirdUser = userBO.getUser(secondUser.getUserReferee());
                 if (thirdUser != null) {
                     amount = AmountUtil.mul(data.getAmount(),
                         aData.getValue3());
-                    accountBO.transAmountCZB(fromUser,
+                    accountBO.transAmountCZB(applyUser.getUserId(),
                         ECurrency.YJ_CNY.getCode(), thirdUser.getUserId(),
                         ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_TJJL,
                         EBizType.AJ_TJJL.getValue(),

@@ -77,9 +77,6 @@
 			<if test="channelType != null and channelType != '' ">
 				AND t.channel_type = #{channelType}
 			</if>
-			<if test="highUserId != null and highUserId != '' ">
-				AND u.high_user_id = #{highUserId}
-			</if>
 		</trim>
 	</sql>
 	
@@ -106,7 +103,7 @@
 		,t.pay_datetime
 		,t.channel_type
 		FROM
-		tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user
+		tbh_charge t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -116,9 +113,48 @@
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user
+		SELECT count(1) FROM tbh_charge t 
 		<include refid="where_condition" />
 	</select>
+		
+	<select id="select_front_charge" parameterType="charge" resultMap="charge_DB_Result">
+		SELECT
+		t.code
+		,t.pay_group
+		,t.ref_no
+		,t.account_number
+		,t.amount
+		
+		,t.account_name
+		,t.type
+		,t.currency
+		,t.biz_type
+		,t.biz_note
+		
+		,t.status
+		,t.apply_user
+		,t.apply_datetime
+		
+		,t.pay_user
+		,t.pay_note
+		,t.pay_datetime
+		,t.channel_type
+		FROM
+		tbh_charge t INNER JOIN tbh_user u ON t.apply_user = u.user_id AND u.high_user_id = #{highUserId}
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_front_count" parameterType="charge" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_charge t INNER JOIN tbh_user u ON t.apply_user = u.user_id AND u.high_user_id = #{highUserId}
+		<include refid="where_condition" />
+	</select>
+
+
 	
 	<insert id="insert_charge" parameterType="charge" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tbh_charge(

@@ -28,6 +28,7 @@ public class XN627473 extends AProcessor {
     public Object doBusiness() throws BizException {
         Charge condition = new Charge();
         condition.setHighUserId(req.getUserId());
+        // condition.setApplyUser(req.getUserId());
         condition.setStatus(req.getStatus());
 
         condition.setApplyDatetimeStart(
@@ -43,7 +44,7 @@ public class XN627473 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return chargeAO.queryChargePage(start, limit, condition);
+        return chargeAO.queryFrontChargePage(start, limit, condition);
     }
 
     @Override

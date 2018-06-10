@@ -40,7 +40,6 @@ import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.enums.EInnerProductStatus;
-import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductYunFei;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
@@ -135,16 +134,32 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         InnerProduct innerProduct = innerProductBO
             .getInnerProduct(data.getProductCode());
         if (!EInnerProductStatus.Shelf_YES.getCode()
-            .equals(innerProduct.getCode())) {
+            .equals(innerProduct.getStatus())) {
             throw new BizException("xn00000", "产品未上架，无法完成支付");
         }
         if (EBoolean.NO.getCode().equals(payType)) {
             // 支付订单，更新订单状态
+
             accountBO.transAmountCZB(data.getApplyUser(),
                 ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
                 ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
                 EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
                 data.getCode());
+
+            String payGroup = innerOrderBO.addPayGroup(data,
+                EBoolean.YES.getCode());
+            data.setPayDatetime(new Date());
+            data.setPayCode(data.getPayCode());
+            data.setPayAmount(data.getAmount());
+            Account account = accountBO.getAccountByUser(data.getApplyUser(),
+                ECurrency.YJ_CNY.getCode());
+
+            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
+                null, payGroup, data.getCode(), EBizType.AJ_GMCP,
+                EBizType.AJ_GMCP.getValue(), data.getAmount());
+
+            data.setStatus(EInnerOrderStatus.Paid.getCode());
+            innerOrderBO.paySuccess(data);
             result = new BooleanRes(true);
         } else if (EBoolean.YES.getCode().equals(payType)) {
             return this.payWXH5(data);
@@ -161,7 +176,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             ESystemCode.BH.getCode(), payGroup, order.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
             PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
-            EPayType.WEIXIN_H5.getCode());
+            EChannelType.WeChat_H5.getCode());
     }
 
     @Override
@@ -190,9 +205,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
                     ECurrency.YJ_CNY);
                 accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.WeChat_H5, null, outTradeNo, data.getCode(),
-                    EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
-                    data.getAmount());
+                    EChannelType.WeChat_H5, wechatOrderNo, outTradeNo,
+                    data.getCode(), EBizType.AJ_YCCH,
+                    EBizType.AJ_YCCH.getValue(), data.getAmount());
                 innerOrderBO.paySuccess(data);
             } else {
                 data.setPayDatetime(new Date());
