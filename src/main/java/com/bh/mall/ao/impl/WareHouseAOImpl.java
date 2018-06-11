@@ -100,8 +100,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
                 wareHouse.setProduct(product);
             }
         }
-        userBO.getCheckUser(condition.getUserId());
-        return wareHouseBO.getPaginable(start, limit, condition);
+        return page;
     }
 
     @Override

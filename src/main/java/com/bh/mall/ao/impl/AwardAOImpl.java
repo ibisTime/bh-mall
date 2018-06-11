@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,28 @@ public class AwardAOImpl implements IAwardAO {
     public Paginable<Award> queryAwardPage(int start, int limit,
             Award condition) {
 
-        return awardBO.getPaginable(start, limit, condition);
+        Paginable<Award> page = awardBO.getPaginable(start, limit, condition);
+        for (Iterator<Award> iterator = page.getList().iterator(); iterator
+            .hasNext();) {
+            Award award = iterator.next();
+            if (award.getLevel() == 6) {
+                iterator.remove();
+            }
+
+        }
+        return page;
     }
 
     @Override
     public List<Award> queryAwardList(Award condition) {
-        return awardBO.queryAwardList(condition);
+        List<Award> list = awardBO.queryAwardList(condition);
+        for (Iterator<Award> iterator = list.iterator(); iterator.hasNext();) {
+            Award award = iterator.next();
+            if (award.getLevel() == 6) {
+                iterator.remove();
+            }
+        }
+        return list;
     }
 
     @Override

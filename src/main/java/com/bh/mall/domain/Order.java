@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -144,7 +145,7 @@ public class Order extends ABaseDO {
 
     private String statusForQuery;
 
-    private String statusList;
+    private List<String> statusList;
 
     private String keyword;
 
@@ -354,11 +355,11 @@ public class Order extends ABaseDO {
         this.payCode = payCode;
     }
 
-    public String getStatusList() {
+    public List<String> getStatusList() {
         return statusList;
     }
 
-    public void setStatusList(String statusList) {
+    public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
     }
 

@@ -17,9 +17,9 @@ public interface IAccountAO {
     public void editAccountName(String userId, String realName);
 
     // 不同用户不同币种间资金划转
-    void transAmountCZB(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, Long transAmount,
-            String bizType, String fromBizNote, String toBizNote, String refNo);
+    void transAmountCZB(String fromUserId, String fromCurrency, String toUserId,
+            String toCurrency, Long transAmount, String bizType,
+            String fromBizNote, String toBizNote, String refNo);
 
     // 分页查询账户
     public Paginable<Account> queryAccountPage(int start, int limit,
@@ -33,5 +33,8 @@ public interface IAccountAO {
 
     // 列表查询账户
     public List<Account> queryAccountList(Account condition);
+
+    // 检查红线
+    public boolean checkAmount(String userId);
 
 }

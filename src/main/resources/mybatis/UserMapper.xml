@@ -690,7 +690,8 @@
 	<update id="to_apply" parameterType="user">
 		UPDATE tbh_user
 		SET
-		mobile = #{mobile}
+		status = #{status}
+		,mobile = #{mobile}
 		,apply_level = #{applyLevel}
 		,user_referee = #{userReferee}
 		,introducer = #{introducer}

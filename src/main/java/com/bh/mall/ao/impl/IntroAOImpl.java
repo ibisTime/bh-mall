@@ -40,7 +40,9 @@ public class IntroAOImpl implements IIntroAO {
     }
 
     @Override
-    public Paginable<Intro> queryIntroPage(int start, int limit, Intro condition) {
+    public Paginable<Intro> queryIntroPage(int start, int limit,
+            Intro condition) {
+
         return introBO.getPaginable(start, limit, condition);
     }
 

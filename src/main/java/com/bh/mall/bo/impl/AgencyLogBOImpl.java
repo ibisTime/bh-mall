@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,6 @@ import com.bh.mall.dao.IAgencyLogDAO;
 import com.bh.mall.domain.AgencyLog;
 import com.bh.mall.domain.User;
 import com.bh.mall.enums.EAgencyType;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -236,7 +236,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String toApply(User data, String payPdf) {
+    public String toApply(User data, String payPdf, String status) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
@@ -249,9 +249,10 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setTeamName(data.getTeamName());
         alData.setUserReferee(data.getUserReferee());
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
+        Date date = new Date();
+        alData.setApplyDatetime(date);
 
-        alData.setStatus(EUserStatus.TO_WILL.getCode());
+        alData.setStatus(status);
         agencyLogDAO.insert(alData);
         return code;
     }

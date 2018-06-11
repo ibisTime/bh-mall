@@ -36,6 +36,7 @@ public class XN627665 extends AProcessor {
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(
             DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setStatusList(req.getStatusList());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

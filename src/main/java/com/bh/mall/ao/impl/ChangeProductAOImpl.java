@@ -344,7 +344,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
             uData.getUserId(), req.getProductSpecsCode());
         if (whData == null) {
-            throw new BizException("xn000", "您的云仓中该规格的茶品不存在");
+            throw new BizException("xn000", "您的云仓中该规格的产品不存在");
         }
         if (whData.getQuantity() < StringValidater
             .toInteger(req.getQuantity())) {

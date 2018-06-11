@@ -38,15 +38,21 @@ public class JourAOImpl implements IJourAO {
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
         boolean flag = true;
-        String bizType = EBizType.AJ_JSJL.getCode();
+        String bizType = null;
         if (EAwardType.DirectAward.getCode().equals(condition.getType())) {
             flag = false;
             bizType = EBizType.AJ_TJJL.getCode();
+            condition.setBizType(bizType);
         } else if (EAwardType.SendAward.getCode().equals(condition.getType())) {
             flag = false;
             bizType = EBizType.AJ_CHJL.getCode();
+            condition.setBizType(bizType);
+        } else if (EAwardType.IntroduceAward.getCode()
+            .equals(condition.getType())) {
+            flag = false;
+            bizType = EBizType.AJ_JSJL.getCode();
+            condition.setBizType(bizType);
         }
-        condition.setBizType(bizType);
 
         long count = jourBO.getTotalCount(condition);
         Page<Jour> page = new Page<Jour>(start, limit, count);
@@ -57,7 +63,7 @@ public class JourAOImpl implements IJourAO {
             for (Jour jour : list) {
                 // 是否是推荐奖
                 if (flag) {
-                    jour.setUserInformation(userBO.getUser(jour.getRefNo()));
+                    jour.setUserInformation(userBO.getUser(jour.getUserId()));
                 } else {
                     jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
                 }

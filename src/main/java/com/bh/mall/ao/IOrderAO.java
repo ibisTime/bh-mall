@@ -17,8 +17,6 @@ public interface IOrderAO {
 
     public void addOrder(XN627640Req req);
 
-    public void dropOrder(String code);
-
     public void editOrder(XN627643Req req);
 
     public Paginable<Order> queryOrderPage(int start, int limit,

@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 分页
  * @author: nyc 
@@ -16,6 +18,9 @@ public class XN627665Req extends APageReq {
 
     // 订单状态
     private String status;
+
+    // 订单状态List
+    private List<String> statusList;
 
     // 订单归属人
     private String toUserId;
@@ -56,6 +61,14 @@ public class XN627665Req extends APageReq {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

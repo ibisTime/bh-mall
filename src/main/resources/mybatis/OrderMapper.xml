@@ -78,7 +78,12 @@
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
 				</when>
-				
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
 				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" u.team_name like "%"${keyword}"%" 
@@ -269,6 +274,8 @@
 		,logistics_code = #{logisticsCode}
 		,logistics_company = #{logisticsCompany}
 		,pdf = #{pdf}
+		
+		,is_company_send = #{isCompanySend}
 		,status = #{status}
 		,remark = #{remark}
 		WHERE code = #{code}

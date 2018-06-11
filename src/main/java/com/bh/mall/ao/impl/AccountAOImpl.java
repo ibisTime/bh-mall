@@ -10,12 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.User;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 
@@ -23,10 +26,13 @@ import com.bh.mall.exception.BizException;
 public class AccountAOImpl implements IAccountAO {
 
     @Autowired
-    private IAccountBO accountBO;
+    IAccountBO accountBO;
 
     @Autowired
-    private IUserBO userBO;
+    IUserBO userBO;
+
+    @Autowired
+    IAgentBO agentBO;
 
     @Override
     @Transactional
@@ -40,10 +46,6 @@ public class AccountAOImpl implements IAccountAO {
             if (null == eAccountType) {
                 new BizException("XN0000", "账户类型不存在");
             }
-            // for (String currency : currencyList) {
-            // accountBO.distributeAccount(userId, realName, eAccountType,
-            // currency, systemCode, companyCode);
-            // }
         }
     }
 
@@ -125,6 +127,21 @@ public class AccountAOImpl implements IAccountAO {
             }
         }
         return list;
+    }
+
+    @Override
+    public boolean checkAmount(String userId) {
+        Account account = accountBO.getAccountByUser(userId,
+            ECurrency.MK_CNY.getCode());
+        User user = userBO.getUser(userId);
+        Agent agent = null;
+        if (null != user.getLevel() && 0 != user.getLevel()) {
+            agent = agentBO.getAgentByLevel(user.getLevel());
+        }
+        if (account.getAmount() <= agent.getRedAmount()) {
+            return false;
+        }
+        return true;
     }
 
 }

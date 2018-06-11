@@ -194,6 +194,8 @@ public class OrderAOImpl implements IOrderAO {
         ProductSpecs psData = productSpecsBO
             .getProductSpecs(req.getProductSpecsCode());
         Product pData = productBO.getProduct(psData.getProductCode());
+        // 库存产品数量是否充足
+
         if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
@@ -299,6 +301,7 @@ public class OrderAOImpl implements IOrderAO {
                 amount = amount + StringValidater.toLong(sysConfig.getCvalue());
             }
         }
+        data.setIsSendHome(req.getIsSendHome());
         data.setYunfei(yunfei);
         data.setAmount(amount);
         data.setApplyUser(req.getApplyUser());
@@ -322,6 +325,7 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
+    @Transactional
     public Object payOrder(List<String> codeList, String payType) {
         Object result = null;
         for (String code : codeList) {
@@ -331,26 +335,18 @@ public class OrderAOImpl implements IOrderAO {
             }
 
             User uData = userBO.getUser(data.getApplyUser());
-            Account accountData = null;
             if (EUserKind.Customer.getCode().equals(uData.getKind())) {
                 data.setPayType(EPayType.WEIXIN_XCX.getCode());
                 Object payResult = this.payWXH5(data);
                 result = payResult;
 
             } else if (EPayType.RMB_YE.getCode().equals(payType)) {
-                accountData = accountBO.getAccountByUser(data.getApplyUser(),
-                    ECurrency.MK_CNY.getCode());
+                Account accountData = accountBO.getAccountByUser(
+                    data.getApplyUser(), ECurrency.YJ_CNY.getCode());
 
                 // 进价
-                ProductSpecsPrice inPrice = null;
-                if (StringUtils.isEmpty(data.getToUser())) {
-                    inPrice = productSpecsPriceBO.getPriceByLevel(
-                        data.getProductSpecsCode(), uData.getLevel());
-                } else {
-                    User toUser = userBO.getUser(data.getToUser());
-                    inPrice = productSpecsPriceBO.getPriceByLevel(
-                        data.getProductSpecsCode(), toUser.getLevel());
-                }
+                ProductSpecsPrice inPrice = productSpecsPriceBO.getPriceByLevel(
+                    data.getProductSpecsCode(), uData.getLevel());
 
                 // 总利润
                 Long awardAmount = (data.getPrice() - inPrice.getPrice())
@@ -364,11 +360,15 @@ public class OrderAOImpl implements IOrderAO {
                 // 出货以及推荐奖励
                 this.payAward(data);
                 // 账户扣钱
-
                 String payGroup = orderBO.addPayGroup(data);
-                accountBO.changeAmount(data.getApplyUser(), EChannelType.NBZ,
-                    null, payGroup, data.getCode(), EBizType.AJ_GMYC,
-                    EBizType.AJ_GMYC.getValue(), data.getAmount());
+
+                Account mkAccount = accountBO.getAccountByUser(
+                    data.getApplyUser(), ECurrency.MK_CNY.getCode());
+
+                accountBO.changeAmount(mkAccount.getAccountNumber(),
+                    EChannelType.NBZ, null, payGroup, data.getCode(),
+                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
+                    -data.getAmount());
                 data.setPayDatetime(new Date());
                 data.setPayCode(data.getCode());
                 data.setPayAmount(data.getAmount());
@@ -473,10 +473,6 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
-    public void dropOrder(String code) {
-    }
-
-    @Override
     public Paginable<Order> queryOrderPage(int start, int limit,
             Order condition) {
         if (condition.getStartDatetime() != null
@@ -493,6 +489,7 @@ public class OrderAOImpl implements IOrderAO {
             String approveUser = this.getName(order.getApprover());
             order.setApproveName(approveUser);
             String deliveName = this.getName(order.getDeliver());
+
             order.setDeliveName(deliveName);
             String updateName = this.getName(order.getUpdater());
             order.setUpdater(updateName);
@@ -520,6 +517,7 @@ public class OrderAOImpl implements IOrderAO {
             String approveUser = this.getName(order.getApprover());
             order.setApproveName(approveUser);
             String deliveName = this.getName(order.getDeliver());
+
             order.setDeliveName(deliveName);
             String updateName = this.getName(order.getUpdater());
             order.setUpdater(updateName);
@@ -534,6 +532,7 @@ public class OrderAOImpl implements IOrderAO {
         order.setUser(user);
         String approveUser = this.getName(order.getApprover());
         order.setApproveName(approveUser);
+
         String deliveName = this.getName(order.getDeliver());
         order.setDeliveName(deliveName);
         String updateName = this.getName(order.getUpdater());
@@ -584,7 +583,6 @@ public class OrderAOImpl implements IOrderAO {
         }
         // 直接推荐人
         User firstUser = userBO.getUser(applyUser.getUserReferee());
-
         Award aData = awardBO.getAwardByType(applyUser.getLevel(),
             data.getProductCode(), EAwardType.DirectAward.getCode());
 
@@ -626,74 +624,87 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     @Transactional
     public void deliverOrder(XN627645Req req) {
+
         Order data = orderBO.getOrder(req.getCode());
-        if (!EOrderStatus.TO_Apprvoe.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "订单未支付或已发货");
-        }
-        User fromUser = userBO.getUser(data.getApplyUser());
-        WareHouse fromData = wareHouseBO.getWareHouseByProductSpec(
-            fromUser.getUserId(), data.getProductSpecsCode());
-
-        // 订单归属人是代理
-        if (StringUtils.isNotBlank(data.getToUser())) {
-            User toUser = userBO.getUser(data.getToUser());
-            WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
-                toUser.getUserId(), data.getProductSpecsCode());
-            if (fromData == null) {
-                throw new BizException("xn000",
-                    toData.getUserId() + ",您仓库中没有该产品");
+        if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
+            if (!EOrderStatus.TO_Apprvoe.getCode().equals(data.getStatus())) {
+                throw new BizException("xn0000", "订单未支付或已发货");
             }
-            if (fromData.getQuantity() < 0) {
-                throw new BizException("xn000",
-                    toData.getRealName() + ",您仓库中该改规格测产品不足");
-            }
-        }
-        // 代理购买云仓
-        if (EUserKind.Merchant.getCode().equals(fromUser.getKind())
-                && EBoolean.NO.getCode().equals(data.getIsSendHome())) {
-            // 没有该产品
-            if (fromData == null) {
-                String code = OrderNoGenerater
-                    .generate(EGeneratePrefix.WareHouse.getCode());
-                WareHouse whData = new WareHouse();
-                whData.setCode(code);
-                whData.setProductCode(data.getProductCode());
-                whData.setProductName(data.getProductName());
-                whData.setProductSpecsCode(data.getProductSpecsCode());
-                whData.setProductSpecsName(data.getProductSpecsName());
+            User fromUser = userBO.getUser(data.getApplyUser());
+            WareHouse fromData = wareHouseBO.getWareHouseByProductSpec(
+                fromUser.getUserId(), data.getProductSpecsCode());
 
-                whData.setCurrency(ECurrency.YC_CNY.getCode());
-                whData.setUserId(fromUser.getUserId());
-                whData.setRealName(fromUser.getRealName());
-                whData.setCreateDatetime(new Date());
-                whData.setPrice(data.getPrice());
-
-                whData.setQuantity(data.getQuantity());
-                Long amount = data.getQuantity() * data.getPrice();
-                whData.setAmount(amount);
-                whData.setStatus(EAccountStatus.NORMAL.getCode());
-                whData.setCompanyCode(ESystemCode.BH.getCode());
-                whData.setSystemCode(ESystemCode.BH.getCode());
-                wareHouseBO.saveWareHouse(whData, data.getQuantity(),
-                    EBizType.AJ_GMYC, "购买" + data.getProductName(),
-                    data.getCode());
-
-            } else {
-                wareHouseBO.changeWareHouse(fromData.getCode(),
-                    data.getQuantity(), EBizType.AJ_GMYC,
-                    EBizType.AJ_GMYC.getValue(), data.getCode());
+            // 订单归属人是代理
+            if (StringUtils.isNotBlank(data.getToUser())) {
+                User toUser = userBO.getUser(data.getToUser());
+                WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
+                    toUser.getUserId(), data.getProductSpecsCode());
+                if (fromData == null) {
+                    throw new BizException("xn000",
+                        toData.getUserId() + ",您仓库中没有该产品");
+                }
+                if (fromData.getQuantity() < 0) {
+                    throw new BizException("xn000",
+                        toData.getRealName() + ",您仓库中该改规格测产品不足");
+                }
             }
 
-        }
+            // 代理购买云仓
+            if (EUserKind.Merchant.getCode().equals(fromUser.getKind())
+                    && EBoolean.NO.getCode().equals(data.getIsSendHome())) {
+                // 没有该产品
+                if (fromData == null) {
+                    String code = OrderNoGenerater
+                        .generate(EGeneratePrefix.WareHouse.getCode());
+                    WareHouse whData = new WareHouse();
+                    whData.setCode(code);
+                    whData.setProductCode(data.getProductCode());
+                    whData.setProductName(data.getProductName());
+                    whData.setProductSpecsCode(data.getProductSpecsCode());
+                    whData.setProductSpecsName(data.getProductSpecsName());
 
+                    whData.setCurrency(ECurrency.YC_CNY.getCode());
+                    whData.setUserId(fromUser.getUserId());
+                    whData.setRealName(fromUser.getRealName());
+                    whData.setCreateDatetime(new Date());
+                    whData.setPrice(data.getPrice());
+
+                    whData.setQuantity(data.getQuantity());
+                    Long amount = data.getQuantity() * data.getPrice();
+                    whData.setAmount(amount);
+                    whData.setStatus(EAccountStatus.NORMAL.getCode());
+                    whData.setCompanyCode(ESystemCode.BH.getCode());
+                    whData.setSystemCode(ESystemCode.BH.getCode());
+                    wareHouseBO.saveWareHouse(whData, data.getQuantity(),
+                        EBizType.AJ_GMYC, "购买" + data.getProductName(),
+                        data.getCode());
+
+                } else {
+                    wareHouseBO.changeWareHouse(fromData.getCode(),
+                        data.getQuantity(), EBizType.AJ_GMYC,
+                        EBizType.AJ_GMYC.getValue(), data.getCode());
+                }
+
+            }
+
+        }
         data.setDeliver(req.getDeliver());
         data.setDeliveDatetime(new Date());
         data.setLogisticsCode(req.getLogisticsCode());
         data.setLogisticsCompany(req.getLogisticsCompany());
         data.setPdf(req.getPdf());
+
+        data.setIsCompanySend(req.getIsCompanySend());
         data.setStatus(EOrderStatus.TO_Deliver.getCode());
         data.setRemark(req.getRemark());
         orderBO.deliverOrder(data);
+        // 订单归属人云仓减少
+        if (StringUtils.isNotBlank(data.getToUser())) {
+            WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
+                data.getToUser(), data.getProductSpecsCode());
+            wareHouseBO.changeWareHouse(toData.getCode(), -data.getQuantity(),
+                EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(), data.getCode());
+        }
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 分页
  * @author: nyc 
@@ -21,7 +23,7 @@ public class XN627662Req extends APageReq {
     private String status;
 
     // 查询待处理订单
-    private String statusList;
+    private List<String> statusList;
 
     // 下单人
     private String keyword;
@@ -64,11 +66,11 @@ public class XN627662Req extends APageReq {
         this.keyword = keyword;
     }
 
-    public String getStatusList() {
+    public List<String> getStatusList() {
         return statusList;
     }
 
-    public void setStatusList(String statusList) {
+    public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
     }
 

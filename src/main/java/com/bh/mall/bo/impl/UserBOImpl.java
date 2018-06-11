@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
@@ -41,9 +40,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Autowired
     private IUserDAO userDAO;
-
-    @Autowired
-    private IAgencyLogBO agencyLogBO;
 
     @Override
     public User doGetUserByOpenId(String h5OpenId, String companyCode,
@@ -124,8 +120,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setCompanyCode(companyCode);
         user.setLevel(level);
         user.setSystemCode(systemCode);
-        String logCode = agencyLogBO.acceptIntention(user);
-        user.setLastAgentLog(logCode);
         userDAO.insert(user);
         return userId;
     }

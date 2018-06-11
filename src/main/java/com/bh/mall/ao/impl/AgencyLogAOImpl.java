@@ -1,7 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -170,9 +168,7 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        if (EUserStatus.IGNORED.getCode().equals(condition.getStatus())
-                || EUserStatus.ALLOTED.getCode()
-                    .equals(condition.getStatus())) {
+        if (EUserStatus.IGNORED.getCode().equals(condition.getStatus())) {
             condition.setApprover(condition.getUserIdForQuery());
         } else {
             condition.setToUserId(condition.getUserIdForQuery());
@@ -182,27 +178,17 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
             condition);
         User userReferee = null;
         User user = null;
-        List<AgencyLog> chekcList = new ArrayList<AgencyLog>();
-        AgencyLog check = new AgencyLog();
-        AgencyLog agencyLog = null;
 
-        for (Iterator<AgencyLog> iterator = page.getList().iterator(); iterator
-            .hasNext();) {
-            agencyLog = iterator.next();
-            check.setApplyUser(agencyLog.getApplyUser());
-            chekcList = agencyLogBO.queryAgencyLogList(check);
-            if (chekcList.size() > 1) {
-                iterator.remove();
-                continue;
-            }
+        for (AgencyLog agencyLog : page.getList()) {
             user = userAO.doGetUser(agencyLog.getApplyUser());
+            agencyLog.setUser(user);
             if (StringUtils.isNotBlank(user.getUserReferee())) {
                 userReferee = userAO.doGetUser(user.getUserReferee());
                 agencyLog.setRefereeName(userReferee.getRealName());
             }
             // 审核人
             if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
-                iterator.next().setApprovName(agencyLog.getApprover());
+                agencyLog.setApprovName(EUser.ADMIN.getCode());
             } else {
                 if (StringUtils.isNotBlank(agencyLog.getApprover())) {
                     User aprrvoeName = userAO
@@ -216,30 +202,41 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
                     }
                 }
             }
-
         }
+        // for (Iterator<AgencyLog> iterator = page.getList().iterator();
+        // iterator
+        // .hasNext();) {
+        // agencyLog = iterator.next();
+        // // check.setApplyUser(agencyLog.getApplyUser());
+        // // chekcList = agencyLogBO.queryAgencyLogList(check);
+        // // if (chekcList.size() > 1) {
+        // // iterator.remove();
+        // // continue;
+        // // }
+        // user = userAO.doGetUser(agencyLog.getApplyUser());
+        // if (StringUtils.isNotBlank(user.getUserReferee())) {
+        // userReferee = userAO.doGetUser(user.getUserReferee());
+        // agencyLog.setRefereeName(userReferee.getRealName());
+        // }
+        // // 审核人
+        // if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
+        // iterator.next().setApprovName(EUser.ADMIN.getCode());
+        // } else {
+        // if (StringUtils.isNotBlank(agencyLog.getApprover())) {
+        // User aprrvoeName = userAO
+        // .doGetUser(agencyLog.getApprover());
+        // if (null != aprrvoeName) {
+        // userReferee = userAO
+        // .getUserName(aprrvoeName.getUserId());
+        // if (userReferee != null) {
+        // agencyLog.setApprovName(userReferee.getRealName());
+        // }
+        // }
+        // }
+        // }
+        //
+        // }
         return page;
-    }
-
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
-
-        for (Iterator<String> iterator = list.iterator(); iterator.hasNext();) {
-            String string = iterator.next();
-            if ("2".equals(string)) {
-                iterator.remove();
-                continue;
-            }
-        }
-
-        for (String string : list) {
-            System.out.println(string);
-        }
     }
 
 }

@@ -51,9 +51,6 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
             throw new BizException("xn000000", "新增流关联编号不能为空");
         }
-        if (transAmount == 0) {
-            throw new BizException("xn000000", "新增流水变动金额不能为0");
-        }
         Long amount = dbAccount.getAmount();
         if (null == amount) {
             amount = 0L;

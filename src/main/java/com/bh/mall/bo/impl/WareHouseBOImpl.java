@@ -57,7 +57,7 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         WareHouse data = null;
         if (StringUtils.isNotBlank(code)) {
             WareHouse condition = new WareHouse();
-            condition.setProductCode(code);
+            condition.setCode(code);
             data = wareHouseDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "云仓不存在");

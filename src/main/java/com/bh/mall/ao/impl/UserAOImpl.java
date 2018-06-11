@@ -62,6 +62,7 @@ import com.bh.mall.enums.EAddressType;
 import com.bh.mall.enums.EAfterSaleStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ELoginType;
@@ -734,7 +735,8 @@ public class UserAOImpl implements IUserAO {
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setApplyDatetime(new Date());
 
-        String logCode = agencyLogBO.toApply(data, req.getPayPdf());
+        String logCode = agencyLogBO.toApply(data, req.getPayPdf(),
+            EUserStatus.TO_WILL.getCode());
         data.setLastAgentLog(logCode);
         userBO.applyIntent(data);
         addressBO.saveAddress(data.getUserId(),
@@ -773,10 +775,12 @@ public class UserAOImpl implements IUserAO {
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
 
+        data.setStatus(EUserStatus.TO_APPROVE.getCode());
         data.setArea(req.getArea());
         data.setAddress(req.getAddress());
         data.setSource(req.getFromInfo());
-        String logCode = agencyLogBO.toApply(data, req.getPayPdf());
+        String logCode = agencyLogBO.toApply(data, req.getPayPdf(),
+            EUserStatus.TO_APPROVE.getCode());
         data.setLastAgentLog(logCode);
 
         userBO.toApply(data);
@@ -899,6 +903,8 @@ public class UserAOImpl implements IUserAO {
         data.setLastAgentLog(logCode);
         userBO.acceptIntention(data);
 
+        // 门槛账户加钱
+
     }
 
     @Override
@@ -1012,6 +1018,17 @@ public class UserAOImpl implements IUserAO {
                     data.getRealName(), EAccountType.Business, currencyList,
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
                 String fromUser = null;
+
+                // 获取门槛账户
+                Account account = accountBO.getAccountByUser(data.getUserId(),
+                    ECurrency.MK_CNY.getCode());
+                // 账户加钱
+                Agent agent = agentBO.getAgentByLevel(data.getApplyLevel());
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.Offline, null, null, data.getUserId(),
+                    EBizType.AJ_CZ, EBizType.AJ_CZ.getValue(),
+                    agent.getAmount());
+
                 if (EUser.ADMIN.getCode().equals(approver)) {
                     fromUser = ESysUser.SYS_USER_BH.getCode();
                     highUserId = EUser.ADMIN.getCode();
