@@ -8,6 +8,8 @@
 		<result column="level" property="level"/>
 		<result column="price" property="price"/>
 		<result column="change_price" property="changePrice"/>
+		
+		<result column="min_number" property="minNumber"/>
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -31,6 +33,7 @@
 		,t.level
 		,t.price
 		,t.change_price
+		,t.min_number
 		FROM tbh_product_specs_price t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
@@ -53,6 +56,7 @@
 		,level
 		,price
 		,change_price
+		,min_number
 		)
 		VALUES(
 		#{code}
@@ -60,6 +64,7 @@
 		,#{level}
 		,#{price}
 		,#{changePrice}
+		,#{minNumber}
 		)
 	</insert>
 	
@@ -70,6 +75,7 @@
 		,level = #{level}
 		,price = #{price}
 		,change_price = #{changePrice}
+		,min_number = #{minNumber}
 		where code=#{code}
 	</update>
 	

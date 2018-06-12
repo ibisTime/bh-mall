@@ -203,39 +203,6 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
                 }
             }
         }
-        // for (Iterator<AgencyLog> iterator = page.getList().iterator();
-        // iterator
-        // .hasNext();) {
-        // agencyLog = iterator.next();
-        // // check.setApplyUser(agencyLog.getApplyUser());
-        // // chekcList = agencyLogBO.queryAgencyLogList(check);
-        // // if (chekcList.size() > 1) {
-        // // iterator.remove();
-        // // continue;
-        // // }
-        // user = userAO.doGetUser(agencyLog.getApplyUser());
-        // if (StringUtils.isNotBlank(user.getUserReferee())) {
-        // userReferee = userAO.doGetUser(user.getUserReferee());
-        // agencyLog.setRefereeName(userReferee.getRealName());
-        // }
-        // // 审核人
-        // if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
-        // iterator.next().setApprovName(EUser.ADMIN.getCode());
-        // } else {
-        // if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-        // User aprrvoeName = userAO
-        // .doGetUser(agencyLog.getApprover());
-        // if (null != aprrvoeName) {
-        // userReferee = userAO
-        // .getUserName(aprrvoeName.getUserId());
-        // if (userReferee != null) {
-        // agencyLog.setApprovName(userReferee.getRealName());
-        // }
-        // }
-        // }
-        // }
-        //
-        // }
         return page;
     }
 

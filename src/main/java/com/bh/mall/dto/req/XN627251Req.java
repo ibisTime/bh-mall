@@ -25,21 +25,6 @@ public class XN627251Req {
     @NotBlank(message = "申请等级不能为空")
     private String applyLevel;
 
-    // （选填）身份证反面
-    private String idBehind;
-
-    // （选填）身份证正面
-    private String idFront;
-
-    // (选填) 手持身份证
-    private String idHand;
-
-    // （选填）介绍人
-    private String introducer;
-
-    // (选填)打款截图
-    private String payPdf;
-
     // （必填）来源
     @NotBlank(message = "来源不能为空")
     private String fromInfo;
@@ -64,12 +49,60 @@ public class XN627251Req {
     @NotBlank(message = "详细地址不能为空")
     private String address;
 
+    // （选填）打款截图
+    private String payAmount;
+
+    // （选填）打款截图
+    private String payPdf;
+
+    // （选填）身份证反面
+    private String idKind;
+
+    // （选填）身份证反面
+    private String idNo;
+
+    // （选填）身份证反面
+    private String idBehind;
+
+    // （选填）身份证正面
+    private String idFront;
+
+    // (选填) 手持身份证
+    private String idHand;
+
+    // （选填）介绍人
+    private String introducer;
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPayPdf() {
+        return payPdf;
+    }
+
+    public void setPayPdf(String payPdf) {
+        this.payPdf = payPdf;
+    }
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
     }
 
     public String getRealName() {
@@ -128,14 +161,6 @@ public class XN627251Req {
         this.introducer = introducer;
     }
 
-    public String getPayPdf() {
-        return payPdf;
-    }
-
-    public void setPayPdf(String payPdf) {
-        this.payPdf = payPdf;
-    }
-
     public String getFromInfo() {
         return fromInfo;
     }
@@ -182,6 +207,14 @@ public class XN627251Req {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(String payAmount) {
+        this.payAmount = payAmount;
     }
 
 }

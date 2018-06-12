@@ -8,6 +8,7 @@
 		<result column="amount" property="amount"/>
 		<result column="red_amount" property="redAmount"/>
 		<result column="min_charge_amount" property="minChargeAmount"/>
+		
 		<result column="updater" property="updater"/>
 		<result column="update_datetime" property="updateDatetime"/>
 		<result column="remark" property="remark"/>
@@ -64,6 +65,7 @@
 		,red_amount=#{redAmount}
 		,min_charge_amount=#{minChargeAmount}
 		,updater=#{updater}
+		
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
 		WHERE level=#{level}

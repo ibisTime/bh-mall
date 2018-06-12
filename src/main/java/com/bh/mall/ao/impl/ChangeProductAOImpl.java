@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IChangeProductAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IChangeProductBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
@@ -22,6 +23,7 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.ChangeProduct;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
@@ -29,6 +31,7 @@ import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627790Req;
+import com.bh.mall.dto.res.XN627805Res;
 import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
@@ -43,28 +46,31 @@ import com.bh.mall.exception.BizException;
 public class ChangeProductAOImpl implements IChangeProductAO {
 
     @Autowired
-    private IChangeProductBO changeProductBO;
+    IChangeProductBO changeProductBO;
 
     @Autowired
-    private IUserBO userBO;
+    IUserBO userBO;
 
     @Autowired
-    private IWareHouseBO wareHouseBO;
+    IWareHouseBO wareHouseBO;
 
     @Autowired
-    private IWareHouseLogBO wareHouseLogBO;
+    IWareHouseLogBO wareHouseLogBO;
 
     @Autowired
-    private IProductSpecsBO productSpecsBO;
+    IProductSpecsBO productSpecsBO;
 
     @Autowired
-    private IProductBO productBO;
+    IProductBO productBO;
 
     @Autowired
-    private IProductSpecsPriceBO productSpecsPriceBO;
+    IProductSpecsPriceBO productSpecsPriceBO;
 
     @Autowired
-    private IProductLogBO productLogBO;
+    IProductLogBO productLogBO;
+
+    @Autowired
+    IAgentBO agentBO;
 
     @Override
     public String addChangeProduct(XN627790Req req) {
@@ -379,5 +385,28 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         cpData.setCanChangeQuantity(canChangeQuantity);
 
         return cpData;
+    }
+
+    @Override
+    public XN627805Res checkAmount(String userId) {
+        XN627805Res res = new XN627805Res();
+        res.setResult(true);
+        List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
+        Long amount = 0L;
+        for (WareHouse wareHouse : list) {
+            if (null != wareHouse.getAmount() || 0 != wareHouse.getAmount()) {
+                amount = amount + wareHouse.getAmount();
+            }
+        }
+        res.setAmount(amount);
+        User user = userBO.getUser(userId);
+        if (null != user.getLevel() || 0 != user.getLevel()) {
+            Agent agent = agentBO.getAgentByLevel(user.getLevel());
+            res.setRedAmount(agent.getRedAmount());
+            if (agent.getRedAmount() >= amount) {
+                res.setResult(false);
+            }
+        }
+        return res;
     }
 }

@@ -56,6 +56,9 @@
 		<result column="remark" property="remark" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
+		
+		<result column="pay_amount" property="payAmount"/>
+		<result column="pay_pdf" property="payPdf"/>
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
@@ -252,6 +255,8 @@
 		,t.remark
 		,t.company_code
 		,t.system_code
+		,t.pay_pdf
+		,t.pay_amount
 		FROM
 		tbh_user t
 		<include refid="where_condition" />
@@ -319,6 +324,8 @@
 		,t.remark
 		,t.company_code
 		,t.system_code
+		,t.pay_pdf
+		,t.pay_amount
 		FROM
 		tbh_user t, tbh_agency_log l 
 		<include refid="where_condition" />
@@ -642,6 +649,8 @@
 		status = #{status}
 		,apply_level = #{applyLevel}
 		,team_name = #{teamName}
+		,pay_amount = #{payAmount}
+		,pay_pdf = #{payPdf}
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
@@ -677,9 +686,20 @@
 		,wx_id = #{wxId}
 		,mobile = #{mobile}
 		,real_name = #{realName}
+		
+		,apply_level = #{applyLevel}
+		,user_referee = #{userReferee}
+		,introducer = #{introducer}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		
+		,id_front = #{idFront}
+		,id_behind = #{idBehind}
+		,id_hand = #{idHand}
 		,province = #{province}
 		,city = #{city}
 		,area = #{area}
+		
 		,address = #{address}
 		,apply_level = #{applyLevel}	
 		,apply_datetime = #{applyDatetime}	
@@ -692,24 +712,47 @@
 		SET
 		status = #{status}
 		,mobile = #{mobile}
+		,high_user_id = #{highUserId}
+		,team_name = #{teamName}
 		,apply_level = #{applyLevel}
+		
 		,user_referee = #{userReferee}
 		,introducer = #{introducer}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_front = #{idFront}
+		
 		,id_behind = #{idBehind}
 		,id_hand = #{idHand}
 		,real_name = #{realName}
 		,status = #{status}
 		,source = #{source}
+		
+		,pay_amount = #{payAmount}
+		,pay_pdf = #{payPdf}
+		,source = #{source}
 		,apply_datetime = #{applyDatetime}
 		,province = #{province}
 		,city = #{city}
 		,area = #{area}
+		
 		,address = #{address}
 		,last_agent_log = #{lastAgentLog}
 		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
+	
+			
+	<update id="to_apply" parameterType="user">
+		UPDATE tbh_user
+		SET
+		id_kind = #{idKind}
+		,id_no = #{idNo}
+		,id_front = #{idFront}
+		,id_behind = #{idBehind}
+		,id_hand = #{idHand}
+		,pay_amount = #{payAmount}
+		,pay_pdf = #{payPdf}
 		WHERE user_id = #{userId}
 	</update>
 </mapper>

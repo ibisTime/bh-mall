@@ -23,7 +23,6 @@ public class XN627301 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        System.out.println("userReferee:" + req.getUserReferee());
         return userAO.doLoginWeChatByMerchant(req.getCode(),
             EUserKind.Merchant.getCode(), req.getUserReferee());
     }

@@ -7,6 +7,7 @@ import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627255Req;
+import com.bh.mall.dto.req.XN627362Req;
 import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627263Res;
 import com.bh.mall.dto.res.XN627302Res;
@@ -82,7 +83,7 @@ public interface IUserAO {
     public void cancelImpower(String userId);
 
     // 审核授权
-    public void approveImpower(String userId, String approver, String result,
+    public boolean approveImpower(String userId, String approver, String result,
             String remark);
 
     // 取消授权审核
@@ -131,5 +132,8 @@ public interface IUserAO {
     public User getUserName(String userReferee);
 
     public String addUser(String mobile, String loginPwd, String realName);
+
+    // 补充授权所需信息
+    public void addInfo(XN627362Req req);
 
 }

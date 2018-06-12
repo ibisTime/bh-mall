@@ -199,6 +199,10 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     @Override
     public void toApply(User data) {
         super.update(NAMESPACE.concat("to_apply"), data);
+    }
 
+    @Override
+    public void addInfo(User data) {
+        super.update(NAMESPACE.concat("add_info"), data);
     }
 }

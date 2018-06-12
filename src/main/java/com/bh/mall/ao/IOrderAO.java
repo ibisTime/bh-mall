@@ -49,6 +49,5 @@ public interface IOrderAO {
     public void receivedOrder(String code);
 
     void paySuccess(String result);
-    // void paySuccess(String payCode, String payGroup, Long amount);
 
 }

@@ -245,7 +245,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setToUserId(data.getUserReferee());
 
         alData.setPayPdf(payPdf);
-        alData.setType(EAgencyType.Allot.getCode());
+        alData.setType(EAgencyType.Imporder.getCode());
         alData.setTeamName(data.getTeamName());
         alData.setUserReferee(data.getUserReferee());
         alData.setApplyUser(data.getUserId());

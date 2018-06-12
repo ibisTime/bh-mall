@@ -25,9 +25,8 @@ public class XN627257 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.approveImpower(req.getUserId(), req.getApprover(),
-            req.getResult(), req.getRemark());
-        return new BooleanRes(true);
+        return new BooleanRes(userAO.approveImpower(req.getUserId(),
+            req.getApprover(), req.getResult(), req.getRemark()));
     }
 
     @Override

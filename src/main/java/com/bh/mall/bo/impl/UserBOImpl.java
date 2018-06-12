@@ -664,4 +664,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         userDAO.toApply(data);
     }
 
+    @Override
+    public void addInfo(User data) {
+        userDAO.addInfo(data);
+    }
+
 }

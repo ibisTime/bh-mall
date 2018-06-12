@@ -17,9 +17,13 @@ public class XN627262Req {
     @NotBlank(message = " 升级等级不能为空")
     private String highLevel;
 
-    /// （必填）打款截图
+    // （必填）打款截图
     @NotBlank(message = "打款截图不能为空")
     private String payPdf;
+
+    // （必填）打款金额
+    @NotBlank(message = "打款金额不能为空")
+    private String padAmount;
 
     // (选填) 团队名称
     private String teamName;
@@ -54,6 +58,14 @@ public class XN627262Req {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getPadAmount() {
+        return padAmount;
+    }
+
+    public void setPadAmount(String padAmount) {
+        this.padAmount = padAmount;
     }
 
 }

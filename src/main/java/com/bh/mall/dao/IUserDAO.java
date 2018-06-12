@@ -87,4 +87,7 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     // 申请代理
     public void toApply(User data);
+
+    // 补充授权所需信息
+    public void addInfo(User data);
 }

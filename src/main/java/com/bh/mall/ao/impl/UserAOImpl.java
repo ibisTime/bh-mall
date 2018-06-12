@@ -54,6 +54,7 @@ import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627255Req;
+import com.bh.mall.dto.req.XN627362Req;
 import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627263Res;
 import com.bh.mall.dto.res.XN627302Res;
@@ -702,6 +703,9 @@ public class UserAOImpl implements IUserAO {
             Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
             user.setImpowerAmount(agent.getAmount());
         }
+        if (null != user.getPayAmount() && 0 != user.getPayAmount()) {
+            user.setResult(false);
+        }
         return user;
     }
 
@@ -719,8 +723,12 @@ public class UserAOImpl implements IUserAO {
         AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
-            throw new BizException("xn0000", "本等级不可被意向");
+            throw new BizException("xn00000", "本等级不可被意向");
         }
+
+        AgentImpower agentImpower = agentImpowerBO.getAgentImpowerByLevel(
+            StringValidater.toInteger(req.getApplyLevel()));
+
         User data = userBO.getCheckUser(req.getUserId());
 
         data.setRealName(req.getRealName());
@@ -735,9 +743,6 @@ public class UserAOImpl implements IUserAO {
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setApplyDatetime(new Date());
 
-        String logCode = agencyLogBO.toApply(data, req.getPayPdf(),
-            EUserStatus.TO_WILL.getCode());
-        data.setLastAgentLog(logCode);
         userBO.applyIntent(data);
         addressBO.saveAddress(data.getUserId(),
             EAddressType.User_Address.getCode(), req.getMobile(),
@@ -755,13 +760,25 @@ public class UserAOImpl implements IUserAO {
         if (EBoolean.NO.getCode().equals(impower.getIsIntent())) {
             throw new BizException("xn0000", "本等级不可被意向");
         }
+        if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
+            if (StringUtils.isBlank(req.getIdNo())
+                    || StringUtils.isBlank(req.getIdHand())
+                    || StringUtils.isBlank(req.getIdBehind())
+                    || StringUtils.isBlank(req.getIdFront())) {
+                throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
+            }
+        }
+
+        if (StringUtils.isNotEmpty(req.getPayAmount())) {
+            if (impower.getMinCharge() > StringValidater
+                .toLong(req.getPayAmount())) {
+                throw new BizException("xn0000",
+                    "本等级需要充值门槛为" + req.getPayAmount());
+            }
+        }
         User data = userBO.getUser(req.getUserId());
-        // 添加代理轨迹
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setRealName(req.getRealName());
-        data.setIdBehind(req.getIdBehind());
-        data.setIdFront(req.getIdFront());
-        data.setIdHand(req.getIdHand());
 
         User highUser = userBO.getUser(data.getUserReferee());
         if (null != highUser) {
@@ -769,14 +786,23 @@ public class UserAOImpl implements IUserAO {
             data.setTeamName(highUser.getTeamName());
 
         }
-        data.setIntroducer(req.getIntroducer());
         data.setUserReferee(data.getUserReferee());
         data.setMobile(req.getMobile());
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
 
+        data.setIdKind(req.getIdKind());
+        data.setIdNo(req.getIdNo());
+        data.setIdBehind(req.getIdBehind());
+        data.setIdFront(req.getIdFront());
+        data.setIdHand(req.getIdHand());
+
+        data.setIntroducer(req.getIntroducer());
         data.setStatus(EUserStatus.TO_APPROVE.getCode());
         data.setArea(req.getArea());
+        data.setPayAmount(StringValidater.toLong(req.getPayAmount()));
+        data.setPayPdf(req.getPayPdf());
+
         data.setAddress(req.getAddress());
         data.setSource(req.getFromInfo());
         String logCode = agencyLogBO.toApply(data, req.getPayPdf(),
@@ -790,15 +816,6 @@ public class UserAOImpl implements IUserAO {
             req.getAddress(), EBoolean.YES.getCode());
         result = new XN627302Res(data.getUserId(), EBoolean.NO.getCode());
         return result;
-        // XN627302Res result = null;
-        // Map<String, String> wxRes = getUserInfo(req.getCode());
-        // String unionId = (String) wxRes.get("unionId");
-        // String h5OpenId = (String) wxRes.get("h5OpenId");
-        // User dbUser = userBO.doGetUserByOpenId(h5OpenId,
-        // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-        // if (null != dbUser) {
-        // throw new BizException("xn0000", "您已经申请过代理");
-        // } else {
 
     }
 
@@ -902,9 +919,6 @@ public class UserAOImpl implements IUserAO {
         String logCode = agencyLogBO.acceptIntention(data);
         data.setLastAgentLog(logCode);
         userBO.acceptIntention(data);
-
-        // 门槛账户加钱
-
     }
 
     @Override
@@ -980,7 +994,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void approveImpower(String userId, String approver, String result,
+    public boolean approveImpower(String userId, String approver, String result,
             String remark) {
         User data = userBO.getUser(userId);
         AgencyLog log = agencyLogBO.getAgencyLog(data.getLastAgentLog());
@@ -1019,22 +1033,21 @@ public class UserAOImpl implements IUserAO {
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
                 String fromUser = null;
 
-                // 获取门槛账户
-                Account account = accountBO.getAccountByUser(data.getUserId(),
-                    ECurrency.MK_CNY.getCode());
-                // 账户加钱
-                Agent agent = agentBO.getAgentByLevel(data.getApplyLevel());
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.Offline, null, null, data.getUserId(),
-                    EBizType.AJ_CZ, EBizType.AJ_CZ.getValue(),
-                    agent.getAmount());
-
                 if (EUser.ADMIN.getCode().equals(approver)) {
                     fromUser = ESysUser.SYS_USER_BH.getCode();
                     highUserId = EUser.ADMIN.getCode();
                 } else {
                     User approveUser = userBO.getUser(approver);
                     fromUser = approveUser.getUserId();
+                }
+                // 代理是否已打款
+                if (null != data.getPayAmount() && 0 != data.getPayAmount()) {
+                    Account account = accountBO.getAccountByUser(
+                        data.getUserId(), ECurrency.MK_CNY.getCode());
+                    accountBO.changeAmount(account.getAccountNumber(),
+                        EChannelType.Offline, null, null, data.getUserId(),
+                        EBizType.AJ_CZ, EBizType.AJ_CZ.getValue(),
+                        data.getPayAmount());
                 }
 
                 // 介绍奖
@@ -1073,6 +1086,7 @@ public class UserAOImpl implements IUserAO {
         String logCode = agencyLogBO.approveImpower(data, status);
         data.setLastAgentLog(logCode);
         userBO.approveImpower(data);
+        return true;
 
     }
 
@@ -1148,7 +1162,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public XN627262Res upgradeLevel(String userId, String highLevel,
-            String payPdf, String teamName) {
+            String payPdf, String payAmount) {
         XN627262Res res = null;
         User data = userBO.getUser(userId);
 
@@ -1181,9 +1195,10 @@ public class UserAOImpl implements IUserAO {
         }
 
         data.setApplyLevel(StringValidater.toInteger(highLevel));
-        data.setTeamName(teamName);
         data.setStatus(EUserStatus.TO_UPGRADE.getCode());
         data.setApplyDatetime(new Date());
+        data.setPayAmount(StringValidater.toLong(payAmount));
+
         String logCode = agencyLogBO.upgradeLevel(data, payPdf);
         data.setLastAgentLog(logCode);
         userBO.upgradeLevel(data);
@@ -1370,6 +1385,20 @@ public class UserAOImpl implements IUserAO {
         data.setCompanyCode(ESystemCode.BH.getCode());
         userBO.doSaveUser(data);
         return userId;
+    }
+
+    @Override
+    public void addInfo(XN627362Req req) {
+        User data = userBO.getUser(req.getUserId());
+        data.setIdKind(req.getIdKind());
+        data.setIdNo(req.getIdNo());
+        data.setIdFront(req.getIdFront());
+        data.setIdBehind(req.getIdBehind());
+
+        data.setIdHand(req.getIdHand());
+        data.setPayAmount(StringValidater.toLong(req.getPayAmount()));
+        data.setPayPdf(req.getPayPdf());
+        userBO.addInfo(data);
     }
 
 }

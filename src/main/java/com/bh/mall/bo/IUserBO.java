@@ -171,4 +171,7 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void doSaveUser(User data);
 
+    // 补充授权所需信息
+    public void addInfo(User data);
+
 }

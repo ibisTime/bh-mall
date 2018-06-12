@@ -166,6 +166,12 @@ public class User extends ABaseDO {
     // 最后一条代理轨迹记录
     private String lastAgentLog;
 
+    // 门槛费
+    private Long payAmount;
+
+    // 打款截图
+    private String payPdf;
+
     // 备注
     private String remark;
 
@@ -237,6 +243,9 @@ public class User extends ABaseDO {
 
     // 状态List
     private List<String> statusList;
+
+    // 是否打款
+    private boolean result;
 
     public String getUserId() {
         return userId;
@@ -776,6 +785,30 @@ public class User extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public Long getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
+    }
+
+    public String getPayPdf() {
+        return payPdf;
+    }
+
+    public void setPayPdf(String payPdf) {
+        this.payPdf = payPdf;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
     }
 
 }

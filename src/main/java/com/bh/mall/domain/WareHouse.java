@@ -41,7 +41,7 @@ public class WareHouse extends ABaseDO {
     // 数量
     private Integer quantity;
 
-    // 余额
+    // 总价值
     private Long amount;
 
     // 用户编号

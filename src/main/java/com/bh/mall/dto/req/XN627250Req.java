@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627250Req {
 
     // （必填） 用户编号
-    @NotBlank(message = "250用户编号不能为空")
+    @NotBlank(message = "用户编号不能为空")
     private String userId;
 
     // （必填） 姓名
@@ -46,16 +46,9 @@ public class XN627250Req {
     @NotBlank(message = "详细地址不能为空")
     private String address;
 
-    // (选填)打款截图
-    private String payPdf;
-
-    public String getPayPdf() {
-        return payPdf;
-    }
-
-    public void setPayPdf(String payPdf) {
-        this.payPdf = payPdf;
-    }
+    // (必填)信息来源
+    @NotBlank(message = "信息来源不能为空")
+    private String fromInfo;
 
     public String getRealName() {
         return realName;
@@ -129,12 +122,12 @@ public class XN627250Req {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        return "XN627250Req [userId=" + userId + ", realName=" + realName
-                + ", wxId=" + wxId + ", applyLevel=" + applyLevel + ", mobile="
-                + mobile + ", province=" + province + ", city=" + city
-                + ", area=" + area + ", address=" + address + "]";
+    public String getFromInfo() {
+        return fromInfo;
+    }
+
+    public void setFromInfo(String fromInfo) {
+        this.fromInfo = fromInfo;
     }
 
 }
