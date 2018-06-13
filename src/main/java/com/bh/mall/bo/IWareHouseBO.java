@@ -3,6 +3,7 @@ package com.bh.mall.bo;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
+import com.bh.mall.domain.Order;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EBizType;
 
@@ -35,5 +36,10 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
     public void refreshLogCode(WareHouse whData);
 
     public List<WareHouse> getWareHouseByUser(String userId);
+
+    // ===========================================
+
+    public void changeWareHouse(String code, Order data, Integer quantity,
+            EBizType ajYcch, String value);
 
 }

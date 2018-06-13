@@ -7,6 +7,7 @@ import com.bh.mall.domain.ChangeProduct;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.domain.WareHouseLog;
+import com.bh.mall.domain.WareHouseSpecs;
 import com.bh.mall.enums.EBizType;
 
 public interface IWareHouseLogBO extends IPaginableBO<WareHouseLog> {
@@ -28,5 +29,13 @@ public interface IWareHouseLogBO extends IPaginableBO<WareHouseLog> {
     public String refreshChangePrice(ChangeProduct data, WareHouse dbData,
             Long changePirce, int canChangeQuantity, String status,
             String bizNote);
+
+    // =========================
+    public String saveWareHouseLog(WareHouse wareHouse, WareHouseSpecs data,
+            EBizType ajGmyc, String value, String code);
+
+    public String saveWareHouseLog(Order order, String wareHouseCode,
+            Integer beforeNumber, Integer changeNumber, String bizType,
+            String bizNote, String refNo);
 
 }

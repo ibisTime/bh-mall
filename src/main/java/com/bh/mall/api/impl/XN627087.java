@@ -21,18 +21,12 @@ public class XN627087 extends AProcessor {
 
     private XN627087Req req = null;
 
-    /** 
-     * @see com.xnjr.base.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         return sysConfigAO.getSYSConfig(req.getCkey(), req.getCompanyCode(),
             req.getSystemCode());
     }
 
-    /** 
-     * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627087Req.class);

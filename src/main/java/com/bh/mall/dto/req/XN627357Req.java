@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627357Req {
 
     // （必填）用户编号
-    @NotBlank(message = "编号不能为空")
+    @NotBlank(message = "XN627357Req编号不能为空")
     private String userId;
 
     public String getUserId() {

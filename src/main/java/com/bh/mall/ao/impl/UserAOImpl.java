@@ -268,7 +268,7 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("code", code);// 微信H5
         logger.info(
             "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
-        XN627302Res result = new XN627302Res();
+        XN627302Res result = null;
         try {
             String response = PostSimulater
                 .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
@@ -324,7 +324,8 @@ public class UserAOImpl implements IUserAO {
             // System.out.println("subscribe:" + subscribe);
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                result = new XN627302Res(dbUser.getUserId());
+                result = new XN627302Res(dbUser.getUserId(),
+                    dbUser.getStatus());
             } else {
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
@@ -391,7 +392,6 @@ public class UserAOImpl implements IUserAO {
     private XN627302Res doWxLoginReg(String companyCode, String systemCode,
             String unionId, String appOpenId, String h5OpenId, String nickname,
             String photo, String userKind, String userReferee) {
-        XN627302Res result = new XN627302Res();
         userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
             systemCode);
         String status = null;
@@ -406,7 +406,7 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
             userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status,
             level, companyCode, systemCode, userReferee);
-        result.setUserId(userId);
+        XN627302Res result = new XN627302Res(userId, status);
         return result;
     }
 
@@ -714,6 +714,12 @@ public class UserAOImpl implements IUserAO {
         if (null != user.getPayAmount() && 0 != user.getPayAmount()) {
             user.setResult(false);
         }
+        // 该等级授权规则
+        if (EUserKind.Merchant.getCode().equals(user.getKind())) {
+            AgentImpower impower = agentImpowerBO
+                .getAgentImpowerByLevel(user.getApplyLevel());
+            user.setImpower(impower);
+        }
         return user;
     }
 
@@ -728,80 +734,9 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void applyIntent(XN627250Req req) {
-        // String companyCode = ESystemCode.BH.getCode();
-        // String systemCode = ESystemCode.BH.getCode();
-        // // Step1：获取密码参数信息
-        // Map<String, String> configPwd = sysConfigBO.getConfigsMap(
-        // EConfigType.WEIXIN_XCX.getCode(), companyCode, systemCode);
-        //
-        // String appId = configPwd.get(SysConstant.WX_XCX_ACCESS_KEY);
-        // String appSecret = configPwd.get(SysConstant.WX_XCX_SECRET_KEY);
-        //
-        // if (StringUtils.isBlank(appId)) {
-        // throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
-        // }
-        // if (StringUtils.isBlank(appSecret)) {
-        // throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
-        // }
-        //
-        // // Step2：通过Authorization Code获取Access Token
-        // String sessionKey = "";
-        // Map<String, Object> res = new HashMap<>();
-        // Properties fromProperties = new Properties();
-        // fromProperties.put("grant_type", "authorization_code");
-        // fromProperties.put("appid", appId);
-        // fromProperties.put("secret", appSecret);
-        // // fromProperties.put("code", code);// 微信H5
-        // fromProperties.put("js_code", req.getCode());// 微信小程序
-        // logger.info("appId:" + appId + ",appSecret:" + appSecret +
-        // ",js_code:"
-        // + req.getCode());
-        // XN627302Res result = null;
-        // try {
-        // String response = PostSimulater.requestPostForm(
-        // WechatConstant.WXXCX_TOKEN_URL, fromProperties);
-        // res = getMapFromResponse(response);
-        // sessionKey = (String) res.get("session_key");
-        // if (res.get("error") != null) {
-        // throw new BizException("XN000000",
-        // "微信登录失败原因：" + res.get("error"));
-        // }
-        // if (StringUtils.isBlank(sessionKey)) {
-        // throw new BizException("XN000000", "sessionKey不能为空");
-        // }
-        // // Step3：使用Access Token来获取用户的OpenID
-        // String openId = (String) res.get("openid");
-        // String unionId = (String) res.get("unionid");
-        // if (StringUtils.isBlank(openId)) {
-        // throw new BizException("XN000000", "opind不能为空");
-        // }
-        // // Step4：根据openId，unionId从数据库中查询用户信息
-        // User dbUser = userBO.doGetUserByOpenId(openId, companyCode,
-        // systemCode);
-        // if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-        // result = new XN627302Res(dbUser.getUserId(),
-        // dbUser.getStatus());
-        // } else {
-        // String nickname = (String) res.get("nickname");
-        // String photo = (String) res.get("headimgurl");
-        // result = doWxLoginReg(companyCode, systemCode, unionId, null,
-        // openId, nickname, photo, EUserKind.Merchant.getCode(),
-        // null);
-        // // Step5：判断注册是否传手机号，有则注册，无则反馈
-        // // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
-        // // result = doWxLoginRegMobile(req, companyCode, systemCode,
-        // // unionId, appOpenId, h5OpenId, nickname, photo, gender);
-        // // } else {
-        // // result = doWxLoginReg(req, companyCode, systemCode, unionId,
-        // // appOpenId, h5OpenId, nickname, photo, gender);
-        // // }
-        // result.setStatus(EUserStatus.MIND.getCode());
-        // }
-        // } catch (Exception e) {
-        // throw new BizException("xn000000", e.getMessage());
-        // }
-        // // return result;
-
+        PhoneUtil.checkMobile(req.getMobile());
+        userBO.isMobileExist(req.getMobile(), ESystemCode.BH.getCode(),
+            ESystemCode.BH.getCode());
         AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
@@ -832,80 +767,9 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public XN627302Res applyHaveUserReferee(XN627251Req req) {
-        // String companyCode = ESystemCode.BH.getCode();
-        // String systemCode = ESystemCode.BH.getCode();
-        // // Step1：获取密码参数信息
-        // Map<String, String> configPwd = sysConfigBO.getConfigsMap(
-        // EConfigType.WEIXIN_XCX.getCode(), companyCode, systemCode);
-        //
-        // String appId = configPwd.get(SysConstant.WX_XCX_ACCESS_KEY);
-        // String appSecret = configPwd.get(SysConstant.WX_XCX_SECRET_KEY);
-        //
-        // if (StringUtils.isBlank(appId)) {
-        // throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
-        // }
-        // if (StringUtils.isBlank(appSecret)) {
-        // throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
-        // }
-        //
-        // // Step2：通过Authorization Code获取Access Token
-        // String sessionKey = "";
-        // Map<String, Object> res = new HashMap<>();
-        // Properties fromProperties = new Properties();
-        // fromProperties.put("grant_type", "authorization_code");
-        // fromProperties.put("appid", appId);
-        // fromProperties.put("secret", appSecret);
-        // fromProperties.put("code", req.getCode());// 微信H5
-        // // fromProperties.put("js_code", req.getCode());// 微信小程序
-        // logger.info("appId:" + appId + ",appSecret:" + appSecret +
-        // ",js_code:"
-        // + req.getCode());
-        // XN627302Res result = null;
-        // try {
-        // String response = PostSimulater.requestPostForm(
-        // WechatConstant.WXXCX_TOKEN_URL, fromProperties);
-        // res = getMapFromResponse(response);
-        // sessionKey = (String) res.get("session_key");
-        // if (res.get("error") != null) {
-        // throw new BizException("XN000000",
-        // "微信登录失败原因：" + res.get("error"));
-        // }
-        // if (StringUtils.isBlank(sessionKey)) {
-        // throw new BizException("XN000000", "sessionKey不能为空");
-        // }
-        // // Step3：使用Access Token来获取用户的OpenID
-        // String openId = (String) res.get("openid");
-        // String unionId = (String) res.get("unionid");
-        // if (StringUtils.isBlank(openId)) {
-        // throw new BizException("XN000000", "opind不能为空");
-        // }
-        // // Step4：根据openId，unionId从数据库中查询用户信息
-        // User dbUser = userBO.doGetUserByOpenId(openId, companyCode,
-        // systemCode);
-        // if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-        // result = new XN627302Res(dbUser.getUserId(),
-        // dbUser.getStatus());
-        // } else {
-        // String nickname = (String) res.get("nickname");
-        // String photo = (String) res.get("headimgurl");
-        // result = doWxLoginReg(companyCode, systemCode, unionId, null,
-        // openId, nickname, photo, EUserKind.Merchant.getCode(),
-        // null);
-        // // Step5：判断注册是否传手机号，有则注册，无则反馈
-        // // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
-        // // result = doWxLoginRegMobile(req, companyCode, systemCode,
-        // // unionId, appOpenId, h5OpenId, nickname, photo, gender);
-        // // } else {
-        // // result = doWxLoginReg(req, companyCode, systemCode, unionId,
-        // // appOpenId, h5OpenId, nickname, photo, gender);
-        // // }
-        // result.setStatus(EUserStatus.MIND.getCode());
-        // }
-        // } catch (Exception e) {
-        // throw new BizException("xn000000", e.getMessage());
-        // }
-        // return result;
-
+        PhoneUtil.checkMobile(req.getMobile());
+        userBO.isMobileExist(req.getMobile(), ESystemCode.BH.getCode(),
+            ESystemCode.BH.getCode());
         XN627302Res result = null;
         // 是否可被意向
         AgentImpower impower = agentImpowerBO.getAgentImpowerByLevel(
@@ -932,6 +796,7 @@ public class UserAOImpl implements IUserAO {
             data.setTeamName(highUser.getTeamName());
 
         }
+        data.setWxId(req.getWxId());
         data.setUserReferee(data.getUserReferee());
         data.setMobile(req.getMobile());
         data.setProvince(req.getProvince());
@@ -1207,17 +1072,20 @@ public class UserAOImpl implements IUserAO {
 
                 // 介绍奖
                 if (StringUtils.isNotBlank(data.getIntroducer())) {
+                    User user = userBO.getUserByMobile(data.getIntroducer());
+
                     Intro iData = introBO.getIntroByLevel(data.getLevel());
                     long amount = AmountUtil.mul(impower.getMinCharge(),
                         iData.getPercent());
 
-                    if (data.getLevel() == StringValidater
-                        .toInteger(EUserLevel.ONE.getCode())) {
+                    if (StringUtils.isNotBlank(user.getHighUserId())
+                            || EUser.ADMIN.getCode()
+                                .equals(user.getHighUserId())) {
                         fromUser = ESysUser.SYS_USER_BH.getCode();
                     }
 
                     accountBO.transAmountCZB(fromUser,
-                        ECurrency.YJ_CNY.getCode(), data.getIntroducer(),
+                        ECurrency.YJ_CNY.getCode(), user.getUserId(),
                         ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_JSJL,
                         "介绍代理[" + data.getRealName() + "]的"
                                 + EBizType.AJ_JSJL.getCode() + "支出",

@@ -75,6 +75,14 @@
 		,amount = #{amount}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_quantity" parameterType="WareHouseSpecs">
+		UPDATE thf_ware_house_specs
+		SET
+		quantity = #{quantity}
+		,amount = #{amount}
+		WHERE code = #{code}
+	</update>
 
 
 </mapper>

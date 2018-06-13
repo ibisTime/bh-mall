@@ -712,6 +712,7 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,wx_id = #{wxId}
 		,mobile = #{mobile}
 		,high_user_id = #{highUserId}
 		,team_name = #{teamName}

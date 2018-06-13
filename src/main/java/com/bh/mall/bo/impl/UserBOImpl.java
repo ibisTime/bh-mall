@@ -294,9 +294,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return false;
     }
 
-    /** 
-     * @see com.bh.mall.bo.IUserBO#checkUserReferee(java.lang.String)
-     */
     @Override
     public void checkUserReferee(String userReferee, String systemCode) {
         if (StringUtils.isNotBlank(userReferee)) {
@@ -667,6 +664,20 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void addInfo(User data) {
         userDAO.addInfo(data);
+    }
+
+    @Override
+    public User getUserByMobile(String introducer) {
+        User data = null;
+        if (StringUtils.isNotBlank(introducer)) {
+            User condition = new User();
+            condition.setMobile(introducer);
+            data = userDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn000000", "推荐人不存在");
+            }
+        }
+        return data;
     }
 
 }

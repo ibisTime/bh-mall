@@ -10,7 +10,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 列表查询用户
+ * 详情查询用户
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:

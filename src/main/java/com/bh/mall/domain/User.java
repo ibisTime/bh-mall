@@ -241,6 +241,9 @@ public class User extends ABaseDO {
 
     private Long impowerAmount;
 
+    // 授权
+    private AgentImpower impower;
+
     // 状态List
     private List<String> statusList;
 
@@ -809,6 +812,14 @@ public class User extends ABaseDO {
 
     public void setResult(boolean result) {
         this.result = result;
+    }
+
+    public AgentImpower getImpower() {
+        return impower;
+    }
+
+    public void setImpower(AgentImpower impower) {
+        this.impower = impower;
     }
 
 }

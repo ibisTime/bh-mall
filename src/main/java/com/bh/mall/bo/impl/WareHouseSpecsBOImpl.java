@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bh.mall.bo.IWareHouseLogBO;
 import com.bh.mall.bo.IWareHouseSpecsBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.AmountUtil;
@@ -13,6 +14,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareHouseSpecsDAO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.WareHouse;
 import com.bh.mall.domain.WareHouseSpecs;
 import com.bh.mall.exception.BizException;
 
@@ -21,7 +23,10 @@ public class WareHouseSpecsBOImpl extends PaginableBOImpl<WareHouseSpecs>
         implements IWareHouseSpecsBO {
 
     @Autowired
-    private IWareHouseSpecsDAO wareHouseSpecsDAO;
+    IWareHouseSpecsDAO wareHouseSpecsDAO;
+
+    @Autowired
+    IWareHouseLogBO wareHouseLogBO;
 
     public void saveWareHouseSpecs(WareHouseSpecs data) {
         String code = null;
@@ -82,18 +87,24 @@ public class WareHouseSpecsBOImpl extends PaginableBOImpl<WareHouseSpecs>
     }
 
     @Override
-    public void saveWareHouseSpecs(String whCode, Order order) {
+    public void saveWareHouseSpecs(WareHouse wareHouse, Order order) {
+        WareHouseSpecs data = new WareHouseSpecs();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.WareHourseSpecs.getCode());
-        WareHouseSpecs data = new WareHouseSpecs();
         data.setCode(code);
-        data.setWareHouseCode(whCode);
+        data.setWareHouseCode(wareHouse.getCode());
         data.setProductSpecsCode(order.getProductSpecsCode());
         data.setQuantity(order.getQuantity());
 
         data.setPrice(order.getPrice());
         data.setAmount(order.getAmount());
         wareHouseSpecsDAO.insert(data);
+
+    }
+
+    @Override
+    public void refreshQuantity(WareHouseSpecs data) {
+        wareHouseSpecsDAO.updateQuantity(data);
     }
 
 }

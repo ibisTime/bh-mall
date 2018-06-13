@@ -53,4 +53,9 @@ public class WareHouseSpecsDAOImpl extends AMybatisTemplate
 
     }
 
+    @Override
+    public void updateQuantity(WareHouseSpecs data) {
+        super.update(NAMESPACE.concat("update_quantity"), data);
+    }
+
 }

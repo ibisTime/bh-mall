@@ -37,39 +37,17 @@ public class JourAOImpl implements IJourAO {
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
-        boolean flag = true;
-        String bizType = null;
-        if (EAwardType.DirectAward.getCode().equals(condition.getType())) {
-            flag = false;
-            bizType = EBizType.AJ_TJJL.getCode();
-            condition.setBizType(bizType);
-        } else if (EAwardType.SendAward.getCode().equals(condition.getType())) {
-            flag = false;
-            bizType = EBizType.AJ_CHJL.getCode();
-            condition.setBizType(bizType);
-        } else if (EAwardType.IntroduceAward.getCode()
-            .equals(condition.getType())) {
-            flag = false;
-            bizType = EBizType.AJ_JSJL.getCode();
-            condition.setBizType(bizType);
-        }
 
-        long count = jourBO.getTotalCount(condition);
-        Page<Jour> page = new Page<Jour>(start, limit, count);
-        List<Jour> list = jourBO.queryJourList(condition);
-
-        // 补充关联编号的信息
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (Jour jour : list) {
-                // 是否是推荐奖
-                if (flag) {
-                    jour.setUserInformation(userBO.getUser(jour.getUserId()));
-                } else {
-                    jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
-                }
+        Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
+        for (Jour jour : page.getList()) {
+            // 是否是推荐奖
+            if (EBizType.AJ_TJJL.getCode().equals(jour.getBizType())
+                    || EBizType.AJ_XJBD.getCode().equals(jour.getBizType())) {
+                jour.setUserInformation(userBO.getUser(jour.getUserId()));
             }
+            jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
         }
-        page.setList(list);
+
         return page;
     }
 
@@ -129,7 +107,6 @@ public class JourAOImpl implements IJourAO {
             flag = false;
             bizType = EBizType.AJ_CHJL.getCode();
         }
-        condition.setBizType(bizType);
 
         long count = jourBO.getTotalCount(condition);
         Page<Jour> page = new Page<Jour>(start, limit, count);

@@ -174,4 +174,6 @@ public interface IUserBO extends IPaginableBO<User> {
     // 补充授权所需信息
     public void addInfo(User data);
 
+    public User getUserByMobile(String introducer);
+
 }

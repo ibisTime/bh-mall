@@ -138,11 +138,10 @@ public class WareHouseAOImpl implements IWareHouseAO {
     public void deliveProject(XN627815Req req) {
         WareHouse data = wareHouseBO.getWareHouseByProductSpec(req.getUserId(),
             req.getProductSpecsCode());
-        Product product = productBO.getProduct(data.getProductCode());
         if (null == data) {
             throw new BizException("xn00000", "您仓库中没有该规格的产品");
         }
-
+        Product product = productBO.getProduct(data.getProductCode());
         if (data.getQuantity() < StringValidater.toInteger(req.getQuantity())) {
             throw new BizException("xn00000", "您仓库中该规格的产品数量不足");
         }
@@ -156,9 +155,9 @@ public class WareHouseAOImpl implements IWareHouseAO {
             .generate(EGeneratePrefix.Order.getCode());
 
         order.setCode(orderCode);
-        order.setProductCode(data.getCode());
+        order.setProductCode(data.getProductCode());
         order.setProductName(data.getProductName());
-        // order.setPic(data.get);
+        order.setPic(product.getPic());
 
         order.setProductSpecsCode(data.getProductSpecsCode());
         order.setProductSpecsName(data.getProductSpecsName());
@@ -177,9 +176,8 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setYunfei(yunfei);
         order.setAmount(amount);
         order.setApplyUser(data.getUserId());
-
-        order.setApplyDatetime(new Date());
         order.setToUser(data.getUserId());
+        order.setApplyDatetime(new Date());
 
         order.setSigner(req.getSigner());
         order.setMobile(req.getMobile());

@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseLogBO;
+import com.bh.mall.bo.IWareHouseSpecsBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.dao.IWareHouseDAO;
+import com.bh.mall.domain.Order;
 import com.bh.mall.domain.WareHouse;
+import com.bh.mall.domain.WareHouseSpecs;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
@@ -22,10 +25,13 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         implements IWareHouseBO {
 
     @Autowired
-    private IWareHouseDAO wareHouseDAO;
+    IWareHouseDAO wareHouseDAO;
 
     @Autowired
-    private IWareHouseLogBO wareHouseLogBO;
+    IWareHouseLogBO wareHouseLogBO;
+
+    @Autowired
+    IWareHouseSpecsBO wareHouseSpecsBO;
 
     @Override
     public void saveWareHouse(WareHouse data, Integer quantity,
@@ -142,6 +148,30 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         WareHouse condition = new WareHouse();
         condition.setUserId(userId);
         return wareHouseDAO.selectList(condition);
+    }
+
+    @Override
+    public void changeWareHouse(String code, Order order, Integer quantity,
+            EBizType bizType, String bizNote) {
+        WareHouse dbData = this.getWareHouse(code);
+        WareHouseSpecs specs = wareHouseSpecsBO.getWareHouseSpecsByCode(
+            dbData.getCode(), order.getProductSpecsCode());
+        Integer nowQuantity = specs.getQuantity() + quantity;
+        Long nowAmount = AmountUtil.eraseLiUp(nowQuantity * specs.getPrice());
+        if (nowQuantity < 0) {
+            throw new BizException("xn0000", "该规格的产品数量不足");
+        }
+        // 记录流水
+        String logCode = wareHouseLogBO.saveWareHouseLog(order,
+            dbData.getCode(), specs.getQuantity(), quantity, bizType.getCode(),
+            bizNote, order.getCode());
+        // 改变数量
+        specs.setQuantity(nowQuantity);
+        specs.setAmount(nowAmount);
+        wareHouseSpecsBO.refreshQuantity(specs);
+        dbData.setLastChangeCode(logCode);
+        wareHouseDAO.updateLogCode(dbData);
+
     }
 
 }

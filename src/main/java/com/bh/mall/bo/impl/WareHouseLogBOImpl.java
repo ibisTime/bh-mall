@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IWareHouseLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareHouseLogDAO;
@@ -15,6 +17,7 @@ import com.bh.mall.domain.ChangeProduct;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.domain.WareHouseLog;
+import com.bh.mall.domain.WareHouseSpecs;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.exception.BizException;
 
@@ -153,6 +156,61 @@ public class WareHouseLogBOImpl extends PaginableBOImpl<WareHouseLog>
         logData.setAmount(dbData.getAmount());
         logData.setBizNote(bizNote);
         wareHouseLogDAO.insert(logData);
+        return code;
+    }
+
+    @Override
+    public String saveWareHouseLog(WareHouse wareHouse, WareHouseSpecs data,
+            EBizType bizType, String bizNote, String refNo) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.WareHourseLog.getCode());
+        WareHouseLog logData = new WareHouseLog();
+        logData.setCode(code);
+        logData.setRefNo(data.getCode());
+        logData.setWareHouseCode(wareHouse.getCode());
+        logData.setProductCode(wareHouse.getProductCode());
+
+        logData.setProductSpecsCode(data.getProductSpecsCode());
+        logData.setPrice(data.getPrice());
+        logData.setTranNumber(data.getQuantity());
+        logData.setBeforeNumber(0);
+        logData.setAfterNumber(data.getQuantity());
+        logData.setApplyUser(wareHouse.getUserId());
+
+        logData.setRealName(wareHouse.getRealName());
+        Date date = new Date();
+        logData.setApplyDatetime(date);
+        logData.setAmount(data.getAmount());
+        logData.setBizNote(bizNote);
+        wareHouseLogDAO.insert(logData);
+        return code;
+    }
+
+    @Override
+    public String saveWareHouseLog(Order order, String wareHouseCode,
+            Integer beforeNumber, Integer changeNumber, String bizType,
+            String bizNote, String refNo) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.WareHourseLog.getCode());
+        WareHouseLog logData = new WareHouseLog();
+        logData.setCode(code);
+        logData.setRefNo(refNo);
+        logData.setWareHouseCode(wareHouseCode);
+        logData.setProductCode(order.getProductCode());
+        logData.setProductName(order.getProductName());
+
+        logData.setProductSpecsCode(order.getProductSpecsCode());
+        logData.setProductSpecsName(order.getProductSpecsName());
+        logData.setPrice(order.getPrice());
+        logData.setTranNumber(changeNumber);
+        logData.setBeforeNumber(beforeNumber);
+
+        Long amount = AmountUtil.mul(order.getPrice(),
+            (beforeNumber + changeNumber));
+        logData.setAfterNumber(beforeNumber + changeNumber);
+        logData.setAmount(amount);
+        logData.setBizType(bizType);
+        logData.setBizNote(bizNote);
         return code;
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.WareHouse;
 import com.bh.mall.domain.WareHouseSpecs;
 
 public interface IWareHouseSpecsBO extends IPaginableBO<WareHouseSpecs> {
@@ -22,6 +23,8 @@ public interface IWareHouseSpecsBO extends IPaginableBO<WareHouseSpecs> {
     public WareHouseSpecs getWareHouseSpecsByCode(String whCode,
             String productSpecsCode);
 
-    public void saveWareHouseSpecs(String code, Order data);
+    public void saveWareHouseSpecs(WareHouse wareHouse, Order data);
+
+    public void refreshQuantity(WareHouseSpecs specs);
 
 }

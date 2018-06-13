@@ -3,11 +3,27 @@ package com.bh.mall.dto.res;
 public class XN627300Res {
     private String userId;
 
+    private String status;
+
     public XN627300Res() {
     }
 
     public XN627300Res(String userId) {
         this.userId = userId;
+    }
+
+    public XN627300Res(String userId, String status) {
+        super();
+        this.userId = userId;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUserId() {

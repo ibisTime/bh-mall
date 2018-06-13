@@ -139,24 +139,16 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         }
         if (EBoolean.NO.getCode().equals(payType)) {
             // 支付订单，更新订单状态
-
+            System.out.println("余额");
             accountBO.transAmountCZB(data.getApplyUser(),
                 ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
                 ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
                 EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
                 data.getCode());
 
-            String payGroup = innerOrderBO.addPayGroup(data,
-                EBoolean.YES.getCode());
             data.setPayDatetime(new Date());
             data.setPayCode(data.getPayCode());
             data.setPayAmount(data.getAmount());
-            Account account = accountBO.getAccountByUser(data.getApplyUser(),
-                ECurrency.YJ_CNY.getCode());
-
-            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, payGroup, data.getCode(), EBizType.AJ_GMCP,
-                EBizType.AJ_GMCP.getValue(), data.getAmount());
 
             data.setStatus(EInnerOrderStatus.Paid.getCode());
             innerOrderBO.paySuccess(data);

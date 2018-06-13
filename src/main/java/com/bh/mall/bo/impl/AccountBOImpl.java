@@ -266,7 +266,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             new BizException("XN0000", "来去双方账号一致，无需内部划转");
         }
         this.changeAmount(fromAccountNumber, EChannelType.NBZ, null, null,
-            refNo, bizType, fromBizNote, -transAmount);
+            refNo, bizType, fromBizNote, transAmount);
         this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
             bizType, toBizNote, transAmount);
     }

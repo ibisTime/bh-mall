@@ -8,4 +8,6 @@ public interface IWareHouseSpecsDAO extends IBaseDAO<WareHouseSpecs> {
     String NAMESPACE = IWareHouseSpecsDAO.class.getName().concat(".");
 
     void update(WareHouseSpecs data);
+
+    void updateQuantity(WareHouseSpecs data);
 }

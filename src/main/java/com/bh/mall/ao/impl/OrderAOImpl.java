@@ -213,6 +213,8 @@ public class OrderAOImpl implements IOrderAO {
 
         User applyUser = userBO.getUser(req.getApplyUser());
 
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Order.getCode());
         ProductSpecsPrice pspData = productSpecsPriceBO
             .getPriceBySpecsCode(psData.getCode(), applyUser.getLevel());
         // 判断代理状态
@@ -224,37 +226,28 @@ public class OrderAOImpl implements IOrderAO {
                 .equals(psData.getIsNormalOrder())) {
                 throw new BizException("xn0000", "该产品规格不予许普通单下单");
             }
-
-            // 不考虑上级代理仓库中是否有货
             int quantity = StringValidater.toInteger(req.getQuantity())
                     * psData.getNumber();
 
-            // 修改产品库存记录
-            productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
-                pData.getRealNumber(), quantity, null);
-            pData.setRealNumber(pData.getRealNumber() - quantity);
-            productBO.refreshRealNumber(pData);
-            // 下单代理是一级
-            /*
-             * if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == user
-             * .getLevel()) { WareHouse whData =
-             * wareHouseBO.getWareHouseByProductSpec( user.getUserId(),
-             * req.getProductSpecsCode());
-             * wareHouseBO.changeWareHouse(whData.getCode(),
-             * StringValidater.toInteger(req.getQuantity()), EBizType.AJ_GMYC,
-             * EBizType.AJ_GMYC.getValue(), code); } else { User fromUser =
-             * userBO.getCheckUser(req.getToUser()); User toUser =
-             * userBO.getCheckUser(req.getApplyUser());
-             * wareHouseBO.transQuantity(fromUser.getUserId(), psData.getCode(),
-             * toUser.getUserId(), psData.getCode(),
-             * StringValidater.toInteger(req.getQuantity()), EBizType.AJ_GMYC,
-             * EBizType.AJ_YCCH, EBizType.AJ_GMYC.getValue(),
-             * EBizType.AJ_YCCH.getValue(), code); }
-             */
+            // 下单代理无上级
+            if (StringUtils.isBlank(req.getToUser())
+                    || EUserKind.Merchant.getCode().equals(req.getToUser())) {
+                // 修改产品库存记录
+                productLogBO.saveChangeLog(pData,
+                    EProductLogType.Order.getCode(), pData.getRealNumber(),
+                    quantity, null);
+                pData.setRealNumber(pData.getRealNumber() - quantity);
+                productBO.refreshRealNumber(pData);
+            } else {
+                // 减少上级库存
+                User toUser = userBO.getUser(req.getToUser());
+                WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
+                    toUser.getUserId(), req.getProductSpecsCode());
+                wareHouseBO.changeWareHouse(whData.getCode(),
+                    -StringValidater.toInteger(req.getQuantity()),
+                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), code);
+            }
         }
-
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
 
         Order data = new Order();
         data.setCode(code);
@@ -266,8 +259,10 @@ public class OrderAOImpl implements IOrderAO {
         data.setProductSpecsName(pData.getName());
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
         data.setPrice(pspData.getPrice());
+
         Long amount = AmountUtil.eraseLiUp(
             StringValidater.toInteger(req.getQuantity()) * pspData.getPrice());
+
         // 是否包邮
         Long yunfei = 0L;
         if (EBoolean.YES.getCode().equals(req.getIsSendHome())) {
@@ -657,13 +652,11 @@ public class OrderAOImpl implements IOrderAO {
                 // // 云仓没有该产品
                 // if (null == wareHouse) {
                 // String code = OrderNoGenerater
-                // .generate(EGeneratePrefix.Order.getCode());
-                //
+                // .generate(EGeneratePrefix.WareHouse.getCode());
                 // wareHouse = new WareHouse();
                 // wareHouse.setCode(code);
                 // wareHouse.setUserId(data.getApplyUser());
-                //
-                // wareHouseSpecsBO.saveWareHouseSpecs(code, data);
+                // wareHouseSpecsBO.saveWareHouseSpecs(wareHouse, data);
                 // } else {
                 // WareHouseSpecs whs = wareHouseSpecsBO
                 // .getWareHouseSpecsByCode(wareHouse.getCode(),
@@ -681,14 +674,18 @@ public class OrderAOImpl implements IOrderAO {
                 // wareHouseBO.changeWareHouse(wareHouse.getCode(),
                 // data.getQuantity(), EBizType.AJ_GMYC,
                 // EBizType.AJ_GMYC.getValue(), data.getCode());
-                // wareHouseSpecsBO.refreshWareHouseSpecs(
-                // whs.getCode(), data.getQuantity());
+                // wareHouseSpecsBO.refreshWareHouseSpecs(whs.getCode(),
+                // data.getQuantity());
                 // } else {
+                //
+                // wareHouseBO.changeWareHouse(wareHouse.getCode(), data,
+                // -data.getQuantity(), EBizType.AJ_YCCH,
+                // EBizType.AJ_YCCH.getValue());
                 // wareHouseBO.changeWareHouse(wareHouse.getCode(),
                 // data.getQuantity(), EBizType.AJ_GMYC,
                 // EBizType.AJ_GMYC.getValue(), data.getCode());
-                // wareHouseSpecsBO.refreshWareHouseSpecs(
-                // whs.getCode(), data.getQuantity());
+                // wareHouseSpecsBO.refreshWareHouseSpecs(whs.getCode(),
+                // data.getQuantity());
                 // }
                 // }
 
