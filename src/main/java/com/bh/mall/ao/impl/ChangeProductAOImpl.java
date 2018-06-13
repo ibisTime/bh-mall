@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IChangeProductAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IChangeProductBO;
+import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
@@ -25,6 +26,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.ChangeProduct;
+import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
@@ -36,7 +38,9 @@ import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
+import com.bh.mall.enums.ECheckStatus;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
@@ -71,6 +75,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
     @Autowired
     IAgentBO agentBO;
+
+    @Autowired
+    IOrderBO orderBO;
 
     @Override
     public String addChangeProduct(XN627790Req req) {
@@ -390,23 +397,40 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     @Override
     public XN627805Res checkAmount(String userId) {
         XN627805Res res = new XN627805Res();
-        res.setResult(true);
-        List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
-        Long amount = 0L;
-        for (WareHouse wareHouse : list) {
-            if (null != wareHouse.getAmount() || 0 != wareHouse.getAmount()) {
-                amount = amount + wareHouse.getAmount();
-            }
-        }
-        res.setAmount(amount);
         User user = userBO.getUser(userId);
-        if (null != user.getLevel() || 0 != user.getLevel()) {
+        Long amount = 0L;
+        res.setResult(ECheckStatus.NORMAL.getCode());
+        // 代理已通过审核
+        if (null != user.getLevel() && 0 != user.getLevel()) {
             Agent agent = agentBO.getAgentByLevel(user.getLevel());
-            res.setRedAmount(agent.getRedAmount());
-            if (agent.getRedAmount() >= amount) {
-                res.setResult(false);
+
+            // 是否完成授权单
+            Order oCondition = new Order();
+            oCondition.setApplyUser(user.getUserId());
+            oCondition.setStatusForQuery(EOrderStatus.No_Impwoer.getCode());
+            List<Order> orderList = orderBO.queryOrderList(oCondition);
+            Long orderAmount = 0L;
+            for (Order order : orderList) {
+                orderAmount = orderAmount + order.getPayAmount();
             }
+
+            if (agent.getAmount() > orderAmount) {
+                res.setResult(ECheckStatus.MIN_LOW.getCode());
+            }
+
+            List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
+            for (WareHouse wareHouse : list) {
+                if (null != wareHouse.getAmount()) {
+                    amount = amount + wareHouse.getAmount();
+                }
+            }
+            if (agent.getRedAmount() >= amount) {
+                res.setResult(ECheckStatus.RED_LOW.getCode());
+            }
+            res.setRedAmount(agent.getRedAmount());
+            res.setAmount(amount);
         }
+
         return res;
     }
 }

@@ -3,7 +3,7 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627452Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -22,20 +22,14 @@ public class XN627452 extends AProcessor {
 
     private XN627452Req req = null;
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doBusiness()
-    */
     @Override
     public Object doBusiness() throws BizException {
         return accountAO.getAccount(req.getAccountNumber());
     }
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
-    */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627452Req.class);
-        StringValidater.validateBlank(req.getAccountNumber());
+        ObjValidater.validateReq(req);
     }
 }

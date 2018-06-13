@@ -23,7 +23,9 @@ public enum EBizType {
                     "出货奖励"), AJ_GMCP_TK("AJ_GMCP_TK", "购买产品退款"),
 
     AJ_QKYE("AJ_QKYE", "升级清空余额"), AJ_JSJL("AJ_JSJL", "介绍奖励"), AJ_YCCH("AJ_YCCH",
-            "云仓出货"), AJ_YCZH("AJ_YCZH", "云仓置换"), AJ_GMCP("AJ_GMCP", "购买产品");
+            "云仓出货"), AJ_YCZH("AJ_YCZH", "云仓置换"), AJ_GMCP("AJ_GMCP", "购买产品"),
+
+    AJ_YCTH("AJ_YCTH", "云仓提货"), AJ_XJBD("AJ_XJBD", "下级变动");
 
     public static EBizType getBizType(String code) {
         Map<String, EBizType> map = getBizTypeMap();

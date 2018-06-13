@@ -142,7 +142,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setApplyLevel(StringValidater.toInteger(level));
         user.setRealName(realName);
 
-        user.setStatus(EUserStatus.TO_WILL.getCode());
+        user.setStatus(EUserStatus.MIND.getCode());
         user.setApplyDatetime(new Date());
         user.setUnionId(unionId);
         user.setH5OpenId(h5OpenId);

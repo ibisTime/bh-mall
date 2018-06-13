@@ -41,9 +41,14 @@ public class CartAOImpl implements ICartAO {
         if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
             throw new BizException("xn00000", "产品未上架，无法添加购物车");
         }
-        if (pData.getRealNumber() < StringValidater.toInteger(quantity)
-                || StringValidater.toInteger(quantity) < 0) {
-            throw new BizException("xn00000", "产品数量不足或小于零");
+        if (StringValidater.toInteger(quantity) <= 0) {
+            throw new BizException("xn00000", "添加数量不能少于零");
+        }
+
+        Integer nowNumber = pData.getRealNumber()
+                - StringValidater.toInteger(quantity);
+        if (nowNumber < 0) {
+            throw new BizException("xn00000", "产品库存不足");
         }
 
         Cart data = cartBO.getCartByProductCode(productCode, productSpecsCode);

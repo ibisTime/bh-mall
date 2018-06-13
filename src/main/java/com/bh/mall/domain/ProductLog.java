@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * 
+ * 产品库存变动
  * @author: nyc 
  * @since: 2018年3月23日 上午11:38:30 
  * @history:

@@ -15,7 +15,6 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAccountDAO;
 import com.bh.mall.dao.IWareHouseDAO;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
@@ -46,39 +45,26 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             EAccountType accountType, List<String> currencyList,
             String systemCode, String companyCode) {
         String accountNumber = null;
-        String code = null;
         if (StringUtils.isNotBlank(userId)) {
             for (String currency : currencyList) {
                 if (ECurrency.YC_CNY.getCode().equals(currency)) {
-                    code = OrderNoGenerater
-                        .generate(EGeneratePrefix.WareHouse.getCode());
-                    WareHouse whData = new WareHouse();
-                    whData.setCode(code);
-                    whData.setType(accountType.getCode());
-                    whData.setCurrency(currency);
-                    whData.setUserId(userId);
-                    whData.setRealName(realName);
-                    whData.setStatus(EAccountStatus.NORMAL.getCode());
-                    whData.setCreateDatetime(new Date());
-                    wareHouseDAO.insert(whData);
-                } else {
-                    accountNumber = OrderNoGenerater
-                        .generate(EGeneratePrefix.Account.getCode());
-                    Account data = new Account();
-                    data.setAccountNumber(accountNumber);
-                    data.setUserId(userId);
-                    data.setRealName(realName);
-
-                    data.setType(accountType.getCode());
-                    data.setCurrency(currency);
-                    data.setStatus(EAccountStatus.NORMAL.getCode());
-                    data.setAmount(0L);
-                    data.setFrozenAmount(0L);
-
-                    data.setCreateDatetime(new Date());
-                    accountDAO.insert(data);
+                    continue;
                 }
+                accountNumber = OrderNoGenerater
+                    .generate(EGeneratePrefix.Account.getCode());
+                Account data = new Account();
+                data.setAccountNumber(accountNumber);
+                data.setUserId(userId);
+                data.setRealName(realName);
 
+                data.setType(accountType.getCode());
+                data.setCurrency(currency);
+                data.setStatus(EAccountStatus.NORMAL.getCode());
+                data.setAmount(0L);
+                data.setFrozenAmount(0L);
+
+                data.setCreateDatetime(new Date());
+                accountDAO.insert(data);
             }
         }
         return accountNumber;
@@ -95,7 +81,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         }
         Long nowAmount = dbAmount + transAmount;
         // 特定账户余额可为负
-        if (!dbAccount.getUserId().contains(ESysUser.SYS_USER.getCode())
+        if (!dbAccount.getUserId().contains(ESysUser.SYS_USER_BH.getCode())
                 && nowAmount < 0) {
             throw new BizException("xn000000", "账户余额不足");
         }

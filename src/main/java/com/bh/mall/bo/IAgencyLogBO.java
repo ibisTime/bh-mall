@@ -33,4 +33,6 @@ public interface IAgencyLogBO extends IPaginableBO<AgencyLog> {
 
     public String toApply(User dbUser, String payPdf, String status);
 
+    public String refreshHighUser(User data);
+
 }

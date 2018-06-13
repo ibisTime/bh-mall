@@ -69,12 +69,9 @@
 				AND t.to_user = #{toUser}
 			</if>
 			<if test="statusForQuery != null and statusForQuery != '' ">
-				AND t.status IN (1,2,3,5)
+				AND t.status IN ${statusForQuery}
 			</if>
 			<choose>
-				<when test="status == '1,2'">
-					AND t.status = '1' or t.status = '2'
-				</when>
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
 				</when>

@@ -41,6 +41,8 @@ public class ProductSpecs extends ABaseDO {
     // 规格价格
     private List<ProductSpecsPrice> priceList;
 
+    // *************db**************
+
     // 规格价格
     private ProductSpecsPrice price;
 

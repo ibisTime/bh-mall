@@ -3,7 +3,7 @@ package com.bh.mall.dto.res;
 public class XN627805Res {
 
     // 结果
-    private boolean result;
+    private String result;
 
     // 红线金额
     private Long redAmount;
@@ -14,18 +14,18 @@ public class XN627805Res {
     public XN627805Res() {
     }
 
-    public XN627805Res(boolean result, Long redAmount, Long amount) {
+    public XN627805Res(String result, Long redAmount, Long amount) {
         super();
         this.result = result;
         this.redAmount = redAmount;
         this.amount = amount;
     }
 
-    public boolean isResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(boolean result) {
+    public void setResult(String result) {
         this.result = result;
     }
 

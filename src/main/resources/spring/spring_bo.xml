@@ -137,7 +137,12 @@
 	<bean id="wareHouseLogBO" class="com.bh.mall.bo.impl.WareHouseLogBOImpl">
 		<property name="paginableDAO" ref="wareHouseLogDAOImpl"></property>
 	</bean>
+	
 	<bean id="changeProductBO" class="com.bh.mall.bo.impl.ChangeProductBOImpl">
 		<property name="paginableDAO" ref="changeProductDAOImpl"></property>
+	</bean>
+	
+	<bean id="wareHouseSpecsBO" class="com.bh.mall.bo.impl.WareHouseSpecsBOImpl">
+		<property name="paginableDAO" ref="wareHouseSpecsDAOImpl"></property>
 	</bean>
 </beans>

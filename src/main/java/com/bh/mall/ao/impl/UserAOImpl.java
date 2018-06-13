@@ -225,6 +225,14 @@ public class UserAOImpl implements IUserAO {
             } else {
                 result = doWxLoginReg(companyCode, systemCode, null, null,
                     openId, null, null, userKind, null);
+                // Step5：判断注册是否传手机号，有则注册，无则反馈
+                // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
+                // result = doWxLoginRegMobile(req, companyCode, systemCode,
+                // unionId, appOpenId, h5OpenId, nickname, photo, gender);
+                // } else {
+                // result = doWxLoginReg(req, companyCode, systemCode, unionId,
+                // appOpenId, h5OpenId, nickname, photo, gender);
+                // }
             }
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
@@ -291,29 +299,29 @@ public class UserAOImpl implements IUserAO {
             User dbUser = userBO.doGetUserByOpenId(h5OpenId, companyCode,
                 systemCode);
 
-            // 用户是否关注了公众号
-            // 1、获取全局token
-            Map<String, Object> resMap1 = new HashMap<>();
-            Properties properties1 = new Properties();
-            properties1.put("grant_type", "client_credential");
-            properties1.put("appid", appId);
-            properties1.put("secret", appSecret);
-            resMap1 = getMapFromResponse(PostSimulater.requestPostForm(
-                WechatConstant.WXXCX_GLOBAL_TOKEN_URL, properties1));
-            String token = (String) resMap1.get("access_token");
-            if (StringUtils.isBlank(token)) {
-                throw new BizException("XN000000", "accessToken不能为空");
-            }
-
-            Map<String, Object> resMap2 = new HashMap<>();
-            Properties properties2 = new Properties();
-            properties2.put("access_token", token);
-            properties2.put("openid", openId);
-            resMap2 = getMapFromResponse(PostSimulater
-                .requestPostForm(WechatConstant.WX_USER_CGI_URL, properties2));
-
-            String subscribe = String.valueOf(resMap2.get("subscribe"));
-            System.out.println("subscribe:" + subscribe);
+            // // 用户是否关注了公众号
+            // // 1、获取全局token
+            // Map<String, Object> resMap1 = new HashMap<>();
+            // Properties properties1 = new Properties();
+            // properties1.put("grant_type", "client_credential");
+            // properties1.put("appid", appId);
+            // properties1.put("secret", appSecret);
+            // resMap1 = getMapFromResponse(PostSimulater.requestPostForm(
+            // WechatConstant.WXXCX_GLOBAL_TOKEN_URL, properties1));
+            // String token = (String) resMap1.get("access_token");
+            // if (StringUtils.isBlank(token)) {
+            // throw new BizException("XN000000", "accessToken不能为空");
+            // }
+            //
+            // Map<String, Object> resMap2 = new HashMap<>();
+            // Properties properties2 = new Properties();
+            // properties2.put("access_token", token);
+            // properties2.put("openid", openId);
+            // resMap2 = getMapFromResponse(PostSimulater
+            // .requestPostForm(WechatConstant.WX_USER_CGI_URL, properties2));
+            //
+            // String subscribe = String.valueOf(resMap2.get("subscribe"));
+            // System.out.println("subscribe:" + subscribe);
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
                 result = new XN627302Res(dbUser.getUserId());
@@ -324,7 +332,7 @@ public class UserAOImpl implements IUserAO {
                 result = doWxLoginReg(companyCode, systemCode, unionId, null,
                     h5OpenId, nickname, photo, userKind, userReferee);
             }
-            result.setSubscribe(subscribe);
+            // result.setSubscribe(subscribe);
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
         }
@@ -393,7 +401,7 @@ public class UserAOImpl implements IUserAO {
             status = EUserStatus.NORMAL.getCode();
             level = 6;
         } else {
-            status = EUserStatus.TO_WILL.getCode();
+            status = EUserStatus.TO_MIND.getCode();
         }
         String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
             userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status,
@@ -720,14 +728,85 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void applyIntent(XN627250Req req) {
+        // String companyCode = ESystemCode.BH.getCode();
+        // String systemCode = ESystemCode.BH.getCode();
+        // // Step1：获取密码参数信息
+        // Map<String, String> configPwd = sysConfigBO.getConfigsMap(
+        // EConfigType.WEIXIN_XCX.getCode(), companyCode, systemCode);
+        //
+        // String appId = configPwd.get(SysConstant.WX_XCX_ACCESS_KEY);
+        // String appSecret = configPwd.get(SysConstant.WX_XCX_SECRET_KEY);
+        //
+        // if (StringUtils.isBlank(appId)) {
+        // throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
+        // }
+        // if (StringUtils.isBlank(appSecret)) {
+        // throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
+        // }
+        //
+        // // Step2：通过Authorization Code获取Access Token
+        // String sessionKey = "";
+        // Map<String, Object> res = new HashMap<>();
+        // Properties fromProperties = new Properties();
+        // fromProperties.put("grant_type", "authorization_code");
+        // fromProperties.put("appid", appId);
+        // fromProperties.put("secret", appSecret);
+        // // fromProperties.put("code", code);// 微信H5
+        // fromProperties.put("js_code", req.getCode());// 微信小程序
+        // logger.info("appId:" + appId + ",appSecret:" + appSecret +
+        // ",js_code:"
+        // + req.getCode());
+        // XN627302Res result = null;
+        // try {
+        // String response = PostSimulater.requestPostForm(
+        // WechatConstant.WXXCX_TOKEN_URL, fromProperties);
+        // res = getMapFromResponse(response);
+        // sessionKey = (String) res.get("session_key");
+        // if (res.get("error") != null) {
+        // throw new BizException("XN000000",
+        // "微信登录失败原因：" + res.get("error"));
+        // }
+        // if (StringUtils.isBlank(sessionKey)) {
+        // throw new BizException("XN000000", "sessionKey不能为空");
+        // }
+        // // Step3：使用Access Token来获取用户的OpenID
+        // String openId = (String) res.get("openid");
+        // String unionId = (String) res.get("unionid");
+        // if (StringUtils.isBlank(openId)) {
+        // throw new BizException("XN000000", "opind不能为空");
+        // }
+        // // Step4：根据openId，unionId从数据库中查询用户信息
+        // User dbUser = userBO.doGetUserByOpenId(openId, companyCode,
+        // systemCode);
+        // if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+        // result = new XN627302Res(dbUser.getUserId(),
+        // dbUser.getStatus());
+        // } else {
+        // String nickname = (String) res.get("nickname");
+        // String photo = (String) res.get("headimgurl");
+        // result = doWxLoginReg(companyCode, systemCode, unionId, null,
+        // openId, nickname, photo, EUserKind.Merchant.getCode(),
+        // null);
+        // // Step5：判断注册是否传手机号，有则注册，无则反馈
+        // // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
+        // // result = doWxLoginRegMobile(req, companyCode, systemCode,
+        // // unionId, appOpenId, h5OpenId, nickname, photo, gender);
+        // // } else {
+        // // result = doWxLoginReg(req, companyCode, systemCode, unionId,
+        // // appOpenId, h5OpenId, nickname, photo, gender);
+        // // }
+        // result.setStatus(EUserStatus.MIND.getCode());
+        // }
+        // } catch (Exception e) {
+        // throw new BizException("xn000000", e.getMessage());
+        // }
+        // // return result;
+
         AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
             throw new BizException("xn00000", "本等级不可被意向");
         }
-
-        AgentImpower agentImpower = agentImpowerBO.getAgentImpowerByLevel(
-            StringValidater.toInteger(req.getApplyLevel()));
 
         User data = userBO.getCheckUser(req.getUserId());
 
@@ -739,7 +818,7 @@ public class UserAOImpl implements IUserAO {
 
         data.setArea(req.getArea());
         data.setAddress(req.getAddress());
-        data.setStatus(EUserStatus.TO_WILL.getCode());
+        data.setStatus(EUserStatus.MIND.getCode());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setApplyDatetime(new Date());
 
@@ -753,6 +832,80 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public XN627302Res applyHaveUserReferee(XN627251Req req) {
+        // String companyCode = ESystemCode.BH.getCode();
+        // String systemCode = ESystemCode.BH.getCode();
+        // // Step1：获取密码参数信息
+        // Map<String, String> configPwd = sysConfigBO.getConfigsMap(
+        // EConfigType.WEIXIN_XCX.getCode(), companyCode, systemCode);
+        //
+        // String appId = configPwd.get(SysConstant.WX_XCX_ACCESS_KEY);
+        // String appSecret = configPwd.get(SysConstant.WX_XCX_SECRET_KEY);
+        //
+        // if (StringUtils.isBlank(appId)) {
+        // throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
+        // }
+        // if (StringUtils.isBlank(appSecret)) {
+        // throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
+        // }
+        //
+        // // Step2：通过Authorization Code获取Access Token
+        // String sessionKey = "";
+        // Map<String, Object> res = new HashMap<>();
+        // Properties fromProperties = new Properties();
+        // fromProperties.put("grant_type", "authorization_code");
+        // fromProperties.put("appid", appId);
+        // fromProperties.put("secret", appSecret);
+        // fromProperties.put("code", req.getCode());// 微信H5
+        // // fromProperties.put("js_code", req.getCode());// 微信小程序
+        // logger.info("appId:" + appId + ",appSecret:" + appSecret +
+        // ",js_code:"
+        // + req.getCode());
+        // XN627302Res result = null;
+        // try {
+        // String response = PostSimulater.requestPostForm(
+        // WechatConstant.WXXCX_TOKEN_URL, fromProperties);
+        // res = getMapFromResponse(response);
+        // sessionKey = (String) res.get("session_key");
+        // if (res.get("error") != null) {
+        // throw new BizException("XN000000",
+        // "微信登录失败原因：" + res.get("error"));
+        // }
+        // if (StringUtils.isBlank(sessionKey)) {
+        // throw new BizException("XN000000", "sessionKey不能为空");
+        // }
+        // // Step3：使用Access Token来获取用户的OpenID
+        // String openId = (String) res.get("openid");
+        // String unionId = (String) res.get("unionid");
+        // if (StringUtils.isBlank(openId)) {
+        // throw new BizException("XN000000", "opind不能为空");
+        // }
+        // // Step4：根据openId，unionId从数据库中查询用户信息
+        // User dbUser = userBO.doGetUserByOpenId(openId, companyCode,
+        // systemCode);
+        // if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+        // result = new XN627302Res(dbUser.getUserId(),
+        // dbUser.getStatus());
+        // } else {
+        // String nickname = (String) res.get("nickname");
+        // String photo = (String) res.get("headimgurl");
+        // result = doWxLoginReg(companyCode, systemCode, unionId, null,
+        // openId, nickname, photo, EUserKind.Merchant.getCode(),
+        // null);
+        // // Step5：判断注册是否传手机号，有则注册，无则反馈
+        // // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
+        // // result = doWxLoginRegMobile(req, companyCode, systemCode,
+        // // unionId, appOpenId, h5OpenId, nickname, photo, gender);
+        // // } else {
+        // // result = doWxLoginReg(req, companyCode, systemCode, unionId,
+        // // appOpenId, h5OpenId, nickname, photo, gender);
+        // // }
+        // result.setStatus(EUserStatus.MIND.getCode());
+        // }
+        // } catch (Exception e) {
+        // throw new BizException("xn000000", e.getMessage());
+        // }
+        // return result;
+
         XN627302Res result = null;
         // 是否可被意向
         AgentImpower impower = agentImpowerBO.getAgentImpowerByLevel(
@@ -769,13 +922,6 @@ public class UserAOImpl implements IUserAO {
             }
         }
 
-        if (StringUtils.isNotEmpty(req.getPayAmount())) {
-            if (impower.getMinCharge() > StringValidater
-                .toLong(req.getPayAmount())) {
-                throw new BizException("xn0000",
-                    "本等级需要充值门槛为" + req.getPayAmount());
-            }
-        }
         User data = userBO.getUser(req.getUserId());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setRealName(req.getRealName());
@@ -903,7 +1049,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void acceptIntention(String userId, String approver, String remark) {
         User data = userBO.getUser(userId);
-        if (!EUserStatus.TO_WILL.getCode().equals(data.getStatus())) {
+        if (!EUserStatus.MIND.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
 
@@ -924,7 +1070,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void ignore(String userId, String aprrover) {
         User data = userBO.getUser(userId);
-        if (!EUserStatus.TO_WILL.getCode().equals(data.getStatus())) {
+        if (!EUserStatus.MIND.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
         data.setApprover(aprrover);
@@ -953,17 +1099,30 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void cancelImpower(String userId) {
         User data = userBO.getUser(userId);
-        Account condition = new Account();
-        condition.setUserId(data.getUserId());
 
-        // 账户是否余额
-        List<Account> accountList = accountBO.queryAccountList(condition);
-        for (Account account : accountList) {
-            if (account.getAmount() != 0) {
-                throw new BizException("xn0000",
-                    "您的" + account.getCurrency() + "账户还有余额,请取出后再申请");
-            }
+        // 下级代理门槛中是否有钱
+        // User uCondition = new User();
+        // uCondition.setHighUserId(data.getUserId());
+        // List<User> list = userBO.queryUserList(uCondition);
+        // if (CollectionUtils.isNotEmpty(list)) {
+        // // 获取门槛余额
+        // for (User user : list) {
+        // Account account = accountBO.getAccountByUser(user.getUserId(),
+        // ECurrency.MK_CNY.getCode());
+        // if (account.getAmount() >= 0) {
+        // throw new BizException("xn0000",
+        // "您的下级代理[" + user.getRealName() + "]门槛账户中还有余额，无法申请退出");
+        // }
+        // }
+        // }
+
+        // 可提现账户是否余额
+        Account account = accountBO.getAccountByUser(data.getUserId(),
+            ECurrency.YJ_CNY.getCode());
+        if (account.getAmount() > 0) {
+            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
         }
+
         // 是否有未完成的订单
         Order oCondition = new Order();
         oCondition.setApplyUser(data.getUserId());
@@ -980,6 +1139,7 @@ public class UserAOImpl implements IUserAO {
         if (ioCount != 0) {
             throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
         }
+
         AfterSale asCondition = new AfterSale();
         asCondition.setApplyUser(data.getUserId());
         asCondition.setStatus(EAfterSaleStatus.NO_CallOff.getCode());
@@ -987,13 +1147,16 @@ public class UserAOImpl implements IUserAO {
         if (asCount != 0) {
             throw new BizException("xn000", "您还有未完成的售后单,请在订单完成后申请");
         }
+
         data.setStatus(EUserStatus.TO_CANCEL.getCode());
         String logCode = agencyLogBO.cancelImpower(data);
         data.setLastAgentLog(logCode);
+
         userBO.cancelImpower(data);
     }
 
     @Override
+    @Transactional
     public boolean approveImpower(String userId, String approver, String result,
             String remark) {
         User data = userBO.getUser(userId);
@@ -1007,19 +1170,29 @@ public class UserAOImpl implements IUserAO {
         String status = EUserStatus.IMPOWERED.getCode();
         String manager = null;
         String highUserId = log.getToUserId();
+        String fromUser = null;
+        if (EUser.ADMIN.getCode().equals(approver)) {
+            fromUser = ESysUser.SYS_USER_BH.getCode();
+        } else {
+            User approveUser = userBO.getUser(approver);
+            fromUser = approveUser.getUserId();
+        }
 
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setHighUserId(approver);
-            AgentImpower aiData = agentImpowerBO
+            AgentImpower impower = agentImpowerBO
                 .getAgentImpowerByLevel(data.getApplyLevel());
-            if (EBoolean.YES.getCode().equals(aiData.getIsRealName())) {
-                if (StringUtils.isBlank(data.getRealName())) {
-                    throw new BizException("xn000", "本等级授权需要实名，请实名后再授权");
+
+            if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
+                if (StringUtils.isBlank(data.getIdNo())
+                        || StringUtils.isBlank(data.getIdHand())
+                        || StringUtils.isBlank(data.getIdBehind())
+                        || StringUtils.isBlank(data.getIdFront())) {
+                    throw new BizException("xn0000", "本等级需要实名认证，该代理还未完成实名认证");
                 }
             }
-
             // 需要公司授权
-            if (EBoolean.YES.getCode().equals(aiData.getIsCompanyImpower())
+            if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())
                     && !EUser.ADMIN.getCode().equals(approver)) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
@@ -1031,29 +1204,11 @@ public class UserAOImpl implements IUserAO {
                 accountBO.distributeAccount(data.getUserId(),
                     data.getRealName(), EAccountType.Business, currencyList,
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-                String fromUser = null;
-
-                if (EUser.ADMIN.getCode().equals(approver)) {
-                    fromUser = ESysUser.SYS_USER_BH.getCode();
-                    highUserId = EUser.ADMIN.getCode();
-                } else {
-                    User approveUser = userBO.getUser(approver);
-                    fromUser = approveUser.getUserId();
-                }
-                // 代理是否已打款
-                if (null != data.getPayAmount() && 0 != data.getPayAmount()) {
-                    Account account = accountBO.getAccountByUser(
-                        data.getUserId(), ECurrency.MK_CNY.getCode());
-                    accountBO.changeAmount(account.getAccountNumber(),
-                        EChannelType.Offline, null, null, data.getUserId(),
-                        EBizType.AJ_CZ, EBizType.AJ_CZ.getValue(),
-                        data.getPayAmount());
-                }
 
                 // 介绍奖
                 if (StringUtils.isNotBlank(data.getIntroducer())) {
                     Intro iData = introBO.getIntroByLevel(data.getLevel());
-                    long amount = AmountUtil.mul(aiData.getMinCharge(),
+                    long amount = AmountUtil.mul(impower.getMinCharge(),
                         iData.getPercent());
 
                     if (data.getLevel() == StringValidater
@@ -1127,16 +1282,36 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void editHighUser(String userId, String highUser, String updater) {
+    public void editHighUser(String userId, String highUserId, String updater) {
         User data = userBO.getUser(userId);
-
-        User highData = userBO.getUser(highUser);
-        if (data.getLevel() <= highData.getLevel()) {
+        // 当前上级是否申请退出
+        if (StringUtils.isNotBlank(data.getHighUserId())) {
+            User oldHigh = userBO.getUser(highUserId);
+            if (!EUserStatus.CANCELED.getCode().equals(oldHigh.getStatus())
+                    || data.getLevel() <= oldHigh.getLevel()) {
+                throw new BizException("xn0000", "该代理当前上级未退出且自己未升级，请确认后再修改上级");
+            }
+        }
+        User highUser = userBO.getUser(highUserId);
+        if (data.getLevel() <= highUser.getLevel()) {
             throw new BizException("xn0000", "不能大于上级等级");
         }
-        data.setHighUserId(highData.getUserId());
+
+        // 增加新上级的门槛金额
+        Account account = accountBO.getAccountByUser(userId,
+            ECurrency.MK_CNY.getCode());
+        Account highAccount = accountBO.getAccountByUser(highUser.getUserId(),
+            ECurrency.MK_CNY.getCode());
+
+        accountBO.changeAmount(highAccount.getAccountNumber(), EChannelType.NBZ,
+            null, null, data.getUserId(), EBizType.AJ_XJBD,
+            EBizType.AJ_XJBD.getValue(), account.getAmount());
+
+        data.setHighUserId(highUser.getUserId());
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
+        String logCode = agencyLogBO.refreshHighUser(data);
+        data.setLastAgentLog(logCode);
         userBO.refreshHighUser(data);
 
     }
@@ -1157,7 +1332,6 @@ public class UserAOImpl implements IUserAO {
         User data = userBO.getUser(userId);
         userBO.getCheckUser(manager);
         userBO.refreshManager(data, manager, updater);
-
     }
 
     @Override
@@ -1166,9 +1340,8 @@ public class UserAOImpl implements IUserAO {
         XN627262Res res = null;
         User data = userBO.getUser(userId);
 
-        if (!EUserStatus.NORMAL.getCode().equals(data.getStatus())
-                || !EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
-                || !EUserStatus.UPGRADED.getCode().equals(data.getStatus())) {
+        if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
+                || EUserStatus.UPGRADED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn000", "您的状态无法申请升级");
         }
         if (data.getLevel() <= StringValidater.toInteger(highLevel)) {
@@ -1236,7 +1409,6 @@ public class UserAOImpl implements IUserAO {
                     }
                 }
             }
-
         }
         res = new XN627263Res(message);
         data.setApprover(approver);
@@ -1390,6 +1562,25 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void addInfo(XN627362Req req) {
         User data = userBO.getUser(req.getUserId());
+        AgentImpower impower = agentImpowerBO
+            .getAgentImpowerByLevel(data.getApplyLevel());
+        if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
+            if (StringUtils.isBlank(req.getIdNo())
+                    || StringUtils.isBlank(req.getIdHand())
+                    || StringUtils.isBlank(req.getIdBehind())
+                    || StringUtils.isBlank(req.getIdFront())) {
+                throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
+            }
+        }
+
+        if (StringUtils.isNotEmpty(req.getPayAmount())) {
+            if (impower.getMinCharge() > StringValidater
+                .toLong(req.getPayAmount())) {
+                throw new BizException("xn0000",
+                    "本等级需要充值门槛为" + req.getPayAmount());
+            }
+        }
+
         data.setIdKind(req.getIdKind());
         data.setIdNo(req.getIdNo());
         data.setIdFront(req.getIdFront());

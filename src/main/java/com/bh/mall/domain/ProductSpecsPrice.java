@@ -30,7 +30,7 @@ public class ProductSpecsPrice extends ABaseDO {
     private Long changePrice;
 
     // 本等级云仓最低发货数量
-    private Integer minAmount;
+    private Integer minNumber;
 
     public String getCode() {
         return code;
@@ -72,12 +72,12 @@ public class ProductSpecsPrice extends ABaseDO {
         this.changePrice = changePrice;
     }
 
-    public Integer getMinAmount() {
-        return minAmount;
+    public Integer getMinNumber() {
+        return minNumber;
     }
 
-    public void setMinAmount(Integer minAmount) {
-        this.minAmount = minAmount;
+    public void setMinNumber(Integer minNumber) {
+        this.minNumber = minNumber;
     }
 
 }

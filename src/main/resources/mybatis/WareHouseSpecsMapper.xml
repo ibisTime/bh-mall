@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IWareHouseSpecsDAO">
+	<resultMap id="WareHouseSpecs_DB_Result" type="wareHouseSpecs">
+		<result column="code" property="code" />
+		<result column="ware_house_code" property="wareHouseCode" />
+		<result column="product_specs_code" property="productSpecsCode" />
+		<result column="price" property="price" />
+		<result column="quantity" property="quantity" />
+		<result column="amount" property="amount" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="wareHouseCode != null and wareHouseCode != '' ">
+				AND t.ware_house_code = #{wareHouseCode}
+			</if>
+			<if test="productSpecsCode != null and productSpecsCode != '' ">
+				AND t.product_specs_code = #{productSpecsCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_wareHouseSpecs" parameterType="WareHouseSpecs" resultMap="WareHouseSpecs_DB_Result">
+		SELECT
+		t.code
+		,t.ware_house_code
+		,t.product_specs_code
+		,t.price
+		,t.quantity
+		,t.amount
+		FROM
+		thf_ware_house_specs t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_wareHouseSpecs_count" parameterType="WareHouseSpecs"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM thf_ware_house_specs t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_wareHouseSpecs" parameterType="WareHouseSpecs">
+		INSERT INTO
+		thf_ware_house_specs(
+		code
+		,ware_house_code
+		,product_specs_code
+		,price
+		,quantity
+		,amount
+		)
+		VALUES(
+		#{code}
+		,#{wareHouseCode}
+		,#{productSpecsCode}
+		,#{price}
+		,#{quantity}
+		,#{amount}
+		)
+	</insert>
+
+	<update id="update_wareHouseSpecs" parameterType="WareHouseSpecs">
+		UPDATE thf_ware_house_specs
+		SET
+		price = #{price}
+		,quantity = #{quantity}
+		,amount = #{amount}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

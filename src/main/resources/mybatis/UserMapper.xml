@@ -621,6 +621,7 @@
 		high_user_id = #{highUserId}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
+		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -743,7 +744,7 @@
 	</update>
 	
 			
-	<update id="to_apply" parameterType="user">
+	<update id="add_info" parameterType="user">
 		UPDATE tbh_user
 		SET
 		id_kind = #{idKind}

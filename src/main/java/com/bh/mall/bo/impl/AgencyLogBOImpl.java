@@ -257,4 +257,21 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         return code;
     }
 
+    @Override
+    public String refreshHighUser(User data) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgencyLog.getCode());
+        AgencyLog alData = new AgencyLog();
+        alData.setCode(code);
+        alData.setTeamName(data.getTeamName());
+        alData.setUserReferee(data.getUserReferee());
+        alData.setApplyUser(data.getUserId());
+        Date date = new Date();
+        alData.setApplyDatetime(date);
+
+        alData.setStatus(data.getStatus());
+        agencyLogDAO.insert(alData);
+        return code;
+    }
+
 }

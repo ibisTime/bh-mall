@@ -362,6 +362,7 @@ public class ProductAOImpl implements IProductAO {
         Product data = productBO.getProduct(code);
         List<ProductSpecs> list = productSpecsBO
             .getProductSpecsByProduct(data.getCode());
+
         for (ProductSpecs productSpecs : list) {
             ProductSpecsPrice condition = new ProductSpecsPrice();
             condition.setLevel(level);
