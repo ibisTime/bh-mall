@@ -161,7 +161,11 @@ public class UserAOImpl implements IUserAO {
     @Override
     public XN627302Res doLoginWeChatByMerchant(String code, String userKind,
             String userReferee) {
-        return doLoginWeChatH(code, userKind, userReferee);
+        String status = EUserStatus.TO_MIND.getCode();
+        if (StringUtils.isNotBlank(userReferee)) {
+            status = EUserStatus.IMPOWERO_INFO.getCode();
+        }
+        return doLoginWeChatH(code, userKind, userReferee, status);
     }
 
     @Override
@@ -224,7 +228,8 @@ public class UserAOImpl implements IUserAO {
                     dbUser.getStatus());
             } else {
                 result = doWxLoginReg(companyCode, systemCode, null, null,
-                    openId, null, null, userKind, null);
+                    openId, null, null, userKind, null,
+                    EUserStatus.NORMAL.getCode());
                 // Step5：判断注册是否传手机号，有则注册，无则反馈
                 // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
                 // result = doWxLoginRegMobile(req, companyCode, systemCode,
@@ -242,7 +247,7 @@ public class UserAOImpl implements IUserAO {
 
     @Transactional
     private XN627302Res doLoginWeChatH(String code, String userKind,
-            String userReferee) {
+            String userReferee, String status) {
         String companyCode = ESystemCode.BH.getCode();
         String systemCode = ESystemCode.BH.getCode();
         // Step1：获取密码参数信息
@@ -331,7 +336,7 @@ public class UserAOImpl implements IUserAO {
                 String photo = (String) wxRes.get("headimgurl");
 
                 result = doWxLoginReg(companyCode, systemCode, unionId, null,
-                    h5OpenId, nickname, photo, userKind, userReferee);
+                    h5OpenId, nickname, photo, userKind, userReferee, status);
             }
             // result.setSubscribe(subscribe);
         } catch (Exception e) {
@@ -391,21 +396,13 @@ public class UserAOImpl implements IUserAO {
 
     private XN627302Res doWxLoginReg(String companyCode, String systemCode,
             String unionId, String appOpenId, String h5OpenId, String nickname,
-            String photo, String userKind, String userReferee) {
+            String photo, String userKind, String userReferee, String status) {
         userBO.doCheckOpenId(unionId, h5OpenId, appOpenId, companyCode,
             systemCode);
-        String status = null;
-        Integer level = 0;
-        // 插入用户信息
-        if (EUserKind.Customer.getCode().equals(userKind)) {
-            status = EUserStatus.NORMAL.getCode();
-            level = 6;
-        } else {
-            status = EUserStatus.TO_MIND.getCode();
-        }
+        System.out.println("kind：" + userKind + ",status：" + status);
         String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
-            userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status,
-            level, companyCode, systemCode, userReferee);
+            userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status, 0,
+            companyCode, systemCode, userReferee);
         XN627302Res result = new XN627302Res(userId, status);
         return result;
     }
@@ -716,9 +713,11 @@ public class UserAOImpl implements IUserAO {
         }
         // 该等级授权规则
         if (EUserKind.Merchant.getCode().equals(user.getKind())) {
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(user.getApplyLevel());
-            user.setImpower(impower);
+            if (null != user.getApplyLevel()) {
+                AgentImpower impower = agentImpowerBO
+                    .getAgentImpowerByLevel(user.getApplyLevel());
+                user.setImpower(impower);
+            }
         }
         return user;
     }
@@ -774,6 +773,7 @@ public class UserAOImpl implements IUserAO {
         // 是否可被意向
         AgentImpower impower = agentImpowerBO.getAgentImpowerByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
+
         if (EBoolean.NO.getCode().equals(impower.getIsIntent())) {
             throw new BizException("xn0000", "本等级不可被意向");
         }
@@ -788,14 +788,22 @@ public class UserAOImpl implements IUserAO {
 
         User data = userBO.getUser(req.getUserId());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        data.setRealName(req.getRealName());
 
+        AgencyLog log = agencyLogBO.getAgencyLog(data.getLastAgentLog());
+        if (StringUtils.isNotBlank(log.getToUserId())) {
+            User highUser = userBO.getUser(log.getToUserId());
+            if (data.getApplyLevel() < highUser.getHighLevel()) {
+                throw new BizException("xn0000", "申请等级不能高于上级代理等级");
+            }
+        }
+
+        data.setRealName(req.getRealName());
         User highUser = userBO.getUser(data.getUserReferee());
         if (null != highUser) {
             data.setHighUserId(highUser.getUserId());
             data.setTeamName(highUser.getTeamName());
-
         }
+
         data.setWxId(req.getWxId());
         data.setUserReferee(data.getUserReferee());
         data.setMobile(req.getMobile());
@@ -890,7 +898,7 @@ public class UserAOImpl implements IUserAO {
     public void allotAgency(String userId, String toUserId, String manager,
             String approver) {
         User data = userBO.getUser(userId);
-        String status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+        String status = EUserStatus.TO_APPROVE.getCode();
         if (!EUserKind.Merchant.getCode().equals(data.getKind())) {
             throw new BizException("xn0000", "该用户不是代理，无法分配");
         }
@@ -900,7 +908,10 @@ public class UserAOImpl implements IUserAO {
                 throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
             }
             status = EUserStatus.ALLOTED.getCode();
+        } else {
+            status = EUserStatus.ADD_INFO.getCode();
         }
+
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setManager(manager);
@@ -914,7 +925,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void acceptIntention(String userId, String approver, String remark) {
         User data = userBO.getUser(userId);
-        if (!EUserStatus.MIND.getCode().equals(data.getStatus())) {
+        if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
+                || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
 
@@ -926,7 +938,7 @@ public class UserAOImpl implements IUserAO {
         data.setApprover(approver);
         data.setApplyDatetime(new Date());
         data.setRemark(remark);
-        data.setStatus(EUserStatus.TO_APPROVE.getCode());
+        data.setStatus(EUserStatus.ADD_INFO.getCode());
         String logCode = agencyLogBO.acceptIntention(data);
         data.setLastAgentLog(logCode);
         userBO.acceptIntention(data);
@@ -935,7 +947,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void ignore(String userId, String aprrover) {
         User data = userBO.getUser(userId);
-        if (!EUserStatus.MIND.getCode().equals(data.getStatus())) {
+        if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
+                || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
         data.setApprover(aprrover);
@@ -966,25 +979,31 @@ public class UserAOImpl implements IUserAO {
         User data = userBO.getUser(userId);
 
         // 下级代理门槛中是否有钱
-        // User uCondition = new User();
-        // uCondition.setHighUserId(data.getUserId());
-        // List<User> list = userBO.queryUserList(uCondition);
-        // if (CollectionUtils.isNotEmpty(list)) {
-        // // 获取门槛余额
-        // for (User user : list) {
-        // Account account = accountBO.getAccountByUser(user.getUserId(),
-        // ECurrency.MK_CNY.getCode());
-        // if (account.getAmount() >= 0) {
-        // throw new BizException("xn0000",
-        // "您的下级代理[" + user.getRealName() + "]门槛账户中还有余额，无法申请退出");
-        // }
-        // }
-        // }
+        User uCondition = new User();
+        uCondition.setHighUserId(data.getUserId());
+        Long amount = 0L;
+        Account lowAccount = null;
+        List<User> list = userBO.queryUserList(uCondition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            // 获取门槛余额
+            for (User user : list) {
+                lowAccount = accountBO.getAccountByUser(user.getUserId(),
+                    ECurrency.MK_CNY.getCode());
+                amount = amount + lowAccount.getAmount();
+            }
+        }
+
+        Account account = accountBO.getAccountByUser(data.getUserId(),
+            ECurrency.MK_CNY.getCode());
+        if (null == account.getAmount() || account.getAmount() < amount) {
+            throw new BizException("xn000",
+                "您的门槛账户中的余额为[" + account.getAmount() + "]低于下级门槛账户余额，无法申请退出");
+        }
 
         // 可提现账户是否余额
-        Account account = accountBO.getAccountByUser(data.getUserId(),
+        Account txAccount = accountBO.getAccountByUser(data.getUserId(),
             ECurrency.YJ_CNY.getCode());
-        if (account.getAmount() > 0) {
+        if (txAccount.getAmount() > 0) {
             throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
         }
 
@@ -1026,9 +1045,9 @@ public class UserAOImpl implements IUserAO {
             String remark) {
         User data = userBO.getUser(userId);
         AgencyLog log = agencyLogBO.getAgencyLog(data.getLastAgentLog());
-        if (!(EUserStatus.TO_APPROVE.getCode().equals(log.getStatus())
+        if (!(EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
                 || EUserStatus.TO_COMPANYAPPROVE.getCode()
-                    .equals(log.getStatus()))) {
+                    .equals(data.getStatus()))) {
             throw new BizException("xn000", "该代理未处于待授权状态");
         }
 
@@ -1441,23 +1460,28 @@ public class UserAOImpl implements IUserAO {
             }
         }
 
-        if (StringUtils.isNotEmpty(req.getPayAmount())) {
-            if (impower.getMinCharge() > StringValidater
-                .toLong(req.getPayAmount())) {
-                throw new BizException("xn0000",
-                    "本等级需要充值门槛为" + req.getPayAmount());
-            }
-        }
-
         data.setIdKind(req.getIdKind());
         data.setIdNo(req.getIdNo());
         data.setIdFront(req.getIdFront());
         data.setIdBehind(req.getIdBehind());
 
         data.setIdHand(req.getIdHand());
-        data.setPayAmount(StringValidater.toLong(req.getPayAmount()));
-        data.setPayPdf(req.getPayPdf());
+        data.setStatus(EUserStatus.TO_APPROVE.getCode());
         userBO.addInfo(data);
+    }
+
+    @Override
+    public boolean isRealName(String userId) {
+        User user = userBO.getUser(userId);
+        if (null != user.getApplyLevel()) {
+            AgentImpower impower = agentImpowerBO
+                .getAgentImpowerByLevel(user.getApplyLevel());
+            if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
 }

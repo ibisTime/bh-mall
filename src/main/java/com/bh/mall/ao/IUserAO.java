@@ -136,4 +136,7 @@ public interface IUserAO {
     // 补充授权所需信息
     public void addInfo(XN627362Req req);
 
+    // 本等级是否实名
+    public boolean isRealName(String userId);
+
 }

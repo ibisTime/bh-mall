@@ -40,6 +40,8 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
     // ===========================================
 
     public void changeWareHouse(String code, Order data, Integer quantity,
-            EBizType ajYcch, String value);
+            EBizType izType, String value);
+
+    public WareHouse getWareHouseByUser(String userId, String projectCode);
 
 }

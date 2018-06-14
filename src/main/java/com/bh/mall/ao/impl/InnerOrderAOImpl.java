@@ -139,7 +139,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         }
         if (EBoolean.NO.getCode().equals(payType)) {
             // 支付订单，更新订单状态
-            System.out.println("余额");
             accountBO.transAmountCZB(data.getApplyUser(),
                 ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
                 ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
@@ -220,6 +219,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                 || !EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已发货");
         }
+
         data.setSigner(req.getSigner());
         data.setMobile(req.getMobile());
         data.setProvince(req.getProvince());
@@ -264,8 +264,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     @Override
     public List<InnerOrder> queryInnerOrderList(InnerOrder condition) {
-        if (condition.getStartDatetime() != null
-                && condition.getEndDatetime() != null && condition
+
+        if (null != condition.getStartDatetime()
+                && null != condition.getEndDatetime() && condition
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }

@@ -11,9 +11,11 @@ import com.bh.mall.ao.IWareHouseAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
+import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
+import com.bh.mall.bo.IWareHouseSpecsBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
@@ -55,6 +57,12 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Autowired
     ISYSConfigBO sysConfigBO;
 
+    @Autowired
+    IWareHouseSpecsBO wareHouseSpecsBO;
+
+    @Autowired
+    IProductSpecsBO productSpecsBO;
+
     @Override
     public Paginable<WareHouse> queryWareHousePage(int start, int limit,
             WareHouse condition) {
@@ -66,6 +74,17 @@ public class WareHouseAOImpl implements IWareHouseAO {
             wareHouse.setUser(user);
             Product product = productBO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
+
+            // WareHouseSpecs whsCondition = new WareHouseSpecs();
+            // whsCondition.setWareHouseCode(wareHouse.getCode());
+            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
+            // .queryWareHouseSpecsList(whsCondition);
+            // for (WareHouseSpecs wareHouseSpecs : whsList) {
+            // ProductSpecs specs = productSpecsBO
+            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
+            // wareHouseSpecs.setSpecsName(specs.getName());
+            // }
+            // wareHouse.setWhsList(whsList);
         }
         page.setList(list);
         return page;
@@ -79,6 +98,17 @@ public class WareHouseAOImpl implements IWareHouseAO {
             wareHouse.setUser(user);
             Product product = productBO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
+
+            // WareHouseSpecs whsCondition = new WareHouseSpecs();
+            // whsCondition.setWareHouseCode(wareHouse.getCode());
+            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
+            // .queryWareHouseSpecsList(whsCondition);
+            // for (WareHouseSpecs wareHouseSpecs : whsList) {
+            // ProductSpecs specs = productSpecsBO
+            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
+            // wareHouseSpecs.setSpecsName(specs.getName());
+            // }
+            // wareHouse.setWhsList(whsList);
         }
         return list;
     }
@@ -96,6 +126,17 @@ public class WareHouseAOImpl implements IWareHouseAO {
             }
             Product product = productBO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
+
+            // WareHouseSpecs whsCondition = new WareHouseSpecs();
+            // whsCondition.setWareHouseCode(wareHouse.getCode());
+            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
+            // .queryWareHouseSpecsList(whsCondition);
+            // for (WareHouseSpecs wareHouseSpecs : whsList) {
+            // ProductSpecs specs = productSpecsBO
+            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
+            // wareHouseSpecs.setSpecsName(specs.getName());
+            // }
+            // wareHouse.setWhsList(whsList);
         }
 
         return list;
@@ -112,6 +153,17 @@ public class WareHouseAOImpl implements IWareHouseAO {
                     .getProduct(wareHouse.getProductCode());
                 wareHouse.setProduct(product);
             }
+
+            // WareHouseSpecs whsCondition = new WareHouseSpecs();
+            // whsCondition.setWareHouseCode(wareHouse.getCode());
+            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
+            // .queryWareHouseSpecsList(whsCondition);
+            // for (WareHouseSpecs wareHouseSpecs : whsList) {
+            // ProductSpecs specs = productSpecsBO
+            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
+            // wareHouseSpecs.setSpecsName(specs.getName());
+            // }
+            // wareHouse.setWhsList(whsList);
         }
         return page;
     }
@@ -128,6 +180,16 @@ public class WareHouseAOImpl implements IWareHouseAO {
                 wareHouse.setProduct(product);
                 allAmount = allAmount + wareHouse.getAmount();
             }
+            // WareHouseSpecs whsCondition = new WareHouseSpecs();
+            // whsCondition.setWareHouseCode(wareHouse.getCode());
+            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
+            // .queryWareHouseSpecsList(whsCondition);
+            // for (WareHouseSpecs wareHouseSpecs : whsList) {
+            // ProductSpecs specs = productSpecsBO
+            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
+            // wareHouseSpecs.setSpecsName(specs.getName());
+            // }
+            // wareHouse.setWhsList(whsList);
         }
         allAmount = AmountUtil.eraseLiUp(allAmount);
         res = new XN627814Res(list, allAmount);

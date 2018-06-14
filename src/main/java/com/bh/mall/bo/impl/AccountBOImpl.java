@@ -202,9 +202,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         return accountDAO.selectList(data);
     }
 
-    /** 
-     * @see com.std.account.bo.IAccountBO#getAccountByUser(java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public Account getAccountByUser(String userId, String currency) {
         Account data = null;
@@ -222,9 +219,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         return data;
     }
 
-    /** 
-     * @see com.std.account.bo.IAccountBO#refreshAccountName(java.lang.String, java.lang.String)
-     */
     @Override
     public void refreshAccountName(String userId, String realName) {
         Account data = new Account();
@@ -233,9 +227,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         accountDAO.updateRealName(data);
     }
 
-    /** 
-     * @see com.std.account.bo.IAccountBO#getSysAccount(java.lang.String, java.lang.String)
-     */
     @Override
     public Account getSysAccountNumber(String systemCode, String companyCode,
             ECurrency currency) {

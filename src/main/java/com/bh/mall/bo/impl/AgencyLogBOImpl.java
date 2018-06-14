@@ -83,6 +83,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
+
         alData.setStatus(data.getStatus());
         agencyLogDAO.insert(alData);
         return code;

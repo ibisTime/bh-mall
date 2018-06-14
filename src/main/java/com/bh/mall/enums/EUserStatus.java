@@ -16,7 +16,8 @@ public enum EUserStatus {
             "已升级"), TO_COMPANYUPGRADE("14", "升级待公司审核"),
 
     TO_COMPANYCANCEL("15", "授权取消待公司审核"), TO_MIND("16",
-            "待申请意向代理"), EDIT_HIGHUSER("17", "修改上级");
+            "待申请意向代理"), EDIT_HIGHUSER("17", "修改上级"), ADD_INFO("18",
+                    "补全授权资料"), IMPOWERO_INFO("19", "待填写授权资料");
 
     EUserStatus(String code, String value) {
         this.code = code;

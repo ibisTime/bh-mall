@@ -27,6 +27,7 @@
 		<result column="out_amount" property="outAmount"/>
 		<result column="in_amount" property="inAmount"/>
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -110,7 +111,7 @@
 		</trim>
 	</sql>
 	
-	<select id="select_jour" parameterType="jour" resultMap="jour_DB_Result">
+	<select id="select_jour_detail" parameterType="jour" resultMap="jour_DB_Result">
 		SELECT
 		t.code
 		,t.pay_group
@@ -157,7 +158,7 @@
 	</select>
 
 
-	<select id="select_jour_detail" parameterType="jour" resultMap="jour_DB_Result">
+	<select id="select_jour" parameterType="jour" resultMap="jour_DB_Result">
 		SELECT
 		t.code
 		,t.pay_group

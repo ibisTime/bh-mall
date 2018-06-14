@@ -402,11 +402,13 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         res.setResult(ECheckStatus.NORMAL.getCode());
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
+            System.out.println(user.getLevel());
             Agent agent = agentBO.getAgentByLevel(user.getLevel());
 
             // 是否完成授权单
             Order oCondition = new Order();
             oCondition.setApplyUser(user.getUserId());
+            oCondition.setIsSendHome(EBoolean.YES.getCode());
             oCondition.setStatusForQuery(EOrderStatus.No_Impwoer.getCode());
             List<Order> orderList = orderBO.queryOrderList(oCondition);
             Long orderAmount = 0L;

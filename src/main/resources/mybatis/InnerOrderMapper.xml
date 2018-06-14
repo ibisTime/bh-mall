@@ -201,7 +201,7 @@
 	<update id="deliver_innerProduct" parameterType="innerOrder">
 		UPDATE tbh_inner_order
 		SET
-		,deliver = #{deliver}
+		deliver = #{deliver}
 		,delive_datetime = #{deliveDatetime}
 		,logistics_code = #{logisticsCode}
 		,logistics_company = #{logisticsCompany}

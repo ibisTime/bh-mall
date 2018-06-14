@@ -165,11 +165,11 @@ public class WeChatAOImpl implements IWeChatAO {
                     EBizType.getBizTypeMap().get(order.getBizType()),
                     order.getBizNote(), order.getAmount());
                 // 托管账户加钱
-                // accountBO.changeAmount(ESysUser.SYS_USER_BH.getCode(),
-                // EChannelType.getEChannelType(order.getChannelType()),
-                // wechatOrderNo, order.getPayGroup(), order.getRefNo(),
-                // EBizType.getBizTypeMap().get(order.getBizType()),
-                // order.getBizNote(), order.getAmount());
+                accountBO.changeAmount(ESystemCode.BH.getCode(),
+                    EChannelType.getEChannelType(order.getChannelType()),
+                    wechatOrderNo, order.getPayGroup(), order.getRefNo(),
+                    EBizType.getBizTypeMap().get(order.getBizType()),
+                    order.getBizNote(), order.getAmount());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);

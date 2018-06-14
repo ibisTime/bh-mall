@@ -748,7 +748,8 @@
 	<update id="add_info" parameterType="user">
 		UPDATE tbh_user
 		SET
-		id_kind = #{idKind}
+		status = #{status}
+		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_front = #{idFront}
 		,id_behind = #{idBehind}

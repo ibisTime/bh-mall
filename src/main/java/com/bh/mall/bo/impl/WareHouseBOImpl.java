@@ -174,4 +174,21 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
 
     }
 
+    @Override
+    public WareHouse getWareHouseByUser(String userId, String productCode) {
+        WareHouse data = null;
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(productCode)) {
+            WareHouse condition = new WareHouse();
+            condition.setUserId(userId);
+            condition.setProductCode(productCode);
+            data = wareHouseDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn00000", "该代理云仓中没有该产品");
+            }
+        }
+
+        return null;
+    }
+
 }

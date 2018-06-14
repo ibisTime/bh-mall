@@ -9,9 +9,6 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 public class XN627251Req {
-    // 微信code
-    // @NotBlank(message = "微信code不能为空")
-    private String code;
 
     // 用户编号
     @NotBlank(message = "用户编号不能为空")
@@ -76,14 +73,6 @@ public class XN627251Req {
 
     // （选填）介绍人
     private String introducer;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getUserId() {
         return userId;

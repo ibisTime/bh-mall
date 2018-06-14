@@ -30,6 +30,11 @@ public class WareHouseSpecs extends ABaseDO {
     // 总价
     private Long amount;
 
+    // ***************db*****************
+
+    // 规格名称
+    private String specsName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -76,6 +81,14 @@ public class WareHouseSpecs extends ABaseDO {
 
     public void setAmount(Long amount) {
         this.amount = amount;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
 }

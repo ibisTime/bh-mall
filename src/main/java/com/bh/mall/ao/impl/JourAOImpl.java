@@ -3,7 +3,6 @@ package com.bh.mall.ao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Jour;
 import com.bh.mall.enums.EAwardType;
-import com.bh.mall.enums.EBizType;
 
 /** 
  * @author: xieyj 
@@ -38,17 +36,7 @@ public class JourAOImpl implements IJourAO {
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
 
-        Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
-        for (Jour jour : page.getList()) {
-            // 是否是推荐奖
-            if (EBizType.AJ_TJJL.getCode().equals(jour.getBizType())
-                    || EBizType.AJ_XJBD.getCode().equals(jour.getBizType())) {
-                jour.setUserInformation(userBO.getUser(jour.getUserId()));
-            }
-            jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
-        }
-
-        return page;
+        return jourBO.getPaginable(start, limit, condition);
     }
 
     @Override
@@ -97,33 +85,11 @@ public class JourAOImpl implements IJourAO {
     @Override
     public Paginable<Jour> queryDetailPage(int start, int limit,
             Jour condition) {
-        boolean flag = true;
-        String bizType = EBizType.AJ_JSJL.getCode();
-        if (EAwardType.DirectAward.getCode().equals(condition.getBizType())) {
-            flag = false;
-            bizType = EBizType.AJ_TJJL.getCode();
-        } else if (EAwardType.SendAward.getCode()
-            .equals(condition.getBizType())) {
-            flag = false;
-            bizType = EBizType.AJ_CHJL.getCode();
-        }
 
         long count = jourBO.getTotalCount(condition);
         Page<Jour> page = new Page<Jour>(start, limit, count);
         List<Jour> list = jourBO.queryDetailPage(page.getStart(),
             page.getPageSize(), condition);
-
-        // 补充关联编号的信息
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (Jour jour : list) {
-                // 是否是推荐奖
-                if (flag) {
-                    jour.setUserInformation(userBO.getUser(jour.getRefNo()));
-                } else {
-                    jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
-                }
-            }
-        }
         page.setList(list);
         return page;
     }

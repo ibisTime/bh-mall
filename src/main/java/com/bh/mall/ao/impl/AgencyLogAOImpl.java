@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -178,9 +179,14 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
             condition);
         User userReferee = null;
         User user = null;
-
-        for (AgencyLog agencyLog : page.getList()) {
+        for (Iterator<AgencyLog> iterator = page.getList().iterator(); iterator
+            .hasNext();) {
+            AgencyLog agencyLog = iterator.next();
             user = userAO.doGetUser(agencyLog.getApplyUser());
+            if (!user.getLastAgentLog().equals(agencyLog.getCode())) {
+                iterator.remove();
+                continue;
+            }
             agencyLog.setUser(user);
             if (StringUtils.isNotBlank(user.getUserReferee())) {
                 userReferee = userAO.doGetUser(user.getUserReferee());

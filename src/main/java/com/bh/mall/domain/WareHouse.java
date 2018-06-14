@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -68,11 +69,17 @@ public class WareHouse extends ABaseDO {
     // ****************db***************
     private String keyword;
 
+    // 用户
     private User user;
 
+    // 仓库货物总价值
     private Product product;
 
+    // 仓库货物总价值
     private Long allAmount;
+
+    // 产品名称
+    private List<WareHouseSpecs> whsList;
 
     public User getUser() {
         return user;
@@ -240,6 +247,14 @@ public class WareHouse extends ABaseDO {
 
     public void setAllAmount(Long allAmount) {
         this.allAmount = allAmount;
+    }
+
+    public List<WareHouseSpecs> getWhsList() {
+        return whsList;
+    }
+
+    public void setWhsList(List<WareHouseSpecs> whsList) {
+        this.whsList = whsList;
     }
 
 }

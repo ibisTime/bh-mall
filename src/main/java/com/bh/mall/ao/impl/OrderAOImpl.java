@@ -184,11 +184,17 @@ public class OrderAOImpl implements IOrderAO {
 
             WareHouse whData = wareHouseBO
                 .getWareHouseByProductSpec(user.getUserId(), psData.getCode());
+            // WareHouse whData =
+            // wareHouseBO.getWareHouseByUser(user.getUserId(),
+            // pData.getCode());
+            // wareHouseSpecsBO.getWareHouseSpecsByCode(whData.getCode(),
+            // psData.getCode());
+            // wareHouseBO.changeWareHouse(whData.getCode(),
+            // -order.getQuantity(),
+            // EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), order.getCode());
 
             wareHouseBO.changeWareHouse(whData.getCode(), cart.getQuantity(),
                 EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), code);
-            // 修改产品数量
-            productBO.refreshRealNumber(pData);
         }
     }
 
@@ -229,9 +235,9 @@ public class OrderAOImpl implements IOrderAO {
             int quantity = StringValidater.toInteger(req.getQuantity())
                     * psData.getNumber();
 
-            // 下单代理无上级
+            // 直接向平台下单
             if (StringUtils.isBlank(req.getToUser())
-                    || EUserKind.Merchant.getCode().equals(req.getToUser())) {
+                    || EUser.ADMIN.getCode().equals(req.getToUser())) {
                 // 修改产品库存记录
                 productLogBO.saveChangeLog(pData,
                     EProductLogType.Order.getCode(), pData.getRealNumber(),
@@ -246,6 +252,15 @@ public class OrderAOImpl implements IOrderAO {
                 wareHouseBO.changeWareHouse(whData.getCode(),
                     -StringValidater.toInteger(req.getQuantity()),
                     EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), code);
+                // WareHouse whData =
+                // wareHouseBO.getWareHouseByUser(toUser.getUserId(),
+                // pData.getCode());
+                // wareHouseSpecsBO.getWareHouseSpecsByCode(whData.getCode(),
+                // psData.getCode());
+                // wareHouseBO.changeWareHouse(whData.getCode(),
+                // -StringValidater.toInteger(req.getQuantity()),
+                // EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                // order.getCode());
             }
         }
 

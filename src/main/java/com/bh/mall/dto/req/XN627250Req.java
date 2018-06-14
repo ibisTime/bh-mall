@@ -14,10 +14,6 @@ public class XN627250Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
-    // 微信编号
-    // @NotBlank(message = "微信编号不能为空")
-    private String code;
-
     // （必填） 姓名
     @NotBlank(message = " 姓名不能为空")
     private String realName;
@@ -132,14 +128,6 @@ public class XN627250Req {
 
     public void setFromInfo(String fromInfo) {
         this.fromInfo = fromInfo;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
 }
