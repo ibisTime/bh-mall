@@ -14,6 +14,10 @@ public class XN627362Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
+    // // 申请等级
+    // @NotBlank(message = "申请等级不能为空")
+    // private String applyLevel;
+
     // （选填）证件类型
     private String idKind;
 

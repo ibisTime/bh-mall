@@ -408,12 +408,11 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             // 是否完成授权单
             Order oCondition = new Order();
             oCondition.setApplyUser(user.getUserId());
-            oCondition.setIsSendHome(EBoolean.YES.getCode());
             oCondition.setStatusForQuery(EOrderStatus.No_Impwoer.getCode());
             List<Order> orderList = orderBO.queryOrderList(oCondition);
             Long orderAmount = 0L;
             for (Order order : orderList) {
-                orderAmount = orderAmount + order.getPayAmount();
+                orderAmount = orderAmount + order.getAmount();
             }
 
             if (agent.getAmount() > orderAmount) {

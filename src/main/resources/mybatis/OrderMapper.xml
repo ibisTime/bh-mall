@@ -96,8 +96,11 @@
 				AND t.status IN (1,2,3,5)
 			</if>
 			
-		<if test="level != null and level != '' ">
+			<if test="level != null and level != '' ">
 				AND u.level = #{level}
+			</if>
+			<if test="isSendHome != null and isSendHome != '' ">
+				AND t.is_send_home = #{isSendHome}
 			</if>
 		</trim>
 	</sql>

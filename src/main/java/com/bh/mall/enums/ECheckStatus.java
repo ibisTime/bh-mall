@@ -2,7 +2,7 @@ package com.bh.mall.enums;
 
 public enum ECheckStatus {
 
-    RED_LOW("0", "不通过"), MIN_LOW("1", "通过"), NORMAL("3", "正常");
+    RED_LOW("0", "不通过"), MIN_LOW("1", "通过"), NORMAL("2", "正常");
 
     ECheckStatus(String code, String value) {
         this.code = code;

@@ -608,7 +608,6 @@
 		status = #{status}
 		,approver = #{approver}
 		,level = #{level}
-		,high_user_id = #{highUserId}
 		,approve_datetime = #{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
 		,remark = #{remark}
@@ -672,6 +671,7 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,high_user_id = #{highUserId}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
 		,last_agent_log = #{lastAgentLog}

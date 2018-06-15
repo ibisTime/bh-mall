@@ -238,7 +238,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setYunfei(yunfei);
         order.setAmount(amount);
         order.setApplyUser(data.getUserId());
-        order.setToUser(data.getUserId());
         order.setApplyDatetime(new Date());
 
         order.setSigner(req.getSigner());
@@ -250,7 +249,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setKind(kind);
         order.setProvince(req.getProvince());
 
-        order.setStatus(EOrderStatus.Unpaid.getCode());
+        order.setStatus(EOrderStatus.TO_Apprvoe.getCode());
         order.setIsSendHome(EBoolean.YES.getCode());
         orderBO.saveOrder(order);
 

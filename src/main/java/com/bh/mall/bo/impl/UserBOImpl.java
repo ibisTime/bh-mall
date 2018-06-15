@@ -96,7 +96,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
             String photo, String status, Integer level, String systemCode,
-            String companyCode, String userReferee) {
+            String companyCode, String highUserId) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
@@ -107,19 +107,20 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setLoginName(mobile);
         user.setMobile(mobile);
         user.setKind(kind);
-        user.setUserReferee(userReferee);
+        user.setHighUserId(highUserId);
 
         user.setLoginPwd(MD5Util.md5(loginPwd));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         user.setNickname(nickname);
         user.setPhoto(photo);
         user.setStatus(status);
+
         Date date = new Date();
         user.setCreateDatetime(date);
-
         user.setCompanyCode(companyCode);
         user.setLevel(level);
         user.setSystemCode(systemCode);
+
         userDAO.insert(user);
         return userId;
     }
@@ -678,6 +679,17 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
         }
         return data;
+    }
+
+    @Override
+    public void refreshHighUser(String userId, User oldHighUserId,
+            User newHighUserId) {
+        User user = this.getUser(userId);
+        if (user.getLevel() == oldHighUserId.getLevel()) {
+            user.setUserReferee(oldHighUserId.getUserId());
+        }
+        user.setHighUserId(newHighUserId.getHighUserId());
+
     }
 
 }

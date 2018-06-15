@@ -533,42 +533,33 @@ public class OrderAOImpl implements IOrderAO {
 
     private void payAward(Order data) {
         // 订单归属人不是平台
-        if (StringUtils.isNotBlank(data.getToUser())
-                && !EUser.ADMIN.getCode().equals(data.getToUser())) {
-            Product product = productBO.getProduct(data.getProductCode());
-            // 获取订单归属人及其上级
-            String toUserId = data.getToUser();
-            User toUser = userBO.getUser(toUserId);
-            String fromUserId = ESysUser.SYS_USER_BH.getCode();
+        Product product = productBO.getProduct(data.getProductCode());
+        // 获取订单归属人及其上级
+        String toUserId = data.getApplyUser();
+        User toUser = userBO.getUser(toUserId);
+        String fromUserId = ESysUser.SYS_USER_BH.getCode();
+        // 有上级，且不是平台
+        if (StringUtils.isNotBlank(toUser.getHighUserId())
+                && !EUser.ADMIN.getCode().equals(toUser.getHighUserId())) {
+            fromUserId = toUser.getHighUserId();
+        }
 
-            // **********推荐奖*********
-            // 有上级的代理下单
-            if (StringUtils.isNotBlank(toUserId)
-                    && !EUser.ADMIN.getCode().equals(toUserId)) {
-                // 订单归属人是否有上级
-                if (StringUtils.isNotBlank(toUser.getHighUserId())
-                        && !EUser.ADMIN.getCode()
-                            .equals(toUser.getHighUserId())) {
-                    fromUserId = toUser.getHighUserId();
-                }
+        // **********出货奖*******
+        // 出货奖励,且产品计入出货
+        if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
+            Award aData = awardBO.getAwardByType(toUser.getLevel(),
+                data.getProductCode(), EAwardType.SendAward.getCode());
+            Long awardAmount = AmountUtil.mul(data.getAmount(),
+                aData.getValue1());
+            accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
+                toUserId, ECurrency.YJ_CNY.getCode(), awardAmount,
+                EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
+                EBizType.AJ_CHJL.getValue(), data.getCode());
+        }
 
-                // **********出货奖*******
-                // 出货奖励,且产品计入出货
-                if (EProductIsTotal.YES.getCode()
-                    .equals(product.getIsTotal())) {
-                    Award aData = awardBO.getAwardByType(toUser.getLevel(),
-                        data.getProductCode(), EAwardType.SendAward.getCode());
-                    Long awardAmount = AmountUtil.mul(data.getAmount(),
-                        aData.getValue1());
-                    accountBO.transAmountCZB(fromUserId,
-                        ECurrency.YJ_CNY.getCode(), toUserId,
-                        ECurrency.YJ_CNY.getCode(), awardAmount,
-                        EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
-                        EBizType.AJ_CHJL.getValue(), data.getCode());
-                }
-
-            }
-
+        // **********推荐奖**********
+        // 是否有推荐人
+        if (StringUtils.isNotBlank(toUser.getUserReferee())) {
             // 直接推荐人
             User firstUser = userBO.getUser(toUser.getUserReferee());
             Award aData = awardBO.getAwardByType(toUser.getLevel(),
@@ -584,8 +575,9 @@ public class OrderAOImpl implements IOrderAO {
                     EBizType.AJ_TJJL.getValue(), data.getCode());
 
                 // 间接推荐奖
-                User secondUser = userBO.getUser(firstUser.getUserReferee());
-                if (secondUser != null) {
+                if (StringUtils.isNotBlank(firstUser.getUserReferee())) {
+                    User secondUser = userBO
+                        .getUser(firstUser.getUserReferee());
                     amount = AmountUtil.mul(data.getAmount(),
                         aData.getValue2());
                     accountBO.transAmountCZB(fromUserId,
@@ -593,10 +585,11 @@ public class OrderAOImpl implements IOrderAO {
                         ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_TJJL,
                         EBizType.AJ_TJJL.getValue(),
                         EBizType.AJ_TJJL.getValue(), data.getCode());
+
                     // 次推荐奖
-                    User thirdUser = userBO
-                        .getUser(secondUser.getUserReferee());
-                    if (thirdUser != null) {
+                    if (StringUtils.isNotBlank(secondUser.getUserReferee())) {
+                        User thirdUser = userBO
+                            .getUser(secondUser.getUserReferee());
                         amount = AmountUtil.mul(data.getAmount(),
                             aData.getValue3());
                         accountBO.transAmountCZB(fromUserId,
@@ -607,8 +600,8 @@ public class OrderAOImpl implements IOrderAO {
                     }
                 }
             }
-
         }
+
     }
 
     @Override
@@ -618,42 +611,43 @@ public class OrderAOImpl implements IOrderAO {
         Order data = orderBO.getOrder(req.getCode());
         User fromUser = userBO.getUser(data.getApplyUser());
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
-            // if (!EOrderStatus.TO_Apprvoe.getCode().equals(data.getStatus()))
-            // {
-            // throw new BizException("xn0000", "订单未支付或已发货");
-            // }
+            if (!data.getApplyUser().equals(data.getToUser())) {
+                // 订单归属人云仓减少
+                if (StringUtils.isNotBlank(data.getToUser())
+                        && !EUser.ADMIN.getCode().equals(data.getToUser())) {
 
-            // 订单归属人云仓减少
-            if (StringUtils.isNotBlank(data.getToUser())
-                    && !EUser.ADMIN.getCode().equals(data.getToUser())) {
+                    // 订单数量是否少于本等级最低发货数量
+                    User toUser = userBO.getUser(data.getToUser());
+                    ProductSpecsPrice psp = productSpecsPriceBO.getPriceByLevel(
+                        data.getProductSpecsCode(), toUser.getLevel());
+                    ProductSpecs ps = productSpecsBO
+                        .getProductSpecs(psp.getProductSpecsCode());
+                    if (psp.getMinNumber() > data.getQuantity()) {
+                        throw new BizException("xn00000",
+                            "该产品云仓发货不能少于" + psp.getMinNumber() + ps.getName());
+                    }
 
-                // 订单数量是否少于本等级最低发货数量
-                User toUser = userBO.getUser(data.getToUser());
-                ProductSpecsPrice psp = productSpecsPriceBO.getPriceByLevel(
-                    data.getProductSpecsCode(), toUser.getLevel());
-                ProductSpecs ps = productSpecsBO
-                    .getProductSpecs(psp.getProductSpecsCode());
-                if (psp.getMinNumber() > data.getQuantity()) {
-                    throw new BizException("xn00000",
-                        "该产品云仓发货不能少于" + psp.getMinNumber() + ps.getName());
+                    WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
+                        data.getToUser(), data.getProductSpecsCode());
+                    wareHouseBO.changeWareHouse(toData.getCode(),
+                        -data.getQuantity(), EBizType.AJ_QKYE,
+                        EBizType.AJ_QKYE.getValue(), data.getCode());
+
+                    // 卖货后赚的钱
+                    Account account = accountBO.getAccountByUser(
+                        data.getToUser(), ECurrency.YJ_CNY.getCode());
+                    accountBO.changeAmount(account.getAccountNumber(),
+                        EChannelType.NBZ, null, data.getPayGroup(),
+                        data.getCode(), EBizType.AJ_CELR,
+                        EBizType.AJ_CELR.getValue(), data.getPayAmount());
+
+                    // 出货以及推荐奖励
+                    if (EUserKind.Merchant.getCode()
+                        .equals(fromUser.getKind())) {
+                        this.payAward(data);
+                    }
+
                 }
-
-                WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
-                    data.getToUser(), data.getProductSpecsCode());
-                wareHouseBO.changeWareHouse(toData.getCode(),
-                    -data.getQuantity(), EBizType.AJ_QKYE,
-                    EBizType.AJ_QKYE.getValue(), data.getCode());
-
-                // 卖货后赚的钱
-                Account account = accountBO.getAccountByUser(data.getToUser(),
-                    ECurrency.YJ_CNY.getCode());
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, data.getPayGroup(), data.getCode(),
-                    EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(),
-                    data.getPayAmount());
-
-                // 出货以及推荐奖励
-                this.payAward(data);
             }
 
         }
