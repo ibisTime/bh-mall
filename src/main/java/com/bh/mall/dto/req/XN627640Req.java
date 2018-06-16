@@ -3,8 +3,7 @@ package com.bh.mall.dto.req;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
-
-import com.bh.mall.domain.Cart;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 提交订单
@@ -15,8 +14,8 @@ import com.bh.mall.domain.Cart;
 public class XN627640Req {
 
     // 购物车订单编号列表
-    @NotBlank(message = "订单编号不能为空")
-    private List<Cart> cartList;
+    @NotEmpty(message = "订单编号不能为空")
+    private List<String> cartList;
 
     // （必填）下单人
     @NotBlank(message = "下单人不能为空")
@@ -65,11 +64,11 @@ public class XN627640Req {
         this.isSendHome = isSendHome;
     }
 
-    public List<Cart> getCartList() {
+    public List<String> getCartList() {
         return cartList;
     }
 
-    public void setCartList(List<Cart> cartList) {
+    public void setCartList(List<String> cartList) {
         this.cartList = cartList;
     }
 

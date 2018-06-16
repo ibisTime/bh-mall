@@ -12,10 +12,12 @@ import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductSpecsBO;
+import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseSpecsBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
@@ -23,6 +25,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
+import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
@@ -63,17 +66,79 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Autowired
     IProductSpecsBO productSpecsBO;
 
+    @Autowired
+    IProductSpecsPriceBO productSpecsPriceBO;
+
     @Override
     public Paginable<WareHouse> queryWareHousePage(int start, int limit,
             WareHouse condition) {
-        Paginable<WareHouse> page = wareHouseBO.getPaginable(start, limit,
-            condition);
-        List<WareHouse> list = page.getList();
+        long count = wareHouseBO.getTotalCountByProduct(condition);
+        Page<WareHouse> page = new Page<WareHouse>(start, limit, count);
+        List<WareHouse> list = wareHouseBO.queryWareHousePorductList(condition);
+
+        WareHouse specsCondition = new WareHouse();
         for (WareHouse wareHouse : list) {
             User user = userBO.getUser(wareHouse.getUserId());
             wareHouse.setUser(user);
             Product product = productBO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
+            specsCondition.setUserId(wareHouse.getUserId());
+            specsCondition.setProductCode(wareHouse.getProductCode());
+            wareHouse
+                .setWhsList(wareHouseBO.queryWareHouseList(specsCondition));
+
+        }
+        page.setList(list);
+        return page;
+    }
+
+    @Override
+    public List<WareHouse> queryWareHouseList(WareHouse condition) {
+        List<WareHouse> list = wareHouseBO.queryWareHouseList(condition);
+        WareHouse specsCondition = new WareHouse();
+        for (WareHouse wareHouse : list) {
+            User user = userBO.getUser(wareHouse.getUserId());
+            wareHouse.setUser(user);
+            Product product = productBO.getProduct(wareHouse.getProductCode());
+            wareHouse.setProduct(product);
+            specsCondition.setUserId(wareHouse.getUserId());
+            specsCondition.setProductCode(wareHouse.getProductCode());
+            wareHouse
+                .setWhsList(wareHouseBO.queryWareHouseList(specsCondition));
+        }
+        return list;
+    }
+
+    @Override
+    public WareHouse getWareHouse(String code) {
+        WareHouse data = wareHouseBO.getWareHouse(code);
+        WareHouse condition = new WareHouse();
+        condition.setUserId(data.getUserId());
+        condition.setProductCode(data.getProductCode());
+        List<WareHouse> specsList = wareHouseBO.queryWareHouseList(condition);
+        data.setWhsList(specsList);
+        Product product = productBO.getProduct(data.getProductCode());
+        data.setProduct(product);
+        return data;
+    }
+
+    @Override
+    public Paginable<WareHouse> queryWareHouseFrontPage(int start, int limit,
+            WareHouse condition) {
+        long count = wareHouseBO.getTotalCountByProduct(condition);
+        Page<WareHouse> page = new Page<WareHouse>(start, limit, count);
+        List<WareHouse> list = wareHouseBO.queryWareHousePorductList(condition);
+
+        WareHouse specsCondition = new WareHouse();
+        for (WareHouse wareHouse : list) {
+            User user = userBO.getUser(wareHouse.getUserId());
+            wareHouse.setUser(user);
+            Product product = productBO.getProduct(wareHouse.getProductCode());
+            wareHouse.setProduct(product);
+            specsCondition.setUserId(wareHouse.getUserId());
+            specsCondition.setProductCode(wareHouse.getProductCode());
+            wareHouse
+                .setWhsList(wareHouseBO.queryWareHouseList(specsCondition));
 
             // WareHouseSpecs whsCondition = new WareHouseSpecs();
             // whsCondition.setWareHouseCode(wareHouse.getCode());
@@ -87,84 +152,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
             // wareHouse.setWhsList(whsList);
         }
         page.setList(list);
-        return page;
-    }
-
-    @Override
-    public List<WareHouse> queryWareHouseList(WareHouse condition) {
-        List<WareHouse> list = wareHouseBO.queryWareHouseList(condition);
-        for (WareHouse wareHouse : list) {
-            User user = userBO.getUser(wareHouse.getUserId());
-            wareHouse.setUser(user);
-            Product product = productBO.getProduct(wareHouse.getProductCode());
-            wareHouse.setProduct(product);
-
-            // WareHouseSpecs whsCondition = new WareHouseSpecs();
-            // whsCondition.setWareHouseCode(wareHouse.getCode());
-            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
-            // .queryWareHouseSpecsList(whsCondition);
-            // for (WareHouseSpecs wareHouseSpecs : whsList) {
-            // ProductSpecs specs = productSpecsBO
-            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
-            // wareHouseSpecs.setSpecsName(specs.getName());
-            // }
-            // wareHouse.setWhsList(whsList);
-        }
-        return list;
-    }
-
-    @Override
-    public List<WareHouse> getWareHouse(String code) {
-        WareHouse condition = new WareHouse();
-        condition.setCode(code);
-
-        List<WareHouse> list = wareHouseBO.queryWareHouseList(condition);
-        for (WareHouse wareHouse : list) {
-            if (StringUtils.isNotBlank(wareHouse.getUserId())) {
-                User user = userBO.getUser(wareHouse.getUserId());
-                wareHouse.setUser(user);
-            }
-            Product product = productBO.getProduct(wareHouse.getProductCode());
-            wareHouse.setProduct(product);
-
-            // WareHouseSpecs whsCondition = new WareHouseSpecs();
-            // whsCondition.setWareHouseCode(wareHouse.getCode());
-            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
-            // .queryWareHouseSpecsList(whsCondition);
-            // for (WareHouseSpecs wareHouseSpecs : whsList) {
-            // ProductSpecs specs = productSpecsBO
-            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
-            // wareHouseSpecs.setSpecsName(specs.getName());
-            // }
-            // wareHouse.setWhsList(whsList);
-        }
-
-        return list;
-    }
-
-    @Override
-    public Paginable<WareHouse> queryWareHouseFrontPage(int start, int limit,
-            WareHouse condition) {
-        Paginable<WareHouse> page = wareHouseBO.getPaginable(start, limit,
-            condition);
-        for (WareHouse wareHouse : page.getList()) {
-            if (StringUtils.isNotBlank(wareHouse.getProductCode())) {
-                Product product = productBO
-                    .getProduct(wareHouse.getProductCode());
-                wareHouse.setProduct(product);
-            }
-
-            // WareHouseSpecs whsCondition = new WareHouseSpecs();
-            // whsCondition.setWareHouseCode(wareHouse.getCode());
-            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
-            // .queryWareHouseSpecsList(whsCondition);
-            // for (WareHouseSpecs wareHouseSpecs : whsList) {
-            // ProductSpecs specs = productSpecsBO
-            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
-            // wareHouseSpecs.setSpecsName(specs.getName());
-            // }
-            // wareHouse.setWhsList(whsList);
-        }
         return page;
     }
 
@@ -257,5 +244,27 @@ public class WareHouseAOImpl implements IWareHouseAO {
         wareHouseBO.changeWareHouse(data.getCode(),
             -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCTH,
             EBizType.AJ_YCTH.getValue(), orderCode);
+    }
+
+    @Override
+    public Paginable<WareHouse> queryWareHouseCFrontPage(int start, int limit,
+            WareHouse condition) {
+        Paginable<WareHouse> page = wareHouseBO.getPaginable(start, limit,
+            condition);
+        WareHouse specsCondition = new WareHouse();
+
+        for (WareHouse wareHouse : page.getList()) {
+            specsCondition.setUserId(wareHouse.getUserId());
+            specsCondition.setProductCode(wareHouse.getProductCode());
+            List<WareHouse> whList = wareHouseBO
+                .queryWareHouseList(specsCondition);
+            for (WareHouse wh : whList) {
+                ProductSpecsPrice price = productSpecsPriceBO
+                    .getPriceByLevel(wh.getProductSpecsCode(), 6);
+                wh.setPrice(price.getPrice());
+            }
+
+        }
+        return page;
     }
 }

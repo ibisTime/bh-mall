@@ -1,38 +1,38 @@
-
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IChannelBankAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627263Req;
+import com.bh.mall.dto.req.XN627102Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 审核升级申请
+ * 修改银行
  * @author: nyc 
- * @since: 2018年4月1日 上午10:58:40 
+ * @since: 2018年4月27日 下午8:53:36 
  * @history:
  */
-public class XN627263 extends AProcessor {
+public class XN627102 extends AProcessor {
 
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private IChannelBankAO channelBankAO = SpringContextHolder
+        .getBean(IChannelBankAO.class);
 
-    private XN627263Req req = null;
+    private XN627102Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.approveUpgrade(req.getUserId(), req.getApprover(),
-            req.getRemark(), req.getResult());
+        channelBankAO.editChannelBank(req.getId(), req.getBankCode(),
+            req.getBankName());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627263Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627102Req.class);
         ObjValidater.validateReq(req);
     }
 

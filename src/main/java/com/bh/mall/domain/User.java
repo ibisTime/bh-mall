@@ -169,6 +169,9 @@ public class User extends ABaseDO {
     // 门槛费
     private Long payAmount;
 
+    // 授权时间
+    private Date impowerDatetime;
+
     // 打款截图
     private String payPdf;
 
@@ -820,6 +823,14 @@ public class User extends ABaseDO {
 
     public void setImpower(AgentImpower impower) {
         this.impower = impower;
+    }
+
+    public Date getImpowerDatetime() {
+        return impowerDatetime;
+    }
+
+    public void setImpowerDatetime(Date impowerDatetime) {
+        this.impowerDatetime = impowerDatetime;
     }
 
 }

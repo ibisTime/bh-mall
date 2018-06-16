@@ -24,7 +24,7 @@ public interface ICartAO {
     String addCart(String userId, String productCode, String productSpecsCode,
             String quantity);
 
-    void editCart(String code, String type, String quantity);
+    void editCart(String code, String quantity);
 
     Product getCartProduct(String productSpecsCode);
 

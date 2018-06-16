@@ -79,7 +79,7 @@ public class WareHouse extends ABaseDO {
     private Long allAmount;
 
     // 产品名称
-    private List<WareHouseSpecs> whsList;
+    private List<WareHouse> specsList;
 
     public User getUser() {
         return user;
@@ -249,12 +249,12 @@ public class WareHouse extends ABaseDO {
         this.allAmount = allAmount;
     }
 
-    public List<WareHouseSpecs> getWhsList() {
-        return whsList;
+    public List<WareHouse> getWhsList() {
+        return specsList;
     }
 
-    public void setWhsList(List<WareHouseSpecs> whsList) {
-        this.whsList = whsList;
+    public void setWhsList(List<WareHouse> specsList) {
+        this.specsList = specsList;
     }
 
 }

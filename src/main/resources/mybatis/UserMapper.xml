@@ -54,6 +54,7 @@
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="last_agent_log" property="lastAgentLog" />
 		<result column="remark" property="remark" />
+		<result column="impower_datetime" property="impowerDatetime" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 		
@@ -252,6 +253,7 @@
 		
 		,t.approve_datetime
 		,t.last_agent_log
+		,t.impower_datetime
 		,t.remark
 		,t.company_code
 		,t.system_code
@@ -321,6 +323,7 @@
 		
 		,t.approve_datetime
 		,t.last_agent_log
+		,t.impower_datetime
 		,t.remark
 		,t.company_code
 		,t.system_code
@@ -606,6 +609,7 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,high_user_id = #{highUserId}
 		,approver = #{approver}
 		,level = #{level}
 		,approve_datetime = #{approveDatetime}
@@ -714,7 +718,6 @@
 		status = #{status}
 		,wx_id = #{wxId}
 		,mobile = #{mobile}
-		,high_user_id = #{highUserId}
 		,team_name = #{teamName}
 		,apply_level = #{applyLevel}
 		

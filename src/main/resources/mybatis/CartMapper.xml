@@ -10,7 +10,6 @@
 		<result column="quantity" property="quantity" />
 		
 		<result column="price" property="price" />
-		<result column="name" property="productName" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -33,9 +32,8 @@
 		,t.product_specs_code
 		,t.quantity
 		,t.price
-		,p.name
 		FROM
-		tbh_cart t LEFT JOIN tbh_product p ON p.code = t.product_code
+		tbh_cart t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

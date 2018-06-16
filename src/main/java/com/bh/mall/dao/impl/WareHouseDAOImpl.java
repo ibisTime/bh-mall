@@ -57,4 +57,16 @@ public class WareHouseDAOImpl extends AMybatisTemplate
         super.update(NAMESPACE.concat("update_logCode"), data);
     }
 
+    @Override
+    public long selectTotalCountProduct(WareHouse condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_product_count"),
+            condition);
+    }
+
+    @Override
+    public List<WareHouse> selectPorductList(WareHouse condition) {
+        return super.selectList(NAMESPACE.concat("select_wareHouse_product"),
+            condition, WareHouse.class);
+    }
+
 }

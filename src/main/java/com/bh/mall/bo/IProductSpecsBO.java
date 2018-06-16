@@ -14,12 +14,12 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
 
     List<ProductSpecs> queryProductSpecsList(ProductSpecs condition);
 
-    ProductSpecs getProductSpecs(String code);
-
     void saveProductSpecs(String code, XN627546Req psReq);
 
     void saveProductSpecsList(String code, List<XN627546Req> specList);
 
     List<ProductSpecs> getProductSpecsByProduct(String productCode);
+
+    ProductSpecs getProductSpecs(String productSpecsCode);
 
 }

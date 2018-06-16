@@ -18,10 +18,6 @@ public class XN627621Req {
     @NotBlank(message = "数量不能为空")
     private String quantity;
 
-    // 类型
-    @NotBlank(message = "类型不能为空")
-    private String type;
-
     public String getCode() {
         return code;
     }
@@ -36,14 +32,6 @@ public class XN627621Req {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
 }

@@ -14,16 +14,17 @@ public interface IChannelBankBO extends IPaginableBO<ChannelBank> {
 
     public boolean isChannelBankExist(Long id);
 
-    public int saveChannelBank(ChannelBank data);
+    public int saveChannelBank(String bankCode, String bankName);
 
     public int removeChannelBank(Long id);
-
-    public int refreshChannelBank(ChannelBank data);
 
     public List<ChannelBank> queryChannelBankList(ChannelBank condition);
 
     public ChannelBank getChannelBank(Long id);
 
     public ChannelBank getChannelBank(String bankCode);
+
+    public void refreshChannelBank(ChannelBank data, String bankCode,
+            String bankName);
 
 }

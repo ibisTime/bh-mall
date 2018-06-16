@@ -2,6 +2,8 @@ package com.bh.mall.dto.req;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 分页
  * @author: nyc 
@@ -23,6 +25,7 @@ public class XN627665Req extends APageReq {
     private List<String> statusList;
 
     // 订单归属人
+    @NotBlank(message = "用户ID不能为空")
     private String toUserId;
 
     // 类型

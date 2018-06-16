@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IChannelBankAO;
 import com.bh.mall.bo.IChannelBankBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.ChannelBank;
 import com.bh.mall.exception.BizException;
 
@@ -18,16 +19,15 @@ public class ChannelBankAOImpl implements IChannelBankAO {
     private IChannelBankBO channelBankBO;
 
     @Override
-    public void addChannelBank(ChannelBank data) {
-        channelBankBO.saveChannelBank(data);
+    public int addChannelBank(String bankCode, String bankName) {
+        return channelBankBO.saveChannelBank(bankCode, bankName);
     }
 
     @Override
-    public void editChannelBank(ChannelBank data) {
-        if (!channelBankBO.isChannelBankExist(data.getId())) {
-            throw new BizException("xn0000", "渠道银行序号不存在");
-        }
-        channelBankBO.refreshChannelBank(data);
+    public void editChannelBank(String id, String bankCode, String bankName) {
+        ChannelBank data = channelBankBO
+            .getChannelBank(StringValidater.toLong(id));
+        channelBankBO.refreshChannelBank(data, bankCode, bankName);
     }
 
     @Override

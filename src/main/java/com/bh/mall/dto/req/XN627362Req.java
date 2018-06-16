@@ -14,6 +14,8 @@ public class XN627362Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
+    // 介绍人（选填）
+    private String introducer;
     // // 申请等级
     // @NotBlank(message = "申请等级不能为空")
     // private String applyLevel;
@@ -34,10 +36,6 @@ public class XN627362Req {
     private String idHand;
 
     // （选填）打款金额
-    private String payAmount;
-
-    // （选填）打款证明
-    private String payPdf;
 
     public String getUserId() {
         return userId;
@@ -61,14 +59,6 @@ public class XN627362Req {
 
     public String getIdNo() {
         return idNo;
-    }
-
-    public String getPayAmount() {
-        return payAmount;
-    }
-
-    public String getPayPdf() {
-        return payPdf;
     }
 
     public void setUserId(String userId) {
@@ -95,12 +85,12 @@ public class XN627362Req {
         this.idNo = idNo;
     }
 
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
+    public String getIntroducer() {
+        return introducer;
     }
 
-    public void setPayPdf(String payPdf) {
-        this.payPdf = payPdf;
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
     }
 
 }

@@ -187,8 +187,17 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
                 throw new BizException("xn00000", "该代理云仓中没有该产品");
             }
         }
+        return data;
+    }
 
-        return null;
+    @Override
+    public long getTotalCountByProduct(WareHouse condition) {
+        return wareHouseDAO.selectTotalCountProduct(condition);
+    }
+
+    @Override
+    public List<WareHouse> queryWareHousePorductList(WareHouse condition) {
+        return wareHouseDAO.selectPorductList(condition);
     }
 
 }

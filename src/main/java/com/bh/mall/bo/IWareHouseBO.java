@@ -37,6 +37,10 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
 
     public List<WareHouse> getWareHouseByUser(String userId);
 
+    public long getTotalCountByProduct(WareHouse condition);
+
+    public List<WareHouse> queryWareHousePorductList(WareHouse condition);
+
     // ===========================================
 
     public void changeWareHouse(String code, Order data, Integer quantity,

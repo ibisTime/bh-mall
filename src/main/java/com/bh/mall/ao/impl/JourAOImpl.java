@@ -14,7 +14,6 @@ import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Jour;
-import com.bh.mall.enums.EAwardType;
 
 /** 
  * @author: xieyj 
@@ -58,21 +57,8 @@ public class JourAOImpl implements IJourAO {
     }
 
     @Override
-    public Jour getJour(String userId) {
-        Jour data = jourBO.getJour(userId);
-        boolean flag = false;
-        if (EAwardType.DirectAward.getCode().equals(data.getType())) {
-            flag = true;
-        } else if (EAwardType.SendAward.getCode().equals(data.getType())) {
-            flag = true;
-        }
-        // 补充关联编号的信息
-        if (flag) {
-            data.setUserInformation(userBO.getUser(data.getRefNo()));
-        } else {
-            data.setOrderInformation(orderAO.getOrder(data.getRefNo()));
-        }
-        return data;
+    public Jour getJour(String code) {
+        return jourBO.getJour(code);
     }
 
     @Override

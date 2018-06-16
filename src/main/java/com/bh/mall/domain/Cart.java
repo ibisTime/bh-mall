@@ -31,7 +31,12 @@ public class Cart extends ABaseDO {
     private Long price;
 
     // ***********************db****************
-    private String productName;
+
+    // 产品
+    private Product product;
+
+    // 规格名称
+    private String specsName;
 
     public void setCode(String code) {
         this.code = code;
@@ -41,12 +46,28 @@ public class Cart extends ABaseDO {
         return code;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
     public void setProductCode(String productCode) {
@@ -71,14 +92,6 @@ public class Cart extends ABaseDO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public Long getPrice() {

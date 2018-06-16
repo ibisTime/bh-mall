@@ -10,7 +10,7 @@ import com.bh.mall.exception.BizException;
 public enum EChannelType {
     WeChat_H5("35", "微信公众号支付"), Offline("90", "线下转账")
 
-    , NBZ("0", "内部账"), WeChat_XCX("1", "微信小程序支付");
+    , NBZ("0", "内部账"), WeChat_XCX("1", "微信小程序支付"), BankCard("2", "银行卡");
 
     public static Map<String, EChannelType> getChannelTypeResultMap() {
         Map<String, EChannelType> map = new HashMap<String, EChannelType>();

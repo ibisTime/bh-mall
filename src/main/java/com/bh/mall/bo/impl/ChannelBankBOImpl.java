@@ -11,6 +11,7 @@ import com.bh.mall.bo.IChannelBankBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.IChannelBankDAO;
 import com.bh.mall.domain.ChannelBank;
+import com.bh.mall.enums.EChannelType;
 import com.bh.mall.exception.BizException;
 
 /**
@@ -19,8 +20,8 @@ import com.bh.mall.exception.BizException;
  * @history:
  */
 @Component
-public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank> implements
-        IChannelBankBO {
+public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank>
+        implements IChannelBankBO {
 
     @Autowired
     private IChannelBankDAO channelBankDAO;
@@ -36,12 +37,12 @@ public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank> implements
     }
 
     @Override
-    public int saveChannelBank(ChannelBank data) {
-        int count = 0;
-        if (data != null) {
-            count = channelBankDAO.insert(data);
-        }
-        return count;
+    public int saveChannelBank(String bankCode, String bankName) {
+        ChannelBank data = new ChannelBank();
+        data.setBankCode(bankCode);
+        data.setBankName(bankName);
+        data.setChannelType(EChannelType.BankCard.getCode());
+        return channelBankDAO.insert(data);
     }
 
     @Override
@@ -56,12 +57,11 @@ public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank> implements
     }
 
     @Override
-    public int refreshChannelBank(ChannelBank data) {
-        int count = 0;
-        if (data != null) {
-            count = channelBankDAO.update(data);
-        }
-        return count;
+    public void refreshChannelBank(ChannelBank data, String bankCode,
+            String bankName) {
+        data.setBankCode(bankCode);
+        data.setBankName(bankName);
+        channelBankDAO.update(data);
     }
 
     @Override

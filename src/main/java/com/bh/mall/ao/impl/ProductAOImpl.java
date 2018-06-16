@@ -14,6 +14,7 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
+import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -37,19 +38,22 @@ import com.bh.mall.exception.BizException;
 public class ProductAOImpl implements IProductAO {
 
     @Autowired
-    private IProductBO productBO;
+    IProductBO productBO;
 
     @Autowired
-    private IProductSpecsBO productSpecsBO;
+    IProductSpecsBO productSpecsBO;
 
     @Autowired
-    private IProductSpecsPriceBO productSpecsPriceBO;
+    IProductSpecsPriceBO productSpecsPriceBO;
 
     @Autowired
-    private IProductLogBO productLogBO;
+    IProductLogBO productLogBO;
 
     @Autowired
-    private IAwardBO awardBO;
+    IAwardBO awardBO;
+
+    @Autowired
+    IWareHouseBO wareHouseBO;
 
     @Override
     public String addProduct(XN627540Req req) {

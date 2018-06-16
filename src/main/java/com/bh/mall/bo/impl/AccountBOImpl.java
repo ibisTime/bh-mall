@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAccountDAO;
@@ -83,7 +84,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         // 特定账户余额可为负
         if (!dbAccount.getUserId().contains(ESysUser.SYS_USER_BH.getCode())
                 && nowAmount < 0) {
-            throw new BizException("xn000000", "账户余额不足");
+            throw new BizException("xn000000",
+                "账户余额不足，需充值[" + AmountUtil.eraseLiUp(nowAmount) + "]元");
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,
@@ -254,7 +256,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         String fromAccountNumber = fromAccount.getAccountNumber();
         String toAccountNumber = toAccount.getAccountNumber();
         if (fromAccountNumber.equals(toAccountNumber)) {
-            new BizException("XN0000", "来去双方账号一致，无需内部划转");
+            throw new BizException("XN0000", "来去双方账号一致，无需内部划转");
         }
         this.changeAmount(fromAccountNumber, EChannelType.NBZ, null, null,
             refNo, bizType, fromBizNote, -transAmount);

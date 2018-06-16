@@ -49,7 +49,6 @@ import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
 import com.bh.mall.dto.req.XN627645Req;
 import com.bh.mall.dto.res.BooleanRes;
-import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EAwardType;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
@@ -122,8 +121,9 @@ public class OrderAOImpl implements IOrderAO {
     // C端下单
     @Override
     public void addOrder(XN627640Req req) {
-        for (Cart cart : req.getCartList()) {
+        for (String code : req.getCartList()) {
             Order order = new Order();
+            Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
@@ -135,10 +135,10 @@ public class OrderAOImpl implements IOrderAO {
                 .getPriceBySpecsCode(psData.getCode(), 6);
             order.setKind(EOrderKind.Normal_Order.getCode());
 
-            String code = OrderNoGenerater
+            String oCode = OrderNoGenerater
                 .generate(EGeneratePrefix.Order.getCode());
 
-            order.setCode(code);
+            order.setCode(oCode);
             order.setProductCode(pData.getCode());
             order.setProductName(pData.getName());
             order.setPic(pData.getAdvPic());
@@ -323,7 +323,7 @@ public class OrderAOImpl implements IOrderAO {
 
             User uData = userBO.getUser(data.getApplyUser());
             if (EUserKind.Customer.getCode().equals(uData.getKind())) {
-                data.setPayType(EPayType.WEIXIN_XCX.getCode());
+                data.setPayType(EChannelType.WeChat_XCX.getCode());
                 Object payResult = this.payWXH5(data);
                 result = payResult;
 
@@ -345,7 +345,7 @@ public class OrderAOImpl implements IOrderAO {
 
                 result = new BooleanRes(true);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-                data.setPayType(payType);
+                data.setPayType(EChannelType.WeChat_H5.getCode());
                 Object payResult = this.payWXH5(data);
                 result = payResult;
             }
@@ -361,11 +361,11 @@ public class OrderAOImpl implements IOrderAO {
         String payGroup = orderBO.addPayGroup(data);
         Account account = accountBO.getAccountByUser(data.getToUser(),
             ECurrency.YJ_CNY.getCode());
+        System.out.println(data.getPayType());
         return weChatAO.getPrepayIdH5(user.getUserId(),
             account.getAccountNumber(), payGroup, data.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
-            EChannelType.WeChat_H5.getCode());
+            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL, data.getPayType());
     }
 
     @Override
@@ -639,7 +639,7 @@ public class OrderAOImpl implements IOrderAO {
                     accountBO.changeAmount(account.getAccountNumber(),
                         EChannelType.NBZ, null, data.getPayGroup(),
                         data.getCode(), EBizType.AJ_CELR,
-                        EBizType.AJ_CELR.getValue(), data.getPayAmount());
+                        EBizType.AJ_CELR.getValue(), data.getAmount());
 
                     // 出货以及推荐奖励
                     if (EUserKind.Merchant.getCode()
@@ -658,45 +658,6 @@ public class OrderAOImpl implements IOrderAO {
 
                 WareHouse wareHouse = wareHouseBO.getWareHouseByProductSpec(
                     fromUser.getUserId(), data.getProductSpecsCode());
-                // // 云仓没有该产品
-                // if (null == wareHouse) {
-                // String code = OrderNoGenerater
-                // .generate(EGeneratePrefix.WareHouse.getCode());
-                // wareHouse = new WareHouse();
-                // wareHouse.setCode(code);
-                // wareHouse.setUserId(data.getApplyUser());
-                // wareHouseSpecsBO.saveWareHouseSpecs(wareHouse, data);
-                // } else {
-                // WareHouseSpecs whs = wareHouseSpecsBO
-                // .getWareHouseSpecsByCode(wareHouse.getCode(),
-                // data.getProductSpecsCode());
-                // if (null == whs) {
-                // whs = new WareHouseSpecs();
-                // whs.setWareHouseCode(whs.getCode());
-                // whs.setProductSpecsCode(data.getProductSpecsCode());
-                // whs.setPrice(data.getPrice());
-                // whs.setQuantity(data.getQuantity());
-                //
-                // whs.setAmount(data.getAmount());
-                // wareHouseSpecsBO.saveWareHouseSpecs(whs);
-                //
-                // wareHouseBO.changeWareHouse(wareHouse.getCode(),
-                // data.getQuantity(), EBizType.AJ_GMYC,
-                // EBizType.AJ_GMYC.getValue(), data.getCode());
-                // wareHouseSpecsBO.refreshWareHouseSpecs(whs.getCode(),
-                // data.getQuantity());
-                // } else {
-                //
-                // wareHouseBO.changeWareHouse(wareHouse.getCode(), data,
-                // -data.getQuantity(), EBizType.AJ_YCCH,
-                // EBizType.AJ_YCCH.getValue());
-                // wareHouseBO.changeWareHouse(wareHouse.getCode(),
-                // data.getQuantity(), EBizType.AJ_GMYC,
-                // EBizType.AJ_GMYC.getValue(), data.getCode());
-                // wareHouseSpecsBO.refreshWareHouseSpecs(whs.getCode(),
-                // data.getQuantity());
-                // }
-                // }
 
                 // 没有该产品
                 if (null == wareHouse) {
@@ -718,7 +679,8 @@ public class OrderAOImpl implements IOrderAO {
                     whData.setQuantity(data.getQuantity());
                     Long amount = data.getQuantity() * data.getPrice();
                     whData.setAmount(amount);
-                    whData.setStatus(EAccountStatus.NORMAL.getCode());
+                    whData.setStatus(EProductStatus.Shelf_YES.getCode());
+
                     whData.setCompanyCode(ESystemCode.BH.getCode());
                     whData.setSystemCode(ESystemCode.BH.getCode());
                     wareHouseBO.saveWareHouse(whData, data.getQuantity(),
