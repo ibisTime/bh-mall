@@ -57,13 +57,14 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                 // 新增价格体系
                 for (XN627547Req specsPrice : specsPriceList) {
                     ProductSpecsPrice productSpecsPrice = new ProductSpecsPrice();
-
                     String pspCode = OrderNoGenerater
                         .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
                     productSpecsPrice.setCode(pspCode);
                     productSpecsPrice.setProductSpecsCode(psCode);
                     productSpecsPrice.setLevel(
                         StringValidater.toInteger(specsPrice.getLevel()));
+
+                    productSpecsPrice.setMinNumber(0);
                     productSpecsPrice.setPrice(
                         StringValidater.toLong(specsPrice.getPrice()));
                     productSpecsPrice.setChangePrice(

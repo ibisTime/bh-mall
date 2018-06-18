@@ -28,6 +28,12 @@ public enum ECurrency {
         return map;
     }
 
+    public static String getCurrency(String currency) {
+        Map<String, ECurrency> map = ECurrency.getCurrencyMap();
+        ECurrency value = map.get(currency);
+        return value.getValue();
+    }
+
     ECurrency(String code, String value) {
         this.code = code;
         this.value = value;

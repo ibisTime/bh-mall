@@ -570,7 +570,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void cancelImpower(User data) {
-        data.setStatus(EUserStatus.TO_CANCEL.getCode());
         userDAO.cancelImpower(data);
     }
 
@@ -679,17 +678,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             }
         }
         return data;
-    }
-
-    @Override
-    public void refreshHighUser(String userId, User oldHighUserId,
-            User newHighUserId) {
-        User user = this.getUser(userId);
-        if (user.getLevel() == oldHighUserId.getLevel()) {
-            user.setUserReferee(oldHighUserId.getUserId());
-        }
-        user.setHighUserId(newHighUserId.getHighUserId());
-
     }
 
 }

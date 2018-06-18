@@ -20,7 +20,6 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -94,7 +93,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
         data.setQuantity(quantity);
 
-        Long amount = AmountUtil.eraseLiUp(quantity * innerProduct.getPrice());
+        Long amount = quantity * innerProduct.getPrice();
         data.setYunfei(0L);
         // 是否包邮
         if (EProductYunFei.YunFei_NO.getCode()

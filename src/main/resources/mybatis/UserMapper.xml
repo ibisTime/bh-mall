@@ -721,6 +721,7 @@
 		,team_name = #{teamName}
 		,apply_level = #{applyLevel}
 		
+		,high_user_id = #{highUserId}
 		,user_referee = #{userReferee}
 		,introducer = #{introducer}
 		,id_kind = #{idKind}

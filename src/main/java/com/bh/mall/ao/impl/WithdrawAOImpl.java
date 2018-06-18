@@ -52,6 +52,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (amount <= 0) {
             throw new BizException("xn000000", "提现金额需大于零");
         }
+
         Account dbAccount = accountBO.getAccount(accountNumber);
         // 判断本月是否次数已满，且现在只能有一笔取现未支付记录
         withdrawBO.doCheckTimes(dbAccount);
@@ -60,14 +61,15 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (dbAccount.getAmount() < amount) {
             throw new BizException("xn000000", "余额不足");
         }
+
         // 生成取现订单
         Long fee = doGetFee(dbAccount.getType(), amount,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         // 取现总金额
-        amount = amount + fee;
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);
         // 冻结取现金额
+        amount = amount + fee;
         accountBO.frozenAmount(dbAccount, amount, withdrawCode);
         return withdrawCode;
     }
@@ -130,8 +132,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     private void approveOrderYES(Withdraw data, String approveUser,
             String approveNote) {
-        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES,
-            approveUser, approveNote);
+        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES, approveUser,
+            approveNote);
     }
 
     private void approveOrderNO(Withdraw data, String approveUser,
@@ -232,11 +234,11 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 取现单笔最大金额
         String qxDbzdjeValue = argsMap.get(SysConstant.QXDBZDJE);
         if (StringUtils.isNotBlank(qxDbzdjeValue)) {
-            Long qxDbzdje = AmountUtil
-                .mul(1000L, Double.valueOf(qxDbzdjeValue));
+            Long qxDbzdje = AmountUtil.mul(1000L,
+                Double.valueOf(qxDbzdjeValue));
             if (amount > qxDbzdje) {
-                throw new BizException("xn000000", "取现单笔最大金额不能超过"
-                        + qxDbzdjeValue + "元。");
+                throw new BizException("xn000000",
+                    "取现单笔最大金额不能超过" + qxDbzdjeValue + "元。");
             }
         }
         String qxBsValue = argsMap.get(qxbs);

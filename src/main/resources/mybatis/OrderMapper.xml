@@ -93,7 +93,7 @@
 			</if>
 			
 			<if test="statusForQuery != null and statusForQuery != '' ">
-				AND t.status IN (1,2,3,5)
+				AND t.status IN (3,4)
 			</if>
 			
 			<if test="level != null and level != '' ">

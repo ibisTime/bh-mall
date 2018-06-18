@@ -111,11 +111,13 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
     @Override
     public WareHouse getWareHouse(String code) {
+
         WareHouse data = wareHouseBO.getWareHouse(code);
         WareHouse condition = new WareHouse();
         condition.setUserId(data.getUserId());
         condition.setProductCode(data.getProductCode());
         List<WareHouse> specsList = wareHouseBO.queryWareHouseList(condition);
+
         data.setWhsList(specsList);
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);

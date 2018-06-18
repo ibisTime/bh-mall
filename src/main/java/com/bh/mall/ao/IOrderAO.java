@@ -15,7 +15,7 @@ import com.bh.mall.dto.req.XN627645Req;
 public interface IOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void addOrder(XN627640Req req);
+    public List<String> addOrder(XN627640Req req);
 
     public void editOrder(XN627643Req req);
 

@@ -2,7 +2,6 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,9 +33,9 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public String addBankcard(XN627520Req req) {
         // 判断卡号是否重复
-        List<Bankcard> list = bankcardBO.queryBankcardList(req.getUserId());
-        if (CollectionUtils.isNotEmpty(list)) {
-            throw new BizException("xn0000", "您已绑定银行卡,无需绑定多张");
+        boolean flag = bankcardBO.isBankcardExist(req.getUserId());
+        if (flag) {
+            throw new BizException("xn0000", "该银行卡已存在");
         }
 
         Bankcard data = new Bankcard();
@@ -65,8 +64,8 @@ public class BankcardAOImpl implements IBankcardAO {
     public void editBankcard(XN627522Req req) {
         Bankcard bankcard = bankcardBO.getBankcard(req.getCode());
         if (!bankcard.getBankcardNumber().equals(req.getBankcardNumber())) { // 有修改就去判断是否唯一
-            List<Bankcard> list = bankcardBO.queryBankcardList(bankcard
-                .getUserId());
+            List<Bankcard> list = bankcardBO
+                .queryBankcardList(bankcard.getUserId());
             for (Bankcard card : list) {
                 if (req.getBankcardNumber().equals(card.getBankcardNumber())) {
                     throw new BizException("xn0000", "银行卡号已存在");
@@ -96,8 +95,8 @@ public class BankcardAOImpl implements IBankcardAO {
         Bankcard bankcard = bankcardBO.getBankcard(req.getCode());
         userBO.checkTradePwd(bankcard.getUserId(), req.getTradePwd());
         if (!bankcard.getBankcardNumber().equals(req.getBankcardNumber())) { // 有修改就去判断是否唯一
-            List<Bankcard> list = bankcardBO.queryBankcardList(bankcard
-                .getUserId());
+            List<Bankcard> list = bankcardBO
+                .queryBankcardList(bankcard.getUserId());
             for (Bankcard card : list) {
                 if (req.getBankcardNumber().equals(card.getBankcardNumber())) {
                     throw new BizException("xn0000", "银行卡号已存在");

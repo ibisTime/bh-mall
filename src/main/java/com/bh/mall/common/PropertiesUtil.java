@@ -46,5 +46,8 @@ public class PropertiesUtil {
 
         public static String WECHAT_H5_ORDER_BACKURL = props
             .getProperty("WECHAT_H5_ORDER_BACKURL");
+
+        public static String WECHAT_XCX_ORDER_BACKURL = props
+            .getProperty("WECHAT_XCX_ORDER_BACKURL");
     }
 }

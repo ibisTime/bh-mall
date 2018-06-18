@@ -14,6 +14,8 @@ import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Jour;
+import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.EBoolean;
 
 /** 
  * @author: xieyj 
@@ -34,8 +36,30 @@ public class JourAOImpl implements IJourAO {
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
+        boolean flag = true;
+        if (EBoolean.NO.getCode().equals(condition.getBizType())) {
+            condition.setBizType(EBizType.AJ_TJJL.getCode());
+        } else if (EBoolean.YES.getCode().equals(condition.getBizType())) {
+            condition.setBizType(EBizType.AJ_GMYC.getCode());
+        } else {
+            flag = false;
+            condition.setBizType(EBizType.AJ_JSJL.getCode());
+        }
 
-        return jourBO.getPaginable(start, limit, condition);
+        long count = jourBO.getTotalCount(condition);
+        Page<Jour> page = new Page<Jour>(start, limit, count);
+        List<Jour> list = jourBO.queryDetailPage(page.getStart(),
+            page.getPageSize(), condition);
+        for (Jour jour : list) {
+            if (flag) {
+                jour.setUserInformation(userBO.getUser(jour.getRefNo()));
+            } else {
+                jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
+            }
+        }
+
+        page.setList(list);
+        return page;
     }
 
     @Override
@@ -71,13 +95,15 @@ public class JourAOImpl implements IJourAO {
     @Override
     public Paginable<Jour> queryDetailPage(int start, int limit,
             Jour condition) {
+        if (EBoolean.NO.getCode().equals(condition.getBizType())) {
+            condition.setBizType(EBizType.AJ_TJJL.getCode());
+        } else if (EBoolean.YES.getCode().equals(condition.getBizType())) {
+            condition.setBizType(EBizType.AJ_CHJL.getCode());
+        } else {
+            condition.setBizType(EBizType.AJ_JSJL.getCode());
+        }
 
-        long count = jourBO.getTotalCount(condition);
-        Page<Jour> page = new Page<Jour>(start, limit, count);
-        List<Jour> list = jourBO.queryDetailPage(page.getStart(),
-            page.getPageSize(), condition);
-        page.setList(list);
-        return page;
+        return jourBO.getPaginable(start, limit, condition);
     }
 
 }

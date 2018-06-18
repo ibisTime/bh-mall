@@ -399,12 +399,13 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         XN627805Res res = new XN627805Res();
         User user = userBO.getUser(userId);
         Long amount = 0L;
+        Long redAmount = 0L;
         res.setResult(ECheckStatus.NORMAL.getCode());
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
             System.out.println(user.getLevel());
             Agent agent = agentBO.getAgentByLevel(user.getLevel());
-
+            redAmount = agent.getRedAmount();
             // 是否完成授权单
             Order oCondition = new Order();
             oCondition.setApplyUser(user.getUserId());
@@ -416,6 +417,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             }
 
             if (agent.getAmount() > orderAmount) {
+                redAmount = agent.getAmount() - orderAmount;
                 res.setResult(ECheckStatus.MIN_LOW.getCode());
             }
 
@@ -425,10 +427,11 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                     amount = amount + wareHouse.getAmount();
                 }
             }
-            if (agent.getRedAmount() >= amount) {
+            if (agent.getRedAmount() > amount) {
                 res.setResult(ECheckStatus.RED_LOW.getCode());
+                amount = agent.getRedAmount() - amount;
             }
-            res.setRedAmount(agent.getRedAmount());
+            res.setRedAmount(redAmount);
             res.setAmount(amount);
         }
 
