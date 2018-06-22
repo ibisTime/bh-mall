@@ -44,12 +44,7 @@ public class CartAOImpl implements ICartAO {
             throw new BizException("xn00000", "添加数量不能少于零");
         }
 
-        /*
-         * Integer nowNumber = pData.getRealNumber() -
-         * StringValidater.toInteger(quantity); if (nowNumber < 0) { throw new
-         * BizException("xn00000", "产品库存不足"); }
-         */
-
+        productBO.getProduct(productCode);
         Cart data = cartBO.getCartByProductCode(productCode, productSpecsCode);
         ProductSpecsPrice specsPrice = productSpecsPriceBO
             .getPriceBySpecsCode(productSpecsCode, 6);

@@ -8,6 +8,12 @@ public class XN627302Req {
     @NotBlank(message = "微信开放编号不能为空")
     private String code;
 
+    // 昵称
+    private String nickname;
+
+    // 头像
+    private String photo;
+
     // 推荐人
     private String userReferee;
 
@@ -29,6 +35,22 @@ public class XN627302Req {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getIsNeedMobile() {

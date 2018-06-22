@@ -674,10 +674,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setMobile(introducer);
             data = userDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn000000", "推荐人不存在");
+                throw new BizException("xn000000", "介绍人不存在");
             }
         }
         return data;
+    }
+
+    @Override
+    public void refreshHigh(User data) {
+        userDAO.updateHigh(data);
     }
 
 }

@@ -176,4 +176,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public User getUserByMobile(String introducer);
 
+    public void refreshHigh(User data);
+
 }

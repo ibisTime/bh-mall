@@ -90,4 +90,7 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     // 补充授权所需信息
     public void addInfo(User data);
+
+    // 修改推荐的代理的上级
+    public void updateHigh(User data);
 }

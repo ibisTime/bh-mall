@@ -174,11 +174,11 @@ public class WeChatAOImpl implements IWeChatAO {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);
             }
-            // CallbackResult callbackResult = new CallbackResult(isSucc,
-            // order.getBizType(), order.getCode(), order.getPayGroup(),
-            // order.getChargeAmount(), systemCode, companyCode, bizBackUrl);
+            CallbackResult callbackResult = new CallbackResult(isSucc,
+                order.getBizType(), order.getCode(), order.getPayGroup(),
+                order.getAmount(), systemCode, companyCode, bizBackUrl);
             // 回调业务biz
-            // doBizCallback(callbackResult);
+            doBizCallback(callbackResult);
         } catch (JDOMException | IOException e) {
             throw new BizException("xn000000", "回调结果XML解析失败");
         }

@@ -10,15 +10,40 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627454Req {
 
-    // 用户编号(必填)
-    @NotBlank(message = "userId不能为空")
-    private String userId;
+    // （必填）账户编号
+    @NotBlank(message = "账户编号不能为空")
+    private String accountNumber;
 
-    public String getUserId() {
-        return userId;
+    // （必填）变动金额
+    @NotBlank(message = "变动金额不能为空")
+    private String changeAmount;
+
+    // （必填）备注
+    @NotBlank(message = "备注不能为空")
+    private String remark;
+
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getChangeAmount() {
+        return changeAmount;
     }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public void setChangeAmount(String changeAmount) {
+        this.changeAmount = changeAmount;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
 }

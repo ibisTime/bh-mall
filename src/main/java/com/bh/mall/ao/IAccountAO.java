@@ -37,4 +37,8 @@ public interface IAccountAO {
     // 检查红线
     public boolean checkAmount(String userId);
 
+    // 扣款/充值
+    public void transAmount(String accountNumber, String changeAmount,
+            String remark);
+
 }

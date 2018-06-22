@@ -30,4 +30,6 @@ public interface IWareHouseAO {
     public Paginable<WareHouse> queryWareHouseCFrontPage(int start, int limit,
             WareHouse condition);
 
+    public WareHouse getWareHouseByCustomer(String code);
+
 }

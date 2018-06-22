@@ -117,7 +117,11 @@ public class WareHouseAOImpl implements IWareHouseAO {
         condition.setUserId(data.getUserId());
         condition.setProductCode(data.getProductCode());
         List<WareHouse> specsList = wareHouseBO.queryWareHouseList(condition);
-
+        for (WareHouse wh : specsList) {
+            ProductSpecsPrice price = productSpecsPriceBO
+                .getPriceByLevel(wh.getProductSpecsCode(), 6);
+            wh.setPrice(price.getPrice());
+        }
         data.setWhsList(specsList);
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
@@ -251,11 +255,14 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Override
     public Paginable<WareHouse> queryWareHouseCFrontPage(int start, int limit,
             WareHouse condition) {
-        Paginable<WareHouse> page = wareHouseBO.getPaginable(start, limit,
-            condition);
+        long count = wareHouseBO.getTotalCountByProduct(condition);
+        Page<WareHouse> page = new Page<WareHouse>(start, limit, count);
+        List<WareHouse> list = wareHouseBO.queryWareHousePorductList(condition);
         WareHouse specsCondition = new WareHouse();
-
-        for (WareHouse wareHouse : page.getList()) {
+        Product product = null;
+        for (WareHouse wareHouse : list) {
+            product = productBO.getProduct(wareHouse.getProductCode());
+            wareHouse.setProduct(product);
             specsCondition.setUserId(wareHouse.getUserId());
             specsCondition.setProductCode(wareHouse.getProductCode());
             List<WareHouse> whList = wareHouseBO
@@ -265,8 +272,27 @@ public class WareHouseAOImpl implements IWareHouseAO {
                     .getPriceByLevel(wh.getProductSpecsCode(), 6);
                 wh.setPrice(price.getPrice());
             }
-
+            wareHouse.setWhsList(whList);
         }
+        page.setList(list);
         return page;
+    }
+
+    @Override
+    public WareHouse getWareHouseByCustomer(String code) {
+        WareHouse data = wareHouseBO.getWareHouse(code);
+        WareHouse condition = new WareHouse();
+        condition.setUserId(data.getUserId());
+        condition.setProductCode(data.getProductCode());
+        List<WareHouse> specsList = wareHouseBO.queryWareHouseList(condition);
+        for (WareHouse wareHouse : specsList) {
+            ProductSpecsPrice price = productSpecsPriceBO
+                .getPriceByLevel(wareHouse.getProductSpecsCode(), 6);
+            wareHouse.setPrice(price.getPrice());
+        }
+        data.setWhsList(specsList);
+        Product product = productBO.getProduct(data.getProductCode());
+        data.setProduct(product);
+        return data;
     }
 }

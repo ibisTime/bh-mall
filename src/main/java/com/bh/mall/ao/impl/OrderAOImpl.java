@@ -148,7 +148,7 @@ public class OrderAOImpl implements IOrderAO {
             order.setPic(pData.getAdvPic());
 
             order.setProductSpecsCode(psData.getCode());
-            order.setProductSpecsName(pData.getName());
+            order.setProductSpecsName(psData.getName());
             order.setQuantity(cart.getQuantity());
             order.setPrice(pspData.getPrice());
 
@@ -240,7 +240,7 @@ public class OrderAOImpl implements IOrderAO {
         data.setPic(pData.getAdvPic());
         data.setProductSpecsCode(psData.getCode());
 
-        data.setProductSpecsName(pData.getName());
+        data.setProductSpecsName(psData.getName());
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
         data.setPrice(pspData.getPrice());
 
@@ -326,9 +326,10 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     private Object payWXH5(Order data, String callBackUrl) {
-        Long rmbAmount = data.getAmount() + data.getYunfei();
+        Long rmbAmount = data.getAmount();
         User user = userBO.getCheckUser(data.getApplyUser());
         String payGroup = orderBO.addPayGroup(data);
+        userBO.getCheckUser(data.getToUser());
         Account account = accountBO.getAccountByUser(data.getToUser(),
             ECurrency.YJ_CNY.getCode());
         System.out.println(data.getPayType());

@@ -23,7 +23,8 @@ public interface IUserAO {
             String userReferee);
 
     // C端微信注册/登录
-    public XN627302Res doLoginWeChatByCustomer(String code, String userKind);
+    public XN627302Res doLoginWeChatByCustomer(String code, String nickname,
+            String photo, String kind);
 
     // 注销/激活用户
     public void doCloseOpen(String userId, String updater, String remark);

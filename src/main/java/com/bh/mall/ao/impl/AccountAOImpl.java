@@ -13,11 +13,13 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.User;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
@@ -142,6 +144,32 @@ public class AccountAOImpl implements IAccountAO {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void transAmount(String accountNumber, String changeAmount,
+            String remark) {
+        Account account = accountBO.getAccount(accountNumber);
+        EBizType bizType = EBizType.AJ_KK;
+        String bizNote = EBizType.AJ_KK.getValue();
+        Long amount = StringValidater.toLong(changeAmount);
+
+        if (amount == 0) {
+            throw new BizException("xn00000", "变动金额不为低于零");
+        }
+        if (amount > 0) {
+            bizType = EBizType.AJ_CZ;
+            bizNote = EBizType.AJ_CZ.getValue();
+        }
+
+        Long totalAmount = amount + account.getAmount();
+        if (totalAmount < 0) {
+            throw new BizException("xn00000", "用户账户余额不足");
+        }
+        accountBO.changeAmount(accountNumber, EChannelType.NBZ, null, null,
+            account.getUserId(), bizType, bizNote,
+            StringValidater.toLong(changeAmount));
+
     }
 
 }

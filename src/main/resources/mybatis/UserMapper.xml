@@ -613,6 +613,7 @@
 		,approver = #{approver}
 		,level = #{level}
 		,approve_datetime = #{approveDatetime}
+		,impower_datetime = #{impowerDatetime}
 		,last_agent_log = #{lastAgentLog}
 		,remark = #{remark}
 		WHERE user_id = #{userId}
@@ -663,9 +664,11 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,level = #{level}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
+		,pay_amount = #{payAmount}
 		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
@@ -753,6 +756,7 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,introducer = #{introducer}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_front = #{idFront}
@@ -760,6 +764,18 @@
 		,id_hand = #{idHand}
 		,pay_amount = #{payAmount}
 		,pay_pdf = #{payPdf}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
+	<update id="update_high" parameterType="user">
+		UPDATE tbh_user
+		SET
+		high_user_id = #{highUserId}
+		,user_referee = #{userReferee}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
 </mapper>

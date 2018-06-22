@@ -65,7 +65,7 @@
 		,t.create_datetime
 		,t.last_change_code
 		FROM
-		tbh_ware_house t 
+		tbh_ware_house t  LEFT JOIN tbh_product p ON t.product_code = p.code
 		<include refid="where_condition" />
 		GROUP BY t.product_code
 		<trim prefix="ORDER BY ">
@@ -77,9 +77,8 @@
 	
 	<select id="select_product_count" parameterType="wareHouse"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_ware_house t
+		SELECT count(1) FROM tbh_ware_house t LEFT JOIN tbh_product p ON t.product_code = p.code
 		<include refid="where_condition" />
-		GROUP BY t.product_code
 	</select>
 	
 	<select id="select_wareHouse" parameterType="wareHouse" resultMap="wareHouse_DB_Result">
@@ -112,7 +111,7 @@
 
 	<select id="select_wareHouse_count" parameterType="wareHouse"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_ware_house t
+		SELECT count(1) FROM tbh_ware_house t 
 		<include refid="where_condition" />
 	</select>
 

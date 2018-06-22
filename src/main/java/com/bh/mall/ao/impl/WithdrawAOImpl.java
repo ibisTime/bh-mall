@@ -91,10 +91,11 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 生成取现订单
         Long fee = doGetFee(dbAccount.getType(), amount,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+
         // 取现总金额
-        amount = amount + fee;
-        String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
-            payCardInfo, payCardNo, applyUser, applyNote);
+        String withdrawCode = withdrawBO.applyOrder(dbAccount, amount - fee,
+            fee, payCardInfo, payCardNo, applyUser, applyNote);
+
         // 冻结取现金额
         accountBO.frozenAmount(dbAccount, amount, withdrawCode);
         return withdrawCode;

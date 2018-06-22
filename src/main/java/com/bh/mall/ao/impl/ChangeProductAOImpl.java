@@ -286,8 +286,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 -quantity, approver);
 
             // 云仓新增产品
-            WareHouse whData = wareHouseBO.getWareHouseByProductSpec(approver,
-                data.getChangeSpecsCode());
+            WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
+                data.getApplyUser(), data.getChangeSpecsCode());
             if (whData == null) {
                 String whCode = OrderNoGenerater
                     .generate(EGeneratePrefix.WareHouse.getCode());

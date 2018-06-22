@@ -11,7 +11,6 @@ import com.bh.mall.ao.IJourAO;
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.IUserBO;
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Jour;
 import com.bh.mall.enums.EBizType;
@@ -36,30 +35,14 @@ public class JourAOImpl implements IJourAO {
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
-        boolean flag = true;
-        if (EBoolean.NO.getCode().equals(condition.getBizType())) {
-            condition.setBizType(EBizType.AJ_TJJL.getCode());
-        } else if (EBoolean.YES.getCode().equals(condition.getBizType())) {
-            condition.setBizType(EBizType.AJ_GMYC.getCode());
-        } else {
-            flag = false;
-            condition.setBizType(EBizType.AJ_JSJL.getCode());
-        }
 
-        long count = jourBO.getTotalCount(condition);
-        Page<Jour> page = new Page<Jour>(start, limit, count);
-        List<Jour> list = jourBO.queryDetailPage(page.getStart(),
-            page.getPageSize(), condition);
-        for (Jour jour : list) {
-            if (flag) {
-                jour.setUserInformation(userBO.getUser(jour.getRefNo()));
-            } else {
-                jour.setOrderInformation(orderAO.getOrder(jour.getRefNo()));
-            }
-        }
-
-        page.setList(list);
-        return page;
+        // long count = jourBO.getTotalCount(condition);
+        // Page<Jour> page = new Page<Jour>(start, limit, count);
+        // List<Jour> list = jourBO.queryDetailPage(page.getStart(),
+        // page.getPageSize(), condition);
+        //
+        // page.setList(list);
+        return jourBO.getPaginable(start, limit, condition);
     }
 
     @Override

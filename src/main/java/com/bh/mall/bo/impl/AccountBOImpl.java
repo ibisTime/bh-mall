@@ -84,9 +84,11 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         // 特定账户余额可为负
         if (!dbAccount.getUserId().contains(ESysUser.SYS_USER_BH.getCode())
                 && nowAmount < 0) {
-            throw new BizException("xn000000", dbAccount.getRealName()
-                    + ECurrency.getCurrency(dbAccount.getCurrency())
-                    + "账户余额不足，需充值[" + AmountUtil.eraseLiUp(-nowAmount) + "]元");
+            throw new BizException("xn000000",
+                dbAccount.getRealName()
+                        + ECurrency.getCurrency(dbAccount.getCurrency())
+                        + "账户余额不足，需充值["
+                        + AmountUtil.eraseLiUp(-nowAmount) / 1000 + "]元");
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,
