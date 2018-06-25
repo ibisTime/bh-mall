@@ -41,14 +41,15 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                 data.setCode(psCode);
                 data.setProductCode(code);
                 data.setName(productSpec.getName());
+
                 data.setNumber(
                     StringValidater.toInteger(productSpec.getNumber()));
                 data.setWeight(
                     StringValidater.toDouble(productSpec.getWeight()));
                 data.setIsUpgradeOrder(productSpec.getIsUpgradeOrder());
-
                 data.setIsImpowerOrder(productSpec.getIsPowerOrder());
                 data.setIsNormalOrder(productSpec.getIsNormalOrder());
+
                 productSpecsDAO.insert(data);
 
                 List<XN627547Req> specsPriceList = productSpec
@@ -69,6 +70,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                         StringValidater.toLong(specsPrice.getPrice()));
                     productSpecsPrice.setChangePrice(
                         StringValidater.toLong(specsPrice.getChangePrice()));
+                    productSpecsPrice.setIsBuy(specsPrice.getIsBuy());
                     productSpecsPriceDAO.insert(productSpecsPrice);
                 }
             }
@@ -83,11 +85,17 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             if (StringUtils.isNotBlank(req.getCode())) {
                 ProductSpecs data = this.getProductSpecs(req.getCode());
                 data.setName(req.getName());
+                data.setIsSingle(req.getIsSingle());
+                data.setSingleNumber(
+                    StringValidater.toInteger(req.getSingleNumber()));
+                data.setRefCode(req.getRefCode());
+
                 data.setNumber(StringValidater.toInteger(req.getNumber()));
                 data.setWeight(StringValidater.toDouble(req.getWeight()));
                 data.setIsUpgradeOrder(req.getIsUpgradeOrder());
                 data.setIsImpowerOrder(req.getIsPowerOrder());
                 data.setIsNormalOrder(req.getIsNormalOrder());
+
                 productSpecsDAO.update(data);
                 List<XN627547Req> specsPriceList = req.getSpecsPriceList();
 
@@ -100,6 +108,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                         StringValidater.toLong(specsPrice.getPrice()));
                     pspData.setChangePrice(
                         StringValidater.toLong(specsPrice.getChangePrice()));
+                    pspData.setIsBuy(specsPrice.getIsBuy());
                     productSpecsPriceDAO.update(pspData);
                 }
             }
@@ -145,6 +154,11 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         String psCode = OrderNoGenerater
             .generate(EGeneratePrefix.ProductSpecs.getCode());
         data.setCode(psCode);
+        data.setIsSingle(psReq.getIsSingle());
+        data.setSingleNumber(
+            StringValidater.toInteger(psReq.getSingleNumber()));
+        data.setRefCode(psReq.getRefCode());
+
         data.setProductCode(code);
         data.setName(psReq.getName());
         data.setNumber(StringValidater.toInteger(psReq.getNumber()));
@@ -159,7 +173,6 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         // 新增价格体系
         for (XN627547Req specsPrice : specsPriceList) {
             ProductSpecsPrice productSpecsPrice = new ProductSpecsPrice();
-
             String pspCode = OrderNoGenerater
                 .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
             productSpecsPrice.setCode(pspCode);
@@ -168,8 +181,10 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                 .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
             productSpecsPrice
                 .setPrice(StringValidater.toLong(specsPrice.getPrice()));
+
             productSpecsPrice.setChangePrice(
                 StringValidater.toLong(specsPrice.getChangePrice()));
+            productSpecsPrice.setIsBuy(specsPrice.getIsBuy());
             productSpecsPriceDAO.insert(productSpecsPrice);
         }
     }

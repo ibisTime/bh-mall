@@ -4,26 +4,14 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.dto.req.XN627002Req;
 
 public interface IAgentAO {
 
     String DEFAULT_ORDER_COLUMN = "level";
 
-    /**
-     * 修改代理
-     * @param level
-     * @param name 
-     * @param amount 
-     * @param minChargeAmount 
-     * @param redAmount 
-     * @param updater 
-     * @param remark
-     * @create: 2018年1月31日 上午9:45:54 chenshan
-     * @history:
-     */
-    public void editAgent(String level, String name, String amount,
-            String minChargeAmount, String redAmount, String updater,
-            String remark);
+    // 修改代理等级
+    public void editAgent(XN627002Req req);
 
     /**
      * 分页查询代理

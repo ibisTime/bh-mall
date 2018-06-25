@@ -20,6 +20,15 @@ public class ProductSpecs extends ABaseDO {
     // 产品编号
     private String productCode;
 
+    // 是否可拆单
+    private String isSingle;
+
+    // 拆单数量
+    private Integer singleNumber;
+
+    // 关联拆单规格
+    private String refCode;
+
     // 规格名称
     private String name;
 
@@ -124,6 +133,30 @@ public class ProductSpecs extends ABaseDO {
 
     public void setPrice(ProductSpecsPrice price) {
         this.price = price;
+    }
+
+    public String getIsSingle() {
+        return isSingle;
+    }
+
+    public Integer getSingleNumber() {
+        return singleNumber;
+    }
+
+    public String getRefCode() {
+        return refCode;
+    }
+
+    public void setIsSingle(String isSingle) {
+        this.isSingle = isSingle;
+    }
+
+    public void setSingleNumber(Integer singleNumber) {
+        this.singleNumber = singleNumber;
+    }
+
+    public void setRefCode(String refCode) {
+        this.refCode = refCode;
     }
 
 }

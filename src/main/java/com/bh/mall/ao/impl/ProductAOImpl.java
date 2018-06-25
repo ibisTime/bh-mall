@@ -7,6 +7,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IProductAO;
 import com.bh.mall.bo.IAwardBO;
@@ -56,6 +57,7 @@ public class ProductAOImpl implements IProductAO {
     IWareHouseBO wareHouseBO;
 
     @Override
+    @Transactional
     public String addProduct(XN627540Req req) {
 
         String code = OrderNoGenerater

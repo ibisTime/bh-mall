@@ -1,6 +1,5 @@
 package com.bh.mall.bo.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,16 +20,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     private IAgentDAO agentDAO;
 
     @Override
-    public void editAgent(Agent data, String name, String amount,
-            String minChargeAmount, String redAmount, String updater,
-            String remark) {
-        data.setName(name);
-        data.setAmount(Long.valueOf(amount));
-        data.setMinChargeAmount(Long.valueOf(minChargeAmount));
-        data.setRedAmount(Long.valueOf(redAmount));
-        data.setUpdater(updater);
-        data.setUpdateDatetime(new Date());
-        data.setRemark(remark);
+    public void editAgent(Agent data) {
         agentDAO.update(data);
     }
 

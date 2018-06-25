@@ -25,6 +25,9 @@ public class XN627547Req {
     @NotBlank(message = "换货不能为空")
     private String changePrice;
 
+    // （必填）是否可购买
+    private String isBuy;
+
     public String getCode() {
         return code;
     }
@@ -55,6 +58,14 @@ public class XN627547Req {
 
     public void setChangePrice(String changePrice) {
         this.changePrice = changePrice;
+    }
+
+    public String getIsBuy() {
+        return isBuy;
+    }
+
+    public void setIsBuy(String isBuy) {
+        this.isBuy = isBuy;
     }
 
 }

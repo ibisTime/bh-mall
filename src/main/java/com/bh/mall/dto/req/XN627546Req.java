@@ -2,6 +2,8 @@ package com.bh.mall.dto.req;
 
 import java.util.List;
 
+import javax.validation.constraints.Min;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -18,6 +20,19 @@ public class XN627546Req {
     // （必填）规格名称
     @NotBlank(message = "规格名称不能为空")
     private String name;
+
+    // （必填）是否可拆单
+    @NotBlank(message = "是否可拆单不能为空")
+    private String isSingle;
+
+    // （必填）拆单数量
+    @NotBlank(message = "拆单数量不能为空")
+    @Min(0)
+    private String singleNumber;
+
+    // （必填）关联拆单编号
+    @NotBlank(message = "关联拆单编号不能为空")
+    private String refCode;
 
     // （必填）规格包含数量
     @NotBlank(message = "规格包含数量不能为空")
@@ -104,6 +119,30 @@ public class XN627546Req {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getIsSingle() {
+        return isSingle;
+    }
+
+    public String getSingleNumber() {
+        return singleNumber;
+    }
+
+    public String getRefCode() {
+        return refCode;
+    }
+
+    public void setIsSingle(String isSingle) {
+        this.isSingle = isSingle;
+    }
+
+    public void setSingleNumber(String singleNumber) {
+        this.singleNumber = singleNumber;
+    }
+
+    public void setRefCode(String refCode) {
+        this.refCode = refCode;
     }
 
 }

@@ -32,6 +32,12 @@ public class Agent extends ABaseDO {
     // 本等级每次最低充值金额
     private Long minChargeAmount;
 
+    // 本等级门槛最低余额
+    private Long minSurplus;
+
+    // 本等级是够开启云仓
+    private String isWareHouse;
+
     // 更新人
     private String updater;
 
@@ -124,6 +130,22 @@ public class Agent extends ABaseDO {
 
     public void setLevelForQuery(String levelForQuery) {
         this.levelForQuery = levelForQuery;
+    }
+
+    public Long getMinSurplus() {
+        return minSurplus;
+    }
+
+    public void setMinSurplus(Long minSurplus) {
+        this.minSurplus = minSurplus;
+    }
+
+    public String getIsWareHouse() {
+        return isWareHouse;
+    }
+
+    public void setIsWareHouse(String isWareHouse) {
+        this.isWareHouse = isWareHouse;
     }
 
 }

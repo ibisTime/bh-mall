@@ -3,6 +3,7 @@ package com.bh.mall.dto.req;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 新增产品
@@ -53,9 +54,11 @@ public class XN627540Req {
     private String updater;
 
     // (必填) 产品规格
+    @NotEmpty(message = "产品规格不能为空")
     private List<XN627546Req> specList;
 
     // (必填) 出货/推荐奖励
+    @NotBlank(message = "奖励规则不能为空")
     private List<XN627548Req> awardList;
 
     // （选填）备注

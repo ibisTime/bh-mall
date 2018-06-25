@@ -705,10 +705,15 @@ public class UserAOImpl implements IUserAO {
             }
         }
 
+        // 上级
         if (StringUtils.isNotBlank(user.getHighUserId())) {
             User highUser = userBO.getUserName(user.getHighUserId());
             if (highUser != null) {
                 user.setHighUser(highUser);
+            }
+            // 如果自己的无团队，拉取上级团队
+            if (StringUtils.isBlank(user.getTeamName())) {
+                user.setTeamName(highUser.getTeamName());
             }
         }
         if (StringUtils.isNotBlank(user.getIntroducer())) {
@@ -1576,6 +1581,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void addInfo(XN627362Req req) {
+        PhoneUtil.checkMobile(req.getMobile());
         User data = userBO.getUser(req.getUserId());
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
@@ -1583,11 +1589,9 @@ public class UserAOImpl implements IUserAO {
             if (user.getUserId().equals(req.getUserId())) {
                 throw new BizException("xn0000", "推荐人不能填自己哦！");
             }
-            // if (!(EUserStatus.IMPOWERED.getCode().equals(user.getStatus())
-            // || EUserStatus.UPGRADED.getCode()
-            // .equals(user.getStatus()))) {
-            // throw new BizException("xn0000", "您填写的推荐人还未授权哦！");
-            // }
+            if (!EUserKind.Merchant.getCode().equals(user.getKind())) {
+                throw new BizException("xn0000", "您填写的推荐人不是我们的代理哦！");
+            }
 
             if (user.getLevel() <= data.getApplyLevel()) {
                 throw new BizException("xn0000", "您申请的等级需高于推荐人哦！");
@@ -1598,21 +1602,28 @@ public class UserAOImpl implements IUserAO {
             .getAgentImpowerByLevel(data.getApplyLevel());
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
             if (StringUtils.isBlank(req.getIdNo())
-                    || StringUtils.isBlank(req.getIdHand())
-                    || StringUtils.isBlank(req.getIdBehind())
-                    || StringUtils.isBlank(req.getIdFront())) {
+                    || StringUtils.isBlank(req.getIdHand())) {
                 throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
             }
         }
 
+        data.setRealName(req.getRealName());
+        data.setWxId(req.getWxId());
+        data.setMobile(req.getMobile());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+
+        data.setArea(req.getArea());
+        data.setAddress(req.getAddress());
+        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
+        data.setTeamName(req.getTeamName());
+
         data.setIdKind(req.getIdKind());
         data.setIdNo(req.getIdNo());
-        data.setIdFront(req.getIdFront());
-        data.setIdBehind(req.getIdBehind());
-        data.setIntroducer(req.getIntroducer());
-
         data.setIdHand(req.getIdHand());
+        data.setIntroducer(req.getIntroducer());
         data.setStatus(EUserStatus.TO_COMPANYAPPROVE.getCode());
+
         userBO.addInfo(data);
     }
 

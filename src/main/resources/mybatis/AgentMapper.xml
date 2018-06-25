@@ -9,6 +9,8 @@
 		<result column="red_amount" property="redAmount"/>
 		<result column="min_charge_amount" property="minChargeAmount"/>
 		
+		<result column="min_surplus" property="minSurplus"/>
+		<result column="is_wareHouse" property="isWareHouse"/>
 		<result column="updater" property="updater"/>
 		<result column="update_datetime" property="updateDatetime"/>
 		<result column="remark" property="remark"/>
@@ -25,6 +27,9 @@
 			<if test="level != null and level !=''">
 				AND t.level = #{level}
 			</if>
+			<if test="isWareHouse != null and isWareHouse !=''">
+				AND t.is_wareHouse = #{isWareHouse}
+			</if>
 			
 			<if test="lowLevel != null and lowLevel !=''">
 				<![CDATA[AND t.level > #{lowLevel}]]>
@@ -39,6 +44,9 @@
 		,t.amount
 		,t.red_amount
 		,t.min_charge_amount
+		,t.min_surplus
+		
+		,t.is_wareHouse
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -64,8 +72,10 @@
 		,amount=#{amount}
 		,red_amount=#{redAmount}
 		,min_charge_amount=#{minChargeAmount}
-		,updater=#{updater}
 		
+		,min_surplus = #{minSurplus}
+		,is_wareHouse = #{isWareHouse}
+		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
 		WHERE level=#{level}

@@ -7,9 +7,7 @@ import com.bh.mall.domain.Agent;
 
 public interface IAgentBO extends IPaginableBO<Agent> {
 
-    public void editAgent(Agent data, String name, String amount,
-            String minChargeAmount, String redAmount, String updater,
-            String remark);
+    public void editAgent(Agent data);
 
     public Agent getAgent(String code);
 

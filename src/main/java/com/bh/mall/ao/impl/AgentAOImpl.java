@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.dto.req.XN627002Req;
 
 @Service
 public class AgentAOImpl implements IAgentAO {
@@ -17,12 +20,22 @@ public class AgentAOImpl implements IAgentAO {
     private IAgentBO agentBO;
 
     @Override
-    public void editAgent(String level, String name, String amount,
-            String minChargeAmount, String redAmount, String updater,
-            String remark) {
-        Agent data = agentBO.getAgent(level);
-        agentBO.editAgent(data, name, amount, minChargeAmount, redAmount,
-            updater, remark);
+    public void editAgent(XN627002Req req) {
+        Agent data = agentBO.getAgent(req.getLevel());
+        data.setName(req.getName());
+        data.setAmount(StringValidater.toLong(req.getAmount()));
+        data.setMinChargeAmount(
+            StringValidater.toLong(req.getMinChargeAmount()));
+        data.setMinSurplus(StringValidater.toLong(req.getMinSurplus()));
+
+        data.setIsWareHouse(req.getIsWareHouse());
+        data.setRedAmount(StringValidater.toLong(req.getRedAmount()));
+        data.setUpdater(req.getUpdater());
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(req.getRemark());
+
+        agentBO.editAgent(data);
     }
 
     @Override

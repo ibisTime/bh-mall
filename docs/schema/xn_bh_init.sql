@@ -617,3 +617,17 @@ insert into `tsys_menu_role` (`role_code`, `menu_code`, `updater`, `update_datet
 
 
 insert into `tsys_role` (`code`, `name`, `level`, `updater`, `update_datetime`, `remark`, `system_code`) values('RO201800000000000001','超级管理员','1','admin','2018-02-21 10:00:00',NULL,'CD-CBH000020');
+
+
+insert into `tbh_award` (`code`, `type`, `product_code`, `level`, `value1`, `value2`, `value3`) 
+values('AW20180625173914579488','0',NULL,'5','0.000',NULL,NULL);
+insert into `tbh_award` (`code`, `type`, `product_code`, `level`, `value1`, `value2`, `value3`) 
+values('AW201806251739145808303','1',NULL,'1','3.000',NULL,NULL);
+insert into `tbh_award` (`code`, `type`, `product_code`, `level`, `value1`, `value2`, `value3`) 
+values('AW201806251739145826576','1',NULL,'2','2.000',NULL,NULL);
+insert into `tbh_award` (`code`, `type`, `product_code`, `level`, `value1`, `value2`, `value3`)
+values('AW201806251739145832760','1',NULL,'3','0.000',NULL,NULL);
+insert into `tbh_award` (`code`, `type`, `product_code`, `level`, `value1`, `value2`, `value3`) 
+values('AW201806251739145844286','1',NULL,'4','0.000',NULL,NULL);
+insert into `tbh_award` (`code`, `type`, `product_code`, `level`, `value1`, `value2`, `value3`)
+values('AW201806251739145861274','1',NULL,'5','0.000',NULL,NULL);

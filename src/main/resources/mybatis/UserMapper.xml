@@ -756,14 +756,21 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,wx_id = #{wxId}
+		,mobile = #{mobile}
+		,real_name = #{realName}
+		,apply_level = #{applyLevel}
+		
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		,team_name = #{teamName}
+		
 		,introducer = #{introducer}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
-		,id_front = #{idFront}
-		,id_behind = #{idBehind}
 		,id_hand = #{idHand}
-		,pay_amount = #{payAmount}
-		,pay_pdf = #{payPdf}
 		WHERE user_id = #{userId}
 	</update>
 	

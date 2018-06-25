@@ -24,9 +24,7 @@ public class XN627002 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.editAgent(req.getLevel(), req.getName(), req.getAmount(),
-            req.getMinChargeAmount(), req.getRedAmount(), req.getUpdater(),
-            req.getRemark());
+        agentAO.editAgent(req);
         return new BooleanRes(true);
     }
 

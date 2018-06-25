@@ -32,6 +32,9 @@ public class ProductSpecsPrice extends ABaseDO {
     // 本等级云仓最低发货数量
     private Integer minNumber;
 
+    // 本等级是否可购买
+    private String isBuy;
+
     public String getCode() {
         return code;
     }
@@ -78,6 +81,14 @@ public class ProductSpecsPrice extends ABaseDO {
 
     public void setMinNumber(Integer minNumber) {
         this.minNumber = minNumber;
+    }
+
+    public String getIsBuy() {
+        return isBuy;
+    }
+
+    public void setIsBuy(String isBuy) {
+        this.isBuy = isBuy;
     }
 
 }

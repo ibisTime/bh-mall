@@ -5,6 +5,11 @@
 	<resultMap id="productSpecs_DB_Result" type="productSpecs">
 		<result column="code" property="code"/>
 		<result column="product_code" property="productCode"/>
+		<result column="is_single" property="isSingle"/>
+		<result column="single_number" property="singleNumber"/>
+		<result column="ref_code" property="refCode"/>
+		
+		
 		<result column="name" property="name"/>
 		<result column="number" property="number"/>
 		<result column="weight" property="weight"/>
@@ -35,6 +40,15 @@
 			<if test="isNormalOrder != null and isNormalOrder !=''">
 				AND t.is_normal_order  = #{isNormalOrder}
 			</if>
+			<if test="isSingle != null and isSingle !=''">
+				AND t.is_single  = #{isSingle}
+			</if>
+			<if test="singleNumber != null and singleNumber !=''">
+				AND t.single_number  = #{singleNumber}
+			</if>
+			<if test="refCode != null and refCode !=''">
+				AND t.ref_code  = #{refCode}
+			</if>
 		</trim>
 	</sql>
 	
@@ -42,6 +56,10 @@
 		SELECT 
 		t.code
 		,t.product_code
+		,t.is_single
+		,t.single_number
+		,t.ref_code
+		
 		,t.name
 		,t.number
 		,t.weight
@@ -92,11 +110,14 @@
 	<update id="update_productSpecs" parameterType="productSpecs">
 		UPDATE tbh_product_specs
 		SET 
-		name = #{name}
+		,is_single = #{isSingle}
+		,single_number = #{singleNumber}
+		,ref_code = #{refCode}
+		,name = #{name}
 		,number = #{number}
+		
 		,weight = #{weight}
 		,is_impower_order = #{isImpowerOrder}
-		
 		,is_upgrade_order = #{isUpgradeOrder}
 		,is_normal_order = #{isNormalOrder}
 		WHERE code=#{code}

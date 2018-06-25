@@ -10,6 +10,7 @@
 		<result column="change_price" property="changePrice"/>
 		
 		<result column="min_number" property="minNumber"/>
+		<result column="is_buy" property="is_buy"/>
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -23,6 +24,9 @@
 			<if test="level != null and level !=''">
 				AND t.level  = #{level}
 			</if>
+			<if test="isBuy != null and isBuy !=''">
+				AND t.is_buy  = #{isBuy}
+			</if>
 		</trim>
 	</sql>
 	
@@ -34,6 +38,7 @@
 		,t.price
 		,t.change_price
 		,t.min_number
+		,t.is_buy
 		FROM tbh_product_specs_price t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
@@ -57,6 +62,7 @@
 		,price
 		,change_price
 		,min_number
+		,is_buy
 		)
 		VALUES(
 		#{code}
@@ -65,6 +71,7 @@
 		,#{price}
 		,#{changePrice}
 		,#{minNumber}
+		,#{isBuy}
 		)
 	</insert>
 	
@@ -76,6 +83,7 @@
 		,price = #{price}
 		,change_price = #{changePrice}
 		,min_number = #{minNumber}
+		,id_buy = #{isBuy}
 		where code=#{code}
 	</update>
 	
