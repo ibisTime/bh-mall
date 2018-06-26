@@ -104,6 +104,9 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
             condition.setProductCode(productCode);
             condition.setType(type);
             data = awardDAO.select(condition);
+            if (null == data) {
+                throw new BizException("xn00000", "该产品奖励不存在");
+            }
         }
         return data;
     }

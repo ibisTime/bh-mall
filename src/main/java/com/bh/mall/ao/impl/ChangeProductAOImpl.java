@@ -424,18 +424,17 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             Agent agent = agentBO.getAgentByLevel(user.getLevel());
             AgentImpower impower = agentImpowerBO
                 .getAgentImpowerByLevel(user.getLevel());
-            redAmount = agent.getRedAmount();
             Account account = accountBO.getAccountByUser(user.getUserId(),
                 ECurrency.MK_CNY.getCode());
 
+            // 本等级门槛最低余额
+            if (account.getAmount() > agent.getMinSurplus()) {
+                res.setMinAmount(agent.getMinSurplus());
+                res.setResult(ECheckStatus.MIN_LOW.getCode());
+            }
+
             // 是否已授权
             if (EUserStatus.IMPOWERED.getCode().equals(user.getStatus())) {
-                // 是否有过充值
-                List<Charge> charge = chargeBO
-                    .getChargeByUser(user.getUserId());
-                if (CollectionUtils.isEmpty(charge)) {
-                    chargeAmount = impower.getMinCharge();
-                }
                 // 是否完成授权单
                 Long orderAmount = orderBO.checkImpowerOrder(user.getUserId());
                 if (agent.getAmount() > orderAmount) {
@@ -466,11 +465,19 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 redAmount = agent.getRedAmount() - redAmount;
             }
 
-            // 本等级门槛最低余额
-            if (account.getAmount() > agent.getMinSurplus()) {
-                res.setResult(ECheckStatus.MIN_LOW.getCode());
+            // 是否有过充值,且充值金额大于最低/授权充值
+            Long cAmount = 0L;
+            List<Charge> charge = chargeBO.getChargeByUser(user.getUserId());
+            for (Charge charge2 : charge) {
+                cAmount = cAmount + charge2.getAmount();
+            }
+            if (CollectionUtils.isEmpty(charge)
+                    || impower.getMinCharge() > cAmount) {
+                res.setResult(ECheckStatus.To_Charge.getCode());
+                chargeAmount = impower.getMinCharge() - cAmount;
             }
 
+            res.setLevel(user.getLevel());
             res.setChargeAmount(chargeAmount);
             res.setMinAmount(account.getAmount());
             res.setRedAmount(redAmount);
@@ -479,4 +486,5 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
         return res;
     }
+
 }

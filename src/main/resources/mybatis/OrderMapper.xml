@@ -5,7 +5,6 @@
 	<resultMap id="order_DB_Result" type="order">
 		<result column="code" property="code" />
 		<result column="is_company_send" property="isCompanySend" />
-		<result column="is_send_home" property="isSendHome"/>
 		<result column="kind" property="kind" />
 		<result column="product_code" property="productCode" />
 		
@@ -99,9 +98,7 @@
 			<if test="level != null and level != '' ">
 				AND u.level = #{level}
 			</if>
-			<if test="isSendHome != null and isSendHome != '' ">
-				AND t.is_send_home = #{isSendHome}
-			</if>
+			
 		</trim>
 	</sql>
 	
@@ -110,7 +107,6 @@
 		SELECT
 		t.code
 		,t.is_company_send
-		,t.is_send_home
 		,t.kind
 		,t.product_code
 		
@@ -179,7 +175,6 @@
 		tbh_order(
 		code
 		,is_company_send
-		,is_send_home
 		,kind
 		,product_code
 		,product_name
@@ -209,7 +204,6 @@
 		VALUES(
 		#{code}
 		,#{isCompanySend}
-		,#{isSendHome}
 		,#{kind}
 		,#{productCode}
 		,#{productName}

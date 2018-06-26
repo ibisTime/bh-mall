@@ -14,6 +14,9 @@ public class XN627805Res {
     // 授权或升级所购买
     private Long amount;
 
+    // 等级
+    private Integer level;
+
     // 门槛所需充值金额
     private Long chargeAmount;
 
@@ -21,13 +24,14 @@ public class XN627805Res {
     }
 
     public XN627805Res(String result, Long redAmount, Long minAmount,
-            Long amount, Long chargeAmount) {
+            Long amount, Long chargeAmount, Integer level) {
         super();
         this.result = result;
         this.redAmount = redAmount;
         this.minAmount = minAmount;
         this.amount = amount;
         this.chargeAmount = chargeAmount;
+        this.level = level;
     }
 
     public String getResult() {
@@ -68,6 +72,14 @@ public class XN627805Res {
 
     public void setChargeAmount(Long chargeAmount) {
         this.chargeAmount = chargeAmount;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

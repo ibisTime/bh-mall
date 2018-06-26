@@ -13,6 +13,7 @@
 		<result column="is_buy" property="is_buy"/>
 		<result column="daily_number" property="dailyNumber"/>
 		<result column="weekly_number" property="weeklyNumber"/>
+		<result column="monthly_number" property="monthlyNumber"/>
 	</resultMap>
 	
 	<sql id="where_condition">

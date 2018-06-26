@@ -704,7 +704,6 @@ public class UserAOImpl implements IUserAO {
                 user.setRefereeUser(userReferee);
             }
         }
-
         // 上级
         if (StringUtils.isNotBlank(user.getHighUserId())) {
             User highUser = userBO.getUserName(user.getHighUserId());
@@ -1096,9 +1095,7 @@ public class UserAOImpl implements IUserAO {
 
             if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
                 if (StringUtils.isBlank(data.getIdNo())
-                        || StringUtils.isBlank(data.getIdHand())
-                        || StringUtils.isBlank(data.getIdBehind())
-                        || StringUtils.isBlank(data.getIdFront())) {
+                        || StringUtils.isBlank(data.getIdHand())) {
                     throw new BizException("xn0000", "本等级需要实名认证，该代理还未完成实名认证");
                 }
             }

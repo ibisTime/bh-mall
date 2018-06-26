@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -142,8 +143,13 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
     @Override
     public List<Charge> getChargeByUser(String userId) {
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EChargeStatus.Pay_YES.getCode());
+        statusList.add(EChargeStatus.Cancel_YES.getCode());
         Charge condition = new Charge();
         condition.setApplyUser(userId);
+
+        condition.setStatusList(statusList);
         return chargeDAO.selectList(condition);
     }
 }

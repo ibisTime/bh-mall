@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -85,6 +86,9 @@ public class Charge extends ABaseDO {
     private User user;
 
     private String highUserId;
+
+    // 状态
+    private List<String> statusList;
 
     public String getCode() {
         return code;
@@ -284,6 +288,18 @@ public class Charge extends ABaseDO {
 
     public void setChargePdf(String chargePdf) {
         this.chargePdf = chargePdf;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
 }
