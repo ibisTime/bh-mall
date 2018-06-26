@@ -685,4 +685,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         userDAO.updateHigh(data);
     }
 
+    @Override
+    public User getUserByIdNo(String idNo) {
+        User data = null;
+        if (StringUtils.isNotBlank(idNo)) {
+            User condition = new User();
+            condition.setIdNo(idNo);
+            data = userDAO.select(condition);
+            if (data != null) {
+                throw new BizException("xn000000", "身份证号已存在");
+            }
+        }
+        return data;
+    }
+
 }

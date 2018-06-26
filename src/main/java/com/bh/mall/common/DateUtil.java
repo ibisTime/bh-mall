@@ -250,6 +250,87 @@ public class DateUtil {
         return currentDate.getTime();
     }
 
+    /**
+     * 获取当本周第一天
+     * @param month
+     * @return 
+     * @create: 2018年5月11日 下午1:58:15 nyc
+     * @history:
+     */
+    public static Date getWeeklyStart() {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int weekDay = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+        int today = calendar.get(Calendar.DAY_OF_MONTH);
+
+        calendar.set(Calendar.DAY_OF_MONTH, (today - weekDay));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取当本周最后一天
+     * 
+     * 周日  = 1
+     * 周一  = 2
+     * 周二  = 3
+     * ......
+     * @param month
+     * @return 
+     * @create: 2018年5月11日 下午1:58:15 nyc
+     * @history:
+     */
+    public static Date getWeeklyEnd() {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int weekDay = 7 - (calendar.get(Calendar.DAY_OF_WEEK) - 1);
+        int today = calendar.get(Calendar.DAY_OF_MONTH);
+
+        calendar.set(Calendar.DAY_OF_MONTH, (today + weekDay));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取当指定月份第一天
+     * @param month
+     * @return 
+     * @create: 2018年5月11日 下午1:58:15 nyc
+     * @history:
+     */
+    public static Date getMonthStart() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取当前月份最后一天
+     * @param month
+     * @return 
+     * @create: 2018年5月11日 下午1:58:15 nyc
+     * @history:
+     */
+    public static Date getMonthEnd() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH,
+            calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        return calendar.getTime();
+    }
+
     public static void main(String[] args) {
+        System.out.println(getWeeklyEnd());
     }
 }

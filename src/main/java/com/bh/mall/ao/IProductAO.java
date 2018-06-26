@@ -10,6 +10,7 @@ import com.bh.mall.dto.req.XN627543Req;
 import com.bh.mall.dto.req.XN627545Req;
 
 public interface IProductAO {
+
     String DEFAULT_ORDER_COLUMN = "code";
 
     String addProduct(XN627540Req req);

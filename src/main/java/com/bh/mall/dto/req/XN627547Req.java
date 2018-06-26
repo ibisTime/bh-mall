@@ -28,6 +28,15 @@ public class XN627547Req {
     // （必填）是否可购买
     private String isBuy;
 
+    // 日限购
+    private String dailyNumber;
+
+    // 周限购
+    private String weeklyNumber;
+
+    // 月限购
+    private String monthlyNumber;
+
     public String getCode() {
         return code;
     }
@@ -66,6 +75,30 @@ public class XN627547Req {
 
     public void setIsBuy(String isBuy) {
         this.isBuy = isBuy;
+    }
+
+    public String getDailyNumber() {
+        return dailyNumber;
+    }
+
+    public String getWeeklyNumber() {
+        return weeklyNumber;
+    }
+
+    public String getMonthlyNumber() {
+        return monthlyNumber;
+    }
+
+    public void setDailyNumber(String dailyNumber) {
+        this.dailyNumber = dailyNumber;
+    }
+
+    public void setWeeklyNumber(String weeklyNumber) {
+        this.weeklyNumber = weeklyNumber;
+    }
+
+    public void setMonthlyNumber(String monthlyNumber) {
+        this.monthlyNumber = monthlyNumber;
     }
 
 }

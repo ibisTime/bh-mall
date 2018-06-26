@@ -76,6 +76,7 @@
 		SELECT count(1) FROM tbh_product t
 		<include refid="where_condition"/>
 	</select>
+	
 	<insert id="insert_product" parameterType="product">
 		INSERT INTO tbh_product(
 		code
@@ -88,8 +89,8 @@
 		,pic
 		,adv_pic
 		,slogan
-		,is_total
 		
+		,is_total
 		,status
 		,create_datetime
 		,updater
@@ -108,7 +109,6 @@
 		,#{advPic}
 		,#{slogan}
 		,#{isTotal}
-		
 		,#{status}
 		,#{createDatetime}
 		,#{updater}

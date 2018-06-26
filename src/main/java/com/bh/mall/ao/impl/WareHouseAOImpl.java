@@ -7,8 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWareHouseAO;
 import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductSpecsBO;
@@ -32,11 +34,11 @@ import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EBizType;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EProductYunFei;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -68,6 +70,12 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
     @Autowired
     IProductSpecsPriceBO productSpecsPriceBO;
+
+    @Autowired
+    IAgentImpowerBO agentImpowerBO;
+
+    @Autowired
+    IOrderAO orderAO;
 
     @Override
     public Paginable<WareHouse> queryWareHousePage(int start, int limit,
@@ -191,6 +199,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
     @Override
     public void deliveProject(XN627815Req req) {
+        User user = userBO.getUser(req.getUserId());
         WareHouse data = wareHouseBO.getWareHouseByProductSpec(req.getUserId(),
             req.getProductSpecsCode());
         if (null == data) {
@@ -203,7 +212,31 @@ public class WareHouseAOImpl implements IWareHouseAO {
         Long amount = AmountUtil.mul(data.getPrice(),
             StringValidater.toInteger(req.getQuantity()));
 
-        String kind = EOrderKind.Normal_Order.getCode();
+        String kind = EOrderKind.Pick_Up.getCode();
+
+        // 是否完成授权单
+        boolean impowerOrder = orderAO.CheckImpowerOrder(user);
+        if (EUserStatus.IMPOWERED.getCode().equals(user.getStatus())) {
+            if (!impowerOrder) {
+                kind = EOrderKind.Impower_Order.getCode();
+            }
+        }
+        // 是否完成升级单
+        boolean upgradeOrder = orderAO.CheckImpowerOrder(user);
+        if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
+            if (!upgradeOrder) {
+                kind = EOrderKind.Upgrade_Order.getCode();
+            }
+        }
+
+        Order condition = new Order();
+        condition.setApplyUser(data.getUserId());
+        condition.setKind(EOrderKind.Impower_Order.getCode());
+        List<Order> impowerList = orderBO.queryOrderList(condition);
+        Long impowerAmount = 0L;
+        for (Order order : impowerList) {
+            impowerAmount = impowerAmount + order.getAmount();
+        }
 
         Order order = new Order();
         String orderCode = OrderNoGenerater
@@ -243,7 +276,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setProvince(req.getProvince());
 
         order.setStatus(EOrderStatus.TO_Apprvoe.getCode());
-        order.setIsSendHome(EBoolean.YES.getCode());
         orderBO.saveOrder(order);
 
         // 减少云仓库存

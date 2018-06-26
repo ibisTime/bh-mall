@@ -562,6 +562,7 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,high_user_id = #{highUserId}
 		,manager = #{manager}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
@@ -756,15 +757,7 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
-		,wx_id = #{wxId}
-		,mobile = #{mobile}
-		,real_name = #{realName}
 		,apply_level = #{applyLevel}
-		
-		,province = #{province}
-		,city = #{city}
-		,area = #{area}
-		,address = #{address}
 		,team_name = #{teamName}
 		
 		,introducer = #{introducer}

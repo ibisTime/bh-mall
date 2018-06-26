@@ -711,10 +711,6 @@ public class UserAOImpl implements IUserAO {
             if (highUser != null) {
                 user.setHighUser(highUser);
             }
-            // 如果自己的无团队，拉取上级团队
-            if (StringUtils.isBlank(user.getTeamName())) {
-                user.setTeamName(highUser.getTeamName());
-            }
         }
         if (StringUtils.isNotBlank(user.getIntroducer())) {
             User introduceName = userBO.getUserName(user.getIntroducer());
@@ -794,10 +790,11 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public XN627302Res applyHaveUserReferee(XN627251Req req) {
         PhoneUtil.checkMobile(req.getMobile());
-        System.out.println("introducerMobile:" + req.getIntroducer());
+        String introducer = req.getIntroducer();
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
             User user = userBO.getUserByMobile(req.getIntroducer());
+            introducer = user.getUserId();
             if (user.getLevel() <= StringValidater
                 .toInteger(req.getApplyLevel())) {
                 throw new BizException("xn0000", "您申请的等级需高于推荐人哦！");
@@ -954,6 +951,7 @@ public class UserAOImpl implements IUserAO {
             status = EUserStatus.ADD_INFO.getCode();
         }
 
+        data.setHighUserId(toUserId);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setManager(manager);
@@ -1128,7 +1126,7 @@ public class UserAOImpl implements IUserAO {
 
                 // 介绍奖
                 if (StringUtils.isNotBlank(data.getIntroducer())) {
-                    User user = userBO.getUserByMobile(data.getIntroducer());
+                    User user = userBO.getUser(data.getIntroducer());
                     Intro iData = introBO.getIntroByLevel(data.getApplyLevel());
                     long amount = AmountUtil.mul(impower.getMinCharge(),
                         iData.getPercent());
@@ -1581,7 +1579,6 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void addInfo(XN627362Req req) {
-        PhoneUtil.checkMobile(req.getMobile());
         User data = userBO.getUser(req.getUserId());
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
@@ -1593,8 +1590,9 @@ public class UserAOImpl implements IUserAO {
                 throw new BizException("xn0000", "您填写的推荐人不是我们的代理哦！");
             }
 
-            if (user.getLevel() <= data.getApplyLevel()) {
-                throw new BizException("xn0000", "您申请的等级需高于推荐人哦！");
+            if (user.getLevel() <= StringValidater
+                .toInteger(req.getApplyLevel())) {
+                throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
         }
 
@@ -1604,17 +1602,19 @@ public class UserAOImpl implements IUserAO {
             if (StringUtils.isBlank(req.getIdNo())
                     || StringUtils.isBlank(req.getIdHand())) {
                 throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
+            } else {
+                userBO.getUserByIdNo(req.getIdNo());
             }
         }
 
-        data.setRealName(req.getRealName());
-        data.setWxId(req.getWxId());
-        data.setMobile(req.getMobile());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-
-        data.setArea(req.getArea());
-        data.setAddress(req.getAddress());
+        // data.setRealName(req.getRealName());
+        // data.setWxId(req.getWxId());
+        // data.setMobile(req.getMobile());
+        // data.setProvince(req.getProvince());
+        // data.setCity(req.getCity());
+        //
+        // data.setArea(req.getArea());
+        // data.setAddress(req.getAddress());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setTeamName(req.getTeamName());
 
@@ -1688,6 +1688,23 @@ public class UserAOImpl implements IUserAO {
         }
     }
 
+    @Override
+    public void addHighAccount(User user, Long amount) {
+        if (StringUtils.isNotBlank(user.getHighUserId())) {
+            User highUser = userBO.getUser(user.getHighUserId());
+            if (EUserKind.Merchant.getCode().equals(highUser.getKind())) {
+                Account account = accountBO.getAccountByUser(
+                    highUser.getUserId(), ECurrency.MK_CNY.getCode());
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.WeChat_H5, null, null, user.getUserId(),
+                    EBizType.AJ_XJCZ, EBizType.AJ_XJCZ.getValue(), amount);
+                if (StringUtils.isNotBlank(highUser.getHighUserId())) {
+                    addHighAccount(highUser, amount);
+                }
+            }
+        }
+    }
+
     private void changeHighUser(String highUserId, String userId,
             String approver, String remark) {
 
@@ -1710,6 +1727,11 @@ public class UserAOImpl implements IUserAO {
 
         }
 
+    }
+
+    @Override
+    public User doGetUserByMobile(String mobile) {
+        return userBO.getUserByMobile(mobile);
     }
 
 }

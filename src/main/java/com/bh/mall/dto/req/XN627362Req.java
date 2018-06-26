@@ -15,31 +15,24 @@ public class XN627362Req {
     private String userId;
 
     // （必填） 姓名
-    @NotBlank(message = " 姓名不能为空")
     private String realName;
 
     // （必填）微信号
-    @NotBlank(message = "微信号不能为空")
     private String wxId;
 
     // （必填） 电话
-    @NotBlank(message = "电话不能为空")
     private String mobile;
 
     // （必填） 省
-    @NotBlank(message = " 省不能为空")
     private String province;
 
     // （必填） 市
-    @NotBlank(message = "市不能为空")
     private String city;
 
     // （必填） 区
-    @NotBlank(message = "区不能为空")
     private String area;
 
     // （必填） 详细地址
-    @NotBlank(message = "详细地址不能为空")
     private String address;
 
     // 申请等级（必填）

@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,8 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOrderDAO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.enums.EOrderKind;
+import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -135,6 +138,46 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     @Override
     public void payNo(Order data) {
         orderDAO.payNo(data);
+    }
+
+    @Override
+    public Long checkImpowerOrder(String applyUser) {
+        Order condition = new Order();
+        condition.setApplyUser(applyUser);
+        condition.setKind(EOrderKind.Impower_Order.getCode());
+        condition.setStatusForQuery(EOrderStatus.Impwoer.getCode());
+        List<Order> list = orderDAO.selectList(condition);
+        Long amount = 0L;
+
+        for (Order order : list) {
+            amount = amount + order.getAmount();
+        }
+        return amount;
+    }
+
+    @Override
+    public Long checkUpgradeOrder(String applyUser) {
+        Order condition = new Order();
+        condition.setApplyUser(applyUser);
+        condition.setKind(EOrderKind.Upgrade_Order.getCode());
+        condition.setStatusForQuery(EOrderStatus.Impwoer.getCode());
+        List<Order> list = orderDAO.selectList(condition);
+        Long amount = 0L;
+
+        for (Order order : list) {
+            amount = amount + order.getAmount();
+        }
+        return amount;
+    }
+
+    @Override
+    public List<Order> getProductQuantity(String userId, Date startDatetime,
+            Date endDatetime) {
+        Order condition = new Order();
+        condition.setApplyUser(userId);
+        condition.setStartDatetime(startDatetime);
+        condition.setEndDatetime(endDatetime);
+        return orderDAO.selectList(condition);
     }
 
 }

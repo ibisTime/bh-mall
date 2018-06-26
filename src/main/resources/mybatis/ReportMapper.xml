@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IReportDAO">
+	<resultMap id="Report_DB_Result" type="Report">
+		<result column="code" property="code" />
+		<result column="real_name" property="realName" />
+		<result column="mobile" property="mobile" />
+		<result column="wxId" property="wxId" />
+		<result column="level" property="level" />
+		<result column="user_referee" property="userReferee" />
+		<result column="introducer" property="introducer" />
+		<result column="high_user_id" property="highUserId" />
+		<result column="team_name" property="teamName" />
+		<result column="manager" property="manager" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="address" property="address" />
+		<result column="impower_datetime" property="impowerDatetime" />
+		<result column="send_award" property="sendAward" />
+		<result column="intr_award" property="intrAward" />
+		<result column="refree_award" property="refreeAward" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_Report" parameterType="Report" resultMap="Report_DB_Result">
+		SELECT
+		t.code
+		,t.real_name
+		,t.mobile
+		,t.wxId
+		,t.level
+		,t.user_referee
+		,t.introducer
+		,t.high_user_id
+		,t.team_name
+		,t.manager
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+		,t.impower_datetime
+		,t.send_award
+		,t.intr_award
+		,t.refree_award
+		FROM
+		thf_report t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_Report_count" parameterType="Report"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM thf_report t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_Report" parameterType="Report">
+		INSERT INTO
+		thf_report(
+		code
+		,real_name
+		,mobile
+		,wxId
+		,level
+		,user_referee
+		,introducer
+		,high_user_id
+		,team_name
+		,manager
+		,province
+		,city
+		,area
+		,address
+		,impower_datetime
+		,send_award
+		,intr_award
+		,refree_award
+		)
+		VALUES(
+		#{code}
+		,#{realName}
+		,#{mobile}
+		,#{wxId}
+		,#{level}
+		,#{userReferee}
+		,#{introducer}
+		,#{highUserId}
+		,#{teamName}
+		,#{manager}
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{address}
+		,#{impowerDatetime}
+		,#{sendAward}
+		,#{intrAward}
+		,#{refreeAward}
+		)
+	</insert>
+
+	<update id="update_Report" parameterType="Report">
+		UPDATE thf_report
+		SET
+		real_name = #{realName}
+		,mobile = #{mobile}
+		,wxId = #{wxId}
+		,level = #{level}
+		,user_referee = #{userReferee}
+		,introducer = #{introducer}
+		,high_user_id = #{highUserId}
+		,team_name = #{teamName}
+		,manager = #{manager}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		,impower_datetime = #{impowerDatetime}
+		,send_award = #{sendAward}
+		,intr_award = #{intrAward}
+		,refree_award = #{refreeAward}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

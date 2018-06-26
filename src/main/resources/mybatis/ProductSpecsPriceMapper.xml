@@ -11,6 +11,8 @@
 		
 		<result column="min_number" property="minNumber"/>
 		<result column="is_buy" property="is_buy"/>
+		<result column="daily_number" property="dailyNumber"/>
+		<result column="weekly_number" property="weeklyNumber"/>
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -39,6 +41,10 @@
 		,t.change_price
 		,t.min_number
 		,t.is_buy
+		
+		,t.daily_number
+		,t.weekly_number
+		,t.monthly_number
 		FROM tbh_product_specs_price t
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
@@ -63,6 +69,10 @@
 		,change_price
 		,min_number
 		,is_buy
+		
+		,daily_number
+		,weekly_number
+		,monthly_number
 		)
 		VALUES(
 		#{code}
@@ -72,6 +82,11 @@
 		,#{changePrice}
 		,#{minNumber}
 		,#{isBuy}
+		
+		,#{dailyNumber}
+		,#{weeklyNumber}
+		,#{monthlyNumber}
+		
 		)
 	</insert>
 	
@@ -84,6 +99,10 @@
 		,change_price = #{changePrice}
 		,min_number = #{minNumber}
 		,id_buy = #{isBuy}
+		
+		,daily_number = #{dailyNumber}
+		,weekly_number = #{weeklyNumber}
+		,monthly_number = #{monthlyNumber}
 		where code=#{code}
 	</update>
 	

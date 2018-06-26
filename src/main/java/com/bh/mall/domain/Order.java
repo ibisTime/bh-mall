@@ -135,9 +135,6 @@ public class Order extends ABaseDO {
     // 备注
     private String remark;
 
-    // 是否送货到家
-    private String isSendHome;
-
     // ************************db*********************
     private Date startDatetime;
 
@@ -177,14 +174,6 @@ public class Order extends ABaseDO {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
-    }
-
-    public String getIsSendHome() {
-        return isSendHome;
-    }
-
-    public void setIsSendHome(String isSendHome) {
-        this.isSendHome = isSendHome;
     }
 
     public void setCode(String code) {

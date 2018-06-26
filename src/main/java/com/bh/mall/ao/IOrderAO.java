@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
@@ -49,5 +50,11 @@ public interface IOrderAO {
     public void receivedOrder(String code);
 
     void paySuccess(String result);
+
+    // 检查是否完成授权单
+    public boolean CheckImpowerOrder(User user);
+
+    // 检查是否完成升级单
+    public boolean CheckUpgradeOrder(User user);
 
 }

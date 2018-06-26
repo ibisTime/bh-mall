@@ -71,6 +71,13 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                     productSpecsPrice.setChangePrice(
                         StringValidater.toLong(specsPrice.getChangePrice()));
                     productSpecsPrice.setIsBuy(specsPrice.getIsBuy());
+
+                    productSpecsPrice.setDailyNumber(
+                        StringValidater.toInteger(specsPrice.getDailyNumber()));
+                    productSpecsPrice.setWeeklyNumber(StringValidater
+                        .toInteger(specsPrice.getWeeklyNumber()));
+                    productSpecsPrice.setMonthlyNumber(StringValidater
+                        .toInteger(specsPrice.getMonthlyNumber()));
                     productSpecsPriceDAO.insert(productSpecsPrice);
                 }
             }
@@ -109,6 +116,13 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                     pspData.setChangePrice(
                         StringValidater.toLong(specsPrice.getChangePrice()));
                     pspData.setIsBuy(specsPrice.getIsBuy());
+
+                    pspData.setDailyNumber(
+                        StringValidater.toInteger(specsPrice.getDailyNumber()));
+                    pspData.setWeeklyNumber(StringValidater
+                        .toInteger(specsPrice.getWeeklyNumber()));
+                    pspData.setMonthlyNumber(StringValidater
+                        .toInteger(specsPrice.getMonthlyNumber()));
                     productSpecsPriceDAO.update(pspData);
                 }
             }
@@ -185,6 +199,12 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             productSpecsPrice.setChangePrice(
                 StringValidater.toLong(specsPrice.getChangePrice()));
             productSpecsPrice.setIsBuy(specsPrice.getIsBuy());
+            productSpecsPrice.setDailyNumber(
+                StringValidater.toInteger(specsPrice.getDailyNumber()));
+            productSpecsPrice.setWeeklyNumber(
+                StringValidater.toInteger(specsPrice.getWeeklyNumber()));
+            productSpecsPrice.setMonthlyNumber(
+                StringValidater.toInteger(specsPrice.getMonthlyNumber()));
             productSpecsPriceDAO.insert(productSpecsPrice);
         }
     }

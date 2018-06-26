@@ -3,13 +3,17 @@ package com.bh.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IChangeProductAO;
+import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.IChangeProductBO;
+import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
@@ -24,9 +28,11 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.domain.ChangeProduct;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
@@ -40,10 +46,10 @@ import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
 import com.bh.mall.enums.ECheckStatus;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
+import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -78,6 +84,15 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
     @Autowired
     IOrderBO orderBO;
+
+    @Autowired
+    IAccountBO accountBO;
+
+    @Autowired
+    IChargeBO chargeBO;
+
+    @Autowired
+    IAgentImpowerBO agentImpowerBO;
 
     @Override
     public String addChangeProduct(XN627790Req req) {
@@ -400,37 +415,64 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         User user = userBO.getUser(userId);
         Long amount = 0L;
         Long redAmount = 0L;
+        Long chargeAmount = 0L;
         res.setResult(ECheckStatus.NORMAL.getCode());
+
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
             System.out.println(user.getLevel());
             Agent agent = agentBO.getAgentByLevel(user.getLevel());
+            AgentImpower impower = agentImpowerBO
+                .getAgentImpowerByLevel(user.getLevel());
             redAmount = agent.getRedAmount();
-            // 是否完成授权单
-            Order oCondition = new Order();
-            oCondition.setApplyUser(user.getUserId());
-            oCondition.setStatusForQuery(EOrderStatus.No_Impwoer.getCode());
-            List<Order> orderList = orderBO.queryOrderList(oCondition);
-            Long orderAmount = 0L;
-            for (Order order : orderList) {
-                orderAmount = orderAmount + order.getAmount();
+            Account account = accountBO.getAccountByUser(user.getUserId(),
+                ECurrency.MK_CNY.getCode());
+
+            // 是否已授权
+            if (EUserStatus.IMPOWERED.getCode().equals(user.getStatus())) {
+                // 是否有过充值
+                List<Charge> charge = chargeBO
+                    .getChargeByUser(user.getUserId());
+                if (CollectionUtils.isEmpty(charge)) {
+                    chargeAmount = impower.getMinCharge();
+                }
+                // 是否完成授权单
+                Long orderAmount = orderBO.checkImpowerOrder(user.getUserId());
+                if (agent.getAmount() > orderAmount) {
+                    amount = agent.getAmount() - orderAmount;
+                    res.setResult(ECheckStatus.NO_Impwoer.getCode());
+                }
             }
 
-            if (agent.getAmount() > orderAmount) {
-                redAmount = agent.getAmount() - orderAmount;
-                res.setResult(ECheckStatus.MIN_LOW.getCode());
+            // 是否已经升级
+            if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
+                // 是否完成升级单
+                Long orderAmount = orderBO.checkUpgradeOrder(user.getUserId());
+                if (agent.getAmount() > orderAmount) {
+                    amount = agent.getAmount() - orderAmount;
+                    res.setResult(ECheckStatus.NO_Upgrae.getCode());
+                }
             }
 
+            // 云仓是否低于红线
             List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
             for (WareHouse wareHouse : list) {
                 if (null != wareHouse.getAmount()) {
-                    amount = amount + wareHouse.getAmount();
+                    redAmount = redAmount + wareHouse.getAmount();
                 }
             }
-            if (agent.getRedAmount() > amount) {
+            if (agent.getRedAmount() > redAmount) {
                 res.setResult(ECheckStatus.RED_LOW.getCode());
-                amount = agent.getRedAmount() - amount;
+                redAmount = agent.getRedAmount() - redAmount;
             }
+
+            // 本等级门槛最低余额
+            if (account.getAmount() > agent.getMinSurplus()) {
+                res.setResult(ECheckStatus.MIN_LOW.getCode());
+            }
+
+            res.setChargeAmount(chargeAmount);
+            res.setMinAmount(account.getAmount());
             res.setRedAmount(redAmount);
             res.setAmount(amount);
         }

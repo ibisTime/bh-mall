@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bh.mall.ao.IUserAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
@@ -84,6 +85,9 @@ public class WeChatAOImpl implements IWeChatAO {
     @Autowired
     IAgentBO agentBO;
 
+    @Autowired
+    IUserAO userAO;
+
     @Override
     @Transactional
     public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
@@ -134,6 +138,7 @@ public class WeChatAOImpl implements IWeChatAO {
     }
 
     @Override
+    @Transactional
     public void doCallbackH5(String result) {
         Map<String, String> map = null;
         try {
@@ -170,6 +175,10 @@ public class WeChatAOImpl implements IWeChatAO {
                     wechatOrderNo, order.getPayGroup(), order.getRefNo(),
                     EBizType.getBizTypeMap().get(order.getBizType()),
                     order.getBizNote(), order.getAmount());
+
+                // 上级加钱
+                User user = userBO.getUser(order.getApplyUser());
+                userAO.addHighAccount(user, order.getAmount());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);

@@ -139,4 +139,11 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             Charge condition) {
         return chargeDAO.selectFrontChargePage(pageNO, pageSize, condition);
     }
+
+    @Override
+    public List<Charge> getChargeByUser(String userId) {
+        Charge condition = new Charge();
+        condition.setApplyUser(userId);
+        return chargeDAO.selectList(condition);
+    }
 }

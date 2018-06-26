@@ -139,4 +139,9 @@ public interface IUserAO {
     // 本等级是否实名
     public boolean isRealName(String userId);
 
+    void addHighAccount(User user, Long amount);
+
+    // 根据手机号获取用户详情
+    public User doGetUserByMobile(String mobile);
+
 }

@@ -35,6 +35,15 @@ public class ProductSpecsPrice extends ABaseDO {
     // 本等级是否可购买
     private String isBuy;
 
+    // 每日限购
+    private Integer dailyNumber;
+
+    // 每周限购
+    private Integer weeklyNumber;
+
+    // 每月限购
+    private Integer monthlyNumber;
+
     public String getCode() {
         return code;
     }
@@ -89,6 +98,30 @@ public class ProductSpecsPrice extends ABaseDO {
 
     public void setIsBuy(String isBuy) {
         this.isBuy = isBuy;
+    }
+
+    public Integer getDailyNumber() {
+        return dailyNumber;
+    }
+
+    public Integer getWeeklyNumber() {
+        return weeklyNumber;
+    }
+
+    public Integer getMonthlyNumber() {
+        return monthlyNumber;
+    }
+
+    public void setDailyNumber(Integer dailyNumber) {
+        this.dailyNumber = dailyNumber;
+    }
+
+    public void setWeeklyNumber(Integer weeklyNumber) {
+        this.weeklyNumber = weeklyNumber;
+    }
+
+    public void setMonthlyNumber(Integer monthlyNumber) {
+        this.monthlyNumber = monthlyNumber;
     }
 
 }

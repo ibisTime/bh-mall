@@ -29,4 +29,6 @@ public interface IChargeBO extends IPaginableBO<Charge> {
     List<Charge> queryFrontChargePage(int pageNO, int pageSize,
             Charge condition);
 
+    List<Charge> getChargeByUser(String userId);
+
 }

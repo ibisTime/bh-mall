@@ -145,4 +145,7 @@
 	<bean id="wareHouseSpecsBO" class="com.bh.mall.bo.impl.WareHouseSpecsBOImpl">
 		<property name="paginableDAO" ref="wareHouseSpecsDAOImpl"></property>
 	</bean>
+	<bean id="reportBO" class="com.bh.mall.bo.impl.ReportBOImpl">
+		<property name="paginableDAO" ref="reportDAOImpl"/>
+	</bean>
 </beans>
