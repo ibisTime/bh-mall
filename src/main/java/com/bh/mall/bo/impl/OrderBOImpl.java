@@ -144,6 +144,8 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     @Override
     public Long checkImpowerOrder(String applyUser) {
         List<String> statusList = new ArrayList<String>();
+        statusList.add(EOrderStatus.Paid.getCode());
+        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
         statusList.add(EOrderStatus.TO_Deliver.getCode());
         statusList.add(EOrderStatus.Received.getCode());
 
@@ -162,6 +164,8 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     @Override
     public Long checkUpgradeOrder(String applyUser) {
         List<String> statusList = new ArrayList<String>();
+        statusList.add(EOrderStatus.Paid.getCode());
+        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
         statusList.add(EOrderStatus.TO_Deliver.getCode());
         statusList.add(EOrderStatus.Received.getCode());
 

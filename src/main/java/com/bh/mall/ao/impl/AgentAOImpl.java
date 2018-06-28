@@ -29,12 +29,13 @@ public class AgentAOImpl implements IAgentAO {
         data.setMinSurplus(StringValidater.toLong(req.getMinSurplus()));
 
         data.setIsWareHouse(req.getIsWareHouse());
+        data.setIsSend(req.getIsSend());
         data.setRedAmount(StringValidater.toLong(req.getRedAmount()));
         data.setUpdater(req.getUpdater());
         Date date = new Date();
+
         data.setUpdateDatetime(date);
         data.setRemark(req.getRemark());
-
         agentBO.editAgent(data);
     }
 

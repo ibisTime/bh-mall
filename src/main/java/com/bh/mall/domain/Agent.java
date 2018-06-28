@@ -38,6 +38,9 @@ public class Agent extends ABaseDO {
     // 本等级是够开启云仓
     private String isWareHouse;
 
+    // 授权单是否可以自发
+    private String isSend;
+
     // 更新人
     private String updater;
 
@@ -146,6 +149,14 @@ public class Agent extends ABaseDO {
 
     public void setIsWareHouse(String isWareHouse) {
         this.isWareHouse = isWareHouse;
+    }
+
+    public String getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(String isSend) {
+        this.isSend = isSend;
     }
 
 }

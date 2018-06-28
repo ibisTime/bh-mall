@@ -8,7 +8,6 @@ import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.req.XN627362Req;
-import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627302Res;
 
 public interface IUserAO {
@@ -101,8 +100,8 @@ public interface IUserAO {
     public void editManager(String userId, String manager, String updater);
 
     // 升级申请
-    public XN627262Res upgradeLevel(String userId, String highLevel,
-            String payPdf, String teamName);
+    public void upgradeLevel(String userId, String highLevel, String payPdf,
+            String teamName);
 
     // 审核升级申请
     public void approveUpgrade(String userId, String approver, String remark,

@@ -12,16 +12,18 @@ import com.bh.mall.dto.req.XN627241Req;
 public interface IIntroAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addIntro(Intro data);
-
     public void dropIntro(String code);
 
     public void editIntro(XN627241Req req);
 
-    public Paginable<Intro> queryIntroPage(int start, int limit, Intro condition);
+    public Paginable<Intro> queryIntroPage(int start, int limit,
+            Intro condition);
 
     public List<Intro> queryIntroList(Intro condition);
 
     public Intro getIntro(String code);
+
+    public List<String> addIntro(String level, List<Intro> introList,
+            String updater, String remark);
 
 }

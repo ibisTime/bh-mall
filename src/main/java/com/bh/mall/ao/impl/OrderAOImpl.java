@@ -286,9 +286,12 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     @Transactional
     public String addOrderNoCart(XN627641Req req) {
+        User applyUser = userBO.getUser(req.getApplyUser());
         ProductSpecs psData = productSpecsBO
             .getProductSpecs(req.getProductSpecsCode());
         Product pData = productBO.getProduct(psData.getProductCode());
+        ProductSpecsPrice pspData = productSpecsPriceBO
+            .getPriceBySpecsCode(psData.getCode(), applyUser.getLevel());
 
         Integer nowNumber = pData.getRealNumber()
                 - StringValidater.toInteger(req.getQuantity());
@@ -299,14 +302,30 @@ public class OrderAOImpl implements IOrderAO {
         if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
+        Long amount = StringValidater.toInteger(req.getQuantity())
+                * pspData.getPrice();
 
-        User applyUser = userBO.getUser(req.getApplyUser());
+        // 门槛余额是否高于限制
+        Account account = accountBO.getAccountByUser(applyUser.getUserId(),
+            ECurrency.MK_CNY.getCode());
+        // 还需购买数量
+        int needNumber = (int) ((account.getAmount() - amount)
+                / pspData.getPrice());
+        if (((account.getAmount() - amount) % pspData.getPrice()) != 0) {
+            needNumber = needNumber + 1;
+        }
+        Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+        if ((account.getAmount() - amount) > agent.getMinSurplus()) {
+            throw new BizException("xn0000",
+                "剩余门槛不能大于[" + agent.getMinSurplus() / 10000 + "]元，目前余额还有["
+                        + (account.getAmount() - amount) / 1000 + "]元，需购买数量为["
+                        + needNumber + "]" + psData.getName());
+        }
+
         String kind = EOrderKind.Normal_Order.getCode();
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
-        ProductSpecsPrice pspData = productSpecsPriceBO
-            .getPriceBySpecsCode(psData.getCode(), applyUser.getLevel());
         Long yunfei = 0L;
         Order data = new Order();
         data.setCode(code);
@@ -319,8 +338,6 @@ public class OrderAOImpl implements IOrderAO {
 
         data.setPrice(pspData.getPrice());
         data.setApplyUser(req.getApplyUser());
-        Long amount = StringValidater.toInteger(req.getQuantity())
-                * pspData.getPrice();
         data.setAmount(amount);
 
         // 判断代理状态
@@ -354,7 +371,6 @@ public class OrderAOImpl implements IOrderAO {
             }
 
             // 该等级是不能购买云仓，计算运费
-            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
             if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
                 if (EProductYunFei.YunFei_NO.getCode()
                     .equals(pData.getIsFree())) {

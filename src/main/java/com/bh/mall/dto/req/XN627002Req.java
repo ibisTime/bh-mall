@@ -37,6 +37,10 @@ public class XN627002Req {
     @NotBlank(message = "红线金额不能为空")
     private String redAmount;
 
+    // （必填）本等级授权单允许自发
+    @NotBlank(message = "本等级授权单是否自发")
+    private String isSend;
+
     // （必填） 更新人
     @NotBlank(message = " 更新人不能为空")
     private String updater;
@@ -115,4 +119,13 @@ public class XN627002Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(String isSend) {
+        this.isSend = isSend;
+    }
+
 }

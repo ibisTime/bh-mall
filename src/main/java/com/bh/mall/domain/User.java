@@ -240,9 +240,17 @@ public class User extends ABaseDO {
     // 介绍人姓名
     private String introduceName;
 
+    // 管理员名字
     private String manageName;
 
+    // 授权金额
     private Long impowerAmount;
+
+    // 意向归属人名字
+    private String toUserName;
+
+    // 意向归属人电话
+    private String toUserMobile;
 
     // 授权
     private AgentImpower impower;
@@ -831,6 +839,22 @@ public class User extends ABaseDO {
 
     public void setImpowerDatetime(Date impowerDatetime) {
         this.impowerDatetime = impowerDatetime;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public String getToUserMobile() {
+        return toUserMobile;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
+    }
+
+    public void setToUserMobile(String toUserMobile) {
+        this.toUserMobile = toUserMobile;
     }
 
 }

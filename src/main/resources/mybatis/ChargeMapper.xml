@@ -12,9 +12,12 @@
 		<result column="account_name" property="accountName" />
 		<result column="type" property="type" />
 		<result column="currency" property="currency" />
+		<result column="charge_pdf" property="chargePdf" />
+		<result column="channel_type" property="channelType" />
+		<result column="channel_order" property="channelOrder" />
+		
 		<result column="biz_type" property="bizType" />
 		<result column="biz_note" property="bizNote" />
-		
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_note" property="applyNote" />
@@ -41,6 +44,10 @@
 			<if test="accountNumber != null and accountNumber != '' ">
 				AND t.account_number = #{accountNumber}
 			</if>
+			<if test="channelType != null and channelType != '' ">
+				AND t.channel_type = #{channelType}
+			</if>
+			
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
 			</if>
@@ -53,6 +60,18 @@
 			<if test="bizType != null and bizType != '' ">
 				AND t.biz_type = #{bizType}
 			</if>
+			<choose>
+				<when test="status != null and status != ''">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0">
+					AND t.status IN
+					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
@@ -68,6 +87,7 @@
 			<if test="payUser != null and payUser != '' ">
 				AND t.pay_user = #{payUser}
 			</if>
+			
 			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
 				<![CDATA[AND t.pay_datetime >= #{payDatetimeStart}]]>
 			</if>
@@ -91,6 +111,9 @@
 		,t.account_name
 		,t.type
 		,t.currency
+		,t.charge_pdf
+		,t.channel_type
+		,t.channel_order
 		,t.biz_type
 		,t.biz_note
 		
@@ -128,6 +151,9 @@
 		,t.account_name
 		,t.type
 		,t.currency
+		,t.charge_pdf
+		,t.channel_type
+		,t.channel_order
 		,t.biz_type
 		,t.biz_note
 		
@@ -167,6 +193,9 @@
 		,account_name
 		,type
 		,currency
+		,charge_pdf
+		,channel_type
+		,channel_order
 		,biz_type
 		,biz_note
 		

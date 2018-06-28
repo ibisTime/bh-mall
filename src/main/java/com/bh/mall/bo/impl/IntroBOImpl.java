@@ -6,11 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IIntroBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IIntroDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Intro;
 import com.bh.mall.exception.BizException;
 
@@ -19,6 +21,9 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
 
     @Autowired
     private IIntroDAO introDAO;
+
+    @Autowired
+    IAgentBO agentBO;
 
     @Override
     public boolean isIntroExist(String code) {
@@ -74,7 +79,7 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
             condition.setCode(code);
             data = introDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "介绍奖励不存在");
             }
         }
         return data;
@@ -85,5 +90,21 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
         Intro condition = new Intro();
         condition.setLevel(level);
         return introDAO.select(condition);
+    }
+
+    @Override
+    public Intro getIntroByLevel(Integer fromLevel, Integer toLevel) {
+        Intro condition = new Intro();
+        condition.setLevel(fromLevel);
+        condition.setLevel(toLevel);
+        Intro data = introDAO.select(condition);
+
+        Agent fromAgent = agentBO.getAgentByLevel(fromLevel);
+        Agent toAgent = agentBO.getAgentByLevel(toLevel);
+        if (null == data) {
+            throw new BizException("xn0000",
+                fromAgent.getName() + "介绍" + toAgent.getName() + "的介绍奖励不存在");
+        }
+        return data;
     }
 }

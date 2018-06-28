@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.IIntroDAO">
-	<resultMap id="intro_DB_Result" type="intro">
+<mapper namespace="com.bh.mall.dao.IAwardIntervalDAO">
+	<resultMap id="awardInterval_DB_Result" type="awardInterval">
 		<result column="code" property="code" />
 		<result column="level" property="level" />
-		<result column="intro_level" property="introLevel" />
+		<result column="start_amount" property="startAmount" />
+		<result column="end_amount" property="endAmount" />
 		<result column="percent" property="percent" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -19,22 +21,22 @@
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
 			</if>
-			<if test="introLevel != null and introLevel != '' ">
-				AND t.intro_level = #{introLevel}
-			</if>
+			
 		</trim>
 	</sql>
-	<select id="select_intro" parameterType="intro" resultMap="intro_DB_Result">
+	<select id="select_awardInterval" parameterType="awardInterval" resultMap="awardInterval_DB_Result">
 		SELECT
 		t.code
 		,t.level
-		,t.intro_level
+		,t.start_amount
+		,t.end_amount
 		,t.percent
+		
 		,t.updater
 		,t.update_datetime
 		,t.remark
 		FROM
-		tbh_intro t
+		tbh_award_interval t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -43,45 +45,58 @@
 		</trim>
 	</select>
 
-	<select id="select_intro_count" parameterType="intro"
+	<select id="select_awardInterval_count" parameterType="awardInterval"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_intro t
+		SELECT count(1) FROM tbh_award_interval t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_intro" parameterType="intro">
+	<insert id="insert_awardInterval" parameterType="awardInterval">
 		INSERT INTO
-		tbh_intro(
+		tbh_award_interval(
 		code
 		,level
-		,intro_level
+		,start_amount
+		,end_amount
 		,percent
-		,updater
-		,update_datetime
-		,remark
+		
+		,updater         
+		,update_datetime 
+		,remark          
 		)
 		VALUES(
 		#{code}
 		,#{level}
-		,#{introLevel}
+		,#{startAmount}
+		,#{endAmount}
 		,#{percent}
-		,#{updater}
-		,#{updateDatetime}
-		,#{remark}
+		
+		,#{updater}        
+		,#{updateDatetime} 
+		,#{remark}          
 		)
 	</insert>
 
-	<update id="update_intro" parameterType="intro">
-		UPDATE tbh_intro
+	<update id="update_awardInterval" parameterType="awardInterval">
+		UPDATE tbh_award_interval
 		SET
 		level = #{level}
-		,intro_level = #{introLevel}
+		,start_amount = #{startAmount}
+		,end_amount = #{endAmount}
 		,percent = #{percent}
+		
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	<delete id="delete_awardInterval" parameterType="awardInterval">
+		DELETE FROM 
+		tbh_award_interval
+		WHERE 
+		code = #{code}
+	</delete>
 
 
 </mapper>

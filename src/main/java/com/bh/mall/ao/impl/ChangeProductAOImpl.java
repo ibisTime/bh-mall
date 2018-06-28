@@ -427,11 +427,6 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             Account account = accountBO.getAccountByUser(user.getUserId(),
                 ECurrency.MK_CNY.getCode());
 
-            // 本等级门槛最低余额
-            if (account.getAmount() > agent.getMinSurplus()) {
-                result = ECheckStatus.MIN_LOW.getCode();
-            }
-
             // 是否已授权
             if (EUserStatus.IMPOWERED.getCode().equals(user.getStatus())) {
                 // 是否完成授权单
@@ -464,7 +459,12 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 redAmount = agent.getRedAmount() - redAmount;
             }
 
-            // 是否有过充值,且充值金额大于最低/授权充值
+            // 本等级门槛最低余额
+            if (account.getAmount() > agent.getMinSurplus()) {
+                result = ECheckStatus.MIN_LOW.getCode();
+            }
+
+            // 是否有过充值,且充值金额大于最低授权充值
             Long cAmount = 0L;
             List<Charge> charge = chargeBO.getChargeByUser(user.getUserId());
             for (Charge charge2 : charge) {

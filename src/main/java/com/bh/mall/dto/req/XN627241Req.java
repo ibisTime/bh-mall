@@ -9,16 +9,17 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 public class XN627241Req {
+
     // 编号
-    @NotBlank
+    @NotBlank(message = "编号不能为空")
     private String code;
 
     // 奖励比例
-    @NotBlank
+    @NotBlank(message = "奖励比例不能为空")
     private String percent;
 
     // 更新人
-    @NotBlank
+    @NotBlank(message = "更新人不能为空")
     private String updater;
 
     // 备注

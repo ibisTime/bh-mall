@@ -11,6 +11,7 @@
 		
 		<result column="min_surplus" property="minSurplus"/>
 		<result column="is_wareHouse" property="isWareHouse"/>
+		<result column="is_send" property="isSend"/>
 		<result column="updater" property="updater"/>
 		<result column="update_datetime" property="updateDatetime"/>
 		<result column="remark" property="remark"/>
@@ -30,6 +31,9 @@
 			<if test="isWareHouse != null and isWareHouse !=''">
 				AND t.is_wareHouse = #{isWareHouse}
 			</if>
+			<if test="isSend != null and isSend !=''">
+				AND t.is_send = #{isSend}
+			</if>
 			
 			<if test="lowLevel != null and lowLevel !=''">
 				<![CDATA[AND t.level > #{lowLevel}]]>
@@ -47,6 +51,7 @@
 		,t.min_surplus
 		
 		,t.is_wareHouse
+		,t.is_send
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -75,6 +80,7 @@
 		
 		,min_surplus = #{minSurplus}
 		,is_wareHouse = #{isWareHouse}
+		,is_send = #{isSend}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}

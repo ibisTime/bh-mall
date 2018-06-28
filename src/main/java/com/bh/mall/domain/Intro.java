@@ -20,6 +20,9 @@ public class Intro extends ABaseDO {
     // 等级
     private Integer level;
 
+    // 可介绍等级
+    private Integer introLevel;
+
     // 奖励比例
     private Double percent;
 
@@ -46,6 +49,16 @@ public class Intro extends ABaseDO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+    
+    
+
+    public Integer getIntroLevel() {
+        return introLevel;
+    }
+
+    public void setIntroLevel(Integer introLevel) {
+        this.introLevel = introLevel;
     }
 
     public void setUpdater(String updater) {

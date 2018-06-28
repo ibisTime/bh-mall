@@ -29,6 +29,7 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IUserBO;
+import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
@@ -51,11 +52,11 @@ import com.bh.mall.domain.Intro;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.User;
+import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.req.XN627362Req;
-import com.bh.mall.dto.res.XN627262Res;
 import com.bh.mall.dto.res.XN627302Res;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAddressType;
@@ -126,6 +127,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     IAgentBO agentBO;
+
+    @Autowired
+    IWareHouseBO wareHouseBO;
 
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
@@ -577,7 +581,16 @@ public class UserAOImpl implements IUserAO {
                     user.setManageName(manageName.getLoginName());
                 }
             }
-
+            // 最后一条代理轨迹
+            if (StringUtils.isNotBlank(user.getLastAgentLog())) {
+                AgencyLog log = agencyLogBO
+                    .getAgencyLog(user.getLastAgentLog());
+                if (StringUtils.isNotBlank(log.getToUserId())) {
+                    User toUser = userBO.getUser(log.getToUserId());
+                    user.setToUserName(toUser.getRealName());
+                    user.setToUserMobile(toUser.getMobile());
+                }
+            }
         }
         return page;
     }
@@ -723,6 +736,7 @@ public class UserAOImpl implements IUserAO {
                 user.setImpower(impower);
             }
         }
+
         return user;
     }
 
@@ -1104,7 +1118,8 @@ public class UserAOImpl implements IUserAO {
                 // 介绍奖
                 if (StringUtils.isNotBlank(data.getIntroducer())) {
                     User user = userBO.getUser(data.getIntroducer());
-                    Intro iData = introBO.getIntroByLevel(data.getApplyLevel());
+                    Intro iData = introBO.getIntroByLevel(user.getLevel(),
+                        data.getApplyLevel());
                     long amount = AmountUtil.mul(impower.getMinCharge(),
                         iData.getPercent());
 
@@ -1269,9 +1284,8 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public XN627262Res upgradeLevel(String userId, String highLevel,
-            String payPdf, String payAmount) {
-        XN627262Res res = null;
+    public void upgradeLevel(String userId, String highLevel, String payPdf,
+            String payAmount) {
         User data = userBO.getUser(userId);
         if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
                 || EUserStatus.UPGRADED.getCode().equals(data.getStatus()))) {
@@ -1291,8 +1305,8 @@ public class UserAOImpl implements IUserAO {
         Agent agent = agentBO
             .getAgentByLevel(StringValidater.toInteger(highLevel));
 
+        // 推荐人数是否满足半门槛
         List<User> userReferee = userBO.getUsersByUserReferee(data.getUserId());
-
         if (upgrade.getReNumber() >= userReferee.size()) {
             if (StringValidater.toLong(payAmount) <= agent
                 .getMinChargeAmount()) {
@@ -1303,10 +1317,15 @@ public class UserAOImpl implements IUserAO {
 
         AgentUpgrade auData = agentUpgradeBO
             .getAgentUpgradeByLevel(data.getLevel());
-
         // 余额是否清零
         if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
-            res = new XN627262Res("本等级余额将被清零，请确保您的账户中没有余额");
+            // 云仓是否有余额
+            List<WareHouse> list = wareHouseBO
+                .getWareHouseByUser(data.getUserId());
+            if (CollectionUtils.isNotEmpty(list)) {
+                throw new BizException("xn00000", "本等级升级云仓中不允许有余额");
+            }
+
         }
         String status = EUserStatus.TO_COMPANYUPGRADE.getCode();
         if (StringUtils.isNotBlank(data.getHighUserId())) {
@@ -1325,7 +1344,6 @@ public class UserAOImpl implements IUserAO {
         String logCode = agencyLogBO.upgradeLevel(data, payPdf);
         data.setLastAgentLog(logCode);
         userBO.upgradeLevel(data);
-        return res;
     }
 
     @Override

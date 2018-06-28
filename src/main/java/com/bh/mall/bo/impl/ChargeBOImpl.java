@@ -148,8 +148,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         statusList.add(EChargeStatus.Cancel_YES.getCode());
         Charge condition = new Charge();
         condition.setApplyUser(userId);
-
         condition.setStatusList(statusList);
+
         return chargeDAO.selectList(condition);
     }
 }

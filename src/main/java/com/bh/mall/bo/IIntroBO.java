@@ -21,4 +21,6 @@ public interface IIntroBO extends IPaginableBO<Intro> {
 
     public Intro getIntroByLevel(Integer level);
 
+    public Intro getIntroByLevel(Integer fromLevel, Integer toLevel);
+
 }

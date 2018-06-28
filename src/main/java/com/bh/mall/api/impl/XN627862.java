@@ -1,38 +1,37 @@
-
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IAwardIntervalAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627262Req;
+import com.bh.mall.dto.req.XN627862Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 升级申请
+ * 修改介绍奖励
  * @author: nyc 
- * @since: 2018年4月1日 上午10:58:40 
+ * @since: 2018年6月28日 下午5:55:07 
  * @history:
  */
-public class XN627262 extends AProcessor {
+public class XN627862 extends AProcessor {
 
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private IAwardIntervalAO awardIntervalAO = SpringContextHolder
+        .getBean(IAwardIntervalAO.class);
 
-    private XN627262Req req = null;
+    private XN627862Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.upgradeLevel(req.getUserId(), req.getHighLevel(),
-            req.getPayPdf(), req.getPadAmount());
+        awardIntervalAO.editAwardInterval(req);
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627262Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627862Req.class);
         ObjValidater.validateReq(req);
     }
 
