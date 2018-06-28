@@ -2,6 +2,7 @@ package com.bh.mall.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -108,6 +109,20 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
             }
         }
         return data;
+    }
+
+    @Override
+    public List<ProductSpecsPrice> getPspBySpecsCode(String specsCode) {
+        List<ProductSpecsPrice> list = null;
+        if (StringUtils.isNotBlank(specsCode)) {
+            ProductSpecsPrice condition = new ProductSpecsPrice();
+            condition.setProductSpecsCode(specsCode);
+            list = productSpecsPriceDAO.selectList(condition);
+            if (CollectionUtils.isEmpty(list)) {
+                throw new BizException("xn0000", "该规格价格不存在");
+            }
+        }
+        return list;
     }
 
 }

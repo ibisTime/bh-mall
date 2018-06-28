@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Intro;
 import com.bh.mall.dto.req.XN627241Req;
+import com.bh.mall.exception.BizException;
 
 @Service
 public class IntroAOImpl implements IIntroAO {
@@ -23,26 +23,28 @@ public class IntroAOImpl implements IIntroAO {
     private IIntroBO introBO;
 
     @Override
-    public List<String> addIntro(String level, List<Intro> introList,
+    public String addIntro(String level, String introLevel, String percent,
             String updater, String remark) {
-        List<String> list = new ArrayList<String>();
-        for (Intro intro : introList) {
-            Intro data = new Intro();
-            String code = OrderNoGenerater
-                .generate(EGeneratePrefix.Intro.getCode());
-            data.setCode(code);
-            data.setLevel(intro.getLevel());
-            data.setIntroLevel(intro.getIntroLevel());
-
-            data.setPercent(intro.getPercent());
-            data.setUpdater(intro.getUpdater());
-            Date date = new Date();
-            data.setUpdateDatetime(date);
-            data.setRemark(intro.getRemark());
-
-            introBO.saveIntro(data);
+        if (StringValidater.toInteger(introLevel) >= StringValidater
+            .toInteger(level)) {
+            throw new BizException("xn00000", "可介绍的等级不能低于本等级");
         }
-        return list;
+
+        Intro data = new Intro();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Intro.getCode());
+        data.setCode(code);
+        data.setLevel(StringValidater.toInteger(level));
+        data.setIntroLevel(StringValidater.toInteger(introLevel));
+
+        data.setPercent(StringValidater.toDouble(percent));
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+        introBO.saveIntro(data);
+
+        return code;
     }
 
     @Override
@@ -57,13 +59,13 @@ public class IntroAOImpl implements IIntroAO {
 
     @Override
     public void dropIntro(String code) {
-        introBO.removeIntro(code);
+        Intro data = introBO.getIntro(code);
+        introBO.removeIntro(data);
     }
 
     @Override
     public Paginable<Intro> queryIntroPage(int start, int limit,
             Intro condition) {
-
         return introBO.getPaginable(start, limit, condition);
     }
 

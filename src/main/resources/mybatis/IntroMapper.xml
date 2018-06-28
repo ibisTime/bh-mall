@@ -82,6 +82,13 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	<delete id="delete_intro">
+		DELETE FROM  
+		tbh_intro
+		WHERE 
+		code = #{code}
+	</delete>
 
 
 </mapper>

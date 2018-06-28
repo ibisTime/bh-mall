@@ -23,7 +23,7 @@ public interface IIntroAO {
 
     public Intro getIntro(String code);
 
-    public List<String> addIntro(String level, List<Intro> introList,
+    public String addIntro(String level, String introLevel, String percent,
             String updater, String remark);
 
 }

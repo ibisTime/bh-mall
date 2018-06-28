@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 规格定价
  * @author: nyc 
@@ -14,19 +12,19 @@ public class XN627547Req {
     private String code;
 
     // （必填）等级
-    @NotBlank(message = "等级不能为空")
     private String level;
 
     // （必填）价格
-    @NotBlank(message = "价格不能为空")
     private String price;
 
     // （必填）换货价
-    @NotBlank(message = "换货不能为空")
     private String changePrice;
 
     // （必填）是否可购买
     private String isBuy;
+
+    // 最小数量
+    private String minNumber;
 
     // 日限购
     private String dailyNumber;
@@ -75,6 +73,14 @@ public class XN627547Req {
 
     public void setIsBuy(String isBuy) {
         this.isBuy = isBuy;
+    }
+
+    public String getMinNumber() {
+        return minNumber;
+    }
+
+    public void setMinNumber(String minNumber) {
+        this.minNumber = minNumber;
     }
 
     public String getDailyNumber() {

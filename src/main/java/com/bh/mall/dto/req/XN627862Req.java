@@ -16,10 +16,6 @@ public class XN627862Req {
     @NotBlank(message = "编号不能为空")
     private String code;
 
-    // （必填） 等级
-    @NotBlank(message = "等级不能为空")
-    private String level;
-
     // （必填） 奖励百分比
     @NotBlank(message = "奖励百分比不能为空")
     private String percent;
@@ -49,10 +45,6 @@ public class XN627862Req {
         this.code = code;
     }
 
-    public String getLevel() {
-        return level;
-    }
-
     public String getPercent() {
         return percent;
     }
@@ -71,10 +63,6 @@ public class XN627862Req {
 
     public String getRemark() {
         return remark;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
     public void setPercent(String percent) {

@@ -47,23 +47,13 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
     }
 
     @Override
-    public int removeIntro(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            Intro data = new Intro();
-            data.setCode(code);
-            count = introDAO.delete(data);
-        }
-        return count;
+    public void removeIntro(Intro data) {
+        introDAO.delete(data);
     }
 
     @Override
-    public int refreshIntro(Intro data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = introDAO.update(data);
-        }
-        return count;
+    public void refreshIntro(Intro data) {
+        introDAO.update(data);
     }
 
     @Override

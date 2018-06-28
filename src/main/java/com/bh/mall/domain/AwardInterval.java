@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
-* 可介绍等级
+* 出货奖励
 * @author: nyc 
 * @since: 2018-06-28 16:54:46
 * @history:
@@ -42,6 +42,9 @@ public class AwardInterval extends ABaseDO {
 
     // 等级名称
     private String name;
+
+    // 出货金额
+    private Long amount;
 
     public String getCode() {
         return code;
@@ -113,6 +116,14 @@ public class AwardInterval extends ABaseDO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
 }

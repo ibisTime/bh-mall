@@ -29,7 +29,9 @@ public class XN627865 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AwardInterval condition = new AwardInterval();
-        condition.setLevel(StringValidater.toInteger(req.getLevel()));
+        if (StringUtils.isNotBlank(req.getLevel())) {
+            condition.setLevel(StringValidater.toInteger(req.getLevel()));
+        }
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

@@ -8,7 +8,6 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.req.XN627005Req;
-import com.bh.mall.enums.EUserLevel;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -28,12 +27,6 @@ public class XN627005 extends AProcessor {
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
         condition.setName(req.getName());
-        if (StringUtils.isBlank(req.getLevel())) {
-            condition.setLevelForQuery(EUserLevel.All.getCode());
-        } else {
-            condition.setLevel(StringValidater.toInteger(req.getLevel()));
-        }
-
         condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
 
         String orderColumn = req.getOrderColumn();

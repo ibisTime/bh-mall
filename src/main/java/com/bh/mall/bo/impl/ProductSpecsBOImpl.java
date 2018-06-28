@@ -65,7 +65,8 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                     productSpecsPrice.setLevel(
                         StringValidater.toInteger(specsPrice.getLevel()));
 
-                    productSpecsPrice.setMinNumber(0);
+                    productSpecsPrice.setMinNumber(
+                        StringValidater.toInteger(specsPrice.getMinNumber()));
                     productSpecsPrice.setPrice(
                         StringValidater.toLong(specsPrice.getPrice()));
                     productSpecsPrice.setChangePrice(
@@ -214,6 +215,45 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         ProductSpecs condition = new ProductSpecs();
         condition.setProductCode(productCode);
         return productSpecsDAO.selectList(condition);
+    }
+
+    @Override
+    public void refreshProductSpecs(XN627546Req psReq,
+            List<XN627547Req> specsPriceList) {
+        ProductSpecs psData = this.getProductSpecs(psReq.getCode());
+        psData.setIsSingle(psReq.getIsSingle());
+        psData.setSingleNumber(
+            StringValidater.toInteger(psReq.getSingleNumber()));
+        psData.setRefCode(psReq.getRefCode());
+
+        psData.setName(psReq.getName());
+        psData.setNumber(StringValidater.toInteger(psReq.getNumber()));
+        psData.setWeight(StringValidater.toDouble(psReq.getWeight()));
+        psData.setIsUpgradeOrder(psReq.getIsUpgradeOrder());
+
+        psData.setIsImpowerOrder(psReq.getIsPowerOrder());
+        psData.setIsNormalOrder(psReq.getIsNormalOrder());
+
+        productSpecsDAO.update(psData);
+        List<XN627547Req> pspList = specsPriceList;
+
+        for (XN627547Req specsPrice : pspList) {
+            ProductSpecsPrice pspData = new ProductSpecsPrice();
+            pspData.setCode(specsPrice.getCode());
+            pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
+            pspData.setChangePrice(
+                StringValidater.toLong(specsPrice.getChangePrice()));
+            pspData.setIsBuy(specsPrice.getIsBuy());
+
+            pspData.setDailyNumber(
+                StringValidater.toInteger(specsPrice.getDailyNumber()));
+            pspData.setWeeklyNumber(
+                StringValidater.toInteger(specsPrice.getWeeklyNumber()));
+            pspData.setMonthlyNumber(
+                StringValidater.toInteger(specsPrice.getMonthlyNumber()));
+            productSpecsPriceDAO.update(pspData);
+        }
+
     }
 
 }

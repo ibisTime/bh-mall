@@ -22,8 +22,8 @@ public class XN627240 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return introAO.addIntro(req.getLevel(), req.getIntroList(),
-            req.getUpdater(), req.getRemark());
+        return introAO.addIntro(req.getLevel(), req.getIntroLevel(),
+            req.getPercent(), req.getUpdater(), req.getRemark());
     }
 
     @Override

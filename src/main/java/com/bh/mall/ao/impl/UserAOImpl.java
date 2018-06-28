@@ -989,7 +989,7 @@ public class UserAOImpl implements IUserAO {
         }
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.IGNORED.getCode());
+        data.setStatus(EUserStatus.TO_MIND.getCode());
         String logCode = agencyLogBO.ignore(data);
         data.setLastAgentLog(logCode);
         userBO.ignore(data);
@@ -1133,9 +1133,12 @@ public class UserAOImpl implements IUserAO {
                         data.getUserId());
                 }
             }
-
+            // 未通过，无上级
+        } else if (EUserStatus.ADD_INFO.getCode().equals(data.getStatus())) {
+            status = EUserStatus.ADD_INFO.getCode();
+            // 未通过，有上级
         } else {
-            status = EUserStatus.NO_THROUGH.getCode();
+            status = EUserStatus.IMPOWERO_INFO.getCode();
         }
         Date date = new Date();
         if (EUserStatus.IMPOWERED.getCode().equals(status)) {
@@ -1358,10 +1361,6 @@ public class UserAOImpl implements IUserAO {
         String status = EUserStatus.IMPOWERED.getCode();
         Integer level = data.getLevel();
         if (EBoolean.YES.getCode().equals(result)) {
-            // AgencyLog log = agencyLogBO.getAgencyLog(data.getLastAgentLog());
-            // if (EAgencyType.Update.getCode().equals(log.getType())) {
-            // throw new BizException("xn00000", "该代理还未改变上级，无法审核");
-            // }
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
             status = EUserStatus.UPGRADED.getCode();

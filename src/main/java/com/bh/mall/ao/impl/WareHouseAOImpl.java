@@ -27,6 +27,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
+import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.User;
@@ -200,11 +201,22 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
     @Override
     public void deliveProject(XN627815Req req) {
+        // 检查限购
         User user = userBO.getUser(req.getUserId());
         WareHouse data = wareHouseBO.getWareHouseByProductSpec(req.getUserId(),
             req.getProductSpecsCode());
         if (null == data) {
             throw new BizException("xn00000", "您仓库中没有该规格的产品");
+        }
+
+        ProductSpecs psData = productSpecsBO
+            .getProductSpecs(data.getProductSpecsCode());
+        ProductSpecsPrice pspData = productSpecsPriceBO
+            .getPriceBySpecsCode(data.getProductSpecsCode(), user.getLevel());
+        orderAO.checkLimitNumber(user, psData, pspData, data.getQuantity());
+        if (pspData.getMinNumber() > data.getQuantity()) {
+            throw new BizException("xn00000",
+                "该产品云仓发货不能少于" + pspData.getMinNumber() + psData.getName());
         }
         Product product = productBO.getProduct(data.getProductCode());
         if (data.getQuantity() < StringValidater.toInteger(req.getQuantity())) {

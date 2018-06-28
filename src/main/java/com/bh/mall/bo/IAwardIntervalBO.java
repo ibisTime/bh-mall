@@ -17,4 +17,6 @@ public interface IAwardIntervalBO extends IPaginableBO<AwardInterval> {
 
     public AwardInterval getAwardInterval(String code);
 
+    public AwardInterval getAwardIntervalByLevel(Integer level, Long amount);
+
 }

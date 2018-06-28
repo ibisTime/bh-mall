@@ -26,7 +26,7 @@ public class AwardIntervalAOImpl implements IAwardIntervalAO {
     @Override
     public String addAwardInterval(String level, Long startAmount,
             Long endAmount, String percent, String updater, String remark) {
-        if (endAmount > startAmount) {
+        if (endAmount < startAmount) {
             throw new BizException("xn00000", "起始金额不能大于截止金额");
         }
 
@@ -52,12 +52,11 @@ public class AwardIntervalAOImpl implements IAwardIntervalAO {
     public void editAwardInterval(XN627862Req req) {
         Long startAmount = StringValidater.toLong(req.getStartAmount());
         Long endAmount = StringValidater.toLong(req.getEndAmount());
-        if (endAmount > startAmount) {
+        if (endAmount < startAmount) {
             throw new BizException("xn00000", "起始金额不能大于截止金额");
         }
 
         AwardInterval data = awardIntervalBO.getAwardInterval(req.getCode());
-        data.setLevel(StringValidater.toInteger(req.getLevel()));
         data.setStartAmount(startAmount);
         data.setEndAmount(endAmount);
         data.setPercent(StringValidater.toDouble(req.getPercent()));

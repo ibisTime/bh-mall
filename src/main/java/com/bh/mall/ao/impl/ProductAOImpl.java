@@ -89,6 +89,7 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
+    @Transactional
     public void editProduct(XN627541Req req) {
         Product data = productBO.getProduct(req.getCode());
         if (EProductStatus.Shelf_YES.getCode().equals(data.getStatus())) {
@@ -115,18 +116,20 @@ public class ProductAOImpl implements IProductAO {
         List<ProductSpecs> dbPsList = productSpecsBO
             .queryProductSpecsList(psCondition);
 
+        // 如果数据库未存在此规格，表示已经删除
         for (ProductSpecs productSpecs : dbPsList) {
-            if (psList.contains(productSpecs)) {
+            if (!psList.contains(productSpecs)) {
                 productSpecsBO.removeProductSpecs(productSpecs.getCode());
             }
         }
 
+        // 无code为新增，否则修改
         for (XN627546Req psReq : psList) {
-            ProductSpecs psData = productSpecsBO
-                .getProductSpecs(psReq.getCode());
-            // 是否新增
-            if (psData == null) {
+            if (StringUtils.isBlank(psReq.getCode())) {
                 productSpecsBO.saveProductSpecs(data.getCode(), psReq);
+            } else {
+                productSpecsBO.refreshProductSpecs(psReq,
+                    psReq.getSpecsPriceList());
             }
         }
 

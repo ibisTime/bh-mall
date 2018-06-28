@@ -148,4 +148,8 @@
 	<bean id="reportBO" class="com.bh.mall.bo.impl.ReportBOImpl">
 		<property name="paginableDAO" ref="reportDAOImpl"/>
 	</bean>
+	
+	<bean id="awardIntervalBO" class="com.bh.mall.bo.impl.AwardIntervalBOImpl">
+		<property name="paginableDAO" ref="awardIntervalDAOImpl"/>
+	</bean>	
 </beans>

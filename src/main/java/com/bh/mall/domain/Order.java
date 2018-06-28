@@ -144,6 +144,8 @@ public class Order extends ABaseDO {
 
     private List<String> statusList;
 
+    private List<String> fialStatus;
+
     private String keyword;
 
     private String approveName;
@@ -574,6 +576,14 @@ public class Order extends ABaseDO {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public List<String> getFialStatus() {
+        return fialStatus;
+    }
+
+    public void setFialStatus(List<String> fialStatus) {
+        this.fialStatus = fialStatus;
     }
 
 }

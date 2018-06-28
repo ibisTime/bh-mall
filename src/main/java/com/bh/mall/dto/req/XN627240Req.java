@@ -1,10 +1,6 @@
 package com.bh.mall.dto.req;
 
-import java.util.List;
-
 import org.hibernate.validator.constraints.NotBlank;
-
-import com.bh.mall.domain.Intro;
 
 /**
  * 新增介绍奖
@@ -17,9 +13,13 @@ public class XN627240Req {
     @NotBlank(message = "等级不能为空")
     private String level;
 
-    // （必填）介绍等级
-    @NotBlank(message = "可介绍等级不能为空")
-    private List<Intro> introList;
+    // （必填）可介绍 等级
+    @NotBlank(message = "可介绍 不能为空")
+    private String introLevel;
+
+    // （必填）奖励百分比
+    @NotBlank(message = "奖励百分比不能为空")
+    private String percent;
 
     // 更新人
     @NotBlank(message = "更新人不能为空")
@@ -32,8 +32,12 @@ public class XN627240Req {
         return level;
     }
 
-    public List<Intro> getIntroList() {
-        return introList;
+    public String getIntroLevel() {
+        return introLevel;
+    }
+
+    public String getPercent() {
+        return percent;
     }
 
     public String getUpdater() {
@@ -48,8 +52,12 @@ public class XN627240Req {
         this.level = level;
     }
 
-    public void setIntroList(List<Intro> introList) {
-        this.introList = introList;
+    public void setIntroLevel(String introLevel) {
+        this.introLevel = introLevel;
+    }
+
+    public void setPercent(String percent) {
+        this.percent = percent;
     }
 
     public void setUpdater(String updater) {

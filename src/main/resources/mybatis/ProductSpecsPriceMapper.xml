@@ -10,7 +10,7 @@
 		<result column="change_price" property="changePrice"/>
 		
 		<result column="min_number" property="minNumber"/>
-		<result column="is_buy" property="is_buy"/>
+		<result column="is_buy" property="isBuy"/>
 		<result column="daily_number" property="dailyNumber"/>
 		<result column="weekly_number" property="weeklyNumber"/>
 		<result column="monthly_number" property="monthlyNumber"/>
@@ -94,9 +94,7 @@
 	<update id="update_productSpecsPrice" parameterType="productSpecsPrice">
 		UPDATE tbh_product_specs_price
 		SET 
-		product_specs_code = #{productSpecsCode}
-		,level = #{level}
-		,price = #{price}
+		price = #{price}
 		,change_price = #{changePrice}
 		,min_number = #{minNumber}
 		,id_buy = #{isBuy}

@@ -106,12 +106,9 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
             String fromBizNote, String toBizNote, String refNo) {
         String fromCode = fromWareHouse.getCode();
         String toCode = toWareHouse.getCode();
-        if (fromCode.equals(toCode)) {
-            throw new BizException("xn0000", "来去账户一致");
-        }
-        this.changeWareHouse(fromCode, -quantity, fromBizType, fromBizNote,
+        this.changeWareHouse(fromCode, quantity, fromBizType, fromBizNote,
             refNo);
-        this.changeWareHouse(toCode, quantity, toBizType, toBizNote, refNo);
+        this.changeWareHouse(toCode, -quantity, toBizType, toBizNote, refNo);
     }
 
     @Override
@@ -125,6 +122,7 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         if (nowQuantity < 0) {
             throw new BizException("xn0000", "该规格的产品数量不足");
         }
+
         // 记录流水
         String logCode = wareHouseLogBO.saveWareHouseLog(dbData, quantity,
             bizType, bizNote, refNo);
@@ -134,7 +132,13 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         data.setQuantity(nowQuantity);
         data.setAmount(nowAmount);
         data.setLastChangeCode(logCode);
-        wareHouseDAO.updateQuantity(data);
+        // 该规格产品数量为零时，从云仓删除该产品
+        if (nowQuantity == 0) {
+            wareHouseDAO.delete(data);
+        } else {
+            wareHouseDAO.updateQuantity(data);
+        }
+
     }
 
     @Override

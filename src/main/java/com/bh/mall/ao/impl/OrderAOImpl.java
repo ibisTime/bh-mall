@@ -20,6 +20,7 @@ import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.IAwardBO;
+import com.bh.mall.bo.IAwardIntervalBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
@@ -42,6 +43,7 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.domain.Award;
+import com.bh.mall.domain.AwardInterval;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
@@ -131,6 +133,9 @@ public class OrderAOImpl implements IOrderAO {
     @Autowired
     IAgentBO agentBO;
 
+    @Autowired
+    IAwardIntervalBO awardIntervalBO;
+
     @Override
     @Transactional
     public List<String> addOrder(XN627640Req req) {
@@ -150,7 +155,7 @@ public class OrderAOImpl implements IOrderAO {
                 .getProductSpecs(cart.getProductSpecsCode());
             ProductSpecsPrice pspData = productSpecsPriceBO
                 .getPriceBySpecsCode(psData.getCode(), level);
-            User user = userBO.getUser(req.getApplyUser());
+            User applyUser = userBO.getUser(req.getApplyUser());
 
             // 方便代理够买云仓使用
             order.setProductCode(pData.getCode());
@@ -169,42 +174,14 @@ public class OrderAOImpl implements IOrderAO {
             order.setAmount(amount);
 
             // 下单人是否是代理
-            if (EUserKind.Merchant.getCode().equals(user.getKind())) {
-                level = user.getLevel();
+            if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
+                level = applyUser.getLevel();
                 pspData = productSpecsPriceBO
                     .getPriceBySpecsCode(psData.getCode(), level);
-                // 是否完成授权单
-                boolean impowerOrder = this.CheckImpowerOrder(user);
-                if (EUserStatus.IMPOWERED.getCode().equals(user.getStatus())) {
-                    if (!impowerOrder) {
-                        kind = EOrderKind.Impower_Order.getCode();
-                        if (EProductSpecsType.Apply_NO.getCode()
-                            .equals(psData.getIsImpowerOrder())) {
-                            throw new BizException("xn0000", "该产品规格不予授权单单下单");
-                        }
-                    }
-                }
-
-                // 是否完成升级单
-                boolean upgradeOrder = this.CheckImpowerOrder(user);
-                if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
-                    if (!upgradeOrder) {
-                        kind = EOrderKind.Upgrade_Order.getCode();
-                    }
-                    if (EProductSpecsType.Apply_NO.getCode()
-                        .equals(psData.getIsUpgradeOrder())) {
-                        throw new BizException("xn0000", "该产品规格不予授权单单下单");
-                    }
-                }
-
-                // 是否允许普通单下单
-                if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(psData.getIsNormalOrder())) {
-                    throw new BizException("xn0000", "该产品规格不予许普通单下单");
-                }
+                kind = this.checkOrder(applyUser, psData);
 
                 // 该等级是不能购买云仓，计算运费
-                Agent agent = agentBO.getAgentByLevel(user.getLevel());
+                Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
                 if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
                     if (EProductYunFei.YunFei_NO.getCode()
                         .equals(pData.getIsFree())) {
@@ -215,41 +192,15 @@ public class OrderAOImpl implements IOrderAO {
                     }
 
                 } else {
+                    // 检查限购与是否买
+                    if (EBoolean.NO.getCode().equals(pspData.getIsBuy())) {
+                        throw new BizException("xn0000", "您的等级无法购买该规格的产品");
+                    }
                     int quantity = cart.getQuantity() * psData.getNumber();
-                    int number = 0;
-                    // 每日限购
-                    if (0 != pspData.getDailyNumber()) {
-                        number = this.getNumber(user.getUserId(),
-                            DateUtil.getTodayStart(), DateUtil.getTodayEnd());
-                        if (quantity + number > pspData.getDailyNumber()) {
-                            throw new BizException("xn0000",
-                                "您今日还能购买" + (pspData.getDailyNumber() - quantity
-                                        - number));
-                        }
-                    }
+                    // 改变产品数量
+                    this.changeProductNumber(applyUser, pData, psData, order,
+                        req.getToUser(), code);
 
-                    // 周限购
-                    if (0 != pspData.getWeeklyNumber()) {
-                        number = this.getNumber(user.getUserId(),
-                            DateUtil.getWeeklyStart(), DateUtil.getWeeklyEnd());
-                        if ((quantity + number) > pspData.getDailyNumber()) {
-                            throw new BizException("xn0000",
-                                "您本周还能购买" + (pspData.getDailyNumber() - quantity
-                                        - number));
-                        }
-                    }
-
-                    // 月限购
-                    if (0 != pspData.getMonthlyNumber()) {
-                        number = this.getNumber(user.getUserId(),
-                            DateUtil.getMonthStart(), DateUtil.getMonthEnd());
-
-                        if ((quantity + number) > pspData.getDailyNumber()) {
-                            throw new BizException("xn0000",
-                                "您本月还能购买" + (pspData.getDailyNumber() - quantity
-                                        - number));
-                        }
-                    }
                 }
             }
 
@@ -343,27 +294,8 @@ public class OrderAOImpl implements IOrderAO {
         // 判断代理状态
         if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
             // 是否完成授权单
-            boolean impowerOrder = this.CheckImpowerOrder(applyUser);
-            if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
-                if (!impowerOrder) {
-                    kind = EOrderKind.Impower_Order.getCode();
-                    if (EProductSpecsType.Apply_NO.getCode()
-                        .equals(psData.getIsImpowerOrder())) {
-                        throw new BizException("xn0000", "该产品规格不予授权单单下单");
-                    }
-                }
-            }
-            // 是否完成升级单
-            boolean upgradeOrder = this.CheckImpowerOrder(applyUser);
-            if (EUserStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
-                if (!upgradeOrder) {
-                    kind = EOrderKind.Upgrade_Order.getCode();
-                }
-                if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(psData.getIsUpgradeOrder())) {
-                    throw new BizException("xn0000", "该产品规格不予授权单单下单");
-                }
-            }
+            kind = this.checkOrder(applyUser, psData);
+
             // 判断是否允许：普通，授权，升级下单
             if (EProductSpecsType.Apply_NO.getCode()
                 .equals(psData.getIsNormalOrder())) {
@@ -381,41 +313,14 @@ public class OrderAOImpl implements IOrderAO {
                 }
 
             } else {
-                int quantity = psData.getNumber();
-                int number = 0;
-                // 每日限购
-                if (0 != pspData.getDailyNumber()) {
-                    number = this.getNumber(applyUser.getUserId(),
-                        DateUtil.getTodayStart(), DateUtil.getTodayEnd());
-                    if (quantity + number > pspData.getDailyNumber()) {
-                        throw new BizException("xn0000",
-                            "您今日还能购买" + (pspData.getDailyNumber() - quantity
-                                    - number));
-                    }
+                // 检查限购与是否买
+                if (EBoolean.NO.getCode().equals(pspData.getIsBuy())) {
+                    throw new BizException("xn0000", "您的等级无法购买该规格的产品");
                 }
 
-                // 周限购
-                if (0 != pspData.getWeeklyNumber()) {
-                    number = this.getNumber(applyUser.getUserId(),
-                        DateUtil.getWeeklyStart(), DateUtil.getWeeklyEnd());
-                    if ((quantity + number) > pspData.getDailyNumber()) {
-                        throw new BizException("xn0000",
-                            "您本周还能购买" + (pspData.getDailyNumber() - quantity
-                                    - number));
-                    }
-                }
-
-                // 月限购
-                if (0 != pspData.getMonthlyNumber()) {
-                    number = this.getNumber(applyUser.getUserId(),
-                        DateUtil.getMonthStart(), DateUtil.getMonthEnd());
-
-                    if ((quantity + number) > pspData.getDailyNumber()) {
-                        throw new BizException("xn0000",
-                            "您本月还能购买" + (pspData.getDailyNumber() - quantity
-                                    - number));
-                    }
-                }
+                // 改变产品数量
+                this.changeProductNumber(applyUser, pData, psData, data,
+                    req.getToUser(), code);
 
             }
         }
@@ -725,9 +630,9 @@ public class OrderAOImpl implements IOrderAO {
         // **********出货奖*******
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
-            Award aData = awardBO.getAwardByType(toUser.getLevel(),
-                data.getProductCode(), EAwardType.SendAward.getCode());
-            Long awardAmount = AmountUtil.mul(orderAmount, aData.getValue1());
+            AwardInterval award = awardIntervalBO
+                .getAwardIntervalByLevel(toUser.getLevel(), data.getAmount());
+            Long awardAmount = AmountUtil.mul(orderAmount, award.getPercent());
             accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
                 toUser.getUserId(), ECurrency.YJ_CNY.getCode(), awardAmount,
                 EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
@@ -736,46 +641,53 @@ public class OrderAOImpl implements IOrderAO {
 
         // **********推荐奖**********
         // 是否有推荐人
-        if (StringUtils.isNotBlank(toUser.getUserReferee())) {
-            // 直接推荐人
-            User firstUser = userBO.getUser(toUser.getUserReferee());
-            Award aData = awardBO.getAwardByType(toUser.getLevel(),
-                data.getProductCode(), EAwardType.DirectAward.getCode());
+        if (this.checkAward(toUser)) {
+            if (StringUtils.isNotBlank(toUser.getUserReferee())) {
+                // 直接推荐人
+                User firstUser = userBO.getUser(toUser.getUserReferee());
+                Award aData = awardBO.getAwardByType(toUser.getLevel(),
+                    data.getProductCode(), EAwardType.DirectAward.getCode());
 
-            Long amount = 0L;
-            // 直接推荐奖
-            if (firstUser != null) {
-                amount = AmountUtil.mul(orderAmount, aData.getValue1());
-                accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
-                    firstUser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
-                    EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
-                    EBizType.AJ_TJJL.getValue(), data.getCode());
-
-                // 间接推荐奖
-                if (StringUtils.isNotBlank(firstUser.getUserReferee())) {
-                    User secondUser = userBO
-                        .getUser(firstUser.getUserReferee());
-                    amount = AmountUtil.mul(orderAmount, aData.getValue2());
+                Long amount = 0L;
+                // 直接推荐奖
+                if (firstUser != null) {
+                    amount = AmountUtil.mul(orderAmount, aData.getValue1());
                     accountBO.transAmountCZB(fromUserId,
-                        ECurrency.YJ_CNY.getCode(), secondUser.getUserId(),
+                        ECurrency.YJ_CNY.getCode(), firstUser.getUserId(),
                         ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_TJJL,
                         EBizType.AJ_TJJL.getValue(),
                         EBizType.AJ_TJJL.getValue(), data.getCode());
 
-                    // 次推荐奖
-                    if (StringUtils.isNotBlank(secondUser.getUserReferee())) {
-                        User thirdUser = userBO
-                            .getUser(secondUser.getUserReferee());
-                        amount = AmountUtil.mul(orderAmount, aData.getValue3());
+                    // 间接推荐奖
+                    if (StringUtils.isNotBlank(firstUser.getUserReferee())) {
+                        User secondUser = userBO
+                            .getUser(firstUser.getUserReferee());
+                        amount = AmountUtil.mul(orderAmount, aData.getValue2());
                         accountBO.transAmountCZB(fromUserId,
-                            ECurrency.YJ_CNY.getCode(), thirdUser.getUserId(),
+                            ECurrency.YJ_CNY.getCode(), secondUser.getUserId(),
                             ECurrency.YJ_CNY.getCode(), amount,
                             EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
                             EBizType.AJ_TJJL.getValue(), data.getCode());
+
+                        // 次推荐奖
+                        if (StringUtils
+                            .isNotBlank(secondUser.getUserReferee())) {
+                            User thirdUser = userBO
+                                .getUser(secondUser.getUserReferee());
+                            amount = AmountUtil.mul(orderAmount,
+                                aData.getValue3());
+                            accountBO.transAmountCZB(fromUserId,
+                                ECurrency.YJ_CNY.getCode(),
+                                thirdUser.getUserId(),
+                                ECurrency.YJ_CNY.getCode(), amount,
+                                EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
+                                EBizType.AJ_TJJL.getValue(), data.getCode());
+                        }
                     }
                 }
             }
         }
+
     }
 
     @Override
@@ -786,6 +698,11 @@ public class OrderAOImpl implements IOrderAO {
         User fromUser = userBO.getUser(data.getApplyUser());
         String toUserId = ESysUser.SYS_USER_BH.getCode();
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
+            // C端产品无法云仓发
+            if (EUserKind.Customer.getCode().equals(data.getKind())) {
+                throw new BizException("xn00000", "非代理的订单无法从云仓发货哦！");
+            }
+
             // 订单归属人云仓减少
             if (StringUtils.isNotBlank(data.getToUser())) {
                 // 订单数量是否少于本等级最低发货数量
@@ -862,6 +779,12 @@ public class OrderAOImpl implements IOrderAO {
                 || EOrderStatus.Received.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "该订单无法取消");
         }
+
+        // 云仓提货单无法取消
+        if (EOrderKind.Pick_Up.getCode().equals(data.getKind())
+                || EOrderKind.Impower_Order.getCode().equals(data.getKind())) {
+            throw new BizException("xn00000", "从云仓提货的订单无法取消哦！");
+        }
         data.setStatus(EOrderStatus.TO_Cancel.getCode());
 
         orderBO.cancelOrder(data);
@@ -905,11 +828,10 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     private String getName(String user) {
-
         if (StringUtils.isBlank(user)) {
             return null;
         }
-        if ("admin".equals(user)) {
+        if (EUser.ADMIN.getCode().equals(user)) {
             return user;
         }
         String name = null;
@@ -984,6 +906,102 @@ public class OrderAOImpl implements IOrderAO {
         return true;
     }
 
+    private String checkOrder(User applyUser, ProductSpecs psData) {
+        String kind = EOrderKind.Normal_Order.getCode();
+        // 是否完成授权单
+        boolean impowerOrder = this.CheckImpowerOrder(applyUser);
+        if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
+            if (!impowerOrder) {
+                kind = EOrderKind.Impower_Order.getCode();
+                if (EProductSpecsType.Apply_NO.getCode()
+                    .equals(psData.getIsImpowerOrder())) {
+                    throw new BizException("xn0000", "该产品规格不予授权单单下单");
+                }
+            }
+        }
+
+        // 是否完成升级单
+        boolean upgradeOrder = this.CheckImpowerOrder(applyUser);
+        if (EUserStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
+            if (!upgradeOrder) {
+                kind = EOrderKind.Upgrade_Order.getCode();
+            }
+            if (EProductSpecsType.Apply_NO.getCode()
+                .equals(psData.getIsUpgradeOrder())) {
+                throw new BizException("xn0000", "该产品规格不予授权单单下单");
+            }
+        }
+
+        // 是否允许普通单下单
+        if (EProductSpecsType.Apply_NO.getCode()
+            .equals(psData.getIsNormalOrder())) {
+            throw new BizException("xn0000", "该产品规格不予许普通单下单");
+        }
+        return kind;
+    }
+
+    // 变动产品数量
+    private void changeProductNumber(User applyUser, Product pData,
+            ProductSpecs psData, Order order, String toUser, String code) {
+        int quantity = order.getQuantity() * psData.getNumber();
+        // 扣减云仓
+        if (StringUtils.isNotBlank(toUser)) {
+            // 有上级代理,扣减上级代理云仓
+            User touser = userBO.getUser(toUser);
+            wareHouseBO.transQuantity(applyUser.getUserId(), psData.getCode(),
+                touser.getUserId(), psData.getCode(), order.getQuantity(),
+                EBizType.AJ_GMYC, EBizType.AJ_YCCH, EBizType.AJ_GMYC.getValue(),
+                EBizType.AJ_YCCH.getValue(), code);
+
+        } else {
+            // 无上级代理,扣减产品实际库存
+            productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
+                pData.getRealNumber(), quantity, null);
+            pData.setRealNumber(pData.getRealNumber() - quantity);
+            productBO.refreshRealNumber(pData);
+        }
+    }
+
+    // 检查限购数量
+    @Override
+    public void checkLimitNumber(User applyUser, ProductSpecs psData,
+            ProductSpecsPrice pspData, Integer quantity) {
+
+        // 每日限购
+        if (0 != pspData.getDailyNumber()) {
+            int dailyNumber = this.getNumber(applyUser.getUserId(),
+                DateUtil.getTodayStart(), DateUtil.getTodayEnd());
+            if (quantity + dailyNumber > pspData.getDailyNumber()) {
+                throw new BizException("xn0000", "您今日还能购买"
+                        + (pspData.getDailyNumber() - quantity - dailyNumber));
+            }
+        }
+
+        // 周限购
+        if (0 != pspData.getWeeklyNumber()) {
+            int weeklyNumber = this.getNumber(applyUser.getUserId(),
+                DateUtil.getWeeklyStart(), DateUtil.getWeeklyEnd());
+            if ((quantity + weeklyNumber) > pspData.getDailyNumber()) {
+                throw new BizException("xn0000", "您本周还能购买"
+                        + (pspData.getDailyNumber() - quantity - weeklyNumber));
+            }
+        }
+
+        // 月限购
+        if (0 != pspData.getMonthlyNumber()) {
+            int monthlyNumber = this.getNumber(applyUser.getUserId(),
+                DateUtil.getMonthStart(), DateUtil.getMonthEnd());
+
+            if ((quantity + monthlyNumber) > pspData.getDailyNumber()) {
+                throw new BizException("xn0000",
+                    "您本月还能购买" + (pspData.getDailyNumber() - quantity
+                            - monthlyNumber));
+            }
+        }
+
+    }
+
+    // 日、周、月已购数量
     private int getNumber(String userId, Date startDatetime, Date endDatetime) {
         int number = 0;
         List<Order> list = orderBO.getProductQuantity(userId, startDatetime,
@@ -995,4 +1013,34 @@ public class OrderAOImpl implements IOrderAO {
         }
         return number;
     }
+
+    // 检查介绍奖与推荐奖是否同时存在
+    private boolean checkAward(User user) {
+        // 介绍人与推荐人同时存在
+        if (StringUtils.isNotBlank(user.getIntroducer())
+                && StringUtils.isNotBlank(user.getUserReferee())) {
+            // 下单金额是否超过授权金额
+            AgentImpower impower = agentImpowerBO
+                .getAgentImpowerByLevel(user.getLevel());
+            List<String> fialStatus = new ArrayList<String>();
+            fialStatus.add(EOrderStatus.Unpaid.getCode());
+            fialStatus.add(EOrderStatus.Canceled.getCode());
+            fialStatus.add(EOrderStatus.Pay_NO.getCode());
+
+            Order condition = new Order();
+            condition.setApplyUser(user.getUserId());
+            condition.setKind(EOrderKind.Normal_Order.getCode());
+            List<Order> list = orderBO.queryOrderList(condition);
+
+            Long amount = 0L;
+            for (Order order : list) {
+                amount = amount + order.getAmount();
+            }
+            if (impower.getMinCharge() > amount) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

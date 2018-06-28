@@ -11,9 +11,9 @@ public interface IIntroBO extends IPaginableBO<Intro> {
 
     public String saveIntro(Intro data);
 
-    public int removeIntro(String code);
+    public void removeIntro(Intro data);
 
-    public int refreshIntro(Intro data);
+    public void refreshIntro(Intro data);
 
     public List<Intro> queryIntroList(Intro condition);
 

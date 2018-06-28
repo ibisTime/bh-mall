@@ -80,6 +80,12 @@
 						#{item}
 					</foreach>
 				</when>
+				<when test="fialStatus != null and fialStatus > 0 ">
+					AND t.status NOT IN
+					<foreach collection="fialStatus" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
 				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" u.team_name like "%"${keyword}"%" 

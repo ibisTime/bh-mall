@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.ProductSpecs;
+import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
@@ -56,5 +58,8 @@ public interface IOrderAO {
 
     // 检查是否完成升级单
     public boolean CheckUpgradeOrder(User user);
+
+    void checkLimitNumber(User applyUser, ProductSpecs psData,
+            ProductSpecsPrice pspData, Integer quantity);
 
 }

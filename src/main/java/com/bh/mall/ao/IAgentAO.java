@@ -43,4 +43,6 @@ public interface IAgentAO {
      */
     public List<Agent> queryAgentList(Agent condition);
 
+    public Object queryAgentNoCList(Agent condition);
+
 }

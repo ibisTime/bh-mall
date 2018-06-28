@@ -5,6 +5,7 @@ import java.util.List;
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.dto.req.XN627546Req;
+import com.bh.mall.dto.req.XN627547Req;
 
 public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
 
@@ -21,5 +22,8 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
     List<ProductSpecs> getProductSpecsByProduct(String productCode);
 
     ProductSpecs getProductSpecs(String productSpecsCode);
+
+    void refreshProductSpecs(XN627546Req psReq,
+            List<XN627547Req> specsPriceList);
 
 }

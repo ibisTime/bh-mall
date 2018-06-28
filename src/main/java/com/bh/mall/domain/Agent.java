@@ -53,7 +53,7 @@ public class Agent extends ABaseDO {
     // ***************db*************
     private Integer lowLevel;
 
-    private String levelForQuery;
+    private Integer highLevel;
 
     public Integer getLowLevel() {
         return lowLevel;
@@ -127,14 +127,6 @@ public class Agent extends ABaseDO {
         this.remark = remark;
     }
 
-    public String getLevelForQuery() {
-        return levelForQuery;
-    }
-
-    public void setLevelForQuery(String levelForQuery) {
-        this.levelForQuery = levelForQuery;
-    }
-
     public Long getMinSurplus() {
         return minSurplus;
     }
@@ -157,6 +149,14 @@ public class Agent extends ABaseDO {
 
     public void setIsSend(String isSend) {
         this.isSend = isSend;
+    }
+
+    public Integer getHighLevel() {
+        return highLevel;
+    }
+
+    public void setHighLevel(Integer highLevel) {
+        this.highLevel = highLevel;
     }
 
 }

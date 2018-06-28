@@ -1,6 +1,7 @@
 package com.bh.mall.ao.impl;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,18 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public List<Agent> queryAgentList(Agent condition) {
         return agentBO.queryAgentList(condition);
+    }
+
+    @Override
+    public Object queryAgentNoCList(Agent condition) {
+        List<Agent> list = agentBO.queryAgentList(condition);
+        for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+            Agent agent = (Agent) iterator.next();
+            if (6 == agent.getLevel()) {
+                iterator.remove();
+            }
+        }
+        return list;
     }
 
 }

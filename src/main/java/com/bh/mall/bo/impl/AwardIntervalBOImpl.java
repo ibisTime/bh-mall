@@ -51,4 +51,16 @@ public class AwardIntervalBOImpl extends PaginableBOImpl<AwardInterval>
         }
         return data;
     }
+
+    @Override
+    public AwardInterval getAwardIntervalByLevel(Integer level, Long amount) {
+        AwardInterval condition = new AwardInterval();
+        condition.setLevel(level);
+        condition.setAmount(amount);
+        AwardInterval data = awardIntervalDAO.select(condition);
+        if (data == null) {
+            throw new BizException("xn0000", "介绍奖励不存在");
+        }
+        return data;
+    }
 }
