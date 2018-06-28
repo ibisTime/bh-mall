@@ -96,7 +96,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String kind, String loginPwd, String nickname,
             String photo, String status, Integer level, String systemCode,
-            String companyCode, String highUserId) {
+            String companyCode, String userReferee) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
@@ -107,7 +107,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setLoginName(mobile);
         user.setMobile(mobile);
         user.setKind(kind);
-        user.setHighUserId(highUserId);
+        user.setUserReferee(userReferee);
 
         user.setLoginPwd(MD5Util.md5(loginPwd));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));

@@ -330,23 +330,6 @@ public class UserAOImpl implements IUserAO {
             // System.out.println("subscribe:" + subscribe);
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-
-                // if (StringUtils.isNotBlank(highUserId)
-                // && StringUtils.isNotBlank(dbUser.getHighUserId())) {
-                // User oldHighUser = userBO.getUser(highUserId);
-                // User newHighUser = userBO.getUser(highUserId);
-                // // 新、旧上级不是同一人
-                // if (!highUserId.equals(dbUser.getHighUserId())
-                // && newHighUser.getLevel() < oldHighUser
-                // .getLevel()) {
-                // // 状态处于未授权
-                // if (EUserStatus.IMPOWERO_INFO.getCode()
-                // .equals(dbUser.getStatus())) {
-                // userBO.refreshHighUser(dbUser.getUserId(),
-                // oldHighUser, newHighUser);
-                // }
-                // }
-                // }
                 result = new XN627302Res(dbUser.getUserId(),
                     dbUser.getStatus());
             } else {
@@ -812,29 +795,26 @@ public class UserAOImpl implements IUserAO {
         }
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
             if (StringUtils.isBlank(req.getIdNo())
-                    || StringUtils.isBlank(req.getIdHand())
-                    || StringUtils.isBlank(req.getIdBehind())
-                    || StringUtils.isBlank(req.getIdFront())) {
+                    || StringUtils.isBlank(req.getIdHand())) {
                 throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
             }
         }
-        System.out.println("getUserId" + req.getUserId());
 
         User data = userBO.getUser(req.getUserId());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         String status = EUserStatus.TO_APPROVE.getCode();
 
-        if (StringUtils.isNotBlank(data.getHighUserId())) {
-            User highUser = userBO.getUser(data.getHighUserId());
-            if (null != highUser) {
-                data.setHighUserId(highUser.getUserId());
-                data.setTeamName(highUser.getTeamName());
-                if (data.getApplyLevel() < highUser.getLevel() - 1) {
+        if (StringUtils.isNotBlank(data.getUserReferee())) {
+            User userReferee = userBO.getUser(data.getUserReferee());
+            if (null != userReferee) {
+                data.setHighUserId(userReferee.getUserId());
+                data.setTeamName(userReferee.getTeamName());
+                if (data.getApplyLevel() < userReferee.getLevel()) {
                     throw new BizException("xn0000", "申请等级不能高于上级代理等级");
                 }
-                if (data.getApplyLevel() == highUser.getLevel()) {
+                if (data.getApplyLevel() == userReferee.getLevel()) {
                     data.setHighUserId(null);
-                    data.setUserReferee(highUser.getUserId());
+                    data.setUserReferee(userReferee.getUserId());
                     status = EUserStatus.TO_COMPANYAPPROVE.getCode();
                 }
             }
@@ -853,7 +833,7 @@ public class UserAOImpl implements IUserAO {
         data.setIdFront(req.getIdFront());
         data.setIdHand(req.getIdHand());
 
-        data.setIntroducer(req.getIntroducer());
+        data.setIntroducer(introducer);
         data.setStatus(status);
         data.setArea(req.getArea());
         data.setPayAmount(StringValidater.toLong(req.getPayAmount()));

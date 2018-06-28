@@ -121,13 +121,14 @@ public class WareHouseAOImpl implements IWareHouseAO {
     public WareHouse getWareHouse(String code) {
 
         WareHouse data = wareHouseBO.getWareHouse(code);
+        User user = userBO.getUser(data.getUserId());
         WareHouse condition = new WareHouse();
         condition.setUserId(data.getUserId());
         condition.setProductCode(data.getProductCode());
         List<WareHouse> specsList = wareHouseBO.queryWareHouseList(condition);
         for (WareHouse wh : specsList) {
             ProductSpecsPrice price = productSpecsPriceBO
-                .getPriceByLevel(wh.getProductSpecsCode(), 6);
+                .getPriceByLevel(wh.getProductSpecsCode(), user.getLevel());
             wh.setPrice(price.getPrice());
         }
         data.setWhsList(specsList);
@@ -275,7 +276,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setKind(kind);
         order.setProvince(req.getProvince());
 
-        order.setStatus(EOrderStatus.TO_Apprvoe.getCode());
+        order.setStatus(EOrderStatus.Paid.getCode());
         orderBO.saveOrder(order);
 
         // 减少云仓库存

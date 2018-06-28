@@ -7,8 +7,8 @@ CREATE TABLE `tbh_account` (
   `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
   `status` varchar(2) DEFAULT NULL COMMENT '状态（正常/程序冻结/人工冻结）',
   `currency` varchar(8) DEFAULT NULL COMMENT '币种',
-  `amount` bigint(32) DEFAULT NULL COMMENT '余额',
-  `frozen_amount` bigint(32) DEFAULT NULL COMMENT '冻结金额',
+  `amount` bigint(32) DEFAULT '0' COMMENT '余额',
+  `frozen_amount` bigint(32) DEFAULT '0' COMMENT '冻结金额',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `last_order` varchar(32) DEFAULT NULL COMMENT '最近一次变动对应的流水编号',
   PRIMARY KEY (`account_number`),
@@ -71,8 +71,8 @@ CREATE TABLE `tbh_agency_log` (
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
-  `level` int(11) DEFAULT NULL COMMENT '当前等级',
-  `apply_level` int(11) DEFAULT NULL COMMENT '申请等级',
+  `level` int(11) DEFAULT '0' COMMENT '当前等级',
+  `apply_level` int(11) DEFAULT '0' COMMENT '申请等级',
   `high_user_id` varchar(32) DEFAULT NULL COMMENT '上级',
   `user_referee` varchar(32) DEFAULT NULL COMMENT '推荐人',
   `team_name` varchar(255) DEFAULT NULL COMMENT '团队名称',
@@ -89,10 +89,10 @@ DROP TABLE IF EXISTS `tbh_agent`;
 CREATE TABLE `tbh_agent` (
   `level` bigint(32) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL COMMENT '等级名称',
-  `amount` bigint(32) DEFAULT NULL COMMENT '首次授权发送金额',
-  `red_amount` bigint(32) DEFAULT NULL COMMENT '红线金额',
-  `min_charge_amount` bigint(32) DEFAULT NULL COMMENT '本等级每次最低充值金额',
-  `min_surplus` bigint(20) DEFAULT NULL COMMENT '本等级门槛最低余额',
+  `amount` bigint(32) DEFAULT '0' COMMENT '首次授权发送金额',
+  `red_amount` bigint(32) DEFAULT '0' COMMENT '红线金额',
+  `min_charge_amount` bigint(32) DEFAULT '0' COMMENT '本等级每次最低充值金额',
+  `min_surplus` bigint(20) DEFAULT '0' COMMENT '本等级门槛最低余额',
   `is_wareHouse` char(1) DEFAULT NULL COMMENT '本等级是否启用云仓',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
@@ -109,8 +109,8 @@ CREATE TABLE `tbh_agent_impower` (
   `is_intro` char(1) DEFAULT NULL COMMENT '是否可被介绍（0否 1是）',
   `is_real_name` char(1) DEFAULT NULL COMMENT '是否实名（0否 1是）',
   `is_company_impower` char(1) DEFAULT NULL COMMENT '是否需要公司审核（0否 1是）',
-  `impower_amount` bigint(20) DEFAULT NULL COMMENT '授权单金额',
-  `min_charge` bigint(20) DEFAULT NULL COMMENT '充值门槛',
+  `impower_amount` bigint(20) DEFAULT '0' COMMENT '授权单金额',
+  `min_charge` bigint(20) DEFAULT '0' COMMENT '充值门槛',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(64) DEFAULT NULL COMMENT '备注',
@@ -124,7 +124,7 @@ CREATE TABLE `tbh_agent_upgrade` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `level` varchar(32) DEFAULT NULL COMMENT '代理等级',
   `is_company_approve` char(1) DEFAULT NULL COMMENT '本等级升级是否公司审核',
-  `re_number` int(11) DEFAULT NULL COMMENT '半门槛推荐人数',
+  `re_number` int(11) DEFAULT '0' COMMENT '半门槛推荐人数',
   `is_reset` char(1) DEFAULT NULL COMMENT '本等级升级是否余额清零',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
@@ -160,8 +160,8 @@ CREATE TABLE `tbh_bankcard` (
   `type` varchar(4) DEFAULT NULL COMMENT '类型',
   `status` varchar(2) DEFAULT NULL COMMENT '状态',
   `currency` varchar(8) DEFAULT NULL COMMENT '币种',
-  `amount` bigint(32) DEFAULT NULL COMMENT '余额',
-  `frozen_amount` bigint(32) DEFAULT NULL COMMENT '冻结金额',
+  `amount` bigint(32) DEFAULT '0' COMMENT '余额',
+  `frozen_amount` bigint(32) DEFAULT '0' COMMENT '冻结金额',
   `md5` varchar(32) DEFAULT NULL COMMENT 'MD5',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
@@ -176,8 +176,8 @@ CREATE TABLE `tbh_cart` (
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户ID',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_specs_code` varchar(32) DEFAULT NULL COMMENT '产品规格编号',
-  `price` bigint(20) DEFAULT NULL COMMENT '单价',
-  `quantity` int(11) DEFAULT NULL COMMENT '数量',
+  `price` bigint(20) DEFAULT '0' COMMENT '单价',
+  `quantity` int(11) DEFAULT '0' COMMENT '数量',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -189,15 +189,15 @@ CREATE TABLE `tbh_change_product` (
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
   `product_specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
   `product_specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
-  `quantity` int(11) DEFAULT NULL COMMENT '置换数量',
-  `price` bigint(20) DEFAULT NULL COMMENT '规格价格',
-  `amount` bigint(20) DEFAULT NULL COMMENT '置换总价',
+  `quantity` int(11) DEFAULT '0' COMMENT '置换数量',
+  `price` bigint(20) DEFAULT '0' COMMENT '规格价格',
+  `amount` bigint(20) DEFAULT '0' COMMENT '置换总价',
   `change_product_code` varchar(32) DEFAULT NULL COMMENT '置换产品编号',
   `change_product_name` varchar(255) DEFAULT NULL COMMENT '置换产品名称',
   `change_specs_code` varchar(32) DEFAULT NULL COMMENT '置换产品规格编号',
   `change_specs_name` varchar(255) DEFAULT NULL COMMENT '置换规格名称',
   `change_price` bigint(20) DEFAULT NULL COMMENT '换货价',
-  `can_change_quantity` int(11) DEFAULT NULL COMMENT '可置换数量',
+  `can_change_quantity` int(11) DEFAULT '0' COMMENT '可置换数量',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `real_name` varchar(255) DEFAULT NULL COMMENT '姓名',
   `level` int(4) DEFAULT NULL COMMENT '申请人等级',
@@ -211,21 +211,6 @@ CREATE TABLE `tbh_change_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `tbh_channel_bank`;
-CREATE TABLE `tbh_channel_bank` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
-  `bank_code` varchar(32) DEFAULT NULL COMMENT '银行编号',
-  `bank_name` varchar(32) DEFAULT NULL COMMENT '银行名称',
-  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态（启用/不启用）',
-  `channel_bank` varchar(32) DEFAULT NULL COMMENT '渠道给银行的代号',
-  `max_order` bigint(32) DEFAULT NULL COMMENT '笔数限制',
-  `order_amount` bigint(32) DEFAULT NULL COMMENT '单笔限额',
-  `day_amount` bigint(32) DEFAULT NULL COMMENT '每日限额',
-  `month_amount` bigint(32) DEFAULT NULL COMMENT '每月限额',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `tbh_charge`;
@@ -278,27 +263,6 @@ CREATE TABLE `tbh_cnavigate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `tbh_company_channel`;
-CREATE TABLE `tbh_company_channel` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
-  `company_name` varchar(32) DEFAULT NULL COMMENT '公司名称',
-  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态（启用/不启用）',
-  `channel_company` varchar(32) DEFAULT NULL COMMENT '渠道给公司的代号',
-  `private_key1` text COMMENT '秘钥1',
-  `private_key2` text COMMENT '私钥2',
-  `private_key3` text COMMENT '私钥3',
-  `private_key4` text COMMENT '私钥4',
-  `private_key5` text COMMENT '私钥5',
-  `page_url` varchar(255) DEFAULT NULL COMMENT '界面正确回调地址',
-  `error_url` varchar(255) DEFAULT NULL COMMENT '界面错误回调地址',
-  `back_url` varchar(255) DEFAULT NULL COMMENT '服务器回调地址',
-  `fee` bigint(32) DEFAULT NULL COMMENT '手续费',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `system_code` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tbh_inner_order`;
 CREATE TABLE `tbh_inner_order` (
@@ -422,14 +386,14 @@ CREATE TABLE `tbh_order` (
   `price` bigint(20) DEFAULT NULL COMMENT '图片',
   `to_user` varchar(32) DEFAULT NULL COMMENT '数量',
   `amount` bigint(20) DEFAULT NULL COMMENT '单价',
-  `yunfei` bigint(20) DEFAULT '0' COMMENT '向谁提货',
-  `status` varchar(4) DEFAULT NULL COMMENT '下单订单金额',
-  `pay_type` varchar(64) DEFAULT NULL COMMENT '运费',
-  `pay_group` varchar(32) DEFAULT NULL COMMENT '状态',
-  `pay_amount` bigint(20) DEFAULT NULL COMMENT '支付渠道',
-  `pay_datetime` datetime DEFAULT NULL COMMENT '支付组号',
-  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付金额',
-  `apply_user` varchar(32) DEFAULT NULL COMMENT '支付时间',
+  `yunfei` bigint(20) DEFAULT '0' COMMENT '运费',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `pay_type` varchar(64) DEFAULT NULL COMMENT '支付渠道',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_amount` bigint(20) DEFAULT NULL COMMENT '支付金额',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',
   `real_name` varchar(255) DEFAULT NULL COMMENT '下单人姓名',
   `apply_note` text COMMENT '下单备注',
   `apply_datetime` date DEFAULT NULL COMMENT '下单时间',
@@ -674,75 +638,4 @@ CREATE TABLE `thf_ware_house_specs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `tsys_config`;
-CREATE TABLE `tsys_config` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `type` varchar(32) DEFAULT NULL COMMENT '类型',
-  `ckey` varchar(255) DEFAULT NULL COMMENT 'key',
-  `cvalue` text COMMENT 'value',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
-
-
-DROP TABLE IF EXISTS `tsys_dict`;
-CREATE TABLE `tsys_dict` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
-  `type` char(1) DEFAULT NULL COMMENT '类型（第一层/第二层）',
-  `parent_key` varchar(32) DEFAULT NULL COMMENT '父key',
-  `dkey` varchar(32) DEFAULT NULL COMMENT 'key',
-  `dvalue` varchar(255) DEFAULT NULL COMMENT '值',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `tsys_menu`;
-CREATE TABLE `tsys_menu` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `name` varchar(32) DEFAULT NULL COMMENT '名称',
-  `type` varchar(2) DEFAULT NULL COMMENT '类型',
-  `url` varchar(64) DEFAULT NULL COMMENT '请求url',
-  `order_no` varchar(8) DEFAULT NULL COMMENT '序号',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `parent_code` varchar(32) DEFAULT NULL COMMENT '父亲节点',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `tsys_menu_role`;
-CREATE TABLE `tsys_menu_role` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT,
-  `role_code` varchar(32) DEFAULT NULL,
-  `menu_code` varchar(32) DEFAULT NULL,
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `tsys_role`;
-CREATE TABLE `tsys_role` (
-  `code` varchar(32) NOT NULL COMMENT '角色编号',
-  `name` varchar(32) DEFAULT NULL COMMENT '角色名称',
-  `level` varchar(2) DEFAULT NULL,
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

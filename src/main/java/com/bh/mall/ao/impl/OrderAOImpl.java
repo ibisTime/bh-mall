@@ -475,9 +475,9 @@ public class OrderAOImpl implements IOrderAO {
                 if (EUserKind.Merchant.getCode().equals(uData.getKind())) {
                     // 买入云仓
                     Agent agent = agentBO.getAgentByLevel(uData.getLevel());
-                    if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+                    if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                         // 购买云仓
-                        this.buyWareHouse(data, data.getUser());
+                        this.buyWareHouse(data, uData);
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }

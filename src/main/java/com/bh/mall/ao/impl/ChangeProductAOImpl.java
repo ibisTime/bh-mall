@@ -416,7 +416,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         Long amount = 0L;
         Long redAmount = 0L;
         Long chargeAmount = 0L;
-        res.setResult(ECheckStatus.NORMAL.getCode());
+        String result = ECheckStatus.NORMAL.getCode();
 
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
@@ -429,8 +429,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
             // 本等级门槛最低余额
             if (account.getAmount() > agent.getMinSurplus()) {
-                res.setMinAmount(agent.getMinSurplus());
-                res.setResult(ECheckStatus.MIN_LOW.getCode());
+                result = ECheckStatus.MIN_LOW.getCode();
             }
 
             // 是否已授权
@@ -439,7 +438,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 Long orderAmount = orderBO.checkImpowerOrder(user.getUserId());
                 if (agent.getAmount() > orderAmount) {
                     amount = agent.getAmount() - orderAmount;
-                    res.setResult(ECheckStatus.NO_Impwoer.getCode());
+                    result = ECheckStatus.NO_Impwoer.getCode();
                 }
             }
 
@@ -449,7 +448,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 Long orderAmount = orderBO.checkUpgradeOrder(user.getUserId());
                 if (agent.getAmount() > orderAmount) {
                     amount = agent.getAmount() - orderAmount;
-                    res.setResult(ECheckStatus.NO_Upgrae.getCode());
+                    result = ECheckStatus.NO_Upgrae.getCode();
                 }
             }
 
@@ -461,7 +460,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 }
             }
             if (agent.getRedAmount() > redAmount) {
-                res.setResult(ECheckStatus.RED_LOW.getCode());
+                result = ECheckStatus.RED_LOW.getCode();
                 redAmount = agent.getRedAmount() - redAmount;
             }
 
@@ -473,15 +472,12 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             }
             if (CollectionUtils.isEmpty(charge)
                     || impower.getMinCharge() > cAmount) {
-                res.setResult(ECheckStatus.To_Charge.getCode());
+                result = ECheckStatus.To_Charge.getCode();
                 chargeAmount = impower.getMinCharge() - cAmount;
             }
 
-            res.setLevel(user.getLevel());
-            res.setChargeAmount(chargeAmount);
-            res.setMinAmount(account.getAmount());
-            res.setRedAmount(redAmount);
-            res.setAmount(amount);
+            res = new XN627805Res(result, redAmount, agent.getMinSurplus(),
+                amount, chargeAmount, user.getLevel());
         }
 
         return res;

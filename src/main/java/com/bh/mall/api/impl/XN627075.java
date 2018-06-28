@@ -25,9 +25,6 @@ public class XN627075 extends AProcessor {
 
     private XN627075Req req = null;
 
-    /** 
-     * @see com.xnjr.base.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         SYSDict condition = new SYSDict();

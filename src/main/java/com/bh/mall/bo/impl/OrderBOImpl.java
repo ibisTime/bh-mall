@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -142,13 +143,16 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
 
     @Override
     public Long checkImpowerOrder(String applyUser) {
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EOrderStatus.TO_Deliver.getCode());
+        statusList.add(EOrderStatus.Received.getCode());
+
         Order condition = new Order();
         condition.setApplyUser(applyUser);
         condition.setKind(EOrderKind.Impower_Order.getCode());
-        condition.setStatusForQuery(EOrderStatus.Impwoer.getCode());
+        condition.setStatusList(statusList);
         List<Order> list = orderDAO.selectList(condition);
         Long amount = 0L;
-
         for (Order order : list) {
             amount = amount + order.getAmount();
         }
@@ -157,10 +161,14 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
 
     @Override
     public Long checkUpgradeOrder(String applyUser) {
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EOrderStatus.TO_Deliver.getCode());
+        statusList.add(EOrderStatus.Received.getCode());
+
         Order condition = new Order();
         condition.setApplyUser(applyUser);
         condition.setKind(EOrderKind.Upgrade_Order.getCode());
-        condition.setStatusForQuery(EOrderStatus.Impwoer.getCode());
+        condition.setStatusList(statusList);
         List<Order> list = orderDAO.selectList(condition);
         Long amount = 0L;
 
