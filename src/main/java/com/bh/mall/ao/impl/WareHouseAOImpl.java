@@ -97,6 +97,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
                 .setWhsList(wareHouseBO.queryWareHouseList(specsCondition));
 
         }
+
         page.setList(list);
         return page;
     }

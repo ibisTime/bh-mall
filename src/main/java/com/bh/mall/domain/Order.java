@@ -162,6 +162,8 @@ public class Order extends ABaseDO {
 
     private Product product;
 
+    private List<String> kindList;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -584,6 +586,14 @@ public class Order extends ABaseDO {
 
     public void setFialStatus(List<String> fialStatus) {
         this.fialStatus = fialStatus;
+    }
+
+    public List<String> getKindList() {
+        return kindList;
+    }
+
+    public void setKindList(List<String> kindList) {
+        this.kindList = kindList;
     }
 
 }

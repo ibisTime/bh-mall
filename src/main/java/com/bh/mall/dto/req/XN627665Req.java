@@ -24,6 +24,9 @@ public class XN627665Req extends APageReq {
     // 订单状态List
     private List<String> statusList;
 
+    // 类型
+    private List<String> kindList;
+
     // 订单归属人
     @NotBlank(message = "用户ID不能为空")
     private String toUserId;
@@ -72,6 +75,14 @@ public class XN627665Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public List<String> getKindList() {
+        return kindList;
+    }
+
+    public void setKindList(List<String> kindList) {
+        this.kindList = kindList;
     }
 
 }

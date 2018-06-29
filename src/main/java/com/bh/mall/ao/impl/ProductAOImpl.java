@@ -24,6 +24,7 @@ import com.bh.mall.domain.Award;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
@@ -265,18 +266,6 @@ public class ProductAOImpl implements IProductAO {
 
             List<ProductSpecs> psList = productSpecsBO
                 .queryProductSpecsList(psCondition);
-            // 推荐奖励
-            Award aCondition = new Award();
-            aCondition.setType(EAwardType.DirectAward.getCode());
-            aCondition.setProductCode(product.getCode());
-            List<Award> directAwardList = awardBO.queryAwardList(aCondition);
-
-            // 出货奖励
-            aCondition.setType(EAwardType.SendAward.getCode());
-            List<Award> sendAwardList = awardBO.queryAwardList(aCondition);
-            product.setDirectAwardList(directAwardList);
-            product.setSendAwardList(sendAwardList);
-
             if (CollectionUtils.isNotEmpty(psList)) {
                 for (ProductSpecs productSpecs : psList) {
 
@@ -291,6 +280,17 @@ public class ProductAOImpl implements IProductAO {
                 }
                 product.setSpecsList(psList);
             }
+
+            // 获取各个代理云仓库存
+            List<WareHouse> whList = wareHouseBO
+                .getWareHouseByProduct(product.getCode());
+            int whNumber = 0;
+            for (WareHouse wareHouse : whList) {
+                whNumber = productSpecsBO
+                    .getProductSpecsNumber(product.getCode());
+                whNumber = whNumber + whNumber * wareHouse.getQuantity();
+            }
+            product.setWhNumber(whNumber);
         }
         return page;
     }

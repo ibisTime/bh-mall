@@ -249,6 +249,12 @@ public class User extends ABaseDO {
     // 意向归属人名字
     private String toUserName;
 
+    // 意向归属人团队
+    private String toTeamName;
+
+    // 意向归属人等级
+    private Integer toLevel;
+
     // 意向归属人电话
     private String toUserMobile;
 
@@ -855,6 +861,22 @@ public class User extends ABaseDO {
 
     public void setToUserMobile(String toUserMobile) {
         this.toUserMobile = toUserMobile;
+    }
+
+    public String getToTeamName() {
+        return toTeamName;
+    }
+
+    public Integer getToLevel() {
+        return toLevel;
+    }
+
+    public void setToTeamName(String toTeamName) {
+        this.toTeamName = toTeamName;
+    }
+
+    public void setToLevel(Integer toLevel) {
+        this.toLevel = toLevel;
     }
 
 }

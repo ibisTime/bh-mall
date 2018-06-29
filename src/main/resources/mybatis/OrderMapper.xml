@@ -58,9 +58,17 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="kind != null and kind != '' ">
-				AND t.kind = #{kind}
-			</if>
+			<choose>
+				<when test="kind != null and kind != '' ">
+					AND t.kind = #{kind}
+				</when>
+				<when test="kindList != null and kindList.size() > 0 ">
+					AND t.kind IN 
+					<foreach collection="kindList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>

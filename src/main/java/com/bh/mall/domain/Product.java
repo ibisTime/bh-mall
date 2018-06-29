@@ -80,6 +80,9 @@ public class Product extends ABaseDO {
 
     private String userId;
 
+    // 各级代理云仓该产品最小规格数量
+    private Integer whNumber;
+
     public String getCode() {
         return code;
     }
@@ -254,6 +257,14 @@ public class Product extends ABaseDO {
 
     public void setSendAwardList(List<Award> sendAwardList) {
         this.sendAwardList = sendAwardList;
+    }
+
+    public Integer getWhNumber() {
+        return whNumber;
+    }
+
+    public void setWhNumber(Integer whNumber) {
+        this.whNumber = whNumber;
     }
 
 }

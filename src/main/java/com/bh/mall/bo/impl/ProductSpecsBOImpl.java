@@ -2,6 +2,7 @@ package com.bh.mall.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -253,7 +254,38 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                 StringValidater.toInteger(specsPrice.getMonthlyNumber()));
             productSpecsPriceDAO.update(pspData);
         }
+    }
 
+    @Override
+    public Integer getProductSpecsNumber(String productCode) {
+        ProductSpecs condition = new ProductSpecs();
+        condition.setProductCode(productCode);
+        List<ProductSpecs> list = productSpecsDAO.selectList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("xn00000", "该产品的规格不存在");
+        }
+
+        Integer number = 0;
+        for (ProductSpecs data : list) {
+            number = data.getNumber();
+            if (StringUtils.isNotBlank(data.getRefCode())) {
+                ProductSpecs productSpecs = this
+                    .getProductSpecs(data.getRefCode());
+                number = getMinSpecsNumber(productSpecs, number);
+            }
+        }
+
+        return number;
+    }
+
+    private Integer getMinSpecsNumber(ProductSpecs data, int number) {
+        number = data.getNumber();
+        if (StringUtils.isNotBlank(data.getRefCode())) {
+            ProductSpecs productSpecs = this.getProductSpecs(data.getRefCode());
+            number = number * productSpecs.getNumber();
+            getMinSpecsNumber(data, number);
+        }
+        return number;
     }
 
 }

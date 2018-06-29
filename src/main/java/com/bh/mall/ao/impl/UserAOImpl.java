@@ -707,12 +707,15 @@ public class UserAOImpl implements IUserAO {
                 user.setHighUser(highUser);
             }
         }
+
+        // 介绍人
         if (StringUtils.isNotBlank(user.getIntroducer())) {
             User introduceName = userBO.getUserName(user.getIntroducer());
             if (introduceName != null) {
                 user.setIntroduceName(introduceName.getRealName());
             }
         }
+
         // 关联管理员
         if (StringUtils.isNotBlank(user.getManager())) {
             User manageName = userBO.getUserName(user.getManager());
@@ -720,6 +723,20 @@ public class UserAOImpl implements IUserAO {
                 user.setManageName(manageName.getLoginName());
             }
         }
+
+        // 意向归属人
+
+        if (StringUtils.isNotBlank(user.getLastAgentLog())) {
+            AgencyLog log = agencyLogBO.getAgencyLog(user.getLastAgentLog());
+            if (StringUtils.isNotBlank(log.getToUserId())) {
+                User toUser = userBO.getUser(log.getToUserId());
+                user.setTeamName(toUser.getTeamName());
+                user.setToLevel(toUser.getLevel());
+                user.setToUserName(toUser.getRealName());
+                user.setToUserMobile(toUser.getToUserMobile());
+            }
+        }
+
         // 授权金额
         if (null != user.getApplyLevel()) {
             Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
@@ -944,7 +961,6 @@ public class UserAOImpl implements IUserAO {
             status = EUserStatus.ADD_INFO.getCode();
         }
 
-        data.setHighUserId(toUserId);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setManager(manager);
@@ -958,22 +974,17 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void acceptIntention(String userId, String approver, String remark) {
         User data = userBO.getUser(userId);
-
         if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
 
         AgencyLog log = agencyLogBO.getAgencyLog(data.getLastAgentLog());
-        if (EUser.ADMIN.getCode().equals(approver)) {
-            User highUser = userBO.getSysUser();
-            approver = highUser.getUserId();
-        }
-
         data.setHighUserId(log.getToUserId());
         data.setApprover(approver);
         data.setApplyDatetime(new Date());
         data.setRemark(remark);
+
         data.setStatus(EUserStatus.ADD_INFO.getCode());
         String logCode = agencyLogBO.acceptIntention(data);
         data.setLastAgentLog(logCode);
@@ -987,6 +998,7 @@ public class UserAOImpl implements IUserAO {
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
+
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
         data.setStatus(EUserStatus.TO_MIND.getCode());
@@ -1002,8 +1014,8 @@ public class UserAOImpl implements IUserAO {
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
         data.setArea(req.getArea());
-        data.setAddress(req.getAddress());
 
+        data.setAddress(req.getAddress());
         data.setWxId(req.getWxId());
         data.setMobile(req.getMobile());
         data.setTeamName(req.getTeamName());
@@ -1098,6 +1110,17 @@ public class UserAOImpl implements IUserAO {
                     && !EUser.ADMIN.getCode().equals(approver)) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
+                // 申请的等级是否高于意向归属人的等级
+                if (StringUtils.isNotBlank(log.getToUserId())) {
+                    User toUser = userBO.getUser(log.getToUserId());
+                    if (toUser.getLevel() >= data.getApplyLevel()) {
+                        throw new BizException("xn000",
+                            "该代理申请的高于或等于您的等级，您无法为他办理审核授权");
+                    }
+                    data.setHighUserId(log.getToUserId());
+                    data.setTeamName(toUser.getTeamName());
+                }
+
                 // 根据用户类型获取账户列表
                 List<String> currencyList = distributeAccount(data.getUserId(),
                     data.getRealName(), EUserKind.Merchant.getCode(),
@@ -1151,7 +1174,6 @@ public class UserAOImpl implements IUserAO {
         data.setRemark(remark);
         data.setStatus(status);
 
-        data.setHighUserId(log.getToUserId());
         data.setLevel(data.getApplyLevel());
         String logCode = agencyLogBO.approveImpower(data, status);
         data.setLastAgentLog(logCode);

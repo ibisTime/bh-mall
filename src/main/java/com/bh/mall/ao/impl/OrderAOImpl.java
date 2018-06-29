@@ -180,8 +180,25 @@ public class OrderAOImpl implements IOrderAO {
                     .getPriceBySpecsCode(psData.getCode(), level);
                 kind = this.checkOrder(applyUser, psData);
 
-                // 该等级是不能购买云仓，计算运费
+                // 门槛余额是否高于限制
+                Account account = accountBO.getAccountByUser(
+                    applyUser.getUserId(), ECurrency.MK_CNY.getCode());
+                // 还需购买数量
+                // int needNumber = (int) ((account.getAmount() - amount)
+                // / pspData.getPrice());
+                // if (((account.getAmount() - amount) % pspData.getPrice()) !=
+                // 0) {
+                // needNumber = needNumber + 1;
+                // }
                 Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+                if ((account.getAmount() - amount) > agent.getMinSurplus()) {
+                    throw new BizException("xn0000",
+                        "剩余门槛不能大于[" + agent.getMinSurplus() / 10000
+                                + "]元，目前余额还有["
+                                + (account.getAmount() - amount) / 1000 + "]元");
+                }
+
+                // 该等级是不能购买云仓，计算运费
                 if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
                     if (EProductYunFei.YunFei_NO.getCode()
                         .equals(pData.getIsFree())) {
@@ -196,7 +213,6 @@ public class OrderAOImpl implements IOrderAO {
                     if (EBoolean.NO.getCode().equals(pspData.getIsBuy())) {
                         throw new BizException("xn0000", "您的等级无法购买该规格的产品");
                     }
-                    int quantity = cart.getQuantity() * psData.getNumber();
                     // 改变产品数量
                     this.changeProductNumber(applyUser, pData, psData, order,
                         req.getToUser(), code);
@@ -260,17 +276,16 @@ public class OrderAOImpl implements IOrderAO {
         Account account = accountBO.getAccountByUser(applyUser.getUserId(),
             ECurrency.MK_CNY.getCode());
         // 还需购买数量
-        int needNumber = (int) ((account.getAmount() - amount)
-                / pspData.getPrice());
-        if (((account.getAmount() - amount) % pspData.getPrice()) != 0) {
-            needNumber = needNumber + 1;
-        }
+        // int needNumber = (int) ((account.getAmount() - amount)
+        // / pspData.getPrice());
+        // if (((account.getAmount() - amount) % pspData.getPrice()) != 0) {
+        // needNumber = needNumber + 1;
+        // }
         Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
         if ((account.getAmount() - amount) > agent.getMinSurplus()) {
             throw new BizException("xn0000",
                 "剩余门槛不能大于[" + agent.getMinSurplus() / 10000 + "]元，目前余额还有["
-                        + (account.getAmount() - amount) / 1000 + "]元，需购买数量为["
-                        + needNumber + "]" + psData.getName());
+                        + (account.getAmount() - amount) / 1000 + "]元");
         }
 
         String kind = EOrderKind.Normal_Order.getCode();

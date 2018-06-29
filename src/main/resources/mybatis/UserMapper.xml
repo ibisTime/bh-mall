@@ -562,7 +562,6 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
-		,high_user_id = #{highUserId}
 		,manager = #{manager}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
@@ -611,6 +610,7 @@
 		SET
 		status = #{status}
 		,high_user_id = #{highUserId}
+		,team_name = #{teamName}
 		,approver = #{approver}
 		,level = #{level}
 		,approve_datetime = #{approveDatetime}
@@ -679,7 +679,6 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
-		,high_user_id = #{highUserId}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
