@@ -29,4 +29,7 @@ public interface IProductSpecsPriceBO extends IPaginableBO<ProductSpecsPrice> {
 
     public List<ProductSpecsPrice> getPspBySpecsCode(String productSpecs);
 
+    // 检查机构数量
+    public int checkMinQuantity(String productSpecsCode, Integer level);
+
 }

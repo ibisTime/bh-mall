@@ -10,6 +10,7 @@
 		<result column="change_price" property="changePrice"/>
 		
 		<result column="min_number" property="minNumber"/>
+		<result column="min_quantity" property="minQuantity"/>
 		<result column="is_buy" property="isBuy"/>
 		<result column="daily_number" property="dailyNumber"/>
 		<result column="weekly_number" property="weeklyNumber"/>
@@ -41,8 +42,9 @@
 		,t.price
 		,t.change_price
 		,t.min_number
-		,t.is_buy
 		
+		,t.min_quantity
+		,t.is_buy
 		,t.daily_number
 		,t.weekly_number
 		,t.monthly_number
@@ -69,8 +71,9 @@
 		,price
 		,change_price
 		,min_number
-		,is_buy
+		,min_quantity
 		
+		,is_buy
 		,daily_number
 		,weekly_number
 		,monthly_number
@@ -82,8 +85,9 @@
 		,#{price}
 		,#{changePrice}
 		,#{minNumber}
-		,#{isBuy}
+		,#{minQuantity}
 		
+		,#{isBuy}
 		,#{dailyNumber}
 		,#{weeklyNumber}
 		,#{monthlyNumber}
@@ -97,7 +101,8 @@
 		price = #{price}
 		,change_price = #{changePrice}
 		,min_number = #{minNumber}
-		,id_buy = #{isBuy}
+		,min_quantity = #{minQuantity}
+		,is_buy = #{isBuy}
 		
 		,daily_number = #{dailyNumber}
 		,weekly_number = #{weeklyNumber}

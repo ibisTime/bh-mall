@@ -22,7 +22,7 @@
 				AND t.level = #{level}
 			</if>
 			<if test="amount != null and amount != '' ">
-				<![CDATA[t.start_amount <  amount AND t.end_amount >= amount ]]>
+				<![CDATA[AND t.start_amount <  #{amount} AND t.end_amount >= #{amount} ]]>
 			</if>
 			
 		</trim>

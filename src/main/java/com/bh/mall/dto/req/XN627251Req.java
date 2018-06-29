@@ -26,6 +26,10 @@ public class XN627251Req {
     @NotBlank(message = "申请等级不能为空")
     private String applyLevel;
 
+    // （必填）团队名称
+    @NotBlank(message = "团队名称补不能为空")
+    private String teamName;
+
     // （必填）来源
     @NotBlank(message = "来源不能为空")
     private String fromInfo;
@@ -56,17 +60,11 @@ public class XN627251Req {
     // （选填）打款截图
     private String payPdf;
 
-    // （选填）身份证反面
+    // （选填）身份证类型
     private String idKind;
 
-    // （选填）身份证反面
+    // （选填）身份证号
     private String idNo;
-
-    // （选填）身份证反面
-    private String idBehind;
-
-    // （选填）身份证正面
-    private String idFront;
 
     // (选填) 手持身份证
     private String idHand;
@@ -128,22 +126,6 @@ public class XN627251Req {
 
     public void setApplyLevel(String applyLevel) {
         this.applyLevel = applyLevel;
-    }
-
-    public String getIdBehind() {
-        return idBehind;
-    }
-
-    public void setIdBehind(String idBehind) {
-        this.idBehind = idBehind;
-    }
-
-    public String getIdFront() {
-        return idFront;
-    }
-
-    public void setIdFront(String idFront) {
-        this.idFront = idFront;
     }
 
     public String getIdHand() {
@@ -216,6 +198,14 @@ public class XN627251Req {
 
     public void setPayAmount(String payAmount) {
         this.payAmount = payAmount;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }

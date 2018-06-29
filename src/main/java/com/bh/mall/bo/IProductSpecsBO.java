@@ -11,8 +11,6 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
 
     void removeProductSpecs(String productCode);
 
-    void refreshProductSpecs(List<XN627546Req> list);
-
     List<ProductSpecs> queryProductSpecsList(ProductSpecs condition);
 
     void saveProductSpecs(String code, XN627546Req psReq);
@@ -27,6 +25,6 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
             List<XN627547Req> specsPriceList);
 
     // 获取最小规格数量
-    public Integer getProductSpecsNumber(String productCode);
+    public Integer getMinSpecsNumber(String productCode);
 
 }

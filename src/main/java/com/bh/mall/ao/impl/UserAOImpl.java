@@ -309,39 +309,40 @@ public class UserAOImpl implements IUserAO {
             User dbUser = userBO.doGetUserByOpenId(h5OpenId, companyCode,
                 systemCode);
 
-            // // 用户是否关注了公众号
-            // // 1、获取全局token
-            // Map<String, Object> resMap1 = new HashMap<>();
-            // Properties properties1 = new Properties();
-            // properties1.put("grant_type", "client_credential");
-            // properties1.put("appid", appId);
-            // properties1.put("secret", appSecret);
-            // resMap1 = getMapFromResponse(PostSimulater.requestPostForm(
-            // WechatConstant.WXXCX_GLOBAL_TOKEN_URL, properties1));
-            // String token = (String) resMap1.get("access_token");
-            // if (StringUtils.isBlank(token)) {
-            // throw new BizException("XN000000", "accessToken不能为空");
-            // }
-            //
-            // Map<String, Object> resMap2 = new HashMap<>();
-            // Properties properties2 = new Properties();
-            // properties2.put("access_token", token);
-            // properties2.put("openid", openId);
-            // resMap2 = getMapFromResponse(PostSimulater
-            // .requestPostForm(WechatConstant.WX_USER_CGI_URL, properties2));
-            //
-            // String subscribe = String.valueOf(resMap2.get("subscribe"));
-            // System.out.println("subscribe:" + subscribe);
+            // 用户是否关注了公众号
+            // 1、获取全局token
+            Map<String, Object> resMap1 = new HashMap<>();
+            Properties properties1 = new Properties();
+            properties1.put("grant_type", "client_credential");
+            properties1.put("appid", appId);
+            properties1.put("secret", appSecret);
+            resMap1 = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WXXCX_GLOBAL_TOKEN_URL, properties1));
+            String token = (String) resMap1.get("access_token");
+            if (StringUtils.isBlank(token)) {
+                throw new BizException("XN000000", "accessToken不能为空");
+            }
+
+            Map<String, Object> resMap2 = new HashMap<>();
+            Properties properties2 = new Properties();
+            properties2.put("access_token", token);
+            properties2.put("openid", openId);
+            resMap2 = getMapFromResponse(PostSimulater
+                .requestPostForm(WechatConstant.WX_USER_CGI_URL, properties2));
+
+            String subscribe = String.valueOf(resMap2.get("subscribe"));
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                result = new XN627302Res(dbUser.getUserId(),
-                    dbUser.getStatus());
+                result = new XN627302Res(dbUser.getUserId(), dbUser.getStatus(),
+                    subscribe);
             } else {
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
 
                 result = doWxLoginReg(companyCode, systemCode, unionId, null,
                     h5OpenId, nickname, photo, userKind, highUserId, status);
+                result = new XN627302Res(result.getUserId(), result.getStatus(),
+                    subscribe);
             }
             // result.setSubscribe(subscribe);
         } catch (Exception e) {
@@ -423,7 +424,6 @@ public class UserAOImpl implements IUserAO {
             currencyList.add(ECurrency.YJ_CNY.getCode());
         } else if (EUserKind.Merchant.getCode().equals(kind)) {
             currencyList.add(ECurrency.YJ_CNY.getCode());
-            currencyList.add(ECurrency.YC_CNY.getCode());
             currencyList.add(ECurrency.MK_CNY.getCode());
         }
         return currencyList;
@@ -726,13 +726,12 @@ public class UserAOImpl implements IUserAO {
             }
 
             // 意向归属人
-
             if (StringUtils.isNotBlank(user.getLastAgentLog())) {
                 AgencyLog log = agencyLogBO
                     .getAgencyLog(user.getLastAgentLog());
                 if (StringUtils.isNotBlank(log.getToUserId())) {
                     User toUser = userBO.getUser(log.getToUserId());
-                    user.setTeamName(toUser.getTeamName());
+                    user.setToTeamName(toUser.getTeamName());
                     user.setToLevel(toUser.getLevel());
                     user.setToUserName(toUser.getRealName());
                     user.setToUserMobile(toUser.getToUserMobile());
@@ -807,6 +806,7 @@ public class UserAOImpl implements IUserAO {
     public XN627302Res applyHaveUserReferee(XN627251Req req) {
         PhoneUtil.checkMobile(req.getMobile());
         String introducer = req.getIntroducer();
+        // 校验介绍人
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
             User user = userBO.getUserByMobile(req.getIntroducer());
@@ -816,8 +816,13 @@ public class UserAOImpl implements IUserAO {
                 throw new BizException("xn0000", "您申请的等级需高于推荐人哦！");
             }
         }
+        // 校验手机号
         userBO.isMobileExist(req.getMobile(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
+        // 校验身份证
+        if (StringUtils.isNotBlank(req.getIdNo())) {
+            userBO.getUserByIdNo(req.getIdNo());
+        }
 
         XN627302Res result = null;
         // 是否可被意向
@@ -861,16 +866,14 @@ public class UserAOImpl implements IUserAO {
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
 
+        data.setTeamName(req.getTeamName());
         data.setIdKind(req.getIdKind());
         data.setIdNo(req.getIdNo());
-        data.setIdBehind(req.getIdBehind());
-        data.setIdFront(req.getIdFront());
         data.setIdHand(req.getIdHand());
 
         data.setIntroducer(introducer);
         data.setStatus(status);
         data.setArea(req.getArea());
-        data.setPayAmount(StringValidater.toLong(req.getPayAmount()));
         data.setPayPdf(req.getPayPdf());
 
         data.setAddress(req.getAddress());
@@ -1097,6 +1100,7 @@ public class UserAOImpl implements IUserAO {
 
         String status = EUserStatus.IMPOWERED.getCode();
         String fromUser = ESysUser.SYS_USER_BH.getCode();
+        User highUser = userBO.getSysUser();
 
         if (EResult.Result_YES.getCode().equals(result)) {
             AgentImpower impower = agentImpowerBO
@@ -1120,8 +1124,8 @@ public class UserAOImpl implements IUserAO {
                         throw new BizException("xn000",
                             "该代理申请的高于或等于您的等级，您无法为他办理审核授权");
                     }
-                    data.setHighUserId(log.getToUserId());
-                    data.setTeamName(toUser.getTeamName());
+                    highUser = toUser;
+                    fromUser = highUser.getUserId();
                 }
 
                 // 根据用户类型获取账户列表
@@ -1132,14 +1136,6 @@ public class UserAOImpl implements IUserAO {
                 accountBO.distributeAccount(data.getUserId(),
                     data.getRealName(), EAccountType.Business, currencyList,
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-
-                if (StringUtils.isNotBlank(data.getHighUserId())) {
-                    User highUser = userBO.getUser(data.getHighUserId());
-                    if (EUserKind.Merchant.getCode()
-                        .equals(highUser.getKind())) {
-                        fromUser = highUser.getUserId();
-                    }
-                }
 
                 // 介绍奖
                 if (StringUtils.isNotBlank(data.getIntroducer())) {
@@ -1159,18 +1155,19 @@ public class UserAOImpl implements IUserAO {
                         data.getUserId());
                 }
             }
-            // 未通过，无上级
-        } else if (EUserStatus.ADD_INFO.getCode().equals(data.getStatus())) {
-            status = EUserStatus.ADD_INFO.getCode();
-            // 未通过，有上级
-        } else {
+            // 未通过，有推荐人
+        } else if (StringUtils.isNotBlank(data.getUserReferee())) {
             status = EUserStatus.IMPOWERO_INFO.getCode();
+        } else {
+            status = EUserStatus.TO_MIND.getCode();
         }
+
         Date date = new Date();
         if (EUserStatus.IMPOWERED.getCode().equals(status)) {
             data.setImpowerDatetime(date);
         }
 
+        data.setHighUserId(highUser.getUserId());
         data.setManager(data.getManager());
         data.setApprover(approver);
         data.setApplyDatetime(date);
@@ -1613,6 +1610,11 @@ public class UserAOImpl implements IUserAO {
                 .toInteger(req.getApplyLevel())) {
                 throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
+        }
+
+        // 校验身份证
+        if (StringUtils.isNotBlank(req.getIdNo())) {
+            userBO.getUserByIdNo(req.getIdNo());
         }
 
         AgentImpower impower = agentImpowerBO

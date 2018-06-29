@@ -110,7 +110,7 @@
 	<update id="update_productSpecs" parameterType="productSpecs">
 		UPDATE tbh_product_specs
 		SET 
-		,is_single = #{isSingle}
+		is_single = #{isSingle}
 		,single_number = #{singleNumber}
 		,ref_code = #{refCode}
 		,name = #{name}

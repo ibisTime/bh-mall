@@ -68,6 +68,8 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
 
                     productSpecsPrice.setMinNumber(
                         StringValidater.toInteger(specsPrice.getMinNumber()));
+                    productSpecsPrice.setMinQuantity(
+                        StringValidater.toInteger(specsPrice.getMinQuantity()));
                     productSpecsPrice.setPrice(
                         StringValidater.toLong(specsPrice.getPrice()));
                     productSpecsPrice.setChangePrice(
@@ -81,51 +83,6 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                     productSpecsPrice.setMonthlyNumber(StringValidater
                         .toInteger(specsPrice.getMonthlyNumber()));
                     productSpecsPriceDAO.insert(productSpecsPrice);
-                }
-            }
-        }
-
-    }
-
-    @Override
-    public void refreshProductSpecs(List<XN627546Req> list) {
-
-        for (XN627546Req req : list) {
-            if (StringUtils.isNotBlank(req.getCode())) {
-                ProductSpecs data = this.getProductSpecs(req.getCode());
-                data.setName(req.getName());
-                data.setIsSingle(req.getIsSingle());
-                data.setSingleNumber(
-                    StringValidater.toInteger(req.getSingleNumber()));
-                data.setRefCode(req.getRefCode());
-
-                data.setNumber(StringValidater.toInteger(req.getNumber()));
-                data.setWeight(StringValidater.toDouble(req.getWeight()));
-                data.setIsUpgradeOrder(req.getIsUpgradeOrder());
-                data.setIsImpowerOrder(req.getIsPowerOrder());
-                data.setIsNormalOrder(req.getIsNormalOrder());
-
-                productSpecsDAO.update(data);
-                List<XN627547Req> specsPriceList = req.getSpecsPriceList();
-
-                for (XN627547Req specsPrice : specsPriceList) {
-                    ProductSpecsPrice pspData = new ProductSpecsPrice();
-                    pspData.setCode(specsPrice.getCode());
-                    pspData.setLevel(
-                        StringValidater.toInteger(specsPrice.getLevel()));
-                    pspData.setPrice(
-                        StringValidater.toLong(specsPrice.getPrice()));
-                    pspData.setChangePrice(
-                        StringValidater.toLong(specsPrice.getChangePrice()));
-                    pspData.setIsBuy(specsPrice.getIsBuy());
-
-                    pspData.setDailyNumber(
-                        StringValidater.toInteger(specsPrice.getDailyNumber()));
-                    pspData.setWeeklyNumber(StringValidater
-                        .toInteger(specsPrice.getWeeklyNumber()));
-                    pspData.setMonthlyNumber(StringValidater
-                        .toInteger(specsPrice.getMonthlyNumber()));
-                    productSpecsPriceDAO.update(pspData);
                 }
             }
         }
@@ -195,8 +152,13 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             productSpecsPrice.setProductSpecsCode(psCode);
             productSpecsPrice
                 .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
+
             productSpecsPrice
                 .setPrice(StringValidater.toLong(specsPrice.getPrice()));
+            productSpecsPrice.setMinNumber(
+                StringValidater.toInteger(specsPrice.getMinNumber()));
+            productSpecsPrice.setMinQuantity(
+                StringValidater.toInteger(specsPrice.getMinQuantity()));
 
             productSpecsPrice.setChangePrice(
                 StringValidater.toLong(specsPrice.getChangePrice()));
@@ -246,6 +208,11 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                 StringValidater.toLong(specsPrice.getChangePrice()));
             pspData.setIsBuy(specsPrice.getIsBuy());
 
+            pspData.setMinNumber(
+                StringValidater.toInteger(specsPrice.getMinNumber()));
+            pspData.setMinQuantity(
+                StringValidater.toInteger(specsPrice.getMinQuantity()));
+
             pspData.setDailyNumber(
                 StringValidater.toInteger(specsPrice.getDailyNumber()));
             pspData.setWeeklyNumber(
@@ -257,7 +224,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
     }
 
     @Override
-    public Integer getProductSpecsNumber(String productCode) {
+    public Integer getMinSpecsNumber(String productCode) {
         ProductSpecs condition = new ProductSpecs();
         condition.setProductCode(productCode);
         List<ProductSpecs> list = productSpecsDAO.selectList(condition);
@@ -266,6 +233,10 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         }
 
         Integer number = 0;
+        if (list.size() == 1) {
+            ProductSpecs specs = list.get(0);
+            return specs.getNumber();
+        }
         for (ProductSpecs data : list) {
             number = data.getNumber();
             if (StringUtils.isNotBlank(data.getRefCode())) {
@@ -274,7 +245,6 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                 number = getMinSpecsNumber(productSpecs, number);
             }
         }
-
         return number;
     }
 

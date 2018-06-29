@@ -119,7 +119,8 @@ public class ProductAOImpl implements IProductAO {
 
         // 如果数据库未存在此规格，表示已经删除
         for (ProductSpecs productSpecs : dbPsList) {
-            if (!psList.contains(productSpecs)) {
+            boolean result = this.checkCode(productSpecs.getCode(), psList);
+            if (result) {
                 productSpecsBO.removeProductSpecs(productSpecs.getCode());
             }
         }
@@ -195,11 +196,13 @@ public class ProductAOImpl implements IProductAO {
         if (data.getStatus().equals(EProductStatus.Shelf_YES.getCode())) {
             throw new BizException("xn00000", "产品已上架");
         }
+
         data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         data.setIsFree(req.getIsFree());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setStatus(EProductStatus.Shelf_YES.getCode());
+
         productBO.putOnProduct(data);
     }
 
@@ -286,8 +289,7 @@ public class ProductAOImpl implements IProductAO {
                 .getWareHouseByProduct(product.getCode());
             int whNumber = 0;
             for (WareHouse wareHouse : whList) {
-                whNumber = productSpecsBO
-                    .getProductSpecsNumber(product.getCode());
+                whNumber = productSpecsBO.getMinSpecsNumber(product.getCode());
                 whNumber = whNumber + whNumber * wareHouse.getQuantity();
             }
             product.setWhNumber(whNumber);
@@ -384,4 +386,13 @@ public class ProductAOImpl implements IProductAO {
         return data;
     }
 
+    private boolean checkCode(String code, List<XN627546Req> psList) {
+        for (XN627546Req req : psList) {
+            if (StringUtils.isNotBlank(req.getCode())
+                    && req.getCode().equals(code)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

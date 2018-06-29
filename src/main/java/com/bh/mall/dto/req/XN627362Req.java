@@ -14,27 +14,6 @@ public class XN627362Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
-    // （必填） 姓名
-    private String realName;
-
-    // （必填）微信号
-    private String wxId;
-
-    // （必填） 电话
-    private String mobile;
-
-    // （必填） 省
-    private String province;
-
-    // （必填） 市
-    private String city;
-
-    // （必填） 区
-    private String area;
-
-    // （必填） 详细地址
-    private String address;
-
     // 申请等级（必填）
     @NotBlank(message = "申请等级不能为空")
     private String applyLevel;
@@ -95,72 +74,16 @@ public class XN627362Req {
         this.introducer = introducer;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public String getWxId() {
-        return wxId;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
     public String getApplyLevel() {
         return applyLevel;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public void setWxId(String wxId) {
-        this.wxId = wxId;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public String getTeamName() {
+        return teamName;
     }
 
     public void setApplyLevel(String applyLevel) {
         this.applyLevel = applyLevel;
-    }
-
-    public String getTeamName() {
-        return teamName;
     }
 
     public void setTeamName(String teamName) {

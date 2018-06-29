@@ -59,7 +59,7 @@ public class AwardIntervalBOImpl extends PaginableBOImpl<AwardInterval>
         condition.setAmount(amount);
         AwardInterval data = awardIntervalDAO.select(condition);
         if (data == null) {
-            throw new BizException("xn0000", "介绍奖励不存在");
+            throw new BizException("xn0000", "出货奖励不存在");
         }
         return data;
     }

@@ -202,7 +202,6 @@
 		,status
 		,apply_user
 		,apply_datetime
-		,channel_type
 		)
 		VALUES(
 		#{code}
@@ -214,13 +213,15 @@
 		,#{accountName}
 		,#{type}
 		,#{currency}
+		,#{chargePdf}
+		,#{channelType}
+		,#{channelOrder}
 		,#{bizType}
 		,#{bizNote}
 		
 		,#{status}
 		,#{applyUser}
 		,#{applyDatetime}
-		,#{channelType}
 		)
 	</insert>
 

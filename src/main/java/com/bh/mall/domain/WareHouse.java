@@ -78,6 +78,9 @@ public class WareHouse extends ABaseDO {
     // 仓库货物总价值
     private Long allAmount;
 
+    // 最小规格总数量
+    private Integer allQuantity;
+
     // 产品名称
     private List<WareHouse> specsList;
 
@@ -254,6 +257,22 @@ public class WareHouse extends ABaseDO {
     }
 
     public void setWhsList(List<WareHouse> specsList) {
+        this.specsList = specsList;
+    }
+
+    public Integer getAllQuantity() {
+        return allQuantity;
+    }
+
+    public List<WareHouse> getSpecsList() {
+        return specsList;
+    }
+
+    public void setAllQuantity(Integer allQuantity) {
+        this.allQuantity = allQuantity;
+    }
+
+    public void setSpecsList(List<WareHouse> specsList) {
         this.specsList = specsList;
     }
 

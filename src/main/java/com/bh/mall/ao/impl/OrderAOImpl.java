@@ -149,7 +149,6 @@ public class OrderAOImpl implements IOrderAO {
             }
 
             Integer level = 6;
-            String kind = EOrderKind.Normal_Order.getCode();
             Long yunfei = 0L;
             ProductSpecs psData = productSpecsBO
                 .getProductSpecs(cart.getProductSpecsCode());
@@ -168,28 +167,26 @@ public class OrderAOImpl implements IOrderAO {
 
             order.setCode(oCode);
             order.setQuantity(cart.getQuantity());
-            order.setPrice(pspData.getPrice());
-            order.setApplyUser(req.getApplyUser());
             Long amount = cart.getQuantity() * pspData.getPrice();
-            order.setAmount(amount);
 
             // 下单人是否是代理
             if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
                 level = applyUser.getLevel();
                 pspData = productSpecsPriceBO
                     .getPriceBySpecsCode(psData.getCode(), level);
-                kind = this.checkOrder(applyUser, psData);
+                amount = cart.getQuantity() * pspData.getPrice();
+
+                // 检查起购数量
+                int minQuantity = productSpecsPriceBO
+                    .checkMinQuantity(pspData.getCode(), level);
+                if (minQuantity > cart.getQuantity()) {
+                    throw new BizException("xn0000",
+                        "您购买的数量不能低于" + minQuantity + "]");
+                }
 
                 // 门槛余额是否高于限制
                 Account account = accountBO.getAccountByUser(
                     applyUser.getUserId(), ECurrency.MK_CNY.getCode());
-                // 还需购买数量
-                // int needNumber = (int) ((account.getAmount() - amount)
-                // / pspData.getPrice());
-                // if (((account.getAmount() - amount) % pspData.getPrice()) !=
-                // 0) {
-                // needNumber = needNumber + 1;
-                // }
                 Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
                 if ((account.getAmount() - amount) > agent.getMinSurplus()) {
                     throw new BizException("xn0000",
@@ -222,9 +219,12 @@ public class OrderAOImpl implements IOrderAO {
 
             list.add(oCode);
             order.setCode(oCode);
-            order.setKind(kind);
+            order.setKind(EOrderKind.Normal_Order.getCode());
             order.setPic(pData.getAdvPic());
+            order.setPrice(pspData.getPrice());
+            order.setApplyUser(req.getApplyUser());
 
+            order.setAmount(amount);
             order.setCode(oCode);
             order.setYunfei(yunfei);
             order.setAmount(amount + yunfei);
@@ -239,7 +239,6 @@ public class OrderAOImpl implements IOrderAO {
             order.setAddress(req.getAddress());
             order.setArea(req.getArea());
             order.setCity(req.getCity());
-            order.setKind(kind);
             order.setProvince(req.getProvince());
 
             order.setStatus(EOrderStatus.Unpaid.getCode());
@@ -269,26 +268,27 @@ public class OrderAOImpl implements IOrderAO {
         if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
+
+        // 限购数量
         Long amount = StringValidater.toInteger(req.getQuantity())
                 * pspData.getPrice();
+
+        // 检查起购数量
+        int minQuantity = productSpecsPriceBO
+            .checkMinQuantity(pspData.getCode(), applyUser.getLevel());
+        if (minQuantity > StringValidater.toInteger(req.getQuantity())) {
+            throw new BizException("xn0000", "您购买的数量不能低于" + minQuantity + "]");
+        }
 
         // 门槛余额是否高于限制
         Account account = accountBO.getAccountByUser(applyUser.getUserId(),
             ECurrency.MK_CNY.getCode());
-        // 还需购买数量
-        // int needNumber = (int) ((account.getAmount() - amount)
-        // / pspData.getPrice());
-        // if (((account.getAmount() - amount) % pspData.getPrice()) != 0) {
-        // needNumber = needNumber + 1;
-        // }
         Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
         if ((account.getAmount() - amount) > agent.getMinSurplus()) {
             throw new BizException("xn0000",
-                "剩余门槛不能大于[" + agent.getMinSurplus() / 10000 + "]元，目前余额还有["
+                "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
                         + (account.getAmount() - amount) / 1000 + "]元");
         }
-
-        String kind = EOrderKind.Normal_Order.getCode();
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
@@ -309,7 +309,6 @@ public class OrderAOImpl implements IOrderAO {
         // 判断代理状态
         if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
             // 是否完成授权单
-            kind = this.checkOrder(applyUser, psData);
 
             // 判断是否允许：普通，授权，升级下单
             if (EProductSpecsType.Apply_NO.getCode()
@@ -366,7 +365,7 @@ public class OrderAOImpl implements IOrderAO {
 
         data.setArea(req.getArea());
         data.setCity(req.getCity());
-        data.setKind(kind);
+        data.setKind(EOrderKind.Normal_Order.getCode());
         data.setProvince(req.getProvince());
         data.setStatus(EOrderStatus.Unpaid.getCode());
 
@@ -647,7 +646,8 @@ public class OrderAOImpl implements IOrderAO {
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
             AwardInterval award = awardIntervalBO
                 .getAwardIntervalByLevel(toUser.getLevel(), data.getAmount());
-            Long awardAmount = AmountUtil.mul(orderAmount, award.getPercent());
+            Long awardAmount = AmountUtil.mul(orderAmount,
+                award.getPercent() / 100);
             accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
                 toUser.getUserId(), ECurrency.YJ_CNY.getCode(), awardAmount,
                 EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
@@ -957,23 +957,28 @@ public class OrderAOImpl implements IOrderAO {
 
     // 变动产品数量
     private void changeProductNumber(User applyUser, Product pData,
-            ProductSpecs psData, Order order, String toUser, String code) {
-        int quantity = order.getQuantity() * psData.getNumber();
+            ProductSpecs psData, Order order, String toUserId, String code) {
+        int minNumber = productSpecsBO.getMinSpecsNumber(pData.getCode());
+        int quantity = order.getQuantity() * minNumber;
         // 扣减云仓
-        if (StringUtils.isNotBlank(toUser)) {
+        if (StringUtils.isNotBlank(toUserId)) {
             // 有上级代理,扣减上级代理云仓
-            User touser = userBO.getUser(toUser);
-            wareHouseBO.transQuantity(applyUser.getUserId(), psData.getCode(),
-                touser.getUserId(), psData.getCode(), order.getQuantity(),
-                EBizType.AJ_GMYC, EBizType.AJ_YCCH, EBizType.AJ_GMYC.getValue(),
-                EBizType.AJ_YCCH.getValue(), code);
+            User toUser = userBO.getUser(toUserId);
+            if (EUserKind.Merchant.getCode().equals(toUser)) {
+                wareHouseBO.transQuantity(applyUser.getUserId(),
+                    psData.getCode(), toUser.getUserId(), psData.getCode(),
+                    order.getQuantity(), EBizType.AJ_GMYC, EBizType.AJ_YCCH,
+                    EBizType.AJ_GMYC.getValue(), EBizType.AJ_YCCH.getValue(),
+                    code);
+            } else {
+                // 无上级代理,扣减产品实际库存
+                productLogBO.saveChangeLog(pData,
+                    EProductLogType.Order.getCode(), pData.getRealNumber(),
+                    quantity, null);
+                pData.setRealNumber(pData.getRealNumber() - quantity);
+                productBO.refreshRealNumber(pData);
+            }
 
-        } else {
-            // 无上级代理,扣减产品实际库存
-            productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
-                pData.getRealNumber(), quantity, null);
-            pData.setRealNumber(pData.getRealNumber() - quantity);
-            productBO.refreshRealNumber(pData);
         }
     }
 
@@ -987,8 +992,8 @@ public class OrderAOImpl implements IOrderAO {
             int dailyNumber = this.getNumber(applyUser.getUserId(),
                 DateUtil.getTodayStart(), DateUtil.getTodayEnd());
             if (quantity + dailyNumber > pspData.getDailyNumber()) {
-                throw new BizException("xn0000", "您今日还能购买"
-                        + (pspData.getDailyNumber() - quantity - dailyNumber));
+                throw new BizException("xn0000",
+                    "您今日还能购买" + (pspData.getDailyNumber() - dailyNumber));
             }
         }
 
@@ -997,8 +1002,8 @@ public class OrderAOImpl implements IOrderAO {
             int weeklyNumber = this.getNumber(applyUser.getUserId(),
                 DateUtil.getWeeklyStart(), DateUtil.getWeeklyEnd());
             if ((quantity + weeklyNumber) > pspData.getDailyNumber()) {
-                throw new BizException("xn0000", "您本周还能购买"
-                        + (pspData.getDailyNumber() - quantity - weeklyNumber));
+                throw new BizException("xn0000",
+                    "您本周还能购买" + (pspData.getDailyNumber() - weeklyNumber));
             }
         }
 
@@ -1009,8 +1014,7 @@ public class OrderAOImpl implements IOrderAO {
 
             if ((quantity + monthlyNumber) > pspData.getDailyNumber()) {
                 throw new BizException("xn0000",
-                    "您本月还能购买" + (pspData.getDailyNumber() - quantity
-                            - monthlyNumber));
+                    "您本月还能购买" + (pspData.getDailyNumber() - monthlyNumber));
             }
         }
 

@@ -23,8 +23,11 @@ public class XN627547Req {
     // （必填）是否可购买
     private String isBuy;
 
-    // 最小数量
+    // 云仓最低出货数量
     private String minNumber;
+
+    // 限购数量
+    private String minQuantity;
 
     // 日限购
     private String dailyNumber;
@@ -105,6 +108,14 @@ public class XN627547Req {
 
     public void setMonthlyNumber(String monthlyNumber) {
         this.monthlyNumber = monthlyNumber;
+    }
+
+    public String getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(String minQuantity) {
+        this.minQuantity = minQuantity;
     }
 
 }

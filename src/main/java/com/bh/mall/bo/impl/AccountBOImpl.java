@@ -14,7 +14,6 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAccountDAO;
-import com.bh.mall.dao.IWareHouseDAO;
 import com.bh.mall.domain.Account;
 import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EAccountType;
@@ -38,9 +37,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     @Autowired
     private IJourBO jourBO;
 
-    @Autowired
-    private IWareHouseDAO wareHouseDAO;
-
     @Override
     public String distributeAccount(String userId, String realName,
             EAccountType accountType, List<String> currencyList,
@@ -48,9 +44,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         String accountNumber = null;
         if (StringUtils.isNotBlank(userId)) {
             for (String currency : currencyList) {
-                if (ECurrency.YC_CNY.getCode().equals(currency)) {
-                    continue;
-                }
                 accountNumber = OrderNoGenerater
                     .generate(EGeneratePrefix.Account.getCode());
                 Account data = new Account();

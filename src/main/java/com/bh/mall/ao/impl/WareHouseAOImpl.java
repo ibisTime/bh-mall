@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWareHouseAO;
@@ -115,6 +116,9 @@ public class WareHouseAOImpl implements IWareHouseAO {
             specsCondition.setProductCode(wareHouse.getProductCode());
             wareHouse
                 .setWhsList(wareHouseBO.queryWareHouseList(specsCondition));
+            int minSpecsNumber = productSpecsBO
+                .getMinSpecsNumber(product.getCode());
+            wareHouse.setAllQuantity(minSpecsNumber * wareHouse.getQuantity());
         }
         return list;
     }
@@ -156,17 +160,10 @@ public class WareHouseAOImpl implements IWareHouseAO {
             specsCondition.setProductCode(wareHouse.getProductCode());
             wareHouse
                 .setWhsList(wareHouseBO.queryWareHouseList(specsCondition));
+            int minSpecsNumber = productSpecsBO
+                .getMinSpecsNumber(product.getCode());
+            wareHouse.setAllQuantity(minSpecsNumber * wareHouse.getQuantity());
 
-            // WareHouseSpecs whsCondition = new WareHouseSpecs();
-            // whsCondition.setWareHouseCode(wareHouse.getCode());
-            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
-            // .queryWareHouseSpecsList(whsCondition);
-            // for (WareHouseSpecs wareHouseSpecs : whsList) {
-            // ProductSpecs specs = productSpecsBO
-            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
-            // wareHouseSpecs.setSpecsName(specs.getName());
-            // }
-            // wareHouse.setWhsList(whsList);
         }
         page.setList(list);
         return page;
@@ -201,8 +198,9 @@ public class WareHouseAOImpl implements IWareHouseAO {
     }
 
     @Override
+    @Transactional
     public void deliveProject(XN627815Req req) {
-        // 检查限购
+        System.out.println("数量：" + req.getQuantity());
         User user = userBO.getUser(req.getUserId());
         WareHouse data = wareHouseBO.getWareHouseByProductSpec(req.getUserId(),
             req.getProductSpecsCode());
@@ -214,10 +212,12 @@ public class WareHouseAOImpl implements IWareHouseAO {
             .getProductSpecs(data.getProductSpecsCode());
         ProductSpecsPrice pspData = productSpecsPriceBO
             .getPriceBySpecsCode(data.getProductSpecsCode(), user.getLevel());
+
+        // 检查限购
         orderAO.checkLimitNumber(user, psData, pspData, data.getQuantity());
         if (pspData.getMinNumber() > data.getQuantity()) {
             throw new BizException("xn00000",
-                "该产品云仓发货不能少于" + pspData.getMinNumber() + psData.getName());
+                "该产品云仓提货不能少于" + pspData.getMinNumber() + psData.getName());
         }
         Product product = productBO.getProduct(data.getProductCode());
         if (data.getQuantity() < StringValidater.toInteger(req.getQuantity())) {
