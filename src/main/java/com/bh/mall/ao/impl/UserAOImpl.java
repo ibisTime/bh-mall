@@ -693,67 +693,70 @@ public class UserAOImpl implements IUserAO {
     @Override
     public User doGetUser(String userId) {
         User user = userBO.getUser(userId);
-        // 推荐人、上级、介绍人转义
-        if (StringUtils.isNotBlank(user.getUserReferee())) {
-            User userReferee = userBO.getUserName(user.getUserReferee());
-            if (userReferee != null) {
-                user.setRefereeUser(userReferee);
-            }
-        }
-        // 上级
-        if (StringUtils.isNotBlank(user.getHighUserId())) {
-            User highUser = userBO.getUserName(user.getHighUserId());
-            if (highUser != null) {
-                user.setHighUser(highUser);
-            }
-        }
-
-        // 介绍人
-        if (StringUtils.isNotBlank(user.getIntroducer())) {
-            User introduceName = userBO.getUserName(user.getIntroducer());
-            if (introduceName != null) {
-                user.setIntroduceName(introduceName.getRealName());
-            }
-        }
-
-        // 关联管理员
-        if (StringUtils.isNotBlank(user.getManager())) {
-            User manageName = userBO.getUserName(user.getManager());
-            if (manageName != null) {
-                user.setManageName(manageName.getLoginName());
-            }
-        }
-
-        // 意向归属人
-
-        if (StringUtils.isNotBlank(user.getLastAgentLog())) {
-            AgencyLog log = agencyLogBO.getAgencyLog(user.getLastAgentLog());
-            if (StringUtils.isNotBlank(log.getToUserId())) {
-                User toUser = userBO.getUser(log.getToUserId());
-                user.setTeamName(toUser.getTeamName());
-                user.setToLevel(toUser.getLevel());
-                user.setToUserName(toUser.getRealName());
-                user.setToUserMobile(toUser.getToUserMobile());
-            }
-        }
-
-        // 授权金额
-        if (null != user.getApplyLevel()) {
-            Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
-            user.setImpowerAmount(agent.getAmount());
-        }
-        if (null != user.getPayAmount() && 0 != user.getPayAmount()) {
-            user.setResult(false);
-        }
-        // 该等级授权规则
         if (EUserKind.Merchant.getCode().equals(user.getKind())) {
-            if (null != user.getApplyLevel()) {
-                AgentImpower impower = agentImpowerBO
-                    .getAgentImpowerByLevel(user.getApplyLevel());
-                user.setImpower(impower);
+            // 推荐人、上级、介绍人转义
+            if (StringUtils.isNotBlank(user.getUserReferee())) {
+                User userReferee = userBO.getUserName(user.getUserReferee());
+                if (userReferee != null) {
+                    user.setRefereeUser(userReferee);
+                }
             }
-        }
+            // 上级
+            if (StringUtils.isNotBlank(user.getHighUserId())) {
+                User highUser = userBO.getUserName(user.getHighUserId());
+                if (highUser != null) {
+                    user.setHighUser(highUser);
+                }
+            }
 
+            // 介绍人
+            if (StringUtils.isNotBlank(user.getIntroducer())) {
+                User introduceName = userBO.getUserName(user.getIntroducer());
+                if (introduceName != null) {
+                    user.setIntroduceName(introduceName.getRealName());
+                }
+            }
+
+            // 关联管理员
+            if (StringUtils.isNotBlank(user.getManager())) {
+                User manageName = userBO.getUserName(user.getManager());
+                if (manageName != null) {
+                    user.setManageName(manageName.getLoginName());
+                }
+            }
+
+            // 意向归属人
+
+            if (StringUtils.isNotBlank(user.getLastAgentLog())) {
+                AgencyLog log = agencyLogBO
+                    .getAgencyLog(user.getLastAgentLog());
+                if (StringUtils.isNotBlank(log.getToUserId())) {
+                    User toUser = userBO.getUser(log.getToUserId());
+                    user.setTeamName(toUser.getTeamName());
+                    user.setToLevel(toUser.getLevel());
+                    user.setToUserName(toUser.getRealName());
+                    user.setToUserMobile(toUser.getToUserMobile());
+                }
+            }
+
+            // 授权金额
+            if (null != user.getApplyLevel()) {
+                Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
+                user.setImpowerAmount(agent.getAmount());
+            }
+            if (null != user.getPayAmount() && 0 != user.getPayAmount()) {
+                user.setResult(false);
+            }
+            // 该等级授权规则
+            if (EUserKind.Merchant.getCode().equals(user.getKind())) {
+                if (null != user.getApplyLevel()) {
+                    AgentImpower impower = agentImpowerBO
+                        .getAgentImpowerByLevel(user.getApplyLevel());
+                    user.setImpower(impower);
+                }
+            }
+
+        }
         return user;
     }
 
