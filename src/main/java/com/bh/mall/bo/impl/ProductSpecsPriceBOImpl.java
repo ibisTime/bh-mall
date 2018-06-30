@@ -75,22 +75,8 @@ public class ProductSpecsPriceBOImpl extends PaginableBOImpl<ProductSpecsPrice>
             if (data == null) {
                 throw new BizException("xn0000", "规格价格不存在");
             }
-        }
-        return data;
-    }
-
-    @Override
-    public ProductSpecsPrice getPriceBySpecsCode(String spcesCode,
-            Integer level) {
-        ProductSpecsPrice data = null;
-        if (StringUtils.isNotBlank(spcesCode)) {
-            ProductSpecsPrice condition = new ProductSpecsPrice();
-            condition.setLevel(level);
-            condition.setProductSpecsCode(spcesCode);
-            data = productSpecsPriceDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "规格价格不存在");
-            }
+        } else {
+            throw new BizException("xn0000", "规格价格编号不能为空");
         }
         return data;
     }

@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查意向代理
  * @author: nyc 
@@ -16,6 +18,9 @@ public class XN627356Req {
 
     // （选填）状态
     private String status;
+
+    // 状态List
+    private List<String> statusList;
 
     // （选填）团队名称
     private String teamName;
@@ -94,6 +99,14 @@ public class XN627356Req {
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

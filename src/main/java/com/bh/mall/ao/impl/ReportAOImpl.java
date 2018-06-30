@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IReportAO;
 import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.base.Paginable;
@@ -14,7 +15,10 @@ import com.bh.mall.domain.Report;
 public class ReportAOImpl implements IReportAO {
 
     @Autowired
-    private IReportBO reportBO;
+    IReportBO reportBO;
+
+    @Autowired
+    IOrderAO orderAO;
 
     @Override
     public String addReport(Report data) {
@@ -28,6 +32,8 @@ public class ReportAOImpl implements IReportAO {
     @Override
     public Paginable<Report> queryReportPage(int start, int limit,
             Report condition) {
+        Report reprot = reportBO.getReport(condition.getUserId());
+
         return reportBO.getPaginable(start, limit, condition);
     }
 

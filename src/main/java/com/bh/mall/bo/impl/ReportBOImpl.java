@@ -24,7 +24,6 @@ public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
         String code = null;
         if (data != null) {
             code = OrderNoGenerater.generate(EGeneratePrefix.Report.getCode());
-            data.setCode(code);
             reportDAO.insert(data);
         }
         return code;
@@ -35,7 +34,6 @@ public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Report data = new Report();
-            data.setCode(code);
             count = reportDAO.delete(data);
         }
         return count;
@@ -44,9 +42,6 @@ public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
     @Override
     public int refreshReport(Report data) {
         int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = reportDAO.update(data);
-        }
         return count;
     }
 
@@ -60,7 +55,6 @@ public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
         Report data = null;
         if (StringUtils.isNotBlank(code)) {
             Report condition = new Report();
-            condition.setCode(code);
             data = reportDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "�� ��Ų�����");

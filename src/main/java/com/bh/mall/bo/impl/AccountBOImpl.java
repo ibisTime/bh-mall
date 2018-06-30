@@ -261,4 +261,17 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             bizType, toBizNote, transAmount);
     }
 
+    @Override
+    public Account getAccountNocheck(String userId, String currency) {
+        Account data = null;
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(currency)) {
+            Account condition = new Account();
+            condition.setUserId(userId);
+            condition.setCurrency(currency);
+            data = accountDAO.select(condition);
+        }
+        return data;
+    }
+
 }

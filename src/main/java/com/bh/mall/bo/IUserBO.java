@@ -181,4 +181,6 @@ public interface IUserBO extends IPaginableBO<User> {
     // 根据身份号获取用户信息
     public User getUserByIdNo(String idNo);
 
+    public void checkTeamName(String teamName);
+
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IProductSpecsBO;
+import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -29,6 +30,9 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
 
     @Autowired
     private IProductSpecsPriceDAO productSpecsPriceDAO;
+
+    @Autowired
+    private IProductSpecsPriceBO productSpecsPriceBO;
 
     @Override
     public void saveProductSpecsList(String code, List<XN627546Req> specList) {
@@ -201,7 +205,8 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         List<XN627547Req> pspList = specsPriceList;
 
         for (XN627547Req specsPrice : pspList) {
-            ProductSpecsPrice pspData = new ProductSpecsPrice();
+            ProductSpecsPrice pspData = productSpecsPriceBO
+                .getProductSpecsPrice(specsPrice.getCode());
             pspData.setCode(specsPrice.getCode());
             pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
             pspData.setChangePrice(

@@ -137,27 +137,29 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String approveImpower(User data, String result) {
+    public String approveImpower(AgencyLog log, User user) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
 
         alData.setCode(code);
-        alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
+        alData.setApplyUser(log.getApplyUser());
+        alData.setApplyDatetime(log.getApplyDatetime());
         alData.setType(EAgencyType.Imporder.getCode());
-        alData.setApplyLevel(data.getApplyLevel());
+        alData.setApplyLevel(log.getApplyLevel());
 
-        alData.setToUserId(data.getHighUserId());
-        alData.setTeamName(data.getTeamName());
-        alData.setUserReferee(data.getUserReferee());
-        alData.setApprover(data.getApprover());
-        alData.setLevel(data.getLevel());
-        alData.setHighUserId(data.getHighUserId());
+        alData.setToUserId(log.getToUserId());
+        alData.setTeamName(user.getTeamName());
+        alData.setUserReferee(log.getUserReferee());
+        alData.setApprover(log.getApprover());
 
-        alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setStatus(result);
-        alData.setRemark(data.getRemark());
+        alData.setApplyLevel(log.getApplyLevel());
+        alData.setLevel(user.getLevel());
+        alData.setHighUserId(user.getHighUserId());
+        alData.setApproveDatetime(log.getApproveDatetime());
+        alData.setStatus(user.getStatus());
+
+        alData.setRemark(log.getRemark());
         agencyLogDAO.insert(alData);
         return code;
     }
@@ -247,7 +249,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         AgencyLog alData = new AgencyLog();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());
-        alData.setToUserId(data.getHighUserId());
+        alData.setToUserId(data.getUserReferee());
 
         alData.setPayPdf(payPdf);
         alData.setType(EAgencyType.Imporder.getCode());

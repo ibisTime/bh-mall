@@ -211,7 +211,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
         ProductSpecs psData = productSpecsBO
             .getProductSpecs(data.getProductSpecsCode());
         ProductSpecsPrice pspData = productSpecsPriceBO
-            .getPriceBySpecsCode(data.getProductSpecsCode(), user.getLevel());
+            .getPriceByLevel(data.getProductSpecsCode(), user.getLevel());
 
         // 检查限购
         orderAO.checkLimitNumber(user, psData, pspData, data.getQuantity());

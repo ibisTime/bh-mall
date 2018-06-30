@@ -20,7 +20,7 @@ public interface IAgencyLogBO extends IPaginableBO<AgencyLog> {
 
     public String cancelImpower(User data);
 
-    public String approveImpower(User data, String status);
+    public String approveImpower(AgencyLog log, User user);
 
     public String approveCanenl(User data, String status);
 

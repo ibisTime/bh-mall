@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.util.Date;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -10,204 +12,228 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class Report extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 代理Id
+    private String userId;
 
-	// 真实姓名
-	private String realName;
+    // 真实姓名
+    private String realName;
 
-	// 手机号
-	private String mobile;
+    // 手机号
+    private String mobile;
 
-	// 微信号
-	private String wxId;
+    // 微信号
+    private String wxId;
 
-	// 目前用户等级
-	private String level;
+    // 目前用户等级
+    private String level;
 
-	// 推荐人
-	private String userReferee;
+    // 推荐人
+    private String userReferee;
 
-	// 介绍人
-	private String introducer;
+    // 介绍人
+    private String introducer;
 
-	// 上级用户编号
-	private String highUserId;
+    // 上级用户编号
+    private String highUserId;
 
-	// 团队编号
-	private String teamName;
+    // 团队编号
+    private String teamName;
 
-	// 关联管理员
-	private String manager;
+    // 关联管理员
+    private String manager;
 
-	// 省
-	private String province;
+    // 省
+    private String province;
 
-	// 市区
-	private String city;
+    // 市区
+    private String city;
 
-	// 区(县)
-	private String area;
+    // 区(县)
+    private String area;
 
-	// 具体地址
-	private String address;
+    // 具体地址
+    private String address;
 
-	// 授权时间
-	private String impowerDatetime;
+    // 授权时间
+    private String impowerDatetime;
 
-	// 累计出货奖励
-	private String sendAward;
+    // 累计出货奖励
+    private String sendAward;
 
-	// 累计介绍奖励
-	private String intrAward;
+    // 累计介绍奖励
+    private String intrAward;
 
-	// 累计推荐奖励
-	private String refreeAward;
+    // 累计推荐奖励
+    private String refreeAward;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    // ******************db*******************
 
-	public String getCode() {
-		return code;
-	}
+    // 授权开始时间
+    private Date startDatetime;
 
-	public void setRealName(String realName) {
-		this.realName = realName;
-	}
+    // 授权结束时间
+    private Date endDatetime;
 
-	public String getRealName() {
-		return realName;
-	}
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    public String getRealName() {
+        return realName;
+    }
 
-	public String getMobile() {
-		return mobile;
-	}
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-	public void setWxId(String wxId) {
-		this.wxId = wxId;
-	}
+    public String getMobile() {
+        return mobile;
+    }
 
-	public String getWxId() {
-		return wxId;
-	}
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
+    }
 
-	public void setLevel(String level) {
-		this.level = level;
-	}
+    public String getWxId() {
+        return wxId;
+    }
 
-	public String getLevel() {
-		return level;
-	}
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
-	public void setUserReferee(String userReferee) {
-		this.userReferee = userReferee;
-	}
+    public String getLevel() {
+        return level;
+    }
 
-	public String getUserReferee() {
-		return userReferee;
-	}
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
 
-	public void setIntroducer(String introducer) {
-		this.introducer = introducer;
-	}
+    public String getUserReferee() {
+        return userReferee;
+    }
 
-	public String getIntroducer() {
-		return introducer;
-	}
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
+    }
 
-	public void setHighUserId(String highUserId) {
-		this.highUserId = highUserId;
-	}
+    public String getIntroducer() {
+        return introducer;
+    }
 
-	public String getHighUserId() {
-		return highUserId;
-	}
+    public void setHighUserId(String highUserId) {
+        this.highUserId = highUserId;
+    }
 
-	public void setTeamName(String teamName) {
-		this.teamName = teamName;
-	}
+    public String getHighUserId() {
+        return highUserId;
+    }
 
-	public String getTeamName() {
-		return teamName;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setManager(String manager) {
-		this.manager = manager;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public String getManager() {
-		return manager;
-	}
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
 
-	public void setProvince(String province) {
-		this.province = province;
-	}
+    public String getTeamName() {
+        return teamName;
+    }
 
-	public String getProvince() {
-		return province;
-	}
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public String getManager() {
+        return manager;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
-	public void setArea(String area) {
-		this.area = area;
-	}
+    public String getProvince() {
+        return province;
+    }
 
-	public String getArea() {
-		return area;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public void setArea(String area) {
+        this.area = area;
+    }
 
-	public void setImpowerDatetime(String impowerDatetime) {
-		this.impowerDatetime = impowerDatetime;
-	}
+    public String getArea() {
+        return area;
+    }
 
-	public String getImpowerDatetime() {
-		return impowerDatetime;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public void setSendAward(String sendAward) {
-		this.sendAward = sendAward;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public String getSendAward() {
-		return sendAward;
-	}
+    public void setImpowerDatetime(String impowerDatetime) {
+        this.impowerDatetime = impowerDatetime;
+    }
 
-	public void setIntrAward(String intrAward) {
-		this.intrAward = intrAward;
-	}
+    public String getImpowerDatetime() {
+        return impowerDatetime;
+    }
 
-	public String getIntrAward() {
-		return intrAward;
-	}
+    public void setSendAward(String sendAward) {
+        this.sendAward = sendAward;
+    }
 
-	public void setRefreeAward(String refreeAward) {
-		this.refreeAward = refreeAward;
-	}
+    public String getSendAward() {
+        return sendAward;
+    }
 
-	public String getRefreeAward() {
-		return refreeAward;
-	}
+    public void setIntrAward(String intrAward) {
+        this.intrAward = intrAward;
+    }
+
+    public String getIntrAward() {
+        return intrAward;
+    }
+
+    public void setRefreeAward(String refreeAward) {
+        this.refreeAward = refreeAward;
+    }
+
+    public String getRefreeAward() {
+        return refreeAward;
+    }
+
+    public Date getStartDatetime() {
+        return startDatetime;
+    }
+
+    public Date getEndDatetime() {
+        return endDatetime;
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
+    }
 
 }

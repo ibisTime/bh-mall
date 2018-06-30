@@ -193,8 +193,8 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
+			<if test="teamName != null and teamName != '' ">
+				AND t.team_name = #{teamName}
 			</if>
 			
 			<if test="keyWord !=null and keyWord != '' ">

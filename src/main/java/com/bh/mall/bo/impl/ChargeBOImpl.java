@@ -145,6 +145,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     public List<Charge> getChargeByUser(String userId) {
         List<String> statusList = new ArrayList<String>();
         statusList.add(EChargeStatus.Pay_YES.getCode());
+        statusList.add(EChargeStatus.TO_Cancel.getCode());
         statusList.add(EChargeStatus.Cancel_YES.getCode());
         Charge condition = new Charge();
         condition.setApplyUser(userId);

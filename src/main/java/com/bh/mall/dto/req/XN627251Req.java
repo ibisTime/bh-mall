@@ -27,7 +27,7 @@ public class XN627251Req {
     private String applyLevel;
 
     // （必填）团队名称
-    @NotBlank(message = "团队名称补不能为空")
+    @NotBlank(message = "团队名称不能为空")
     private String teamName;
 
     // （必填）来源

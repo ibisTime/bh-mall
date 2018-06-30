@@ -47,7 +47,7 @@ public class CartAOImpl implements ICartAO {
         productBO.getProduct(productCode);
         Cart data = cartBO.getCartByProductCode(productCode, productSpecsCode);
         ProductSpecsPrice specsPrice = productSpecsPriceBO
-            .getPriceBySpecsCode(productSpecsCode, 6);
+            .getPriceByLevel(productSpecsCode, 6);
 
         String code = OrderNoGenerater.generate(EGeneratePrefix.Cart.getCode());
         if (data != null) {

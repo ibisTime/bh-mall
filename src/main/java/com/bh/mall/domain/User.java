@@ -267,6 +267,12 @@ public class User extends ABaseDO {
     // 是否打款
     private boolean result;
 
+    // 门槛余额
+    private Long mkAmount;
+
+    // 云仓余额
+    private Long whAmount;
+
     public String getUserId() {
         return userId;
     }
@@ -877,6 +883,22 @@ public class User extends ABaseDO {
 
     public void setToLevel(Integer toLevel) {
         this.toLevel = toLevel;
+    }
+
+    public Long getMkAmount() {
+        return mkAmount;
+    }
+
+    public Long getWhAmount() {
+        return whAmount;
+    }
+
+    public void setMkAmount(Long mkAmount) {
+        this.mkAmount = mkAmount;
+    }
+
+    public void setWhAmount(Long whAmount) {
+        this.whAmount = whAmount;
     }
 
 }

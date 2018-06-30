@@ -289,8 +289,9 @@ public class ProductAOImpl implements IProductAO {
                 .getWareHouseByProduct(product.getCode());
             int whNumber = 0;
             for (WareHouse wareHouse : whList) {
-                whNumber = productSpecsBO.getMinSpecsNumber(product.getCode());
-                whNumber = whNumber + whNumber * wareHouse.getQuantity();
+                int nowNumber = productSpecsBO
+                    .getMinSpecsNumber(product.getCode());
+                whNumber = whNumber + nowNumber * wareHouse.getQuantity();
             }
             product.setWhNumber(whNumber);
         }
@@ -344,6 +345,7 @@ public class ProductAOImpl implements IProductAO {
         Paginable<Product> page = productBO.getPaginable(start, limit,
             condition);
         List<Product> list = page.getList();
+
         for (Product product : list) {
             ProductSpecs psCondition = new ProductSpecs();
             psCondition.setProductCode(product.getCode());
@@ -352,10 +354,15 @@ public class ProductAOImpl implements IProductAO {
 
             if (CollectionUtils.isNotEmpty(psList)) {
                 for (ProductSpecs productSpecs : psList) {
+                    // 查询该等级能够看到的规格
+                    ProductSpecsPrice specsPrice = productSpecsPriceBO
+                        .getPriceByLevel(productSpecs.getCode(),
+                            condition.getLevel());
 
                     ProductSpecsPrice pspCondition = new ProductSpecsPrice();
                     pspCondition.setProductSpecsCode(productSpecs.getCode());
                     pspCondition.setLevel(condition.getLevel());
+                    pspCondition.setIsBuy(specsPrice.getIsBuy());
                     List<ProductSpecsPrice> pspList = productSpecsPriceBO
                         .queryProductSpecsPriceList(pspCondition);
                     if (CollectionUtils.isNotEmpty(pspList)) {

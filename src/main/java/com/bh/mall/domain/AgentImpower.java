@@ -32,7 +32,7 @@ public class AgentImpower extends ABaseDO {
     // 本等级是否需要实名
     private String isRealName;
 
-    // 本等级充值门槛
+    // 本等级授权充值门槛
     private Long minCharge;
 
     // 本等级是否需要公司审核(授权)

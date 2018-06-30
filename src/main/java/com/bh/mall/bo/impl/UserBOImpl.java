@@ -699,4 +699,17 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return data;
     }
 
+    @Override
+    public void checkTeamName(String teamName) {
+        List<User> list = null;
+        if (StringUtils.isNotBlank(teamName)) {
+            User condition = new User();
+            condition.setTeamName(teamName);
+            list = userDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(list)) {
+                throw new BizException("xn000000", "该团队名称已经存在喽，重新起一个吧！");
+            }
+        }
+    }
+
 }

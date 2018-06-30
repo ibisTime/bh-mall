@@ -25,6 +25,7 @@ import com.bh.mall.bo.IAgentUpgradeBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IIntroBO;
 import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
@@ -130,6 +131,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     IWareHouseBO wareHouseBO;
+
+    @Autowired
+    IReportBO reportBO;
 
     @Override
     public String doLogin(String loginName, String loginPwd, String kind,
@@ -591,6 +595,19 @@ public class UserAOImpl implements IUserAO {
                     user.setToUserMobile(toUser.getMobile());
                 }
             }
+
+            // 门槛余额
+            Account account = accountBO.getAccountByUser(user.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            user.setMkAmount(account.getAmount());
+            // 云仓余额
+            List<WareHouse> whList = wareHouseBO
+                .getWareHouseByUser(user.getUserId());
+            Long whAmount = 0L;
+            for (WareHouse wareHouse : whList) {
+                whAmount = whAmount + wareHouse.getAmount();
+            }
+            user.setWhAmount(whAmount);
         }
         return page;
     }
@@ -736,6 +753,14 @@ public class UserAOImpl implements IUserAO {
                     user.setToUserName(toUser.getRealName());
                     user.setToUserMobile(toUser.getToUserMobile());
                 }
+
+            } else if (StringUtils.isNotBlank(user.getUserReferee())) {
+                // 有推荐人的时候，同步推荐人的团队等信息
+                User userReferee = userBO.getUser(user.getUserReferee());
+                user.setToTeamName(userReferee.getTeamName());
+                user.setToLevel(userReferee.getLevel());
+                user.setToUserName(userReferee.getRealName());
+                user.setToUserMobile(userReferee.getToUserMobile());
             }
 
             // 授权金额
@@ -755,6 +780,22 @@ public class UserAOImpl implements IUserAO {
                 }
             }
 
+            // 门槛余额
+            Long mkAmount = 0L;
+            Account account = accountBO.getAccountNocheck(user.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            if (null != account) {
+                mkAmount = account.getAmount();
+            }
+            user.setMkAmount(mkAmount);
+            // 云仓余额
+            List<WareHouse> whList = wareHouseBO
+                .getWareHouseByUser(user.getUserId());
+            Long whAmount = 0L;
+            for (WareHouse wareHouse : whList) {
+                whAmount = whAmount + wareHouse.getAmount();
+            }
+            user.setWhAmount(whAmount);
         }
         return user;
     }
@@ -845,17 +886,14 @@ public class UserAOImpl implements IUserAO {
 
         if (StringUtils.isNotBlank(data.getUserReferee())) {
             User userReferee = userBO.getUser(data.getUserReferee());
-            if (null != userReferee) {
-                data.setHighUserId(userReferee.getUserId());
-                data.setTeamName(userReferee.getTeamName());
-                if (data.getApplyLevel() < userReferee.getLevel()) {
-                    throw new BizException("xn0000", "申请等级不能高于上级代理等级");
-                }
-                if (data.getApplyLevel() == userReferee.getLevel()) {
-                    data.setHighUserId(null);
-                    data.setUserReferee(userReferee.getUserId());
-                    status = EUserStatus.TO_COMPANYAPPROVE.getCode();
-                }
+            data.setTeamName(userReferee.getTeamName());
+            if (data.getApplyLevel() < userReferee.getLevel()) {
+                throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
+            }
+            if (data.getApplyLevel() == userReferee.getLevel()) {
+                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+                // 防止团队名称重复
+                userBO.checkTeamName(req.getTeamName());
             }
 
         }
@@ -1117,13 +1155,11 @@ public class UserAOImpl implements IUserAO {
                     && !EUser.ADMIN.getCode().equals(approver)) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
+                data.setLevel(data.getApplyLevel());
+
                 // 申请的等级是否高于意向归属人的等级
                 if (StringUtils.isNotBlank(log.getToUserId())) {
                     User toUser = userBO.getUser(log.getToUserId());
-                    if (toUser.getLevel() >= data.getApplyLevel()) {
-                        throw new BizException("xn000",
-                            "该代理申请的高于或等于您的等级，您无法为他办理审核授权");
-                    }
                     highUser = toUser;
                     fromUser = highUser.getUserId();
                 }
@@ -1138,11 +1174,12 @@ public class UserAOImpl implements IUserAO {
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
 
                 // 介绍奖
+                long amount = 0L;
                 if (StringUtils.isNotBlank(data.getIntroducer())) {
                     User user = userBO.getUser(data.getIntroducer());
                     Intro iData = introBO.getIntroByLevel(user.getLevel(),
                         data.getApplyLevel());
-                    long amount = AmountUtil.mul(impower.getMinCharge(),
+                    amount = AmountUtil.mul(impower.getMinCharge(),
                         iData.getPercent());
 
                     accountBO.transAmountCZB(fromUser,
@@ -1154,6 +1191,9 @@ public class UserAOImpl implements IUserAO {
                                 + EBizType.AJ_JSJL.getValue() + "收入",
                         data.getUserId());
                 }
+
+                // 统计
+                // reportBO.saveReport(data);
             }
             // 未通过，有推荐人
         } else if (StringUtils.isNotBlank(data.getUserReferee())) {
@@ -1167,15 +1207,12 @@ public class UserAOImpl implements IUserAO {
             data.setImpowerDatetime(date);
         }
 
-        data.setHighUserId(highUser.getUserId());
-        data.setManager(data.getManager());
         data.setApprover(approver);
         data.setApplyDatetime(date);
+
         data.setRemark(remark);
         data.setStatus(status);
-
-        data.setLevel(data.getApplyLevel());
-        String logCode = agencyLogBO.approveImpower(data, status);
+        String logCode = agencyLogBO.approveImpower(log, data);
         data.setLastAgentLog(logCode);
         userBO.approveImpower(data);
         return true;
@@ -1388,7 +1425,8 @@ public class UserAOImpl implements IUserAO {
             status = EUserStatus.UPGRADED.getCode();
             AgentUpgrade auData = agentUpgradeBO
                 .getAgentUpgradeByLevel(data.getApplyLevel());
-            // 是否推荐的代理
+
+            // 是否推荐的代理 TODO
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
                 if (!EUser.ADMIN.getCode().equals(approver)) {
                     User approveUser = userBO.getUser(approver);
@@ -1396,6 +1434,7 @@ public class UserAOImpl implements IUserAO {
                         .equals(approveUser.getKind())) {
                         status = EUserStatus.TO_COMPANYUPGRADE.getCode();
                     }
+
                 } else {
                     level = data.getApplyLevel();
                     // 增加账户余额
@@ -1611,6 +1650,8 @@ public class UserAOImpl implements IUserAO {
                 throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
         }
+
+        userBO.checkTeamName(req.getTeamName());
 
         // 校验身份证
         if (StringUtils.isNotBlank(req.getIdNo())) {

@@ -44,6 +44,7 @@ import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
+import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.ECheckStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductLogType;
@@ -420,7 +421,6 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
-            System.out.println(user.getLevel());
             Agent agent = agentBO.getAgentByLevel(user.getLevel());
             AgentImpower impower = agentImpowerBO
                 .getAgentImpowerByLevel(user.getLevel());
@@ -470,16 +470,26 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             for (Charge charge2 : charge) {
                 cAmount = cAmount + charge2.getAmount();
             }
+
+            // 没有过充值，前去充值
             if (CollectionUtils.isEmpty(charge)
                     || impower.getMinCharge() > cAmount) {
                 result = ECheckStatus.To_Charge.getCode();
                 chargeAmount = impower.getMinCharge() - cAmount;
-            }
 
+                // 有过充值，但是钱在审核中
+            } else if (cAmount.equals(impower.getMinCharge())) {
+                Charge condition = new Charge();
+                condition.setApplyUser(user.getUserId());
+                condition.setStatus(EChargeStatus.TO_Cancel.getCode());
+                charge = chargeBO.queryChargeList(condition);
+                if (CollectionUtils.isNotEmpty(charge)) {
+                    result = ECheckStatus.Charging.getCode();
+                }
+            }
             res = new XN627805Res(result, redAmount, agent.getMinSurplus(),
                 amount, chargeAmount, user.getLevel());
         }
-
         return res;
     }
 
