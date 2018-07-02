@@ -27,7 +27,6 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Address;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
@@ -39,7 +38,6 @@ import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EBizType;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EProductYunFei;
@@ -229,7 +227,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
         Agent agent = agentBO.getAgentByLevel(user.getLevel());
         // 未完成授权单
         if (agent.getAmount() > impowerOrder) {
-            if (agent.getAmount() > amount) {
+            if (agent.getAmount() >= amount) {
                 throw new BizException("xn00000", agent.getName() + "授权单金额为["
                         + agent.getAmount() / 1000 + "]元");
             } else {
@@ -268,9 +266,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setProductSpecsName(data.getProductSpecsName());
         order.setQuantity(StringValidater.toInteger(req.getQuantity()));
         order.setPrice(data.getPrice());
-
-        Address address = addressBO.getDefaultAddress(user.getUserId(),
-            EBoolean.YES.getCode());
 
         // 是否包邮
         Long yunfei = 0L;

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAccountDAO;
@@ -80,8 +79,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             throw new BizException("xn000000",
                 dbAccount.getRealName()
                         + ECurrency.getCurrency(dbAccount.getCurrency())
-                        + "账户余额不足，需充值["
-                        + AmountUtil.eraseLiUp(-nowAmount) / 1000 + "]元");
+                        + "账户余额不足，需充值[" + -nowAmount / 1000 + "]元");
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,

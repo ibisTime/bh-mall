@@ -30,10 +30,6 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public void removeOrder(String code) {
-    }
-
-    @Override
     public void refreshOrder(Order data) {
         orderDAO.update(data);
     }

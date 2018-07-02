@@ -4,7 +4,6 @@ import com.bh.mall.ao.IBarCodeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN627870Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -25,9 +24,7 @@ public class XN627870 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return barCodeAO.queryBarCode(
-            StringValidater.toInteger(req.getNumber()),
-            StringValidater.toInteger(req.getQuantity()));
+        return barCodeAO.queryBarCode();
     }
 
     @Override

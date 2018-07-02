@@ -889,23 +889,27 @@ public class UserAOImpl implements IUserAO {
         String status = EUserStatus.TO_APPROVE.getCode();
         String toUser = data.getUserReferee();
 
-        if (StringUtils.isNotBlank(data.getUserReferee())) {
-            User userReferee = userBO.getUser(data.getUserReferee());
-            data.setTeamName(userReferee.getTeamName());
-            if (data.getApplyLevel() < userReferee.getLevel()) {
-                throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
-            }
-            if (data.getApplyLevel() == userReferee.getLevel()) {
-                toUser = data.getHighUserId();
-
-            }
-            if (1 == data.getApplyLevel()) {
-                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
-                // 防止团队名称重复
-                userBO.checkTeamName(req.getTeamName());
-            }
+        User userReferee = userBO.getUser(data.getUserReferee());
+        data.setTeamName(userReferee.getTeamName());
+        if (data.getApplyLevel() < userReferee.getLevel()) {
+            throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
+        }
+        if (data.getApplyLevel() == userReferee.getLevel()) {
+            toUser = userReferee.getHighUserId();
 
         }
+        if (1 == data.getApplyLevel()) {
+            status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+            // 防止团队名称重复
+            userBO.checkTeamName(req.getTeamName());
+            data.setTeamName(req.getTeamName());
+        }
+        if (data.getApplyLevel() > userReferee.getLevel()) {
+            data.setUserReferee(null);
+            toUser = userReferee.getUserId();
+        }
+        System.out.println("toUser:" + toUser);
+        System.out.println("UserReferee:" + data.getUserReferee());
 
         data.setRealName(req.getRealName());
         data.setWxId(req.getWxId());
@@ -1152,12 +1156,11 @@ public class UserAOImpl implements IUserAO {
         if (EResult.Result_YES.getCode().equals(result)) {
             // 更新上级
             if (StringUtils.isNotBlank(log.getToUserId())) {
-                // 意向归属人与推荐人相同
-                if (log.getToUserId().equals(data.getUserReferee())) {
-                    data.setUserReferee(null);
-                    highUser = userBO.getUser(log.getToUserId());
+                highUser = userBO.getUser(log.getToUserId());
+                if (!EUserKind.Plat.getCode().equals(highUser.getKind())) {
                     fromUser = highUser.getUserId();
                 }
+
             }
             data.setHighUserId(highUser.getUserId());
 

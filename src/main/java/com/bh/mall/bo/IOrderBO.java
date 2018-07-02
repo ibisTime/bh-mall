@@ -10,8 +10,6 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public void saveOrder(Order data);
 
-    public void removeOrder(String code);
-
     public void refreshOrder(Order data);
 
     public List<Order> queryOrderList(Order condition);

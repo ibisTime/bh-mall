@@ -72,6 +72,7 @@
 		,use_datetime = #{useDatetime}
 		WHERE code = #{code}
 	</update>
+	
 
 
 </mapper>

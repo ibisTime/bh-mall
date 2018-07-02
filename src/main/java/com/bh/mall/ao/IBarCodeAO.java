@@ -21,9 +21,9 @@ public interface IBarCodeAO {
 
     public BarCode getBarCode(String code);
 
-    public BarCode queryBarCode(int number, int quantity);
+    public BarCode queryBarCode();
 
-    public void downLoad(String code);
+    public List<BarCode> downLoad(int number, int quantity);
 
     public boolean checkCode(String barCode, List<BarCode> barList,
             List<SecurityTrace> stList);

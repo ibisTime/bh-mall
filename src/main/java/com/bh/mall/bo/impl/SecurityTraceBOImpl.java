@@ -13,6 +13,7 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.ISecurityTraceDAO;
 import com.bh.mall.domain.SecurityTrace;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -72,6 +73,14 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
         data.setUseDatetime(new Date());
         securityTraceDAO.updateStatus(data);
 
+    }
+
+    @Override
+    public SecurityTrace getNoUseSecurityTrace() {
+        SecurityTrace condition = new SecurityTrace();
+        condition.setStatus(ECodeStatus.USE_NO.getCode());
+        List<SecurityTrace> list = securityTraceDAO.selectCodeList(condition);
+        return list.get(0);
     }
 
 }

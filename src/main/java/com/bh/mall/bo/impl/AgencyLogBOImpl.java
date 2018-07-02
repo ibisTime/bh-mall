@@ -143,20 +143,20 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         AgencyLog alData = new AgencyLog();
 
         alData.setCode(code);
-        alData.setApplyUser(log.getApplyUser());
+        alData.setApplyUser(user.getUserId());
         alData.setApplyDatetime(log.getApplyDatetime());
         alData.setType(EAgencyType.Imporder.getCode());
-        alData.setApplyLevel(log.getApplyLevel());
+        alData.setApplyLevel(user.getApplyLevel());
 
         alData.setToUserId(log.getToUserId());
         alData.setTeamName(user.getTeamName());
-        alData.setUserReferee(log.getUserReferee());
-        alData.setApprover(log.getApprover());
+        alData.setUserReferee(user.getUserReferee());
+        alData.setApprover(user.getApprover());
 
-        alData.setApplyLevel(log.getApplyLevel());
+        alData.setApplyLevel(user.getApplyLevel());
         alData.setLevel(user.getLevel());
         alData.setHighUserId(user.getHighUserId());
-        alData.setApproveDatetime(log.getApproveDatetime());
+        alData.setApproveDatetime(user.getApproveDatetime());
         alData.setStatus(user.getStatus());
 
         alData.setRemark(log.getRemark());

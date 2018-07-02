@@ -40,15 +40,18 @@ public class OrderNoGenerater {
      * @history:
      */
     public static String generate() {
-        String[] start = { "690", "691", "692" };
         Calendar calendar = Calendar.getInstance();
         Random rand = new Random();
+        String[] strStart = { "690", "691", "692" };
+
         Long random = calendar.getTimeInMillis() / 10000 - rand.nextInt();
         if (random < 0) {
             random = -random;
         }
 
-        String str = start[rand.nextInt(3)] + String.valueOf(random.toString());
+        String str = strStart[rand.nextInt(3)]
+                + String.valueOf(random.toString());
+
         // 少于12位，随机补充
         int lack = 12 - str.length();
         if (lack > 0) {
@@ -62,23 +65,23 @@ public class OrderNoGenerater {
 
         char[] array = str.toCharArray();
 
-        // step1:偶数位的和
+        // step1:奇数位的和
         Long even = 0L;
         for (int i = 0; i < array.length; i = i + 2) {
             even = even + Integer.parseInt(String.valueOf(array[i]));
         }
-        // step2:奇数位的和
+        // step2:偶数位的和
         Long uneven = 0L;
         for (int i = 1; i < array.length; i = i + 2) {
             uneven = uneven + Integer.parseInt(String.valueOf(array[i]));
         }
         // step3：偶数和×3+奇数和
-        Long sum = even * 3 + uneven;
+        Long sum = even + uneven * 3;
         // step4：取step3和个位数的值
         Long unit = 0L;
         // 超过100
         if (sum >= 100) {
-            unit = sum % 100 % 10;
+            unit = sum % 10;
         } else {
             unit = sum % 10;
         }
@@ -103,7 +106,23 @@ public class OrderNoGenerater {
         Calendar calendar = Calendar.getInstance();
         Random rand = new Random();
         Long random = calendar.getTimeInMillis() - rand.nextInt();
-        return random.toString();
+
+        if (random < 0) {
+            random = -random;
+        }
+
+        String str = String.valueOf(random.toString());
+        // 少于12位，随机补充
+        int lack = 12 - str.length();
+        if (lack > 0) {
+            for (int i = 0; i < lack; i++) {
+                str = str + String.valueOf(rand.nextInt(9));
+            }
+            // 多余12位，截取
+        } else if (lack < 0) {
+            str = str.substring(0, 12);
+        }
+        return str;
     }
 
 }

@@ -17,11 +17,9 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.BarCode;
 import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.SecurityTrace;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.enums.ESysConfigType;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.exception.BizException;
 
 @Service
 public class BarCodeAOImpl implements IBarCodeAO {
@@ -48,8 +46,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
         // 新增并校验是否重复
         loop: for (int i = 0; i < number; i++) {
             String barCode = OrderNoGenerater.generate();
-            // 新增箱码
-            // 若重复，重新生成
+            // 新增箱码,若重复，重新生成
             if (this.checkCode(barCode, barList, stList)) {
                 i--;
                 continue;
@@ -78,7 +75,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
 
     @Override
     @Transactional
-    public BarCode queryBarCode(int number, int quantity) {
+    public BarCode queryBarCode() {
         // 取出一个未使用过的箱码
         BarCode data = barCodeBO.getNoUseBarCode();
         SYSConfig sysConfig = sysConfigBO.getConfig(
@@ -87,40 +84,38 @@ public class BarCodeAOImpl implements IBarCodeAO {
         data.setUrl(sysConfig.getCvalue());
 
         // 获取
-        SecurityTrace condition = new SecurityTrace();
-        condition.setStatus(ECodeStatus.USE_NO.getCode());
-        Paginable<SecurityTrace> page = securityTraceBO.getPaginable(0, number,
-            condition);
-
-        for (SecurityTrace securityTrace : page.getList()) {
-            securityTrace.setRefCode(data.getCode());
-            securityTraceBO.refreshSecurityTrace(securityTrace);
-        }
-
-        data.setStList(page.getList());
+        List<SecurityTrace> list = new ArrayList<SecurityTrace>();
+        list.add(securityTraceBO.getNoUseSecurityTrace());
+        data.setStList(list);
         return data;
     }
 
     @Override
-    @Transactional
-    public void downLoad(String code) {
-        BarCode data = barCodeBO.getBarCode(code);
-        if (EBoolean.YES.getCode().equals(data.getStatus())) {
-            throw new BizException("xn00000", "该箱码已被使用，请重新下载！");
-        }
+    public synchronized List<BarCode> downLoad(int number, int quantity) {
+        BarCode condition = new BarCode();
+        condition.setStatus(ECodeStatus.USE_NO.getCode());
+        Paginable<BarCode> page = barCodeBO.getPaginable(0, number, condition);
 
-        List<SecurityTrace> list = securityTraceBO
-            .getSecurityTraceByBarCode(code);
-        // 盒码中是否又被使用过的,没有则修改状态
-        for (SecurityTrace securityTrace : list) {
-            if (EBoolean.YES.getCode().equals(securityTrace.getStatus())) {
-                throw new BizException("xn00000", "本批盒码有已被使用过得盒码，请重新下载！");
+        SYSConfig sysConfig = sysConfigBO.getConfig(
+            ESysConfigType.URL.getCode(), ESystemCode.BH.getCode(),
+            ESystemCode.BH.getCode());
+
+        SecurityTrace traceCondition = new SecurityTrace();
+        condition.setStatus(ECodeStatus.USE_NO.getCode());
+        for (BarCode barCode : page.getList()) {
+
+            barCodeBO.refreshBarCode(barCode);
+            barCode.setUrl(sysConfig.getCvalue());
+            Paginable<SecurityTrace> tracePage = securityTraceBO
+                .getPaginable(number, quantity, traceCondition);
+            for (SecurityTrace trace : tracePage.getList()) {
+                trace.setRefCode(barCode.getCode());
+                securityTraceBO.refreshStatus(trace);
             }
-            securityTraceBO.refreshStatus(securityTrace);
+            barCode.setStList(tracePage.getList());
+            number = number + 1;
         }
-
-        // 修改箱码状态
-        barCodeBO.refreshBarCode(data);
+        return page.getList();
 
     }
 
@@ -161,5 +156,21 @@ public class BarCodeAOImpl implements IBarCodeAO {
         }
         return false;
     }
+
+    // @Override
+    // public String downLoadPic(String picUrl, String code) {
+    // if (picUrl == null)
+    // return null;
+    // @SuppressWarnings("restriction")
+    // BASE64Decoder decoder = new BASE64Decoder();
+    // try {
+    // @SuppressWarnings("restriction")
+    // byte[] b = decoder.decodeBuffer(picUrl);
+    // System.out.println(new String(b));
+    // return new String(b);
+    // } catch (Exception e) {
+    // return null;
+    // }
+    // }
 
 }

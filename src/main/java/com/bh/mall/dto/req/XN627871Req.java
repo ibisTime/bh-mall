@@ -10,16 +10,28 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627871Req {
 
-    // 箱码编号
-    @NotBlank(message = "箱码编号不能为空")
-    private String code;
+    // 张数
+    @NotBlank(message = "张数不能为空")
+    private String number;
 
-    public String getCode() {
-        return code;
+    // 每张数量
+    @NotBlank(message = "每张数量")
+    private String quantity;
+
+    public String getNumber() {
+        return number;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
 }

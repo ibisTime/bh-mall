@@ -21,4 +21,6 @@ public interface ISecurityTraceBO extends IPaginableBO<SecurityTrace> {
 
     public void refreshStatus(SecurityTrace securityTrace);
 
+    public SecurityTrace getNoUseSecurityTrace();
+
 }

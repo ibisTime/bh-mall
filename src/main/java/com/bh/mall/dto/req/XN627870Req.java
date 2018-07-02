@@ -11,11 +11,9 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627870Req {
 
     // 导出数量
-    @NotBlank(message = "盒码数量不能为空")
     private String number;
 
     // 张数
-    @NotBlank(message = "张数不能为空")
     private String quantity;
 
     public String getNumber() {

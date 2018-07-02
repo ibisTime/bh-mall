@@ -87,6 +87,7 @@
 		SET
 		status = #{status}
 		,use_datetime = #{useDatetime}
+		,ref_code = #{refCode}
 		WHERE security_code = #{securityCode}
 	</update>
 
