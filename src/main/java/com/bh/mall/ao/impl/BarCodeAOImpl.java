@@ -51,14 +51,12 @@ public class BarCodeAOImpl implements IBarCodeAO {
             // 新增箱码
             // 若重复，重新生成
             if (this.checkCode(barCode, barList, stList)) {
-                System.out.println("dicyi:" + barCode);
                 i--;
                 continue;
             }
 
             for (String string : list) {
                 if (barCode.equals(string)) {
-                    System.out.println("2222222:" + barCode);
                     i--;
                     continue loop;
                 }
@@ -80,7 +78,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
 
     @Override
     @Transactional
-    public BarCode queryBarCode(int number) {
+    public BarCode queryBarCode(int number, int quantity) {
         // 取出一个未使用过的箱码
         BarCode data = barCodeBO.getNoUseBarCode();
         SYSConfig sysConfig = sysConfigBO.getConfig(

@@ -93,8 +93,10 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
             String toSpecs, Integer quantity, EBizType fromBizType,
             EBizType toBizType, String fromBizNote, String toBizNote,
             String refNo) {
+        System.out.println("fromWareHouse:" + fromUser + "===" + fromSpecs);
         WareHouse fromWareHouse = this.getWareHouseByProductSpec(fromUser,
             fromSpecs);
+        System.out.println("toWareHouse:" + toUser + "===" + toSpecs);
         WareHouse toWareHouse = this.getWareHouseByProductSpec(toUser, toSpecs);
 
         transQuantity(fromWareHouse, toWareHouse, quantity, fromBizType,

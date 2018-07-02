@@ -887,6 +887,7 @@ public class UserAOImpl implements IUserAO {
         User data = userBO.getUser(req.getUserId());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         String status = EUserStatus.TO_APPROVE.getCode();
+        String toUser = data.getUserReferee();
 
         if (StringUtils.isNotBlank(data.getUserReferee())) {
             User userReferee = userBO.getUser(data.getUserReferee());
@@ -895,6 +896,10 @@ public class UserAOImpl implements IUserAO {
                 throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
             }
             if (data.getApplyLevel() == userReferee.getLevel()) {
+                toUser = data.getHighUserId();
+
+            }
+            if (1 == data.getApplyLevel()) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
                 // 防止团队名称重复
                 userBO.checkTeamName(req.getTeamName());
@@ -921,7 +926,7 @@ public class UserAOImpl implements IUserAO {
         data.setAddress(req.getAddress());
         data.setSource(req.getFromInfo());
 
-        String logCode = agencyLogBO.toApply(data, req.getPayPdf(),
+        String logCode = agencyLogBO.toApply(data, toUser,
             EUserStatus.TO_APPROVE.getCode());
         data.setLastAgentLog(logCode);
 
@@ -1145,6 +1150,17 @@ public class UserAOImpl implements IUserAO {
         User highUser = userBO.getSysUser();
 
         if (EResult.Result_YES.getCode().equals(result)) {
+            // 更新上级
+            if (StringUtils.isNotBlank(log.getToUserId())) {
+                // 意向归属人与推荐人相同
+                if (log.getToUserId().equals(data.getUserReferee())) {
+                    data.setUserReferee(null);
+                    highUser = userBO.getUser(log.getToUserId());
+                    fromUser = highUser.getUserId();
+                }
+            }
+            data.setHighUserId(highUser.getUserId());
+
             AgentImpower impower = agentImpowerBO
                 .getAgentImpowerByLevel(data.getApplyLevel());
 
@@ -1162,13 +1178,6 @@ public class UserAOImpl implements IUserAO {
                 data.setLevel(data.getApplyLevel());
                 data.setImpowerDatetime(new Date());
 
-                // 申请的等级是否高于意向归属人的等级
-                if (StringUtils.isNotBlank(log.getToUserId())) {
-                    User toUser = userBO.getUser(log.getToUserId());
-                    highUser = toUser;
-                    fromUser = highUser.getUserId();
-                }
-
                 // 根据用户类型获取账户列表
                 List<String> currencyList = distributeAccount(data.getUserId(),
                     data.getRealName(), EUserKind.Merchant.getCode(),
@@ -1185,7 +1194,7 @@ public class UserAOImpl implements IUserAO {
                     Intro iData = introBO.getIntroByLevel(user.getLevel(),
                         data.getApplyLevel());
                     amount = AmountUtil.mul(impower.getMinCharge(),
-                        iData.getPercent());
+                        iData.getPercent() / 100);
 
                     accountBO.transAmountCZB(fromUser,
                         ECurrency.YJ_CNY.getCode(), user.getUserId(),
@@ -1200,6 +1209,7 @@ public class UserAOImpl implements IUserAO {
                 // 统计
                 // reportBO.saveReport(data);
             }
+
             // 未通过，有推荐人
         } else if (StringUtils.isNotBlank(data.getUserReferee())) {
             status = EUserStatus.IMPOWERO_INFO.getCode();
@@ -1214,9 +1224,9 @@ public class UserAOImpl implements IUserAO {
 
         data.setApprover(approver);
         data.setApplyDatetime(date);
-
         data.setRemark(remark);
         data.setStatus(status);
+
         String logCode = agencyLogBO.approveImpower(log, data);
         data.setLastAgentLog(logCode);
         userBO.approveImpower(data);

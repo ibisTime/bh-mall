@@ -21,7 +21,7 @@ public interface IBarCodeAO {
 
     public BarCode getBarCode(String code);
 
-    public BarCode queryBarCode(int number);
+    public BarCode queryBarCode(int number, int quantity);
 
     public void downLoad(String code);
 

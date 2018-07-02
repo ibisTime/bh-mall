@@ -28,6 +28,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Address;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
@@ -187,16 +188,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
                 wareHouse.setProduct(product);
                 allAmount = allAmount + wareHouse.getAmount();
             }
-            // WareHouseSpecs whsCondition = new WareHouseSpecs();
-            // whsCondition.setWareHouseCode(wareHouse.getCode());
-            // List<WareHouseSpecs> whsList = wareHouseSpecsBO
-            // .queryWareHouseSpecsList(whsCondition);
-            // for (WareHouseSpecs wareHouseSpecs : whsList) {
-            // ProductSpecs specs = productSpecsBO
-            // .getProductSpecs(wareHouseSpecs.getProductSpecsCode());
-            // wareHouseSpecs.setSpecsName(specs.getName());
-            // }
-            // wareHouse.setWhsList(whsList);
         }
         allAmount = AmountUtil.eraseLiUp(allAmount);
         res = new XN627814Res(list, allAmount);
@@ -206,7 +197,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Override
     @Transactional
     public void deliveProject(XN627815Req req) {
-        System.out.println("数量：" + req.getQuantity());
         User user = userBO.getUser(req.getUserId());
         WareHouse data = wareHouseBO.getWareHouseByProductSpec(req.getUserId(),
             req.getProductSpecsCode());
@@ -232,15 +222,22 @@ public class WareHouseAOImpl implements IWareHouseAO {
         Long amount = AmountUtil.mul(data.getPrice(),
             StringValidater.toInteger(req.getQuantity()));
 
+        // 获取授权单
+        Long impowerOrder = orderBO.checkImpowerOrder(user.getUserId());
         String kind = EOrderKind.Pick_Up.getCode();
 
-        // 是否完成授权单
-        boolean impowerOrder = orderAO.CheckImpowerOrder(user);
-        if (EUserStatus.IMPOWERED.getCode().equals(user.getStatus())) {
-            if (!impowerOrder) {
+        Agent agent = agentBO.getAgentByLevel(user.getLevel());
+        // 未完成授权单
+        if (agent.getAmount() > impowerOrder) {
+            if (agent.getAmount() > amount) {
+                throw new BizException("xn00000", agent.getName() + "授权单金额为["
+                        + agent.getAmount() / 1000 + "]元");
+            } else {
                 kind = EOrderKind.Impower_Order.getCode();
             }
+
         }
+
         // 是否完成升级单
         boolean upgradeOrder = orderAO.CheckImpowerOrder(user);
         if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {

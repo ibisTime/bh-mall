@@ -52,7 +52,6 @@ public class OrderNoGenerater {
         // 少于12位，随机补充
         int lack = 12 - str.length();
         if (lack > 0) {
-            System.out.println("lack:" + lack);
             for (int i = 0; i < lack; i++) {
                 str = str + String.valueOf(rand.nextInt(9));
             }

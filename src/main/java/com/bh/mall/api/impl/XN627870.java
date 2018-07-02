@@ -25,8 +25,9 @@ public class XN627870 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return barCodeAO
-            .queryBarCode(StringValidater.toInteger(req.getNumber()));
+        return barCodeAO.queryBarCode(
+            StringValidater.toInteger(req.getNumber()),
+            StringValidater.toInteger(req.getQuantity()));
     }
 
     @Override

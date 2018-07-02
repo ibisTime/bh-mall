@@ -3,7 +3,7 @@ package com.bh.mall.domain;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * 出货／推荐奖励表
+ * 推荐奖励表
  * @author: nyc 
  * @since: 2018年3月23日 上午11:26:04 
  * @history:
@@ -16,7 +16,6 @@ public class Award extends ABaseDO {
     private static final long serialVersionUID = 4595892553641554152L;
 
     // 编号
-
     private String code;
 
     // 类型

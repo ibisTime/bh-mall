@@ -24,7 +24,6 @@ public class XN627641 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        System.out.println("toUserId" + req.getToUser());
         return new PKCodeRes(orderAO.addOrderNoCart(req));
     }
 

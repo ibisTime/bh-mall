@@ -610,6 +610,7 @@
 		SET
 		status = #{status}
 		,high_user_id = #{highUserId}
+		,user_referee = #{userReferee}
 		,team_name = #{teamName}
 		,approver = #{approver}
 		,level = #{level}

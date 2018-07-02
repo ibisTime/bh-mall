@@ -243,15 +243,14 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String toApply(User data, String payPdf, String status) {
+    public String toApply(User data, String toUser, String status) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());
-        alData.setToUserId(data.getUserReferee());
+        alData.setToUserId(toUser);
 
-        alData.setPayPdf(payPdf);
         alData.setType(EAgencyType.Imporder.getCode());
         alData.setTeamName(data.getTeamName());
         alData.setUserReferee(data.getUserReferee());
