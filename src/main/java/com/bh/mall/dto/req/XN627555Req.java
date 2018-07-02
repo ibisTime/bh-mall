@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * front分页查询
  * @author: nyc 
@@ -17,6 +19,7 @@ public class XN627555Req extends APageReq {
     private String name;
 
     // （必填） 用户等级
+    @NotBlank(message = "代理等级不能为空")
     private String level;
 
     // 状态

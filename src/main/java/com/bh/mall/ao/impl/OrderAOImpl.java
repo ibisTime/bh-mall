@@ -174,6 +174,7 @@ public class OrderAOImpl implements IOrderAO {
         Product pData = productBO.getProduct(psData.getProductCode());
         ProductSpecsPrice pspData = productSpecsPriceBO
             .getPriceByLevel(psData.getCode(), applyUser.getLevel());
+
         int minNumber = productSpecsBO.getMinSpecsNumber(pData.getCode());
         Integer nowNumber = pData.getRealNumber()
                 - (StringValidater.toInteger(req.getQuantity()) * minNumber);

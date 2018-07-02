@@ -11,10 +11,6 @@ import com.bh.mall.domain.Report;
 public interface IReportAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addReport(Report data);
-
-    public void editReport(Report data);
-
     public Paginable<Report> queryReportPage(int start, int limit,
             Report condition);
 

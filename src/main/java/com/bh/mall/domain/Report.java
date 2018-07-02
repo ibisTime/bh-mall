@@ -27,7 +27,7 @@ public class Report extends ABaseDO {
     private String wxId;
 
     // 目前用户等级
-    private String level;
+    private Integer level;
 
     // 推荐人
     private String userReferee;
@@ -57,16 +57,16 @@ public class Report extends ABaseDO {
     private String address;
 
     // 授权时间
-    private String impowerDatetime;
+    private Date impowerDatetime;
 
     // 累计出货奖励
-    private String sendAward;
+    private Long sendAward;
 
     // 累计介绍奖励
-    private String intrAward;
+    private Long intrAward;
 
     // 累计推荐奖励
-    private String refreeAward;
+    private Long refreeAward;
 
     // ******************db*******************
 
@@ -75,6 +75,15 @@ public class Report extends ABaseDO {
 
     // 授权结束时间
     private Date endDatetime;
+
+    // 推荐人名字
+    private String userRefereeName;
+
+    // 介绍人名字
+    private String introduceName;
+
+    // 管理员名字
+    private String manageName;
 
     public void setRealName(String realName) {
         this.realName = realName;
@@ -100,11 +109,11 @@ public class Report extends ABaseDO {
         return wxId;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
@@ -188,36 +197,36 @@ public class Report extends ABaseDO {
         return address;
     }
 
-    public void setImpowerDatetime(String impowerDatetime) {
-        this.impowerDatetime = impowerDatetime;
-    }
-
-    public String getImpowerDatetime() {
+    public Date getImpowerDatetime() {
         return impowerDatetime;
     }
 
-    public void setSendAward(String sendAward) {
-        this.sendAward = sendAward;
-    }
-
-    public String getSendAward() {
+    public Long getSendAward() {
         return sendAward;
     }
 
-    public void setIntrAward(String intrAward) {
-        this.intrAward = intrAward;
-    }
-
-    public String getIntrAward() {
+    public Long getIntrAward() {
         return intrAward;
     }
 
-    public void setRefreeAward(String refreeAward) {
-        this.refreeAward = refreeAward;
+    public Long getRefreeAward() {
+        return refreeAward;
     }
 
-    public String getRefreeAward() {
-        return refreeAward;
+    public void setImpowerDatetime(Date impowerDatetime) {
+        this.impowerDatetime = impowerDatetime;
+    }
+
+    public void setSendAward(Long sendAward) {
+        this.sendAward = sendAward;
+    }
+
+    public void setIntrAward(Long intrAward) {
+        this.intrAward = intrAward;
+    }
+
+    public void setRefreeAward(Long refreeAward) {
+        this.refreeAward = refreeAward;
     }
 
     public Date getStartDatetime() {
@@ -234,6 +243,30 @@ public class Report extends ABaseDO {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public String getUserRefereeName() {
+        return userRefereeName;
+    }
+
+    public String getIntroduceName() {
+        return introduceName;
+    }
+
+    public void setUserRefereeName(String userRefereeName) {
+        this.userRefereeName = userRefereeName;
+    }
+
+    public void setIntroduceName(String introduceName) {
+        this.introduceName = introduceName;
+    }
+
+    public String getManageName() {
+        return manageName;
+    }
+
+    public void setManageName(String manageName) {
+        this.manageName = manageName;
     }
 
 }

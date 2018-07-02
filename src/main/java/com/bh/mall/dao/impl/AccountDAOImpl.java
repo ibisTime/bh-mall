@@ -24,17 +24,11 @@ import com.bh.mall.domain.Account;
 @Repository("accountDAOImpl")
 public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
 
-    /** 
-     * @see com.ibis.account.dao.base.IBaseDAO#insert(java.lang.Object)
-     */
     @Override
     public int insert(Account data) {
         return super.insert(NAMESPACE.concat("insert_account"), data);
     }
 
-    /** 
-     * @see com.ibis.account.dao.base.IBaseDAO#delete(java.lang.Object)
-     */
     @Override
     public int delete(Account data) {
         return 0;

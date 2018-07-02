@@ -48,7 +48,7 @@ public class XN627546Req {
 
     // （必填）是否允许授权单下单
     @NotBlank(message = "是否允许授权单下单不能为空")
-    private String isPowerOrder;
+    private String isImpowerOrder;
 
     // （必填）是否允许普通单下单
     @NotBlank(message = "是否允许普通单下单不能为空")
@@ -81,12 +81,12 @@ public class XN627546Req {
         this.isNormalOrder = isNormalOrder;
     }
 
-    public String getIsPowerOrder() {
-        return isPowerOrder;
+    public String getIsImpowerOrder() {
+        return isImpowerOrder;
     }
 
-    public void setIsPowerOrder(String isPowerOrder) {
-        this.isPowerOrder = isPowerOrder;
+    public void setIsImpowerOrder(String isImpowerOrder) {
+        this.isImpowerOrder = isImpowerOrder;
     }
 
     public String getIsUpgradeOrder() {

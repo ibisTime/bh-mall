@@ -152,4 +152,8 @@
 	<bean id="awardIntervalBO" class="com.bh.mall.bo.impl.AwardIntervalBOImpl">
 		<property name="paginableDAO" ref="awardIntervalDAOImpl"/>
 	</bean>	
+	<bean id="securityTraceBO" class="com.bh.mall.bo.impl.SecurityTraceBOImpl">
+		<property name="paginableDAO" ref="securityTraceDAOImpl"/>
+	</bean>	
+	
 </beans>

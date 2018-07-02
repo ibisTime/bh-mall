@@ -36,7 +36,6 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
 
     @Override
     public void saveProductSpecsList(String code, List<XN627546Req> specList) {
-
         // 添加产品规格
         for (XN627546Req productSpec : specList) {
             if (StringUtils.isBlank(productSpec.getCode())) {
@@ -52,7 +51,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
                 data.setWeight(
                     StringValidater.toDouble(productSpec.getWeight()));
                 data.setIsUpgradeOrder(productSpec.getIsUpgradeOrder());
-                data.setIsImpowerOrder(productSpec.getIsPowerOrder());
+                data.setIsImpowerOrder(productSpec.getIsImpowerOrder());
                 data.setIsNormalOrder(productSpec.getIsNormalOrder());
 
                 productSpecsDAO.insert(data);
@@ -142,7 +141,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         data.setWeight(StringValidater.toDouble(psReq.getWeight()));
         data.setIsUpgradeOrder(psReq.getIsUpgradeOrder());
 
-        data.setIsImpowerOrder(psReq.getIsPowerOrder());
+        data.setIsImpowerOrder(psReq.getIsImpowerOrder());
         data.setIsNormalOrder(psReq.getIsNormalOrder());
         productSpecsDAO.insert(data);
 
@@ -198,7 +197,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         psData.setWeight(StringValidater.toDouble(psReq.getWeight()));
         psData.setIsUpgradeOrder(psReq.getIsUpgradeOrder());
 
-        psData.setIsImpowerOrder(psReq.getIsPowerOrder());
+        psData.setIsImpowerOrder(psReq.getIsImpowerOrder());
         psData.setIsNormalOrder(psReq.getIsNormalOrder());
 
         productSpecsDAO.update(psData);
@@ -237,17 +236,23 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
             throw new BizException("xn00000", "该产品的规格不存在");
         }
 
+        // 只要一个规格
         Integer number = 0;
         if (list.size() == 1) {
             ProductSpecs specs = list.get(0);
             return specs.getNumber();
         }
+
+        // 两种以及以上规格
         for (ProductSpecs data : list) {
-            number = data.getNumber();
+            // 规格之间有关联
             if (StringUtils.isNotBlank(data.getRefCode())) {
                 ProductSpecs productSpecs = this
                     .getProductSpecs(data.getRefCode());
                 number = getMinSpecsNumber(productSpecs, number);
+            } else {
+                // 各规格之前没有关联
+                number = data.getNumber();
             }
         }
         return number;
@@ -258,7 +263,9 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
         if (StringUtils.isNotBlank(data.getRefCode())) {
             ProductSpecs productSpecs = this.getProductSpecs(data.getRefCode());
             number = number * productSpecs.getNumber();
-            getMinSpecsNumber(data, number);
+            if (StringUtils.isNotBlank(productSpecs.getRefCode())) {
+                getMinSpecsNumber(productSpecs, number);
+            }
         }
         return number;
     }

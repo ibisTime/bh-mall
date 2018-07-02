@@ -98,4 +98,6 @@ public interface IAddressBO extends IPaginableBO<Address> {
             String province, String city, String area, String address,
             String isDefault);
 
+    public Address getDefaultAddress(String userId, String code);
+
 }

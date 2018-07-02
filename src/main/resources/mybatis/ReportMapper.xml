@@ -118,9 +118,6 @@
 		,area
 		,address
 		,impower_datetime
-		,send_award
-		,intr_award
-		,refree_award
 		)
 		VALUES(
 		#{userId}
@@ -138,9 +135,6 @@
 		,#{area}
 		,#{address}
 		,#{impowerDatetime}
-		,#{sendAward}
-		,#{intrAward}
-		,#{refreeAward}
 		)
 	</insert>
 

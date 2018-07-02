@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWareHouseAO;
+import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.IOrderBO;
@@ -26,6 +27,7 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Address;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
@@ -36,6 +38,7 @@ import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EProductYunFei;
@@ -78,6 +81,9 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
     @Autowired
     IOrderAO orderAO;
+
+    @Autowired
+    IAddressBO addressBO;
 
     @Override
     public Paginable<WareHouse> queryWareHousePage(int start, int limit,
@@ -265,6 +271,9 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setProductSpecsName(data.getProductSpecsName());
         order.setQuantity(StringValidater.toInteger(req.getQuantity()));
         order.setPrice(data.getPrice());
+
+        Address address = addressBO.getDefaultAddress(user.getUserId(),
+            EBoolean.YES.getCode());
 
         // 是否包邮
         Long yunfei = 0L;

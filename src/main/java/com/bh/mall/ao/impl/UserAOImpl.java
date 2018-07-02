@@ -597,9 +597,13 @@ public class UserAOImpl implements IUserAO {
             }
 
             // 门槛余额
-            Account account = accountBO.getAccountByUser(user.getUserId(),
+            Long mkAmount = 0L;
+            Account account = accountBO.getAccountNocheck(user.getUserId(),
                 ECurrency.MK_CNY.getCode());
-            user.setMkAmount(account.getAmount());
+            if (null != account) {
+                mkAmount = account.getAmount();
+            }
+            user.setMkAmount(mkAmount);
             // 云仓余额
             List<WareHouse> whList = wareHouseBO
                 .getWareHouseByUser(user.getUserId());
@@ -1156,6 +1160,7 @@ public class UserAOImpl implements IUserAO {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
                 data.setLevel(data.getApplyLevel());
+                data.setImpowerDatetime(new Date());
 
                 // 申请的等级是否高于意向归属人的等级
                 if (StringUtils.isNotBlank(log.getToUserId())) {

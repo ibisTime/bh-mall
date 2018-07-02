@@ -8,6 +8,7 @@
  */
 package com.bh.mall.core;
 
+import java.util.Calendar;
 import java.util.Random;
 
 import com.bh.mall.common.DateUtil;
@@ -30,6 +31,80 @@ public class OrderNoGenerater {
         int random = Math.abs(new Random().nextInt()) % 10000;
         String today = DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_4);
         return prefix + today + String.valueOf(random);
+    }
+
+    /**
+     * 生成条形码，开头可以为690-692
+     * @return 
+     * @create: 2018年7月2日 上午1:07:35 nyc
+     * @history:
+     */
+    public static String generate() {
+        String[] start = { "690", "691", "692" };
+        Calendar calendar = Calendar.getInstance();
+        Random rand = new Random();
+        Long random = calendar.getTimeInMillis() / 10000 - rand.nextInt();
+        if (random < 0) {
+            random = -random;
+        }
+
+        String str = start[rand.nextInt(3)] + String.valueOf(random.toString());
+        // 少于12位，随机补充
+        int lack = 12 - str.length();
+        if (lack > 0) {
+            System.out.println("lack:" + lack);
+            for (int i = 0; i < lack; i++) {
+                str = str + String.valueOf(rand.nextInt(9));
+            }
+            // 多余12位，截取
+        } else if (lack < 0) {
+            str = str.substring(0, 12);
+        }
+
+        char[] array = str.toCharArray();
+
+        // step1:偶数位的和
+        Long even = 0L;
+        for (int i = 0; i < array.length; i = i + 2) {
+            even = even + Integer.parseInt(String.valueOf(array[i]));
+        }
+        // step2:奇数位的和
+        Long uneven = 0L;
+        for (int i = 1; i < array.length; i = i + 2) {
+            uneven = uneven + Integer.parseInt(String.valueOf(array[i]));
+        }
+        // step3：偶数和×3+奇数和
+        Long sum = even * 3 + uneven;
+        // step4：取step3和个位数的值
+        Long unit = 0L;
+        // 超过100
+        if (sum >= 100) {
+            unit = sum % 100 % 10;
+        } else {
+            unit = sum % 10;
+        }
+
+        // step5:10减去step4得到的个位数，如果结果==10，取0
+        if (unit != 0) {
+            unit = 10 - unit;
+        } else {
+            unit = 0L;
+        }
+        return str + unit.toString();
+    }
+
+    /**
+     * 生成防伪/溯源码
+     * @return 
+     * @create: 2018年7月2日 上午1:08:31 nyc
+     * @history:
+     */
+
+    public static String generateTrace() {
+        Calendar calendar = Calendar.getInstance();
+        Random rand = new Random();
+        Long random = calendar.getTimeInMillis() - rand.nextInt();
+        return random.toString();
     }
 
 }

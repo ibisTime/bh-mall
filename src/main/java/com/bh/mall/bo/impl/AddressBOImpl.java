@@ -137,4 +137,17 @@ public class AddressBOImpl extends PaginableBOImpl<Address>
         data.setIsDefault(isDefault);
         addressDAO.insert(data);
     }
+
+    @Override
+    public Address getDefaultAddress(String userId, String isDefault) {
+        Address data = null;
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(isDefault)) {
+            Address condition = new Address();
+            condition.setUserId(userId);
+            condition.setIsDefault(isDefault);
+            data = addressDAO.select(condition);
+        }
+        return data;
+    }
 }

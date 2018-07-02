@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.ISecurityTraceDAO">
+	<resultMap id="securityTrace_DB_Result" type="securityTrace">
+		<result column="security_code" property="securityCode" />
+		<result column="trace_code" property="traceCode" />
+		<result column="ref_code" property="refCode" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="use_datetime" property="useDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="securityCode != null and securityCode != '' ">
+				AND t.security_code = #{securityCode}
+			</if>
+			<if test="traceCode != null and traceCode != '' ">
+				AND t.trace_code = #{traceCode}
+			</if>
+			<if test="refCode != null and refCode != '' ">
+				AND t.ref_code = #{refCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_securityTrace" parameterType="SecurityTrace" resultMap="securityTrace_DB_Result">
+		SELECT
+		t.security_code
+		,t.trace_code
+		,t.ref_code
+		,t.status
+		,t.create_datetime
+		,t.use_datetime
+		FROM
+		tbh_security_trace t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_code" parameterType="SecurityTrace" resultMap="securityTrace_DB_Result">
+		SELECT
+		t.security_code
+		,t.trace_code
+		FROM
+		tbh_security_trace t
+	</select>
+
+	<select id="select_securityTrace_count" parameterType="SecurityTrace"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_security_trace t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_securityTrace" parameterType="SecurityTrace">
+		INSERT INTO
+		tbh_security_trace(
+		security_code
+		,trace_code
+		,status
+		,create_datetime
+		)
+		VALUES(
+		#{securityCode}
+		,#{traceCode}
+		,#{status}
+		,#{createDatetime}
+		)
+	</insert>
+
+	<update id="update_securityTrace" parameterType="SecurityTrace">
+		UPDATE tbh_security_trace
+		SET
+		ref_code = #{refCode}
+		WHERE security_code = #{securityCode}
+	</update>
+	
+	<update id="update_status" parameterType="SecurityTrace">
+		UPDATE tbh_security_trace
+		SET
+		status = #{status}
+		,use_datetime = #{useDatetime}
+		WHERE security_code = #{securityCode}
+	</update>
+
+
+</mapper>

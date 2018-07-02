@@ -53,5 +53,7 @@
 		<typeAlias alias="report" type="com.bh.mall.domain.Report"/>
 		
 		<typeAlias alias="awardInterval" type="com.bh.mall.domain.AwardInterval"/>
+		<typeAlias alias="securityTrace" type="com.bh.mall.domain.SecurityTrace"/>
+		<typeAlias alias="barCode" type="com.bh.mall.domain.BarCode"/>
 	</typeAliases>
 </configuration>	

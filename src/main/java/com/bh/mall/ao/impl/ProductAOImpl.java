@@ -1,6 +1,8 @@
 package com.bh.mall.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -31,6 +33,7 @@ import com.bh.mall.dto.req.XN627543Req;
 import com.bh.mall.dto.req.XN627545Req;
 import com.bh.mall.dto.req.XN627546Req;
 import com.bh.mall.enums.EAwardType;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductNumberType;
 import com.bh.mall.enums.EProductStatus;
@@ -81,6 +84,14 @@ public class ProductAOImpl implements IProductAO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         productBO.saveProduct(data);
+
+        // 只有一个规格时，数量必须为一
+        if (req.getSpecList().size() == 1) {
+            XN627546Req req2 = req.getSpecList().get(0);
+            if ("1".equals(req2.getNumber())) {
+                throw new BizException("xn00000", "必须有一个的规格的数量为1");
+            }
+        }
 
         productSpecsBO.saveProductSpecsList(code, req.getSpecList());
         productLogBO.saveProductLog(code, req.getUpdater(),
@@ -344,52 +355,63 @@ public class ProductAOImpl implements IProductAO {
 
         Paginable<Product> page = productBO.getPaginable(start, limit,
             condition);
-        List<Product> list = page.getList();
 
-        for (Product product : list) {
+        for (Iterator<Product> iterator = page.getList().iterator(); iterator
+            .hasNext();) {
+            Product product = iterator.next();
+            List<ProductSpecs> psList = new ArrayList<ProductSpecs>();
             ProductSpecs psCondition = new ProductSpecs();
             psCondition.setProductCode(product.getCode());
-            List<ProductSpecs> psList = productSpecsBO
+            List<ProductSpecs> specsList = productSpecsBO
                 .queryProductSpecsList(psCondition);
 
-            if (CollectionUtils.isNotEmpty(psList)) {
-                for (ProductSpecs productSpecs : psList) {
-                    // 查询该等级能够看到的规格
-                    ProductSpecsPrice specsPrice = productSpecsPriceBO
-                        .getPriceByLevel(productSpecs.getCode(),
-                            condition.getLevel());
+            for (ProductSpecs productSpecs : specsList) {
+                // 查询该等级能够看到的规格
+                ProductSpecsPrice specsPrice = productSpecsPriceBO
+                    .getPriceByLevel(productSpecs.getCode(),
+                        condition.getLevel());
+                if (EBoolean.YES.getCode().equals(specsPrice.getIsBuy())) {
+                    ProductSpecs ps = productSpecsBO
+                        .getProductSpecs(specsPrice.getProductSpecsCode());
 
-                    ProductSpecsPrice pspCondition = new ProductSpecsPrice();
-                    pspCondition.setProductSpecsCode(productSpecs.getCode());
-                    pspCondition.setLevel(condition.getLevel());
-                    pspCondition.setIsBuy(specsPrice.getIsBuy());
-                    List<ProductSpecsPrice> pspList = productSpecsPriceBO
-                        .queryProductSpecsPriceList(pspCondition);
-                    if (CollectionUtils.isNotEmpty(pspList)) {
-                        productSpecs.setPriceList(pspList);
-                    }
+                    // 补充规格价格
+                    List<ProductSpecsPrice> pspList = new ArrayList<ProductSpecsPrice>();
+                    pspList.add(specsPrice);
+                    ps.setPriceList(pspList);
+                    psList.add(ps);
                 }
-                product.setSpecsList(psList);
+
             }
+            // 该产品没有符合的规格时，从List中删除
+            if (CollectionUtils.sizeIsEmpty(psList)) {
+                iterator.remove();
+            }
+            product.setSpecsList(psList);
         }
+
         return page;
     }
 
     @Override
     public Product getProduct(String code, Integer level) {
         Product data = productBO.getProduct(code);
-        List<ProductSpecs> list = productSpecsBO
+        List<ProductSpecs> specsList = productSpecsBO
             .getProductSpecsByProduct(data.getCode());
 
-        for (ProductSpecs productSpecs : list) {
-            ProductSpecsPrice condition = new ProductSpecsPrice();
-            condition.setLevel(level);
-            ProductSpecsPrice price = productSpecsPriceBO
+        List<ProductSpecs> list = new ArrayList<ProductSpecs>();
+        for (ProductSpecs productSpecs : specsList) {
+            // 查询该等级能够看到的规格
+            ProductSpecsPrice specsPrice = productSpecsPriceBO
                 .getPriceByLevel(productSpecs.getCode(), level);
-            productSpecs.setPrice(price);
+            if (EBoolean.YES.getCode().equals(specsPrice.getIsBuy())) {
+                ProductSpecs ps = productSpecsBO
+                    .getProductSpecs(specsPrice.getProductSpecsCode());
+                ps.setPrice(specsPrice);
+                list.add(ps);
+            }
         }
-        data.setSpecsList(list);
 
+        data.setSpecsList(list);
         return data;
     }
 

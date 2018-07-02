@@ -11,29 +11,27 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Report;
-import com.bh.mall.dto.req.XN627854Req;
+import com.bh.mall.dto.req.XN627850Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 我的介绍/推荐
+ * 我的出货
  * @author: nyc 
  * @since: 2018年6月30日 下午7:09:17 
  * @history:
  */
-public class XN627854 extends AProcessor {
+public class XN627855 extends AProcessor {
 
     private IReportAO reportAO = SpringContextHolder.getBean(IReportAO.class);
 
-    private XN627854Req req = null;
+    private XN627850Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         Report condition = new Report();
-        condition.setUserReferee(req.getUserReferee());
-        condition.setIntroducer(req.getIntroducer());
-
+        condition.setUserId(req.getUserId());
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
         Date endDatetime = DateUtil.strToDate(req.getDateStart(),
@@ -54,7 +52,7 @@ public class XN627854 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627854Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627850Req.class);
         ObjValidater.validateReq(req);
     }
 
