@@ -58,7 +58,7 @@ public class CodeController {
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
-            writer.append("生成结束");
+            writer.append("it's over");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

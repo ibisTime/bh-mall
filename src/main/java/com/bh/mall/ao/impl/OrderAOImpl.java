@@ -49,7 +49,6 @@ import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
-import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627640Req;
@@ -69,7 +68,6 @@ import com.bh.mall.enums.EProductIsTotal;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductSpecsType;
 import com.bh.mall.enums.EProductStatus;
-import com.bh.mall.enums.EProductYunFei;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
@@ -287,14 +285,12 @@ public class OrderAOImpl implements IOrderAO {
 
                 // 代理下单
                 if (EUserKind.Merchant.getCode().equals(uData.getKind())) {
-                    // 买入云仓
-                    Agent agent = agentBO.getAgentByLevel(uData.getLevel());
-                    if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
-                        // 购买云仓
-                        this.buyWareHouse(data, uData);
-                        // 出货以及推荐奖励
-                        this.payAward(data);
-                    }
+                    System.out.println("买云仓啦~");
+                    // 购买云仓
+                    this.buyWareHouse(data, uData);
+                    System.out.println("发奖励啦~");
+                    // 出货以及推荐奖励
+                    this.payAward(data);
                 }
 
                 result = new BooleanRes(true);
@@ -373,13 +369,10 @@ public class OrderAOImpl implements IOrderAO {
                 // 代理进货且是购买云仓
                 User applyUser = userBO.getUser(data.getApplyUser());
                 if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
-                    Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-                    if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
-                        // 购买云仓
-                        this.buyWareHouse(data, data.getUser());
-                        // 出货以及推荐奖励
-                        this.payAward(data);
-                    }
+                    // 购买云仓
+                    this.buyWareHouse(data, data.getUser());
+                    // 出货以及推荐奖励
+                    this.payAward(data);
                 }
                 orderBO.paySuccess(data);
             } else {
@@ -488,7 +481,7 @@ public class OrderAOImpl implements IOrderAO {
         // 获取订单归属人及其上级
         User toUser = userBO.getUser(data.getApplyUser());
         String fromUserId = ESysUser.SYS_USER_BH.getCode();
-        Long orderAmount = data.getAmount() - data.getYunfei();
+        Long orderAmount = data.getAmount();
         // 有上级，且不是平台
         if (StringUtils.isNotBlank(toUser.getHighUserId())
                 && !EUser.ADMIN.getCode().equals(toUser.getHighUserId())) {
@@ -947,7 +940,6 @@ public class OrderAOImpl implements IOrderAO {
             String province, String city, String area, String address) {
 
         Order order = new Order();
-        Long yunfei = 0L;
         ProductSpecsPrice pspData = productSpecsPriceBO
             .getPriceByLevel(psData.getCode(), applyUser.getLevel());
         String code = OrderNoGenerater
@@ -995,13 +987,6 @@ public class OrderAOImpl implements IOrderAO {
             }
         }
 
-        // 计算运费
-        if (EProductYunFei.YunFei_NO.getCode().equals(pData.getIsFree())) {
-            SYSConfig sysConfig = sysConfigBO.getConfig(province,
-                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            yunfei = StringValidater.toLong(sysConfig.getCvalue());
-        }
-
         // 改变产品数量
         this.changeProductNumber(applyUser, pData, psData, order, code);
 
@@ -1011,8 +996,6 @@ public class OrderAOImpl implements IOrderAO {
         order.setApplyUser(applyUser.getUserId());
 
         order.setAmount(amount);
-        order.setYunfei(yunfei);
-        order.setAmount(amount + yunfei);
 
         order.setApplyDatetime(new Date());
         order.setApplyNote(applyNote);

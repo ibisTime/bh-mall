@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import com.bh.mall.domain.SecurityTrace;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.enums.ESysConfigType;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.exception.BizException;
 
 @Service
 public class BarCodeAOImpl implements IBarCodeAO {
@@ -94,8 +96,11 @@ public class BarCodeAOImpl implements IBarCodeAO {
     public synchronized List<BarCode> downLoad(int number, int quantity) {
         BarCode condition = new BarCode();
         condition.setStatus(ECodeStatus.USE_NO.getCode());
-        Paginable<BarCode> page = barCodeBO.getPaginable(0, number, condition);
-
+        Paginable<BarCode> page = barCodeBO.getPaginable(0, quantity,
+            condition);
+        if (CollectionUtils.isEmpty(page.getList())) {
+            throw new BizException("xn00000", "箱码已经没有啦");
+        }
         SYSConfig sysConfig = sysConfigBO.getConfig(
             ESysConfigType.URL.getCode(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
@@ -103,17 +108,19 @@ public class BarCodeAOImpl implements IBarCodeAO {
         SecurityTrace traceCondition = new SecurityTrace();
         condition.setStatus(ECodeStatus.USE_NO.getCode());
         for (BarCode barCode : page.getList()) {
-
             barCodeBO.refreshBarCode(barCode);
             barCode.setUrl(sysConfig.getCvalue());
             Paginable<SecurityTrace> tracePage = securityTraceBO
-                .getPaginable(number, quantity, traceCondition);
+                .getPaginable(quantity, number, traceCondition);
+            if (CollectionUtils.isEmpty(tracePage.getList())) {
+                throw new BizException("xn00000", "盒码已经没有啦");
+            }
             for (SecurityTrace trace : tracePage.getList()) {
                 trace.setRefCode(barCode.getCode());
                 securityTraceBO.refreshStatus(trace);
             }
             barCode.setStList(tracePage.getList());
-            number = number + 1;
+            quantity = quantity + 1;
         }
         return page.getList();
 
