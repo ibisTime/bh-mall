@@ -10,12 +10,12 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627871Req {
 
-    // 张数
-    @NotBlank(message = "张数不能为空")
+    // 每页数量
+    @NotBlank(message = "每页数量不能为空")
     private String number;
 
-    // 每张数量
-    @NotBlank(message = "每张数量")
+    // 张数
+    @NotBlank(message = "张数不能为空")
     private String quantity;
 
     public String getNumber() {

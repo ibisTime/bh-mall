@@ -41,6 +41,7 @@
 		t.code
 		FROM
 		tbh_bar_code t
+		<include refid="where_condition" />
 	</select>
 
 	<select id="select_barCode_count" parameterType="BarCode"

@@ -2,6 +2,7 @@ package com.bh.mall.ao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -43,7 +44,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
         List<SecurityTrace> stList = securityTraceBO.queryCodeList();
 
         // 将新增的Code存储起来，并进行比较
-        List<String> list = new ArrayList<String>();
+        List<String> list = new LinkedList<String>();
 
         // 新增并校验是否重复
         loop: for (int i = 0; i < number; i++) {
@@ -63,7 +64,6 @@ public class BarCodeAOImpl implements IBarCodeAO {
             System.out.println(barCode);
             // 新增的Code放入List中
             list.add(barCode);
-
             Date date = new Date();
             BarCode barData = new BarCode();
             barData.setCode(barCode);
@@ -105,22 +105,25 @@ public class BarCodeAOImpl implements IBarCodeAO {
             ESysConfigType.URL.getCode(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
 
-        SecurityTrace traceCondition = new SecurityTrace();
-        condition.setStatus(ECodeStatus.USE_NO.getCode());
         for (BarCode barCode : page.getList()) {
-            barCodeBO.refreshBarCode(barCode);
+
             barCode.setUrl(sysConfig.getCvalue());
+            SecurityTrace traceCondition = new SecurityTrace();
+            traceCondition.setStatus(ECodeStatus.USE_NO.getCode());
             Paginable<SecurityTrace> tracePage = securityTraceBO
-                .getPaginable(quantity, number, traceCondition);
+                .getPaginable(quantity - 1, number, traceCondition);
+
             if (CollectionUtils.isEmpty(tracePage.getList())) {
                 throw new BizException("xn00000", "盒码已经没有啦");
             }
+
             for (SecurityTrace trace : tracePage.getList()) {
                 trace.setRefCode(barCode.getCode());
                 securityTraceBO.refreshStatus(trace);
             }
             barCode.setStList(tracePage.getList());
             quantity = quantity + 1;
+            barCodeBO.refreshBarCode(barCode);
         }
         return page.getList();
 

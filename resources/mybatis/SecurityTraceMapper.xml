@@ -51,6 +51,7 @@
 		,t.trace_code
 		FROM
 		tbh_security_trace t
+		<include refid="where_condition" />
 	</select>
 
 	<select id="select_securityTrace_count" parameterType="SecurityTrace"
