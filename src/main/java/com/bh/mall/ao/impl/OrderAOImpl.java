@@ -975,7 +975,7 @@ public class OrderAOImpl implements IOrderAO {
             Account account = accountBO.getAccountByUser(applyUser.getUserId(),
                 ECurrency.MK_CNY.getCode());
             Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-            if ((account.getAmount() - amount) > agent.getMinSurplus()) {
+            if ((account.getAmount() - amount) >= agent.getMinSurplus()) {
                 throw new BizException("xn0000",
                     "剩余门槛不能大于[" + agent.getMinSurplus() / 10000 + "]元，目前余额还有["
                             + (account.getAmount() - amount) / 1000 + "]元");

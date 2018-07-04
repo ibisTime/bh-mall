@@ -32,7 +32,6 @@ import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
-import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627815Req;
@@ -40,8 +39,6 @@ import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
-import com.bh.mall.enums.EProductYunFei;
-import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -217,8 +214,8 @@ public class WareHouseAOImpl implements IWareHouseAO {
         if (data.getQuantity() < StringValidater.toInteger(req.getQuantity())) {
             throw new BizException("xn00000", "您仓库中该规格的产品数量不足");
         }
-        Long amount = AmountUtil.mul(data.getPrice(),
-            StringValidater.toInteger(req.getQuantity()));
+        Long amount = data.getPrice()
+                * StringValidater.toInteger(req.getQuantity());
 
         // 获取授权单
         Long impowerOrder = orderBO.checkImpowerOrder(user.getUserId());
@@ -267,16 +264,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
         order.setQuantity(StringValidater.toInteger(req.getQuantity()));
         order.setPrice(data.getPrice());
 
-        // 是否包邮
-        Long yunfei = 0L;
-        if (EProductYunFei.YunFei_NO.getCode().equals(product.getIsFree())) {
-            SYSConfig sysConfig = sysConfigBO.getConfig(req.getProvince(),
-                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            yunfei = StringValidater.toLong(sysConfig.getCvalue());
-            amount = amount + StringValidater.toLong(sysConfig.getCvalue());
-        }
-
-        order.setYunfei(yunfei);
         order.setAmount(amount);
         order.setApplyUser(data.getUserId());
         order.setApplyDatetime(new Date());
