@@ -88,7 +88,7 @@ public class SecurityTraceAOImpl implements ISecurityTraceAO {
             SecurityTrace data = new SecurityTrace();
             data.setSecurityCode(securityCode);
             data.setTraceCode(traceCode);
-            data.setStatus(ECodeStatus.USE_NO.getCode());
+            data.setStatus(ECodeStatus.TO_USER.getCode());
             data.setCreateDatetime(date);
             securityTraceBO.saveSecurityTrace(data);
 

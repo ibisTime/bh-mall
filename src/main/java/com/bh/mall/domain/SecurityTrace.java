@@ -23,6 +23,9 @@ public class SecurityTrace extends ABaseDO {
     // 关联条形码
     private String refCode;
 
+    // 关联订单编号
+    private String orderCode;
+
     // 状态（未使用，已使用）
     private String status;
 
@@ -78,6 +81,14 @@ public class SecurityTrace extends ABaseDO {
 
     public void setUseDatetime(Date useDatetime) {
         this.useDatetime = useDatetime;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
 }

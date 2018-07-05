@@ -12,9 +12,6 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class Agent extends ABaseDO {
 
-    /**
-     * tbh
-     */
     private static final long serialVersionUID = -8708365669948607235L;
 
     // 等级

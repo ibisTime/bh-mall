@@ -14,4 +14,6 @@ public interface IBarCodeDAO extends IBaseDAO<BarCode> {
 
     List<BarCode> selectCodeList(BarCode condition);
 
+    void splitSingle(BarCode barData);
+
 }

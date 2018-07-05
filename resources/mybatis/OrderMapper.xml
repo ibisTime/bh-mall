@@ -11,6 +11,7 @@
 		<result column="product_name" property="productName" />
 		<result column="product_specs_code" property="productSpecsCode" />
 		<result column="product_specs_name" property="productSpecsName" />
+		<result column="bar_code" property="barCode" />
 		<result column="pic" property="pic" />
 		<result column="quantity" property="quantity" />
 		
@@ -112,7 +113,12 @@
 			<if test="level != null and level != '' ">
 				AND u.level = #{level}
 			</if>
-			
+			<if test="barCode != null and barCode != '' ">
+				AND t.bar_code = #{barCode}
+			</if>
+			<if test="deliver != null and deliver != '' ">
+				AND t.deliver = #{deliver}
+			</if>
 		</trim>
 	</sql>
 	
@@ -127,6 +133,7 @@
 		,t.product_name
 		,t.product_specs_code
 		,t.product_specs_name
+		,t.bar_code
 		,t.pic
 		,t.quantity
 		
@@ -195,6 +202,7 @@
 		
 		,product_specs_code
 		,product_specs_name
+		,bar_code
 		,pic
 		,quantity
 		,price
@@ -224,6 +232,7 @@
 		
 		,#{productSpecsCode}
 		,#{productSpecsName}
+		,#{barCode}
 		,#{pic}
 		,#{quantity}
 		,#{price}

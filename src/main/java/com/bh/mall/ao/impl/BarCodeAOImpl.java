@@ -67,7 +67,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
             Date date = new Date();
             BarCode barData = new BarCode();
             barData.setCode(barCode);
-            barData.setStatus(ECodeStatus.USE_NO.getCode());
+            barData.setStatus(ECodeStatus.TO_USER.getCode());
             barData.setCreateDatetime(date);
             barCodeBO.saveBarCode(barData);
 
@@ -93,10 +93,11 @@ public class BarCodeAOImpl implements IBarCodeAO {
     }
 
     @Override
+    @Transactional
     public synchronized List<BarCode> downLoad(int number, int quantity) {
         // 获取盒码
         BarCode condition = new BarCode();
-        condition.setStatus(ECodeStatus.USE_NO.getCode());
+        condition.setStatus(ECodeStatus.TO_USER.getCode());
         Paginable<BarCode> page = barCodeBO.getPaginable(0, quantity,
             condition);
         if (CollectionUtils.isEmpty(page.getList())) {
@@ -111,17 +112,22 @@ public class BarCodeAOImpl implements IBarCodeAO {
         for (BarCode barCode : page.getList()) {
             barCode.setUrl(sysConfig.getCvalue());
             SecurityTrace traceCondition = new SecurityTrace();
-            traceCondition.setStatus(ECodeStatus.USE_NO.getCode());
+            traceCondition.setStatus(ECodeStatus.TO_USER.getCode());
             Paginable<SecurityTrace> tracePage = securityTraceBO
                 .getPaginable(quantity - 1, number, traceCondition);
+
+            // 更新箱状态
+            if (!ECodeStatus.TO_USER.getCode().equals(barCode.getStatus())) {
+                throw new BizException("xn00000", "箱码已被使用");
+            }
+
             // 是否还有可用盒码
             if (CollectionUtils.isEmpty(tracePage.getList())) {
                 throw new BizException("xn00000", "盒码已经没有啦");
             }
-            // 建立关联关系
+            // 建立关联关系并更新状态
             for (SecurityTrace trace : tracePage.getList()) {
-                trace.setRefCode(barCode.getCode());
-                securityTraceBO.refreshStatus(trace);
+                securityTraceBO.refreshSecurityTrace(trace, barCode.getCode());
             }
             barCode.setStList(tracePage.getList());
             quantity = quantity + 1;
@@ -149,7 +155,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
     @Override
     public boolean checkCode(String code, List<BarCode> list,
             List<SecurityTrace> stList) {
-
+        // 是否与箱码重复
         for (BarCode barCode : list) {
             if (barCode.getCode().equals(code)) {
                 return true;
@@ -167,21 +173,5 @@ public class BarCodeAOImpl implements IBarCodeAO {
         }
         return false;
     }
-
-    // @Override
-    // public String downLoadPic(String picUrl, String code) {
-    // if (picUrl == null)
-    // return null;
-    // @SuppressWarnings("restriction")
-    // BASE64Decoder decoder = new BASE64Decoder();
-    // try {
-    // @SuppressWarnings("restriction")
-    // byte[] b = decoder.decodeBuffer(picUrl);
-    // System.out.println(new String(b));
-    // return new String(b);
-    // } catch (Exception e) {
-    // return null;
-    // }
-    // }
 
 }

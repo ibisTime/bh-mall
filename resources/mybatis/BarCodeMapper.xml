@@ -74,6 +74,14 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="split_single" parameterType="BarCode">
+		UPDATE tbh_bar_code
+		SET
+		status = #{status}
+		,use_datetime = #{useDatetime}
+		WHERE code = #{code}
+	</update>
+	
 
 
 </mapper>

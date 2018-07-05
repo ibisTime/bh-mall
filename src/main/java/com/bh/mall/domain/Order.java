@@ -36,6 +36,9 @@ public class Order extends ABaseDO {
     // 规格名称
     private String productSpecsName;
 
+    // 关联箱码
+    private String barCode;
+
     // 图片
     private String pic;
 
@@ -594,6 +597,14 @@ public class Order extends ABaseDO {
 
     public void setKindList(List<String> kindList) {
         this.kindList = kindList;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
     }
 
 }

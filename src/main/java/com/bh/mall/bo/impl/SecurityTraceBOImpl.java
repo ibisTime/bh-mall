@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -37,7 +38,9 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
     }
 
     @Override
-    public void refreshSecurityTrace(SecurityTrace data) {
+    public void refreshSecurityTrace(SecurityTrace data, String refCode) {
+        data.setRefCode(refCode);
+        data.setStatus(ECodeStatus.USE_NO.getCode());
         securityTraceDAO.update(data);
     }
 
@@ -67,6 +70,8 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
 
     @Override
     public void refreshStatus(SecurityTrace data) {
+        data.setStatus(ECodeStatus.USE_YES.getCode());
+        data.setUseDatetime(new Date());
         securityTraceDAO.updateStatus(data);
 
     }

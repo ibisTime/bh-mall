@@ -34,6 +34,9 @@ public class XN627662Req extends APageReq {
     // 下单代理等级
     private String level;
 
+    // 发货人
+    private String deliver;
+
     public String getProductName() {
         return productName;
     }
@@ -80,6 +83,14 @@ public class XN627662Req extends APageReq {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getDeliver() {
+        return deliver;
+    }
+
+    public void setDeliver(String deliver) {
+        this.deliver = deliver;
     }
 
 }

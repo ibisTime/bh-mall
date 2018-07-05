@@ -7,6 +7,8 @@
 		<result column="trace_code" property="traceCode" />
 		<result column="ref_code" property="refCode" />
 		<result column="status" property="status" />
+		<result column="order_code" property="orderCode" />
+		
 		<result column="create_datetime" property="createDatetime" />
 		<result column="use_datetime" property="useDatetime" />
 	</resultMap>
@@ -23,6 +25,9 @@
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="orderCode != null and orderCode != '' ">
+				AND t.order_code = #{orderCode}
 			</if>
 		</trim>
 	</sql>
@@ -86,7 +91,8 @@
 	<update id="update_status" parameterType="SecurityTrace">
 		UPDATE tbh_security_trace
 		SET
-		ref_code = #{refCode}
+		status = #{status}
+		,use_datetime = #{useDatetime}
 		WHERE security_code = #{securityCode}
 	</update>
 

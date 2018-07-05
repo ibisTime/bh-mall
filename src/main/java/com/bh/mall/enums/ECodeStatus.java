@@ -2,7 +2,8 @@ package com.bh.mall.enums;
 
 public enum ECodeStatus {
 
-    USE_NO("0", "未使用"), USE_YES("1", "已使用");
+    TO_USER("0", "待下载"), USE_NO("1", "未使用"), USE_YES("2",
+            "已使用"), SPLIT_SINGLE("3", "已拆分");
 
     ECodeStatus(String code, String value) {
         this.code = code;

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
@@ -21,6 +22,7 @@ import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.IAwardBO;
 import com.bh.mall.bo.IAwardIntervalBO;
+import com.bh.mall.bo.IBarCodeBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
@@ -28,6 +30,7 @@ import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.ISecurityTraceBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseSpecsBO;
@@ -44,11 +47,13 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.domain.Award;
 import com.bh.mall.domain.AwardInterval;
+import com.bh.mall.domain.BarCode;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.SecurityTrace;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627640Req;
@@ -60,6 +65,7 @@ import com.bh.mall.enums.EAwardType;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
+import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
@@ -132,6 +138,12 @@ public class OrderAOImpl implements IOrderAO {
 
     @Autowired
     IAwardIntervalBO awardIntervalBO;
+
+    @Autowired
+    IBarCodeBO barCodeBO;
+
+    @Autowired
+    ISecurityTraceBO securityTraceBO;
 
     @Override
     @Transactional
@@ -567,7 +579,6 @@ public class OrderAOImpl implements IOrderAO {
     public void deliverOrder(XN627645Req req) {
 
         Order data = orderBO.getOrder(req.getCode());
-        User fromUser = userBO.getUser(data.getApplyUser());
         String toUserId = ESysUser.SYS_USER_BH.getCode();
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
             // C端产品无法云仓发
@@ -575,10 +586,8 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn00000", "非代理的订单无法从云仓发货哦！");
             }
 
-            // 订单归属人云仓减少
-            if (StringUtils.isNotBlank(data.getToUser())) {
-                // 订单数量是否少于本等级最低发货数量
-                User toUser = userBO.getUser(data.getToUser());
+            User toUser = userBO.getUser(data.getToUser());
+            if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
                 toUserId = toUser.getUserId();
                 ProductSpecsPrice psp = productSpecsPriceBO.getPriceByLevel(
                     data.getProductSpecsCode(), toUser.getLevel());
@@ -594,27 +603,18 @@ public class OrderAOImpl implements IOrderAO {
                 if (null == toData) {
                     throw new BizException("xn00000", "您的云仓中没有该规格的产品");
                 }
-                wareHouseBO.changeWareHouse(toData.getCode(),
-                    -data.getQuantity(), EBizType.AJ_YCCH,
-                    EBizType.AJ_YCCH.getValue(), data.getCode());
             }
         }
 
-        // 是否可以云仓发货
-        Agent agent = agentBO.getAgentByLevel(fromUser.getLevel());
-        if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
-            // 卖货后赚的钱
-            Account account = accountBO.getAccountByUser(toUserId,
-                ECurrency.YJ_CNY.getCode());
-            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, data.getPayGroup(), data.getCode(), EBizType.AJ_CELR,
-                EBizType.AJ_CELR.getValue(), data.getAmount());
+        // 卖货后赚的钱
+        Account account = accountBO.getAccountByUser(toUserId,
+            ECurrency.YJ_CNY.getCode());
+        accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
+            null, data.getPayGroup(), data.getCode(), EBizType.AJ_CELR,
+            EBizType.AJ_CELR.getValue(), data.getAmount());
 
-            // 出货以及推荐奖励
-            this.payAward(data);
-        } else {
-            throw new BizException("xn00000", "本等级的提货单无法从云仓发送");
-        }
+        // 出货以及推荐奖励
+        this.payAward(data);
 
         data.setDeliver(req.getDeliver());
         data.setDeliveDatetime(new Date());
@@ -625,6 +625,52 @@ public class OrderAOImpl implements IOrderAO {
         data.setIsCompanySend(req.getIsCompanySend());
         data.setStatus(EOrderStatus.TO_Deliver.getCode());
         data.setRemark(req.getRemark());
+
+        // 订单与箱码关联（整箱发货）
+        if (StringUtils.isNotBlank(req.getBarCode())) {
+            data.setBarCode(req.getBarCode());
+            // 修改箱码状态
+            BarCode barData = barCodeBO.getBarCode(req.getBarCode());
+            if (ECodeStatus.USE_YES.equals(barData.getStatus())) {
+                throw new BizException("xn00000", "该箱码已经使用过");
+            }
+            if (ECodeStatus.SPLIT_SINGLE.equals(barData.getStatus())) {
+                throw new BizException("xn00000", "该箱码已已拆分");
+            }
+            barCodeBO.refreshBarCode(barData);
+
+            // 更新箱码关联的盒码
+            List<SecurityTrace> stList = securityTraceBO
+                .getSecurityTraceByBarCode(barData.getCode());
+            for (SecurityTrace securityTrace : stList) {
+                if (EBoolean.YES.getCode().equals(securityTrace.getStatus())) {
+                    throw new BizException("xn00000", "该盒码已被使用");
+                }
+                securityTraceBO.refreshStatus(securityTrace);
+            }
+        }
+
+        // 订单与盒码关联（盒装发货）
+        if (CollectionUtils.isNotEmpty(req.getTraceCodeList())) {
+            for (String stCode : req.getTraceCodeList()) {
+                SecurityTrace stData = securityTraceBO.getSecurityTrace(stCode);
+                if (EBoolean.YES.getCode().equals(stData.getStatus())) {
+                    throw new BizException("xn00000", "该盒码已被使用");
+                }
+                securityTraceBO.refreshStatus(stData);
+            }
+
+            SecurityTrace stData = securityTraceBO
+                .getSecurityTrace(req.getTraceCodeList().get(0));
+            BarCode barData = barCodeBO.getBarCode(stData.getRefCode());
+            // 关联箱码不是未使用和已拆分
+            if (ECodeStatus.USE_YES.getCode().equals(barData.getCode())) {
+                throw new BizException("xn00000", "该箱码已被使用");
+            }
+            // 更新关联的箱码状态
+            barCodeBO.splitSingle(barData);
+
+        }
         orderBO.deliverOrder(data);
 
     }
