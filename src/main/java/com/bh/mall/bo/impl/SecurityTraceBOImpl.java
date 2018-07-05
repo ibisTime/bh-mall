@@ -1,6 +1,5 @@
 package com.bh.mall.bo.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -12,7 +11,6 @@ import com.bh.mall.bo.ISecurityTraceBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.ISecurityTraceDAO;
 import com.bh.mall.domain.SecurityTrace;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.exception.BizException;
 
@@ -69,8 +67,6 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
 
     @Override
     public void refreshStatus(SecurityTrace data) {
-        data.setStatus(EBoolean.YES.getCode());
-        data.setUseDatetime(new Date());
         securityTraceDAO.updateStatus(data);
 
     }

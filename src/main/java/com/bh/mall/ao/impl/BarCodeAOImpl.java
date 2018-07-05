@@ -94,6 +94,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
 
     @Override
     public synchronized List<BarCode> downLoad(int number, int quantity) {
+        // 获取盒码
         BarCode condition = new BarCode();
         condition.setStatus(ECodeStatus.USE_NO.getCode());
         Paginable<BarCode> page = barCodeBO.getPaginable(0, quantity,
@@ -101,29 +102,29 @@ public class BarCodeAOImpl implements IBarCodeAO {
         if (CollectionUtils.isEmpty(page.getList())) {
             throw new BizException("xn00000", "箱码已经没有啦");
         }
+        // 获取二维码的URL
         SYSConfig sysConfig = sysConfigBO.getConfig(
             ESysConfigType.URL.getCode(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
 
+        // 获取箱码下得盒码
         for (BarCode barCode : page.getList()) {
-
             barCode.setUrl(sysConfig.getCvalue());
             SecurityTrace traceCondition = new SecurityTrace();
             traceCondition.setStatus(ECodeStatus.USE_NO.getCode());
             Paginable<SecurityTrace> tracePage = securityTraceBO
                 .getPaginable(quantity - 1, number, traceCondition);
-
+            // 是否还有可用盒码
             if (CollectionUtils.isEmpty(tracePage.getList())) {
                 throw new BizException("xn00000", "盒码已经没有啦");
             }
-
+            // 建立关联关系
             for (SecurityTrace trace : tracePage.getList()) {
                 trace.setRefCode(barCode.getCode());
                 securityTraceBO.refreshStatus(trace);
             }
             barCode.setStList(tracePage.getList());
             quantity = quantity + 1;
-            barCodeBO.refreshBarCode(barCode);
         }
         return page.getList();
 

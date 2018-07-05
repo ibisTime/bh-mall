@@ -86,9 +86,7 @@
 	<update id="update_status" parameterType="SecurityTrace">
 		UPDATE tbh_security_trace
 		SET
-		status = #{status}
-		,use_datetime = #{useDatetime}
-		,ref_code = #{refCode}
+		ref_code = #{refCode}
 		WHERE security_code = #{securityCode}
 	</update>
 
