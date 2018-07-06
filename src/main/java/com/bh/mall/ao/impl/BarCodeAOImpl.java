@@ -120,6 +120,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
             if (!ECodeStatus.TO_USER.getCode().equals(barCode.getStatus())) {
                 throw new BizException("xn00000", "箱码已被使用");
             }
+            barCodeBO.refreshBarCode(barCode);
 
             // 是否还有可用盒码
             if (CollectionUtils.isEmpty(tracePage.getList())) {

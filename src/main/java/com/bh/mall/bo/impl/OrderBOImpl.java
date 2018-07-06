@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -138,7 +139,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public Long checkImpowerOrder(String applyUser) {
+    public boolean checkImpowerOrder(String applyUser) {
         List<String> statusList = new ArrayList<String>();
         statusList.add(EOrderStatus.Paid.getCode());
         statusList.add(EOrderStatus.TO_Apprvoe.getCode());
@@ -150,15 +151,14 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setKind(EOrderKind.Impower_Order.getCode());
         condition.setStatusList(statusList);
         List<Order> list = orderDAO.selectList(condition);
-        Long amount = 0L;
-        for (Order order : list) {
-            amount = amount + order.getAmount();
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
         }
-        return amount;
+        return false;
     }
 
     @Override
-    public Long checkUpgradeOrder(String applyUser) {
+    public boolean checkUpgradeOrder(String applyUser) {
         List<String> statusList = new ArrayList<String>();
         statusList.add(EOrderStatus.Paid.getCode());
         statusList.add(EOrderStatus.TO_Apprvoe.getCode());
@@ -170,12 +170,10 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setKind(EOrderKind.Upgrade_Order.getCode());
         condition.setStatusList(statusList);
         List<Order> list = orderDAO.selectList(condition);
-        Long amount = 0L;
-
-        for (Order order : list) {
-            amount = amount + order.getAmount();
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
         }
-        return amount;
+        return false;
     }
 
     @Override
@@ -186,6 +184,25 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setStartDatetime(startDatetime);
         condition.setEndDatetime(endDatetime);
         return orderDAO.selectList(condition);
+    }
+
+    @Override
+    public Long getOrderByUser(String userId) {
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EOrderStatus.Paid.getCode());
+        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
+        statusList.add(EOrderStatus.TO_Deliver.getCode());
+        statusList.add(EOrderStatus.Received.getCode());
+
+        Order condition = new Order();
+        condition.setApplyUser(userId);
+        List<Order> list = orderDAO.selectList(condition);
+        condition.setKind(EOrderKind.Normal_Order.getCode());
+        Long amount = 0L;
+        for (Order order : list) {
+            amount = amount + order.getAmount();
+        }
+        return amount;
     }
 
 }

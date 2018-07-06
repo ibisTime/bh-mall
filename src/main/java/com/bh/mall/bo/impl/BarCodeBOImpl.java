@@ -30,7 +30,7 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
 
     @Override
     public void refreshBarCode(BarCode data) {
-        data.setStatus(EBoolean.YES.getCode());
+        data.setStatus(ECodeStatus.USE_NO.getCode());
         data.setUseDatetime(new Date());
         barCodeDAO.update(data);
     }

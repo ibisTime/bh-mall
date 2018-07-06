@@ -85,6 +85,7 @@
 		UPDATE tbh_security_trace
 		SET
 		ref_code = #{refCode}
+		,status = #{status}
 		WHERE security_code = #{securityCode}
 	</update>
 	

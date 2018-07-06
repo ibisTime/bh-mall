@@ -53,12 +53,6 @@ public interface IOrderAO {
 
     void paySuccess(String result);
 
-    // 检查是否完成授权单
-    public boolean CheckImpowerOrder(User user);
-
-    // 检查是否完成升级单
-    public boolean CheckUpgradeOrder(User user);
-
     void checkLimitNumber(User applyUser, ProductSpecs psData,
             ProductSpecsPrice pspData, Integer quantity);
 

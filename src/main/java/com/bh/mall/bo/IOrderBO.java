@@ -43,12 +43,14 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public void payNo(Order data);
 
-    public Long checkImpowerOrder(String applyUser);
+    public boolean checkImpowerOrder(String applyUser);
 
-    public Long checkUpgradeOrder(String applyUser);
+    public boolean checkUpgradeOrder(String applyUser);
 
     // 根据时间查询订单数量
     public List<Order> getProductQuantity(String userId, Date startDatetime,
             Date endDatetime);
+
+    public Long getOrderByUser(String userId);
 
 }

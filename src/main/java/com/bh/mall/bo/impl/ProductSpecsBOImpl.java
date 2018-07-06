@@ -259,13 +259,10 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
     }
 
     private Integer getMinSpecsNumber(ProductSpecs data, int number) {
-        number = data.getNumber();
-        if (StringUtils.isNotBlank(data.getRefCode())) {
-            ProductSpecs productSpecs = this.getProductSpecs(data.getRefCode());
-            number = number * productSpecs.getNumber();
-            if (StringUtils.isNotBlank(productSpecs.getRefCode())) {
-                getMinSpecsNumber(productSpecs, number);
-            }
+        ProductSpecs productSpecs = this.getProductSpecs(data.getRefCode());
+        number = number * productSpecs.getNumber();
+        if (StringUtils.isNotBlank(productSpecs.getRefCode())) {
+            getMinSpecsNumber(productSpecs, number);
         }
         return number;
     }

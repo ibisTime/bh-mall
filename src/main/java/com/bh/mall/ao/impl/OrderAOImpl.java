@@ -204,32 +204,6 @@ public class OrderAOImpl implements IOrderAO {
         Long amount = StringValidater.toInteger(req.getQuantity())
                 * pspData.getPrice();
 
-        // 检查起购数量
-        int minQuantity = productSpecsPriceBO
-            .checkMinQuantity(pspData.getCode(), applyUser.getLevel());
-        if (minQuantity > StringValidater.toInteger(req.getQuantity())) {
-            throw new BizException("xn0000", "您购买的数量不能低于" + minQuantity + "]");
-        }
-
-        // 门槛余额是否高于限制
-        Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-        Account account = accountBO.getAccountByUser(applyUser.getUserId(),
-            ECurrency.MK_CNY.getCode());
-
-        // 门槛最低余额为零
-        if (0 == agent.getMinSurplus()) {
-            if ((account.getAmount() - amount) > agent.getMinSurplus()) {
-                throw new BizException("xn0000",
-                    "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
-                            + (account.getAmount() - amount) / 1000 + "]元");
-            }
-
-        } else if ((account.getAmount() - amount) >= agent.getMinSurplus()) {
-            throw new BizException("xn0000",
-                "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
-                        + (account.getAmount() - amount) / 1000 + "]元");
-        }
-
         Order data = new Order();
         data.setProductCode(pData.getCode());
         data.setProductName(pData.getName());
@@ -288,22 +262,26 @@ public class OrderAOImpl implements IOrderAO {
                     EChannelType.NBZ, null, payGroup, data.getCode(),
                     EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
                     -data.getAmount());
-
-                data.setPayDatetime(new Date());
-                data.setPayCode(data.getCode());
-                data.setPayAmount(data.getAmount());
-                data.setStatus(EOrderStatus.Received.getCode());
-                orderBO.paySuccess(data);
+                String status = EOrderStatus.Received.getCode();
 
                 // 代理下单
                 if (EUserKind.Merchant.getCode().equals(uData.getKind())) {
-                    System.out.println("买云仓啦~");
-                    // 购买云仓
-                    this.buyWareHouse(data, uData);
-                    System.out.println("发奖励啦~");
+
+                    // 该等级是否启用云仓
+                    Agent agent = agentBO.getAgentByLevel(uData.getLevel());
+                    if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
+                        status = EOrderStatus.Paid.getCode();
+                        // 购买云仓
+                        this.buyWareHouse(data, uData);
+                    }
                     // 出货以及推荐奖励
                     this.payAward(data);
                 }
+                data.setPayDatetime(new Date());
+                data.setPayCode(data.getCode());
+                data.setPayAmount(data.getAmount());
+                data.setStatus(status);
+                orderBO.paySuccess(data);
 
                 result = new BooleanRes(true);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
@@ -355,10 +333,6 @@ public class OrderAOImpl implements IOrderAO {
             boolean isSucc = weChatAO.reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
             if (isSucc) {
-                data.setPayDatetime(new Date());
-                data.setPayCode(wechatOrderNo);
-                data.setPayAmount(data.getAmount());
-                data.setStatus(EOrderStatus.Received.getCode());
 
                 User user = userBO.getUser(data.getToUser());
                 Account account = accountBO.getAccountByUser(user.getUserId(),
@@ -378,14 +352,25 @@ public class OrderAOImpl implements IOrderAO {
                     EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
                     data.getAmount());
 
+                String status = EOrderStatus.Paid.getCode();
                 // 代理进货且是购买云仓
                 User applyUser = userBO.getUser(data.getApplyUser());
                 if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
-                    // 购买云仓
-                    this.buyWareHouse(data, data.getUser());
+                    Agent agent = agentBO.getAgentByLevel(user.getLevel());
+                    if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
+                        status = EOrderStatus.Received.getCode();
+                        // 购买云仓
+                        this.buyWareHouse(data, applyUser);
+                    }
                     // 出货以及推荐奖励
                     this.payAward(data);
                 }
+
+                data.setPayDatetime(new Date());
+                data.setPayCode(wechatOrderNo);
+                data.setPayAmount(data.getAmount());
+                data.setStatus(status);
+
                 orderBO.paySuccess(data);
             } else {
                 data.setStatus(EOrderStatus.Pay_NO.getCode());
@@ -804,34 +789,11 @@ public class OrderAOImpl implements IOrderAO {
         }
     }
 
-    @Override
-    public boolean CheckImpowerOrder(User user) {
-        AgentImpower impower = agentImpowerBO
-            .getAgentImpowerByLevel(user.getLevel());
-        Long amount = orderBO.checkImpowerOrder(user.getUserId());
-        if (impower.getMinCharge() > amount) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean CheckUpgradeOrder(User user) {
-        AgentImpower impower = agentImpowerBO
-            .getAgentImpowerByLevel(user.getLevel());
-        Long amount = orderBO.checkUpgradeOrder(user.getUserId());
-        if (impower.getMinCharge() > amount) {
-            return false;
-        }
-        return true;
-    }
-
     private String checkOrder(User applyUser, ProductSpecs psData) {
         String kind = EOrderKind.Normal_Order.getCode();
         // 是否完成授权单
-        boolean impowerOrder = this.CheckImpowerOrder(applyUser);
         if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
-            if (!impowerOrder) {
+            if (!orderBO.checkImpowerOrder(applyUser.getUserId())) {
                 kind = EOrderKind.Impower_Order.getCode();
                 if (EProductSpecsType.Apply_NO.getCode()
                     .equals(psData.getIsImpowerOrder())) {
@@ -841,11 +803,11 @@ public class OrderAOImpl implements IOrderAO {
         }
 
         // 是否完成升级单
-        boolean upgradeOrder = this.CheckImpowerOrder(applyUser);
+        // boolean upgradeOrder = this.CheckImpowerOrder(applyUser);
         if (EUserStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
-            if (!upgradeOrder) {
-                kind = EOrderKind.Upgrade_Order.getCode();
-            }
+            // if (!upgradeOrder) {
+            // kind = EOrderKind.Upgrade_Order.getCode();
+            // }
             if (EProductSpecsType.Apply_NO.getCode()
                 .equals(psData.getIsUpgradeOrder())) {
                 throw new BizException("xn0000", "该产品规格不予授权单单下单");
@@ -1005,10 +967,9 @@ public class OrderAOImpl implements IOrderAO {
 
         // 下单人是否是代理
         if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
-            pspData = productSpecsPriceBO.getPriceByLevel(psData.getCode(),
-                applyUser.getLevel());
-            amount = quantity * pspData.getPrice();
-
+            // pspData = productSpecsPriceBO.getPriceByLevel(psData.getCode(),
+            // applyUser.getLevel());
+            // amount = quantity * pspData.getPrice();
             // 检查起购数量
             int minQuantity = productSpecsPriceBO
                 .checkMinQuantity(pspData.getCode(), applyUser.getLevel());
@@ -1018,19 +979,26 @@ public class OrderAOImpl implements IOrderAO {
             }
 
             // 门槛余额是否高于限制
+            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
             Account account = accountBO.getAccountByUser(applyUser.getUserId(),
                 ECurrency.MK_CNY.getCode());
-            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-            if ((account.getAmount() - amount) >= agent.getMinSurplus()) {
+
+            // 门槛最低余额为零
+            if (0 == agent.getMinSurplus()) {
+                if ((account.getAmount() - amount) > agent.getMinSurplus()) {
+                    throw new BizException("xn0000",
+                        "剩余门槛不能大于[" + agent.getMinSurplus() / 1000
+                                + "]元，目前余额还有["
+                                + (account.getAmount() - amount) / 1000 + "]元");
+                }
+
+            } else if ((account.getAmount() - amount) >= agent
+                .getMinSurplus()) {
                 throw new BizException("xn0000",
-                    "剩余门槛不能大于[" + agent.getMinSurplus() / 10000 + "]元，目前余额还有["
+                    "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
                             + (account.getAmount() - amount) / 1000 + "]元");
             }
 
-            // 是否能购买该规格
-            if (EBoolean.NO.getCode().equals(pspData.getIsBuy())) {
-                throw new BizException("xn0000", "您的等级无法购买该规格的产品");
-            }
         }
 
         // 改变产品数量

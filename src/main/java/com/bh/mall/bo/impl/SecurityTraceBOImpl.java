@@ -81,6 +81,9 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
         SecurityTrace condition = new SecurityTrace();
         condition.setStatus(ECodeStatus.USE_NO.getCode());
         List<SecurityTrace> list = securityTraceDAO.selectCodeList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            throw new BizException("xn00000", "盒码没有啦");
+        }
         return list.get(0);
     }
 

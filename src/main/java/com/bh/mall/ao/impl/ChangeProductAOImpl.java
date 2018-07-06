@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IChangeProductAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentImpowerBO;
 import com.bh.mall.bo.IChangeProductBO;
@@ -50,7 +51,6 @@ import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -94,6 +94,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
     @Autowired
     IAgentImpowerBO agentImpowerBO;
+
+    @Autowired
+    IAgencyLogBO agencyLogBO;
 
     @Override
     public String addChangeProduct(XN627790Req req) {
@@ -414,53 +417,61 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     public XN627805Res checkAmount(String userId) {
         XN627805Res res = new XN627805Res();
         User user = userBO.getUser(userId);
-        Long amount = 0L;
+        // 需要补充红线金额
         Long redAmount = 0L;
+        // 门槛所需充值金额
         Long chargeAmount = 0L;
         String result = ECheckStatus.NORMAL.getCode();
+        String isWareHouse = EBoolean.YES.getCode();
 
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
             Agent agent = agentBO.getAgentByLevel(user.getLevel());
             AgentImpower impower = agentImpowerBO
                 .getAgentImpowerByLevel(user.getLevel());
-            Account account = accountBO.getAccountByUser(user.getUserId(),
-                ECurrency.MK_CNY.getCode());
 
-            // 是否已授权
-            if (EUserStatus.IMPOWERED.getCode().equals(user.getStatus())) {
-                // 是否完成授权单
-                Long orderAmount = orderBO.checkImpowerOrder(user.getUserId());
-                if (agent.getAmount() > orderAmount) {
-                    amount = agent.getAmount() - orderAmount;
-                    result = ECheckStatus.NO_Impwoer.getCode();
-                }
-            }
-
-            // 是否已经升级
-            if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
-                // 是否完成升级单
-                Long orderAmount = orderBO.checkUpgradeOrder(user.getUserId());
-                if (agent.getAmount() > orderAmount) {
-                    amount = agent.getAmount() - orderAmount;
-                    result = ECheckStatus.NO_Upgrae.getCode();
-                }
-            }
-
-            // 云仓是否低于红线
+            // 检查云仓红线
+            Long whAmount = 0L;
             List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
             for (WareHouse wareHouse : list) {
                 if (null != wareHouse.getAmount()) {
-                    redAmount = redAmount + wareHouse.getAmount();
+                    whAmount = whAmount + wareHouse.getAmount();
                 }
             }
-            if (agent.getRedAmount() > redAmount) {
-                result = ECheckStatus.RED_LOW.getCode();
-                redAmount = agent.getRedAmount() - redAmount;
+
+            // 开启云仓,且红线限制为零，红线限制不为零时，不会出现直接跳到下授权单
+            if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
+
+                if (0 == agent.getAmount()) {
+                    // 没有过任何订单或购买云仓数量少于首次授权发货金额，购买云仓
+                    Long orderAmount = orderBO.getOrderByUser(user.getUserId());
+                    if (0 == orderAmount || orderAmount > agent.getAmount()) {
+                        result = ECheckStatus.TO_BUY.getCode();
+                    } else if (orderBO.checkImpowerOrder(user.getUserId())) {
+                        // 是否完成授权单
+                        result = ECheckStatus.NO_Impwoer.getCode();
+                    }
+                }
+
+            } else if (orderBO.checkImpowerOrder(user.getUserId())) {
+                // 未完成授权单
+                result = ECheckStatus.NO_WAREHOUSE.getCode();
             }
 
-            // 本等级门槛最低余额
-            if (account.getAmount() > agent.getMinSurplus()) {
+            // 最后一条轨迹为升级时，检查升级单
+            // AgencyLog log = agencyLogBO.getAgencyLog(user.getLastAgentLog());
+            // if (EUserStatus.UPGRADED.getCode().equals(log.getStatus())) {
+            // amount = agent.getAmount();
+            // result = ECheckStatus.NO_Upgrae.getCode();
+            // }
+
+            // 检查门槛余额
+            Account account = accountBO.getAccountByUser(user.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            // 如果可剩余余额为零，不考虑等于的情况
+            if (0 == agent.getMinSurplus() && account.getAmount() > 0) {
+                result = ECheckStatus.MIN_LOW.getCode();
+            } else if (0 != agent.getMinSurplus() && account.getAmount() >= 0) {
                 result = ECheckStatus.MIN_LOW.getCode();
             }
 
@@ -488,7 +499,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 }
             }
             res = new XN627805Res(result, redAmount, agent.getMinSurplus(),
-                amount, chargeAmount, user.getLevel());
+                agent.getAmount(), chargeAmount, user.getLevel(), isWareHouse);
         }
         return res;
     }
