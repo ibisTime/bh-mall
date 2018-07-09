@@ -875,6 +875,7 @@ public class UserAOImpl implements IUserAO {
                 throw new BizException("xn0000", "您申请的等级需高于推荐人哦！");
             }
         }
+
         // 校验手机号
         userBO.isMobileExist(req.getMobile(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
@@ -1161,15 +1162,23 @@ public class UserAOImpl implements IUserAO {
             String remark) {
         User data = userBO.getUser(userId);
         AgencyLog log = agencyLogBO.getAgencyLog(data.getLastAgentLog());
+        String status = EUserStatus.IMPOWERED.getCode();
+        String fromUser = ESysUser.SYS_USER_BH.getCode();
+        User highUser = userBO.getSysUser();
+
         if (!(EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
                 || EUserStatus.TO_COMPANYAPPROVE.getCode()
                     .equals(data.getStatus()))) {
             throw new BizException("xn000", "该代理未处于待授权状态");
         }
 
-        String status = EUserStatus.IMPOWERED.getCode();
-        String fromUser = ESysUser.SYS_USER_BH.getCode();
-        User highUser = userBO.getSysUser();
+        // 审核人
+        User approveUser = null;
+        if (EUser.ADMIN.getCode().equals(approver)) {
+            approveUser = userBO.getSysUser();
+        } else {
+            approveUser = userBO.getUser(approver);
+        }
 
         if (EResult.Result_YES.getCode().equals(result)) {
 
@@ -1184,10 +1193,11 @@ public class UserAOImpl implements IUserAO {
             }
             // 需要公司授权
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())
-                    && !EUser.ADMIN.getCode().equals(approver)) {
+                    && EUserKind.Merchant.equals(approveUser.getKind())) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
-                // 更新上级
+
+                // 审核通过，确定上级，等级，授权时间
                 if (StringUtils.isNotBlank(log.getToUserId())) {
                     highUser = userBO.getUser(log.getToUserId());
                     if (!EUserKind.Plat.getCode().equals(highUser.getKind())) {
@@ -1197,7 +1207,8 @@ public class UserAOImpl implements IUserAO {
                 }
                 data.setHighUserId(highUser.getUserId());
                 data.setLevel(data.getApplyLevel());
-                data.setImpowerDatetime(new Date());
+                Date date = new Date();
+                data.setImpowerDatetime(date);
 
                 // 根据用户类型获取账户列表
                 List<String> currencyList = distributeAccount(data.getUserId(),
@@ -1247,13 +1258,7 @@ public class UserAOImpl implements IUserAO {
             status = EUserStatus.TO_MIND.getCode();
         }
 
-        Date date = new Date();
-        if (EUserStatus.IMPOWERED.getCode().equals(status)) {
-            data.setImpowerDatetime(date);
-        }
-
         data.setApprover(approver);
-        data.setApplyDatetime(date);
         data.setRemark(remark);
         data.setStatus(status);
 

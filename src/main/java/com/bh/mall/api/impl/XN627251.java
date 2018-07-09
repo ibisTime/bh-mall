@@ -22,7 +22,6 @@ public class XN627251 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        System.out.println("teamName1:" + req.getTeamName());
         return userAO.applyHaveUserReferee(req);
     }
 
