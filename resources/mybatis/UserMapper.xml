@@ -572,7 +572,9 @@
 	<update id="ignore_gency" parameterType="user">
 		UPDATE tbh_user
 		SET
-		updater = #{updater}
+		mobile = #{mobile}
+		,id_no = #{idNo}
+		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,status = #{status}
 		,last_agent_log = #{lastAgentLog}
@@ -609,6 +611,8 @@
 		UPDATE tbh_user
 		SET
 		status = #{status}
+		,mobile = #{mobile}
+		,id_no = #{idNo}
 		,high_user_id = #{highUserId}
 		,user_referee = #{userReferee}
 		,team_name = #{teamName}
@@ -776,6 +780,15 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,last_agent_log = #{lastAgentLog}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
+	<update id="reapply_agent" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,user_referee = #{userReferee}
 		WHERE user_id = #{userId}
 	</update>
 </mapper>

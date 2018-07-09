@@ -14,7 +14,7 @@ public interface IAgencyLogBO extends IPaginableBO<AgencyLog> {
 
     public String saveAgencyLog(User data, String toUser);
 
-    public String acceptIntention(User data);
+    public String acceptIntention(AgencyLog log, String status);
 
     public String ignore(User data);
 

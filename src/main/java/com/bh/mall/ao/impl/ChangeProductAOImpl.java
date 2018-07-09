@@ -442,20 +442,20 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             // 开启云仓,且红线限制为零，红线限制不为零时，不会出现直接跳到下授权单
             if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
 
-                if (0 == agent.getAmount()) {
-                    // 没有过任何订单或购买云仓数量少于首次授权发货金额，购买云仓
-                    Long orderAmount = orderBO.getOrderByUser(user.getUserId());
-                    if (0 == orderAmount || orderAmount > agent.getAmount()) {
-                        result = ECheckStatus.TO_BUY.getCode();
-                    } else if (orderBO.checkImpowerOrder(user.getUserId())) {
-                        // 是否完成授权单
-                        result = ECheckStatus.NO_Impwoer.getCode();
-                    }
+                // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，购买云仓
+                Long orderAmount = orderBO.getOrderByUser(user.getUserId());
+                if (0 == orderAmount || orderAmount < agent.getAmount()) {
+                    // result = ECheckStatus.TO_BUY.getCode();
+                    result = ECheckStatus.RED_LOW.getCode();
+                } else if (orderBO.checkImpowerOrder(user.getUserId())) {
+                    // 是否完成授权单
+                    result = ECheckStatus.NO_Impwoer.getCode();
                 }
 
             } else if (orderBO.checkImpowerOrder(user.getUserId())) {
                 // 未完成授权单
-                result = ECheckStatus.NO_WAREHOUSE.getCode();
+                // result = ECheckStatus.NO_WAREHOUSE.getCode();
+                result = ECheckStatus.RED_LOW.getCode();
             }
 
             // 最后一条轨迹为升级时，检查升级单
@@ -466,15 +466,18 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             // }
 
             // 检查门槛余额
-            Account account = accountBO.getAccountByUser(user.getUserId(),
+            Account account = accountBO.getAccountNocheck(user.getUserId(),
                 ECurrency.MK_CNY.getCode());
-            // 如果可剩余余额为零，不考虑等于的情况
-            if (0 == agent.getMinSurplus() && account.getAmount() > 0) {
-                result = ECheckStatus.MIN_LOW.getCode();
-            } else if (0 != agent.getMinSurplus() && account.getAmount() >= 0) {
-                result = ECheckStatus.MIN_LOW.getCode();
-            }
+            if (null != account) {
+                // 如果可剩余余额为零，不考虑等于的情况
+                if (0 == agent.getMinSurplus() && account.getAmount() > 0) {
+                    result = ECheckStatus.MIN_LOW.getCode();
+                } else if (0 != agent.getMinSurplus()
+                        && account.getAmount() >= agent.getMinSurplus()) {
+                    result = ECheckStatus.MIN_LOW.getCode();
+                }
 
+            }
             // 是否有过充值,且充值金额大于最低授权充值
             Long cAmount = 0L;
             List<Charge> charge = chargeBO.getChargeByUser(user.getUserId());

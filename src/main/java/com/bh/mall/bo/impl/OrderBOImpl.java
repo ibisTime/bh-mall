@@ -205,4 +205,43 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         return amount;
     }
 
+    @Override
+    public String pickUpGoods(String productCode, String productName,
+            String pic, String productSpecsCode, String productSpecsName,
+            Integer singleNumber, Long price, String highUserId, long amount,
+            String userId, String signer, String mobile, String province,
+            String city, String area, String address, String kind) {
+        Order data = new Order();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Order.getCode());
+
+        data.setCode(code);
+        data.setProductCode(productCode);
+        data.setProductName(productName);
+        data.setPic(pic);
+
+        data.setProductSpecsCode(productSpecsCode);
+        data.setProductSpecsName(productSpecsName);
+        data.setQuantity(singleNumber);
+        data.setPrice(data.getPrice());
+
+        data.setToUser(highUserId);
+        data.setAmount(amount);
+        data.setApplyUser(userId);
+        data.setApplyDatetime(new Date());
+
+        data.setSigner(signer);
+        data.setMobile(mobile);
+        data.setProvince(province);
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
+
+        data.setKind(kind);
+        data.setStatus(EOrderStatus.Paid.getCode());
+        orderDAO.insert(data);
+        return code;
+
+    }
+
 }

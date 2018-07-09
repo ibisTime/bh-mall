@@ -29,7 +29,7 @@ public interface IOrderAO {
 
     public Order getOrder(String code);
 
-    public String addOrderNoCart(XN627641Req req);
+    public List<String> addOrderNoCart(XN627641Req req);
 
     // 付款
     public Object payOrder(List<String> codeList, String payType);

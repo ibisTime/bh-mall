@@ -26,7 +26,6 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     private IAgencyLogDAO agencyLogDAO;
 
     @Override
-
     public String saveAgencyLog(User data, String toUserId) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
@@ -68,23 +67,23 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String acceptIntention(User data) {
+    public String acceptIntention(AgencyLog log, String status) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
         AgencyLog alData = new AgencyLog();
         alData.setCode(code);
         alData.setType(EAgencyType.Imporder.getCode());
-        alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
-        alData.setToUserId(data.getApprover());
+        alData.setApplyUser(log.getApplyUser());
+        alData.setApplyDatetime(log.getApplyDatetime());
+        alData.setToUserId(log.getToUserId());
 
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setTeamName(data.getTeamName());
-        alData.setUserReferee(data.getUserReferee());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setApplyLevel(log.getApplyLevel());
+        alData.setTeamName(log.getTeamName());
+        alData.setUserReferee(log.getUserReferee());
+        alData.setApprover(log.getApprover());
+        alData.setApproveDatetime(log.getApproveDatetime());
 
-        alData.setStatus(data.getStatus());
+        alData.setStatus(log.getStatus());
         agencyLogDAO.insert(alData);
         return code;
     }
@@ -98,7 +97,6 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setType(EAgencyType.Allot.getCode());
         alData.setApplyUser(data.getUserId());
         alData.setApplyDatetime(data.getApplyDatetime());
-        alData.setToUserId(data.getApprover());
 
         alData.setApplyLevel(data.getApplyLevel());
         alData.setTeamName(data.getTeamName());

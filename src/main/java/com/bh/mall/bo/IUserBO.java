@@ -183,4 +183,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void checkTeamName(String teamName);
 
+    public void reapply(User dbUser, String status, String userReferee);
+
 }

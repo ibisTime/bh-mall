@@ -256,7 +256,7 @@ public class UserAOImpl implements IUserAO {
 
     @Transactional
     private XN627302Res doLoginWeChatH(String code, String userKind,
-            String highUserId, String status) {
+            String userReferee, String status) {
         String companyCode = ESystemCode.BH.getCode();
         String systemCode = ESystemCode.BH.getCode();
         // Step1：获取密码参数信息
@@ -309,9 +309,6 @@ public class UserAOImpl implements IUserAO {
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = (String) wxRes.get("openid");
             System.out.println("unionId:" + unionId);
-            // Step4：根据openId，unionId从数据库中查询用户信息
-            User dbUser = userBO.doGetUserByOpenId(h5OpenId, companyCode,
-                systemCode);
 
             // 用户是否关注了公众号
             // 1、获取全局token
@@ -336,7 +333,18 @@ public class UserAOImpl implements IUserAO {
 
             String subscribe = String.valueOf(resMap2.get("subscribe"));
 
+            // Step4：根据openId，unionId从数据库中查询用户信息
+            User dbUser = userBO.doGetUserByOpenId(h5OpenId, companyCode,
+                systemCode);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                // 被忽略意向的代理重新进入
+                if (EUserStatus.IGNORED.getCode().equals(dbUser.getStatus())
+                        || EUserStatus.TO_MIND.getCode()
+                            .equals(dbUser.getStatus())
+                        || EUserStatus.IMPOWERO_INFO.getCode()
+                            .equals(dbUser.getStatus())) {
+                    userBO.reapply(dbUser, status, userReferee);
+                }
                 result = new XN627302Res(dbUser.getUserId(), dbUser.getStatus(),
                     subscribe);
             } else {
@@ -344,7 +352,7 @@ public class UserAOImpl implements IUserAO {
                 String photo = (String) wxRes.get("headimgurl");
 
                 result = doWxLoginReg(companyCode, systemCode, unionId, null,
-                    h5OpenId, nickname, photo, userKind, highUserId, status);
+                    h5OpenId, nickname, photo, userKind, userReferee, status);
                 result = new XN627302Res(result.getUserId(), result.getStatus(),
                     subscribe);
             }
@@ -549,15 +557,16 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public Paginable<User> queryUserPage(int start, int limit, User condition) {
+
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
                 && condition.getApplyDatetimeStart()
                     .after(condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
+
         Paginable<User> page = userBO.getPaginable(start, limit, condition);
-        List<User> list = page.getList();
-        for (User user : list) {
+        for (User user : page.getList()) {
             // 推荐人、上级、介绍人转义
             if (StringUtils.isNotBlank(user.getUserReferee())) {
                 User userReferee = userBO.getUserName(user.getUserReferee());
@@ -728,6 +737,10 @@ public class UserAOImpl implements IUserAO {
                 if (highUser != null) {
                     user.setHighUser(highUser);
                 }
+                user.setToTeamName(highUser.getTeamName());
+                user.setToLevel(highUser.getLevel());
+                user.setToUserName(highUser.getRealName());
+                user.setToUserMobile(highUser.getToUserMobile());
             }
 
             // 介绍人
@@ -770,6 +783,7 @@ public class UserAOImpl implements IUserAO {
             // 授权金额
             if (null != user.getApplyLevel()) {
                 Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
+                user.setLevelName(agent.getName());
                 user.setImpowerAmount(agent.getAmount());
             }
             if (null != user.getPayAmount() && 0 != user.getPayAmount()) {
@@ -1043,22 +1057,26 @@ public class UserAOImpl implements IUserAO {
         data.setRemark(remark);
 
         data.setStatus(EUserStatus.ADD_INFO.getCode());
-        String logCode = agencyLogBO.acceptIntention(data);
+        String logCode = agencyLogBO.acceptIntention(log, data.getStatus());
         data.setLastAgentLog(logCode);
         userBO.acceptIntention(data);
     }
 
     @Override
     public void ignore(String userId, String aprrover) {
+
         User data = userBO.getUser(userId);
         if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn0000", "该代理不是有意向代理");
         }
+        // 清空手机号与身份证，防止重新申请时重复
+        data.setMobile(null);
+        data.setIdNo(null);
 
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.TO_MIND.getCode());
+        data.setStatus(EUserStatus.IGNORED.getCode());
         String logCode = agencyLogBO.ignore(data);
         data.setLastAgentLog(logCode);
         userBO.ignore(data);
@@ -1154,15 +1172,6 @@ public class UserAOImpl implements IUserAO {
         User highUser = userBO.getSysUser();
 
         if (EResult.Result_YES.getCode().equals(result)) {
-            // 更新上级
-            if (StringUtils.isNotBlank(log.getToUserId())) {
-                highUser = userBO.getUser(log.getToUserId());
-                if (!EUserKind.Plat.getCode().equals(highUser.getKind())) {
-                    fromUser = highUser.getUserId();
-                }
-
-            }
-            data.setHighUserId(highUser.getUserId());
 
             AgentImpower impower = agentImpowerBO
                 .getAgentImpowerByLevel(data.getApplyLevel());
@@ -1178,6 +1187,15 @@ public class UserAOImpl implements IUserAO {
                     && !EUser.ADMIN.getCode().equals(approver)) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
+                // 更新上级
+                if (StringUtils.isNotBlank(log.getToUserId())) {
+                    highUser = userBO.getUser(log.getToUserId());
+                    if (!EUserKind.Plat.getCode().equals(highUser.getKind())) {
+                        fromUser = highUser.getUserId();
+                    }
+
+                }
+                data.setHighUserId(highUser.getUserId());
                 data.setLevel(data.getApplyLevel());
                 data.setImpowerDatetime(new Date());
 
@@ -1196,17 +1214,20 @@ public class UserAOImpl implements IUserAO {
                     User user = userBO.getUser(data.getIntroducer());
                     Intro iData = introBO.getIntroByLevel(user.getLevel(),
                         data.getApplyLevel());
-                    amount = AmountUtil.mul(impower.getMinCharge(),
-                        iData.getPercent() / 100);
+                    if (null != iData) {
+                        amount = AmountUtil.mul(impower.getMinCharge(),
+                            iData.getPercent() / 100);
 
-                    accountBO.transAmountCZB(fromUser,
-                        ECurrency.YJ_CNY.getCode(), user.getUserId(),
-                        ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_JSJL,
-                        "介绍代理[" + data.getRealName() + "]的"
-                                + EBizType.AJ_JSJL.getCode() + "支出",
-                        "介绍代理[" + data.getRealName() + "]的"
-                                + EBizType.AJ_JSJL.getValue() + "收入",
-                        data.getUserId());
+                        accountBO.transAmountCZB(fromUser,
+                            ECurrency.YJ_CNY.getCode(), user.getUserId(),
+                            ECurrency.YJ_CNY.getCode(), amount,
+                            EBizType.AJ_JSJL,
+                            "介绍代理[" + data.getRealName() + "]的"
+                                    + EBizType.AJ_JSJL.getCode() + "支出",
+                            "介绍代理[" + data.getRealName() + "]的"
+                                    + EBizType.AJ_JSJL.getValue() + "收入",
+                            data.getUserId());
+                    }
                 }
 
                 // 统计
@@ -1215,8 +1236,14 @@ public class UserAOImpl implements IUserAO {
 
             // 未通过，有推荐人
         } else if (StringUtils.isNotBlank(data.getUserReferee())) {
+            // 清空手机号与身份证号，防止重新申请时重复
+            data.setMobile(null);
+            data.setIdNo(null);
             status = EUserStatus.IMPOWERO_INFO.getCode();
         } else {
+            // 未通过，无推荐人
+            data.setMobile(null);
+            data.setIdNo(null);
             status = EUserStatus.TO_MIND.getCode();
         }
 

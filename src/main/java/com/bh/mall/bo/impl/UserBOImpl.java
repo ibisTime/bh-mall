@@ -559,7 +559,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void ignore(User data) {
-        data.setStatus(EUserStatus.IGNORED.getCode());
         userDAO.ignore(data);
     }
 
@@ -710,6 +709,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                 throw new BizException("xn000000", "该团队名称已经存在喽，重新起一个吧！");
             }
         }
+    }
+
+    @Override
+    public void reapply(User data, String status, String userReferee) {
+        data.setStatus(status);
+        data.setUserReferee(userReferee);
+        userDAO.reapply(data);
     }
 
 }

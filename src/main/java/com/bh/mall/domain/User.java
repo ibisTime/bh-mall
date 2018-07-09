@@ -273,6 +273,9 @@ public class User extends ABaseDO {
     // 云仓余额
     private Long whAmount;
 
+    // 等级名称
+    private String levelName;
+
     public String getUserId() {
         return userId;
     }
@@ -899,6 +902,14 @@ public class User extends ABaseDO {
 
     public void setWhAmount(Long whAmount) {
         this.whAmount = whAmount;
+    }
+
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
     }
 
 }

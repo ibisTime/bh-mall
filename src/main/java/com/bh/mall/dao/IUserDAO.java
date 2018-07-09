@@ -93,4 +93,7 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     // 修改推荐的代理的上级
     public void updateHigh(User data);
+
+    // 重新申请
+    public void reapply(User data);
 }
