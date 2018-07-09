@@ -28,6 +28,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627815Req;
@@ -35,6 +36,7 @@ import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EOrderKind;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -212,14 +214,15 @@ public class WareHouseAOImpl implements IWareHouseAO {
         if (data.getQuantity() < StringValidater.toInteger(req.getQuantity())) {
             throw new BizException("xn00000", "您仓库中该规格的产品数量不足");
         }
-        Long amount = data.getPrice()
-                * StringValidater.toInteger(req.getQuantity());
 
         // 获取授权单
         String kind = EOrderKind.Pick_Up.getCode();
         Agent agent = agentBO.getAgentByLevel(user.getLevel());
 
         // 是否完成授权单
+        Long amount = data.getPrice()
+                * StringValidater.toInteger(req.getQuantity());
+
         if (orderBO.checkImpowerOrder(user.getUserId())) {
             if (agent.getAmount() > amount) {
                 throw new BizException("xn00000", agent.getName() + "授权单金额为["
@@ -238,6 +241,15 @@ public class WareHouseAOImpl implements IWareHouseAO {
         // kind = EOrderKind.Upgrade_Order.getCode();
         // }
         // }
+
+        // 产品不包邮，计算运费
+        Long yunfei = 0L;
+        if (EBoolean.NO.getCode().equals(product.getIsFree())) {
+            SYSConfig sysConfig = sysConfigBO.getConfig(req.getProvince(),
+                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            yunfei = StringValidater.toLong(sysConfig.getCvalue());
+        }
+
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
 
@@ -250,11 +262,10 @@ public class WareHouseAOImpl implements IWareHouseAO {
                     data.getProductName(), product.getPic(),
                     data.getProductSpecsCode(), data.getProductSpecsName(),
                     psData.getSingleNumber(), data.getPrice(),
-                    user.getHighUserId(),
-                    psData.getSingleNumber() * data.getPrice(),
-                    data.getUserId(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), kind);
+                    psData.getSingleNumber() * data.getPrice(), yunfei,
+                    user.getHighUserId(), data.getUserId(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress(), kind);
 
                 // 减少云仓库存
                 wareHouseBO.changeWareHouse(data.getCode(),
@@ -265,10 +276,11 @@ public class WareHouseAOImpl implements IWareHouseAO {
             String code = orderBO.pickUpGoods(data.getProductCode(),
                 data.getProductName(), product.getPic(),
                 data.getProductSpecsCode(), data.getProductSpecsName(),
-                psData.getSingleNumber(), data.getPrice(), user.getHighUserId(),
-                psData.getSingleNumber() * data.getPrice(), data.getUserId(),
-                req.getSigner(), req.getMobile(), req.getProvince(),
-                req.getCity(), req.getArea(), req.getAddress(), kind);
+                psData.getSingleNumber(), data.getPrice(),
+                psData.getSingleNumber() * data.getPrice(), yunfei,
+                user.getHighUserId(), data.getUserId(), req.getSigner(),
+                req.getMobile(), req.getProvince(), req.getCity(),
+                req.getArea(), req.getAddress(), kind);
             // 减少云仓库存
             wareHouseBO.changeWareHouse(data.getCode(),
                 -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCTH,

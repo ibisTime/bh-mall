@@ -53,6 +53,7 @@ import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.SecurityTrace;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
@@ -389,18 +390,31 @@ public class OrderAOImpl implements IOrderAO {
         Paginable<Order> page = orderBO.getPaginable(start, limit, condition);
         List<Order> list = page.getList();
         for (Order order : list) {
+            // 下单人
             User user = userBO.getCheckUser(order.getApplyUser());
             order.setUser(user);
-            String approveUser = this.getName(order.getApprover());
-            order.setApproveName(approveUser);
-            String deliveName = this.getName(order.getDeliver());
 
-            order.setDeliveName(deliveName);
-            String updateName = this.getName(order.getUpdater());
-            order.setUpdater(updateName);
+            // 订单归属人
             String toUserName = this.getName(order.getToUser());
             order.setToUserName(toUserName);
 
+            // 收货人
+            String signeName = this.getName(order.getSigner());
+            order.setSigneName(signeName);
+
+            // 审核人
+            String approveUser = this.getName(order.getApprover());
+            order.setApproveName(approveUser);
+
+            // 发货人
+            String deliveName = this.getName(order.getDeliver());
+            order.setDeliveName(deliveName);
+
+            // 更新人
+            String updateName = this.getName(order.getUpdater());
+            order.setUpdater(updateName);
+
+            // 产品信息
             Product product = productBO.getProduct(order.getProductCode());
             order.setProduct(product);
         }
@@ -417,15 +431,33 @@ public class OrderAOImpl implements IOrderAO {
         }
         List<Order> list = orderBO.queryOrderList(condition);
         for (Order order : list) {
+            // 下单人
             User user = userBO.getCheckUser(order.getApplyUser());
             order.setUser(user);
+
+            // 订单归属人
+            String toUserName = this.getName(order.getToUser());
+            order.setToUserName(toUserName);
+
+            // 收货人
+            String signeName = this.getName(order.getSigner());
+            order.setSigneName(signeName);
+
+            // 审核人
             String approveUser = this.getName(order.getApprover());
             order.setApproveName(approveUser);
-            String deliveName = this.getName(order.getDeliver());
 
+            // 发货人
+            String deliveName = this.getName(order.getDeliver());
             order.setDeliveName(deliveName);
+
+            // 更新人
             String updateName = this.getName(order.getUpdater());
             order.setUpdater(updateName);
+
+            // 产品信息
+            Product product = productBO.getProduct(order.getProductCode());
+            order.setProduct(product);
         }
         return list;
     }
@@ -433,15 +465,33 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public Order getOrder(String code) {
         Order order = orderBO.getOrder(code);
+        // 下单人
         User user = userBO.getCheckUser(order.getApplyUser());
         order.setUser(user);
+
+        // 订单归属人
+        String toUserName = this.getName(order.getToUser());
+        order.setToUserName(toUserName);
+
+        // 收货人
+        String signeName = this.getName(order.getSigner());
+        order.setSigneName(signeName);
+
+        // 审核人
         String approveUser = this.getName(order.getApprover());
         order.setApproveName(approveUser);
 
+        // 发货人
         String deliveName = this.getName(order.getDeliver());
         order.setDeliveName(deliveName);
+
+        // 更新人
         String updateName = this.getName(order.getUpdater());
         order.setUpdater(updateName);
+
+        // 产品信息
+        Product product = productBO.getProduct(order.getProductCode());
+        order.setProduct(product);
         return order;
     }
 
@@ -949,7 +999,6 @@ public class OrderAOImpl implements IOrderAO {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
 
-        // 方便代理够买云仓使用
         order.setCode(code);
         order.setProductCode(pData.getCode());
         order.setProductName(pData.getName());
@@ -960,6 +1009,7 @@ public class OrderAOImpl implements IOrderAO {
         order.setToUser(highUser.getUserId());
         order.setQuantity(quantity);
         Long amount = quantity * pspData.getPrice();
+        Long yunfei = 0L;
 
         String kind = EOrderKind.Normal_Order.getCode();
         // 下单人是否是代理
@@ -1006,6 +1056,12 @@ public class OrderAOImpl implements IOrderAO {
                 this.changeProductNumber(applyUser, pData, psData, order, code);
             } else if (flag) {
                 kind = EOrderKind.Impower_Order.getCode();
+                // 产品不包邮，计算运费
+                if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
+                    SYSConfig sysConfig = sysConfigBO.getConfig(province,
+                        ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+                    yunfei = StringValidater.toLong(sysConfig.getCvalue());
+                }
             }
 
         }
@@ -1014,8 +1070,9 @@ public class OrderAOImpl implements IOrderAO {
         order.setPic(pData.getAdvPic());
         order.setPrice(pspData.getPrice());
         order.setApplyUser(applyUser.getUserId());
+        order.setYunfei(yunfei);
 
-        order.setAmount(amount);
+        order.setAmount(amount + yunfei);
 
         order.setApplyDatetime(new Date());
         order.setApplyNote(applyNote);

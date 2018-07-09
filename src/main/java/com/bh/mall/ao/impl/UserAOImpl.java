@@ -167,12 +167,16 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public XN627302Res doLoginWeChatByMerchant(String code, String userKind,
-            String highUserId) {
+            String userRefreee) {
         String status = EUserStatus.TO_MIND.getCode();
-        if (StringUtils.isNotBlank(highUserId)) {
+        if (StringUtils.isNotBlank(userRefreee)) {
+            // TODO 偶尔会有"undefined"传进来
+            if ("undefined".equals(userRefreee)) {
+                throw new BizException("xn00000", "该二维码存在问题，请联系上级获取最新的二维码！");
+            }
             status = EUserStatus.IMPOWERO_INFO.getCode();
         }
-        return doLoginWeChatH(code, userKind, highUserId, status);
+        return doLoginWeChatH(code, userKind, userRefreee, status);
     }
 
     @Override
@@ -308,7 +312,6 @@ public class UserAOImpl implements IUserAO {
                 .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = (String) wxRes.get("openid");
-            System.out.println("unionId:" + unionId);
 
             // 用户是否关注了公众号
             // 1、获取全局token
@@ -1191,7 +1194,7 @@ public class UserAOImpl implements IUserAO {
                     throw new BizException("xn0000", "本等级需要实名认证，该代理还未完成实名认证");
                 }
             }
-            // 需要公司授权
+            // 需要公司授权且审核人不是平台
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())
                     && EUserKind.Merchant.equals(approveUser.getKind())) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
@@ -1724,7 +1727,6 @@ public class UserAOImpl implements IUserAO {
         // data.setMobile(req.getMobile());
         // data.setProvince(req.getProvince());
         // data.setCity(req.getCity());
-        //
         // data.setArea(req.getArea());
         // data.setAddress(req.getAddress());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
@@ -1751,18 +1753,6 @@ public class UserAOImpl implements IUserAO {
 
         }
         return false;
-    }
-
-    private Long getAmount(String userId) {
-        Long amount = 0L;
-        User user = userBO.getUser(userId);
-        if (StringUtils.isNotBlank(user.getUserReferee())) {
-            Account account = accountBO.getAccountByUser(userId,
-                ECurrency.MK_CNY.getCode());
-            amount = amount + account.getAmount();
-        }
-        return amount;
-
     }
 
     private void changeAmount(User data) {

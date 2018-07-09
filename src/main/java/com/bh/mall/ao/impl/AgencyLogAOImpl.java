@@ -169,7 +169,10 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        if (EUserStatus.IGNORED.getCode().equals(condition.getStatus())) {
+        // 如果是已忽略或已接受状态，根据审核人去查
+        if (EUserStatus.IGNORED.getCode().equals(condition.getStatus())
+                || EUserStatus.ALLOTED.getCode()
+                    .equals(condition.getStatus())) {
             condition.setApprover(condition.getUserIdForQuery());
         } else {
             condition.setToUserId(condition.getUserIdForQuery());

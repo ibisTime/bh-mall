@@ -208,9 +208,10 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     @Override
     public String pickUpGoods(String productCode, String productName,
             String pic, String productSpecsCode, String productSpecsName,
-            Integer singleNumber, Long price, String highUserId, long amount,
-            String userId, String signer, String mobile, String province,
-            String city, String area, String address, String kind) {
+            Integer singleNumber, Long price, Long amount, Long yunfei,
+            String highUserId, String userId, String signer, String mobile,
+            String province, String city, String area, String address,
+            String kind) {
         Order data = new Order();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
@@ -226,7 +227,8 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         data.setPrice(data.getPrice());
 
         data.setToUser(highUserId);
-        data.setAmount(amount);
+        data.setYunfei(yunfei);
+        data.setAmount(amount + yunfei);
         data.setApplyUser(userId);
         data.setApplyDatetime(new Date());
 

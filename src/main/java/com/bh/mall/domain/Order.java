@@ -139,33 +139,50 @@ public class Order extends ABaseDO {
     private String remark;
 
     // ************************db*********************
+
+    // 下单开始时间
     private Date startDatetime;
 
+    // 下单结束时间
     private Date endDatetime;
 
+    // 状态
     private String statusForQuery;
 
+    // 状态
     private List<String> statusList;
 
+    // 状态
     private List<String> fialStatus;
 
     private String keyword;
 
+    // 审核人名字
     private String approveName;
 
+    // 发货人名字
     private String deliveName;
 
+    // 更信人名字
     private String updateName;
 
+    // 订单归属人名字
     private String toUserName;
 
+    // 等级
     private Integer level;
 
+    // 用户
     private User user;
 
+    // 产品
     private Product product;
 
+    // 订单类型
     private List<String> kindList;
+
+    // 收货人名字
+    private String signeName;
 
     public Date getStartDatetime() {
         return startDatetime;
@@ -605,6 +622,14 @@ public class Order extends ABaseDO {
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
+    }
+
+    public String getSigneName() {
+        return signeName;
+    }
+
+    public void setSigneName(String signeName) {
+        this.signeName = signeName;
     }
 
 }

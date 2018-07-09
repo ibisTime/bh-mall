@@ -10,6 +10,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627350Req;
 import com.bh.mall.enums.EUserKind;
+import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -29,6 +30,7 @@ public class XN627350 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         User condition = new User();
+        condition.setStatus(EUserStatus.IMPOWERED.getCode());
         condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
         condition.setKind(EUserKind.Merchant.getCode());

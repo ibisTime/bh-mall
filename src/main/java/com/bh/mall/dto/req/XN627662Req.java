@@ -37,6 +37,9 @@ public class XN627662Req extends APageReq {
     // 发货人
     private String deliver;
 
+    // 订单归属人
+    private String toUser;
+
     public String getProductName() {
         return productName;
     }
@@ -91,6 +94,14 @@ public class XN627662Req extends APageReq {
 
     public void setDeliver(String deliver) {
         this.deliver = deliver;
+    }
+
+    public String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 
 }

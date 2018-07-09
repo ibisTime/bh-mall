@@ -34,6 +34,8 @@ public class XN627361 extends AProcessor {
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         condition.setStatus(req.getStatus());
+        condition.setUserReferee(req.getUserId());
+
         Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
         Date applyDatetimeEnd = DateUtil.strToDate(req.getDateEnd(),

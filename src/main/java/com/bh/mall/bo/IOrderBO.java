@@ -56,8 +56,9 @@ public interface IOrderBO extends IPaginableBO<Order> {
     // 提货
     public String pickUpGoods(String productCode, String productName,
             String pic, String productSpecsCode, String productSpecsName,
-            Integer singleNumber, Long price, String highUserId, long amount,
-            String userId, String signer, String mobile, String province,
-            String city, String area, String address, String kind);
+            Integer singleNumber, Long price, Long amount, Long yunfei,
+            String highUserId, String userId, String signer, String mobile,
+            String province, String city, String area, String address,
+            String kind);
 
 }
