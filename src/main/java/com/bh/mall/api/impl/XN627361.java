@@ -11,6 +11,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627361Req;
+import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -34,7 +35,13 @@ public class XN627361 extends AProcessor {
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         condition.setStatus(req.getStatus());
-        condition.setUserReferee(req.getUserId());
+
+        // TODO
+        if (EUserStatus.TO_CANCEL.getCode().equals(req.getStatus())) {
+            condition.setHighUserId(req.getUserId());
+        } else {
+            condition.setUserReferee(req.getUserId());
+        }
 
         Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);

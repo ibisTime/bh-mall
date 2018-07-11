@@ -21,15 +21,15 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class ABaseDO implements Serializable {
 
     /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     * @Fields serialVersionUID :  
      */
     private static final long serialVersionUID = -1529928645166513824L;
 
     private String order = null;
 
     public void setOrder(String fieldName, boolean ascending) {
-        Order orderInfo = ascending ? Order.asc(fieldName) : Order
-            .desc(fieldName);
+        Order orderInfo = ascending ? Order.asc(fieldName)
+                : Order.desc(fieldName);
         this.order = orderInfo.toSqlString();
     }
 

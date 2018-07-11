@@ -30,7 +30,7 @@ public class APIServlet extends HttpServlet {
     static Logger logger = Logger.getLogger(APIServlet.class);
 
     /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     * @Fields serialVersionUID :  
      */
     private static final long serialVersionUID = 6175432226630152841L;
 

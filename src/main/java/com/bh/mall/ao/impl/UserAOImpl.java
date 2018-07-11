@@ -1503,7 +1503,6 @@ public class UserAOImpl implements IUserAO {
             AgentUpgrade auData = agentUpgradeBO
                 .getAgentUpgradeByLevel(data.getApplyLevel());
 
-            // 是否推荐的代理 TODO
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
                 if (!EUser.ADMIN.getCode().equals(approver)) {
                     User approveUser = userBO.getUser(approver);
