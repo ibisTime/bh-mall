@@ -52,6 +52,9 @@ public class Agent extends ABaseDO {
 
     private Integer highLevel;
 
+    // 是够需要实名
+    private String isRealName;
+
     public Integer getLowLevel() {
         return lowLevel;
     }
@@ -154,6 +157,14 @@ public class Agent extends ABaseDO {
 
     public void setHighLevel(Integer highLevel) {
         this.highLevel = highLevel;
+    }
+
+    public String getIsRealName() {
+        return isRealName;
+    }
+
+    public void setIsRealName(String isRealName) {
+        this.isRealName = isRealName;
     }
 
 }

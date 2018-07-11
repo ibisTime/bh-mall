@@ -1337,7 +1337,8 @@ public class UserAOImpl implements IUserAO {
         // throw new BizException("xn0000", "该代理未申请升级");
         // }
         if (!EUserKind.Plat.getCode().equals(newHighUser.getKind())) {
-            if (data.getLevel() <= newHighUser.getLevel()) {
+            if (data.getLevel() <= newHighUser.getLevel()
+                    && null != data.getLevel()) {
                 throw new BizException("xn0000", "不能大于上级等级");
             }
         }
