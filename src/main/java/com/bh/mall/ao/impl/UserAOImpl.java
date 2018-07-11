@@ -170,7 +170,7 @@ public class UserAOImpl implements IUserAO {
             String userRefreee) {
         String status = EUserStatus.TO_MIND.getCode();
         if (StringUtils.isNotBlank(userRefreee)) {
-            // TODO 偶尔会有"undefined"传进来
+            // 防止二维码识别出错，传入undefined
             if ("undefined".equals(userRefreee)) {
                 throw new BizException("xn00000", "该二维码存在问题，请联系上级获取最新的二维码！");
             }
@@ -564,10 +564,6 @@ public class UserAOImpl implements IUserAO {
 
         User user = userBO.getUserByMobile(mobile);
 
-        // 检查新密码与旧密码是否相同
-        if (user.getLoginPwd().equals(newLoginPwd)) {
-            throw new BizException("xn00000", "新旧密码不能相同");
-        }
         // 新手机号验证
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "627309",
             user.getCompanyCode(), user.getSystemCode());
@@ -791,7 +787,10 @@ public class UserAOImpl implements IUserAO {
                     user.setToUserMobile(toUser.getToUserMobile());
                 }
 
-            } else if (StringUtils.isNotBlank(user.getUserReferee())) {
+            }
+
+            // 推荐人
+            if (StringUtils.isNotBlank(user.getUserReferee())) {
                 // 有推荐人的时候，同步推荐人的团队等信息
                 User userReferee = userBO.getUser(user.getUserReferee());
                 user.setToTeamName(userReferee.getTeamName());

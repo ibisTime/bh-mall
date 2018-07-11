@@ -84,10 +84,8 @@ public class AgentAOImpl implements IAgentAO {
             Agent agent = iterator.next();
             if (6 == agent.getLevel()) {
                 iterator.remove();
+                continue;
             }
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(agent.getLevel());
-            iterator.next().setIsRealName(impower.getIsRealName());
         }
         return list;
     }

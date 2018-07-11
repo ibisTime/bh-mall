@@ -717,7 +717,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void refreshLoginPwd(User user, String newLoginPwd) {
-        user.setLoginPwd(newLoginPwd);
+        user.setLoginPwd(MD5Util.md5(newLoginPwd));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(newLoginPwd));
         userDAO.updateLoginPwd(user);
     }
