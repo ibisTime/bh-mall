@@ -97,6 +97,9 @@
 			<if test="channelType != null and channelType != '' ">
 				AND t.channel_type = #{channelType}
 			</if>
+			<if test="level != null and level != '' ">
+				AND u.level = #{level}
+			</if>
 		</trim>
 	</sql>
 	
@@ -126,7 +129,7 @@
 		,t.pay_datetime
 		,t.channel_type
 		FROM
-		tbh_charge t 
+		tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -136,7 +139,7 @@
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_charge t 
+		SELECT count(1) FROM tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
 		<include refid="where_condition" />
 	</select>
 		

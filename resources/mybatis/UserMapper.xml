@@ -513,7 +513,7 @@
 	<update id="update_login_pwd" parameterType="user">
 		UPDATE tbh_user
 		SET
-		 login_pwd = #{loginPwd}
+		login_pwd = #{loginPwd}
 		,login_pwd_strength = #{loginPwdStrength}
 		WHERE
 		user_id = #{userId}	
@@ -522,7 +522,7 @@
 	<update id="update_trade_pwd" parameterType="user">
 		UPDATE tbh_user
 		SET
-		 trade_pwd = #{tradePwd}
+		trade_pwd = #{tradePwd}
 		,trade_pwd_strength = #{tradePwdStrength}
 		WHERE
 		user_id = #{userId}	
@@ -555,6 +555,7 @@
 		UPDATE tbh_user
 		SET
 		mobile = #{mobile}
+		,login_name = #{loginName}
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -789,6 +790,16 @@
 		SET
 		status = #{status}
 		,user_referee = #{userReferee}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_role" parameterType="user">
+		UPDATE tbh_user
+		SET
+		role_code = #{roleCode}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
 </mapper>

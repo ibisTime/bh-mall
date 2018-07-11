@@ -21,6 +21,12 @@ public interface ISecurityTraceBO extends IPaginableBO<SecurityTrace> {
 
     public void refreshSecurityTrace(SecurityTrace trace, String barCode);
 
-    void refreshStatus(SecurityTrace data);
+    void refreshStatus(SecurityTrace data, String orderCode);
+
+    public SecurityTrace getSecurity(String securityCode);
+
+    public SecurityTrace getTrace(String traceCode);
+
+    public int refreshSecurity(SecurityTrace data);
 
 }

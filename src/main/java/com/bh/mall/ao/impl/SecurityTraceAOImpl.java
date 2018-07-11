@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IBarCodeAO;
+import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.ISecurityTraceAO;
 import com.bh.mall.bo.IBarCodeBO;
 import com.bh.mall.bo.ISecurityTraceBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.BarCode;
+import com.bh.mall.domain.Order;
 import com.bh.mall.domain.SecurityTrace;
 import com.bh.mall.enums.ECodeStatus;
+import com.bh.mall.exception.BizException;
 
 @Service
 public class SecurityTraceAOImpl implements ISecurityTraceAO {
@@ -28,6 +32,9 @@ public class SecurityTraceAOImpl implements ISecurityTraceAO {
 
     @Autowired
     IBarCodeAO barCodeAO;
+
+    @Autowired
+    IOrderAO orderAO;
 
     @Override
     public Paginable<SecurityTrace> querySecurityTracePage(int start, int limit,
@@ -93,5 +100,34 @@ public class SecurityTraceAOImpl implements ISecurityTraceAO {
             securityTraceBO.saveSecurityTrace(data);
 
         }
+    }
+
+    @Override
+    public int getSecurity(String securityCode) {
+        SecurityTrace data = securityTraceBO.getSecurity(securityCode);
+        if (!ECodeStatus.USE_YES.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "该防伪码还未启用");
+        }
+
+        // 查询次数是否为空，防止之前未默认为零的报错
+        if (null == data.getNumber()) {
+            data.setNumber(0);
+        }
+        return securityTraceBO.refreshSecurity(data);
+    }
+
+    @Override
+    public SecurityTrace getTrace(String traceCode) {
+        SecurityTrace data = securityTraceBO.getTrace(traceCode);
+        if (!ECodeStatus.USE_YES.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "该溯源码还未启用");
+        }
+        if (StringUtils.isBlank(data.getOrderCode())) {
+            throw new BizException("xn00000", "该溯源码还未绑定任何订单");
+        }
+
+        Order order = orderAO.getOrder(data.getOrderCode());
+        data.setOrderData(order);
+        return data;
     }
 }

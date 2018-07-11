@@ -42,14 +42,13 @@ public class OrderNoGenerater {
     public static String generate() {
         Calendar calendar = Calendar.getInstance();
         Random rand = new Random();
-        String[] strStart = { "690", "691", "692" };
 
         Long random = calendar.getTimeInMillis() / 10000 - rand.nextInt();
         if (random < 0) {
             random = -random;
         }
 
-        String str = strStart[rand.nextInt(3)]
+        String str = String.valueOf(rand.nextInt(900) + 100)
                 + String.valueOf(random.toString());
 
         // 少于12位，随机补充

@@ -20,4 +20,8 @@ public interface ISecurityTraceAO {
 
     public void addSecurityTrace(int number);
 
+    public int getSecurity(String securityCode);
+
+    public SecurityTrace getTrace(String traceCode);
+
 }

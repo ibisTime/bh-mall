@@ -63,4 +63,9 @@ public class SecurityTraceDAOImpl extends AMybatisTemplate
             SecurityTrace.class);
     }
 
+    @Override
+    public void updateNumber(SecurityTrace data) {
+        super.update(NAMESPACE.concat("update_number"), data);
+    }
+
 }

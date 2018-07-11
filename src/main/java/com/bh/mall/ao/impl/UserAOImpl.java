@@ -488,7 +488,7 @@ public class UserAOImpl implements IUserAO {
         if (!user.getSystemCode().equals(role.getSystemCode())) {
             throw new BizException("li01004", "用户和角色系统不对应");
         }
-        userBO.refreshRole(userId, roleCode, updater, remark);
+        userBO.refreshRole(user, roleCode, updater, remark);
     }
 
     // 重置登录密码
@@ -556,6 +556,23 @@ public class UserAOImpl implements IUserAO {
                     + "，请妥善保管您的账户相关信息。",
             "631072", user.getCompanyCode(), user.getSystemCode());
 
+    }
+
+    @Override
+    public void resetLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd) {
+
+        User user = userBO.getUserByMobile(mobile);
+
+        // 检查新密码与旧密码是否相同
+        if (user.getLoginPwd().equals(newLoginPwd)) {
+            throw new BizException("xn00000", "新旧密码不能相同");
+        }
+        // 新手机号验证
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "627309",
+            user.getCompanyCode(), user.getSystemCode());
+
+        userBO.refreshLoginPwd(user, newLoginPwd);
     }
 
     @Override
@@ -922,12 +939,10 @@ public class UserAOImpl implements IUserAO {
             userBO.checkTeamName(req.getTeamName());
             data.setTeamName(req.getTeamName());
         }
+
         if (data.getApplyLevel() > userReferee.getLevel()) {
-            data.setUserReferee(null);
             toUser = userReferee.getUserId();
         }
-        System.out.println("toUser:" + toUser);
-        System.out.println("UserReferee:" + data.getUserReferee());
 
         data.setRealName(req.getRealName());
         data.setWxId(req.getWxId());
@@ -1206,8 +1221,16 @@ public class UserAOImpl implements IUserAO {
                     if (!EUserKind.Plat.getCode().equals(highUser.getKind())) {
                         fromUser = highUser.getUserId();
                     }
-
                 }
+
+                // 申请等级低于推荐人等级，推荐人更改为空
+                if (StringUtils.isNotBlank(data.getUserReferee())) {
+                    User userReferee = userBO.getUser(data.getUserReferee());
+                    if (data.getApplyLevel() > userReferee.getLevel()) {
+                        data.setUserReferee(null);
+                    }
+                }
+
                 data.setHighUserId(highUser.getUserId());
                 data.setLevel(data.getApplyLevel());
                 Date date = new Date();

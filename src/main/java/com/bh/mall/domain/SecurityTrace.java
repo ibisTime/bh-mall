@@ -29,11 +29,18 @@ public class SecurityTrace extends ABaseDO {
     // 状态（未使用，已使用）
     private String status;
 
+    // 查询次数
+    private Integer number;
+
     // 生成时间
     private Date createDatetime;
 
     // 使用时间
     private Date useDatetime;
+
+    // **************db*************
+
+    private Order orderData;
 
     public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
@@ -89,6 +96,22 @@ public class SecurityTrace extends ABaseDO {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public Order getOrderData() {
+        return orderData;
+    }
+
+    public void setOrderData(Order orderData) {
+        this.orderData = orderData;
     }
 
 }

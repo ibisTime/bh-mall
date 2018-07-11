@@ -116,11 +116,7 @@ public class ChargeAOImpl implements IChargeAO {
 
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
         for (Charge charge : page.getList()) {
-            if (!EUser.ADMIN.getCode().equals(charge.getApplyUser())
-                    && charge.getApplyUser() != null) {
-                User user = userBO.getCheckUser(charge.getApplyUser());
-                charge.setUser(user);
-            }
+            // 获取一级代理
             if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
                     && charge.getPayUser() != null) {
                 User payUser = userBO.getCheckUser(charge.getPayUser());

@@ -537,7 +537,6 @@ public class OrderAOImpl implements IOrderAO {
             AwardInterval award = awardIntervalBO
                 .getAwardIntervalByLevel(toUser.getLevel(), data.getAmount());
             if (award != null) {
-                System.out.println("有出货奖吗~~~~~~~~~~");
                 Long awardAmount = AmountUtil.mul(orderAmount,
                     award.getPercent() / 100);
                 accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
@@ -552,7 +551,6 @@ public class OrderAOImpl implements IOrderAO {
         // 是否有推荐人
         if (this.checkAward(toUser)) {
             if (StringUtils.isNotBlank(toUser.getUserReferee())) {
-                System.out.println("还有奖的？？？？？");
                 // 直接推荐人
                 User firstUser = userBO.getUser(toUser.getUserReferee());
                 Award aData = awardBO.getAwardByType(toUser.getLevel(),
@@ -616,6 +614,7 @@ public class OrderAOImpl implements IOrderAO {
 
             User toUser = userBO.getUser(data.getToUser());
             if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
+
                 toUserId = toUser.getUserId();
                 ProductSpecsPrice psp = productSpecsPriceBO.getPriceByLevel(
                     data.getProductSpecsCode(), toUser.getLevel());
@@ -659,6 +658,12 @@ public class OrderAOImpl implements IOrderAO {
         data.setStatus(EOrderStatus.TO_Deliver.getCode());
         data.setRemark(req.getRemark());
 
+        // 是否有填写箱码或盒码
+        if (StringUtils.isEmpty(req.getBarCode())
+                && CollectionUtils.isEmpty(req.getTraceCodeList())) {
+            throw new BizException("xn000000", "请输入一个箱码或盒码！");
+        }
+
         // 订单与箱码关联（整箱发货）
         if (StringUtils.isNotBlank(req.getBarCode())) {
             data.setBarCode(req.getBarCode());
@@ -668,18 +673,15 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn00000", "该箱码已经使用过");
             }
             if (ECodeStatus.SPLIT_SINGLE.equals(barData.getStatus())) {
-                throw new BizException("xn00000", "该箱码已已拆分");
+                throw new BizException("xn00000", "该箱码已拆分");
             }
             barCodeBO.refreshBarCode(barData);
 
-            // 更新箱码关联的盒码
+            // 更新箱码关联的盒码与订单编号
             List<SecurityTrace> stList = securityTraceBO
                 .getSecurityTraceByBarCode(barData.getCode());
             for (SecurityTrace securityTrace : stList) {
-                if (EBoolean.YES.getCode().equals(securityTrace.getStatus())) {
-                    throw new BizException("xn00000", "该盒码已被使用");
-                }
-                securityTraceBO.refreshStatus(securityTrace);
+                securityTraceBO.refreshStatus(securityTrace, data.getCode());
             }
         }
 
@@ -690,7 +692,7 @@ public class OrderAOImpl implements IOrderAO {
                 if (EBoolean.YES.getCode().equals(stData.getStatus())) {
                     throw new BizException("xn00000", "该盒码已被使用");
                 }
-                securityTraceBO.refreshStatus(stData);
+                securityTraceBO.refreshStatus(stData, data.getCode());
             }
 
             SecurityTrace stData = securityTraceBO
@@ -702,8 +704,8 @@ public class OrderAOImpl implements IOrderAO {
             }
             // 更新关联的箱码状态
             barCodeBO.splitSingle(barData);
-
         }
+
         orderBO.deliverOrder(data);
 
     }
@@ -1063,7 +1065,6 @@ public class OrderAOImpl implements IOrderAO {
                     yunfei = StringValidater.toLong(sysConfig.getCvalue());
                 }
             }
-
         }
 
         order.setKind(kind);
@@ -1073,7 +1074,6 @@ public class OrderAOImpl implements IOrderAO {
         order.setYunfei(yunfei);
 
         order.setAmount(amount + yunfei);
-
         order.setApplyDatetime(new Date());
         order.setApplyNote(applyNote);
         order.setSigner(signer);
@@ -1086,7 +1086,6 @@ public class OrderAOImpl implements IOrderAO {
         order.setStatus(EOrderStatus.Unpaid.getCode());
 
         orderBO.saveOrder(order);
-
         return code;
     }
 

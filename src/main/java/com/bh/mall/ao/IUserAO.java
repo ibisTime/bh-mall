@@ -35,6 +35,10 @@ public interface IUserAO {
     // 重置登录密码
     public void resetAdminLoginPwd(String userId, String newLoginPwd);
 
+    // 重置登录密码
+    public void resetLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd);
+
     // 设置交易密码
     public void setTradePwd(String userId, String smsCaptcha, String tradePwd);
 

@@ -292,6 +292,7 @@
 		,logistics_company = #{logisticsCompany}
 		,pdf = #{pdf}
 		
+		,bar_code = #{barCode}
 		,is_company_send = #{isCompanySend}
 		,status = #{status}
 		,remark = #{remark}

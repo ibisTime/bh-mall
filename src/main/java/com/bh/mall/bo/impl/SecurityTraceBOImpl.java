@@ -30,6 +30,7 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
     public List<SecurityTrace> getSecurityTraceByBarCode(String code) {
         SecurityTrace condition = new SecurityTrace();
         condition.setRefCode(code);
+        condition.setStatus(ECodeStatus.USE_NO.getCode());
         List<SecurityTrace> list = securityTraceDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn00000", "该箱码对应的盒码不存在，请重新下载");
@@ -69,8 +70,9 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
     }
 
     @Override
-    public void refreshStatus(SecurityTrace data) {
+    public void refreshStatus(SecurityTrace data, String orderCode) {
         data.setStatus(ECodeStatus.USE_YES.getCode());
+        data.setOrderCode(orderCode);
         data.setUseDatetime(new Date());
         securityTraceDAO.updateStatus(data);
 
@@ -85,6 +87,41 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
             throw new BizException("xn00000", "盒码没有啦");
         }
         return list.get(0);
+    }
+
+    @Override
+    public int refreshSecurity(SecurityTrace data) {
+        data.setNumber(data.getNumber() + 1);
+        securityTraceDAO.updateNumber(data);
+        return data.getNumber();
+    }
+
+    @Override
+    public SecurityTrace getTrace(String traceCode) {
+        SecurityTrace data = null;
+        if (StringUtils.isNotBlank(traceCode)) {
+            SecurityTrace condition = new SecurityTrace();
+            condition.setTraceCode(traceCode);
+            data = securityTraceDAO.select(condition);
+            if (null == data) {
+                throw new BizException("xn00000", "防伪码不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public SecurityTrace getSecurity(String securityCode) {
+        SecurityTrace data = null;
+        if (StringUtils.isNotBlank(securityCode)) {
+            SecurityTrace condition = new SecurityTrace();
+            condition.setSecurityCode(securityCode);
+            data = securityTraceDAO.select(condition);
+            if (null == data) {
+                throw new BizException("xn00000", "防伪码不存在");
+            }
+        }
+        return data;
     }
 
 }

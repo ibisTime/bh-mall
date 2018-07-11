@@ -85,7 +85,11 @@ public class Charge extends ABaseDO {
     // 用户信息
     private User user;
 
+    // 上级
     private String highUserId;
+
+    // 充值人等级
+    private Integer level;
 
     // 状态
     private List<String> statusList;
@@ -298,8 +302,12 @@ public class Charge extends ABaseDO {
         this.statusList = statusList;
     }
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

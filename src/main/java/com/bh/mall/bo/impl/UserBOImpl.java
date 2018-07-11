@@ -479,17 +479,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshRole(String userId, String roleCode, String updater,
+    public void refreshRole(User data, String roleCode, String updater,
             String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setRoleCode(roleCode);
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            userDAO.updateRole(data);
-        }
+        data.setRoleCode(roleCode);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+        userDAO.updateRole(data);
     }
 
     @Override
@@ -502,6 +498,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void resetBindMobile(User user, String newMobile) {
         user.setMobile(newMobile);
+        user.setLoginName(newMobile);
         userDAO.resetBindMobile(user);
     }
 
@@ -666,11 +663,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public User getUserByMobile(String introducer) {
+    public User getUserByMobile(String mobile) {
         User data = null;
-        if (StringUtils.isNotBlank(introducer)) {
+        if (StringUtils.isNotBlank(mobile)) {
             User condition = new User();
-            condition.setMobile(introducer);
+            condition.setMobile(mobile);
             data = userDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn000000", "介绍人不存在");
@@ -716,6 +713,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setStatus(status);
         data.setUserReferee(userReferee);
         userDAO.reapply(data);
+    }
+
+    @Override
+    public void refreshLoginPwd(User user, String newLoginPwd) {
+        user.setLoginPwd(newLoginPwd);
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(newLoginPwd));
+        userDAO.updateLoginPwd(user);
     }
 
 }
