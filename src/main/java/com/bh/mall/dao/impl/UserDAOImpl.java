@@ -215,4 +215,9 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public void reapply(User data) {
         super.update(NAMESPACE.concat("reapply_agent"), data);
     }
+
+    @Override
+    public void approveCanenl(User data) {
+        super.update(NAMESPACE.concat("approve_canenl"), data);
+    }
 }

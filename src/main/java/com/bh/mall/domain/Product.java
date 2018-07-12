@@ -83,6 +83,12 @@ public class Product extends ABaseDO {
     // 各级代理云仓该产品最小规格数量
     private Integer whNumber;
 
+    // 产品规格
+    private ProductSpecs specs;
+
+    // 规格价格
+    private ProductSpecsPrice specsPrice;
+
     public String getCode() {
         return code;
     }
@@ -265,6 +271,22 @@ public class Product extends ABaseDO {
 
     public void setWhNumber(Integer whNumber) {
         this.whNumber = whNumber;
+    }
+
+    public ProductSpecs getSpecs() {
+        return specs;
+    }
+
+    public ProductSpecsPrice getSpecsPrice() {
+        return specsPrice;
+    }
+
+    public void setSpecs(ProductSpecs specs) {
+        this.specs = specs;
+    }
+
+    public void setSpecsPrice(ProductSpecsPrice specsPrice) {
+        this.specsPrice = specsPrice;
     }
 
 }

@@ -35,12 +35,11 @@ public class XN627361 extends AProcessor {
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         condition.setStatus(req.getStatus());
-
-        // TODO
-        if (EUserStatus.TO_CANCEL.getCode().equals(req.getStatus())) {
-            condition.setHighUserId(req.getUserId());
-        } else {
+        // TODO 修改
+        if (EUserStatus.TO_APPROVE.getCode().equals(req.getStatus())) {
             condition.setUserReferee(req.getUserId());
+        } else {
+            condition.setHighUserId(req.getUserId());
         }
 
         Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),

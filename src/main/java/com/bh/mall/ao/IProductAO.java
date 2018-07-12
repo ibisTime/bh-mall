@@ -37,4 +37,6 @@ public interface IProductAO {
 
     Product getProduct(String code, Integer integer);
 
+    Product getProductBySpecs(String specsCode, String level);
+
 }

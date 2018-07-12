@@ -424,4 +424,15 @@ public class ProductAOImpl implements IProductAO {
         }
         return true;
     }
+
+    @Override
+    public Product getProductBySpecs(String specsCode, String level) {
+        ProductSpecs specs = productSpecsBO.getProductSpecs(specsCode);
+        Product product = productBO.getProduct(specs.getProductCode());
+        ProductSpecsPrice specsPrice = productSpecsPriceBO
+            .getPriceByLevel(specs.getCode(), StringValidater.toInteger(level));
+        product.setSpecs(specs);
+        product.setSpecsPrice(specsPrice);
+        return product;
+    }
 }

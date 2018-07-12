@@ -576,7 +576,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void approveCanenl(User data) {
-        userDAO.approveImpower(data);
+        userDAO.approveCanenl(data);
     }
 
     @Override
@@ -720,6 +720,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setLoginPwd(MD5Util.md5(newLoginPwd));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(newLoginPwd));
         userDAO.updateLoginPwd(user);
+    }
+
+    @Override
+    public List<User> queryLowUserList(String userId) {
+        User condition = new User();
+        condition.setHighUserId(userId);
+        return userDAO.selectList(condition);
     }
 
 }

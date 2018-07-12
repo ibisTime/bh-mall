@@ -730,18 +730,24 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public void cancelOrder(String code) {
         Order data = orderBO.getOrder(code);
+
+        // 订单已申请取消或已取消
+        if (EOrderStatus.TO_Cancel.getCode().equals(data.getStatus())
+                || EOrderStatus.Canceled.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "订单已申请取消喽，请勿重复申请！");
+        }
+        // 订单已发货或已收货无法取消
         if (EOrderStatus.TO_Deliver.getCode().equals(data.getStatus())
                 || EOrderStatus.Received.getCode().equals(data.getStatus())) {
-            throw new BizException("xn00000", "该订单无法取消");
+            throw new BizException("xn00000", "订单已发货或已收货，无法申请取消");
         }
 
-        // 云仓提货单无法取消
-        if (EOrderKind.Pick_Up.getCode().equals(data.getKind())
-                || EOrderKind.Impower_Order.getCode().equals(data.getKind())) {
-            throw new BizException("xn00000", "从云仓提货的订单无法取消哦！");
+        // 授权单无法取消
+        if (EOrderKind.Impower_Order.getCode().equals(data.getKind())) {
+            throw new BizException("xn00000", "授权单无法取消哦！");
         }
+
         data.setStatus(EOrderStatus.TO_Cancel.getCode());
-
         orderBO.cancelOrder(data);
     }
 
@@ -750,12 +756,19 @@ public class OrderAOImpl implements IOrderAO {
             String remark) {
         Order data = orderBO.getOrder(code);
         if (!EOrderStatus.TO_Cancel.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "订单不处于待审核状态");
+            throw new BizException("xn0000", "该订单未申请取消");
         }
-        // 审核通过取消订单，退钱
+
         data.setStatus(EOrderStatus.Paid.getCode());
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EOrderStatus.Canceled.getCode());
+            // 云仓提货，归还云仓库存
+            // if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
+            //
+            // }else if(){
+            //
+            // }
+
             String toUser = data.getToUser();
             if (StringUtils.isBlank(toUser)) {
                 toUser = ESysUser.SYS_USER_BH.getCode();

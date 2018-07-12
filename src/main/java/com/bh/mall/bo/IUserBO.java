@@ -187,4 +187,6 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshLoginPwd(User user, String newLoginPwd);
 
+    public List<User> queryLowUserList(String userId);
+
 }

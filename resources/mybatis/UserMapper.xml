@@ -769,6 +769,7 @@
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_hand = #{idHand}
+		,apply_datetime = #{applyDatetime}
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -802,4 +803,19 @@
 		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
+	
+	
+	<update id="approve_canenl" parameterType="user">
+		UPDATE tbh_user
+		SET
+		status = #{status}
+		,mobile = #{mobile}
+		,id_no = #{idNo}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,last_agent_log = #{lastAgentLog}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
+	
 </mapper>

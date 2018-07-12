@@ -53,7 +53,7 @@ public class ChargeAOImpl implements IChargeAO {
 
         // 普通充值
         User user = userBO.getUser(applyUser);
-        Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
+        Agent agent = agentBO.getAgentByLevel(user.getLevel());
         if (agent.getMinChargeAmount() > amount) {
             throw new BizException("xn000000",
                 "充值金额不能低于[" + agent.getMinChargeAmount() / 1000 + "]");
