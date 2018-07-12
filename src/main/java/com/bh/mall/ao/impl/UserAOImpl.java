@@ -1112,7 +1112,7 @@ public class UserAOImpl implements IUserAO {
         if (null != data.getLevel() && data.getLevel() != newLevel) {
             // 有推荐人
             if (StringUtils.isNotBlank(data.getUserReferee())) {
-                throw new BizException("xn00000", "该代理还有推挤");
+                throw new BizException("xn00000", "该代理还有推荐人");
             }
 
             // 如果有下级，修改等级不能低于下级中最高的等级

@@ -988,7 +988,6 @@ public class OrderAOImpl implements IOrderAO {
         // 介绍人与推荐人同时存在
         if (StringUtils.isNotBlank(user.getIntroducer())
                 && StringUtils.isNotBlank(user.getUserReferee())) {
-            System.out.println("同在的啊~~~~~~~~");
             // 下单金额是否超过授权金额
             List<String> statusList = new ArrayList<String>();
             statusList.add(EOrderStatus.Paid.getCode());
