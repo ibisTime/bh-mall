@@ -1109,22 +1109,23 @@ public class UserAOImpl implements IUserAO {
         User data = userBO.getUser(req.getUserId());
         Integer newLevel = StringValidater.toInteger(req.getLevel());
 
-        // 有推荐人
-        if (StringUtils.isNotBlank(data.getUserReferee())) {
-            throw new BizException("xn00000", "该代理还有推挤");
-        }
+        if (null != data.getLevel() && data.getLevel() != newLevel) {
+            // 有推荐人
+            if (StringUtils.isNotBlank(data.getUserReferee())) {
+                throw new BizException("xn00000", "该代理还有推挤");
+            }
 
-        // 如果有下级，修改等级不能低于下级中最高的等级
-        List<User> lowUser = userBO.queryLowUserList(data.getUserId());
+            // 如果有下级，修改等级不能低于下级中最高的等级
+            List<User> lowUser = userBO.queryLowUserList(data.getUserId());
 
-        for (User user : lowUser) {
-            if (newLevel >= user.getLevel()) {
-                throw new BizException("xn00000", "修改的等级不能低于下级等级");
+            for (User user : lowUser) {
+                if (newLevel >= user.getLevel()) {
+                    throw new BizException("xn00000", "修改的等级不能低于下级等级");
+                }
             }
         }
 
-        // 修改等级不能高于上级等级
-
+        data.setRealName(req.getRealName());
         data.setLevel(newLevel);
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());

@@ -20,7 +20,7 @@ public class Agent extends ABaseDO {
     // 等级名称
     private String name;
 
-    // 首次授权发送金额
+    // 首次授权金额
     private Long amount;
 
     // 红线金额

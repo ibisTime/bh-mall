@@ -202,8 +202,23 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
 
-        // 订单拆单
+        // 是否为授权单
         Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+        if (orderBO.checkImpowerOrder(applyUser.getUserId())) {
+            // 订单金额
+            ProductSpecsPrice pspData = productSpecsPriceBO
+                .getPriceByLevel(psData.getCode(), applyUser.getLevel());
+            Long orderAmount = pspData.getPrice()
+                    * StringValidater.toInteger(req.getQuantity());
+            // 订单金额不能低于授权单金额
+            if (agent.getAmount() > orderAmount) {
+                throw new BizException("xn00000", agent.getName() + "授权单金额为["
+                        + agent.getAmount() / 1000 + "]元");
+            }
+
+        }
+
+        // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())
                 && EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
 

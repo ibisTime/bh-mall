@@ -45,6 +45,10 @@ public class XN627255Req {
     // （必填）团队名称
     private String teamName;
 
+    // 真实姓名
+    @NotBlank(message = "真实姓名不能为空")
+    private String realName;
+
     public String getUserId() {
         return userId;
     }
@@ -115,6 +119,14 @@ public class XN627255Req {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }
