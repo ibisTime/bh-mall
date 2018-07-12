@@ -279,7 +279,7 @@ public class OrderAOImpl implements IOrderAO {
                     if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                         status = EOrderStatus.Received.getCode();
                         // 购买云仓
-                        this.buyWareHouse(data, uData);
+                        wareHouseBO.buyWareHouse(data, uData);
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
@@ -368,7 +368,7 @@ public class OrderAOImpl implements IOrderAO {
                     if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                         status = EOrderStatus.Received.getCode();
                         // 购买云仓
-                        this.buyWareHouse(data, applyUser);
+                        wareHouseBO.buyWareHouse(data, applyUser);
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
@@ -829,44 +829,6 @@ public class OrderAOImpl implements IOrderAO {
         return name;
     }
 
-    @Transactional
-    private void buyWareHouse(Order data, User fromUser) {
-        WareHouse wareHouse = wareHouseBO.getWareHouseByProductSpec(
-            fromUser.getUserId(), data.getProductSpecsCode());
-
-        // 没有该产品
-        if (null == wareHouse) {
-            String code = OrderNoGenerater
-                .generate(EGeneratePrefix.WareHouse.getCode());
-            WareHouse whData = new WareHouse();
-            whData.setCode(code);
-            whData.setProductCode(data.getProductCode());
-            whData.setProductName(data.getProductName());
-            whData.setProductSpecsCode(data.getProductSpecsCode());
-            whData.setProductSpecsName(data.getProductSpecsName());
-
-            whData.setCurrency(ECurrency.YC_CNY.getCode());
-            whData.setUserId(fromUser.getUserId());
-            whData.setRealName(fromUser.getRealName());
-            whData.setCreateDatetime(new Date());
-            whData.setPrice(data.getPrice());
-
-            whData.setQuantity(data.getQuantity());
-            Long amount = data.getQuantity() * data.getPrice();
-            whData.setAmount(amount);
-            whData.setStatus(EProductStatus.Shelf_YES.getCode());
-
-            whData.setCompanyCode(ESystemCode.BH.getCode());
-            whData.setSystemCode(ESystemCode.BH.getCode());
-            wareHouseBO.saveWareHouse(whData, data.getQuantity(),
-                EBizType.AJ_GMYC, "购买" + data.getProductName(), data.getCode());
-
-        } else {
-            wareHouseBO.changeWareHouse(wareHouse.getCode(), data.getQuantity(),
-                EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), data.getCode());
-        }
-    }
-
     private String checkOrder(User applyUser, ProductSpecs psData) {
         String kind = EOrderKind.Normal_Order.getCode();
         // 是否完成授权单
@@ -921,7 +883,7 @@ public class OrderAOImpl implements IOrderAO {
                     EBizType.AJ_YCCH.getValue(), order.getCode());
 
             }
-            this.buyWareHouse(order, applyUser);
+            wareHouseBO.buyWareHouse(order, applyUser);
 
         } else {
             // 无上级代理,扣减产品实际库存

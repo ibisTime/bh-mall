@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EBizType;
 
@@ -41,11 +42,6 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
 
     public List<WareHouse> queryWareHousePorductList(WareHouse condition);
 
-    // ===========================================
-
-    public void changeWareHouse(String code, Order data, Integer quantity,
-            EBizType izType, String value);
-
-    public WareHouse getWareHouseByUser(String userId, String projectCode);
+    public void buyWareHouse(Order order, User applyUser);
 
 }
