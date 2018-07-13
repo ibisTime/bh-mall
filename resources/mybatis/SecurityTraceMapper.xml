@@ -25,9 +25,21 @@
 			<if test="refCode != null and refCode != '' ">
 				AND t.ref_code = #{refCode}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" index="index"  item="item" close="(" separator=","  open=")" >
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			<if test="keyword != null and keyword != '' ">
+				AND (t.trace_code = #{keyword} OR t.security_code = #{keyword} OR t.ref_code = #{keyword})
 			</if>
+			
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
 			</if>

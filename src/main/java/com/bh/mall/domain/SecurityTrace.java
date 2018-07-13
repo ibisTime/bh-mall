@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -40,7 +41,14 @@ public class SecurityTrace extends ABaseDO {
 
     // **************db*************
 
+    // 订单
     private Order orderData;
+
+    // 状态List
+    private List<String> statusList;
+
+    // 关键字
+    private String keyword;
 
     public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
@@ -112,6 +120,22 @@ public class SecurityTrace extends ABaseDO {
 
     public void setOrderData(Order orderData) {
         this.orderData = orderData;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 }
