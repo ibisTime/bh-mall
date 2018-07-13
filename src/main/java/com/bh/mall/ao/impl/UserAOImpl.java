@@ -345,6 +345,8 @@ public class UserAOImpl implements IUserAO {
                         || EUserStatus.TO_MIND.getCode()
                             .equals(dbUser.getStatus())
                         || EUserStatus.IMPOWERO_INFO.getCode()
+                            .equals(dbUser.getStatus())
+                        || EUserStatus.ADD_INFO.getCode()
                             .equals(dbUser.getStatus())) {
                     userBO.reapply(dbUser, status, userReferee);
                 }

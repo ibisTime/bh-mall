@@ -1024,21 +1024,19 @@ public class OrderAOImpl implements IOrderAO {
             Account account = accountBO.getAccountByUser(applyUser.getUserId(),
                 ECurrency.MK_CNY.getCode());
 
-            if (null != account) {
-                // 门槛最低余额为零
-                Long restAmount = account.getAmount() - amount;
-                if (0 == agent.getMinSurplus()) {
-                    if (restAmount > agent.getMinSurplus()) {
-                        throw new BizException("xn0000",
-                            "剩余门槛不能大于[" + agent.getMinSurplus() / 1000
-                                    + "]元，目前余额还有[" + restAmount / 1000 + "]元");
-                    }
-
-                } else if (restAmount >= agent.getMinSurplus()) {
+            // 门槛最低余额为零
+            Long restAmount = account.getAmount() - amount;
+            if (0 == agent.getMinSurplus()) {
+                if (restAmount > agent.getMinSurplus()) {
                     throw new BizException("xn0000",
                         "剩余门槛不能大于[" + agent.getMinSurplus() / 1000
                                 + "]元，目前余额还有[" + restAmount / 1000 + "]元");
                 }
+
+            } else if (restAmount >= agent.getMinSurplus()) {
+                throw new BizException("xn0000",
+                    "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
+                            + restAmount / 1000 + "]元");
             }
 
             // 是否开启云仓
