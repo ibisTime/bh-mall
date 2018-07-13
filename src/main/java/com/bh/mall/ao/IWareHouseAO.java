@@ -25,6 +25,7 @@ public interface IWareHouseAO {
 
     public XN627814Res getWareHouseByUser(String userId);
 
+    // 云仓提货
     public void deliveProject(XN627815Req req);
 
     public Paginable<WareHouse> queryWareHouseCFrontPage(int start, int limit,

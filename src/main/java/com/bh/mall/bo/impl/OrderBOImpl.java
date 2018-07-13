@@ -17,6 +17,7 @@ import com.bh.mall.dao.IOrderDAO;
 import com.bh.mall.domain.Order;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
+import com.bh.mall.enums.EUser;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -226,7 +227,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         data.setQuantity(singleNumber);
         data.setPrice(data.getPrice());
 
-        data.setToUser(highUserId);
+        data.setToUser(EUser.ADMIN.getCode());
         data.setYunfei(yunfei);
         data.setAmount(amount + yunfei);
         data.setApplyUser(userId);

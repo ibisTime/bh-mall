@@ -1299,7 +1299,7 @@ public class UserAOImpl implements IUserAO {
                 }
 
                 // 统计
-                // reportBO.saveReport(data);
+                reportBO.saveReport(data);
             }
 
             // 未通过，有推荐人

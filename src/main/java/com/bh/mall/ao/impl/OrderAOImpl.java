@@ -248,7 +248,6 @@ public class OrderAOImpl implements IOrderAO {
     public Object payOrder(List<String> codeList, String payType) {
         Object result = null;
         for (String code : codeList) {
-            System.out.println(code);
             Order data = orderBO.getOrder(code);
             if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单未处于待支付状态");
@@ -284,7 +283,11 @@ public class OrderAOImpl implements IOrderAO {
                         this.payAward(data);
                     }
 
+                    // 账户收钱
+                    this.payOrder(uData, data, null);
+
                 }
+                data.setPayType(EChannelType.NBZ.getCode());
                 data.setPayDatetime(new Date());
                 data.setPayCode(data.getCode());
                 data.setPayAmount(data.getAmount());
@@ -343,22 +346,9 @@ public class OrderAOImpl implements IOrderAO {
             if (isSucc) {
 
                 User user = userBO.getUser(data.getToUser());
-                Account account = accountBO.getAccountByUser(user.getUserId(),
-                    ECurrency.YJ_CNY.getCode());
-                if (StringUtils.isBlank(account.getAccountNumber())) {
-                    throw new BizException("xn0000", "收款人账户不存在");
-                }
-                // 收款方账户价钱
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.WeChat_H5, wechatOrderNo, data.getPayGroup(),
-                    data.getCode(), EBizType.AJ_YCCH,
-                    EBizType.AJ_YCCH.getValue(), data.getAmount());
-                // 托管账户加钱
-                accountBO.changeAmount(ESystemCode.BH.getCode(),
-                    EChannelType.getEChannelType(data.getPayType()),
-                    wechatOrderNo, data.getPayGroup(), data.getCode(),
-                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
-                    data.getAmount());
+
+                // 账户收钱
+                this.payOrder(user, data, wechatOrderNo);
 
                 String status = EOrderStatus.Paid.getCode();
                 // 代理进货且是购买云仓
@@ -778,21 +768,27 @@ public class OrderAOImpl implements IOrderAO {
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EOrderStatus.Canceled.getCode());
             // 云仓提货，归还云仓库存
-            // if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
-            //
-            // }else if(){
-            //
-            // }
-
-            String toUser = data.getToUser();
-            if (StringUtils.isBlank(toUser)) {
-                toUser = ESysUser.SYS_USER_BH.getCode();
+            if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
+                WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
+                    data.getApplyUser(), data.getProductSpecsCode());
+                wareHouseBO.changeWareHouse(whData.getCode(),
+                    data.getQuantity(), EBizType.AJ_TH,
+                    EBizType.AJ_TH.getValue(), data.getCode());
             }
-            accountBO.transAmountCZB(toUser, ECurrency.YJ_CNY.getCode(),
-                data.getApplyUser(), ECurrency.YJ_CNY.getCode(),
-                data.getAmount(), EBizType.AJ_GMCP_TK,
-                EBizType.AJ_GMCP_TK.getValue(), EBizType.AJ_GMCP_TK.getValue(),
-                data.getCode());
+
+            // 退换金额
+            if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
+                String toUser = data.getToUser();
+                if (StringUtils.isBlank(toUser)) {
+                    toUser = ESysUser.SYS_USER_BH.getCode();
+                }
+
+                accountBO.transAmountCZB(toUser, ECurrency.YJ_CNY.getCode(),
+                    data.getApplyUser(), ECurrency.YJ_CNY.getCode(),
+                    data.getAmount(), EBizType.AJ_GMCP_TK,
+                    EBizType.AJ_GMCP_TK.getValue(),
+                    EBizType.AJ_GMCP_TK.getValue(), data.getCode());
+            }
         }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
@@ -817,7 +813,7 @@ public class OrderAOImpl implements IOrderAO {
         if (EUser.ADMIN.getCode().equals(user)) {
             return user;
         }
-        String name = null;
+        String name = user;
         User data = userBO.getUserNoCheck(user);
         if (data != null) {
             name = data.getRealName();
@@ -1074,4 +1070,27 @@ public class OrderAOImpl implements IOrderAO {
         return code;
     }
 
+    private void payOrder(User user, Order data, String wechatOrderNo) {
+
+        if (EUserKind.Merchant.getCode().equals(user.getKind())) {
+            Account account = accountBO.getAccountByUser(user.getUserId(),
+                ECurrency.YJ_CNY.getCode());
+            // 收款方账户价钱
+            accountBO.changeAmount(account.getAccountNumber(),
+                EChannelType.WeChat_H5, wechatOrderNo, data.getPayGroup(),
+                data.getCode(), EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                data.getAmount());
+            // 托管账户加钱
+            accountBO.changeAmount(ESystemCode.BH.getCode(),
+                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
+                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
+                EBizType.AJ_GMYC.getValue(), data.getAmount());
+        } else {
+            // 订单归属人是平台，只有托管账户加钱
+            accountBO.changeAmount(ESystemCode.BH.getCode(),
+                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
+                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
+                EBizType.AJ_GMYC.getValue(), data.getAmount());
+        }
+    }
 }
