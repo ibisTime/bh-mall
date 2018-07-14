@@ -31,7 +31,7 @@
 				</when>
 				<when test="statusList != null and statusList.size() > 0 ">
 					AND t.status IN
-					<foreach collection="statusList" index="index"  item="item" close="(" separator=","  open=")" >
+					<foreach collection="statusList" index="index"  item="item" open="(" separator=","  close=")" >
 						#{item}
 					</foreach>
 				</when>

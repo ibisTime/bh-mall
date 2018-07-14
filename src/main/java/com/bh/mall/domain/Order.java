@@ -184,6 +184,12 @@ public class Order extends ABaseDO {
     // 收货人名字
     private String signeName;
 
+    // 团队长名称
+    private String leaderName;
+
+    // 队长手机号
+    private String leaderMobile;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -630,6 +636,22 @@ public class Order extends ABaseDO {
 
     public void setSigneName(String signeName) {
         this.signeName = signeName;
+    }
+
+    public String getLeaderName() {
+        return leaderName;
+    }
+
+    public String getLeaderMobile() {
+        return leaderMobile;
+    }
+
+    public void setLeaderName(String leaderName) {
+        this.leaderName = leaderName;
+    }
+
+    public void setLeaderMobile(String leaderMobile) {
+        this.leaderMobile = leaderMobile;
     }
 
 }

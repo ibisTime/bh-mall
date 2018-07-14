@@ -63,7 +63,7 @@ public interface IUserAO {
 
     public List<User> getUserRefereeList(String userId);
 
-    // 代理申请
+    // 意向代理
     public void applyIntent(XN627250Req req);
 
     // 代理申请，包含推荐人

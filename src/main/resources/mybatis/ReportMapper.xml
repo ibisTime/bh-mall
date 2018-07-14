@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bh.mall.dao.IReportDAO">
-	<resultMap id="Report_DB_Result" type="Report">
+	<resultMap id="report_DB_Result" type="report">
 		<result column="user_id" property="userId" />
 		<result column="real_name" property="realName" />
 		<result column="mobile" property="mobile" />
@@ -64,7 +64,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_Report" parameterType="Report" resultMap="Report_DB_Result">
+	<select id="select_report" parameterType="report" resultMap="report_DB_Result">
 		SELECT
 		t.user_id
 		,t.real_name
@@ -85,7 +85,7 @@
 		,t.intr_award
 		,t.refree_award
 		FROM
-		thf_report t
+		thb_report t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -94,15 +94,15 @@
 		</trim>
 	</select>
 
-	<select id="select_Report_count" parameterType="Report"
+	<select id="select_report_count" parameterType="report"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM thf_report t
+		SELECT count(1) FROM thb_report t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_Report" parameterType="Report">
+	<insert id="insert_report" parameterType="report">
 		INSERT INTO
-		thf_report(
+		thb_report(
 		user_id
 		,real_name
 		,mobile
@@ -138,8 +138,8 @@
 		)
 	</insert>
 
-	<update id="update_Report" parameterType="Report">
-		UPDATE thf_report
+	<update id="update_report" parameterType="report">
+		UPDATE thb_report
 		SET
 		real_name = #{realName}
 		,mobile = #{mobile}

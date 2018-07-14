@@ -276,6 +276,9 @@ public class User extends ABaseDO {
     // 等级名称
     private String levelName;
 
+    // 归属人Id
+    private String toUserId;
+
     public String getUserId() {
         return userId;
     }
@@ -910,6 +913,14 @@ public class User extends ABaseDO {
 
     public void setLevelName(String levelName) {
         this.levelName = levelName;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 
 }

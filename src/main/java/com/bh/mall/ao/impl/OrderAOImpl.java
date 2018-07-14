@@ -399,6 +399,16 @@ public class OrderAOImpl implements IOrderAO {
             User user = userBO.getCheckUser(order.getApplyUser());
             order.setUser(user);
 
+            // 团队长,一级代理自己是团队长
+            if (1 != user.getLevel()) {
+                User teamLeader = userBO.getTeamLeader(user.getTeamName());
+                order.setLeaderName(teamLeader.getRealName());
+                order.setLeaderMobile(teamLeader.getMobile());
+            } else {
+                order.setLeaderName(user.getRealName());
+                order.setLeaderMobile(user.getMobile());
+            }
+
             // 订单归属人
             String toUserName = this.getName(order.getToUser());
             order.setToUserName(toUserName);
@@ -439,6 +449,16 @@ public class OrderAOImpl implements IOrderAO {
             // 下单人
             User user = userBO.getCheckUser(order.getApplyUser());
             order.setUser(user);
+
+            // 团队长,一级代理自己是团队长
+            if (1 != user.getLevel()) {
+                User teamLeader = userBO.getTeamLeader(user.getTeamName());
+                order.setLeaderName(teamLeader.getRealName());
+                order.setLeaderMobile(teamLeader.getMobile());
+            } else {
+                order.setLeaderName(user.getRealName());
+                order.setLeaderMobile(user.getMobile());
+            }
 
             // 订单归属人
             String toUserName = this.getName(order.getToUser());

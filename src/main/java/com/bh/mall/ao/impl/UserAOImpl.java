@@ -168,6 +168,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     public XN627302Res doLoginWeChatByMerchant(String code, String userKind,
             String userRefreee) {
+        // TODO 拆分意向代理
         String status = EUserStatus.TO_MIND.getCode();
         if (StringUtils.isNotBlank(userRefreee)) {
             // 防止二维码识别出错，传入undefined
@@ -176,7 +177,8 @@ public class UserAOImpl implements IUserAO {
             }
             status = EUserStatus.IMPOWERO_INFO.getCode();
         }
-        return doLoginWeChatH(code, userKind, userRefreee, status);
+        return doLoginWeChatH(code, userKind, userRefreee,
+            EUserStatus.IMPOWERO_INFO.getCode());
     }
 
     @Override
@@ -925,13 +927,21 @@ public class UserAOImpl implements IUserAO {
         String status = EUserStatus.TO_APPROVE.getCode();
         String toUser = data.getUserReferee();
 
-        User userReferee = userBO.getUser(data.getUserReferee());
-        data.setTeamName(userReferee.getTeamName());
-        if (data.getApplyLevel() < userReferee.getLevel()) {
-            throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
-        }
-        if (data.getApplyLevel() == userReferee.getLevel()) {
-            toUser = userReferee.getHighUserId();
+        // 有推荐人
+        if (StringUtils.isNotBlank(data.getUserReferee())) {
+            User userReferee = userBO.getUser(data.getUserReferee());
+
+            data.setTeamName(userReferee.getTeamName());
+            if (data.getApplyLevel() < userReferee.getLevel()) {
+                throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
+            }
+            if (data.getApplyLevel() == userReferee.getLevel()) {
+                toUser = userReferee.getHighUserId();
+
+            }
+            if (data.getApplyLevel() > userReferee.getLevel()) {
+                toUser = userReferee.getUserId();
+            }
 
         }
         if (1 == data.getApplyLevel()) {
@@ -939,10 +949,6 @@ public class UserAOImpl implements IUserAO {
             // 防止团队名称重复
             userBO.checkTeamName(req.getTeamName());
             data.setTeamName(req.getTeamName());
-        }
-
-        if (data.getApplyLevel() > userReferee.getLevel()) {
-            toUser = userReferee.getUserId();
         }
 
         data.setRealName(req.getRealName());

@@ -189,4 +189,7 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public List<User> queryLowUserList(String userId);
 
+    // 获取团队长
+    public User getTeamLeader(String teamName);
+
 }
