@@ -97,7 +97,7 @@
 				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
-				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" u.team_name like "%"${keyword}"%" 
+				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" or u.team_name like "%"${keyword}"%" 
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>

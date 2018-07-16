@@ -220,4 +220,10 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public void approveCanenl(User data) {
         super.update(NAMESPACE.concat("approve_canenl"), data);
     }
+
+    @Override
+    public long selectFrontTotalCount(User condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_count"),
+            condition);
+    }
 }

@@ -731,17 +731,22 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public User getTeamLeader(String teamName) {
-        User data = null;
+        List<User> list = null;
         if (StringUtils.isNotBlank(teamName)) {
             User condition = new User();
             condition.setTeamName(teamName);
             condition.setLevel(1);
-            data = userDAO.select(condition);
-            if (null == data) {
+            list = userDAO.selectList(condition);
+            if (CollectionUtils.isEmpty(list)) {
                 throw new BizException("xn00000", "该团队没有团队长");
             }
         }
-        return data;
+        return list.get(0);
+    }
+
+    @Override
+    public long queryTotalCount(User condition) {
+        return userDAO.selectFrontTotalCount(condition);
     }
 
 }

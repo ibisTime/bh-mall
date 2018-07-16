@@ -192,4 +192,6 @@ public interface IUserBO extends IPaginableBO<User> {
     // 获取团队长
     public User getTeamLeader(String teamName);
 
+    public long queryTotalCount(User condition);
+
 }

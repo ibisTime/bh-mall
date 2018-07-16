@@ -102,4 +102,6 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 重新申请
     public void reapply(User data);
 
+    public long selectFrontTotalCount(User condition);
+
 }

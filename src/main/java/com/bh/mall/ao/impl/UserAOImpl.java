@@ -51,6 +51,7 @@ import com.bh.mall.domain.AgentUpgrade;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.Intro;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.Report;
 import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
@@ -1304,8 +1305,13 @@ public class UserAOImpl implements IUserAO {
                     }
                 }
 
-                // 统计
-                reportBO.saveReport(data);
+                // 重新申请时不计入统计
+                Report report = reportBO.getReport(data.getUserId());
+                if (null == report) {
+                    // 统计
+                    reportBO.saveReport(data);
+                }
+
             }
 
             // 未通过，有推荐人
@@ -1656,7 +1662,7 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         condition.setKind(EUserKind.Merchant.getCode());
-        long totalCount = userBO.getTotalCount(condition);
+        long totalCount = userBO.queryTotalCount(condition);
         Page<User> page = new Page<User>(start, limit, totalCount);
         List<User> list = userBO.selectAgentFront(condition, page.getPageNo(),
             page.getPageSize());

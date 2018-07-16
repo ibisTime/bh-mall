@@ -49,9 +49,6 @@
 			<if test="province != null and province != '' ">
 				AND t.province = #{province}
 			</if>
-			<if test="provinceForQuery != null and provinceForQuery != '' ">
-				AND t.province like "%"#{provinceForQuery}"%"
-			</if>
 			
 			<if test="city != null and city != '' ">
 				AND t.city = #{city}
@@ -85,7 +82,7 @@
 		,t.intr_award
 		,t.refree_award
 		FROM
-		thb_report t
+		tbh_report t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -96,13 +93,13 @@
 
 	<select id="select_report_count" parameterType="report"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM thb_report t
+		SELECT count(1) FROM tbh_report t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_report" parameterType="report">
 		INSERT INTO
-		thb_report(
+		tbh_report(
 		user_id
 		,real_name
 		,mobile
@@ -139,7 +136,7 @@
 	</insert>
 
 	<update id="update_report" parameterType="report">
-		UPDATE thb_report
+		UPDATE tbh_report
 		SET
 		real_name = #{realName}
 		,mobile = #{mobile}

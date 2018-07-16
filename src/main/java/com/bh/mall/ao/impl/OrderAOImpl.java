@@ -264,6 +264,7 @@ public class OrderAOImpl implements IOrderAO {
                 String payGroup = orderBO.addPayGroup(data);
                 Account mkAccount = accountBO.getAccountByUser(
                     data.getApplyUser(), ECurrency.MK_CNY.getCode());
+                data.setPayType(EChannelType.NBZ.getCode());
                 accountBO.changeAmount(mkAccount.getAccountNumber(),
                     EChannelType.NBZ, null, payGroup, data.getCode(),
                     EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
@@ -272,7 +273,6 @@ public class OrderAOImpl implements IOrderAO {
 
                 // 代理下单
                 if (EUserKind.Merchant.getCode().equals(uData.getKind())) {
-
                     // 该等级是否启用云仓
                     Agent agent = agentBO.getAgentByLevel(uData.getLevel());
                     if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
@@ -282,12 +282,11 @@ public class OrderAOImpl implements IOrderAO {
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
-
-                    // 账户收钱
-                    this.payOrder(uData, data, null);
+                    // 出货代理账户收钱
+                    User toUser = userBO.getUser(data.getToUser());
+                    this.payOrder(toUser, data, null);
 
                 }
-                data.setPayType(EChannelType.NBZ.getCode());
                 data.setPayDatetime(new Date());
                 data.setPayCode(data.getCode());
                 data.setPayAmount(data.getAmount());
@@ -296,7 +295,6 @@ public class OrderAOImpl implements IOrderAO {
 
                 result = new BooleanRes(true);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-                data.setPayType(EChannelType.WeChat_H5.getCode());
                 Object payResult = this.payWXH5(data,
                     PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
                 result = payResult;
@@ -1091,8 +1089,10 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     private void payOrder(User user, Order data, String wechatOrderNo) {
-
-        if (EUserKind.Merchant.getCode().equals(user.getKind())) {
+        // 微信H5或微信小程序支付
+        if (EChannelType.WeChat_H5.getCode().equals(data.getPayType())
+                || EChannelType.WeChat_XCX.getCode()
+                    .equals(data.getPayType())) {
             Account account = accountBO.getAccountByUser(user.getUserId(),
                 ECurrency.YJ_CNY.getCode());
             // 收款方账户价钱

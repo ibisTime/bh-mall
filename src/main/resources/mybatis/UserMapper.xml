@@ -343,6 +343,11 @@
 	</select>
 
 
+	<select id="select_count" parameterType="user" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_user t LEFT JOIN tbh_agency_log l ON t.user_id = l.to_user_id  
+		<include refid="where_condition"/>
+	</select>
+
 	<insert id="insert_user" parameterType="user">
 		INSERT INTO
 		tbh_user(
