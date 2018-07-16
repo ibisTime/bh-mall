@@ -86,9 +86,6 @@
 				 <when test="kind != null and kind != '' ">
 				  AND t.kind = #{kind}
 				 </when>
-				 <otherwise>
-				  AND 1 = 1
-				 </otherwise>
 			</choose>	
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
@@ -141,9 +138,6 @@
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
 				</when>
-				<otherwise>
-					AND 1=1
-				</otherwise>
 			</choose>
 			
 			<if test="updater != null and updater != '' ">
@@ -333,7 +327,7 @@
 		,t.pay_pdf
 		,t.pay_amount
 		FROM
-		tbh_user t LEFT JOIN tbh_agency_log l ON t.user_id = l.to_user_id  
+		tbh_user t  LEFT JOIN  tbh_agency_log l ON t.user_id = l.apply_user
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -344,7 +338,7 @@
 
 
 	<select id="select_count" parameterType="user" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_user t LEFT JOIN tbh_agency_log l ON t.user_id = l.to_user_id  
+		SELECT count(1) FROM tbh_user t  LEFT JOIN  tbh_agency_log l ON t.user_id = l.apply_user
 		<include refid="where_condition"/>
 	</select>
 

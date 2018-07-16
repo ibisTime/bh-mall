@@ -1052,6 +1052,7 @@ public class OrderAOImpl implements IOrderAO {
 
             // 是否开启云仓
             boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId());
+            // 是否开启云仓
             if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                 // 改变产品数量
                 this.changeProductNumber(applyUser, pData, psData, order, code);
