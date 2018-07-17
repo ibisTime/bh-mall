@@ -37,8 +37,8 @@ public class XN627662 extends AProcessor {
         condition.setDeliver(req.getDeliver());
         condition.setProductName(req.getProductName());
         condition.setToUser(req.getToUser());
-        // TODO 修改
-        condition.setLevel(1);
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
+
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(

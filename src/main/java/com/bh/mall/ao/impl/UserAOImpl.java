@@ -1664,7 +1664,7 @@ public class UserAOImpl implements IUserAO {
         condition.setKind(EUserKind.Merchant.getCode());
         long totalCount = userBO.queryTotalCount(condition);
         Page<User> page = new Page<User>(start, limit, totalCount);
-        List<User> list = userBO.selectAgentFront(condition, page.getPageNo(),
+        List<User> list = userBO.selectAgentFront(condition, page.getStart(),
             page.getPageSize());
 
         for (User data : list) {

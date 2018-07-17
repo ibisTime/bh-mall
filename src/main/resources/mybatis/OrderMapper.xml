@@ -97,7 +97,7 @@
 				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
-				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" or u.team_name like "%"${keyword}"%" 
+				AND (t.product_name like "%"#{keyword}"%" or u.real_name like "%"#{keyword}"%" or u.team_name like "%"#{keyword}"%" )
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
@@ -110,9 +110,17 @@
 				AND t.status IN (3,4)
 			</if>
 			
-			<if test="level != null and level != '' ">
-				AND u.level = #{level}
-			</if>
+			<choose>
+				<when test="level != null and level != '' ">
+					AND u.level = #{level}
+				</when>
+				<when test="levelList != null and levelList.size() > 0 ">
+					AND u.level IN
+					<foreach collection="levelList" index="index" item="item" open="(" separator="," close=")" >
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 			<if test="barCode != null and barCode != '' ">
 				AND t.bar_code = #{barCode}
 			</if>

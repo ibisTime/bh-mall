@@ -33,7 +33,7 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
         condition.setStatus(ECodeStatus.USE_NO.getCode());
         List<SecurityTrace> list = securityTraceDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn00000", "该箱码对应的盒码不存在，请重新下载");
+            throw new BizException("xn00000", "该箱码已被使用啦！");
         }
         return list;
     }

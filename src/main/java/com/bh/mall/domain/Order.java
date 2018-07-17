@@ -190,6 +190,9 @@ public class Order extends ABaseDO {
     // 队长手机号
     private String leaderMobile;
 
+    // 等级list
+    private List<Integer> levelList;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -652,6 +655,14 @@ public class Order extends ABaseDO {
 
     public void setLeaderMobile(String leaderMobile) {
         this.leaderMobile = leaderMobile;
+    }
+
+    public List<Integer> getLevelList() {
+        return levelList;
+    }
+
+    public void setLevelList(List<Integer> levelList) {
+        this.levelList = levelList;
     }
 
 }

@@ -204,18 +204,22 @@ public class OrderAOImpl implements IOrderAO {
 
         // 是否为授权单
         Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-        if (orderBO.checkImpowerOrder(applyUser.getUserId())) {
-            // 订单金额
-            ProductSpecsPrice pspData = productSpecsPriceBO
-                .getPriceByLevel(psData.getCode(), applyUser.getLevel());
-            Long orderAmount = pspData.getPrice()
-                    * StringValidater.toInteger(req.getQuantity());
-            // 订单金额不能低于授权单金额
-            if (agent.getAmount() > orderAmount) {
-                throw new BizException("xn00000", agent.getName() + "授权单金额为["
-                        + agent.getAmount() / 1000 + "]元");
-            }
 
+        // 未开云仓的代理，判断是否为授权单
+        if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+            if (orderBO.checkImpowerOrder(applyUser.getUserId())) {
+                // 订单金额
+                ProductSpecsPrice pspData = productSpecsPriceBO
+                    .getPriceByLevel(psData.getCode(), applyUser.getLevel());
+                Long orderAmount = pspData.getPrice()
+                        * StringValidater.toInteger(req.getQuantity());
+                // 订单金额不能低于授权单金额
+                if (agent.getAmount() > orderAmount) {
+                    throw new BizException("xn00000", agent.getName()
+                            + "授权单金额为[" + agent.getAmount() / 1000 + "]元");
+                }
+
+            }
         }
 
         // 订单拆单
@@ -390,6 +394,14 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
+        // 获取开放云仓的等级
+        List<Integer> levelList = new ArrayList<Integer>();
+        List<Agent> agentList = agentBO.getAgentHaveWH();
+        for (Agent agent : agentList) {
+            levelList.add(agent.getLevel());
+        }
+        condition.setLevelList(levelList);
+
         Paginable<Order> page = orderBO.getPaginable(start, limit, condition);
         List<Order> list = page.getList();
         for (Order order : list) {
@@ -442,6 +454,15 @@ public class OrderAOImpl implements IOrderAO {
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
+
+        // 获取开放云仓的等级
+        List<Integer> levelList = new ArrayList<Integer>();
+        List<Agent> agentList = agentBO.getAgentHaveWH();
+        for (Agent agent : agentList) {
+            levelList.add(agent.getLevel());
+        }
+        condition.setLevelList(levelList);
+
         List<Order> list = orderBO.queryOrderList(condition);
         for (Order order : list) {
             // 下单人
