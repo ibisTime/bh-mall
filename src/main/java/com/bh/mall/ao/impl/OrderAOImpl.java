@@ -1032,6 +1032,7 @@ public class OrderAOImpl implements IOrderAO {
         User highUser = userBO.getUser(applyUser.getHighUserId());
         order.setToUser(highUser.getUserId());
         order.setQuantity(quantity);
+        order.setPrice(pspData.getPrice());
         Long amount = quantity * pspData.getPrice();
         Long yunfei = 0L;
 
@@ -1090,7 +1091,6 @@ public class OrderAOImpl implements IOrderAO {
 
         order.setKind(kind);
         order.setPic(pData.getAdvPic());
-        order.setPrice(pspData.getPrice());
         order.setApplyUser(applyUser.getUserId());
         order.setYunfei(yunfei);
 

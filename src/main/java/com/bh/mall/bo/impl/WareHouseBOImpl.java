@@ -177,6 +177,7 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         WareHouse wareHouse = this.getWareHouseByProductSpec(
             applyUser.getUserId(), data.getProductSpecsCode());
 
+        System.out.println("wareHouse:" + wareHouse);
         // 没有该产品
         if (null == wareHouse) {
             String code = OrderNoGenerater
