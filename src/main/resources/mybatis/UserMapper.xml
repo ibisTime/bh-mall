@@ -327,7 +327,7 @@
 		,t.pay_pdf
 		,t.pay_amount
 		FROM
-		tbh_user t  LEFT JOIN  tbh_agency_log l ON t.user_id = l.apply_user
+		tbh_user t  LEFT JOIN  tbh_agency_log l ON t.last_agent_log = l.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

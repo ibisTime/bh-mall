@@ -40,7 +40,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setApplyUser(data.getUserId());
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setApproveDatetime(new Date());
         alData.setStatus(data.getStatus());
         agencyLogDAO.insert(alData);
 
@@ -102,7 +102,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setTeamName(data.getTeamName());
         alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setApproveDatetime(new Date());
 
         alData.setStatus(data.getStatus());
         agencyLogDAO.insert(alData);
@@ -154,7 +154,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setApplyLevel(user.getApplyLevel());
         alData.setLevel(user.getLevel());
         alData.setHighUserId(user.getHighUserId());
-        alData.setApproveDatetime(user.getApproveDatetime());
+        alData.setApproveDatetime(new Date());
         alData.setStatus(user.getStatus());
 
         alData.setRemark(log.getRemark());
@@ -179,7 +179,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setTeamName(data.getTeamName());
         alData.setUserReferee(data.getUserReferee());
         alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setApproveDatetime(new Date());
         alData.setStatus(status);
         alData.setRemark(data.getRemark());
 
@@ -224,7 +224,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setLevel(data.getLevel());
         alData.setHighUserId(data.getHighUserId());
         alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
+        alData.setApproveDatetime(new Date());
         alData.setStatus(status);
         alData.setRemark(data.getRemark());
         agencyLogDAO.insert(alData);
