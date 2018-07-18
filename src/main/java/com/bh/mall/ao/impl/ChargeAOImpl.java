@@ -17,6 +17,7 @@ import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.User;
 import com.bh.mall.enums.EBizType;
@@ -50,9 +51,20 @@ public class ChargeAOImpl implements IChargeAO {
         if (amount < 0) {
             throw new BizException("xn000000", "金额需大于零");
         }
-
-        // 普通充值
         User user = userBO.getUser(applyUser);
+        // 没有充值过
+        List<Charge> charge = chargeBO.getChargeByUser(user.getUserId());
+        if (CollectionUtils.isEmpty(charge)) {
+            // 首次不能低于授权金额
+            AgentImpower impower = agentImpowerBO
+                .getAgentImpowerByLevel(user.getLevel());
+            if (impower.getMinCharge() > amount) {
+                throw new BizException("xn000000",
+                    "授权金额不能低于[" + impower.getMinCharge() / 1000 + "]");
+            }
+
+        }
+        // 普通充值
         Agent agent = agentBO.getAgentByLevel(user.getLevel());
         if (agent.getMinChargeAmount() > amount) {
             throw new BizException("xn000000",

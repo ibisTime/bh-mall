@@ -223,7 +223,8 @@ public class WareHouseAOImpl implements IWareHouseAO {
         Long amount = data.getPrice()
                 * StringValidater.toInteger(req.getQuantity());
 
-        if (orderBO.checkImpowerOrder(user.getUserId())) {
+        if (orderBO.checkImpowerOrder(user.getUserId(),
+            user.getImpowerDatetime())) {
             if (agent.getAmount() > amount) {
                 throw new BizException("xn00000", agent.getName() + "授权单金额为["
                         + agent.getAmount() / 1000 + "]元");

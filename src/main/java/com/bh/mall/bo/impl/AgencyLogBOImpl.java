@@ -121,13 +121,11 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setLevel(data.getLevel());
 
+        alData.setToUserId(data.getHighUserId());
         alData.setHighUserId(data.getHighUserId());
         alData.setApplyLevel(data.getApplyLevel());
         alData.setTeamName(data.getTeamName());
         alData.setUserReferee(data.getUserReferee());
-        alData.setApprover(data.getApprover());
-
-        alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(data.getStatus());
         agencyLogDAO.insert(alData);
         return code;

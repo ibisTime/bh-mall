@@ -43,7 +43,7 @@ public interface IOrderBO extends IPaginableBO<Order> {
 
     public void payNo(Order data);
 
-    public boolean checkImpowerOrder(String applyUser);
+    public boolean checkImpowerOrder(String applyUser, Date impoweDatetime);
 
     public boolean checkUpgradeOrder(String applyUser);
 

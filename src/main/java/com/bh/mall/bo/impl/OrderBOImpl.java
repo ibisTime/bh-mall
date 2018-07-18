@@ -140,7 +140,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public boolean checkImpowerOrder(String applyUser) {
+    public boolean checkImpowerOrder(String applyUser, Date impoweDatetime) {
         List<String> statusList = new ArrayList<String>();
         statusList.add(EOrderStatus.Paid.getCode());
         statusList.add(EOrderStatus.TO_Apprvoe.getCode());
@@ -151,6 +151,8 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setApplyUser(applyUser);
         condition.setKind(EOrderKind.Impower_Order.getCode());
         condition.setStatusList(statusList);
+        condition.setStartDatetime(impoweDatetime);
+
         List<Order> list = orderDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
             return true;

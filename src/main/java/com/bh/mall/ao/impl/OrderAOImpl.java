@@ -207,7 +207,8 @@ public class OrderAOImpl implements IOrderAO {
 
         // 未开云仓的代理，判断是否为授权单
         if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
-            if (orderBO.checkImpowerOrder(applyUser.getUserId())) {
+            if (orderBO.checkImpowerOrder(applyUser.getUserId(),
+                applyUser.getImpowerDatetime())) {
                 // 订单金额
                 ProductSpecsPrice pspData = productSpecsPriceBO
                     .getPriceByLevel(psData.getCode(), applyUser.getLevel());
@@ -229,12 +230,11 @@ public class OrderAOImpl implements IOrderAO {
             int singleNumber = StringValidater.toInteger(req.getQuantity())
                     / psData.getSingleNumber();
 
-            for (int i = 0; i < StringValidater
-                .toInteger(req.getQuantity()); i++) {
-                list.add(this.addOrder(applyUser, pData, psData, singleNumber,
-                    req.getApplyNote(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress()));
+            for (int i = 0; i < singleNumber; i++) {
+                list.add(this.addOrder(applyUser, pData, psData,
+                    psData.getSingleNumber(), req.getApplyNote(),
+                    req.getSigner(), req.getMobile(), req.getProvince(),
+                    req.getCity(), req.getArea(), req.getAddress()));
             }
         } else {
             list.add(this.addOrder(applyUser, pData, psData,
@@ -405,6 +405,7 @@ public class OrderAOImpl implements IOrderAO {
         Paginable<Order> page = orderBO.getPaginable(start, limit, condition);
         List<Order> list = page.getList();
         for (Order order : list) {
+            System.out.println(order.getPic());
             // 下单人
             User user = userBO.getCheckUser(order.getApplyUser());
             order.setUser(user);
@@ -813,10 +814,7 @@ public class OrderAOImpl implements IOrderAO {
                 wareHouseBO.changeWareHouse(whData.getCode(),
                     data.getQuantity(), EBizType.AJ_TH,
                     EBizType.AJ_TH.getValue(), data.getCode());
-            }
-
-            // 退换金额
-            if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
+            } else if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
                 String toUser = data.getToUser();
                 if (StringUtils.isBlank(toUser)) {
                     toUser = ESysUser.SYS_USER_BH.getCode();
@@ -868,7 +866,8 @@ public class OrderAOImpl implements IOrderAO {
         String kind = EOrderKind.Normal_Order.getCode();
         // 是否完成授权单
         if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
-            if (!orderBO.checkImpowerOrder(applyUser.getUserId())) {
+            if (!orderBO.checkImpowerOrder(applyUser.getUserId(),
+                applyUser.getImpowerDatetime())) {
                 kind = EOrderKind.Impower_Order.getCode();
                 if (EProductSpecsType.Apply_NO.getCode()
                     .equals(psData.getIsImpowerOrder())) {
@@ -1073,7 +1072,8 @@ public class OrderAOImpl implements IOrderAO {
             }
 
             // 是否开启云仓
-            boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId());
+            boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
+                applyUser.getImpowerDatetime());
             // 是否开启云仓
             if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                 // 改变产品数量

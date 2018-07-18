@@ -178,8 +178,7 @@ public class UserAOImpl implements IUserAO {
             }
             status = EUserStatus.IMPOWERO_INFO.getCode();
         }
-        return doLoginWeChatH(code, userKind, userRefreee,
-            EUserStatus.IMPOWERO_INFO.getCode());
+        return doLoginWeChatH(code, userKind, userRefreee, status);
     }
 
     @Override
@@ -348,8 +347,6 @@ public class UserAOImpl implements IUserAO {
                         || EUserStatus.TO_MIND.getCode()
                             .equals(dbUser.getStatus())
                         || EUserStatus.IMPOWERO_INFO.getCode()
-                            .equals(dbUser.getStatus())
-                        || EUserStatus.ADD_INFO.getCode()
                             .equals(dbUser.getStatus())) {
                     userBO.reapply(dbUser, status, userReferee);
                 }
@@ -1350,6 +1347,7 @@ public class UserAOImpl implements IUserAO {
 
         String status = EUserStatus.IMPOWERED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
+
             // status = EUserStatus.CANCELED.getCode();
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
@@ -1358,13 +1356,12 @@ public class UserAOImpl implements IUserAO {
                 null, null, data.getUserId(), EBizType.AJ_QXSQ,
                 EBizType.AJ_QXSQ.getValue(), -account.getAmount());
 
-            // TODO 代理退出
             // 上级不是平台
             User highUser = userBO.getUser(data.getHighUserId());
             if (EUserKind.Plat.getCode().equals(highUser.getKind())) {
-                status = EUserStatus.ADD_INFO.getCode();
+                status = EUserStatus.CANCELED.getCode();
             } else {
-                status = EUserStatus.IMPOWERO_INFO.getCode();
+                status = EUserStatus.TO_COMPANYCANCEL.getCode();
             }
 
             // 清空手机号与身份证号，防止重新申请时冲突

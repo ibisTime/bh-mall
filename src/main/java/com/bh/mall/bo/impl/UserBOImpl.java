@@ -733,6 +733,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public User getTeamLeader(String teamName) {
         List<User> list = null;
         if (StringUtils.isNotBlank(teamName)) {
+            System.out.println("teamName:" + teamName);
             User condition = new User();
             condition.setTeamName(teamName);
             condition.setLevel(1);

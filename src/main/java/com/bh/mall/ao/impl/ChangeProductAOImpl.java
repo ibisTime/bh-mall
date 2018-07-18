@@ -439,20 +439,28 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 }
             }
 
-            // 开启云仓,且红线限制为零，红线限制不为零时，不会出现直接跳到下授权单
+            // 检查开启云仓代理的红线，
             if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
 
-                // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，购买云仓
-                Long orderAmount = orderBO.getOrderByUser(user.getUserId());
-                if (0 == orderAmount || orderAmount < agent.getAmount()) {
-                    // result = ECheckStatus.TO_BUY.getCode();
-                    result = ECheckStatus.RED_LOW.getCode();
-                } else if (orderBO.checkImpowerOrder(user.getUserId())) {
-                    // 是否完成授权单
+                // 是否完成授权单
+                if (orderBO.checkImpowerOrder(user.getUserId(),
+                    user.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
 
-            } else if (orderBO.checkImpowerOrder(user.getUserId())) {
+                // 红线设置为零视为无限制
+                if (0 < agent.getRedAmount()) {
+                    // 订单金额
+                    Long orderAmount = orderBO.getOrderByUser(user.getUserId());
+                    // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
+                    if (orderAmount < agent.getAmount()) {
+                        // result = ECheckStatus.TO_BUY.getCode();
+                        result = ECheckStatus.RED_LOW.getCode();
+                    }
+                }
+                // 未开启云仓，只检查是否完成授权单
+            } else if (orderBO.checkImpowerOrder(user.getUserId(),
+                user.getImpowerDatetime())) {
                 // 未完成授权单
                 // result = ECheckStatus.NO_WAREHOUSE.getCode();
                 result = ECheckStatus.RED_LOW.getCode();
@@ -486,8 +494,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             }
 
             // 没有过充值，前去充值
-            if (CollectionUtils.isEmpty(charge)
-                    || impower.getMinCharge() > cAmount) {
+            if (CollectionUtils.isEmpty(charge)) {
                 result = ECheckStatus.To_Charge.getCode();
                 chargeAmount = impower.getMinCharge() - cAmount;
 

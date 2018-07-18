@@ -354,10 +354,11 @@
 	</update>
 	
 	
-		<update id="pay_success" parameterType="innerOrder">
+	<update id="pay_success" parameterType="innerOrder">
 		UPDATE tbh_order
 		SET
 		status = #{status}
+		,pay_type = #{payType}
 		,pay_code = #{payCode}
 		,pay_amount = #{payAmount}
 		,pay_datetime = #{payDatetime}
