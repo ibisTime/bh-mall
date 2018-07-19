@@ -347,6 +347,8 @@ public class UserAOImpl implements IUserAO {
                         || EUserStatus.TO_MIND.getCode()
                             .equals(dbUser.getStatus())
                         || EUserStatus.IMPOWERO_INFO.getCode()
+                            .equals(dbUser.getStatus())
+                        || EUserStatus.CANCELED.getCode()
                             .equals(dbUser.getStatus())) {
                     userBO.reapply(dbUser, status, userReferee);
                 }
@@ -1327,23 +1329,36 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn000", "该代理未处于申请取消状态");
         }
 
-        String status = EUserStatus.IMPOWERED.getCode();
+        // 审核人
+        User approveUser = null;
+        if (EUser.ADMIN.getCode().equals(approver)) {
+            approveUser = userBO.getSysUser();
+        } else {
+            approveUser = userBO.getUser(approver);
+        }
+
+        String status = EUserStatus.CANCELED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
 
-            // status = EUserStatus.CANCELED.getCode();
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
-            // 账户清零
-            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, null, data.getUserId(), EBizType.AJ_QXSQ,
-                EBizType.AJ_QXSQ.getValue(), -account.getAmount());
+            // 该等级对应的郑策
+            AgentImpower impower = agentImpowerBO
+                .getAgentImpowerByLevel(data.getLevel());
 
-            // 上级不是平台
-            User highUser = userBO.getUser(data.getHighUserId());
-            if (EUserKind.Plat.getCode().equals(highUser.getKind())) {
-                status = EUserStatus.CANCELED.getCode();
+            // 需要公司授权且审核人不是平台
+            if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())
+                    && EUserKind.Merchant.getCode()
+                        .equals(approveUser.getKind())) {
+                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
-                status = EUserStatus.TO_COMPANYCANCEL.getCode();
+                status = EUserStatus.CANCELED.getCode();
+                // 账户清零
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.NBZ, null, null, data.getUserId(),
+                    EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
+                    -account.getAmount());
+
             }
 
             // 清空手机号与身份证号，防止重新申请时冲突
@@ -1529,8 +1544,10 @@ public class UserAOImpl implements IUserAO {
                 || EUserStatus.TO_UPGRADE.getCode().equals(data.getStatus()))) {
             throw new BizException("xn00000", "代理未申请升级");
         }
+
         String status = EUserStatus.IMPOWERED.getCode();
         Integer level = data.getLevel();
+        // 审核通过
         if (EBoolean.YES.getCode().equals(result)) {
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
@@ -1538,6 +1555,7 @@ public class UserAOImpl implements IUserAO {
             AgentUpgrade auData = agentUpgradeBO
                 .getAgentUpgradeByLevel(data.getApplyLevel());
 
+            // 是否需要公司审核
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
                 if (!EUser.ADMIN.getCode().equals(approver)) {
                     User approveUser = userBO.getUser(approver);
@@ -1561,7 +1579,9 @@ public class UserAOImpl implements IUserAO {
                     changeAmount(data);
                 }
             } else {
+                // 无需公司审核
                 level = data.getApplyLevel();
+
                 // 增加账户余额
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.NBZ, null, null, data.getUserId(),
@@ -1587,6 +1607,15 @@ public class UserAOImpl implements IUserAO {
         String logCode = agencyLogBO.approveUpgrade(data, status);
         data.setLastAgentLog(logCode);
         userBO.approveUpgrade(data);
+
+        // 审核通过，云仓货物价值变为本等级对应的价格
+        if (EUserStatus.UPGRADED.getCode().equals(data.getStatus())) {
+            List<WareHouse> whList = wareHouseBO
+                .getWareHouseByUser(data.getUserId());
+            if (CollectionUtils.isNotEmpty(whList)) {
+                wareHouseBO.changeWareHousePrice(whList, data.getLevel());
+            }
+        }
     }
 
     @Override

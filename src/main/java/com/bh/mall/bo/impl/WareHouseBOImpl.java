@@ -8,15 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseLogBO;
-import com.bh.mall.bo.IWareHouseSpecsBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareHouseDAO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EBizType;
@@ -37,7 +38,7 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
     IWareHouseLogBO wareHouseLogBO;
 
     @Autowired
-    IWareHouseSpecsBO wareHouseSpecsBO;
+    IProductSpecsPriceBO productSpecsPriceBO;
 
     @Override
     public void saveWareHouse(WareHouse data, Integer quantity,
@@ -205,6 +206,17 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
         } else {
             this.changeWareHouse(wareHouse.getCode(), data.getQuantity(),
                 EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), data.getCode());
+        }
+    }
+
+    @Override
+    public void changeWareHousePrice(List<WareHouse> whList, Integer level) {
+        for (WareHouse data : whList) {
+            ProductSpecsPrice psPrice = productSpecsPriceBO
+                .getPriceByLevel(data.getProductSpecsCode(), level);
+            data.setPrice(psPrice.getPrice());
+            data.setAmount(data.getQuantity() * psPrice.getPrice());
+            wareHouseDAO.changePrice(data);
         }
     }
 

@@ -16,4 +16,6 @@ public interface IWareHouseDAO extends IBaseDAO<WareHouse> {
 
     List<WareHouse> selectPorductList(WareHouse condition);
 
+    void changePrice(WareHouse data);
+
 }

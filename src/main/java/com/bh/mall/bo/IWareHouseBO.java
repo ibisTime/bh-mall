@@ -44,4 +44,6 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
 
     public void buyWareHouse(Order order, User applyUser);
 
+    public void changeWareHousePrice(List<WareHouse> whList, Integer level);
+
 }

@@ -417,8 +417,6 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     public XN627805Res checkAmount(String userId) {
         XN627805Res res = new XN627805Res();
         User user = userBO.getUser(userId);
-        // 需要补充红线金额
-        Long redAmount = 0L;
         // 门槛所需充值金额
         Long chargeAmount = 0L;
         String result = ECheckStatus.NORMAL.getCode();
@@ -443,8 +441,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
 
                 // 是否完成授权单
-                if (orderBO.checkImpowerOrder(user.getUserId(),
-                    user.getImpowerDatetime())) {
+                if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
+                    user.getUserId(), user.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
 
@@ -459,8 +457,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                     }
                 }
                 // 未开启云仓，只检查是否完成授权单
-            } else if (orderBO.checkImpowerOrder(user.getUserId(),
-                user.getImpowerDatetime())) {
+            } else if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
+                user.getUserId(), user.getImpowerDatetime())) {
                 // 未完成授权单
                 // result = ECheckStatus.NO_WAREHOUSE.getCode();
                 result = ECheckStatus.RED_LOW.getCode();
@@ -486,7 +484,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 }
 
             }
-            // 是否有过充值,且充值金额大于最低授权充值
+
+            // 是否有过充值
             Long cAmount = 0L;
             List<Charge> charge = chargeBO.getChargeByUser(user.getUserId(),
                 user.getImpowerDatetime());
@@ -509,8 +508,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                     result = ECheckStatus.Charging.getCode();
                 }
             }
-            res = new XN627805Res(result, redAmount, agent.getMinSurplus(),
-                agent.getAmount(), chargeAmount, user.getLevel(), isWareHouse);
+            res = new XN627805Res(result, agent.getRedAmount(),
+                agent.getMinSurplus(), agent.getAmount(), chargeAmount,
+                user.getLevel(), isWareHouse);
         }
         return res;
     }

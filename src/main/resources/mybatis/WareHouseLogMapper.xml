@@ -200,5 +200,13 @@
 		WHERE code = #{code}
 	</update>
 
+	<update id="update_Price" parameterType="wareHouseLog">
+		UPDATE tbh_ware_house_log
+		SET
+		price = #{price}
+		,amount = #{amount}
+		WHERE code = #{code}
+	</update>
+
 
 </mapper>

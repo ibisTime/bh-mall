@@ -224,6 +224,29 @@ public class OrderAOImpl implements IOrderAO {
             }
         }
 
+        // 门槛余额是否高于限制
+        ProductSpecsPrice pspData = productSpecsPriceBO
+            .getPriceByLevel(psData.getCode(), applyUser.getLevel());
+        Long amount = StringValidater.toInteger(req.getQuantity())
+                * pspData.getPrice();
+        Account account = accountBO.getAccountByUser(applyUser.getUserId(),
+            ECurrency.MK_CNY.getCode());
+
+        // 门槛最低余额为零
+        Long restAmount = account.getAmount() - amount;
+        if (0 == agent.getMinSurplus()) {
+            if (restAmount > agent.getMinSurplus()) {
+                throw new BizException("xn0000",
+                    "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
+                            + restAmount / 1000 + "]元");
+            }
+
+        } else if (restAmount >= agent.getMinSurplus()) {
+            throw new BizException("xn0000",
+                "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
+                        + restAmount / 1000 + "]元");
+        }
+
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())
                 && EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
@@ -240,9 +263,10 @@ public class OrderAOImpl implements IOrderAO {
             }
         } else {
             String orderCode = this.addOrder(applyUser, pData, psData,
-                psData.getSingleNumber(), req.getApplyNote(), req.getSigner(),
-                req.getMobile(), req.getProvince(), req.getCity(),
-                req.getArea(), req.getAddress());
+                StringValidater.toInteger(req.getQuantity()),
+                req.getApplyNote(), req.getSigner(), req.getMobile(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress());
             list.add(orderCode);
         }
 
@@ -1059,23 +1083,6 @@ public class OrderAOImpl implements IOrderAO {
 
             // 门槛余额是否高于限制
             Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-            Account account = accountBO.getAccountByUser(applyUser.getUserId(),
-                ECurrency.MK_CNY.getCode());
-
-            // 门槛最低余额为零
-            Long restAmount = account.getAmount() - amount;
-            if (0 == agent.getMinSurplus()) {
-                if (restAmount > agent.getMinSurplus()) {
-                    throw new BizException("xn0000",
-                        "剩余门槛不能大于[" + agent.getMinSurplus() / 1000
-                                + "]元，目前余额还有[" + restAmount / 1000 + "]元");
-                }
-
-            } else if (restAmount >= agent.getMinSurplus()) {
-                throw new BizException("xn0000",
-                    "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
-                            + restAmount / 1000 + "]元");
-            }
 
             // 是否开启云仓
             boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
