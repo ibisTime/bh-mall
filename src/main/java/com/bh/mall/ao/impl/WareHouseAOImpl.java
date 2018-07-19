@@ -277,7 +277,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
             String code = orderBO.pickUpGoods(data.getProductCode(),
                 data.getProductName(), product.getPic(),
                 data.getProductSpecsCode(), data.getProductSpecsName(),
-                psData.getSingleNumber(), data.getPrice(),
+                StringValidater.toInteger(req.getQuantity()), data.getPrice(),
                 psData.getSingleNumber() * data.getPrice(), yunfei,
                 user.getHighUserId(), data.getUserId(), req.getSigner(),
                 req.getMobile(), req.getProvince(), req.getCity(),

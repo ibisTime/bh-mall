@@ -10,21 +10,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOrderDAO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.User;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
-import com.bh.mall.enums.EUser;
 import com.bh.mall.exception.BizException;
 
 @Component
 public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
 
     @Autowired
-    private IOrderDAO orderDAO;
+    IOrderDAO orderDAO;
+
+    @Autowired
+    IUserBO userBO;
 
     @Override
     public void saveOrder(Order data) {
@@ -227,9 +231,10 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         data.setProductSpecsCode(productSpecsCode);
         data.setProductSpecsName(productSpecsName);
         data.setQuantity(singleNumber);
-        data.setPrice(data.getPrice());
+        data.setPrice(price);
 
-        data.setToUser(EUser.ADMIN.getCode());
+        User toUser = userBO.getSysUser();
+        data.setToUser(toUser.getUserId());
         data.setYunfei(yunfei);
         data.setAmount(amount + yunfei);
         data.setApplyUser(userId);

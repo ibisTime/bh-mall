@@ -61,7 +61,6 @@ public class BarCodeAOImpl implements IBarCodeAO {
                     continue loop;
                 }
             }
-            System.out.println(barCode);
             // 新增的Code放入List中
             list.add(barCode);
             Date date = new Date();

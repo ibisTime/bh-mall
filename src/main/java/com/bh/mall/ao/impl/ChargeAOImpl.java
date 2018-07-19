@@ -53,7 +53,8 @@ public class ChargeAOImpl implements IChargeAO {
         }
         User user = userBO.getUser(applyUser);
         // 没有充值过
-        List<Charge> charge = chargeBO.getChargeByUser(user.getUserId());
+        List<Charge> charge = chargeBO.getChargeByUser(user.getUserId(),
+            user.getImpowerDatetime());
         if (CollectionUtils.isEmpty(charge)) {
             // 首次不能低于授权金额
             AgentImpower impower = agentImpowerBO

@@ -71,10 +71,6 @@
 					</foreach>
 				</when>
 			</choose>
-			
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>

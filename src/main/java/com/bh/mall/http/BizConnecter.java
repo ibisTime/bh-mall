@@ -44,7 +44,6 @@ public class BizConnecter {
             Properties formProperties = new Properties();
             formProperties.put("code", code);
             formProperties.put("json", json);
-            System.out.println("code:" + code + ";json:" + json);
             resJson = PostSimulater.requestPostForm(getPostUrl(code),
                 formProperties);
         } catch (Exception e) {

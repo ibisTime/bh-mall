@@ -14,10 +14,6 @@ public class XN627255Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
-    // （必填）代理等级
-    @NotBlank(message = "代理等级不能为空")
-    private String level;
-
     // （必填） 详细地址
     @NotBlank(message = "详细地址不能为空")
     private String address;
@@ -43,6 +39,7 @@ public class XN627255Req {
     private String mobile;
 
     // （必填）团队名称
+    @NotBlank(message = "团队名称不能为空")
     private String teamName;
 
     // 真实姓名
@@ -55,14 +52,6 @@ public class XN627255Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
     public String getAddress() {

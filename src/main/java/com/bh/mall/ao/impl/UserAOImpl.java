@@ -802,8 +802,8 @@ public class UserAOImpl implements IUserAO {
             }
 
             // 授权金额
-            if (null != user.getApplyLevel()) {
-                Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
+            if (null != user.getLevel() && 0 != user.getLevel()) {
+                Agent agent = agentBO.getAgentByLevel(user.getLevel());
                 user.setLevelName(agent.getName());
                 user.setImpowerAmount(agent.getAmount());
             }
@@ -1113,26 +1113,8 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void updateInformation(XN627255Req req) {
         User data = userBO.getUser(req.getUserId());
-        Integer newLevel = StringValidater.toInteger(req.getLevel());
-
-        if (null != data.getLevel() && data.getLevel() != newLevel) {
-            // 有推荐人
-            if (StringUtils.isNotBlank(data.getUserReferee())) {
-                throw new BizException("xn00000", "该代理还有推荐人");
-            }
-
-            // 如果有下级，修改等级不能低于下级中最高的等级
-            List<User> lowUser = userBO.queryLowUserList(data.getUserId());
-
-            for (User user : lowUser) {
-                if (newLevel >= user.getLevel()) {
-                    throw new BizException("xn00000", "修改的等级不能低于下级等级");
-                }
-            }
-        }
 
         data.setRealName(req.getRealName());
-        data.setLevel(newLevel);
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
         data.setArea(req.getArea());
@@ -1798,13 +1780,6 @@ public class UserAOImpl implements IUserAO {
             }
         }
 
-        // data.setRealName(req.getRealName());
-        // data.setWxId(req.getWxId());
-        // data.setMobile(req.getMobile());
-        // data.setProvince(req.getProvince());
-        // data.setCity(req.getCity());
-        // data.setArea(req.getArea());
-        // data.setAddress(req.getAddress());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         data.setTeamName(req.getTeamName());
 

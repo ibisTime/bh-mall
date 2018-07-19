@@ -488,7 +488,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             }
             // 是否有过充值,且充值金额大于最低授权充值
             Long cAmount = 0L;
-            List<Charge> charge = chargeBO.getChargeByUser(user.getUserId());
+            List<Charge> charge = chargeBO.getChargeByUser(user.getUserId(),
+                user.getImpowerDatetime());
             for (Charge charge2 : charge) {
                 cAmount = cAmount + charge2.getAmount();
             }

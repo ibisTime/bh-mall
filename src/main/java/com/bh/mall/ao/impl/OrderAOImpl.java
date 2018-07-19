@@ -86,6 +86,7 @@ import com.bh.mall.util.wechat.XMLUtil;
 
 @Service
 public class OrderAOImpl implements IOrderAO {
+
     private static Logger logger = Logger
         .getLogger(CallbackBzdhConroller.class);
 
@@ -231,18 +232,21 @@ public class OrderAOImpl implements IOrderAO {
                     / psData.getSingleNumber();
 
             for (int i = 0; i < singleNumber; i++) {
-                list.add(this.addOrder(applyUser, pData, psData,
+                String orderCode = this.addOrder(applyUser, pData, psData,
                     psData.getSingleNumber(), req.getApplyNote(),
                     req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress()));
+                    req.getCity(), req.getArea(), req.getAddress());
+                list.add(orderCode);
             }
         } else {
-            list.add(this.addOrder(applyUser, pData, psData,
-                StringValidater.toInteger(req.getQuantity()),
-                req.getApplyNote(), req.getSigner(), req.getMobile(),
-                req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress()));
+            String orderCode = this.addOrder(applyUser, pData, psData,
+                psData.getSingleNumber(), req.getApplyNote(), req.getSigner(),
+                req.getMobile(), req.getProvince(), req.getCity(),
+                req.getArea(), req.getAddress());
+            list.add(orderCode);
         }
+
+        logger.error("订单编号：" + list.toString());
         return list;
 
     }
@@ -250,6 +254,7 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     @Transactional
     public Object payOrder(List<String> codeList, String payType) {
+        logger.error("支付订单编号：" + codeList.toString());
         Object result = null;
         for (String code : codeList) {
             Order data = orderBO.getOrder(code);
@@ -316,7 +321,6 @@ public class OrderAOImpl implements IOrderAO {
         userBO.getCheckUser(data.getToUser());
         Account account = accountBO.getAccountByUser(data.getToUser(),
             ECurrency.YJ_CNY.getCode());
-        System.out.println(data.getPayType());
         return weChatAO.getPrepayIdH5(user.getUserId(),
             account.getAccountNumber(), payGroup, data.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
@@ -405,7 +409,6 @@ public class OrderAOImpl implements IOrderAO {
         Paginable<Order> page = orderBO.getPaginable(start, limit, condition);
         List<Order> list = page.getList();
         for (Order order : list) {
-            System.out.println(order.getPic());
             // 下单人
             User user = userBO.getCheckUser(order.getApplyUser());
             order.setUser(user);
@@ -443,6 +446,9 @@ public class OrderAOImpl implements IOrderAO {
             // 产品信息
             Product product = productBO.getProduct(order.getProductCode());
             order.setProduct(product);
+
+            // TODO 图片名字乱码
+            order.setPic(product.getAdvPic());
         }
         page.setList(list);
         return page;
