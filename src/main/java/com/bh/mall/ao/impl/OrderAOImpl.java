@@ -246,6 +246,13 @@ public class OrderAOImpl implements IOrderAO {
                         + restAmount / 1000 + "]元");
         }
 
+        // 检查起购数量
+        int minQuantity = productSpecsPriceBO
+            .checkMinQuantity(pspData.getCode(), applyUser.getLevel());
+        if (minQuantity > StringValidater.toInteger(req.getQuantity())) {
+            throw new BizException("xn0000", "您购买的数量不能低于" + minQuantity + "]");
+        }
+
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())
                 && EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
@@ -273,7 +280,6 @@ public class OrderAOImpl implements IOrderAO {
             list.add(orderCode);
         }
 
-        logger.error("订单编号：" + list.toString());
         return list;
 
     }
@@ -1069,13 +1075,6 @@ public class OrderAOImpl implements IOrderAO {
             // 检查是否可购买
             if (EBoolean.NO.getCode().equals(pspData.getIsBuy())) {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
-            }
-            // 检查起购数量
-            int minQuantity = productSpecsPriceBO
-                .checkMinQuantity(pspData.getCode(), applyUser.getLevel());
-            if (minQuantity > quantity) {
-                throw new BizException("xn0000",
-                    "您购买的数量不能低于" + minQuantity + "]");
             }
 
             // 门槛余额是否高于限制
