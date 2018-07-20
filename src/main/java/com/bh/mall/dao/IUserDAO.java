@@ -104,4 +104,6 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     public long selectFrontTotalCount(User condition);
 
+    public void updateTeamName(User data);
+
 }

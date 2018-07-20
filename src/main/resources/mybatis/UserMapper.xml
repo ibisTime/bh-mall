@@ -819,4 +819,12 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+	
+	<update id="unpdate_teamName" parameterType="user">
+		UPDATE tbh_user
+		SET
+		team_name = #{teamName}
+		WHERE user_id = #{userId}
+	</update>
+	
 </mapper>

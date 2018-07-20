@@ -226,4 +226,9 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
         return super.selectTotalCount(NAMESPACE.concat("select_count"),
             condition);
     }
+
+    @Override
+    public void updateTeamName(User data) {
+        super.update(NAMESPACE.concat("unpdate_teamName"), data);
+    }
 }

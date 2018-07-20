@@ -194,4 +194,7 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public long queryTotalCount(User condition);
 
+    // 修改团队名称
+    public void refreshTeamName(User user);
+
 }

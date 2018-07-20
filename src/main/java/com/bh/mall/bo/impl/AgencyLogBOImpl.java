@@ -186,7 +186,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
     }
 
     @Override
-    public String upgradeLevel(User data, String payPdf) {
+    public String upgradeLevel(User data, String payPdf, String toUserId) {
         AgencyLog agencyLog = this.getAgencyLog(data.getLastAgentLog());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
@@ -195,6 +195,7 @@ public class AgencyLogBOImpl extends PaginableBOImpl<AgencyLog>
         alData.setType(EAgencyType.Upgrade.getCode());
         alData.setPayPdf(payPdf);
 
+        alData.setToUserId(toUserId);
         alData.setApplyUser(data.getUserId());
         alData.setApplyDatetime(agencyLog.getApplyDatetime());
         alData.setApplyLevel(data.getApplyLevel());

@@ -1116,6 +1116,37 @@ public class UserAOImpl implements IUserAO {
     public void updateInformation(XN627255Req req) {
         User data = userBO.getUser(req.getUserId());
 
+        Integer nowLevel = StringValidater.toInteger(req.getLevel());
+        // 有推荐人时，无法修改
+        if (StringUtils.isNotBlank(data.getUserReferee())) {
+            throw new BizException("xn00000", "该代理有推荐人，请先解绑推荐关系再修改");
+        }
+
+        // 等级不能高于上级
+        User highUser = userBO.getUser(data.getUserId());
+        if (EUserKind.Merchant.getCode().equals(highUser.getKind())
+                && highUser.getLevel() >= nowLevel) {
+            throw new BizException("xn00000", "修改的等级不能高于或等于上级");
+        }
+
+        // 等级不能低于下级
+        List<User> list = userBO.queryLowUserList(data.getUserId());
+        for (User user : list) {
+            if (user.getLevel() <= nowLevel) {
+                throw new BizException("xn00000", "修改的等级不能低于或等于下级");
+            }
+        }
+
+        // 非最高等级代理不能修改
+        if (!data.getTeamName().equals(req.getTeamName())
+                && !EUserLevel.ONE.getCode().equals(req.getLevel())) {
+            // 下级同步团队名字
+            this.editLowUserTeamName(list, req.getTeamName());
+        } else {
+            throw new BizException("xn000000", "该代理不是最高等级，不能修改团队名称");
+        }
+
+        data.setTeamName(req.getTeamName());
         data.setRealName(req.getRealName());
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
@@ -1525,12 +1556,19 @@ public class UserAOImpl implements IUserAO {
 
         }
 
-        data.setApplyLevel(StringValidater.toInteger(highLevel));
+        String toUserId = userBO.getSysUser().getUserId();
+        Integer newLevel = StringValidater.toInteger(highLevel);
+        // 申请不是最高等级
+        if (newLevel != StringValidater.toInteger(EUserLevel.ONE.getCode())) {
+            toUserId = this.getHighUser(data.getHighUserId(), newLevel);
+        }
+
+        data.setApplyLevel(newLevel);
         data.setStatus(status);
         data.setApplyDatetime(new Date());
         data.setPayAmount(StringValidater.toLong(payAmount));
 
-        String logCode = agencyLogBO.upgradeLevel(data, payPdf);
+        String logCode = agencyLogBO.upgradeLevel(data, payPdf, toUserId);
         data.setLastAgentLog(logCode);
         userBO.upgradeLevel(data);
     }
@@ -1917,4 +1955,22 @@ public class UserAOImpl implements IUserAO {
         return userBO.getUserByMobile(mobile);
     }
 
+    private String getHighUser(String highUserId, Integer level) {
+        User highUser = userBO.getUser(highUserId);
+        if (level != highUser.getLevel()) {
+            highUser = userBO.getUser(highUser.getHighUserId());
+            getHighUser(highUser.getHighUserId(), level);
+        }
+        return highUser.getUserId();
+    }
+
+    // 修改下级团队名称
+    private void editLowUserTeamName(List<User> list, String teamName) {
+        for (User user : list) {
+            user.setTeamName(teamName);
+            userBO.refreshTeamName(user);
+            List<User> lowList = userBO.queryLowUserList(user.getUserId());
+            editLowUserTeamName(lowList,  teamName);
+        }
+    }
 }

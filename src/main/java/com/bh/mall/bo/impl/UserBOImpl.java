@@ -749,4 +749,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userDAO.selectFrontTotalCount(condition);
     }
 
+    @Override
+    public void refreshTeamName(User user) {
+        userDAO.updateTeamName(user);
+    }
+
 }

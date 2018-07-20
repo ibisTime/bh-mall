@@ -220,7 +220,6 @@ public class OrderAOImpl implements IOrderAO {
                     throw new BizException("xn00000", agent.getName()
                             + "授权单金额为[" + agent.getAmount() / 1000 + "]元");
                 }
-
             }
         }
 
@@ -255,18 +254,22 @@ public class OrderAOImpl implements IOrderAO {
                     / psData.getSingleNumber();
 
             for (int i = 0; i < singleNumber; i++) {
+
                 String orderCode = this.addOrder(applyUser, pData, psData,
                     psData.getSingleNumber(), req.getApplyNote(),
                     req.getSigner(), req.getMobile(), req.getProvince(),
                     req.getCity(), req.getArea(), req.getAddress());
+
                 list.add(orderCode);
             }
         } else {
+
             String orderCode = this.addOrder(applyUser, pData, psData,
                 StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
                 req.getAddress());
+
             list.add(orderCode);
         }
 
@@ -332,7 +335,6 @@ public class OrderAOImpl implements IOrderAO {
                     PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
                 result = payResult;
             }
-
         }
         return result;
 
@@ -392,7 +394,6 @@ public class OrderAOImpl implements IOrderAO {
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
-
                 }
 
                 data.setPayDatetime(new Date());
@@ -402,15 +403,14 @@ public class OrderAOImpl implements IOrderAO {
 
                 orderBO.paySuccess(data);
             } else {
+
                 data.setStatus(EOrderStatus.Pay_NO.getCode());
                 data.setPayDatetime(new Date());
                 orderBO.payNo(data);
             }
-
         } catch (JDOMException | IOException e) {
             throw new BizException("xn000000", "回调结果XML解析失败");
         }
-
     }
 
     @Override
@@ -619,7 +619,6 @@ public class OrderAOImpl implements IOrderAO {
                     EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
                     EBizType.AJ_CHJL.getValue(), data.getCode());
             }
-
         }
 
         // **********推荐奖**********
@@ -672,7 +671,6 @@ public class OrderAOImpl implements IOrderAO {
                 }
             }
         }
-
     }
 
     @Override
@@ -947,7 +945,6 @@ public class OrderAOImpl implements IOrderAO {
                     EBizType.AJ_YCCH.getValue(), order.getCode());
 
             }
-            wareHouseBO.buyWareHouse(order, applyUser);
 
         } else {
             // 无上级代理,扣减产品实际库存

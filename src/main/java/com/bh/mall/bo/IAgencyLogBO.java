@@ -24,7 +24,7 @@ public interface IAgencyLogBO extends IPaginableBO<AgencyLog> {
 
     public String approveCanenl(User data, String status);
 
-    public String upgradeLevel(User data, String payPdf);
+    public String upgradeLevel(User data, String payPdf, String toUserId);
 
     public String approveUpgrade(User data, String status);
 
