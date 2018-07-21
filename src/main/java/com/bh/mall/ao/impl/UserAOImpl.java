@@ -1103,6 +1103,8 @@ public class UserAOImpl implements IUserAO {
         // 清空手机号与身份证，防止重新申请时重复
         data.setMobile(null);
         data.setIdNo(null);
+        data.setUserReferee(null);
+        data.setHighUserId(null);
 
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
@@ -1331,11 +1333,13 @@ public class UserAOImpl implements IUserAO {
             // 清空手机号与身份证号，防止重新申请时重复
             data.setMobile(null);
             data.setIdNo(null);
+            data.setTeamName(null);
             status = EUserStatus.IMPOWERO_INFO.getCode();
         } else {
             // 未通过，无推荐人
             data.setMobile(null);
             data.setIdNo(null);
+            data.setTeamName(null);
             status = EUserStatus.TO_MIND.getCode();
         }
 
@@ -1395,6 +1399,7 @@ public class UserAOImpl implements IUserAO {
             // 清空手机号与身份证号，防止重新申请时冲突
             data.setMobile(null);
             data.setIdNo(null);
+            data.setTeamName(null);
 
         }
         data.setStatus(status);
@@ -1970,7 +1975,19 @@ public class UserAOImpl implements IUserAO {
             user.setTeamName(teamName);
             userBO.refreshTeamName(user);
             List<User> lowList = userBO.queryLowUserList(user.getUserId());
-            editLowUserTeamName(lowList,  teamName);
+            editLowUserTeamName(lowList, teamName);
         }
+    }
+
+    @Override
+    public void abolishImpower(String userId, String updater, String remark) {
+        User data = userBO.getUser(userId);
+        if (EUserStatus.IMPOWERED.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "该代理还未授权，无法取消");
+        }
+
+        String logCode = agencyLogBO.cancelImpower(data);
+        userBO.abolishImpower(data, updater, remark, logCode);
+
     }
 }

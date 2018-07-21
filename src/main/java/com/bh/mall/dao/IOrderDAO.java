@@ -31,4 +31,6 @@ public interface IOrderDAO extends IBaseDAO<Order> {
     void payNo(Order data);
 
     void paySuccess(Order data);
+
+    void invalidOrder(Order data);
 }

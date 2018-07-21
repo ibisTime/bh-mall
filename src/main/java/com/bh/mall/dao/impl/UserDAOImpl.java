@@ -231,4 +231,9 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public void updateTeamName(User data) {
         super.update(NAMESPACE.concat("unpdate_teamName"), data);
     }
+
+    @Override
+    public void abolishImpower(User data) {
+        super.update(NAMESPACE.concat("abolish_impower"), data);
+    }
 }

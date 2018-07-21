@@ -754,4 +754,25 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         userDAO.updateTeamName(user);
     }
 
+    @Override
+    public void abolishImpower(User data, String updater, String remark,
+            String logCode) {
+        Date date = new Date();
+        data.setStatus(EUserStatus.CANCELED.getCode());
+        data.setUpdater(updater);
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+
+        // 清空号码和推荐/上下级关系
+        data.setMobile(null);
+        data.setIdNo(null);
+        data.setUserReferee(null);
+        data.setHighUserId(null);
+        data.setTeamName(null);
+
+        data.setLastAgentLog(logCode);
+        userDAO.abolishImpower(data);
+
+    }
+
 }
