@@ -13,6 +13,7 @@ public interface IAgencyLogAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
+    //
     public String addAgencyLog(AgencyLog data);
 
     public Paginable<AgencyLog> queryAgencyLogPage(int start, int limit,
