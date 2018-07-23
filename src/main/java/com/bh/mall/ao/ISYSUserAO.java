@@ -10,6 +10,7 @@ public interface ISYSUserAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 注册
+    // type
 
     // 用户登录 XN627300
     public String doLogin(String loginName, String loginPwd, String kind,
