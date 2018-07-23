@@ -9,6 +9,7 @@ public interface IAgentAllotAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增意向分配表
+    //
     public String addAgentAllot(AgentAllot data);
 
     // 修改意向分配表
