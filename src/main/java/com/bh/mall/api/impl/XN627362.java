@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IBuserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -10,7 +10,7 @@ import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
-/**
+/**w
  * 补充授权所需信息
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
@@ -18,7 +18,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627362 extends AProcessor {
 
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private IBuserAO userAO = SpringContextHolder.getBean(IBuserAO.class);
 
     private XN627362Req req = null;
 

@@ -22,6 +22,9 @@ public class IUserBOTest extends ABizTest {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private IBuserBO buserBO;
+
     @Test
     public void doRegister() {
         // String userId = userBO.doRegister("13958092437", "123456",
@@ -30,4 +33,16 @@ public class IUserBOTest extends ABizTest {
         // logger.info("doRegister : {}", userId);
 
     }
+
+    @Test
+    public void doBuserRegister() {
+        // String userId = buserBO.doRegister("13958092437", "123456",
+        // "127.0.0.1",
+        // "", 0L);
+        // logger.info("doRegister : {}", userId);
+
+    }
+
+    // 错误测试
+
 }

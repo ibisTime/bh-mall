@@ -9,6 +9,7 @@ import com.bh.mall.dto.req.XN804081Req;
 import com.bh.mall.dto.req.XN804082Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.dto.res.PKCodeRes;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.http.BizConnecter;
 import com.bh.mall.http.JsonUtils;
 
@@ -50,6 +51,18 @@ public class SmsOutBOImpl implements ISmsOutBO {
     }
 
     @Override
+    public void checkCaptcha(String mobile, String captcha, String bizType) {
+        XN804082Req req = new XN804082Req();
+        req.setMobile(mobile);
+        req.setCaptcha(captcha);
+        req.setBizType(bizType);
+        req.setCompanyCode(ESystemCode.BH.getCode());
+        req.setSystemCode(ESystemCode.BH.getCode());
+        BizConnecter.getBizData("804082", JsonUtils.object2Json(req),
+            BooleanRes.class);
+    }
+
+    @Override
     public void checkCaptcha(String mobile, String captcha, String bizType,
             String companyCode, String systemCode) {
         XN804082Req req = new XN804082Req();
@@ -72,6 +85,22 @@ public class SmsOutBOImpl implements ISmsOutBO {
             req.setType("M");
             req.setCompanyCode(companyCode);
             req.setSystemCode(systemCode);
+            BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
+                PKCodeRes.class);
+        } catch (Exception e) {
+            logger.error("调用短信发送服务异常");
+        }
+    }
+
+    @Override
+    public void sendSmsOut(String mobile, String content, String bizType) {
+        try {
+            XN804080Req req = new XN804080Req();
+            req.setMobile(mobile);
+            req.setContent(content);
+            req.setType("M");
+            req.setCompanyCode(ESystemCode.BH.getCode());
+            req.setSystemCode(ESystemCode.BH.getCode());
             BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {

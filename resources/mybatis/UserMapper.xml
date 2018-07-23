@@ -688,6 +688,7 @@
 	</update>
 	
 	
+	<!--  申请时无推荐人 -->
 	<update id="apply_intent" parameterType="user">
 		UPDATE tbh_user
 		SET
@@ -702,6 +703,8 @@
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		
+		,source = #{source} <!-- 信息来源 need check -->
+		
 		,id_front = #{idFront}
 		,id_behind = #{idBehind}
 		,id_hand = #{idHand}
@@ -715,7 +718,7 @@
 		WHERE user_id = #{userId}
 	</update>
 	
-		
+	<!-- 申请时有推荐人 -->	
 	<update id="to_apply" parameterType="user">
 		UPDATE tbh_user
 		SET

@@ -2,12 +2,12 @@ package com.bh.mall.api.impl;
 
 import java.util.Date;
 
-import com.bh.mall.ao.IAgencyLogAO;
+import com.bh.mall.ao.IAgentAllotAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.AgencyLog;
+import com.bh.mall.domain.AgentAllot;
 import com.bh.mall.dto.req.XN627360Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -21,14 +21,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627360 extends AProcessor {
 
-    private IAgencyLogAO agencyLogAO = SpringContextHolder
-        .getBean(IAgencyLogAO.class);
+    private IAgentAllotAO agencyLogAO = SpringContextHolder
+        .getBean(IAgentAllotAO.class);
 
     private XN627360Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        AgencyLog condition = new AgencyLog();
+        AgentAllot condition = new AgentAllot();
         condition.setKeyWord(req.getKeyword());
         condition.setStatus(req.getStatus());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
@@ -40,7 +40,7 @@ public class XN627360 extends AProcessor {
         condition.setApproveDatetimeStart(approveDatetimeStart);
         condition.setApproveDatetimeEnd(approveDatetimeEnd);
 
-        return agencyLogAO.queryAgencyLogList(condition);
+        return agencyLogAO.queryAgentAllotList(condition);
     }
 
     @Override

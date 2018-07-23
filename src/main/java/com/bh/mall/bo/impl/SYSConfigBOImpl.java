@@ -21,8 +21,8 @@ import com.bh.mall.domain.SYSConfig;
  * @history:
  */
 @Component
-public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
-        ISYSConfigBO {
+public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
+        implements ISYSConfigBO {
     @Autowired
     private ISYSConfigDAO sysConfigDAO;
 
@@ -63,6 +63,17 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     }
 
     @Override
+    public SYSConfig getConfig(String ckey) {
+        SYSConfig result = null;
+        if (ckey != null) {
+            SYSConfig condition = new SYSConfig();
+            condition.setCkey(ckey);
+            result = sysConfigDAO.select(condition);
+        }
+        return result;
+    }
+
+    @Override
     public Map<String, String> getConfigsMap(String type, String companyCode,
             String systemCode) {
         Map<String, String> map = new HashMap<String, String>();
@@ -78,6 +89,22 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
                 }
             }
         }
+        return map;
+
+    }
+
+    @Override
+    public Map<String, String> getConfigsMap(String type) {
+        Map<String, String> map = new HashMap<String, String>();
+        SYSConfig condition = new SYSConfig();
+        condition.setType(type);
+        List<SYSConfig> list = sysConfigDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (SYSConfig sysConfig : list) {
+                map.put(sysConfig.getCkey(), sysConfig.getCvalue());
+            }
+        }
+
         return map;
 
     }

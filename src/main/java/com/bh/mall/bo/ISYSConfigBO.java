@@ -35,6 +35,8 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     public SYSConfig getConfig(String ckey, String companyCode,
             String systemCode);
 
+    public SYSConfig getConfig(String ckey);
+
     /**
      * 获取所有配置
      * @param companyCode
@@ -45,5 +47,7 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
      */
     public Map<String, String> getConfigsMap(String type, String companyCode,
             String systemCode);
+
+    public Map<String, String> getConfigsMap(String type);
 
 }

@@ -3,7 +3,7 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 修改头像
+ * 修改mobile
  * @author: nyc 
  * @since: 2018年4月26日 下午5:54:31 
  * @history:

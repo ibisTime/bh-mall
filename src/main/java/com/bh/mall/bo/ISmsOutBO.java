@@ -38,6 +38,8 @@ public interface ISmsOutBO {
     public void checkCaptcha(String mobile, String captcha, String bizType,
             String companyCode, String systemCode);
 
+    public void checkCaptcha(String mobile, String captcha, String bizType);
+
     /**
      * 发送指定内容短信(系统和公司)
      * @param mobile
@@ -50,4 +52,6 @@ public interface ISmsOutBO {
      */
     public void sendSmsOut(String mobile, String content, String bizType,
             String companyCode, String systemCode);
+
+    public void sendSmsOut(String mobile, String content, String bizType);
 }

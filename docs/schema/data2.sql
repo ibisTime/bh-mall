@@ -20,6 +20,7 @@ CREATE TABLE `tbh_account` (
 DROP TABLE IF EXISTS `tbh_address`;
 CREATE TABLE `tbh_address` (
   `code` varchar(32) NOT NULL COMMENT '收件编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `receiver` varchar(64) DEFAULT NULL COMMENT '收件人姓名',
   `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
@@ -28,7 +29,6 @@ CREATE TABLE `tbh_address` (
   `area` varchar(64) DEFAULT NULL COMMENT '区',
   `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `is_default` char(1) DEFAULT NULL COMMENT '是否默认地址',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
@@ -150,12 +150,12 @@ CREATE TABLE `tbh_award` (
 DROP TABLE IF EXISTS `tbh_bankcard`;
 CREATE TABLE `tbh_bankcard` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `bankcard_number` varchar(64) DEFAULT NULL COMMENT '银行卡编号',
   `bank_code` varchar(32) DEFAULT NULL COMMENT '银行行别',
   `bank_name` varchar(32) DEFAULT NULL COMMENT '银行名称',
   `subbranch` varchar(255) DEFAULT NULL COMMENT '开户支行',
   `bind_mobile` varchar(32) DEFAULT NULL COMMENT '银行卡绑定手机号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
   `type` varchar(4) DEFAULT NULL COMMENT '类型',
   `status` varchar(2) DEFAULT NULL COMMENT '状态',
@@ -174,6 +174,7 @@ DROP TABLE IF EXISTS `tbh_cart`;
 CREATE TABLE `tbh_cart` (
   `code` varchar(32) NOT NULL,
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户ID',
+  `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号）',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_specs_code` varchar(32) DEFAULT NULL COMMENT '产品规格编号',
   `price` bigint(20) DEFAULT '0' COMMENT '单价',
@@ -486,6 +487,137 @@ CREATE TABLE `tbh_product_specs_price` (
   `weekly_number` int(11) DEFAULT '0' COMMENT '周限购',
   `monthly_number` int(11) DEFAULT '0' COMMENT '月限购',
   PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tbh_cuser`;
+CREATE TABLE `tbh_cuser`(
+	`user_id` varchar(32) NOT NULL COMMENT '用户编号',
+	`login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
+    `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
+    `wx_id` varchar(32) DEFAULT NULL COMMENT '微信号',
+    `photo` varchar(255) DEFAULT NULL COMMENT '头像',
+    `nickname` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
+    `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
+    `trade_pwd` varchar(45) DEFAULT NULL COMMENT '交易密码',
+    `trade_pwd_strength` varchar(45) DEFAULT NULL COMMENT '交易密码强度',
+    `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
+    `union_id` varchar(255) DEFAULT NULL COMMENT '联合编号',
+	`h5_open_id` varchar(255) DEFAULT NULL COMMENT '公众号开放编号',
+  	`app_open_id` varchar(255) DEFAULT NULL COMMENT 'app开放编号',
+  	`create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
+  	`status` varchar(4) DEFAULT NULL COMMENT '状态',
+	 PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tbh_sysuser`;
+CREATE TABLE `tbhsysbuser`(
+	 `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+	 `kind` varchar(4) DEFAULT NULL COMMENT '用户类型',
+	 `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
+	 `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',	
+	 `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
+	 `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  	 `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+	  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tbh_uplevel_apply`;
+CREATE TABLE `tbh_uplevel_apply` (
+  `code` varchar(32) NOT NULL,
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_level` varchar(32) DEFAULT NULL COMMENT '申请等级',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `re_number` int(11) DEFAULT '0' COMMENT '半门槛推荐人数',
+  `pay_amount` bigint(20) DEFAULT '0' COMMENT '打款金额',
+  `pay_pdf` varchar(255) DEFAULT NULL COMMENT '打款截图',
+  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `impower_datetime` datetime DEFAULT NULL COMMENT '授权书时间',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tbh_impower_apply`;
+CREATE TABLE `tbh_impower_apply` (
+  `code` varchar(32) NOT NULL,
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_level` varchar(32) DEFAULT NULL COMMENT '申请等级',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `pay_amount` bigint(20) DEFAULT '0' COMMENT '打款金额',
+  `pay_pdf` varchar(255) DEFAULT NULL COMMENT '打款截图',
+  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `impower_datetime` datetime DEFAULT NULL COMMENT '授权书时间',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `tbh_agent_allot`;
+CREATE TABLE `tbh_agent_allot` (
+  `code` varchar(32) NOT NULL,
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `to_user_id` varchar(32) DEFAULT NULL COMMENT '意向归属人',
+  `apply_level` varchar(32) DEFAULT NULL COMMENT '申请等级',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `manager` varchar(32) DEFAULT NULL COMMENT '关联管理员',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `tbh_buser`;
+CREATE TABLE `tbh_buser` (
+	`user_id` varchar(32) NOT NULL COMMENT '用户编号',
+	`login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
+  	`mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
+  	`wx_id` varchar(32) DEFAULT NULL COMMENT '微信号',
+  	`photo` varchar(255) DEFAULT NULL COMMENT '头像',
+  	`nickname` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
+  	`login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
+  	`login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
+  	`kind` varchar(4) DEFAULT NULL COMMENT '用户类型',
+  	`level` int(32) DEFAULT NULL COMMENT '用户等级',
+  	`apply_level` varchar(32) DEFAULT NULL COMMENT '申请等级',
+  	`user_referee` varchar(32) DEFAULT NULL COMMENT '推荐人',
+  	`introducer` varchar(32) DEFAULT NULL COMMENT '介绍人',
+  	`high_user_id` varchar(32) DEFAULT NULL COMMENT '上级用户',
+  	`team_name` varchar(32) DEFAULT NULL COMMENT '团队名称',
+  	`id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
+  	`id_no` varchar(32) DEFAULT NULL COMMENT '证件号码',
+  	`id_front` text COMMENT '身份证反面',
+  	`id_behind` text COMMENT '身份证正面',
+  	`id_hand` text COMMENT '手持身份证',
+  	`real_name` varchar(32) DEFAULT NULL COMMENT '真实姓名',
+  	`role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',
+  	`status` varchar(4) DEFAULT NULL COMMENT '状态',
+  	`source` varchar(32) DEFAULT NULL COMMENT '来源',
+  	`apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  	`manager` varchar(32) DEFAULT NULL COMMENT '关联管理员',
+  	`union_id` varchar(255) DEFAULT NULL COMMENT '联合编号',
+	`h5_open_id` varchar(255) DEFAULT NULL COMMENT '公众号开放编号',
+  	`app_open_id` varchar(255) DEFAULT NULL COMMENT 'app开放编号',
+  	`province` varchar(255) DEFAULT NULL COMMENT '省',
+  	`city` varchar(255) DEFAULT NULL COMMENT '市',
+  	`area` varchar(255) DEFAULT NULL COMMENT '区',
+  	`address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  	`create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
+  	`updater` varchar(32) DEFAULT NULL COMMENT '修改人',
+  	`update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
+  	`approver` varchar(32) DEFAULT NULL COMMENT '审核人',
+  	`approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  	`last_agent_log` varchar(32) DEFAULT NULL COMMENT '最后一条代理轨迹记录',
+  	`remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  	 PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tbh_user`;
