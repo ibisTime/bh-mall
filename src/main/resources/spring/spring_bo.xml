@@ -15,33 +15,6 @@
 	<bean id="userBO" class="com.bh.mall.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl" />
 	</bean>
-	
-	
-	<bean id="cuserBO" class="com.bh.mall.bo.impl.CUserBOImpl">
-		<property name="paginableDAO" ref="cuserDAOImpl" />
-	</bean>
-	
-	
-	<bean id="buserBO" class="com.bh.mall.bo.impl.BUserBOImpl">
-		<property name="paginableDAO" ref="buserDAOImpl" />
-	</bean>
-	
-	<bean id="sysUserBO" class="com.bh.mall.bo.impl.SYSUserBOImpl">
-		<property name="paginableDAO" ref="sysuserDAOImpl" />
-	</bean>
-	
-	<bean id="agentAllotBO" class="com.bh.mall.bo.impl.AgentAllotBOImpl">
-		<property name="paginableDAO" ref="agentAllotDAOImpl" />
-	</bean>
-	
-	<bean id="impowerApplyBO" class="com.bh.mall.bo.impl.ImpowerApplyBOImpl">
-		<property name="paginableDAO" ref="impowerApplyDAOImpl" />
-	</bean>
-	
-	<bean id="uplevelApplyBO" class="com.bh.mall.bo.impl.UpLevelApplyBOImpl">
-		<property name="paginableDAO" ref="upLevelApplyDAOImpl" />
-	</bean>
-		
 	<bean id="addressBO" class="com.bh.mall.bo.impl.AddressBOImpl">
 		<property name="paginableDAO" ref="addressDAOImpl"/>
 	</bean>	
