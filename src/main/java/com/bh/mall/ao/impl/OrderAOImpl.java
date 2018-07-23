@@ -841,8 +841,8 @@ public class OrderAOImpl implements IOrderAO {
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EOrderStatus.Canceled.getCode());
             // 云仓提货，归还云仓库存
+            User applyUser = userBO.getUser(data.getApplyUser());
             if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
-                User applyUser = userBO.getUser(data.getApplyUser());
                 wareHouseBO.buyWareHouse(data, applyUser);
             } else if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
                 String toUser = data.getToUser();
@@ -855,7 +855,15 @@ public class OrderAOImpl implements IOrderAO {
                     data.getAmount(), EBizType.AJ_GMCP_TK,
                     EBizType.AJ_GMCP_TK.getValue(),
                     EBizType.AJ_GMCP_TK.getValue(), data.getCode());
+            } else {
+                // 归还上级库存
+                Product pData = productBO.getProduct(data.getProductCode());
+                ProductSpecs psData = productSpecsBO
+                    .getProductSpecs(data.getProductSpecsCode());
+                this.changeProductNumber(applyUser, pData, psData, data,
+                    -data.getQuantity(), code);
             }
+
         }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
@@ -945,7 +953,7 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn00000", "上级代理云仓中没有该产品");
             } else {
                 // 改变上级云仓
-                wareHouseBO.changeWareHouse(toWareHouse.getCode(), -number,
+                wareHouseBO.changeWareHouse(toWareHouse.getCode(), number,
                     EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
                     order.getCode());
             }
@@ -1156,17 +1164,12 @@ public class OrderAOImpl implements IOrderAO {
         orderBO.invalidOrder(data, updater, remark);
 
         // 退还库存
-        User toUser = userBO.getUser(data.getToUser());
-        if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
-            wareHouseBO.buyWareHouse(data, toUser);
-        } else {
-            User applyUser = userBO.getUser(data.getApplyUser());
-            Product pData = productBO.getProduct(data.getProductCode());
-            ProductSpecs psData = productSpecsBO
-                .getProductSpecs(data.getProductSpecsCode());
-            this.changeProductNumber(applyUser, pData, psData, data,
-                -data.getQuantity(), code);
-        }
+        User applyUser = userBO.getUser(data.getApplyUser());
+        Product pData = productBO.getProduct(data.getProductCode());
+        ProductSpecs psData = productSpecsBO
+            .getProductSpecs(data.getProductSpecsCode());
+        this.changeProductNumber(applyUser, pData, psData, data,
+            -data.getQuantity(), code);
 
     }
 }
