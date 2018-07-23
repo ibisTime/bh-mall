@@ -9,8 +9,6 @@ public interface ISecurityTraceBO extends IPaginableBO<SecurityTrace> {
 
     public void saveSecurityTrace(SecurityTrace data);
 
-    public void refreshSecurityTrace(SecurityTrace data);
-
     public List<SecurityTrace> querySecurityTraceList(SecurityTrace condition);
 
     public SecurityTrace getSecurityTrace(String code);
@@ -19,8 +17,16 @@ public interface ISecurityTraceBO extends IPaginableBO<SecurityTrace> {
 
     public List<SecurityTrace> queryCodeList();
 
-    public void refreshStatus(SecurityTrace securityTrace);
-
     public SecurityTrace getNoUseSecurityTrace();
+
+    public void refreshSecurityTrace(SecurityTrace trace, String barCode);
+
+    void refreshStatus(SecurityTrace data, String orderCode);
+
+    public SecurityTrace getSecurity(String securityCode);
+
+    public SecurityTrace getTrace(String traceCode);
+
+    public int refreshSecurity(SecurityTrace data);
 
 }

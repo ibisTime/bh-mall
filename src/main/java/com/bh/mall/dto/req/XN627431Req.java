@@ -8,7 +8,6 @@ package com.bh.mall.dto.req;
  */
 public class XN627431Req {
 
-    // TODO
     // 类型 （选填）
     private String type;
 

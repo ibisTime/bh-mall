@@ -112,6 +112,7 @@ public class WareHouseLogBOImpl extends PaginableBOImpl<WareHouseLog>
         logData.setStatus(dbData.getStatus());
 
         logData.setApplyUser(dbData.getUserId());
+        logData.setApplyDatetime(new Date());
         logData.setRealName(dbData.getRealName());
         logData.setStatus(dbData.getStatus());
         logData.setAfterNumber(dbData.getQuantity() + quantity);

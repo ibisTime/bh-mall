@@ -69,4 +69,9 @@ public class WareHouseDAOImpl extends AMybatisTemplate
             condition, WareHouse.class);
     }
 
+    @Override
+    public void changePrice(WareHouse data) {
+        super.update(NAMESPACE.concat("update_Price"), data);
+    }
+
 }

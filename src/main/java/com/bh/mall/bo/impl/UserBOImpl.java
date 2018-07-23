@@ -479,17 +479,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshRole(String userId, String roleCode, String updater,
+    public void refreshRole(User data, String roleCode, String updater,
             String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setRoleCode(roleCode);
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            userDAO.updateRole(data);
-        }
+        data.setRoleCode(roleCode);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+        userDAO.updateRole(data);
     }
 
     @Override
@@ -502,6 +498,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void resetBindMobile(User user, String newMobile) {
         user.setMobile(newMobile);
+        user.setLoginName(newMobile);
         userDAO.resetBindMobile(user);
     }
 
@@ -559,7 +556,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void ignore(User data) {
-        data.setStatus(EUserStatus.IGNORED.getCode());
         userDAO.ignore(data);
     }
 
@@ -580,7 +576,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void approveCanenl(User data) {
-        userDAO.approveImpower(data);
+        userDAO.approveCanenl(data);
     }
 
     @Override
@@ -667,11 +663,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public User getUserByMobile(String introducer) {
+    public User getUserByMobile(String mobile) {
         User data = null;
-        if (StringUtils.isNotBlank(introducer)) {
+        if (StringUtils.isNotBlank(mobile)) {
             User condition = new User();
-            condition.setMobile(introducer);
+            condition.setMobile(mobile);
             data = userDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn000000", "介绍人不存在");
@@ -710,6 +706,52 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                 throw new BizException("xn000000", "该团队名称已经存在喽，重新起一个吧！");
             }
         }
+    }
+
+    @Override
+    public void reapply(User data, String status, String userReferee) {
+        data.setStatus(status);
+        data.setUserReferee(userReferee);
+        userDAO.reapply(data);
+    }
+
+    @Override
+    public void refreshLoginPwd(User user, String newLoginPwd) {
+        user.setLoginPwd(MD5Util.md5(newLoginPwd));
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(newLoginPwd));
+        userDAO.updateLoginPwd(user);
+    }
+
+    @Override
+    public List<User> queryLowUserList(String userId) {
+        User condition = new User();
+        condition.setHighUserId(userId);
+        return userDAO.selectList(condition);
+    }
+
+    @Override
+    public User getTeamLeader(String teamName) {
+        List<User> list = null;
+        if (StringUtils.isNotBlank(teamName)) {
+            User condition = new User();
+            condition.setTeamName(teamName);
+            condition.setLevel(1);
+            list = userDAO.selectList(condition);
+            if (CollectionUtils.isEmpty(list)) {
+                throw new BizException("xn00000", "该团队没有团队长");
+            }
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public long queryTotalCount(User condition) {
+        return userDAO.selectFrontTotalCount(condition);
+    }
+
+    @Override
+    public void refreshTeamName(User user) {
+        userDAO.updateTeamName(user);
     }
 
 }

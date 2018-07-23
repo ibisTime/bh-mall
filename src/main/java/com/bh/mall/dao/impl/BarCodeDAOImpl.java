@@ -56,4 +56,9 @@ public class BarCodeDAOImpl extends AMybatisTemplate implements IBarCodeDAO {
             BarCode.class);
     }
 
+    @Override
+    public void splitSingle(BarCode data) {
+        super.update(NAMESPACE.concat("split_single"), data);
+    }
+
 }

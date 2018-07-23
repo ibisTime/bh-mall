@@ -12,7 +12,6 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IIntroDAO;
-import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Intro;
 import com.bh.mall.exception.BizException;
 
@@ -88,13 +87,6 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
         condition.setLevel(fromLevel);
         condition.setLevel(toLevel);
         Intro data = introDAO.select(condition);
-
-        Agent fromAgent = agentBO.getAgentByLevel(fromLevel);
-        Agent toAgent = agentBO.getAgentByLevel(toLevel);
-        if (null == data) {
-            throw new BizException("xn0000",
-                fromAgent.getName() + "介绍" + toAgent.getName() + "的介绍奖励不存在");
-        }
         return data;
     }
 }

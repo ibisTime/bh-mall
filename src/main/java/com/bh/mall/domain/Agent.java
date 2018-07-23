@@ -12,9 +12,6 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class Agent extends ABaseDO {
 
-    /**
-     * tbh
-     */
     private static final long serialVersionUID = -8708365669948607235L;
 
     // 等级
@@ -23,7 +20,7 @@ public class Agent extends ABaseDO {
     // 等级名称
     private String name;
 
-    // 首次授权发送金额
+    // 首次授权金额
     private Long amount;
 
     // 红线金额
@@ -54,6 +51,9 @@ public class Agent extends ABaseDO {
     private Integer lowLevel;
 
     private Integer highLevel;
+
+    // 是够需要实名
+    private String isRealName;
 
     public Integer getLowLevel() {
         return lowLevel;
@@ -157,6 +157,14 @@ public class Agent extends ABaseDO {
 
     public void setHighLevel(Integer highLevel) {
         this.highLevel = highLevel;
+    }
+
+    public String getIsRealName() {
+        return isRealName;
+    }
+
+    public void setIsRealName(String isRealName) {
+        this.isRealName = isRealName;
     }
 
 }

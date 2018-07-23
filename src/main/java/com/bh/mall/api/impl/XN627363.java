@@ -24,6 +24,7 @@ public class XN627363 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+
         return new BooleanRes(userAO.isRealName(req.getUserId()));
     }
 

@@ -13,6 +13,7 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.IBarCodeDAO;
 import com.bh.mall.domain.BarCode;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -29,7 +30,7 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
 
     @Override
     public void refreshBarCode(BarCode data) {
-        data.setStatus(EBoolean.YES.getCode());
+        data.setStatus(ECodeStatus.USE_NO.getCode());
         data.setUseDatetime(new Date());
         barCodeDAO.update(data);
     }
@@ -82,6 +83,13 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
     public List<BarCode> queryCodeList() {
         BarCode condition = new BarCode();
         return barCodeDAO.selectCodeList(condition);
+    }
+
+    @Override
+    public void splitSingle(BarCode barData) {
+        barData.setStatus(ECodeStatus.SPLIT_SINGLE.getCode());
+        barData.setUseDatetime(new Date());
+        barCodeDAO.splitSingle(barData);
     }
 
 }

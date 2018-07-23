@@ -23,7 +23,6 @@ public class XN627642 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         return orderAO.payOrder(req.getCodeList(), req.getPayType());
     }
 

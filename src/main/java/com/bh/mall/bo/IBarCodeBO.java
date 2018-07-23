@@ -21,4 +21,6 @@ public interface IBarCodeBO extends IPaginableBO<BarCode> {
 
     public List<BarCode> queryCodeList();
 
+    public void splitSingle(BarCode barData);
+
 }

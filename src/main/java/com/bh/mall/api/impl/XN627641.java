@@ -5,7 +5,6 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627641Req;
-import com.bh.mall.dto.res.PKCodeRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -24,7 +23,7 @@ public class XN627641 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(orderAO.addOrderNoCart(req));
+        return orderAO.addOrderNoCart(req);
     }
 
     @Override

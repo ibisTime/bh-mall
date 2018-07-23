@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOrderDAO;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.User;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.exception.BizException;
@@ -22,7 +25,10 @@ import com.bh.mall.exception.BizException;
 public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
 
     @Autowired
-    private IOrderDAO orderDAO;
+    IOrderDAO orderDAO;
+
+    @Autowired
+    IUserBO userBO;
 
     @Override
     public void saveOrder(Order data) {
@@ -138,7 +144,7 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     @Override
-    public Long checkImpowerOrder(String applyUser) {
+    public boolean checkImpowerOrder(String applyUser, Date impoweDatetime) {
         List<String> statusList = new ArrayList<String>();
         statusList.add(EOrderStatus.Paid.getCode());
         statusList.add(EOrderStatus.TO_Apprvoe.getCode());
@@ -149,16 +155,17 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setApplyUser(applyUser);
         condition.setKind(EOrderKind.Impower_Order.getCode());
         condition.setStatusList(statusList);
+        condition.setStartDatetime(impoweDatetime);
+
         List<Order> list = orderDAO.selectList(condition);
-        Long amount = 0L;
-        for (Order order : list) {
-            amount = amount + order.getAmount();
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
         }
-        return amount;
+        return false;
     }
 
     @Override
-    public Long checkUpgradeOrder(String applyUser) {
+    public boolean checkUpgradeOrder(String applyUser) {
         List<String> statusList = new ArrayList<String>();
         statusList.add(EOrderStatus.Paid.getCode());
         statusList.add(EOrderStatus.TO_Apprvoe.getCode());
@@ -170,12 +177,10 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setKind(EOrderKind.Upgrade_Order.getCode());
         condition.setStatusList(statusList);
         List<Order> list = orderDAO.selectList(condition);
-        Long amount = 0L;
-
-        for (Order order : list) {
-            amount = amount + order.getAmount();
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
         }
-        return amount;
+        return false;
     }
 
     @Override
@@ -186,6 +191,67 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         condition.setStartDatetime(startDatetime);
         condition.setEndDatetime(endDatetime);
         return orderDAO.selectList(condition);
+    }
+
+    @Override
+    public Long getOrderByUser(String userId) {
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EOrderStatus.Paid.getCode());
+        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
+        statusList.add(EOrderStatus.TO_Deliver.getCode());
+        statusList.add(EOrderStatus.Received.getCode());
+
+        Order condition = new Order();
+        condition.setApplyUser(userId);
+        List<Order> list = orderDAO.selectList(condition);
+        condition.setKind(EOrderKind.Normal_Order.getCode());
+        Long amount = 0L;
+        for (Order order : list) {
+            amount = amount + order.getAmount();
+        }
+        return amount;
+    }
+
+    @Override
+    public String pickUpGoods(String productCode, String productName,
+            String pic, String productSpecsCode, String productSpecsName,
+            Integer singleNumber, Long price, Long amount, Long yunfei,
+            String highUserId, String userId, String signer, String mobile,
+            String province, String city, String area, String address,
+            String kind) {
+        Order data = new Order();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Order.getCode());
+
+        data.setCode(code);
+        data.setProductCode(productCode);
+        data.setProductName(productName);
+        data.setPic(pic);
+
+        data.setProductSpecsCode(productSpecsCode);
+        data.setProductSpecsName(productSpecsName);
+        data.setQuantity(singleNumber);
+        data.setPrice(price);
+
+        User toUser = userBO.getSysUser();
+        data.setToUser(toUser.getUserId());
+        data.setYunfei(yunfei);
+        data.setAmount(amount + yunfei);
+        data.setApplyUser(userId);
+        data.setApplyDatetime(new Date());
+
+        data.setSigner(signer);
+        data.setMobile(mobile);
+        data.setProvince(province);
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
+
+        data.setKind(kind);
+        data.setStatus(EOrderStatus.Paid.getCode());
+        orderDAO.insert(data);
+        return code;
+
     }
 
 }

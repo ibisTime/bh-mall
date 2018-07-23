@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.AgencyLog;
+import com.bh.mall.dto.req.XN627250Req;
 
 @Component
 public interface IAgencyLogAO {
@@ -23,5 +24,8 @@ public interface IAgencyLogAO {
 
     public Paginable<AgencyLog> queryIntentionAgentFrontPage(int start,
             int limit, AgencyLog condition);
+
+    // 申请意向代理
+    public void applyIntent(XN627250Req req);
 
 }

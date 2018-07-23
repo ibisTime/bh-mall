@@ -223,10 +223,7 @@ public class WeChatAOImpl implements IWeChatAO {
         logger.info("out_trade_no：" + map.get("out_trade_no"));
 
         String attach = map.get("attach");
-        System.out.println("attcah=" + attach);
         String[] codes = attach.split("\\|\\|");
-        System.out
-            .println("companyCode=" + codes[0] + " systemCode=" + codes[1]);
         CompanyChannel companyChannel = companyChannelBO
             .getCompanyChannel(codes[0], codes[1], channelType);
 

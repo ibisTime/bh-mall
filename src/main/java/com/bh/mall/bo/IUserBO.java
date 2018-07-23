@@ -114,7 +114,7 @@ public interface IUserBO extends IPaginableBO<User> {
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
 
-    public void refreshRole(String userId, String roleCode, String updater,
+    public void refreshRole(User data, String roleCode, String updater,
             String remark);
 
     public void setTradePwd(User user, String tradePwd);
@@ -174,7 +174,7 @@ public interface IUserBO extends IPaginableBO<User> {
     // 补充授权所需信息
     public void addInfo(User data);
 
-    public User getUserByMobile(String introducer);
+    public User getUserByMobile(String mobile);
 
     public void refreshHigh(User data);
 
@@ -182,5 +182,19 @@ public interface IUserBO extends IPaginableBO<User> {
     public User getUserByIdNo(String idNo);
 
     public void checkTeamName(String teamName);
+
+    public void reapply(User dbUser, String status, String userReferee);
+
+    public void refreshLoginPwd(User user, String newLoginPwd);
+
+    public List<User> queryLowUserList(String userId);
+
+    // 获取团队长
+    public User getTeamLeader(String teamName);
+
+    public long queryTotalCount(User condition);
+
+    // 修改团队名称
+    public void refreshTeamName(User user);
 
 }

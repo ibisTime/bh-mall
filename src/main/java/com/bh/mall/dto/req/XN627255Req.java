@@ -14,13 +14,25 @@ public class XN627255Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
-    // （必填）代理等级
-    @NotBlank(message = "代理等级不能为空")
+    // 真实姓名
+    @NotBlank(message = "真实姓名不能为空")
+    private String realName;
+
+    // （必填）微信号
+    @NotBlank(message = "微信号不能为空")
+    private String wxId;
+
+    // （必填）电话
+    @NotBlank(message = "电话不能为空")
+    private String mobile;
+
+    // 等级（必填）
+    @NotBlank(message = "等级不能为空")
     private String level;
 
-    // （必填） 详细地址
-    @NotBlank(message = "详细地址不能为空")
-    private String address;
+    // （必填）团队名称
+    @NotBlank(message = "团队名称不能为空")
+    private String teamName;
 
     // （必填）省
     @NotBlank(message = "省不能为空")
@@ -34,16 +46,9 @@ public class XN627255Req {
     @NotBlank(message = "区不能为空")
     private String area;
 
-    // （必填）微信号
-    @NotBlank(message = "微信号不能为空")
-    private String wxId;
-
-    // （必填）电话
-    @NotBlank(message = "电话不能为空")
-    private String mobile;
-
-    // （必填）团队名称
-    private String teamName;
+    // （必填） 详细地址
+    @NotBlank(message = "详细地址不能为空")
+    private String address;
 
     public String getUserId() {
         return userId;
@@ -51,14 +56,6 @@ public class XN627255Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
     public String getAddress() {
@@ -115,6 +112,22 @@ public class XN627255Req {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

@@ -272,4 +272,11 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         return data;
     }
 
+    @Override
+    public List<Account> getAccountByUser(String userId) {
+        Account condition = new Account();
+        condition.setUserId(userId);
+        return accountDAO.selectList(condition);
+    }
+
 }

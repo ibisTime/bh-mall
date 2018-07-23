@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -23,14 +24,31 @@ public class SecurityTrace extends ABaseDO {
     // 关联条形码
     private String refCode;
 
+    // 关联订单编号
+    private String orderCode;
+
     // 状态（未使用，已使用）
     private String status;
+
+    // 查询次数
+    private Integer number;
 
     // 生成时间
     private Date createDatetime;
 
     // 使用时间
     private Date useDatetime;
+
+    // **************db*************
+
+    // 订单
+    private Order orderData;
+
+    // 状态List
+    private List<String> statusList;
+
+    // 关键字
+    private String keyword;
 
     public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
@@ -78,6 +96,46 @@ public class SecurityTrace extends ABaseDO {
 
     public void setUseDatetime(Date useDatetime) {
         this.useDatetime = useDatetime;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public Order getOrderData() {
+        return orderData;
+    }
+
+    public void setOrderData(Order orderData) {
+        this.orderData = orderData;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 }

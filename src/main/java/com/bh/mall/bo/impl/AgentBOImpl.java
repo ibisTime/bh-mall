@@ -11,6 +11,7 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -48,6 +49,13 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         Agent condition = new Agent();
         condition.setLevel(applyLevel);
         return agentDAO.select(condition);
+    }
+
+    @Override
+    public List<Agent> getAgentHaveWH() {
+        Agent condition = new Agent();
+        condition.setIsWareHouse(EBoolean.YES.getCode());
+        return agentDAO.selectList(condition);
     }
 
 }

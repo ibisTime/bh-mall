@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public abstract class AListReq implements Serializable {
     /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     * @Fields serialVersionUID :  
      */
     private static final long serialVersionUID = 9192316630188356600L;
 

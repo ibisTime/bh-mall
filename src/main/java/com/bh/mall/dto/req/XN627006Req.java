@@ -7,7 +7,12 @@ package com.bh.mall.dto.req;
  * @since: 2018年1月31日 下午2:53:07 
  * @history:
  */
-public class XN627006Req {
+public class XN627006Req extends APageReq {
+
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = 4088691140071594564L;
 
     // 等级名称 （选填）
     private String level;

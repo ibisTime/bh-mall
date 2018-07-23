@@ -142,14 +142,16 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     }
 
     @Override
-    public List<Charge> getChargeByUser(String userId) {
+    public List<Charge> getChargeByUser(String userId, Date impwoeDatetime) {
         List<String> statusList = new ArrayList<String>();
         statusList.add(EChargeStatus.Pay_YES.getCode());
         statusList.add(EChargeStatus.TO_Cancel.getCode());
         statusList.add(EChargeStatus.Cancel_YES.getCode());
+
         Charge condition = new Charge();
         condition.setApplyUser(userId);
         condition.setStatusList(statusList);
+        condition.setApplyDatetimeStart(impwoeDatetime);
 
         return chargeDAO.selectList(condition);
     }

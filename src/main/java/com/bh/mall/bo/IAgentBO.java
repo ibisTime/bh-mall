@@ -15,4 +15,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public Agent getAgentByLevel(Integer applyLevel);
 
+    public List<Agent> getAgentHaveWH();
+
 }

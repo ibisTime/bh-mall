@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EUserStatus {
+
     NORMAL("0", "正常"), Li_Locked("1", "程序锁定"), Ren_Locked("2", "人工锁定"),
 
     MIND("3", "有意愿"), IGNORED("4", "已忽略"), ALLOTED("5", "已分配"), TO_APPROVE("6",

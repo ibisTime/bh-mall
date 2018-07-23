@@ -9,7 +9,7 @@ import com.bh.mall.domain.SecurityTrace;
 
 @Component
 public interface ISecurityTraceAO {
-    static final String DEFAULT_ORDER_COLUMN = "code";
+    static final String DEFAULT_ORDER_COLUMN = "security_code";
 
     public Paginable<SecurityTrace> querySecurityTracePage(int start, int limit,
             SecurityTrace condition);
@@ -19,5 +19,9 @@ public interface ISecurityTraceAO {
     public SecurityTrace getSecurityTrace(String code);
 
     public void addSecurityTrace(int number);
+
+    public int getSecurity(String securityCode);
+
+    public SecurityTrace getTrace(String traceCode);
 
 }

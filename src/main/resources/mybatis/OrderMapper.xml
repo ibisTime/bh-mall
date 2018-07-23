@@ -11,6 +11,7 @@
 		<result column="product_name" property="productName" />
 		<result column="product_specs_code" property="productSpecsCode" />
 		<result column="product_specs_name" property="productSpecsName" />
+		<result column="bar_code" property="barCode" />
 		<result column="pic" property="pic" />
 		<result column="quantity" property="quantity" />
 		
@@ -96,7 +97,7 @@
 				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
-				AND t.product_name like "%"${keyword}"%" or u.real_name like "%"${keyword}"%" u.team_name like "%"${keyword}"%" 
+				AND (t.product_name like "%"#{keyword}"%" or u.real_name like "%"#{keyword}"%" or u.team_name like "%"#{keyword}"%" )
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
@@ -109,10 +110,23 @@
 				AND t.status IN (3,4)
 			</if>
 			
-			<if test="level != null and level != '' ">
-				AND u.level = #{level}
+			<choose>
+				<when test="level != null and level != '' ">
+					AND u.level = #{level}
+				</when>
+				<when test="levelList != null and levelList.size() > 0 ">
+					AND u.level IN
+					<foreach collection="levelList" index="index" item="item" open="(" separator="," close=")" >
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			<if test="barCode != null and barCode != '' ">
+				AND t.bar_code = #{barCode}
 			</if>
-			
+			<if test="deliver != null and deliver != '' ">
+				AND t.deliver = #{deliver}
+			</if>
 		</trim>
 	</sql>
 	
@@ -127,6 +141,7 @@
 		,t.product_name
 		,t.product_specs_code
 		,t.product_specs_name
+		,t.bar_code
 		,t.pic
 		,t.quantity
 		
@@ -195,6 +210,7 @@
 		
 		,product_specs_code
 		,product_specs_name
+		,bar_code
 		,pic
 		,quantity
 		,price
@@ -224,6 +240,7 @@
 		
 		,#{productSpecsCode}
 		,#{productSpecsName}
+		,#{barCode}
 		,#{pic}
 		,#{quantity}
 		,#{price}
@@ -283,6 +300,7 @@
 		,logistics_company = #{logisticsCompany}
 		,pdf = #{pdf}
 		
+		,bar_code = #{barCode}
 		,is_company_send = #{isCompanySend}
 		,status = #{status}
 		,remark = #{remark}
@@ -336,10 +354,11 @@
 	</update>
 	
 	
-		<update id="pay_success" parameterType="innerOrder">
+	<update id="pay_success" parameterType="innerOrder">
 		UPDATE tbh_order
 		SET
 		status = #{status}
+		,pay_type = #{payType}
 		,pay_code = #{payCode}
 		,pay_amount = #{payAmount}
 		,pay_datetime = #{payDatetime}

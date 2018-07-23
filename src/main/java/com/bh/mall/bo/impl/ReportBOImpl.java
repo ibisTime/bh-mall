@@ -11,7 +11,6 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.IReportDAO;
 import com.bh.mall.domain.Report;
 import com.bh.mall.domain.User;
-import com.bh.mall.exception.BizException;
 
 @Component
 public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
@@ -69,9 +68,6 @@ public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
         if (StringUtils.isNotBlank(code)) {
             Report condition = new Report();
             data = reportDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
-            }
         }
         return data;
     }

@@ -8,7 +8,6 @@ import com.bh.mall.dao.IReportDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.Report;
 
-//CHECK 。。。 
 @Repository("reportDAOImpl")
 public class ReportDAOImpl extends AMybatisTemplate implements IReportDAO {
 

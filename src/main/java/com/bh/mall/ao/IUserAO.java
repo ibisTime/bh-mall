@@ -35,6 +35,10 @@ public interface IUserAO {
     // 重置登录密码
     public void resetAdminLoginPwd(String userId, String newLoginPwd);
 
+    // 重置登录密码
+    public void resetLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd);
+
     // 设置交易密码
     public void setTradePwd(String userId, String smsCaptcha, String tradePwd);
 
@@ -59,7 +63,7 @@ public interface IUserAO {
 
     public List<User> getUserRefereeList(String userId);
 
-    // 代理申请
+    // 意向代理
     public void applyIntent(XN627250Req req);
 
     // 代理申请，包含推荐人

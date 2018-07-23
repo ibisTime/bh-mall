@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -14,6 +16,10 @@ public class XN627645Req {
     @NotBlank(message = "编号不能为空")
     private String code;
 
+    // （必填）是否云仓发货
+    @NotBlank(message = "是否云仓发货不能为空")
+    private String isCompanySend;
+
     // （必填）发货人
     @NotBlank(message = "发货人不能为空")
     private String deliver;
@@ -24,12 +30,14 @@ public class XN627645Req {
     // （选填）物流公司
     private String logisticsCompany;
 
+    // （选填 ） 箱码
+    private String barCode;
+
+    // （选填）盒码
+    private List<String> traceCodeList;
+
     // （选填）物流单
     private String pdf;
-
-    // （必填）是否云仓发货
-    @NotBlank(message = "是否云仓发货不能为空")
-    private String isCompanySend;
 
     // （选填）备注
     private String remark;
@@ -88,6 +96,22 @@ public class XN627645Req {
 
     public void setIsCompanySend(String isCompanySend) {
         this.isCompanySend = isCompanySend;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public List<String> getTraceCodeList() {
+        return traceCodeList;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
+
+    public void setTraceCodeList(List<String> traceCodeList) {
+        this.traceCodeList = traceCodeList;
     }
 
 }

@@ -61,9 +61,14 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     public void updateInformation(User data);
 
+    // 审核授权
+    public void approveImpower(User data);
+
+    // 申请退出
     public void cancelImpower(User data);
 
-    public void approveImpower(User data);
+    // 审核退出
+    public void approveCanenl(User data);
 
     public void updateHighUser(User data);
 
@@ -93,4 +98,12 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     // 修改推荐的代理的上级
     public void updateHigh(User data);
+
+    // 重新申请
+    public void reapply(User data);
+
+    public long selectFrontTotalCount(User condition);
+
+    public void updateTeamName(User data);
+
 }

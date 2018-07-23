@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,22 +23,20 @@ import com.bh.mall.bo.IWareHouseSpecsBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.Order;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EOrderKind;
-import com.bh.mall.enums.EOrderStatus;
-import com.bh.mall.enums.EUserStatus;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -205,85 +202,92 @@ public class WareHouseAOImpl implements IWareHouseAO {
             .getPriceByLevel(data.getProductSpecsCode(), user.getLevel());
 
         // 检查限购
-        orderAO.checkLimitNumber(user, psData, pspData, data.getQuantity());
+        orderAO.checkLimitNumber(user, psData, pspData,
+            StringValidater.toInteger(req.getQuantity()));
         if (pspData.getMinNumber() > data.getQuantity()) {
             throw new BizException("xn00000",
                 "该产品云仓提货不能少于" + pspData.getMinNumber() + psData.getName());
         }
+
+        // 剩余产品是否充足
         Product product = productBO.getProduct(data.getProductCode());
         if (data.getQuantity() < StringValidater.toInteger(req.getQuantity())) {
             throw new BizException("xn00000", "您仓库中该规格的产品数量不足");
         }
+
+        // 获取授权单
+        String kind = EOrderKind.Pick_Up.getCode();
+        Agent agent = agentBO.getAgentByLevel(user.getLevel());
+
+        // 是否完成授权单
         Long amount = data.getPrice()
                 * StringValidater.toInteger(req.getQuantity());
 
-        // 获取授权单
-        Long impowerOrder = orderBO.checkImpowerOrder(user.getUserId());
-        String kind = EOrderKind.Pick_Up.getCode();
-
-        Agent agent = agentBO.getAgentByLevel(user.getLevel());
-        // 未完成授权单
-        if (agent.getAmount() > impowerOrder) {
-            if (agent.getAmount() >= amount) {
+        if (orderBO.checkImpowerOrder(user.getUserId(),
+            user.getImpowerDatetime())) {
+            if (agent.getAmount() > amount) {
                 throw new BizException("xn00000", agent.getName() + "授权单金额为["
                         + agent.getAmount() / 1000 + "]元");
             } else {
                 kind = EOrderKind.Impower_Order.getCode();
             }
 
+        } else {
+            kind = EOrderKind.Pick_Up.getCode();
         }
 
         // 是否完成升级单
-        boolean upgradeOrder = orderAO.CheckImpowerOrder(user);
-        if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
-            if (!upgradeOrder) {
-                kind = EOrderKind.Upgrade_Order.getCode();
+        // if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
+        // if (!orderBO.checkUpgradeOrder(user.getUserId())) {
+        // kind = EOrderKind.Upgrade_Order.getCode();
+        // }
+        // }
+
+        // 产品不包邮，计算运费
+        Long yunfei = 0L;
+        if (EBoolean.NO.getCode().equals(product.getIsFree())) {
+            SYSConfig sysConfig = sysConfigBO.getConfig(req.getProvince(),
+                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            yunfei = StringValidater.toLong(sysConfig.getCvalue());
+        }
+
+        // 订单拆单
+        if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
+
+            int singleNumber = StringValidater.toInteger(req.getQuantity())
+                    / psData.getSingleNumber();
+
+            for (int i = 0; i < singleNumber; i++) {
+
+                String code = orderBO.pickUpGoods(data.getProductCode(),
+                    data.getProductName(), product.getPic(),
+                    data.getProductSpecsCode(), data.getProductSpecsName(),
+                    psData.getSingleNumber(), data.getPrice(),
+                    psData.getSingleNumber() * data.getPrice(), yunfei,
+                    user.getHighUserId(), data.getUserId(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress(), kind);
+
+                // 减少云仓库存
+                wareHouseBO.changeWareHouse(data.getCode(),
+                    -StringValidater.toInteger(req.getQuantity()),
+                    EBizType.AJ_YCTH, EBizType.AJ_YCTH.getValue(), code);
             }
+        } else {
+            String code = orderBO.pickUpGoods(data.getProductCode(),
+                data.getProductName(), product.getPic(),
+                data.getProductSpecsCode(), data.getProductSpecsName(),
+                StringValidater.toInteger(req.getQuantity()), data.getPrice(),
+                psData.getSingleNumber() * data.getPrice(), yunfei,
+                user.getHighUserId(), data.getUserId(), req.getSigner(),
+                req.getMobile(), req.getProvince(), req.getCity(),
+                req.getArea(), req.getAddress(), kind);
+            // 减少云仓库存
+            wareHouseBO.changeWareHouse(data.getCode(),
+                -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCTH,
+                EBizType.AJ_YCTH.getValue(), code);
         }
 
-        Order condition = new Order();
-        condition.setApplyUser(data.getUserId());
-        condition.setKind(EOrderKind.Impower_Order.getCode());
-        List<Order> impowerList = orderBO.queryOrderList(condition);
-        Long impowerAmount = 0L;
-        for (Order order : impowerList) {
-            impowerAmount = impowerAmount + order.getAmount();
-        }
-
-        Order order = new Order();
-        String orderCode = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
-
-        order.setCode(orderCode);
-        order.setProductCode(data.getProductCode());
-        order.setProductName(data.getProductName());
-        order.setPic(product.getPic());
-
-        order.setProductSpecsCode(data.getProductSpecsCode());
-        order.setProductSpecsName(data.getProductSpecsName());
-        order.setQuantity(StringValidater.toInteger(req.getQuantity()));
-        order.setPrice(data.getPrice());
-
-        order.setAmount(amount);
-        order.setApplyUser(data.getUserId());
-        order.setApplyDatetime(new Date());
-
-        order.setSigner(req.getSigner());
-        order.setMobile(req.getMobile());
-        order.setAddress(req.getAddress());
-        order.setArea(req.getArea());
-        order.setCity(req.getCity());
-
-        order.setKind(kind);
-        order.setProvince(req.getProvince());
-
-        order.setStatus(EOrderStatus.Paid.getCode());
-        orderBO.saveOrder(order);
-
-        // 减少云仓库存
-        wareHouseBO.changeWareHouse(data.getCode(),
-            -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCTH,
-            EBizType.AJ_YCTH.getValue(), orderCode);
     }
 
     @Override

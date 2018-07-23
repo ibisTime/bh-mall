@@ -14,4 +14,6 @@ public interface ISecurityTraceDAO extends IBaseDAO<SecurityTrace> {
 
     List<SecurityTrace> selectCodeList(SecurityTrace condition);
 
+    void updateNumber(SecurityTrace data);
+
 }

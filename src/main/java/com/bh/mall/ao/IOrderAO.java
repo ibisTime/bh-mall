@@ -29,7 +29,7 @@ public interface IOrderAO {
 
     public Order getOrder(String code);
 
-    public String addOrderNoCart(XN627641Req req);
+    public List<String> addOrderNoCart(XN627641Req req);
 
     // 付款
     public Object payOrder(List<String> codeList, String payType);
@@ -52,12 +52,6 @@ public interface IOrderAO {
     public void receivedOrder(String code);
 
     void paySuccess(String result);
-
-    // 检查是否完成授权单
-    public boolean CheckImpowerOrder(User user);
-
-    // 检查是否完成升级单
-    public boolean CheckUpgradeOrder(User user);
 
     void checkLimitNumber(User applyUser, ProductSpecs psData,
             ProductSpecsPrice pspData, Integer quantity);
