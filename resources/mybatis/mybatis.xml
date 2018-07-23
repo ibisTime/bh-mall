@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<settings>
+		<setting name="logImpl" value="STDOUT_LOGGING"/>
+	</settings> 
+	<typeAliases>		
+		<typeAlias alias="user" type="com.bh.mall.domain.User" />
+		<typeAlias alias="address" type="com.bh.mall.domain.Address" />
+		<typeAlias alias="sysMenu" type="com.bh.mall.domain.SYSMenu" />
+	    <typeAlias alias="sysRole" type="com.bh.mall.domain.SYSRole" />
+ 	    <typeAlias alias="sysMenuRole" type="com.bh.mall.domain.SYSMenuRole" />
+ 	    
+ 	    <typeAlias alias="cNavigate" type="com.bh.mall.domain.CNavigate" />
+	    <typeAlias alias="sysDict" type="com.bh.mall.domain.SYSDict" />
+	    <typeAlias alias="sysConfig" type="com.bh.mall.domain.SYSConfig" />
+	    
+	    <typeAlias alias="agent" type="com.bh.mall.domain.Agent"/>
+	    <typeAlias alias="agentImpower" type="com.bh.mall.domain.AgentImpower"/>
+	    <typeAlias alias="agentUpgrade" type="com.bh.mall.domain.AgentUpgrade"/>
+	    <typeAlias alias="material" type="com.bh.mall.domain.Material"/>
+	    <typeAlias alias="product" type="com.bh.mall.domain.Product"/>
+	    
+	    <typeAlias alias="productSpecs" type="com.bh.mall.domain.ProductSpecs"/>
+	    <typeAlias alias="productSpecsPrice" type="com.bh.mall.domain.ProductSpecsPrice"/>
+	    <typeAlias alias="innerProduct" type="com.bh.mall.domain.InnerProduct"/>
+	    <typeAlias alias="productLog" type="com.bh.mall.domain.ProductLog"/>
+	    <typeAlias alias="award" type="com.bh.mall.domain.Award"/>
+	    
+	    <typeAlias alias="cart" type="com.bh.mall.domain.Cart"/>
+	    <typeAlias alias="innerOrder" type="com.bh.mall.domain.InnerOrder"/>
+	
+		<typeAlias alias="account" type="com.bh.mall.domain.Account"/>
+	    <typeAlias alias="jour" type="com.bh.mall.domain.Jour"/>
+	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
+	    <typeAlias alias="companyChannel" type="com.bh.mall.domain.CompanyChannel"/>
+	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
+	
+		<typeAlias alias="order" type="com.bh.mall.domain.Order"/>
+		<typeAlias alias="afterSale" type="com.bh.mall.domain.AfterSale"/>
+		<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
+		<typeAlias alias="agencyLog" type="com.bh.mall.domain.AgencyLog"/>
+
+		<typeAlias alias="intro" type="com.bh.mall.domain.Intro"/>
+		<typeAlias alias="wareHouse" type="com.bh.mall.domain.WareHouse"/>
+		<typeAlias alias="wareHouseLog" type="com.bh.mall.domain.WareHouseLog"/>
+		<typeAlias alias="changeProduct" type="com.bh.mall.domain.ChangeProduct"/>
+		
+		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
+		<typeAlias alias="wareHouseSpecs" type="com.bh.mall.domain.WareHouseSpecs"/>
+		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
+		<typeAlias alias="report" type="com.bh.mall.domain.Report"/>
+		
+		<typeAlias alias="awardInterval" type="com.bh.mall.domain.AwardInterval"/>
+		<typeAlias alias="securityTrace" type="com.bh.mall.domain.SecurityTrace"/>
+		<typeAlias alias="barCode" type="com.bh.mall.domain.BarCode"/>
+		
+		<typeAlias alias="sysuser" type="com.bh.mall.domain.SYSUser"/>
+		<typeAlias alias="cuser" type="com.bh.mall.domain.CUser"/>
+		<typeAlias alias="buser" type="com.bh.mall.domain.BUser"/>
+		<typeAlias alias="agentAllot" type="com.bh.mall.domain.AgentAllot"/>
+		<typeAlias alias="impowerApply" type="com.bh.mall.domain.ImpowerApply"/>
+		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.UpLevelApply"/>
+		
+	</typeAliases>
+</configuration>	
