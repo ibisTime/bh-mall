@@ -254,4 +254,15 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
 
     }
 
+    @Override
+    public void invalidOrder(Order data, String updater, String remark) {
+        Date date = new Date();
+        data.setStatus(EOrderStatus.Canceled.getCode());
+        data.setUpdater(updater);
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+
+        orderDAO.invalidOrder(data);
+    }
+
 }

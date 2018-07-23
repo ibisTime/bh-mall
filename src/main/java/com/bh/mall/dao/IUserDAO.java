@@ -106,4 +106,7 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     public void updateTeamName(User data);
 
+    // 取消授权
+    public void abolishImpower(User data);
+
 }

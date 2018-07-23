@@ -147,4 +147,7 @@ public interface IUserAO {
     // 根据手机号获取用户详情
     public User doGetUserByMobile(String mobile);
 
+    // 公司直接取消授权
+    public void abolishImpower(String userId, String updater, String remark);
+
 }

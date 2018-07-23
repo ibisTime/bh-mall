@@ -287,7 +287,6 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     @Transactional
     public Object payOrder(List<String> codeList, String payType) {
-        logger.error("支付订单编号：" + codeList.toString());
         Object result = null;
         for (String code : codeList) {
             Order data = orderBO.getOrder(code);
@@ -842,12 +841,9 @@ public class OrderAOImpl implements IOrderAO {
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EOrderStatus.Canceled.getCode());
             // 云仓提货，归还云仓库存
+            User applyUser = userBO.getUser(data.getApplyUser());
             if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
-                WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
-                    data.getApplyUser(), data.getProductSpecsCode());
-                wareHouseBO.changeWareHouse(whData.getCode(),
-                    data.getQuantity(), EBizType.AJ_TH,
-                    EBizType.AJ_TH.getValue(), data.getCode());
+                wareHouseBO.buyWareHouse(data, applyUser);
             } else if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
                 String toUser = data.getToUser();
                 if (StringUtils.isBlank(toUser)) {
@@ -859,7 +855,15 @@ public class OrderAOImpl implements IOrderAO {
                     data.getAmount(), EBizType.AJ_GMCP_TK,
                     EBizType.AJ_GMCP_TK.getValue(),
                     EBizType.AJ_GMCP_TK.getValue(), data.getCode());
+            } else {
+                // 归还上级库存
+                Product pData = productBO.getProduct(data.getProductCode());
+                ProductSpecs psData = productSpecsBO
+                    .getProductSpecs(data.getProductSpecsCode());
+                this.changeProductNumber(applyUser, pData, psData, data,
+                    -data.getQuantity(), code);
             }
+
         }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
@@ -932,9 +936,12 @@ public class OrderAOImpl implements IOrderAO {
 
     // 变动产品数量
     private void changeProductNumber(User applyUser, Product pData,
-            ProductSpecs psData, Order order, String code) {
+            ProductSpecs psData, Order order, Integer number, String code) {
         int minNumber = productSpecsBO.getMinSpecsNumber(pData.getCode());
-        int quantity = order.getQuantity() * minNumber;
+        int quantity = number * minNumber;
+        if (number < 0) {
+            quantity = -quantity;
+        }
 
         // 有上级代理,扣减上级代理云仓
         User toUser = userBO.getUser(order.getToUser());
@@ -945,11 +952,10 @@ public class OrderAOImpl implements IOrderAO {
             if (null == toWareHouse) {
                 throw new BizException("xn00000", "上级代理云仓中没有该产品");
             } else {
-                // 扣减上级云仓
-                wareHouseBO.changeWareHouse(toWareHouse.getCode(),
-                    -order.getQuantity(), EBizType.AJ_YCCH,
-                    EBizType.AJ_YCCH.getValue(), order.getCode());
-
+                // 改变上级云仓
+                wareHouseBO.changeWareHouse(toWareHouse.getCode(), number,
+                    EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                    order.getCode());
             }
 
         } else {
@@ -1086,7 +1092,8 @@ public class OrderAOImpl implements IOrderAO {
             // 是否开启云仓
             if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                 // 改变产品数量
-                this.changeProductNumber(applyUser, pData, psData, order, code);
+                this.changeProductNumber(applyUser, pData, psData, order,
+                    order.getQuantity(), code);
             } else if (flag) {
                 kind = EOrderKind.Impower_Order.getCode();
                 // 产品不包邮，计算运费
@@ -1143,5 +1150,26 @@ public class OrderAOImpl implements IOrderAO {
                 data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
                 EBizType.AJ_GMYC.getValue(), data.getAmount());
         }
+    }
+
+    @Override
+    @Transactional
+    public void invalidOrder(String code, String updater, String remark) {
+
+        Order data = orderBO.getOrder(code);
+        if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || !EOrderStatus.Pay_NO.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "该订单无法作废");
+        }
+        orderBO.invalidOrder(data, updater, remark);
+
+        // 退还库存
+        User applyUser = userBO.getUser(data.getApplyUser());
+        Product pData = productBO.getProduct(data.getProductCode());
+        ProductSpecs psData = productSpecsBO
+            .getProductSpecs(data.getProductSpecsCode());
+        this.changeProductNumber(applyUser, pData, psData, data,
+            -data.getQuantity(), code);
+
     }
 }

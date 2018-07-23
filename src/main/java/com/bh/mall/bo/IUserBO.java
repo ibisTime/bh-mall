@@ -197,4 +197,8 @@ public interface IUserBO extends IPaginableBO<User> {
     // 修改团队名称
     public void refreshTeamName(User user);
 
+    // 取消授权
+    public void abolishImpower(User data, String updater, String remark,
+            String logCode);
+
 }

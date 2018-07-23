@@ -16,6 +16,7 @@ import com.bh.mall.dto.req.XN627645Req;
 
 @Component
 public interface IOrderAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public List<String> addOrder(XN627640Req req);
@@ -55,5 +56,8 @@ public interface IOrderAO {
 
     void checkLimitNumber(User applyUser, ProductSpecs psData,
             ProductSpecsPrice pspData, Integer quantity);
+
+    // 订单作废
+    public void invalidOrder(String code, String updater, String remark);
 
 }

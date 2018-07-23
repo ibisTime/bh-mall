@@ -364,4 +364,14 @@
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="invalid_order" parameterType="innerOrder">
+		UPDATE tbh_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

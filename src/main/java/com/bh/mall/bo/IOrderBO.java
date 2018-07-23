@@ -61,4 +61,7 @@ public interface IOrderBO extends IPaginableBO<Order> {
             String province, String city, String area, String address,
             String kind);
 
+    // 作废订单
+    public void invalidOrder(Order data, String updater, String remark);
+
 }
