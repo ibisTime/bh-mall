@@ -11,9 +11,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<!-- 分页BO层注入paginableDao -->
-	<bean id="userBO" class="com.bh.mall.bo.impl.UserBOImpl">
-		<property name="paginableDAO" ref="userDAOImpl" />
-	</bean>
 	<bean id="addressBO" class="com.bh.mall.bo.impl.AddressBOImpl">
 		<property name="paginableDAO" ref="addressDAOImpl"/>
 	</bean>	
