@@ -1,3 +1,4 @@
+
 package com.bh.mall.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;

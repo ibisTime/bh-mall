@@ -29,7 +29,7 @@ public class SYSMenu extends ABaseDO {
     private String parentCode;
 
     // 序号
-    private String orderNo;
+    private Integer orderNo;
 
     // 更新人
     private String updater;
@@ -87,11 +87,11 @@ public class SYSMenu extends ABaseDO {
         this.url = url;
     }
 
-    public String getOrderNo() {
+    public Integer getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(String orderNo) {
+    public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
 

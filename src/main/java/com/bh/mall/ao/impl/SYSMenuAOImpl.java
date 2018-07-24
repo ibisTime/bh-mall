@@ -12,6 +12,7 @@ import com.bh.mall.bo.ISYSMenuRoleBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.OrderNoGenerater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SYSMenu;
 import com.bh.mall.dto.req.XN627050Req;
 import com.bh.mall.exception.BizException;
@@ -28,6 +29,7 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
     @Autowired
     IUserBO userBO;
 
+    // 新增菜单
     @Override
     public String addSYSMenu(XN627050Req req) {
         if (!"0".equalsIgnoreCase(req.getParentCode())
@@ -38,10 +40,10 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
         String code = OrderNoGenerater.generate("SM");
         data.setCode(code);
         data.setName(req.getName());
-        data.setType(req.getType());
+        data.setType(req.getType()); // 菜单类型（按钮 / 图片）
         data.setUrl(req.getUrl());
         data.setParentCode(req.getParentCode());
-        data.setOrderNo(req.getOrderNo());
+        data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
 
         data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
@@ -52,6 +54,7 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
 
     }
 
+    // 删除菜单
     @Override
     @Transactional
     public boolean dropSYSMenu(String code) {
@@ -67,6 +70,7 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
         return true;
     }
 
+    // 修改菜单
     @Override
     public boolean editSYSMenu(SYSMenu data) {
         if (data != null && sysMenuBO.isSYSMenuExist(data.getCode())) {
@@ -77,17 +81,20 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
         return true;
     }
 
+    // 分页查询
     @Override
     public Paginable<SYSMenu> querySYSMenuPage(int start, int limit,
             SYSMenu condition) {
         return sysMenuBO.getPaginable(start, limit, condition);
     }
 
+    // 列表查询
     @Override
     public List<SYSMenu> querySYSMenuList(SYSMenu condition) {
         return sysMenuBO.querySYSMenuList(condition);
     }
 
+    // 详细查询
     @Override
     public SYSMenu getSYSMenu(String code) {
         if (!sysMenuBO.isSYSMenuExist(code)) {

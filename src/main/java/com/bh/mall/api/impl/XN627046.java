@@ -26,7 +26,7 @@ public class XN627046 extends AProcessor {
     public Object doBusiness() throws BizException {
         SYSRole condition = new SYSRole();
         condition.setName(req.getName());
-        condition.setLevel(req.getLevel());
+
         // condition.setUpdater(req.getUpdater());
         condition.setSystemCode(req.getSystemCode());
         return sysRoleAO.querySYSRoleList(condition);
