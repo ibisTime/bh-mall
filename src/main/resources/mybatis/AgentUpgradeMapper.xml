@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IAgentUpgradeDAO">
+	<resultMap id="aegnt_DB_Result" type="agentUpgrade">
+		<result column="code" property="code"/>
+		<result column="level" property="level"/>
+		<result column="is_company_approve" property="isCompanyApprove"/>
+		<result column="re_number" property="reNumber"/>
+		<result column="is_reset" property="isReset"/>
+		
+		<result column="updater" property="updater"/>
+		<result column="update_datetime" property="updateDatetime"/>
+		<result column="remark" property="remark"/>
+	</resultMap>
+	
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != ''">
+				AND t.code=#{code}
+			</if>
+			<if test="level != null and level != ''">
+				AND t.level=#{level}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_agentUpgrade" parameterType="agentUpgrade" resultMap="aegnt_DB_Result">
+		SELECT 
+		t.code
+		,t.level
+		,t.is_company_approve
+		,t.re_number
+		,t.is_reset
+		
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM tbh_agent_upgrade t
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_agentUpgrade_count" parameterType="agentUpgrade" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_agent_upgrade t
+		<include refid="where_condition"></include>
+	</select>
+
+	<update id="update_agentUpgrade" parameterType="agentUpgrade">
+		UPDATE tbh_agent_upgrade 
+		SET
+		level=#{level}
+		,is_company_approve=#{isCompanyApprove}
+		,re_number=#{reNumber}
+		,is_reset=#{isReset}
+		
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE code=#{code}
+	</update>
+</mapper>
