@@ -845,15 +845,11 @@ public class OrderAOImpl implements IOrderAO {
             if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
                 wareHouseBO.buyWareHouse(data, applyUser);
             } else if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
-                String toUser = data.getToUser();
-                if (StringUtils.isBlank(toUser)) {
-                    toUser = ESysUser.SYS_USER_BH.getCode();
-                }
 
-                accountBO.transAmountCZB(toUser, ECurrency.YJ_CNY.getCode(),
-                    data.getApplyUser(), ECurrency.YJ_CNY.getCode(),
-                    data.getAmount(), EBizType.AJ_GMCP_TK,
-                    EBizType.AJ_GMCP_TK.getValue(),
+                accountBO.transAmountCZB(applyUser.getUserId(),
+                    ECurrency.YJ_CNY.getCode(), data.getApplyUser(),
+                    ECurrency.YJ_CNY.getCode(), data.getAmount(),
+                    EBizType.AJ_GMCP_TK, EBizType.AJ_GMCP_TK.getValue(),
                     EBizType.AJ_GMCP_TK.getValue(), data.getCode());
             } else {
                 // 归还上级库存
@@ -939,30 +935,28 @@ public class OrderAOImpl implements IOrderAO {
             ProductSpecs psData, Order order, Integer number, String code) {
         int minNumber = productSpecsBO.getMinSpecsNumber(pData.getCode());
         int quantity = number * minNumber;
-        if (number < 0) {
-            quantity = -quantity;
-        }
 
         // 有上级代理,扣减上级代理云仓
         User toUser = userBO.getUser(order.getToUser());
         if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
             WareHouse toWareHouse = wareHouseBO.getWareHouseByProductSpec(
                 order.getToUser(), order.getProductSpecsCode());
-            // 上级云仓没有该产品
-            if (null == toWareHouse) {
-                throw new BizException("xn00000", "上级代理云仓中没有该产品");
-            } else {
-                // 改变上级云仓
+
+            // 数量小于零，代表出货
+            if (0 < number) {
                 wareHouseBO.changeWareHouse(toWareHouse.getCode(), number,
                     EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
                     order.getCode());
+            } else {
+                // 订单取消
+                wareHouseBO.buyWareHouse(order, toUser);
             }
 
         } else {
             // 无上级代理,扣减产品实际库存
             productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
                 pData.getRealNumber(), quantity, null);
-            pData.setRealNumber(pData.getRealNumber() - quantity);
+            pData.setRealNumber(pData.getRealNumber() + quantity);
             productBO.refreshRealNumber(pData);
         }
     }
@@ -1093,7 +1087,7 @@ public class OrderAOImpl implements IOrderAO {
             if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                 // 改变产品数量
                 this.changeProductNumber(applyUser, pData, psData, order,
-                    order.getQuantity(), code);
+                    -order.getQuantity(), code);
             } else if (flag) {
                 kind = EOrderKind.Impower_Order.getCode();
                 // 产品不包邮，计算运费
@@ -1169,7 +1163,7 @@ public class OrderAOImpl implements IOrderAO {
         ProductSpecs psData = productSpecsBO
             .getProductSpecs(data.getProductSpecsCode());
         this.changeProductNumber(applyUser, pData, psData, data,
-            -data.getQuantity(), code);
+            data.getQuantity(), code);
 
     }
 }
