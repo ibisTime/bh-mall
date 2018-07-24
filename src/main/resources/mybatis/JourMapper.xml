@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IJourDAO">
+	<resultMap id="jour_DB_Result" type="jour">
+		<result column="code" property="code" />
+		<result column="pay_group" property="payGroup" />
+		<result column="ref_no" property="refNo" />
+		<result column="channel_type" property="channelType" />
+		<result column="channel_order" property="channelOrder" />
+		<result column="account_number" property="accountNumber" />
+		
+		<result column="trans_amount" property="transAmount" />
+		<result column="user_id" property="userId" />
+		<result column="real_name" property="realName" />
+		<result column="type" property="type" />
+		<result column="currency" property="currency" />
+		
+        <result column="biz_type" property="bizType" />
+		<result column="biz_note" property="bizNote" />
+		<result column="pre_amount" property="preAmount" />
+		<result column="post_amount" property="postAmount" />
+		<result column="status" property="status" />
+		
+		<result column="remark" property="remark" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="out_amount" property="outAmount"/>
+		<result column="in_amount" property="inAmount"/>
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="refNo != null and refNo != '' ">
+				AND t.ref_no = #{refNo}
+			</if>
+			<choose>
+			     <when test='channelType == "out"'>
+				 	AND t.channel_type not in(0)
+				 </when>
+				 <otherwise>
+					 <if test="channelType != null and channelType != '' ">
+						AND t.channel_type = #{channelType}
+					 </if>
+				 </otherwise>
+			</choose>
+			<if test="accountNumber != null and accountNumber != '' ">
+				AND t.account_number = #{accountNumber}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="realName != null and realName != '' ">
+			    AND t.real_name like "%"#{realName}"%"
+			</if>
+			
+			<choose>
+			     <when test='type == "NOT_P"'>
+				 	AND t.type not in('P')
+				 </when>
+				 <otherwise>
+					 <if test="type != null and type != '' ">
+						 AND t.type = #{type}
+					 </if>
+				 </otherwise>
+			</choose>
+			<if test="currency != null and currency != '' ">
+				AND t.currency = #{currency}
+			</if>
+			<if test="bizType != null and bizType != '' ">
+				AND t.biz_type = #{bizType}
+			</if>
+			<if test="bizTypeList != null and bizTypeList != '' ">
+				AND t.biz_type in 
+                <foreach item="item" index="index" collection="bizTypeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
+			<choose>
+			     <when test='status == "in"'>
+				 	AND t.status not in(6)
+				 </when>
+				 <otherwise>
+					 <if test="status != null and status != '' ">
+						AND t.status = #{status}
+					</if>
+				 </otherwise>
+			</choose>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+			
+			<choose>
+			     <when test='kind ==  "0" '>
+				 	<![CDATA[AND t.trans_amount < 0]]>
+				 </when>
+				  <when test='kind ==  "1" '>
+				 	<![CDATA[AND t.trans_amount > 0]]>
+				 </when>
+				 <otherwise>
+					and 1=1
+				 </otherwise>
+			</choose>
+		</trim>
+	</sql>
+	
+	<select id="select_jour_detail" parameterType="jour" resultMap="jour_DB_Result">
+		SELECT
+		t.code
+		,t.pay_group
+		,t.ref_no
+		,t.channel_type
+		,t.channel_order
+		
+		,t.account_number
+		,t.trans_amount
+		
+		,SUM(CASE WHEN  <![CDATA[t.trans_amount < 0]]>  THEN t.trans_amount ELSE 0 END) AS out_amount
+    	,SUM(CASE WHEN <![CDATA[t.trans_amount > 0]]>  THEN t.trans_amount ELSE 0 END) AS in_amount 
+    	
+		,t.user_id
+		,t.real_name
+		,t.type
+		
+		,t.currency
+		,t.biz_type
+		,t.biz_note
+		,t.pre_amount
+		,t.post_amount
+		
+		,t.status
+		,t.remark
+		,t.create_datetime
+		FROM
+		tbh_jour t
+		<include refid="where_condition" />
+		GROUP BY t.user_id
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+
+
+	<select id="select_jour_count" parameterType="jour"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_jour t
+		<include refid="where_condition" />
+	</select>
+
+
+	<select id="select_jour" parameterType="jour" resultMap="jour_DB_Result">
+		SELECT
+		t.code
+		,t.pay_group
+		,t.ref_no
+		,t.channel_type
+		,t.channel_order
+		
+		,t.account_number
+		,t.trans_amount
+		
+		,(CASE WHEN  <![CDATA[t.trans_amount > 0]]>  THEN t.trans_amount ELSE 0 END) AS out_amount
+    	,(CASE WHEN <![CDATA[t.trans_amount < 0]]>  THEN t.trans_amount ELSE 0 END) AS in_amount 
+    	
+		,t.user_id
+		,t.real_name
+		,t.type
+		
+		,t.currency
+		,t.biz_type
+		,t.biz_note
+		,t.pre_amount
+		,t.post_amount
+		
+		,t.status
+		,t.remark
+		,t.create_datetime
+		FROM
+		tbh_jour t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<insert id="insert_jour" parameterType="jour">
+		INSERT INTO
+		tbh_jour(
+		code
+		,pay_group
+		,ref_no
+		,channel_type
+		,channel_order
+		
+		,account_number
+		,trans_amount
+		,user_id
+		,real_name
+		,type
+		
+		,currency
+		,biz_type
+		,biz_note
+		,pre_amount
+		,post_amount
+		
+		,status
+		,remark
+		,create_datetime
+		)
+		VALUES(
+		#{code}
+		,#{payGroup}
+		,#{refNo}
+		,#{channelType}
+		,#{channelOrder}
+		
+		,#{accountNumber}
+		,#{transAmount}
+		,#{userId}
+		,#{realName}
+		,#{type}
+		
+		,#{currency}
+		,#{bizType}
+		,#{bizNote}
+		,#{preAmount}
+		,#{postAmount}
+		
+		,#{status}
+		,#{remark}
+		,#{createDatetime}
+		)
+	</insert>
+	
+	<select id="select_totalAmount" parameterType="jour"
+		resultType="java.lang.Long">
+		SELECT ifnull(sum(trans_amount),0) FROM tbh_jour t 
+		<include refid="where_condition" />
+	</select>
+	
+</mapper>

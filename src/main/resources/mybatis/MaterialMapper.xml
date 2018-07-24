@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IMaterialDAO">
+	<resultMap id="material_DB_Result" type="material">
+		<result column="code" property="code"/>
+		<result column="type" property="type"/>
+		<result column="title" property="title"/>
+		<result column="pic" property="pic"/>
+		<result column="order_no" property="orderNo"/>
+		
+		<result column="level" property="level"/>
+		<result column="status" property="status"/>
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="where" prefixOverrides="AND | OR">
+			<if test="code != null and code != ''">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != ''">
+				AND t.type = #{type}
+			</if>
+			<if test="title != null and title != ''">
+				AND t.title like "%"#{title}"%"
+			</if>
+			<if test="pic != null and pic != ''">
+				AND t.pic = #{pic}
+			</if>
+			
+			<if test="status != null and status != ''">
+				AND t.status = #{status}
+			</if>
+			<if test="level != null and level != ''">
+				AND t.level like "%"#{level}"%"
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_material" parameterType="material" resultMap="material_DB_Result">
+		SELECT 
+		t.code
+		,t.title
+		,t.type
+		,t.pic
+		,t.order_no
+		
+		,t.status
+		,t.level
+		FROM tbh_material t
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	
+	<select id="select_material_count" parameterType="material" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_material t
+		<include refid="where_condition"/>
+	</select>
+	
+	<delete id="delete_material" parameterType="material">
+		DELETE FROM 
+		tbh_material 
+		WHERE 
+		code=#{code}
+	</delete>
+	
+	<insert id="insert_material" parameterType="material">
+		INSERT INTO tbh_material (
+		code
+		,type
+		,title
+		,pic
+		,order_no
+		
+		,status
+		,level
+		) 
+		VALUES(
+		#{code}
+		,#{type}
+		,#{title}
+		,#{pic}
+		,#{orderNo}
+		
+		,#{status}
+		,#{level}
+		)
+	</insert>
+	
+	<update id="update_material" parameterType="material">
+		UPDATE tbh_material 
+		SET
+		type=#{type}
+		,title=#{title}
+		,pic=#{pic}
+		,order_no=#{orderNo}
+		,status=#{status}
+		
+		,level=#{level}
+		WHERE code=#{code}
+	</update>
+</mapper>

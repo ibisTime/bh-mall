@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IChargeDAO">
+	<resultMap id="charge_DB_Result" type="charge">
+		<result column="code" property="code" />
+		<result column="pay_group" property="payGroup" />
+		<result column="ref_no" property="refNo" />
+		<result column="account_number" property="accountNumber" />
+		<result column="amount" property="amount" />
+		
+		<result column="account_name" property="accountName" />
+		<result column="type" property="type" />
+		<result column="currency" property="currency" />
+		<result column="charge_pdf" property="chargePdf" />
+		<result column="channel_type" property="channelType" />
+		<result column="channel_order" property="channelOrder" />
+		
+		<result column="biz_type" property="bizType" />
+		<result column="biz_note" property="bizNote" />
+		<result column="status" property="status" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_note" property="applyNote" />
+		
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="pay_user" property="payUser" />
+		<result column="pay_note" property="payNote" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="channel_type" property="channelType" />
+		
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="refNo != null and refNo != '' ">
+				AND t.ref_no = #{refNo}
+			</if>
+			
+			<if test="accountNumber != null and accountNumber != '' ">
+				AND t.account_number = #{accountNumber}
+			</if>
+			<if test="channelType != null and channelType != '' ">
+				AND t.channel_type = #{channelType}
+			</if>
+			
+			<if test="accountName != null and accountName != '' ">
+				AND t.account_name like "%"#{accountName}"%"
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="currency != null and currency != '' ">
+				AND t.currency = #{currency}
+			</if>
+			<if test="bizType != null and bizType != '' ">
+				AND t.biz_type = #{bizType}
+			</if>
+			<choose>
+				<when test="status != null and status != ''">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0">
+					AND t.status IN
+					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
+			<if test="payUser != null and payUser != '' ">
+				AND t.pay_user = #{payUser}
+			</if>
+			
+			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
+				<![CDATA[AND t.pay_datetime >= #{payDatetimeStart}]]>
+			</if>
+			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
+				<![CDATA[AND t.pay_datetime <= #{payDatetimeEnd}]]>
+			</if>
+			<if test="channelType != null and channelType != '' ">
+				AND t.channel_type = #{channelType}
+			</if>
+			<if test="level != null and level != '' ">
+				AND u.level = #{level}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_charge" parameterType="charge" resultMap="charge_DB_Result">
+		SELECT
+		t.code
+		,t.pay_group
+		,t.ref_no
+		,t.account_number
+		,t.amount
+		
+		,t.account_name
+		,t.type
+		,t.currency
+		,t.charge_pdf
+		,t.channel_type
+		,t.channel_order
+		,t.biz_type
+		,t.biz_note
+		
+		,t.status
+		,t.apply_user
+		,t.apply_datetime
+		
+		,t.pay_user
+		,t.pay_note
+		,t.pay_datetime
+		,t.channel_type
+		FROM
+		tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		<include refid="where_condition" />
+	</select>
+		
+	<select id="select_front_charge" parameterType="charge" resultMap="charge_DB_Result">
+		SELECT
+		t.code
+		,t.pay_group
+		,t.ref_no
+		,t.account_number
+		,t.amount
+		
+		,t.account_name
+		,t.type
+		,t.currency
+		,t.charge_pdf
+		,t.channel_type
+		,t.channel_order
+		,t.biz_type
+		,t.biz_note
+		
+		,t.status
+		,t.apply_user
+		,t.apply_datetime
+		
+		,t.pay_user
+		,t.pay_note
+		,t.pay_datetime
+		,t.channel_type
+		FROM
+		tbh_charge t INNER JOIN tbh_user u ON t.apply_user = u.user_id AND u.high_user_id = #{highUserId}
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_front_count" parameterType="charge" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_charge t INNER JOIN tbh_user u ON t.apply_user = u.user_id AND u.high_user_id = #{highUserId}
+		<include refid="where_condition" />
+	</select>
+
+
+	
+	<insert id="insert_charge" parameterType="charge" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbh_charge(
+		code
+		,pay_group
+		,ref_no
+		,account_number
+		,amount
+		
+		,account_name
+		,type
+		,currency
+		,charge_pdf
+		,channel_type
+		,channel_order
+		,biz_type
+		,biz_note
+		
+		,status
+		,apply_user
+		,apply_datetime
+		)
+		VALUES(
+		#{code}
+		,#{payGroup}
+		,#{refNo}
+		,#{accountNumber}
+		,#{amount}
+		
+		,#{accountName}
+		,#{type}
+		,#{currency}
+		,#{chargePdf}
+		,#{channelType}
+		,#{channelOrder}
+		,#{bizType}
+		,#{bizNote}
+		
+		,#{status}
+		,#{applyUser}
+		,#{applyDatetime}
+		)
+	</insert>
+
+	<update id="pay_order" parameterType="charge">
+		UPDATE tbh_charge SET
+		status = #{status}
+		,pay_user = #{payUser}
+		,pay_note = #{payNote}
+		,pay_datetime=#{payDatetime}
+		WHERE code = #{code}
+	</update>
+</mapper>

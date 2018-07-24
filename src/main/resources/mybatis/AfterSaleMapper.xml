@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IAfterSaleDAO">
+	<resultMap id="afterSale_DB_Result" type="afterSale">
+		<result column="code" property="code" />
+		<result column="apply_user" property="applyUser" />
+		<result column="ref_no" property="refNo" />
+		<result column="sale_type" property="saleType" />
+		<result column="apply_note" property="applyNote" />
+		<result column="pic" property="pic" />
+		
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="status" property="status" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
+		<result column="approve_note" property="approveNote" />
+		<result column="deliver" property="deliver" />
+		<result column="logistics_code" property="logisticsCode" />
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="pdf" property="pdf" />
+		<result column="delive_datetime" property="deliveDatetime" />
+		<result column="signer" property="signer" />
+		<result column="mobile" property="mobile" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="address" property="address" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="saleType != null and saleType != '' ">
+				AND t.sale_type = #{saleType}
+			</if>
+			<if test="keyword != null and keyword != '' ">
+				AND o.product_name LIKE "%"#{keyword}"%" OR  u.real_name LIKE "%"#{keyword}"%"
+			</if>
+			
+			<if test="startDatetime != null and startDatetime != '' ">
+				<![CDATA[AND apply_datetime >=  startDatetime]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != '' ">
+				<![CDATA[AND apply_datetime <=  startDatetime]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_afterSale" parameterType="afterSale" resultMap="afterSale_DB_Result">
+		SELECT
+		t.code
+		,t.apply_user
+		,t.ref_no
+		,t.sale_type
+		,t.apply_note
+		,t.pic
+		,t.apply_datetime
+		,t.status
+		,t.approver
+		,t.approve_datetime
+		,t.approve_note
+		,t.deliver
+		,t.logistics_code
+		,t.logistics_company
+		,t.pdf
+		,t.delive_datetime
+		,t.signer
+		,t.mobile
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+		,t.remark
+		FROM
+		tbh_after_sale t LEFT JOIN tbh_order o LEFT JOIN tbh_user u ON o.apply_user = u.user_id ON t.ref_no = o.code
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_afterSale_count" parameterType="afterSale"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_after_sale t LEFT JOIN tbh_order o LEFT JOIN tbh_user u ON o.apply_user = u.user_id ON t.ref_no = o.code
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_afterSale" parameterType="afterSale">
+		INSERT INTO
+		tbh_after_sale(
+		code
+		,apply_user
+		,ref_no
+		,sale_type
+		,apply_note
+		,pic
+		,apply_datetime
+		,status
+		)
+		VALUES(
+		#{code}
+		,#{applyUser}
+		,#{refNo}
+		,#{saleType}
+		,#{applyNote}
+		,#{pic}
+		,#{applyDatetime}
+		,#{status}
+		)
+	</insert>
+
+	<update id="update_afterSale" parameterType="afterSale">
+		UPDATE tbh_after_sale
+		SET
+		apply_user = #{applyUser}
+		,ref_no = #{refNo}
+		,sale_type = #{saleType}
+		,apply_note = #{applyNote}
+		,pic = #{pic}
+		,apply_datetime = #{applyDatetime}
+		,status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,approve_note = #{approveNote}
+		,deliver = #{deliver}
+		,logistics_code = #{logisticsCode}
+		,logistics_company = #{logisticsCompany}
+		,pdf = #{pdf}
+		,delive_datetime = #{deliveDatetime}
+		,signer = #{signer}
+		,mobile = #{mobile}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="approvre_afterSale" parameterType="afterSale">
+		UPDATE tbh_after_sale
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,approve_note = #{approveNote}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="change_product" parameterType="afterSale">
+		UPDATE tbh_after_sale
+		SET
+		deliver = #{deliver}
+		,logistics_code = #{logisticsCode}
+		,logistics_company = #{logisticsCompany}
+		,pdf = #{pdf}
+		,delive_datetime = #{deliveDatetime}
+		,signer = #{signer}
+		,mobile = #{mobile}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>
