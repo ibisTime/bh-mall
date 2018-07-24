@@ -26,6 +26,7 @@
 		</trim>
 	</sql>
 	
+	
 	<select id="select_agentUpgrade" parameterType="agentUpgrade" resultMap="aegnt_DB_Result">
 		SELECT 
 		t.code

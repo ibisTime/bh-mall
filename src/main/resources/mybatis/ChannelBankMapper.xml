@@ -17,6 +17,7 @@
 		<result column="month_amount" property="monthAmount" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="id != null and id != '' ">
@@ -40,6 +41,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_channelBank" parameterType="channelBank" resultMap="channelBank_DB_Result">
 		SELECT
 		t.id

@@ -18,6 +18,7 @@
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">

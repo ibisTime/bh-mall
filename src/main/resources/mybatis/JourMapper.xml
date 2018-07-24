@@ -58,6 +58,7 @@
 			<if test="realName != null and realName != '' ">
 			    AND t.real_name like "%"#{realName}"%"
 			</if>
+			
 			<choose>
 			     <when test='type == "NOT_P"'>
 				 	AND t.type not in('P')

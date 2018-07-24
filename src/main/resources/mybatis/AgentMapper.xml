@@ -41,6 +41,7 @@
 		</trim>
 	</sql>
 	
+	
 	<select id="select_agent" parameterType="agent" resultMap="aegnt_DB_Result">
 		SELECT 
 		t.name

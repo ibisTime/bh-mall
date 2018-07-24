@@ -9,6 +9,7 @@
 		<result column="sale_type" property="saleType" />
 		<result column="apply_note" property="applyNote" />
 		<result column="pic" property="pic" />
+		
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="status" property="status" />
 		<result column="approver" property="approver" />

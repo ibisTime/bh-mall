@@ -37,6 +37,7 @@
 		</trim>
 	</sql>
 	
+	
 	<select id="select_productLog" parameterType="productLog" resultMap="productLog_DB_Result">
 		SELECT 
 		t.code

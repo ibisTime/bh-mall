@@ -9,6 +9,7 @@
 		<result column="type" property="type" />
 		<result column="status" property="status" />
 		
+		
 		<result column="currency" property="currency" />	
 		<result column="amount" property="amount" />
 		<result column="frozen_amount" property="frozenAmount" />

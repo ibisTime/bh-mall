@@ -7,6 +7,7 @@
 		<result column="type" property="type"/>
 		<result column="receiver" property="receiver" />
 		<result column="mobile" property="mobile" />
+		
 		<result column="province" property="province" />
 		<result column="city" property="city" />
 		<result column="area" property="area" />

@@ -23,6 +23,7 @@
 		<result column="pay_amount" property="payAmount" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="signer" property="signer" />
+		
 		<result column="mobile" property="mobile" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />

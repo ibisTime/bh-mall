@@ -33,6 +33,7 @@
 			<if test="isIntro != null and isIntro != ''">
 				AND t.is_intro=#{isIntro}
 			</if>
+			
 			<if test="isIntent != null and isIntent != ''">
 				AND t.is_intent=#{isIntent}
 			</if>

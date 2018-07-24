@@ -21,8 +21,8 @@
 		<result column="last_change_code" property="lastChangeCode" />
 		<result column="system_code" property="systemCode" />
 		<result column="company_code" property="companyCode" />
-		
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">

@@ -25,6 +25,7 @@
 		<result column="intr_award" property="intrAward" />
 		<result column="refree_award" property="refreeAward" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="userId != null and userId != '' ">

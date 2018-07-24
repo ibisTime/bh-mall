@@ -33,6 +33,7 @@
 		<result column="biz_type" property="bizType" />	
 		<result column="biz_note" property="bizNote" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">

@@ -40,7 +40,6 @@
 	</sql>
 	
 	
-	
 	<select id="select_product" parameterType="product" resultMap="product_DB_Result">
 		SELECT 
 		t.code

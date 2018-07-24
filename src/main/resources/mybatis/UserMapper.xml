@@ -61,6 +61,7 @@
 		<result column="pay_amount" property="payAmount" />
 		<result column="pay_pdf" property="payPdf" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="userId != null and userId != '' ">

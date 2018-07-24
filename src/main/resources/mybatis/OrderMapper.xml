@@ -79,6 +79,7 @@
 			<if test="statusForQuery != null and statusForQuery != '' ">
 				AND t.status IN ${statusForQuery}
 			</if>
+			
 			<choose>
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}

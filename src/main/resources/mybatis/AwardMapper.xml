@@ -31,6 +31,7 @@
 		</trim>
 	</sql>
 	
+	
 	<select id="select_award" parameterType="award" resultMap="award_DB_Result">
 		SELECT
 		t.code

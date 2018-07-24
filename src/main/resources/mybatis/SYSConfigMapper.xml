@@ -68,6 +68,7 @@
 		<include refid="where_condition" />
 	</select>
 	
+	
 	<insert id="insert_sysConfig" parameterType="sysConfig" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tsys_config(
 		type
