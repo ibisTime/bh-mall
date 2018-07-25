@@ -27,7 +27,6 @@ public class XN627046 extends AProcessor {
         SYSRole condition = new SYSRole();
         condition.setName(req.getName());
         // condition.setUpdater(req.getUpdater());
-        condition.setSystemCode(req.getSystemCode());
         return sysRoleAO.querySYSRoleList(condition);
     }
 
