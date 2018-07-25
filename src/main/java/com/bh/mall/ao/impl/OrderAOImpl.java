@@ -847,6 +847,10 @@ public class OrderAOImpl implements IOrderAO {
                     data.getAmount(), EBizType.AJ_GMCP_TK,
                     EBizType.AJ_GMCP_TK.getValue(),
                     EBizType.AJ_GMCP_TK.getValue(), data.getCode());
+            } else {
+                // 购买云仓待支付，归还上级库存
+                User toUser = userBO.getUser(data.getToUser());
+                wareHouseBO.buyWareHouse(data, toUser);
             }
         }
         data.setUpdater(updater);
@@ -1064,16 +1068,11 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
 
-            // 门槛余额是否高于限制
-            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-
             // 是否开启云仓
             boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
                 applyUser.getImpowerDatetime());
             // 是否开启云仓
-            if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
-
-            } else if (flag) {
+            if (flag) {
                 kind = EOrderKind.Impower_Order.getCode();
                 // 产品不包邮，计算运费
                 if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
