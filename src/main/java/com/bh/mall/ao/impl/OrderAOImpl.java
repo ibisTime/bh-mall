@@ -324,8 +324,7 @@ public class OrderAOImpl implements IOrderAO {
                         this.payAward(data);
                     }
                     // 出货代理账户收钱
-                    User toUser = userBO.getUser(data.getToUser());
-                    this.payOrder(toUser, data, null);
+                    this.payOrder(uData, data, null);
 
                 }
                 data.setPayDatetime(new Date());
@@ -683,17 +682,15 @@ public class OrderAOImpl implements IOrderAO {
     public void deliverOrder(XN627645Req req) {
 
         Order data = orderBO.getOrder(req.getCode());
-        String toUserId = ESysUser.SYS_USER_BH.getCode();
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
             // C端产品无法云仓发
             if (EUserKind.Customer.getCode().equals(data.getKind())) {
                 throw new BizException("xn00000", "非代理的订单无法从云仓发货哦！");
             }
 
+            // 订单归属人是代理
             User toUser = userBO.getUser(data.getToUser());
             if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
-
-                toUserId = toUser.getUserId();
                 ProductSpecsPrice psp = productSpecsPriceBO.getPriceByLevel(
                     data.getProductSpecsCode(), toUser.getLevel());
                 ProductSpecs ps = productSpecsBO
@@ -718,13 +715,6 @@ public class OrderAOImpl implements IOrderAO {
                 }
             }
         }
-
-        // 卖货后赚的钱
-        Account account = accountBO.getAccountByUser(toUserId,
-            ECurrency.YJ_CNY.getCode());
-        accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-            null, data.getPayGroup(), data.getCode(), EBizType.AJ_CELR,
-            EBizType.AJ_CELR.getValue(), data.getAmount());
 
         data.setDeliver(req.getDeliver());
         data.setDeliveDatetime(new Date());
@@ -1077,18 +1067,11 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
 
-            // 门槛余额是否高于限制
-            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-
-            // 是否开启云仓
+            // 是否完成授权单
             boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
                 applyUser.getImpowerDatetime());
             // 是否开启云仓
-            if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
-                // 改变产品数量
-                this.changeProductNumber(applyUser, pData, psData, order,
-                    -order.getQuantity(), code);
-            } else if (flag) {
+            if (flag) {
                 kind = EOrderKind.Impower_Order.getCode();
                 // 产品不包邮，计算运费
                 if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
@@ -1121,24 +1104,39 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     private void payOrder(User user, Order data, String wechatOrderNo) {
-        // 微信H5或微信小程序支付
-        if (EChannelType.WeChat_H5.getCode().equals(data.getPayType())
-                || EChannelType.WeChat_XCX.getCode()
-                    .equals(data.getPayType())) {
+
+        // 改变产品数量或上级库存
+        Product pData = productBO.getProduct(data.getProductCode());
+        ProductSpecs psData = productSpecsBO
+            .getProductSpecs(data.getProductSpecsCode());
+
+        this.changeProductNumber(user, pData, psData, data, -data.getQuantity(),
+            data.getCode());
+        User toUser = userBO.getUser(data.getToUser());
+
+        // 非门槛余额支付且收款人不是平台，收款方与平台同时加钱
+        if (!EChannelType.NBZ.getCode().equals(data.getPayType())
+                && EUserKind.Merchant.getCode().equals(toUser.getKind())) {
+
             Account account = accountBO.getAccountByUser(user.getUserId(),
                 ECurrency.YJ_CNY.getCode());
+
             // 收款方账户价钱
             accountBO.changeAmount(account.getAccountNumber(),
                 EChannelType.WeChat_H5, wechatOrderNo, data.getPayGroup(),
                 data.getCode(), EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
                 data.getAmount());
+
             // 托管账户加钱
             accountBO.changeAmount(ESystemCode.BH.getCode(),
                 EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
                 data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
                 EBizType.AJ_GMYC.getValue(), data.getAmount());
-        } else {
-            // 订单归属人是平台，只有托管账户加钱
+
+        } else if (!EChannelType.NBZ.getCode().equals(data.getPayType())
+                && EUserKind.Merchant.getCode().equals(toUser.getKind())) {
+
+            // 非门槛余额支付且收款人是平台，只有托管账户加钱
             accountBO.changeAmount(ESystemCode.BH.getCode(),
                 EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
                 data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,

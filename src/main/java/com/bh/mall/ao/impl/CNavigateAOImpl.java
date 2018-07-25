@@ -36,22 +36,26 @@ public class CNavigateAOImpl implements ICNavigateAO {
 
     @Override
     public void editCNavigate(CNavigate data) {
+
         CNavigate cNavigate = cNavigateBO.getCNavigate(data.getCode());
+
         // 1 地方改
         if (EBoolean.YES.getCode().equals(data.getIsCompanyEdit())) {
+
             // 判断是否地方首次修改地方默认，是则新增，否则修改地方独有
             if (EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
                 CNavigate navigate = cNavigate;
                 // 为指定新增特殊前缀格式
                 String oldCode = data.getCode();
                 if (!data.getCode().contains(EGeneratePrefix.DH.getCode())) {
-                    navigate.setCode(OrderNoGenerater.generate(oldCode
-                        .substring(0, 3)));
+                    navigate.setCode(
+                        OrderNoGenerater.generate(oldCode.substring(0, 3)));
                 } else {
                     navigate.setCode(null);
                 }
                 navigate.setName(data.getName());
                 navigate.setStatus(data.getStatus());
+                // 区分地方是否修改
                 navigate.setBelong(data.getCode());
                 navigate.setCompanyCode(data.getCompanyCode());
                 navigate.setParentCode(data.getParentCode());
@@ -68,6 +72,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
                 data.setBelong(cNavigate.getBelong());
                 cNavigateBO.refreshCNavigate(data);
             }
+
         } else {
             if (!EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
                 data.setBelong(cNavigate.getBelong());
