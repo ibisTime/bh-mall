@@ -37,7 +37,6 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         SYSRole data = new SYSRole();
         data.setCode(code);
         data.setName(req.getName());
-        data.setLevel(req.getLevel());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -71,6 +70,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         } else {
             throw new BizException("lh4000", "角色编号不存在！");
         }
+        
         return true;
     }
 

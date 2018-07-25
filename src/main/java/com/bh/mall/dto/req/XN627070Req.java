@@ -33,11 +33,11 @@ public class XN627070Req {
     private String remark;
 
     // 公司编号（必填）
-    @NotBlank
+    //@NotBlank
     private String companyCode;
 
     // 系统编号（必填）
-    @NotBlank
+    //@NotBlank
     private String systemCode;
 
     public String getType() {

@@ -3,6 +3,7 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.ISYSRoleAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN627040Req;
 import com.bh.mall.dto.res.PKCodeRes;
@@ -31,8 +32,7 @@ public class XN627040 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627040Req.class);
-        StringValidater.validateBlank(req.getName(), req.getLevel(),
-            req.getUpdater(), req.getSystemCode());
+        ObjValidater.validateReq(req);
     }
 
 }

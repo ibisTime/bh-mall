@@ -28,7 +28,6 @@ public class XN627041 extends AProcessor {
         SYSRole data = new SYSRole();
         data.setCode(req.getCode());
         data.setName(req.getName());
-        data.setLevel(req.getLevel());
         data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
         return new BooleanRes(sysRoleAO.editSYSRole(data));

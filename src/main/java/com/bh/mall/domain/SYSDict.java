@@ -47,11 +47,11 @@ public class SYSDict extends ABaseDO {
     // 备注
     private String remark;
 
-    // 公司编号
-    private String companyCode;
-
-    // 系统编号
-    private String systemCode;
+//    // 公司编号
+//    private String companyCode;
+//
+//    // 系统编号
+//    private String systemCode;
 
     public Long getId() {
         return id;
@@ -117,7 +117,7 @@ public class SYSDict extends ABaseDO {
         this.remark = remark;
     }
 
-    public String getCompanyCode() {
+   /* public String getCompanyCode() {
         return companyCode;
     }
 
@@ -131,5 +131,5 @@ public class SYSDict extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
+    }*/
 }

@@ -18,14 +18,14 @@ public class XN627076Req {
     // key（选填）
     private String dkey;
 
-    // 公司编号（必填）
+   /* // 公司编号（必填）
     @NotBlank
     private String companyCode;
 
     // 系统编号（必填）
     @NotBlank
     private String systemCode;
-
+*/
     public String getType() {
         return type;
     }
@@ -50,7 +50,7 @@ public class XN627076Req {
         this.dkey = dkey;
     }
 
-    public String getCompanyCode() {
+    /*public String getCompanyCode() {
         return companyCode;
     }
 
@@ -64,5 +64,5 @@ public class XN627076Req {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
+    }*/
 }

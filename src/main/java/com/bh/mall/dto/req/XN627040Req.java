@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 增加角色
  * @author: xieyj 
@@ -9,18 +11,19 @@ package com.bh.mall.dto.req;
 public class XN627040Req {
 
     // 角色名称(必填)
+	@NotBlank(message="名字不能为空")
     private String name;
 
-    // 角色等级(必填)
-    private String level;
 
     // 更新人(必填)
+	@NotBlank(message="更新人不能为空")
     private String updater;
 
     // 备注(选填)
     private String remark;
 
     // 系统编号（必填）
+    @NotBlank(message="系统编号不能为空")
     private String systemCode;
 
     public String getSystemCode() {
@@ -39,13 +42,6 @@ public class XN627040Req {
         this.name = name;
     }
 
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
 
     public String getUpdater() {
         return updater;

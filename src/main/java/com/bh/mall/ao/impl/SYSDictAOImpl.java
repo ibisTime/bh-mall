@@ -75,8 +75,8 @@ public class SYSDictAOImpl implements ISYSDictAO {
         sysDict.setDvalue(value);
         sysDict.setUpdater(updater);
         sysDict.setRemark(remark);
-        sysDict.setCompanyCode(companyCode);
-        sysDict.setSystemCode(systemCode);
+        /*sysDict.setCompanyCode(companyCode);
+        sysDict.setSystemCode(systemCode);*/
         return sysDictBO.saveSYSDict(sysDict);
     }
 
