@@ -14,7 +14,6 @@
 		<result column="remark" property="remark"/>
 	</resultMap>
 	
-	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != ''">
@@ -25,7 +24,6 @@
 			</if>
 		</trim>
 	</sql>
-	
 	
 	<select id="select_agentUpgrade" parameterType="agentUpgrade" resultMap="aegnt_DB_Result">
 		SELECT 

@@ -2,9 +2,9 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-	<settings>
+	<!-- <settings>
 		<setting name="logImpl" value="STDOUT_LOGGING"/>
-	</settings>
+	</settings> -->
 	<typeAliases>		
 		<typeAlias alias="user" type="com.bh.mall.domain.User" />
 		<typeAlias alias="address" type="com.bh.mall.domain.Address" />
@@ -55,13 +55,5 @@
 		<typeAlias alias="awardInterval" type="com.bh.mall.domain.AwardInterval"/>
 		<typeAlias alias="securityTrace" type="com.bh.mall.domain.SecurityTrace"/>
 		<typeAlias alias="barCode" type="com.bh.mall.domain.BarCode"/>
-		
-		<typeAlias alias="sysuser" type="com.bh.mall.domain.SYSUser"/>
-		<typeAlias alias="cuser" type="com.bh.mall.domain.CUser"/>
-		<typeAlias alias="buser" type="com.bh.mall.domain.BUser"/>
-		<typeAlias alias="agentAllot" type="com.bh.mall.domain.AgentAllot"/>
-		<typeAlias alias="impowerApply" type="com.bh.mall.domain.ImpowerApply"/>
-		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.UpLevelApply"/>
-		
 	</typeAliases>
 </configuration>	

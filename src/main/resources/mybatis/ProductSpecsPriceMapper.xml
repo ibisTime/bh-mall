@@ -57,6 +57,7 @@
 		</trim>
 	</select>
 	
+	
 	<select id="select_productSpecsPrice_count" parameterType="productSpecsPrice" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_product_specs_price t
 		<include refid="where_condition"/>

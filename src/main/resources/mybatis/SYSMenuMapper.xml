@@ -15,7 +15,6 @@
 		<result column="parent_code" property="parentCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
-	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
 			<if test="code != null and code != '' ">

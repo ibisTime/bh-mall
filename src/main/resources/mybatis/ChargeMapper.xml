@@ -29,7 +29,6 @@
 		<result column="channel_type" property="channelType" />
 		
 	</resultMap>
-	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
