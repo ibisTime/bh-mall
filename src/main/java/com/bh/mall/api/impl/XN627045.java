@@ -31,6 +31,7 @@ public class XN627045 extends AProcessor {
         SYSRole condition = new SYSRole();
         condition.setName(req.getName());
         condition.setUpdater(req.getUpdater());
+        condition.setSystemCode(req.getSystemCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ISYSRoleAO.DEFAULT_ORDER_COLUMN;

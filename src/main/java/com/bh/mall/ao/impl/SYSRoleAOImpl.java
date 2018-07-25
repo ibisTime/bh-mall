@@ -40,6 +40,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
+        data.setSystemCode(req.getSystemCode());
         sysRoleBO.saveSYSRole(data);
         return code;
     }

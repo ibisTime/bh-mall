@@ -42,7 +42,7 @@ public class XN627040Req {
         this.name = name;
     }
 
-
+    
     public String getUpdater() {
         return updater;
     }

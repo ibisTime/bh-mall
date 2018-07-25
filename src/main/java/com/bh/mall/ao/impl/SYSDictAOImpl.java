@@ -34,8 +34,7 @@ public class SYSDictAOImpl implements ISYSDictAO {
 
     @Override
     public Long addSYSDict(String type, String parentKey, String key,
-            String value, String updater, String remark, String companyCode,
-            String systemCode) {
+            String value, String updater, String remark) {
         if (EDictType.SECOND.getCode().equals(type)) {
             if (StringUtils.isBlank(parentKey)) {
                 throw new BizException("xn000000", "第二层字典数据，parentKey不能为空");
