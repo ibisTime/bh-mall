@@ -37,7 +37,6 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         SYSRole data = new SYSRole();
         data.setCode(code);
         data.setName(req.getName());
-        data.setLevel(req.getLevel());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());

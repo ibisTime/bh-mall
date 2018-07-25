@@ -1,5 +1,7 @@
 package com.bh.mall.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.bh.mall.ao.ISYSMenuAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
@@ -28,9 +30,17 @@ public class XN627056 extends AProcessor {
         condition.setNameForQuery(req.getName());
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
-        // condition.setUpdater(req.getUpdater());
+        condition.setUpdater(req.getUpdater());
         condition.setSystemCode(req.getSystemCode());
+
+        String column = req.getOrderColumn();
+        if (StringUtils.isBlank(column)) {
+            column = ISYSMenuAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(column, req.getOrderDir());
+
         return sysMenuAO.querySYSMenuList(condition);
+
     }
 
     @Override

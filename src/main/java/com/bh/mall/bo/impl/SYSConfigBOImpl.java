@@ -55,8 +55,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
                 && StringUtils.isNotBlank(systemCode)) {
             SYSConfig condition = new SYSConfig();
             condition.setCkey(ckey);
-            condition.setCompanyCode(companyCode);
-            condition.setSystemCode(systemCode);
             result = sysConfigDAO.select(condition);
         }
         return result;
@@ -79,8 +77,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         Map<String, String> map = new HashMap<String, String>();
         if (StringUtils.isNotBlank(systemCode)) {
             SYSConfig condition = new SYSConfig();
-            condition.setCompanyCode(companyCode);
-            condition.setSystemCode(systemCode);
             condition.setType(type);
             List<SYSConfig> list = sysConfigDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {

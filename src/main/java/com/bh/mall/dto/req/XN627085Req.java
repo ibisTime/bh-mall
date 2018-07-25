@@ -1,11 +1,10 @@
 package com.bh.mall.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * @author: xieyj 
  * @since: 2016年9月17日 下午4:09:39 
  * @history:
+ * 分页查询系统参数
  */
 public class XN627085Req extends APageReq {
 
@@ -20,13 +19,8 @@ public class XN627085Req extends APageReq {
     // key值(选填)
     private String ckey;
 
-    // 公司编号（必填）
-    @NotBlank
-    private String companyCode;
-
-    // 系统编号（必填）
-    @NotBlank
-    private String systemCode;
+    // 更新人（选填）
+    private String updater;
 
     public String getType() {
         return type;
@@ -34,14 +28,6 @@ public class XN627085Req extends APageReq {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getCkey() {
@@ -52,12 +38,12 @@ public class XN627085Req extends APageReq {
         this.ckey = ckey;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
 }

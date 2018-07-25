@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2016年5月16日 下午10:45:20 
  * @history:
  */
-public class XN627065Req {
+public class XN627065Req extends AListReq {
 
     // 角色编号（必填）
     @NotBlank

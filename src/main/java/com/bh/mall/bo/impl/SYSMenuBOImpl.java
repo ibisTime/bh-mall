@@ -19,8 +19,8 @@ import com.bh.mall.domain.SYSMenu;
  * @history:
  */
 @Component
-public class SYSMenuBOImpl extends PaginableBOImpl<SYSMenu> implements
-        ISYSMenuBO {
+public class SYSMenuBOImpl extends PaginableBOImpl<SYSMenu>
+        implements ISYSMenuBO {
 
     @Autowired
     private ISYSMenuDAO sysMenuDAO;
@@ -41,6 +41,7 @@ public class SYSMenuBOImpl extends PaginableBOImpl<SYSMenu> implements
     /** 
      * @see com.bh.mall.bo.ISYSMenuBO#saveSYSMenu(com.xnjr.std.security.domain.SYSMenu)
      */
+    // 新增菜单
     @Override
     public int saveSYSMenu(SYSMenu data) {
         int count = 0;

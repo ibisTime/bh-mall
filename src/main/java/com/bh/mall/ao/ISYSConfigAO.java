@@ -21,10 +21,8 @@ public interface ISYSConfigAO {
 
     public SYSConfig getSYSConfig(Long id);
 
-    public SYSConfig getSYSConfig(String key, String companyCode,
-            String systemCode);
+    public SYSConfig getSYSConfig(String key);
 
-    public Map<String, String> querySYSConfig(String type, String companyCode,
-            String systemCode);
+    public Map<String, String> querySYSConfig(String type);
 
 }

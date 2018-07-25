@@ -14,17 +14,23 @@ import com.bh.mall.dto.req.XN627040Req;
 public interface ISYSRoleAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
+    // 新增角色
     public String addSYSRole(XN627040Req req);
 
+    // 删除角色
     public boolean dropSYSRole(String roleCode);
 
+    // 修改角色
     public boolean editSYSRole(SYSRole data);
 
+    // 列表查询
     public List<SYSRole> querySYSRoleList(SYSRole condition);
 
+    // 分页查询
     public Paginable<SYSRole> querySYSRolePage(int start, int limit,
             SYSRole condition);
 
+    // 详细查询
     public SYSRole getSYSRole(String code);
 
 }

@@ -7,6 +7,14 @@ public class XN627050Req {
     @NotBlank
     private String name;
 
+    // 菜单顺序号（必填）
+    @NotBlank
+    private String orderNo;
+
+    // 父菜单编号(必填)
+    @NotBlank
+    private String parentCode;
+
     // 类型(必填)
     @NotBlank
     private String type;
@@ -14,14 +22,6 @@ public class XN627050Req {
     // 请求url(必填)
     @NotBlank
     private String url;
-
-    // 父菜单编号(必填)
-    @NotBlank
-    private String parentCode;
-
-    // 菜单顺序号（必填）
-    @NotBlank
-    private String orderNo;
 
     // 更新人(必填)
     @NotBlank
