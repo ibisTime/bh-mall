@@ -31,8 +31,6 @@ public class XN627036 extends AProcessor {
         condition.setLocation(req.getLocation());
         condition.setStatus(EBoolean.YES.getCode());
         condition.setIsFront(EBoolean.YES.getCode());
-        condition.setCompanyCode(req.getCompanyCode());
-        condition.setSystemCode(req.getSystemCode());
         return cNavigateAO.queryCNavigateList(condition);
     }
 

@@ -22,6 +22,9 @@ public class XN627312Req {
     @NotBlank(message = "真实姓名不能为空")
     private String realName;
 
+    // （选填）头像
+    private String photo;
+
     public String getLoginPwd() {
         return loginPwd;
     }
@@ -44,6 +47,14 @@ public class XN627312Req {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 }

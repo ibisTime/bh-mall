@@ -98,18 +98,18 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     /*************** 注册 **********************/
     @Override
-    public String addUser(String mobile, String loginPwd, String realName) {
-        sysUserBO.isMobileExist(mobile, ESystemCode.BH.getCode(),
-            ESystemCode.BH.getCode());
+    public String addUser(String mobile, String loginPwd, String realName,
+            String photo) {
+        sysUserBO.isMobileExist(mobile, ESystemCode.BH.getCode());
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
         data.setMobile(mobile);
+        data.setRealName(realName);
         data.setLoginName(mobile);
         data.setLoginPwd(MD5Util.md5(loginPwd));
-        data.setKind(EUserKind.Plat.getCode());
+        data.setPhoto(photo);
         data.setSystemCode(ESystemCode.BH.getCode());
-        data.setCompanyCode(ESystemCode.BH.getCode());
         sysUserBO.doSaveUser(data);
         return userId;
     }
@@ -117,15 +117,10 @@ public class SYSUserAOImpl implements ISYSUserAO {
     /*************** 登录 **********************/
     // 用户登录
     @Override
-    public String doLogin(String loginName, String loginPwd, String kind,
-            String companyCode, String systemCode) {
+    public String doLogin(String loginName, String loginPwd) {
         SYSUser condition = new SYSUser();
 
         condition.setLoginName(loginName);
-
-        // condition.setKind(kind);
-        condition.setCompanyCode(companyCode);
-        condition.setSystemCode(systemCode);
         List<SYSUser> userList1 = sysUserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn805050", "登录名不存在");
@@ -187,11 +182,10 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn000000", "新手机与原手机一致");
         }
         // 判断手机号是否存在
-        sysUserBO.isMobileExist(newMobile, user.getCompanyCode(),
-            user.getSystemCode());
+        sysUserBO.isMobileExist(newMobile, user.getSystemCode());
         // 新手机号验证
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627282",
-            user.getCompanyCode(), user.getSystemCode());
+            user.getSystemCode());
         sysUserBO.resetBindMobile(user, newMobile);
         // 发送短信
         smsOutBO.sendSmsOut(oldMobile,

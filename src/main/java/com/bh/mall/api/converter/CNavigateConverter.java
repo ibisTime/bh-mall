@@ -22,8 +22,6 @@ public class CNavigateConverter {
         result.setParentCode(req.getParentCode());
         result.setRemark(req.getRemark());
         result.setContentType(req.getContentType());
-        result.setCompanyCode(req.getCompanyCode());
-        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
@@ -41,8 +39,6 @@ public class CNavigateConverter {
         result.setBelong(req.getBelong());
         result.setParentCode(req.getParentCode());
         result.setRemark(req.getRemark());
-        result.setContentType(req.getContentType());
-        result.setCompanyCode(req.getCompanyCode());
         return result;
     }
 
@@ -56,8 +52,6 @@ public class CNavigateConverter {
         result.setBelong(req.getBelong());
         result.setParentCode(req.getParentCode());
         result.setContentType(req.getContentType());
-        result.setCompanyCode(req.getCompanyCode());
-        result.setSystemCode(req.getSystemCode());
         return result;
     }
 
