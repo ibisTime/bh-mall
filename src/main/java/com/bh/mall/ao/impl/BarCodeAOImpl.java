@@ -114,11 +114,6 @@ public class BarCodeAOImpl implements IBarCodeAO {
             traceCondition.setStatus(ECodeStatus.TO_USER.getCode());
             Paginable<SecurityTrace> tracePage = securityTraceBO
                 .getPaginable(quantity - 1, number, traceCondition);
-
-            // 更新箱状态
-            if (!ECodeStatus.TO_USER.getCode().equals(barCode.getStatus())) {
-                throw new BizException("xn00000", "箱码已被使用");
-            }
             barCodeBO.refreshBarCode(barCode);
 
             // 是否还有可用盒码
