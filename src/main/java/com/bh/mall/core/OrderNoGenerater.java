@@ -104,13 +104,14 @@ public class OrderNoGenerater {
     public static String generateTrace() {
         Calendar calendar = Calendar.getInstance();
         Random rand = new Random();
-        Long random = calendar.getTimeInMillis() - rand.nextInt();
+        Long random = calendar.getTimeInMillis() / 100 - rand.nextInt();
 
         if (random < 0) {
             random = -random;
         }
 
-        String str = String.valueOf(random.toString());
+        String str = String.valueOf(rand.nextInt(90) + 10)
+                + String.valueOf(random.toString());
         // 少于12位，随机补充
         int lack = 12 - str.length();
         if (lack > 0) {
