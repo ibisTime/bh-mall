@@ -8,6 +8,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author: xieyj 
  * @since: 2016年9月17日 下午4:09:34 
  * @history:
+ * 
+ * 修改系统参数
  */
 public class XN627081Req {
     // 编号

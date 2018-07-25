@@ -12,14 +12,6 @@ public class XN627088Req {
     @NotBlank
     private String type;
 
-    // 公司编号（必填）
-    @NotBlank
-    private String companyCode;
-
-    // 系统编号（必填）
-    @NotBlank
-    private String systemCode;
-
     public String getType() {
         return type;
     }
@@ -28,19 +20,4 @@ public class XN627088Req {
         this.type = type;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 }

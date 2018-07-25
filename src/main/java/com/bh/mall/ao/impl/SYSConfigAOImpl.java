@@ -23,6 +23,7 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     @Autowired
     ISYSConfigBO sysConfigBO;
 
+    // 修改系统参数
     @Override
     public int editSYSConfig(SYSConfig data) {
         int count = 0;
@@ -34,27 +35,29 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
         return count;
     }
 
+    // 分页查询系统参数
     @Override
     public Paginable<SYSConfig> querySYSConfigPage(int start, int limit,
             SYSConfig condition) {
         return sysConfigBO.getPaginable(start, limit, condition);
     }
 
+    // 详细查询系统参数
     @Override
     public SYSConfig getSYSConfig(Long id) {
         return sysConfigBO.getConfig(id);
     }
 
+    // 根据ckey查询系统参数
     @Override
-    public SYSConfig getSYSConfig(String key, String companyCode,
-            String systemCode) {
-        return sysConfigBO.getConfig(key, companyCode, systemCode);
+    public SYSConfig getSYSConfig(String key) {
+        return sysConfigBO.getConfig(key);
     }
 
+    // 根据类型查询系统参数
     @Override
-    public Map<String, String> querySYSConfig(String type, String companyCode,
-            String systemCode) {
-        return sysConfigBO.getConfigsMap(type, companyCode, systemCode);
+    public Map<String, String> querySYSConfig(String type) {
+        return sysConfigBO.getConfigsMap(type);
     }
 
 }

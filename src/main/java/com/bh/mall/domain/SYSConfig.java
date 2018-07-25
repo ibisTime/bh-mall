@@ -44,21 +44,7 @@ public class SYSConfig extends ABaseDO {
     // 备注
     private String remark;
 
-    // 所属公司编号
-    private String companyCode;
-
-    // 系统编号（必填）
-    private String systemCode;
-
     // *************db properties*************
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     // ************* 模糊查询 *****************
     private String ckeyForQuery;
@@ -117,14 +103,6 @@ public class SYSConfig extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getCkeyForQuery() {
