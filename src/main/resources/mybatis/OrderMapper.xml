@@ -374,4 +374,11 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	<delete id="delete_order" parameterType="innerOrder">
+		DELETE FROM
+		tbh_order
+		WHERE
+		code = #{code}
+	</delete>
 </mapper>

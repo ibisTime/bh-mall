@@ -64,4 +64,7 @@ public interface IOrderBO extends IPaginableBO<Order> {
     // 作废订单
     public void invalidOrder(Order data, String updater, String remark);
 
+    // 删除未支付订单
+    public void removeOrder(Order data);
+
 }

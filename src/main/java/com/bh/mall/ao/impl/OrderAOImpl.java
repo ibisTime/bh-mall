@@ -203,7 +203,6 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
 
-        // 是否为授权单
         Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
 
         // 未开云仓的代理，判断是否为授权单
@@ -1071,8 +1070,9 @@ public class OrderAOImpl implements IOrderAO {
             // 是否开启云仓
             boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
                 applyUser.getImpowerDatetime());
-            // 是否开启云仓
-            if (flag) {
+            // 未开启云仓，且未完成授权单
+            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+            if (flag && EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
                 kind = EOrderKind.Impower_Order.getCode();
                 // 产品不包邮，计算运费
                 if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
@@ -1163,6 +1163,18 @@ public class OrderAOImpl implements IOrderAO {
             this.changeProductNumber(applyUser, pData, psData, data,
                 data.getQuantity(), code);
         }
+    }
 
+    // 删除未支付订单
+    public void removeOrder() {
+        // 每十二个小时执行一次，删除是个小时前未支付的订单
+        Date date = new Date();
+        Order condition = new Order();
+        condition.setStatus(EOrderStatus.Unpaid.getCode());
+        condition.setEndDatetime(date);
+        List<Order> list = orderBO.queryOrderList(condition);
+        for (Order data : list) {
+            orderBO.removeOrder(data);
+        }
     }
 }
