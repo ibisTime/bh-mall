@@ -1794,6 +1794,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
     public String addUser(String mobile, String loginPwd, String realName) {
         PhoneUtil.checkMobile(mobile);
         userBO.isMobileExist(mobile, ESystemCode.BH.getCode(),
