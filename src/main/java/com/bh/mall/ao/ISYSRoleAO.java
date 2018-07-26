@@ -21,7 +21,7 @@ public interface ISYSRoleAO {
     public boolean dropSYSRole(String roleCode);
 
     // 修改角色
-    public boolean editSYSRole(SYSRole data);
+    public boolean editSYSRole(SYSRole data); 
 
     // 列表查询
     public List<SYSRole> querySYSRoleList(SYSRole condition);
