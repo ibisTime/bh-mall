@@ -137,6 +137,7 @@
 		,m.type
 		,m.order_no
 		,m.remark
+		,m.updater
 		,m.system_code
 		FROM
 		tsys_menu_role t INNER JOIN tsys_menu m

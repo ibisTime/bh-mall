@@ -503,6 +503,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 Charge condition = new Charge();
                 condition.setApplyUser(user.getUserId());
                 condition.setStatus(EChargeStatus.TO_Cancel.getCode());
+                condition.setApplyDatetimeStart(user.getImpowerDatetime());
                 charge = chargeBO.queryChargeList(condition);
                 if (CollectionUtils.isNotEmpty(charge)) {
                     result = ECheckStatus.Charging.getCode();

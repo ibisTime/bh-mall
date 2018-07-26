@@ -24,6 +24,7 @@
 		<result column="send_award" property="sendAward" />
 		<result column="intr_award" property="intrAward" />
 		<result column="refree_award" property="refreeAward" />
+		<result column="price_spread"  property="priceSpread" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -82,6 +83,7 @@
 		,t.send_award
 		,t.intr_award
 		,t.refree_award
+		,t.price_spread
 		FROM
 		tbh_report t
 		<include refid="where_condition" />
@@ -116,6 +118,7 @@
 		,area
 		,address
 		,impower_datetime
+		,price_spread
 		)
 		VALUES(
 		#{userId}
@@ -133,6 +136,7 @@
 		,#{area}
 		,#{address}
 		,#{impowerDatetime}
+		,#{priceSpread}
 		)
 	</insert>
 
@@ -153,9 +157,6 @@
 		,area = #{area}
 		,address = #{address}
 		,impower_datetime = #{impowerDatetime}
-		,send_award = #{sendAward}
-		,intr_award = #{intrAward}
-		,refree_award = #{refreeAward}
 		WHERE user_id = #{userId}
 	</update>
 

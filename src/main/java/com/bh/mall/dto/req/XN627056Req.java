@@ -2,7 +2,7 @@ package com.bh.mall.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class XN627056Req {
+public class XN627056Req extends AListReq {
     // 菜单名称(选填)
     private String name;
 
@@ -11,6 +11,9 @@ public class XN627056Req {
 
     // 父菜单编号(选填)
     private String parentCode;
+
+    // 更新人(选填)
+    private String updater;
 
     // 系统编号（必填）
     @NotBlank
@@ -38,6 +41,14 @@ public class XN627056Req {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
     public String getType() {

@@ -272,12 +272,4 @@ public class Report extends ABaseDO {
         this.manageName = manageName;
     }
 
-    public Long getPriceSpread() {
-        return priceSpread;
-    }
-
-    public void setPriceSpread(Long priceSpread) {
-        this.priceSpread = priceSpread;
-    }
-
 }

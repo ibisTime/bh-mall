@@ -4,6 +4,7 @@ import com.bh.mall.ao.ISYSMenuAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SYSMenu;
 import com.bh.mall.dto.req.XN627052Req;
 import com.bh.mall.dto.res.BooleanRes;
@@ -31,7 +32,7 @@ public class XN627052 extends AProcessor {
         condition.setType(req.getType());
         condition.setUrl(req.getUrl());
         condition.setParentCode(req.getParentCode());
-        condition.setOrderNo(req.getOrderNo());
+        condition.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
 
         condition.setUpdater(req.getUpdater());
         condition.setRemark(req.getRemark());
