@@ -926,9 +926,11 @@ public class OrderAOImpl implements IOrderAO {
         int minNumber = productSpecsBO.getMinSpecsNumber(pData.getCode());
         int quantity = number * minNumber;
 
-        // 有上级代理,扣减上级代理云仓
+        // 有上级代理,扣减上级代理云仓,且自己开启云仓
+        Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
         User toUser = userBO.getUser(order.getToUser());
-        if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
+        if (EUserKind.Merchant.getCode().equals(toUser.getKind())
+                && EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
             WareHouse toWareHouse = wareHouseBO.getWareHouseByProductSpec(
                 order.getToUser(), order.getProductSpecsCode());
             // 上级云仓没有该产品
@@ -941,7 +943,7 @@ public class OrderAOImpl implements IOrderAO {
                     order.getCode());
             }
 
-        } else {
+        } else if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
             // 无上级代理,扣减产品实际库存
             productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
                 pData.getRealNumber(), quantity, null);

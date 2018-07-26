@@ -93,7 +93,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
 
     @Override
     @Transactional
-    public synchronized List<BarCode> downLoad(int number, int quantity) {
+    public List<BarCode> downLoad(int number, int quantity) {
         // 获取盒码
         BarCode condition = new BarCode();
         condition.setStatus(ECodeStatus.TO_USER.getCode());
@@ -132,6 +132,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
             barCode.setStList(tracePage.getList());
             quantity = quantity + 1;
         }
+
         return page.getList();
 
     }
