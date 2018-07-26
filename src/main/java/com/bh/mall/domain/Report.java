@@ -68,6 +68,9 @@ public class Report extends ABaseDO {
     // 累计推荐奖励
     private Long refreeAward;
 
+    // 累积差额利润
+    private Long priceSpread;
+
     // ******************db*******************
 
     // 授权开始时间
@@ -267,6 +270,14 @@ public class Report extends ABaseDO {
 
     public void setManageName(String manageName) {
         this.manageName = manageName;
+    }
+
+    public Long getPriceSpread() {
+        return priceSpread;
+    }
+
+    public void setPriceSpread(Long priceSpread) {
+        this.priceSpread = priceSpread;
     }
 
 }
