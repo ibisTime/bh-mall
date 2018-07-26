@@ -280,4 +280,5 @@ public class Report extends ABaseDO {
         this.priceSpread = priceSpread;
     }
 
+    
 }
