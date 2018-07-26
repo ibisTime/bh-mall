@@ -11,7 +11,6 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		<result column="system_code" property="systemCode" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -28,9 +27,9 @@
 			<if test="parentKey != null and parentKey != '' ">
 				AND t.parent_key = #{parentKey}
 			</if>	
-			<if test="systemCode != null and systemCode != '' ">
+			<!-- <if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
-			</if>	
+			</if>	 -->
 		</trim>
 	</sql>
 	<select id="select_sysDict" parameterType="sysDict" resultMap="sysDict_DB_Result">
@@ -39,12 +38,11 @@
 		,t.type
 		,t.parent_key
 		,t.dkey
-		
 		,t.dvalue
 		,t.updater
 		,t.update_datetime
 		,t.remark
-		,t.system_code
+		<!-- ,t.system_code -->
 		FROM
 		tsys_dict t 
 		<include refid="where_condition" />
@@ -65,7 +63,6 @@
 		,updater
 		,update_datetime
 		,remark
-		,system_code
 		)
 		VALUES(
 		#{type}
@@ -75,7 +72,6 @@
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
-		,#{systemCode}
 		)
 	</insert>
 

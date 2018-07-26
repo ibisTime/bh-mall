@@ -99,6 +99,11 @@ public class SYSUserDAOImpl extends AMybatisTemplate implements ISYSUserDAO {
     }
 
     @Override
+    public void updateStatus(SYSUser data) {
+        super.update(NAMESPACE.concat("update_status"), data);
+    }
+
+    @Override
     public int delete(SYSUser data) {
         return 0;
     }

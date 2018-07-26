@@ -47,27 +47,13 @@ public class CNavigate extends ABaseDO {
     // 内容样式
     private String contentType;
 
-    // 所属公司
-    private String companyCode;
-
     // 是否公司修改
     private String isCompanyEdit;
-
-    // 系统编号(必填)
-    private String systemCode;
 
     /******************db data******************/
 
     // 是否前端查询
     private String isFront;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getCode() {
         return code;
@@ -163,14 +149,6 @@ public class CNavigate extends ABaseDO {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getIsFront() {

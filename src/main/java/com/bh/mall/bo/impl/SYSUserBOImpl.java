@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -11,9 +12,11 @@ import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
+import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.ISYSUserDAO;
 import com.bh.mall.domain.SYSUser;
+import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -31,15 +34,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     // 注册
     @Override
     public String doRegister(String loginName, String loginPwd,
-            String systemCode, String companyCode) {
+            String systemCode) {
         String userId = OrderNoGenerater.generate("U");
         SYSUser sysUser = new SYSUser();
         sysUser.setUserId(userId);
 
         sysUser.setLoginName(loginName);
-
-        sysUser.setCompanyCode(companyCode);
-
         sysUser.setSystemCode(systemCode);
 
         sysUserDAO.insert(sysUser);
@@ -53,26 +53,35 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
 
     // 保存用户
     @Override
-    public String saveUser(String companyCode, String systemCode) {
+    public String saveUser(String mobile, String loginPwd, String photo,
+            String loginName, String systemCode) {
         String userId = null;
         userId = OrderNoGenerater.generate("U");
         SYSUser data = new SYSUser();
-        data.setUserId(userId); // kind
-        data.setCompanyCode(companyCode);
+        data.setUserId(userId);
+        data.setLoginName(loginName);
+        data.setLoginName(mobile);
+        data.setMobile(mobile);
+
+        data.setPhoto(photo);
+
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+
         data.setSystemCode(systemCode);
+
         sysUserDAO.insert(data);
         return userId;
     }
 
     @Override
-    public void isMobileExist(String mobile, String companyCode,
-            String systemCode) {
+    public void isMobileExist(String mobile, String systemCode) {
         if (StringUtils.isNotBlank(mobile)) {
             // 判断格式
             PhoneUtil.checkMobile(mobile);
             SYSUser condition = new SYSUser();
             condition.setMobile(mobile);
-            condition.setCompanyCode(companyCode);
+
             condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
@@ -175,14 +184,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void isLoginNameExist(String loginName, String kind,
-            String companyCode, String systemCode) {
+    public void isLoginNameExist(String loginName, String systemCode) {
         if (StringUtils.isNotBlank(loginName)) {
             // 判断格式
             SYSUser condition = new SYSUser();
             condition.setLoginName(loginName);
 
-            condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
@@ -192,10 +199,10 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public String getUserId(String companyCode, String systemCode) {
+    public String getUserId(String systemCode) {
         String userId = null;
         SYSUser condition = new SYSUser();
-        condition.setCompanyCode(companyCode);
+
         condition.setSystemCode(systemCode);
         List<SYSUser> list = sysUserDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
@@ -220,6 +227,21 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             data.setPhoto(photo);
             sysUserDAO.updatePhoto(data);
         }
+    }
+
+    @Override
+    public void refreshStatus(String userId, EUserStatus status, String updater,
+            String remark) {
+        if (StringUtils.isNotBlank(userId)) {
+            SYSUser data = new SYSUser();
+            data.setUserId(userId);
+            data.setStatus(status.getCode());
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            sysUserDAO.updateStatus(data); // change to updateStatus
+        }
+
     }
 
 }

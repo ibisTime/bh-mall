@@ -156,6 +156,11 @@
 	</bean>	
 	<bean id="securityTraceBO" class="com.bh.mall.bo.impl.SecurityTraceBOImpl">
 		<property name="paginableDAO" ref="securityTraceDAOImpl"/>
-	</bean>	
+	</bean>
+	
+	<bean id="sysUserBO" class="com.bh.mall.bo.impl.SYSUserBOImpl">
+		<property name="paginableDAO" ref="sysuserDAOImpl"/>
+	</bean>
+		
 	
 </beans>

@@ -22,14 +22,14 @@ public class XN627075Req extends APageReq {
     // key（选填）
     private String dkey;
 
-    // 公司编号（必填）
+    /*// 公司编号（必填）
     @NotBlank
     private String companyCode;
 
     // 系统编号（必填）
     @NotBlank
     private String systemCode;
-
+*/
     public String getType() {
         return type;
     }
@@ -54,7 +54,7 @@ public class XN627075Req extends APageReq {
         this.dkey = dkey;
     }
 
-    public String getSystemCode() {
+  /*  public String getSystemCode() {
         return systemCode;
     }
 
@@ -68,5 +68,5 @@ public class XN627075Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
+    }*/
 }

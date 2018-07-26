@@ -31,8 +31,6 @@ public class XN627076 extends AProcessor {
         condition.setType(req.getType());
         condition.setParentKey(req.getParentKey());
         condition.setDkey(req.getDkey());
-        condition.setCompanyCode(req.getCompanyCode());
-        condition.setSystemCode(req.getSystemCode());
         return sysDictAO.querySysDictList(condition);
     }
 

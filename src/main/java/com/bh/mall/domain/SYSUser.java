@@ -1,6 +1,7 @@
 
 package com.bh.mall.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
@@ -29,7 +30,7 @@ public class SYSUser extends ABaseDO {
     private String loginPwdStrength;
 
     //
-    private String kind;
+    private String realName;
 
     //
     private String mobile;
@@ -37,11 +38,20 @@ public class SYSUser extends ABaseDO {
     // 头像
     private String photo;
 
-    // 公司编号
-    private String companyCode;
-
     // 系统编号
     private String systemCode;
+
+    private String companyCode;
+
+    private Date createDatetime;
+
+    private String status;
+
+    private String updater;
+
+    private Date updateDatetime;
+
+    private String remark;
 
     // DB
     private List<SYSUser> sysUserList;
@@ -82,14 +92,6 @@ public class SYSUser extends ABaseDO {
         this.loginPwd = loginPwd;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
     public String getSystemCode() {
         return systemCode;
     }
@@ -98,12 +100,24 @@ public class SYSUser extends ABaseDO {
         this.systemCode = systemCode;
     }
 
-    public String getKind() {
-        return kind;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public void setKind(String realName) {
+        this.realName = realName;
     }
 
     public String getMobile() {
@@ -122,6 +136,14 @@ public class SYSUser extends ABaseDO {
         this.photo = photo;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     // 登陆密码强度
     public String getLoginPwdStrength() {
         return loginPwdStrength;
@@ -129,6 +151,38 @@ public class SYSUser extends ABaseDO {
 
     public void setLoginPwdStrength(String loginPwdStrength) {
         this.loginPwdStrength = loginPwdStrength;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }
