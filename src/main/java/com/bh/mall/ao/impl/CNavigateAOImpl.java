@@ -40,20 +40,20 @@ public class CNavigateAOImpl implements ICNavigateAO {
         // 1 地方改
         if (EBoolean.YES.getCode().equals(data.getIsCompanyEdit())) {
             // 判断是否地方首次修改地方默认，是则新增，否则修改地方独有
-            if (EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
+            if (EBoolean.NO.getCode().equals(cNavigate.getContentType())) {
                 CNavigate navigate = cNavigate;
                 // 为指定新增特殊前缀格式
                 String oldCode = data.getCode();
                 if (!data.getCode().contains(EGeneratePrefix.DH.getCode())) {
-                    navigate.setCode(OrderNoGenerater.generate(oldCode
-                        .substring(0, 3)));
+                    navigate.setCode(
+                        OrderNoGenerater.generate(oldCode.substring(0, 3)));
                 } else {
                     navigate.setCode(null);
                 }
                 navigate.setName(data.getName());
                 navigate.setStatus(data.getStatus());
                 navigate.setBelong(data.getCode());
-                navigate.setCompanyCode(data.getCompanyCode());
+
                 navigate.setParentCode(data.getParentCode());
                 navigate.setLocation(data.getLocation());
                 navigate.setOrderNo(data.getOrderNo());
@@ -61,7 +61,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
                 navigate.setRemark(data.getRemark());
                 navigate.setUrl(data.getUrl());
                 navigate.setPic(data.getPic());
-                navigate.setSystemCode(data.getSystemCode());
+
                 cNavigateBO.saveCNavigate(navigate);
             } else {
                 // 地方独有修改，属于不变
@@ -69,7 +69,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
                 cNavigateBO.refreshCNavigate(data);
             }
         } else {
-            if (!EBoolean.NO.getCode().equals(cNavigate.getCompanyCode())) {
+            if (!EBoolean.NO.getCode().equals(cNavigate.getContentType())) {
                 data.setBelong(cNavigate.getBelong());
             } else {
                 if (StringUtils.isBlank(data.getBelong())) {

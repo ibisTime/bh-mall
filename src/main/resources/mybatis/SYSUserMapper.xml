@@ -4,13 +4,19 @@
 <mapper namespace="com.bh.mall.dao.ISYSUserDAO">
 	<resultMap id="sysuser_DB_Result" type="sysuser">
 		<result column="user_id" property="userId" />
-		<result column="kind" property="kind" />
-		<result column="login_name" property="loginName" />		
-		<result column="login_pwd" property="loginPwd" />	
+		<result column="role_code" property="roleCode" />
+		<result column="real_name" property="realName" />	
+		<result column="photo" property="photo" />	
 		<result column="mobile" property="mobile" />	
-		<result column="company_code" property="companyCode" />
-		<result column="system_code" property="systemCode" />
-		
+		<result column="login_name" property="loginName" />		
+		<result column="login_pwd" property="loginPwd" />
+		<result column="login_pwd_strength" property="loginPwdStrength" />	
+		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />	
+		<result column="system_code" property="systemCode" />		
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -21,48 +27,53 @@
 			
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
-			</if>
-		
-			
+			</if>			
 			
 			<if test="loginPwd != null and loginPwd != '' ">
 				AND t.login_pwd = #{loginPwd}
-			</if>	
-			
+			</if>				
 			
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
 			</if>
-			
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
+					
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
-			
-			
+						
 		</trim>
 	</sql>
 	
-	<insert id="insert_sysuser" parameterType="sysuser">
+	<insert id="insert_sysuser" parameterType="sysuser">		
 		INSERT INTO
-		tbh_sysuser(
+		tsys_user(
 		user_id
+		,real_name
+		,photo
+		,mobile
 		,login_name		
 		,login_pwd
-		,kind
-		,mobile
-		,company_code
+		,login_pwd_strength
+		,create_datetime
+		,status
+		,updater
+		,update_datetime
+		,remark
 		,system_code
 		)
 		VALUES(
 		#{userId}
-		,#{loginName}	
+		,#{realName}
+		,#{photo}
+		,#{mobile}
+		,#{loginName}
 		,#{loginPwd}
-	    ,#{kind}
-	    ,#{mobile}
-		,#{companyCode}
+		,#{loginPwdStrength}	
+		,#{createDatetime}
+	    ,#{status}
+	    ,#{updater}
+	    ,#{updateDatetime}
+		,#{remark}
 		,#{systemCode}
 		)
 	</insert>
@@ -70,14 +81,21 @@
 	<select id="select_sysuser" parameterType="sysuser" resultMap="sysuser_DB_Result">
 		SELECT
 		t.user_id
-		,t.login_name		
-		,t.kind
+		,t.real_name
+		,t.photo
 		,t.mobile
-		,t.company_code
+		,t.login_name		
+		,t.login_pwd
+		,t.login_pwd_strength
+		,t.create_datetime
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
 		,t.system_code
 		
 		FROM
-		tbh_sysuser t
+		tsys_user t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -87,24 +105,38 @@
 	</select>
 	
 	<select id="select_sysuser_count" parameterType="sysuser" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_sysuser t 
+		SELECT count(1) FROM tsys_user t 
 		<include refid="where_condition"/>
 	</select>
 	
 	<update id="update_sysuser" parameterType="sysuser">
-		UPDATE tbh_sysuser
+		UPDATE tsys_user
 		SET
-		login_name = #{loginName}	
-		,login_pwd = #{loginPwd}
-		,kind = #{kind}
-		,t.mobile = #{mobile}
-		,company_code = #{companyCode}
-		,system_code = #{systemCode}
+		real_name=#{realName}
+		,photo=#{photo}
+		,mobile=#{mobile}
+		,login_name	=#{loginName}	
+		,login_pwd=#{loginPwd}
+		,login_pwd_strength=#{loginPwdStrength}
+		,create_datetime=#{createDatetime}
+		,status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		,system_code=#{systemCode}
 		WHERE user_id = #{userId}
 	</update>
 	
+	<update id="update_photo" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		 photo = #{photo}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
 	<update id="update_login_pwd" parameterType="sysuser">
-		UPDATE tbh_sysuser
+		UPDATE tsys_user
 		SET
 		 login_pwd = #{loginPwd}
 		WHERE
@@ -113,7 +145,7 @@
 	
 		
 	<update id="update_sysuser_loginName" parameterType="sysuser">
-		UPDATE tbh_sysuser
+		UPDATE tsys_user
 		SET
 		login_name = #{loginName}
 		WHERE
@@ -121,9 +153,18 @@
 	</update>
 	
 	<update id="update_mobile" parameterType="sysuser">
-		UPDATE tbh_sysuser
+		UPDATE tsys_user
 		SET
 		mobile = #{mobile}
+		WHERE user_id = #{userId}
+	</update>
+	<update id="update_status" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
 		WHERE user_id = #{userId}
 	</update>
 	

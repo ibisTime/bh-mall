@@ -11,26 +11,6 @@ public class XN627300Req {
     @NotBlank
     private String loginPwd;
 
-    // 用户类型（选填）
-    @NotBlank
-    private String kind;
-
-    // 公司编号（选填）
-    @NotBlank
-    private String companyCode;
-
-    // 系统编号（必填）
-    @NotBlank
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
     public String getLoginName() {
         return loginName;
     }
@@ -47,19 +27,4 @@ public class XN627300Req {
         this.loginPwd = loginPwd;
     }
 
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
 }

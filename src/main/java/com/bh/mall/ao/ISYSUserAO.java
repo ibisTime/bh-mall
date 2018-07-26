@@ -10,13 +10,12 @@ public interface ISYSUserAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 注册
-    // type
 
     // 用户登录 XN627300
-    public String doLogin(String loginName, String loginPwd, String kind,
-            String companyCode, String systemCode);
+    public String doLogin(String loginName, String loginPwd);
 
-    public String addUser(String mobile, String loginPwd, String realName);
+    public String addUser(String mobile, String loginPwd, String realName,
+            String photo);
 
     // 注销 | 激活 XN627280
     public void doCloseOpen(String userId, String updater, String remark);
