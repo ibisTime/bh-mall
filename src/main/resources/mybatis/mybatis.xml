@@ -54,8 +54,8 @@
 		<typeAlias alias="report" type="com.bh.mall.domain.Report"/>
 		
 		<typeAlias alias="awardInterval" type="com.bh.mall.domain.AwardInterval"/>
-		<typeAlias alias="securityTrace" type="com.bh.mall.domain.SecurityTrace"/>
-		<typeAlias alias="barCode" type="com.bh.mall.domain.BarCode"/>
+		<typeAlias alias="miniCode" type="com.bh.mall.domain.MiniCode"/>
+		<typeAlias alias="proCode" type="com.bh.mall.domain.ProCode"/>
 		
 		<typeAlias alias="sysuser" type="com.bh.mall.domain.SYSUser"/>
 		<typeAlias alias="cuser" type="com.bh.mall.domain.CUser"/>

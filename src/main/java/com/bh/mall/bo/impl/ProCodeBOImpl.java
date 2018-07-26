@@ -8,45 +8,45 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.IBarCodeBO;
+import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.dao.IBarCodeDAO;
-import com.bh.mall.domain.BarCode;
+import com.bh.mall.dao.IProCodeDAO;
+import com.bh.mall.domain.ProCode;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
-        implements IBarCodeBO {
+public class ProCodeBOImpl extends PaginableBOImpl<ProCode>
+        implements IProCodeBO {
 
     @Autowired
-    private IBarCodeDAO barCodeDAO;
+    private IProCodeDAO proCodeDAO;
 
-    public void saveBarCode(BarCode data) {
-        barCodeDAO.insert(data);
+    public void saveProCode(ProCode data) {
+        proCodeDAO.insert(data);
 
     }
 
     @Override
-    public void refreshBarCode(BarCode data) {
+    public void refreshProCode(ProCode data) {
         data.setStatus(ECodeStatus.USE_NO.getCode());
         data.setUseDatetime(new Date());
-        barCodeDAO.update(data);
+        proCodeDAO.update(data);
     }
 
     @Override
-    public List<BarCode> queryBarCodeList(BarCode condition) {
-        return barCodeDAO.selectList(condition);
+    public List<ProCode> queryProCodeList(ProCode condition) {
+        return proCodeDAO.selectList(condition);
     }
 
     @Override
-    public BarCode getBarCode(String code) {
-        BarCode data = null;
+    public ProCode getProCode(String code) {
+        ProCode data = null;
         if (StringUtils.isNotBlank(code)) {
-            BarCode condition = new BarCode();
+            ProCode condition = new ProCode();
             condition.setCode(code);
-            data = barCodeDAO.select(condition);
+            data = proCodeDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "条形码不存在");
             }
@@ -56,11 +56,11 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
 
     @Override
     public boolean checkCode(String code) {
-        BarCode data = null;
+        ProCode data = null;
         if (StringUtils.isNotBlank(code)) {
-            BarCode condition = new BarCode();
+            ProCode condition = new ProCode();
             condition.setCode(code);
-            data = barCodeDAO.select(condition);
+            data = proCodeDAO.select(condition);
             if (data == null) {
                 return false;
             }
@@ -69,10 +69,10 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
     }
 
     @Override
-    public BarCode getNoUseBarCode() {
-        BarCode condition = new BarCode();
+    public ProCode getNoUseProCode() {
+        ProCode condition = new ProCode();
         condition.setStatus(EBoolean.NO.getCode());
-        List<BarCode> list = barCodeDAO.selectList(condition);
+        List<ProCode> list = proCodeDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn00000", "箱码已全部用完，请及时补充箱码！");
         }
@@ -80,16 +80,16 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
     }
 
     @Override
-    public List<BarCode> queryCodeList() {
-        BarCode condition = new BarCode();
-        return barCodeDAO.selectCodeList(condition);
+    public List<ProCode> queryCodeList() {
+        ProCode condition = new ProCode();
+        return proCodeDAO.selectCodeList(condition);
     }
 
     @Override
-    public void splitSingle(BarCode barData) {
+    public void splitSingle(ProCode barData) {
         barData.setStatus(ECodeStatus.SPLIT_SINGLE.getCode());
         barData.setUseDatetime(new Date());
-        barCodeDAO.splitSingle(barData);
+        proCodeDAO.splitSingle(barData);
     }
 
 }

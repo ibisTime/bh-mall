@@ -54,22 +54,20 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     // 保存用户
     @Override
     public String saveUser(String mobile, String loginPwd, String photo,
-            String loginName, String systemCode) {
+            String loginName, String systemCode, String status) {
         String userId = null;
         userId = OrderNoGenerater.generate("U");
         SYSUser data = new SYSUser();
         data.setUserId(userId);
+        data.setMobile(mobile);
+        data.setPhoto(photo);
         data.setLoginName(loginName);
         data.setLoginName(mobile);
-        data.setMobile(mobile);
-
-        data.setPhoto(photo);
-
         data.setLoginPwd(MD5Util.md5(loginPwd));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-
+        data.setStatus(status);
+        data.setCreateDatetime(new Date());
         data.setSystemCode(systemCode);
-
         sysUserDAO.insert(data);
         return userId;
     }
@@ -242,6 +240,20 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             sysUserDAO.updateStatus(data); // change to updateStatus
         }
 
+    }
+
+    @Override
+    public void refreshRole(String userId, String roleCode, String updater,
+            String remark) {
+        if (StringUtils.isNotBlank(userId)) {
+            SYSUser data = new SYSUser();
+            data.setUserId(userId);
+            data.setRoleCode(roleCode);
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            sysUserDAO.updateRole(data);
+        }
     }
 
 }

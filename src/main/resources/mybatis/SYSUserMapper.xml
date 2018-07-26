@@ -168,6 +168,16 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+		
+	<update id="update_role" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		 role_code = #{roleCode}
+		,updater = #{updater}
+		WHERE
+		user_id = #{userId}	
+	</update>	
+	
 	<!-- 审核通过授权 -->
 	
 	<!-- 审核通过升级 -->

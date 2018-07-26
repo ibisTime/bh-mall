@@ -14,7 +14,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
     // 保存
     public String saveUser(String mobile, String loginPwd, String photo,
-            String loginName, String systemCode);
+            String loginName, String systemCode, String status);
 
     public void doSaveUser(SYSUser data);
 
@@ -51,6 +51,9 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public void resetBindMobile(SYSUser user, String newMobile);
 
     public void refreshStatus(String userId, EUserStatus status, String updater,
+            String remark);
+
+    public void refreshRole(String userId, String roleCode, String updater,
             String remark);
 
 }

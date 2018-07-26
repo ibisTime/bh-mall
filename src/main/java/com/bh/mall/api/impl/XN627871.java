@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IBarCodeAO;
+import com.bh.mall.ao.IProCodeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -18,14 +18,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627871 extends AProcessor {
 
-    private IBarCodeAO barCodeAO = SpringContextHolder
-        .getBean(IBarCodeAO.class);
+    private IProCodeAO proCodeAO = SpringContextHolder
+        .getBean(IProCodeAO.class);
 
     private XN627871Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return barCodeAO.downLoad(StringValidater.toInteger(req.getNumber()),
+        return proCodeAO.downLoad(StringValidater.toInteger(req.getNumber()),
             StringValidater.toInteger(req.getQuantity()));
     }
 

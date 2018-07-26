@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.ISecurityTraceAO;
+import com.bh.mall.ao.IMiniCodeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -17,8 +17,8 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627881 extends AProcessor {
 
-    private ISecurityTraceAO securityTraceAO = SpringContextHolder
-        .getBean(ISecurityTraceAO.class);
+    private IMiniCodeAO securityTraceAO = SpringContextHolder
+        .getBean(IMiniCodeAO.class);
 
     private XN627881Req req = null;
 

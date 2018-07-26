@@ -22,6 +22,7 @@ import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.IImpowerApplyBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IUpLevelApplyBO;
@@ -29,6 +30,7 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
+import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AgentAllot;
@@ -36,6 +38,7 @@ import com.bh.mall.domain.AgentImpower;
 import com.bh.mall.domain.AgentUpgrade;
 import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.ImpowerApply;
+import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.UpLevelApply;
 import com.bh.mall.enums.EAccountType;
@@ -59,6 +62,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
     ISYSUserBO sysUserBO;
+
+    @Autowired
+    ISYSRoleBO sysRoleBO;
 
     @Autowired
     ISmsOutBO smsOutBO;
@@ -108,7 +114,10 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setRealName(realName);
         data.setLoginName(mobile);
         data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         data.setPhoto(photo);
+        data.setStatus(EUserStatus.NORMAL.getCode());
+        data.setCreateDatetime(new Date());
         data.setSystemCode(ESystemCode.BH.getCode());
         sysUserBO.doSaveUser(data);
         return userId;
@@ -167,6 +176,22 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     }
 
+    /*************** 设置角色**********************/
+    // 设置角色
+    @Override
+    public void doRoleUser(String userId, String roleCode, String updater,
+            String remark) {
+        SYSUser user = sysUserBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("li01004", "用户不存在");
+        }
+        SYSRole role = sysRoleBO.getSYSRole(roleCode);
+        if (role == null) {
+            throw new BizException("li01004", "角色不存在");
+        }
+        sysUserBO.refreshRole(userId, roleCode, updater, remark);
+    }
+
     /*************** 修改密码 **********************/
     // 重置登录密码
     @Override
@@ -223,8 +248,28 @@ public class SYSUserAOImpl implements ISYSUserAO {
     /*************** 修改登录名 **********************/
 
     /*************** 修改照片 **********************/
+    @Override
+    public void doModifyPhoto(String userId, String photo) {
+        sysUserBO.refreshPhoto(userId, photo);
+    }
 
     /*************** 查询 **********************/
+    @Override
+    public Paginable<SYSUser> queryUserPage(int start, int limit,
+            SYSUser condition) {
+        /*
+         * if (condition.getCreateDatetimeStart() != null &&
+         * condition.getApplyDatetimeEnd() != null &&
+         * condition.getApplyDatetimeStart()
+         * .after(condition.getApplyDatetimeEnd())) { throw new
+         * BizException("xn00000", "开始时间不能大于结束时间"); }
+         */
+        Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
+            condition);
+
+        return page;
+    }
+
     // 分页查询所有意向代理
     @Override
     public Paginable<BUser> queryIntentionAgentPage(int start, int limit,

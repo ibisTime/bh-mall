@@ -11,7 +11,7 @@ import com.bh.mall.dao.base.ABaseDO;
 * @since: 2018-07-01 21:28:34
 * @history:
 */
-public class BarCode extends ABaseDO {
+public class ProCode extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,10 +27,16 @@ public class BarCode extends ABaseDO {
     // 使用时间
     private Date useDatetime;
 
+    // 状态List
+    private List<String> statusList;
+
+    // 关键字
+    private String keyword;
+
     // *******************db***************
 
     // 防伪、溯源码
-    private List<SecurityTrace> stList;
+    private List<MiniCode> stList;
 
     // 防伪溯源URL
     private String url;
@@ -67,11 +73,11 @@ public class BarCode extends ABaseDO {
         this.useDatetime = useDatetime;
     }
 
-    public List<SecurityTrace> getStList() {
+    public List<MiniCode> getStList() {
         return stList;
     }
 
-    public void setStList(List<SecurityTrace> stList) {
+    public void setStList(List<MiniCode> stList) {
         this.stList = stList;
     }
 
@@ -81,6 +87,22 @@ public class BarCode extends ABaseDO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 }

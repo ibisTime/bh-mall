@@ -35,7 +35,7 @@
 		,t.update_datetime
 		,t.remark
 		FROM
-		tbh_intro t
+		tbh_js_award t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -46,13 +46,13 @@
 
 	<select id="select_intro_count" parameterType="intro"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_intro t
+		SELECT count(1) FROM tbh_js_award t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_intro" parameterType="intro">
 		INSERT INTO
-		tbh_intro(
+		tbh_js_award(
 		code
 		,level
 		,intro_level
@@ -73,7 +73,7 @@
 	</insert>
 
 	<update id="update_intro" parameterType="intro">
-		UPDATE tbh_intro
+		UPDATE tbh_js_award
 		SET
 		level = #{level}
 		,intro_level = #{introLevel}
@@ -86,7 +86,7 @@
 	
 	<delete id="delete_intro">
 		DELETE FROM  
-		tbh_intro
+		tbh_js_award
 		WHERE 
 		code = #{code}
 	</delete>

@@ -32,7 +32,6 @@
 		SELECT
 		code
 		,name
-		,level
 		,updater
 		,update_datetime
 		,remark
