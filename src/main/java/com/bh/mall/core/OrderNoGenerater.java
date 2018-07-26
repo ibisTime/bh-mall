@@ -125,4 +125,28 @@ public class OrderNoGenerater {
         return str;
     }
 
+    public static void main(String[] args) {
+        Calendar calendar = Calendar.getInstance();
+        Random rand = new Random();
+        Long random = calendar.getTimeInMillis() / 100 - rand.nextInt();
+
+        if (random < 0) {
+            random = -random;
+        }
+
+        String str = String.valueOf(rand.nextInt(90) + 10)
+                + String.valueOf(random.toString());
+        // 少于12位，随机补充
+        int lack = 12 - str.length();
+        if (lack > 0) {
+            for (int i = 0; i < lack; i++) {
+                str = str + String.valueOf(rand.nextInt(9));
+            }
+            // 多余12位，截取
+        } else if (lack < 0) {
+            str = str.substring(0, 12);
+        }
+        System.out.println(str);
+    }
+
 }

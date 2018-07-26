@@ -19,7 +19,6 @@
 			<if test="name != null and name != '' ">
 				AND t.name = #{name}
 			</if>
-			
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
@@ -75,7 +74,6 @@
 	<update id="update_sysRole" parameterType="sysRole">
 		UPDATE tsys_role SET
 		name = #{name}
-	
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

@@ -857,7 +857,7 @@ public class OrderAOImpl implements IOrderAO {
                 ProductSpecs psData = productSpecsBO
                     .getProductSpecs(data.getProductSpecsCode());
                 this.changeProductNumber(applyUser, pData, psData, data,
-                    -data.getQuantity(), code);
+                    data.getQuantity(), code);
             }
 
         }

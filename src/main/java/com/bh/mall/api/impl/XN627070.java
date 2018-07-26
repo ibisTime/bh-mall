@@ -29,8 +29,7 @@ public class XN627070 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new PKIdRes(sysDictAO.addSYSDict(req.getType(),
             req.getParentKey(), req.getDkey(), req.getDvalue(),
-            req.getUpdater(), req.getRemark(), req.getCompanyCode(),
-            req.getSystemCode()));
+            req.getUpdater(), req.getRemark()));
     }
 
     /** 

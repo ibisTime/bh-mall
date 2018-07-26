@@ -56,6 +56,7 @@ public class SYSRole extends ABaseDO {
         this.name = name;
     }
 
+
     public String getUpdater() {
         return updater;
     }

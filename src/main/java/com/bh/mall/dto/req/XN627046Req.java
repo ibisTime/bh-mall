@@ -39,13 +39,6 @@ public class XN627046Req {
         this.name = name;
     }
 
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
 
     public String getUpdater() {
         return updater;
