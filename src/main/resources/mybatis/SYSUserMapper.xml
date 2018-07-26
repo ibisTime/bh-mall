@@ -22,8 +22,6 @@
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
 			</if>
-		
-			
 			
 			<if test="loginPwd != null and loginPwd != '' ">
 				AND t.login_pwd = #{loginPwd}
