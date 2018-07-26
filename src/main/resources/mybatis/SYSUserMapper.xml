@@ -112,7 +112,7 @@
 	<update id="update_sysuser" parameterType="sysuser">
 		UPDATE tsys_user
 		SET
-		,real_name=#{realName}
+		real_name=#{realName}
 		,photo=#{photo}
 		,mobile=#{mobile}
 		,login_name	=#{loginName}	
@@ -156,6 +156,15 @@
 		UPDATE tsys_user
 		SET
 		mobile = #{mobile}
+		WHERE user_id = #{userId}
+	</update>
+	<update id="update_status" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
 		WHERE user_id = #{userId}
 	</update>
 	

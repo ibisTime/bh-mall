@@ -135,6 +135,39 @@ public class SYSUserAOImpl implements ISYSUserAO {
         return user.getUserId();
     }
 
+    /*************** 注销 / 激活 **********************/
+
+    @Override
+    public void doCloseOpen(String userId, String updater, String remark) {
+        SYSUser user = sysUserBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("li01004", "用户不存在");
+        }
+        // admin 不注销
+        if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
+            throw new BizException("li01004", "管理员无法注销");
+        }
+        String mobile = user.getMobile();
+        String smsContent = "";
+        EUserStatus userStatus = null;
+        if (EUserStatus.NORMAL.getCode().equalsIgnoreCase(user.getStatus())) {
+            smsContent = "您的账号已被管理员封禁";
+            userStatus = EUserStatus.Ren_Locked;
+        } else {
+            smsContent = "您的账号已被管理员解封,请遵守平台相关规则";
+            userStatus = EUserStatus.NORMAL;
+        }
+        sysUserBO.refreshStatus(userId, userStatus, updater, remark);
+        if (PhoneUtil.isMobile(mobile)) {
+            // 发送短信
+            smsOutBO.sendSmsOut(mobile,
+                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091",
+                user.getCompanyCode(), user.getSystemCode());
+        }
+
+    }
+
+    /*************** 修改密码 **********************/
     // 重置登录密码
     @Override
     public void resetAdminLoginPwd(String userId, String newLoginPwd) {
@@ -142,6 +175,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.resetAdminLoginPwd(user, newLoginPwd);
     }
 
+    /*************** 验证密码 **********************/
     // 验证登录密码
     @Override
     public void doCheckLoginPwd(String userId, String loginPwd) {
@@ -159,19 +193,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     }
 
-    @Override
-    public void doCloseOpen(String userId, String updater, String remark) {
-        SYSUser user = sysUserBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", "用户不存在");
-        }
-        // admin 不注销
-        if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
-            throw new BizException("li01004", "管理员无法注销");
-        }
-
-    }
-
+    /*************** 修改手机号 **********************/
     // 更换绑定手机号
     @Override
     public void doResetMoblie(String userId, String kind, String newMobile,
@@ -198,8 +220,12 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     }
 
+    /*************** 修改登录名 **********************/
+
+    /*************** 修改照片 **********************/
+
     /*************** 查询 **********************/
-    // 查询所有意向代理申请
+    // 分页查询所有意向代理
     @Override
     public Paginable<BUser> queryIntentionAgentPage(int start, int limit,
             BUser condition) {
@@ -221,7 +247,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         return page;
     }
 
-    // 查询所有代理
+    // 分页查询所有代理
     @Override
     public List<BUser> queryAgentPage(BUser condition) {
         if (StringUtils.isBlank(condition.getHighUserId())) {
@@ -567,7 +593,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         impowerApplyBO.addImpowerApply(imData);
     }
 
-    /*************** 更改 **********************/
+    /*************** 更改上级 **********************/
     @Override
     public void editManager(String userId, String manager, String updater) {
         BUser data = buserBO.getUser(userId);
@@ -635,7 +661,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         }
     }
 
-    // 分配账号
+    // 分配账号 ----- buser
     private List<String> distributeAccount(String userId, String mobile,
             String kind, String companyCode, String systemCode) {
         List<String> currencyList = new ArrayList<String>();

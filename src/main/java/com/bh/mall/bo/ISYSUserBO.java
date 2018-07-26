@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.SYSUser;
+import com.bh.mall.enums.EUserStatus;
 
 public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
@@ -48,5 +49,8 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
     //
     public void resetBindMobile(SYSUser user, String newMobile);
+
+    public void refreshStatus(String userId, EUserStatus status, String updater,
+            String remark);
 
 }

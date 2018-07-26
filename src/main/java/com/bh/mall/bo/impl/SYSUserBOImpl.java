@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -15,6 +16,7 @@ import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.ISYSUserDAO;
 import com.bh.mall.domain.SYSUser;
+import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -225,6 +227,21 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             data.setPhoto(photo);
             sysUserDAO.updatePhoto(data);
         }
+    }
+
+    @Override
+    public void refreshStatus(String userId, EUserStatus status, String updater,
+            String remark) {
+        if (StringUtils.isNotBlank(userId)) {
+            SYSUser data = new SYSUser();
+            data.setUserId(userId);
+            data.setStatus(status.getCode());
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            sysUserDAO.updateStatus(data); // change to updateStatus
+        }
+
     }
 
 }
