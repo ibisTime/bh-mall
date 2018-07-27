@@ -18,9 +18,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
 import com.bh.mall.bo.IAgencyLogBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
-import com.bh.mall.bo.IAgentUpgradeBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IIntroBO;
@@ -70,8 +68,6 @@ public class CUserAOImpl implements ICUserAO {
     @Autowired
     IAgencyLogBO agencyLogBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
     IAccountBO accountBO;
@@ -85,14 +81,12 @@ public class CUserAOImpl implements ICUserAO {
     @Autowired
     IAfterSaleBO afterSaleBO;
 
-    @Autowired
-    IAgentUpgradeBO agentUpgradeBO;
 
     @Autowired
     IIntroBO introBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Autowired
     IWareHouseBO wareHouseBO;

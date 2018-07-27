@@ -19,9 +19,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
 import com.bh.mall.bo.IAgentAllotBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
-import com.bh.mall.bo.IAgentUpgradeBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.IImpowerApplyBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -43,10 +41,8 @@ import com.bh.mall.common.WechatConstant;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AfterSale;
-import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentAllot;
-import com.bh.mall.domain.AgentImpower;
-import com.bh.mall.domain.AgentUpgrade;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.ImpowerApply;
 import com.bh.mall.domain.InnerOrder;
@@ -105,8 +101,6 @@ public class BUserAOImpl implements IBuserAO {
     @Autowired
     IUpLevelApplyBO uplevelApplyBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
     IAccountBO accountBO;
@@ -121,13 +115,10 @@ public class BUserAOImpl implements IBuserAO {
     IAfterSaleBO afterSaleBO;
 
     @Autowired
-    IAgentUpgradeBO agentUpgradeBO;
-
-    @Autowired
     IIntroBO introBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Autowired
     IWareHouseBO wareHouseBO;
@@ -502,7 +493,7 @@ public class BUserAOImpl implements IBuserAO {
         buserBO.isMobileExist(req.getMobile());
 
         // 确认申请等级
-        AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
+        AgentLevel aiData = agentLevelBO.getAgentByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
             throw new BizException("xn00000", "本等级不可被意向");
@@ -569,7 +560,7 @@ public class BUserAOImpl implements IBuserAO {
 
         XN627303Res result = null;
         // 是否可被意向
-        AgentImpower impower = agentImpowerBO.getAgentImpowerByLevel(
+        AgentLevel impower = agentLevelBO.getAgentByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
 
         if (EBoolean.NO.getCode().equals(impower.getIsIntent())) {
@@ -715,8 +706,8 @@ public class BUserAOImpl implements IBuserAO {
             buserBO.getUserByIdNo(req.getIdNo());
         }
 
-        AgentImpower impower = agentImpowerBO
-            .getAgentImpowerByLevel(data.getApplyLevel());
+        AgentLevel impower = agentLevelBO
+            .getAgentByLevel(data.getApplyLevel());
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
             if (StringUtils.isBlank(req.getIdNo())
                     || StringUtils.isBlank(req.getIdHand())) {
@@ -864,9 +855,9 @@ public class BUserAOImpl implements IBuserAO {
         }
 
         // 查看升级所需
-        AgentUpgrade upgrade = agentUpgradeBO
-            .getAgentUpgradeByLevel(StringValidater.toInteger(highLevel));
-        Agent agent = agentBO
+        AgentLevel upgrade = agentLevelBO
+            .getAgentByLevel(StringValidater.toInteger(highLevel));
+        AgentLevel agent = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(highLevel));
 
         // 推荐人数是否满足半门槛
@@ -880,8 +871,8 @@ public class BUserAOImpl implements IBuserAO {
             }
         }
 
-        AgentUpgrade auData = agentUpgradeBO
-            .getAgentUpgradeByLevel(data.getLevel());
+        AgentLevel auData = agentLevelBO
+            .getAgentByLevel(data.getLevel());
         // 余额是否清零
         if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
             // 云仓是否有余额
@@ -982,7 +973,7 @@ public class BUserAOImpl implements IBuserAO {
 
             // 授权金额
             if (null != user.getApplyLevel()) {
-                Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
+                AgentLevel agent = agentLevelBO.getAgentByLevel(user.getApplyLevel());
                 // user.setImpowerAmount(agent.getAmount());
             }
             if (null != user.getPayAmount() && 0 != user.getPayAmount()) {
@@ -991,8 +982,8 @@ public class BUserAOImpl implements IBuserAO {
             // 该等级授权规则
             if (EUserKind.Merchant.getCode().equals(user.getKind())) {
                 if (null != user.getApplyLevel()) {
-                    AgentImpower impower = agentImpowerBO
-                        .getAgentImpowerByLevel(user.getApplyLevel());
+                    AgentLevel impower = agentLevelBO
+                        .getAgentByLevel(user.getApplyLevel());
                     // user.setImpower(impower);
                 }
             }

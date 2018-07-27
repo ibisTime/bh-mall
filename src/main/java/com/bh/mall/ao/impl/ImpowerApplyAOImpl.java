@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IBuserAO;
 import com.bh.mall.ao.IImpowerApplyAO;
-import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IImpowerApplyBO;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.ImpowerApply;
 import com.bh.mall.enums.EUser;
@@ -28,7 +28,7 @@ public class ImpowerApplyAOImpl implements IImpowerApplyAO {
     private IBuserAO buserAO;
 
     @Autowired
-    private IAgentBO agentBO;
+    private IAgentLevelBO agentLevelBO;
 
     /*********************** 查询 *************************/
 
@@ -200,7 +200,7 @@ public class ImpowerApplyAOImpl implements IImpowerApplyAO {
             // 补全授权金额
             if (null != buser.getApplyLevel()) {
                 // 代理等级表
-                Agent agent = agentBO.getAgentByLevel(buser.getApplyLevel());
+                AgentLevel agent = agentLevelBO.getAgentByLevel(buser.getApplyLevel());
                 impowerApply.setImpowerAmount(agent.getAmount());
             }
             // 审核人

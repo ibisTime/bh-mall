@@ -11,15 +11,14 @@ import javax.validation.constraints.NotNull;
 public class XN627007Req {
 
     // 编号 （必填）
-    @NotNull(message = "等级不能为空")
-    private String level;
+    @NotNull(message = "不能为空")
+    private String code;
 
-    public String getLevel() {
-        return level;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
+	public void setCode(String code) {
+		this.code = code;
+	}
 }

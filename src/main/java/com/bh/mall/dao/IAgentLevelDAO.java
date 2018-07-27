@@ -3,11 +3,11 @@ package com.bh.mall.dao;
 import java.util.List;
 
 import com.bh.mall.dao.base.IBaseDAO;
-import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLevel;
 
-public interface IAgentDAO extends IBaseDAO<Agent> {
+public interface IAgentLevelDAO extends IBaseDAO<AgentLevel> {
 
-    String NAMESPACE = IAgentDAO.class.getName().concat(".");
+    String NAMESPACE = IAgentLevelDAO.class.getName().concat(".");
 
     /**
      * 修改代理
@@ -15,12 +15,12 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
      * @create: 2018年1月31日 下午2:54:30 nyc
      * @history:
      */
-    public void update(Agent data);
+    public void update(AgentLevel data);
 
     /**
      * 代理列表
      */
-    public List<Agent> selectList(Agent condition);
+    public List<AgentLevel> selectList(AgentLevel condition);
 
     /**
      * 根据代理等级查找代理
@@ -29,5 +29,5 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
      * @create: 2018年1月31日 下午6:19:48 nyc
      * @history:
      */
-    public Agent selectByLevel(Agent condition);
+    public AgentLevel selectByLevel(AgentLevel condition);
 }

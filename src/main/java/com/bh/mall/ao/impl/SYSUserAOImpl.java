@@ -16,8 +16,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
 import com.bh.mall.bo.IAgentAllotBO;
-import com.bh.mall.bo.IAgentImpowerBO;
-import com.bh.mall.bo.IAgentUpgradeBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.IImpowerApplyBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -32,8 +31,7 @@ import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AgentAllot;
-import com.bh.mall.domain.AgentImpower;
-import com.bh.mall.domain.AgentUpgrade;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.ImpowerApply;
 import com.bh.mall.domain.SYSUser;
@@ -91,10 +89,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
     IImpowerApplyBO impowerApplyBO;
 
     @Autowired
-    IAgentImpowerBO agentImpowerBO;
+    IAgentLevelBO agentLevelBO;
 
-    @Autowired
-    IAgentUpgradeBO agentUpgradeBO;
 
     /*************** 注册 **********************/
     @Override
@@ -368,8 +364,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
              */
             data.setHighUserId(highUser.getUserId());
 
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(data.getApplyLevel());
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(data.getApplyLevel());
 
             if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
                 if (StringUtils.isBlank(data.getIdNo())
@@ -464,8 +460,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
             status = EUserStatus.UPGRADED.getCode();
-            AgentUpgrade auData = agentUpgradeBO
-                .getAgentUpgradeByLevel(data.getApplyLevel());
+            AgentLevel auData = agentLevelBO
+                .getAgentByLevel(data.getApplyLevel());
 
             // 是否推荐的代理 TODO
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {

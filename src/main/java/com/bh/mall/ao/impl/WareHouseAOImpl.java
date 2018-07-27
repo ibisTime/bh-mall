@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWareHouseAO;
 import com.bh.mall.bo.IAddressBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductSpecsBO;
@@ -24,7 +23,7 @@ import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
@@ -52,7 +51,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
     IProductBO productBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Autowired
     IOrderBO orderBO;
@@ -69,8 +68,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Autowired
     IProductSpecsPriceBO productSpecsPriceBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
     IOrderAO orderAO;
@@ -217,7 +214,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
         // 获取授权单
         String kind = EOrderKind.Pick_Up.getCode();
-        Agent agent = agentBO.getAgentByLevel(user.getLevel());
+        AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
 
         // 是否完成授权单
         Long amount = data.getPrice()

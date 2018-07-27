@@ -11,15 +11,13 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IAgencyLogAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgencyLogBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgencyLog;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentImpower;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.enums.EAddressType;
@@ -39,10 +37,8 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
     IUserBO userBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
     IAddressBO addressBO;
@@ -78,7 +74,7 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
             }
             // 补全授权金额
             if (null != user.getApplyLevel()) {
-                Agent agent = agentBO.getAgentByLevel(user.getApplyLevel());
+                AgentLevel agent = agentLevelBO.getAgentByLevel(user.getApplyLevel());
                 agencyLog.setImpowerAmount(agent.getAmount());
             }
             // 审核人
@@ -235,7 +231,7 @@ public class AgencyLogAOImpl implements IAgencyLogAO {
         userBO.isMobileExist(req.getMobile(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
 
-        AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
+        AgentLevel aiData = agentLevelBO.getAgentByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
             throw new BizException("xn00000", "本等级不可被意向");
