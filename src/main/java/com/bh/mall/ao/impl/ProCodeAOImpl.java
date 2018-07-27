@@ -25,8 +25,7 @@ import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
 @Service
-public class BarCodeAOImpl implements IProCodeAO {
-
+public class ProCodeAOImpl implements IProCodeAO {
     @Autowired
     IProCodeBO proCodeBO;
 

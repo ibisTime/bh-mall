@@ -27,7 +27,11 @@
 			
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
+<<<<<<< HEAD
+			</if>
+=======
 			</if>			
+>>>>>>> refs/remotes/origin/master
 			
 			<if test="loginPwd != null and loginPwd != '' ">
 				AND t.login_pwd = #{loginPwd}
@@ -167,6 +171,16 @@
 		,remark=#{remark}
 		WHERE user_id = #{userId}
 	</update>
+	
+		
+	<update id="update_role" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		 role_code = #{roleCode}
+		,updater = #{updater}
+		WHERE
+		user_id = #{userId}	
+	</update>	
 	
 	<!-- 审核通过授权 -->
 	

@@ -11,12 +11,12 @@ import com.bh.mall.dao.base.ABaseDO;
 * @since: 2018-07-01 21:43:49
 * @history:
 */
-public class SecurityTrace extends ABaseDO {
+public class MiniCode extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
     // 防伪码
-    private String securityCode;
+    private String miniCode;
 
     // 溯源码
     private String traceCode;
@@ -50,12 +50,12 @@ public class SecurityTrace extends ABaseDO {
     // 关键字
     private String keyword;
 
-    public void setSecurityCode(String securityCode) {
-        this.securityCode = securityCode;
+    public void setminiCode(String miniCode) {
+        this.miniCode = miniCode;
     }
 
-    public String getSecurityCode() {
-        return securityCode;
+    public String getminiCode() {
+        return miniCode;
     }
 
     public void setTraceCode(String traceCode) {

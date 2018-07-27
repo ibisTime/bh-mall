@@ -16,7 +16,9 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2018年4月26日 下午6:14:01 
  * @history:
  */
-public class XN627312 extends AProcessor {
+
+public class XN627110 extends AProcessor {
+
     private ISYSUserAO userAO = SpringContextHolder.getBean(ISYSUserAO.class);
 
     private XN627110Req req = null;
@@ -32,5 +34,4 @@ public class XN627312 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN627110Req.class);
         ObjValidater.validateReq(req);
     }
-
 }

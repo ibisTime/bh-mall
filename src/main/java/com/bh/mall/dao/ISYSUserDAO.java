@@ -14,6 +14,7 @@ public interface ISYSUserDAO extends IBaseDAO<SYSUser> {
     // 更新状态
 
     // 更新角色
+    public int updateRole(SYSUser data);
 
     // 更新用户名
     public int updateLoginName(SYSUser data);

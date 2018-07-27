@@ -31,7 +31,7 @@ public class XN627645Req {
     private String logisticsCompany;
 
     // （选填 ） 箱码
-    private String barCode;
+    private String proCode;
 
     // （选填）盒码
     private List<String> traceCodeList;
@@ -98,16 +98,16 @@ public class XN627645Req {
         this.isCompanySend = isCompanySend;
     }
 
-    public String getBarCode() {
-        return barCode;
+    public String getProCode() {
+        return proCode;
     }
 
     public List<String> getTraceCodeList() {
         return traceCodeList;
     }
 
-    public void setBarCode(String barCode) {
-        this.barCode = barCode;
+    public void setproCode(String proCode) {
+        this.proCode = proCode;
     }
 
     public void setTraceCodeList(List<String> traceCodeList) {

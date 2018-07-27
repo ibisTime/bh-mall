@@ -43,7 +43,7 @@
 		
 		,t.value3
 		,p.name
-		FROM tbh_award t LEFT JOIN tbh_product p ON t.product_code = p.code
+		FROM tbh_tj_award t LEFT JOIN tbh_product p ON t.product_code = p.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -54,12 +54,12 @@
 
 	<select id="select_award_count" parameterType="award"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_award t
+		SELECT count(1) FROM tbh_tj_award t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_award" parameterType="award">
-		INSERT INTO tbh_award(
+		INSERT INTO tbh_tj_award(
 		code
 		,type
 		,product_code
@@ -82,7 +82,7 @@
 	</insert>
 
 	<update id="update_award" parameterType="award">
-		UPDATE tbh_award
+		UPDATE tbh_tj_award
 		SET
 		level = #{level}
 		,value1 = #{value1}
@@ -94,7 +94,7 @@
 	
 	<delete id="delete_award" parameterType="award">
 		DELETE FROM 
-		tbh_award
+		tbh_tj_award
 		WHERE 
 		product_code = #{productCode}
 	</delete>
