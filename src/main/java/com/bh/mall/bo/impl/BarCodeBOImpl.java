@@ -12,7 +12,6 @@ import com.bh.mall.bo.IBarCodeBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.IBarCodeDAO;
 import com.bh.mall.domain.BarCode;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.exception.BizException;
 
@@ -30,7 +29,7 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
 
     @Override
     public void refreshBarCode(BarCode data) {
-        data.setStatus(ECodeStatus.USE_NO.getCode());
+        data.setStatus(ECodeStatus.USE_YES.getCode());
         data.setUseDatetime(new Date());
         barCodeDAO.update(data);
     }
@@ -71,7 +70,7 @@ public class BarCodeBOImpl extends PaginableBOImpl<BarCode>
     @Override
     public BarCode getNoUseBarCode() {
         BarCode condition = new BarCode();
-        condition.setStatus(EBoolean.NO.getCode());
+        condition.setStatus(ECodeStatus.USE_NO.getCode());
         List<BarCode> list = barCodeDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn00000", "箱码已全部用完，请及时补充箱码！");

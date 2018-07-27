@@ -122,8 +122,8 @@ public class BarCodeAOImpl implements IBarCodeAO {
 
             SecurityTrace traceCondition = new SecurityTrace();
             traceCondition.setStatus(ECodeStatus.TO_USER.getCode());
-            Paginable<SecurityTrace> tracePage = securityTraceBO
-                .getPaginable(pageNo - 1, pageSize, traceCondition);
+            Paginable<SecurityTrace> tracePage = securityTraceBO.getPaginable(0,
+                pageSize, traceCondition);
 
             // 是否还有可用盒码
             if (CollectionUtils.isEmpty(tracePage.getList())) {
@@ -143,7 +143,6 @@ public class BarCodeAOImpl implements IBarCodeAO {
                 // i++;
             }
             barCode.setStList(tracePage.getList());
-            pageNo++;
         }
 
         return page.getList();
