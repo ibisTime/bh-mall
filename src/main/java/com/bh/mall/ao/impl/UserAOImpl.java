@@ -1325,22 +1325,7 @@ public class UserAOImpl implements IUserAO {
                     // 统计
                     reportBO.saveReport(data);
                 }
-
             }
-
-            // 未通过，有推荐人
-        } else if (StringUtils.isNotBlank(data.getUserReferee())) {
-            // 清空手机号与身份证号，防止重新申请时重复
-            data.setMobile(null);
-            data.setIdNo(null);
-            data.setTeamName(null);
-            status = EUserStatus.IMPOWERO_INFO.getCode();
-        } else {
-            // 未通过，无推荐人
-            data.setMobile(null);
-            data.setIdNo(null);
-            data.setTeamName(null);
-            status = EUserStatus.TO_MIND.getCode();
         }
 
         data.setApprover(approver);

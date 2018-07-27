@@ -7,6 +7,7 @@
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="use_datetime" property="useDatetime" />
+		<result column="batch" property="batch" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -26,6 +27,7 @@
 		,t.status
 		,t.create_datetime
 		,t.use_datetime
+		,t.batch
 		FROM
 		tbh_bar_code t
 		<include refid="where_condition" />
@@ -58,12 +60,14 @@
 		,status
 		,create_datetime
 		,use_datetime
+		,batch
 		)
 		VALUES(
 		#{code}
 		,#{status}
 		,#{createDatetime}
 		,#{useDatetime}
+		,#{batch}
 		)
 	</insert>
 

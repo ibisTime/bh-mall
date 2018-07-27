@@ -15,6 +15,7 @@ import com.bh.mall.bo.IBarCodeBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISecurityTraceBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.BarCode;
 import com.bh.mall.domain.SYSConfig;
@@ -39,6 +40,8 @@ public class BarCodeAOImpl implements IBarCodeAO {
     @Override
     @Transactional
     public void addBarCode(int number) {
+
+        String batch = DateUtil.getToDay();
         // 获取数据库的防伪溯源码与条形码
         List<BarCode> barList = barCodeBO.queryCodeList();
         List<SecurityTrace> stList = securityTraceBO.queryCodeList();
@@ -68,6 +71,7 @@ public class BarCodeAOImpl implements IBarCodeAO {
             barData.setCode(barCode);
             barData.setStatus(ECodeStatus.TO_USER.getCode());
             barData.setCreateDatetime(date);
+            barData.setBatch(batch);
             barCodeBO.saveBarCode(barData);
 
         }
@@ -93,12 +97,11 @@ public class BarCodeAOImpl implements IBarCodeAO {
 
     @Override
     @Transactional
-    public List<BarCode> downLoad(int number, int quantity) {
+    public List<BarCode> downLoad(int pageNo, int pageSize) {
         // 获取盒码
         BarCode condition = new BarCode();
         condition.setStatus(ECodeStatus.TO_USER.getCode());
-        Paginable<BarCode> page = barCodeBO.getPaginable(0, quantity,
-            condition);
+        Paginable<BarCode> page = barCodeBO.getPaginable(0, pageNo, condition);
         if (CollectionUtils.isEmpty(page.getList())) {
             throw new BizException("xn00000", "箱码已经没有啦");
         }
@@ -107,30 +110,40 @@ public class BarCodeAOImpl implements IBarCodeAO {
             ESysConfigType.URL.getCode(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
 
-        // 获取箱码下得盒码
+        // // 获取所有的盒码
+        // SecurityTrace traceCondition = new SecurityTrace();
+        // traceCondition.setStatus(ECodeStatus.TO_USER.getCode());
+        // Paginable<SecurityTrace> tracePage = securityTraceBO.getPaginable(0,
+        // pageNo * pageSize, traceCondition);
+
+        // 绑定盒码与箱码的关系
         for (BarCode barCode : page.getList()) {
             barCode.setUrl(sysConfig.getCvalue());
+
             SecurityTrace traceCondition = new SecurityTrace();
             traceCondition.setStatus(ECodeStatus.TO_USER.getCode());
             Paginable<SecurityTrace> tracePage = securityTraceBO
-                .getPaginable(quantity - 1, number, traceCondition);
-
-            // 更新箱状态
-            if (!ECodeStatus.TO_USER.getCode().equals(barCode.getStatus())) {
-                throw new BizException("xn00000", "箱码已被使用");
-            }
-            barCodeBO.refreshBarCode(barCode);
+                .getPaginable(pageNo - 1, pageSize, traceCondition);
 
             // 是否还有可用盒码
             if (CollectionUtils.isEmpty(tracePage.getList())) {
-                throw new BizException("xn00000", "盒码已经没有啦");
+                throw new BizException("xn00000", "盒码数量不够");
             }
+            barCodeBO.refreshBarCode(barCode);
             // 建立关联关系并更新状态
             for (SecurityTrace trace : tracePage.getList()) {
                 securityTraceBO.refreshSecurityTrace(trace, barCode.getCode());
+
+                // int i = 0;
+                // securityTraceBO.refreshSecurityTrace(trace,
+                // barCode.getCode());
+                // if (i == pageSize) {
+                // continue;
+                // }
+                // i++;
             }
             barCode.setStList(tracePage.getList());
-            quantity = quantity + 1;
+            pageNo++;
         }
 
         return page.getList();

@@ -14,6 +14,7 @@ import com.bh.mall.ao.ISecurityTraceAO;
 import com.bh.mall.bo.IBarCodeBO;
 import com.bh.mall.bo.ISecurityTraceBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.BarCode;
 import com.bh.mall.domain.Order;
@@ -54,6 +55,8 @@ public class SecurityTraceAOImpl implements ISecurityTraceAO {
 
     @Override
     public void addSecurityTrace(int number) {
+        String batch = DateUtil.getToDay();
+
         // 获取数据库的防伪溯源码与条形码
         List<BarCode> barList = barCodeBO.queryCodeList();
         List<SecurityTrace> stList = securityTraceBO.queryCodeList();
@@ -97,6 +100,7 @@ public class SecurityTraceAOImpl implements ISecurityTraceAO {
             data.setTraceCode(traceCode);
             data.setStatus(ECodeStatus.TO_USER.getCode());
             data.setCreateDatetime(date);
+            data.setBatch(batch);
             securityTraceBO.saveSecurityTrace(data);
 
         }

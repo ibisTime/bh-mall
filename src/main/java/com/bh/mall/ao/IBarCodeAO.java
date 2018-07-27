@@ -23,7 +23,7 @@ public interface IBarCodeAO {
 
     public BarCode queryBarCode();
 
-    public List<BarCode> downLoad(int number, int quantity);
+    public List<BarCode> downLoad(int pageNo, int pageSize);
 
     public boolean checkCode(String barCode, List<BarCode> barList,
             List<SecurityTrace> stList);

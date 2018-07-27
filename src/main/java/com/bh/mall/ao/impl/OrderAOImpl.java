@@ -167,13 +167,13 @@ public class OrderAOImpl implements IOrderAO {
                     list.add(this.addOrder(applyUser, pData, psData,
                         cart.getQuantity(), req.getApplyNote(), req.getSigner(),
                         req.getMobile(), req.getProvince(), req.getCity(),
-                        req.getArea(), req.getAddress()));
+                        req.getArea(), req.getAddress(), null));
                 }
             } else {
                 list.add(this.addOrder(applyUser, pData, psData,
                     cart.getQuantity(), req.getApplyNote(), req.getSigner(),
                     req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress()));
+                    req.getArea(), req.getAddress(), null));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -204,11 +204,14 @@ public class OrderAOImpl implements IOrderAO {
         }
 
         Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+        String kind = EOrderKind.WH_Order.getCode();
 
         // 未开云仓的代理，判断是否为授权单
         if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
             if (orderBO.checkImpowerOrder(applyUser.getUserId(),
                 applyUser.getImpowerDatetime())) {
+                kind = EOrderKind.Impower_Order.getCode();
+
                 // 订单金额
                 ProductSpecsPrice pspData = productSpecsPriceBO
                     .getPriceByLevel(psData.getCode(), applyUser.getLevel());
@@ -219,6 +222,8 @@ public class OrderAOImpl implements IOrderAO {
                     throw new BizException("xn00000", agent.getName()
                             + "授权单金额为[" + agent.getAmount() / 1000 + "]元");
                 }
+            } else {
+                kind = EOrderKind.Normal_Order.getCode();
             }
         }
 
@@ -264,7 +269,7 @@ public class OrderAOImpl implements IOrderAO {
                 String orderCode = this.addOrder(applyUser, pData, psData,
                     psData.getSingleNumber(), req.getApplyNote(),
                     req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress());
+                    req.getCity(), req.getArea(), req.getAddress(), kind);
 
                 list.add(orderCode);
             }
@@ -274,7 +279,7 @@ public class OrderAOImpl implements IOrderAO {
                 StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress());
+                req.getAddress(), kind);
 
             list.add(orderCode);
         }
@@ -323,6 +328,7 @@ public class OrderAOImpl implements IOrderAO {
                         this.payAward(data);
                     }
                 }
+
                 data.setPayDatetime(new Date());
                 data.setPayCode(data.getCode());
                 data.setPayAmount(data.getAmount());
@@ -680,13 +686,13 @@ public class OrderAOImpl implements IOrderAO {
     public void deliverOrder(XN627645Req req) {
 
         Order data = orderBO.getOrder(req.getCode());
+        User toUser = userBO.getUser(data.getToUser());
+
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
             // C端产品无法云仓发
             if (EUserKind.Customer.getCode().equals(data.getKind())) {
                 throw new BizException("xn00000", "非代理的订单无法从云仓发货哦！");
             }
-
-            User toUser = userBO.getUser(data.getToUser());
             if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
 
                 ProductSpecsPrice psp = productSpecsPriceBO.getPriceByLevel(
@@ -704,14 +710,20 @@ public class OrderAOImpl implements IOrderAO {
                     throw new BizException("xn00000", "您的云仓中没有该规格的产品");
                 }
 
+                // 下单人为代理
                 User applyUser = userBO.getUser(data.getApplyUser());
-                Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-                // 没有开启云仓的发放奖励
-                if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
-                    // 出货以及推荐奖励
-                    this.payAward(data);
+                if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
+                    Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+
+                    // 没有开启云仓的发放奖励
+                    if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+                        // 出货以及推荐奖励
+                        this.payAward(data);
+                    }
                 }
             }
+        } else {
+            // 自发
         }
 
         data.setDeliver(req.getDeliver());
@@ -1036,7 +1048,8 @@ public class OrderAOImpl implements IOrderAO {
 
     private String addOrder(User applyUser, Product pData, ProductSpecs psData,
             int quantity, String applyNote, String signer, String mobile,
-            String province, String city, String area, String address) {
+            String province, String city, String area, String address,
+            String kind) {
 
         Order order = new Order();
         ProductSpecsPrice pspData = productSpecsPriceBO
@@ -1057,7 +1070,6 @@ public class OrderAOImpl implements IOrderAO {
         Long amount = quantity * pspData.getPrice();
         Long yunfei = 0L;
 
-        String kind = EOrderKind.Normal_Order.getCode();
         // 下单人是否是代理
         if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
 
@@ -1066,13 +1078,9 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
 
-            // 是否开启云仓
-            boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
-                applyUser.getImpowerDatetime());
-            // 未开启云仓，且未完成授权单
+            // 未开启云仓，计算与运费
             Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
-            if (flag && EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
-                kind = EOrderKind.Impower_Order.getCode();
+            if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
                 // 产品不包邮，计算运费
                 if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
                     SYSConfig sysConfig = sysConfigBO.getConfig(province,

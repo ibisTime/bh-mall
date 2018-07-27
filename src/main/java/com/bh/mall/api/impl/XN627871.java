@@ -31,8 +31,8 @@ public class XN627871 extends AProcessor {
         List<BarCode> list = null;
         synchronized (IBarCodeAO.class) {
             list = barCodeAO.downLoad(
-                StringValidater.toInteger(req.getNumber()),
-                StringValidater.toInteger(req.getQuantity()));
+                StringValidater.toInteger(req.getPageNo()),
+                StringValidater.toInteger(req.getPageSize()));
         }
         return list;
     }

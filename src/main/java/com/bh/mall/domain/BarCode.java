@@ -27,6 +27,9 @@ public class BarCode extends ABaseDO {
     // 使用时间
     private Date useDatetime;
 
+    // 生成批次
+    private String batch;
+
     // *******************db***************
 
     // 防伪、溯源码
@@ -81,6 +84,14 @@ public class BarCode extends ABaseDO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 
 }

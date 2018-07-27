@@ -13,6 +13,7 @@
 		<result column="number" property="number" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="use_datetime" property="useDatetime" />
+		<result column="batch" property="batch" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -44,6 +45,9 @@
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
 			</if>
+			<if test="batch != null and batch != '' ">
+				AND t.batch = #{batch}
+			</if>
 		</trim>
 	</sql>
 	
@@ -56,6 +60,7 @@
 		,t.status
 		,t.create_datetime
 		,t.use_datetime
+		,t.batch
 		FROM
 		tbh_security_trace t
 		<include refid="where_condition" />
@@ -88,12 +93,14 @@
 		,trace_code
 		,status
 		,create_datetime
+		,batch
 		)
 		VALUES(
 		#{securityCode}
 		,#{traceCode}
 		,#{status}
 		,#{createDatetime}
+		,#{batch}
 		)
 	</insert>
 

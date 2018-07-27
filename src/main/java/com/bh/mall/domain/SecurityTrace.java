@@ -39,6 +39,9 @@ public class SecurityTrace extends ABaseDO {
     // 使用时间
     private Date useDatetime;
 
+    // 生成批次
+    private String batch;
+
     // **************db*************
 
     // 订单
@@ -136,6 +139,14 @@ public class SecurityTrace extends ABaseDO {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 
 }
