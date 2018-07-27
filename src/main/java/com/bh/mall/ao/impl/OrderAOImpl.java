@@ -322,9 +322,6 @@ public class OrderAOImpl implements IOrderAO {
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
-                    // 出货代理账户收钱
-                    this.payOrder(uData, data, null);
-
                 }
                 data.setPayDatetime(new Date());
                 data.setPayCode(data.getCode());
@@ -594,43 +591,45 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     private void payAward(Order data) {
+
         // 订单归属人不是平台
         Product product = productBO.getProduct(data.getProductCode());
-        // 获取订单归属人及其上级
-        User toUser = userBO.getUser(data.getApplyUser());
+        // 获取下单人及其上级
+        User applyUser = userBO.getUser(data.getApplyUser());
         String fromUserId = ESysUser.SYS_USER_BH.getCode();
         Long orderAmount = data.getAmount();
+
         // 有上级，且不是平台
-        if (StringUtils.isNotBlank(toUser.getHighUserId())
-                && !EUser.ADMIN.getCode().equals(toUser.getHighUserId())) {
-            User highUser = userBO.getUser(toUser.getHighUserId());
+        if (StringUtils.isNotBlank(applyUser.getHighUserId())
+                && !EUser.ADMIN.getCode().equals(applyUser.getHighUserId())) {
+            User highUser = userBO.getUser(applyUser.getHighUserId());
             if (EUserKind.Merchant.getCode().equals(highUser.getKind())) {
-                fromUserId = toUser.getHighUserId();
+                fromUserId = applyUser.getHighUserId();
             }
         }
 
         // **********出货奖*******
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
-            AwardInterval award = awardIntervalBO
-                .getAwardIntervalByLevel(toUser.getLevel(), data.getAmount());
+            AwardInterval award = awardIntervalBO.getAwardIntervalByLevel(
+                applyUser.getLevel(), data.getAmount());
             if (award != null) {
                 Long awardAmount = AmountUtil.mul(orderAmount,
                     award.getPercent() / 100);
                 accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
-                    toUser.getUserId(), ECurrency.YJ_CNY.getCode(), awardAmount,
-                    EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
+                    applyUser.getUserId(), ECurrency.YJ_CNY.getCode(),
+                    awardAmount, EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
                     EBizType.AJ_CHJL.getValue(), data.getCode());
             }
         }
 
         // **********推荐奖**********
         // 是否有推荐人
-        if (this.checkAward(toUser)) {
-            if (StringUtils.isNotBlank(toUser.getUserReferee())) {
+        if (this.checkAward(applyUser)) {
+            if (StringUtils.isNotBlank(applyUser.getUserReferee())) {
                 // 直接推荐人
-                User firstUser = userBO.getUser(toUser.getUserReferee());
-                Award aData = awardBO.getAwardByType(toUser.getLevel(),
+                User firstUser = userBO.getUser(applyUser.getUserReferee());
+                Award aData = awardBO.getAwardByType(applyUser.getLevel(),
                     data.getProductCode(), EAwardType.DirectAward.getCode());
 
                 Long amount = 0L;
@@ -1115,9 +1114,8 @@ public class OrderAOImpl implements IOrderAO {
 
         User toUser = userBO.getUser(data.getToUser());
 
-        // 非门槛支付，且订单归属人不是平台，托管账户与代理账户同时加钱
-        if (!EChannelType.NBZ.getCode().equals(data.getPayType())
-                && EUserKind.Merchant.getCode().equals(toUser.getKind())) {
+        // 订单归属人不是平台，托管账户与代理账户同时加钱
+        if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
             Account account = accountBO.getAccountByUser(user.getUserId(),
                 ECurrency.YJ_CNY.getCode());
             // 收款方账户价钱
@@ -1130,9 +1128,8 @@ public class OrderAOImpl implements IOrderAO {
                 EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
                 data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
                 EBizType.AJ_GMYC.getValue(), data.getAmount());
-        } else if (!EChannelType.NBZ.getCode().equals(data.getPayType())
-                && EUserKind.Merchant.getCode().equals(toUser.getKind())) {
-            // 非门槛支付，订单归属人是平台，只有托管账户加钱
+        } else if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
+            // 订单归属人是平台，只有托管账户加钱
             accountBO.changeAmount(ESystemCode.BH.getCode(),
                 EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
                 data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
@@ -1145,28 +1142,20 @@ public class OrderAOImpl implements IOrderAO {
     public void invalidOrder(String code, String updater, String remark) {
 
         Order data = orderBO.getOrder(code);
+        // 非待支付与未审核订单无法作废
         if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())
-                || !EOrderStatus.Pay_NO.getCode().equals(data.getStatus())) {
+                || !EOrderStatus.Paid.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "该订单无法作废");
         }
         orderBO.invalidOrder(data, updater, remark);
 
-        // 退还库存
+        // 提货单归还库存
         User toUser = userBO.getUser(data.getToUser());
-        if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
-            wareHouseBO.buyWareHouse(data, toUser);
-        } else {
-            User applyUser = userBO.getUser(data.getApplyUser());
-            Product pData = productBO.getProduct(data.getProductCode());
-            ProductSpecs psData = productSpecsBO
-                .getProductSpecs(data.getProductSpecsCode());
-            this.changeProductNumber(applyUser, pData, psData, data,
-                data.getQuantity(), code);
-        }
+        wareHouseBO.buyWareHouse(data, toUser);
     }
 
     // 删除未支付订单
-    public void removeOrder() {
+    public void removeOrderTimer() {
         // 每十二个小时执行一次，删除是个小时前未支付的订单
         Date date = new Date();
         Order condition = new Order();

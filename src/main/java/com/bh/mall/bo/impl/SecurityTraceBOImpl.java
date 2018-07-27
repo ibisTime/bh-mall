@@ -104,7 +104,7 @@ public class SecurityTraceBOImpl extends PaginableBOImpl<SecurityTrace>
             condition.setTraceCode(traceCode);
             data = securityTraceDAO.select(condition);
             if (null == data) {
-                throw new BizException("xn00000", "防伪码不存在");
+                throw new BizException("xn00000", "溯源码错误");
             }
         }
         return data;
