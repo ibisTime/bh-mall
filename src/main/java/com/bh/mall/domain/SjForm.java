@@ -4,20 +4,10 @@ import java.util.Date;
 
 import com.bh.mall.dao.base.ABaseDO;
 
-/**
- * 意向收集表
- * api接口： 
- * 627250 ：申请代理 （无推荐人）
- * @author: clockorange 
- * @since: Jul 5, 2018 8:25:10 PM 
- * @history:
- */
-
-public class AgentAllot extends ABaseDO {
-
+public class SjForm extends ABaseDO {
     private static final long serialVersionUID = 1L;
 
-    // 编号
+    // 编码
     private String code;
 
     // 申请人
@@ -26,32 +16,26 @@ public class AgentAllot extends ABaseDO {
     // 申请等级
     private Integer applyLevel;
 
-    // 意向归属人名字
-    private String toUserId;
+    // 申请时间
+    private Date applyDatetime;
 
-    // 意向归属人团队
-    private String toTeamName;
+    // 团队人数
+    private String reNumber;
 
-    // 意向归属人等级
-    private Integer toLevel;
-
-    // 意向归属人电话
-    private String toUserMobile;
+    // 打款金额
+    private Long payAmount;
 
     // 打款截图
     private String payPdf;
 
-    // 是否打款
-    private boolean result;
-
     // 审核人
-    private String manager;
-
-    // 申请时间
-    private Date applyDatetime;
+    private String approver;
 
     // 审核时间
     private Date approveDatetime;
+
+    // 授权书时间
+    private Date impowerDatetime;
 
     // 状态
     private String status;
@@ -62,9 +46,6 @@ public class AgentAllot extends ABaseDO {
     /***************** DB **************************/
 
     private BUser user;
-
-    // 当前等级
-    private Integer level;
 
     private Long impowerAmount;
 
@@ -78,11 +59,15 @@ public class AgentAllot extends ABaseDO {
 
     private String userIdForQuery;
 
+    private Date impowerDatetimeStart;
+
+    private Date impowerDatetimeEnd;
+
     private String keyWord;
 
-    /***********************************/
+    /*******************************************/
 
-    // 获取编号
+    // 获取编码
     public String getCode() {
         return code;
     }
@@ -91,15 +76,7 @@ public class AgentAllot extends ABaseDO {
         this.code = code;
     }
 
-    public Integer getApplyLevel() {
-        return applyLevel;
-    }
-
-    public void setApplyLevel(Integer applyLevel) {
-        this.applyLevel = applyLevel;
-    }
-
-    // 获取意向归属人信息
+    // 获取申请人
     public String getApplyUser() {
         return applyUser;
     }
@@ -108,65 +85,15 @@ public class AgentAllot extends ABaseDO {
         this.applyUser = applyUser;
     }
 
-    public String getToUserName() {
-        return toUserId;
+    // 获取申请等级
+    public Integer getApplyLevel() {
+        return applyLevel;
     }
 
-    public String getToUserMobile() {
-        return toUserMobile;
+    public void setApplyLevel(Integer applyLevel) {
+        this.applyLevel = applyLevel;
     }
 
-    public void setToUserName(String toUserName) {
-        this.toUserId = toUserName;
-    }
-
-    public void setToUserMobile(String toUserMobile) {
-        this.toUserMobile = toUserMobile;
-    }
-
-    public String getToTeamName() {
-        return toTeamName;
-    }
-
-    public Integer getToLevel() {
-        return toLevel;
-    }
-
-    public void setToTeamName(String toTeamName) {
-        this.toTeamName = toTeamName;
-    }
-
-    public void setToLevel(Integer toLevel) {
-        this.toLevel = toLevel;
-    }
-
-    // 获取打款截图
-    public String getPayPdf() {
-        return payPdf;
-    }
-
-    public void setPayPdf(String payPdf) {
-        this.payPdf = payPdf;
-    }
-
-    public boolean isResult() {
-        return result;
-    }
-
-    public void setResult(boolean result) {
-        this.result = result;
-    }
-
-    // 获取审核人
-    public String getManager() {
-        return manager;
-    }
-
-    public void setManager(String manager) {
-        this.manager = manager;
-    }
-
-    // 获取申请时间
     public Date getApplyDatetime() {
         return applyDatetime;
     }
@@ -175,24 +102,43 @@ public class AgentAllot extends ABaseDO {
         this.applyDatetime = applyDatetime;
     }
 
-    // 状态
-    public String getStatus() {
-        return status;
+    // 获取申请等级
+    public String getReNumber() {
+        return reNumber;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setReNumber(String reNumber) {
+        this.reNumber = reNumber;
     }
 
-    // 备注
-    public String getRemark() {
-        return remark;
+    // 获取付款金额
+    public Long getPayAmount() {
+        return payAmount;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
     }
 
+    // 获取付款截图
+    public String getPaymentPdf() {
+        return payPdf;
+    }
+
+    public void setPaymentPdf(String paymentPdf) {
+        this.payPdf = paymentPdf;
+    }
+
+    // 获取审核人
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver;
+    }
+
+    // 获取审核时间
     public Date getApproveDatetime() {
         return approveDatetime;
     }
@@ -201,12 +147,31 @@ public class AgentAllot extends ABaseDO {
         this.approveDatetime = approveDatetime;
     }
 
-    public Integer getLevel() {
-        return level;
+    // 获取授权书时间
+    public Date getImpowerDatetime() {
+        return impowerDatetime;
     }
 
-    public void setLevel(Integer level) {
-        this.level = level;
+    public void setImpowerDatetime(Date impowerDatetime) {
+        this.impowerDatetime = impowerDatetime;
+    }
+
+    // 获取备注
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    // 获取状态
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     // 获取数据库 buser
@@ -274,4 +239,21 @@ public class AgentAllot extends ABaseDO {
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
     }
+
+    public Date getImpowerDatetimeStart() {
+        return impowerDatetimeStart;
+    }
+
+    public void setImpowerDatetimeStart(Date impowerDatetimeStart) {
+        this.impowerDatetimeStart = impowerDatetimeStart;
+    }
+
+    public Date getImpowerDatetimeEnd() {
+        return impowerDatetimeEnd;
+    }
+
+    public void setImpowerDatetimeEnd(Date impowerDatetimeEnd) {
+        this.impowerDatetimeEnd = impowerDatetimeEnd;
+    }
+
 }

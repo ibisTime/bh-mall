@@ -43,40 +43,10 @@ public interface ISYSUserAO {
 
     // 更改信息
 
-    // 代理分配 XN627270
-    public void allotAgency(String userId, String toUserId, String manager,
-            String approver);
-
-    // 忽略意向 XN627269
-    public void ignore(String userId, String updater);
-
-    // 接受意向 XN627268
-    // public void acceptIntention(String userId, String approver, String
-    // remark);
-
-    // 修改用户等级
-    // public void doUpLevel(String userId, String level);
-
     // 修改上级 XN627261
     public void editManager(String userId, String manager, String updater);
 
     // 修改推荐人
-
-    // 审核授权 XN627271
-    public boolean approveImpower(String userId, String approver, String result,
-            String remark);
-
-    // 取消授权 XN627275
-    public void approveImpowerCanenl(String userId, String approver,
-            String result, String remark);
-
-    // XN627276
-    public void approveUplevelCanenl(String userId, String approver,
-            String result, String remark);
-
-    // 审核升级 XN627272
-    public void approveUpgrade(String userId, String approver, String remark,
-            String result);
 
     /*************** 查询 *******************/
 

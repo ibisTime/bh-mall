@@ -104,42 +104,9 @@ public interface IBuserBO extends IPaginableBO<BUser> {
 
     public void resetBindMobile(BUser buser, String newMobile);
 
-    // 补充授权所需信息
-    public void addInfo(BUser data);
-
-    /*************** 申请 **********************/
-
-    // 接受意向分配
-    public void acceptIntention(BUser data);
-
-    public void refreshHighUser(BUser data);
-
-    // 申请代理
-    public void toApply(BUser dbUser);
-
-    // 意向分配
-    public void allotAgency(BUser data);
-
-    public void applyIntent(BUser data);
-
-    // 升级申请
-    public void upgradeLevel(BUser data);
-
-    // 取消授权
-    public void cancelImpower(BUser data);
-
-    public void cancelUplevel(BUser data);
-
-    // 忽略意向
-    public void ignore(BUser data);
+    public String refreshHighUser(BUser data);
 
     BUser getSysUser();
-
-    // 审核授权
-    public void approveImpower(BUser data);
-
-    // 审核升级
-    public void approveUpgrade(BUser data);
 
     public void refreshManager(BUser data, String manager, String updater);
 

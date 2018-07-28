@@ -2,10 +2,7 @@ package com.bh.mall.ao;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.BUser;
-import com.bh.mall.dto.req.XN627250Req;
-import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627255Req;
-import com.bh.mall.dto.req.XN627362Req;
 import com.bh.mall.dto.res.XN627303Res;
 
 /**
@@ -47,30 +44,6 @@ public interface IBuserAO {
 
     // 更新信息 XN627255
     public void updateInformation(XN627255Req req);
-
-    //  实名认证信息补充
-    public void addInfo(XN627362Req req);
-
-    /*************** 申请 *******************/
-
-    // 代理申请
-    public void applyIntent(XN627250Req req);
-
-    // 代理申请，包含推荐人
-    public XN627303Res applyHaveUserReferee(XN627251Req req);
-
-    // 取消授权申请 XN626273
-    public void cancelImpower(String userId);
-
-    // 取消升级申请 XN627276
-    public void cancelUplevel(String userId);
-
-    // 升级申请 XN627267
-    public void upgradeLevel(String userId, String highLevel, String payPdf,
-            String teamName);
-
-    // 接受意向 XN627268
-    public void acceptIntention(String userId, String approver, String remark);
 
     /*************** 查询 *******************/
 

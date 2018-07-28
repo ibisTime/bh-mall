@@ -4,14 +4,28 @@ import java.util.Date;
 
 import com.bh.mall.dao.base.ABaseDO;
 
-public class UpLevelApply extends ABaseDO {
+/**
+ *  授权申请 & 审核表
+ * @author: clockorange 
+ * @since: Jul 11, 2018 2:05:50 PM 
+ * @history:
+ */
+public class SqForm extends ABaseDO {
+
     private static final long serialVersionUID = 1L;
+
+    // 微信号
+    private String wxId;
 
     // 编码
     private String code;
 
     // 申请人
-    private String applyUser;
+    private String userId;
+
+    private String toUserId;
+
+    private String mobile;
 
     // 申请等级
     private Integer applyLevel;
@@ -19,14 +33,41 @@ public class UpLevelApply extends ABaseDO {
     // 申请时间
     private Date applyDatetime;
 
-    // 团队人数
-    private String reNumber;
-
     // 打款金额
     private Long payAmount;
 
     // 打款截图
     private String payPdf;
+
+    // 证件类型
+    private String idKind;
+
+    // 证件号码
+    private String idNo;
+
+    // 身份证正面照片
+    private String idFront;
+
+    // 身份证背面照片
+    private String idBehind;
+
+    // 手持身份证照片
+    private String idHand;
+
+    // 真实姓名
+    private String realName;
+
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 具体地址
+    private String address;
 
     // 审核人
     private String approver;
@@ -47,6 +88,8 @@ public class UpLevelApply extends ABaseDO {
 
     private BUser user;
 
+    private String keyWord;
+
     private Long impowerAmount;
 
     private Date applyDatetimeStart;
@@ -57,15 +100,22 @@ public class UpLevelApply extends ABaseDO {
 
     private Date approveDatetimeEnd;
 
-    private String userIdForQuery;
-
     private Date impowerDatetimeStart;
 
     private Date impowerDatetimeEnd;
 
-    private String keyWord;
+    private String userIdForQuery;
 
     /*******************************************/
+
+    // 获取微信号
+    public String getWxId() {
+        return wxId;
+    }
+
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
+    }
 
     // 获取编码
     public String getCode() {
@@ -76,13 +126,117 @@ public class UpLevelApply extends ABaseDO {
         this.code = code;
     }
 
-    // 获取申请人
-    public String getApplyUser() {
-        return applyUser;
+    // 获取ID
+    public String getUserId() {
+        return userId;
     }
 
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    // 获取手机号
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    // 证件类型
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    // 证件号码
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    // 身份证正面照片
+    public String getIdFront() {
+        return idFront;
+    }
+
+    public void setIdFront(String idFront) {
+        this.idFront = idFront;
+    }
+
+    // 身份证背面照片
+    public String getIdBehind() {
+        return idBehind;
+    }
+
+    public void setIdBehind(String idBehind) {
+        this.idBehind = idBehind;
+    }
+
+    // 手持身份证照片
+    public String getIdHand() {
+        return idHand;
+    }
+
+    public void setIdHand(String idHand) {
+        this.idHand = idHand;
+    }
+
+    // 真实姓名
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    // 省， 市， 区 & 详细地址
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     // 获取申请等级
@@ -100,15 +254,6 @@ public class UpLevelApply extends ABaseDO {
 
     public void setApplyDatetime(Date applyDatetime) {
         this.applyDatetime = applyDatetime;
-    }
-
-    // 获取申请等级
-    public String getReNumber() {
-        return reNumber;
-    }
-
-    public void setReNumber(String reNumber) {
-        this.reNumber = reNumber;
     }
 
     // 获取付款金额
@@ -224,22 +369,6 @@ public class UpLevelApply extends ABaseDO {
         this.approveDatetimeEnd = approveDatetimeEnd;
     }
 
-    public String getUserIdForQuery() {
-        return userIdForQuery;
-    }
-
-    public void setUserIdForQuery(String userIdForQuery) {
-        this.userIdForQuery = userIdForQuery;
-    }
-
-    public String getKeyWord() {
-        return keyWord;
-    }
-
-    public void setKeyWord(String keyWord) {
-        this.keyWord = keyWord;
-    }
-
     public Date getImpowerDatetimeStart() {
         return impowerDatetimeStart;
     }
@@ -254,6 +383,22 @@ public class UpLevelApply extends ABaseDO {
 
     public void setImpowerDatetimeEnd(Date impowerDatetimeEnd) {
         this.impowerDatetimeEnd = impowerDatetimeEnd;
+    }
+
+    public String getUserIdForQuery() {
+        return userIdForQuery;
+    }
+
+    public void setUserIdForQuery(String userIdForQuery) {
+        this.userIdForQuery = userIdForQuery;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
     }
 
 }

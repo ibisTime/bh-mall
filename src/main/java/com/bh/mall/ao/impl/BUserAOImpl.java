@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +17,8 @@ import com.bh.mall.ao.IBuserAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
-import com.bh.mall.bo.IAgentAllotBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IBuserBO;
-import com.bh.mall.bo.IImpowerApplyBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IIntroBO;
 import com.bh.mall.bo.IOrderBO;
@@ -29,8 +26,10 @@ import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
-import com.bh.mall.bo.IUpLevelApplyBO;
+import com.bh.mall.bo.ISqFormBO;
+import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IWareHouseBO;
+import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
@@ -40,31 +39,18 @@ import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.AfterSale;
-import com.bh.mall.domain.AgentAllot;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.BUser;
-import com.bh.mall.domain.ImpowerApply;
-import com.bh.mall.domain.InnerOrder;
-import com.bh.mall.domain.Order;
 import com.bh.mall.domain.SYSRole;
-import com.bh.mall.domain.UpLevelApply;
 import com.bh.mall.domain.WareHouse;
-import com.bh.mall.dto.req.XN627250Req;
-import com.bh.mall.dto.req.XN627251Req;
+import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627255Req;
-import com.bh.mall.dto.req.XN627362Req;
 import com.bh.mall.dto.res.XN627303Res;
-import com.bh.mall.enums.EAddressType;
-import com.bh.mall.enums.EAfterSaleStatus;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ELoginType;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EUserLevel;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -93,14 +79,13 @@ public class BUserAOImpl implements IBuserAO {
     IAddressBO addressBO;
 
     @Autowired
-    IAgentAllotBO agentAllotBO;
+    IYxFormBO agentAllotBO;
 
     @Autowired
-    IImpowerApplyBO impowerApplyBO;
+    ISqFormBO impowerApplyBO;
 
     @Autowired
-    IUpLevelApplyBO uplevelApplyBO;
-
+    ISjFormBO uplevelApplyBO;
 
     @Autowired
     IAccountBO accountBO;
@@ -305,20 +290,6 @@ public class BUserAOImpl implements IBuserAO {
         return result;
     }
 
-    /*************** 分配账号**********************/
-    // 分配账号
-    private List<String> distributeAccount(String userId, String mobile,
-            String kind) {
-        List<String> currencyList = new ArrayList<String>();
-        if (EUserKind.Customer.getCode().equals(kind)) {
-            currencyList.add(ECurrency.YJ_CNY.getCode());
-        } else if (EUserKind.Merchant.getCode().equals(kind)) {
-            currencyList.add(ECurrency.YJ_CNY.getCode());
-            currencyList.add(ECurrency.MK_CNY.getCode());
-        }
-        return currencyList;
-    }
-
     /*************** 注销，激活**********************/
     // 注销 | 激活
     @Override
@@ -484,435 +455,6 @@ public class BUserAOImpl implements IBuserAO {
         return page;
     }
 
-    /*************** 代理申请 **********************/
-    // 代理申请 （无推荐人）
-    @Override
-    @Transactional
-    public void applyIntent(XN627250Req req) {
-        PhoneUtil.checkMobile(req.getMobile());
-        buserBO.isMobileExist(req.getMobile());
-
-        // 确认申请等级
-        AgentLevel aiData = agentLevelBO.getAgentByLevel(
-            StringValidater.toInteger(req.getApplyLevel()));
-        if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
-            throw new BizException("xn00000", "本等级不可被意向");
-        }
-
-        // 确认申请id
-        BUser data = buserBO.getCheckUser(req.getUserId());
-
-        // 获取申请信息
-        data.setRealName(req.getRealName());
-        data.setWxId(req.getWxId());
-        data.setMobile(req.getMobile());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-
-        data.setArea(req.getArea());
-        data.setAddress(req.getAddress());
-        data.setStatus(EUserStatus.MIND.getCode()); // 有意愿
-        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        data.setApplyDatetime(new Date());
-
-        data.setSource(req.getFromInfo());
-
-        // 数据库
-        buserBO.applyIntent(data);
-        addressBO.saveAddress(data.getUserId(),
-            EAddressType.User_Address.getCode(), req.getMobile(),
-            req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
-            req.getAddress(), EBoolean.YES.getCode());
-
-        // insert new agent allot log
-        AgentAllot alData = new AgentAllot();
-        alData.setApplyUser(req.getUserId());
-        alData.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        alData.setApplyDatetime(new Date());
-        alData.setStatus(EUserStatus.MIND.getCode());
-
-        agentAllotBO.addAgentAllot(alData);
-    }
-
-    /*************** 代理申请，有推荐人 **********************/
-    // 申请代理， 有推荐人
-    @Override
-    @Transactional
-    public XN627303Res applyHaveUserReferee(XN627251Req req) {
-        PhoneUtil.checkMobile(req.getMobile());
-        String introducer = req.getIntroducer();
-        // 校验介绍人
-        if (StringUtils.isNotBlank(req.getIntroducer())) {
-            PhoneUtil.checkMobile(req.getIntroducer());
-            BUser buser = buserBO.getUserByMobile(req.getIntroducer());
-            introducer = buser.getUserId();
-            if (buser.getLevel() <= StringValidater
-                .toInteger(req.getApplyLevel())) {
-                throw new BizException("xn0000", "您申请的等级需高于推荐人哦！");
-            }
-        }
-        // 校验手机号
-        buserBO.isMobileExist(req.getMobile());
-        // 校验身份证
-        if (StringUtils.isNotBlank(req.getIdNo())) {
-            buserBO.getUserByIdNo(req.getIdNo());
-        }
-
-        XN627303Res result = null;
-        // 是否可被意向
-        AgentLevel impower = agentLevelBO.getAgentByLevel(
-            StringValidater.toInteger(req.getApplyLevel()));
-
-        if (EBoolean.NO.getCode().equals(impower.getIsIntent())) {
-            throw new BizException("xn0000", "本等级不可被意向");
-        }
-        // 是否需要实名制
-        if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
-            if (StringUtils.isBlank(req.getIdNo())
-                    || StringUtils.isBlank(req.getIdHand())) {
-                throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
-            }
-        }
-
-        BUser data = buserBO.getUser(req.getUserId());
-        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        String status = EUserStatus.TO_APPROVE.getCode(); // 待审核授权
-        String toUser = data.getUserReferee();
-
-        BUser userReferee = buserBO.getUser(data.getUserReferee());
-        data.setTeamName(userReferee.getTeamName());
-        if (data.getApplyLevel() < userReferee.getLevel()) {
-            throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
-        }
-        if (data.getApplyLevel() == userReferee.getLevel()) {
-            toUser = userReferee.getHighUserId();
-
-        }
-        // 是否需要公司审核
-        if (1 == data.getApplyLevel()) {
-            status = EUserStatus.TO_COMPANYAPPROVE.getCode();
-            // 防止团队名称重复
-            buserBO.checkTeamName(req.getTeamName());
-            data.setTeamName(req.getTeamName());
-        }
-        if (data.getApplyLevel() > userReferee.getLevel()) {
-            data.setUserReferee(null);
-            toUser = userReferee.getUserId();
-        }
-        System.out.println("toUser:" + toUser);
-        System.out.println("UserReferee:" + data.getUserReferee());
-
-        data.setRealName(req.getRealName());
-        data.setWxId(req.getWxId());
-        data.setMobile(req.getMobile());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-
-        data.setTeamName(req.getTeamName());
-        data.setIdKind(req.getIdKind());
-        data.setIdNo(req.getIdNo());
-        data.setIdHand(req.getIdHand());
-
-        data.setIntroducer(introducer);
-        data.setStatus(status);
-        data.setArea(req.getArea());
-        // data.setPayPdf(req.getPayPdf());
-
-        data.setAddress(req.getAddress());
-        data.setSource(req.getFromInfo());
-
-        // String logCode = agentAllotBO.toApply(data, toUser,
-        // EUserStatus.TO_APPROVE.getCode());
-        // data.setLastAgentLog(logCode);
-
-        buserBO.toApply(data);
-        addressBO.saveAddress(data.getUserId(),
-            EAddressType.User_Address.getCode(), req.getMobile(),
-            req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
-            req.getAddress(), EBoolean.YES.getCode());
-        result = new XN627303Res(data.getUserId(), EBoolean.NO.getCode());
-
-        // insert new agent allot log
-        AgentAllot alData = new AgentAllot();
-        alData.setApplyUser(req.getUserId());
-        alData.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        alData.setApplyDatetime(new Date());
-        alData.setStatus(EUserStatus.MIND.getCode());
-
-        agentAllotBO.addAgentAllot(alData);
-        return result;
-
-    }
-
-    /***************  向下分配 **********************/
-
-    /***************  接受意向分配 **********************/
-
-    @Override
-    public void acceptIntention(String userId, String approver, String remark) {
-        BUser data = buserBO.getUser(userId);
-        if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
-                || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
-            throw new BizException("xn0000", "该代理不是有意向代理");
-        }
-
-        AgentAllot log = agentAllotBO.getAgentAllot(data.getLastAgentLog());
-        data.setHighUserId(log.getToUserName());
-        data.setApprover(approver);
-        data.setApplyDatetime(new Date());
-        data.setRemark(remark);
-
-        data.setStatus(EUserStatus.ADD_INFO.getCode()); // 补全授权资料
-        String logCode = agentAllotBO.acceptIntention(data);
-        data.setLastAgentLog(logCode);
-        buserBO.acceptIntention(data);
-
-        // insert new agent allot log
-        AgentAllot imData = new AgentAllot();
-        imData.setApplyUser(userId);
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        imData.setStatus(EUserStatus.ADD_INFO.getCode());
-
-        agentAllotBO.addAgentAllot(imData);
-
-    }
-
-    /***************   补全信息 **********************/
-    // 补全授权所需资料
-    @Override
-    public void addInfo(XN627362Req req) {
-        BUser data = buserBO.getUser(req.getUserId());
-        if (StringUtils.isNotBlank(req.getIntroducer())) {
-            PhoneUtil.checkMobile(req.getIntroducer());
-            BUser user = buserBO.getUserByMobile(req.getIntroducer());
-            if (user.getUserId().equals(req.getUserId())) {
-                throw new BizException("xn0000", "推荐人不能填自己哦！");
-            }
-            if (!EUserKind.Merchant.getCode().equals(user.getKind())) {
-                throw new BizException("xn0000", "您填写的推荐人不是我们的代理哦！");
-            }
-
-            if (user.getLevel() <= StringValidater
-                .toInteger(req.getApplyLevel())) {
-                throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
-            }
-        }
-
-        buserBO.checkTeamName(req.getTeamName());
-
-        // 校验身份证
-        if (StringUtils.isNotBlank(req.getIdNo())) {
-            buserBO.getUserByIdNo(req.getIdNo());
-        }
-
-        AgentLevel impower = agentLevelBO
-            .getAgentByLevel(data.getApplyLevel());
-        if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
-            if (StringUtils.isBlank(req.getIdNo())
-                    || StringUtils.isBlank(req.getIdHand())) {
-                throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
-            } else {
-                buserBO.getUserByIdNo(req.getIdNo());
-            }
-        }
-
-        // data.setRealName(req.getRealName());
-        // data.setWxId(req.getWxId());
-        // data.setMobile(req.getMobile());
-        // data.setProvince(req.getProvince());
-        // data.setCity(req.getCity());
-        //
-        // data.setArea(req.getArea());
-        // data.setAddress(req.getAddress());
-        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        data.setTeamName(req.getTeamName());
-
-        data.setIdKind(req.getIdKind());
-        data.setIdNo(req.getIdNo());
-        data.setIdHand(req.getIdHand());
-        data.setIntroducer(req.getIntroducer());
-
-        // 需添加等级以及to user审核
-        // get last agency log
-        // check approver
-        // if kind equals b - to approve
-        // if kind equals p - to company approve
-        data.setStatus(EUserStatus.TO_COMPANYAPPROVE.getCode());
-        buserBO.addInfo(data);
-
-        // insert new impower log
-        ImpowerApply imData = new ImpowerApply();
-        imData.setApplyUser(req.getUserId());
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(EUserStatus.TO_COMPANYAPPROVE.getCode());
-        impowerApplyBO.addImpowerApply(imData);
-
-    }
-
-    /*************** 授权申请 **********************/
-
-    /*************** 取消升级申请 **********************/
-    @Override
-    public void cancelUplevel(String userId) {
-        UpLevelApply upData = new UpLevelApply();
-        upData.setApplyUser(userId);
-        upData.setStatus(EUserStatus.TO_CANCEL.getCode());
-        upData.setApplyDatetime(new Date());
-
-        uplevelApplyBO.addUplevelApply(upData);
-
-    }
-
-    /*************** 取消授权申请 **********************/
-    @Override
-    public void cancelImpower(String userId) {
-        BUser data = buserBO.getUser(userId);
-
-        // 是否有下级
-        BUser uCondition = new BUser();
-        uCondition.setHighUserId(data.getUserId());
-        List<BUser> list = buserBO.queryUserList(uCondition);
-        if (CollectionUtils.isNotEmpty(list)) {
-            throw new BizException("xn000", "您还有下级，无法申请退出");
-        }
-
-        // 可提现账户是否余额
-        Account txAccount = accountBO.getAccountByUser(data.getUserId(),
-            ECurrency.YJ_CNY.getCode());
-        if (txAccount.getAmount() > 0) {
-            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
-        }
-
-        // 是否有未完成的订单
-        Order oCondition = new Order();
-        oCondition.setApplyUser(data.getUserId());
-        oCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
-        long count = orderBO.selectCount(oCondition);
-        if (count != 0) {
-            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
-        }
-
-        InnerOrder ioCondition = new InnerOrder();
-        ioCondition.setApplyUser(data.getUserId());
-        ioCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
-        long ioCount = innerOrderBO.selectCount(ioCondition);
-        if (ioCount != 0) {
-            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
-        }
-
-        AfterSale asCondition = new AfterSale();
-        asCondition.setApplyUser(data.getUserId());
-        asCondition.setStatus(EAfterSaleStatus.NO_CallOff.getCode());
-        long asCount = afterSaleBO.selectCount(asCondition);
-        if (asCount != 0) {
-            throw new BizException("xn000", "您还有未完成的售后单,请在订单完成后申请");
-        }
-
-        String status = EUserStatus.TO_COMPANYCANCEL.getCode();
-        if (StringUtils.isNotBlank(data.getHighUserId())) {
-            BUser buser = buserBO.getUser(data.getHighUserId());
-            if (!EUserKind.Plat.getCode().equals(buser.getKind())) {
-                status = EUserStatus.TO_CANCEL.getCode();
-            }
-        }
-        data.setStatus(status);
-        String logCode = impowerApplyBO.cancelImpower(data);
-        data.setLastAgentLog(logCode);
-
-        buserBO.cancelImpower(data);
-
-        // insert new impower log
-        ImpowerApply imData = new ImpowerApply();
-        imData.setApplyUser(userId);
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(EUserStatus.TO_CANCEL.getCode());
-        impowerApplyBO.addImpowerApply(imData);
-    }
-
-    /*************** 升级申请 **********************/
-    // 升级申请
-    @Override
-    public void upgradeLevel(String userId, String highLevel, String payPdf,
-            String payAmount) {
-        BUser data = buserBO.getUser(userId);
-        if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
-                || EUserStatus.UPGRADED.getCode().equals(data.getStatus()))) {
-            throw new BizException("xn000", "您的状态无法申请升级");
-        }
-
-        if (data.getLevel() <= StringValidater.toInteger(highLevel)) {
-            throw new BizException("xn0000", "升级等级要大于当前等级");
-        }
-        if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == data
-            .getLevel()) {
-            throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
-        }
-
-        // 查看升级所需
-        AgentLevel upgrade = agentLevelBO
-            .getAgentByLevel(StringValidater.toInteger(highLevel));
-        AgentLevel agent = agentLevelBO
-            .getAgentByLevel(StringValidater.toInteger(highLevel));
-
-        // 推荐人数是否满足半门槛
-        List<BUser> userReferee = buserBO
-            .getUsersByUserReferee(data.getUserId());
-        if (upgrade.getReNumber() >= userReferee.size()) {
-            if (StringValidater.toLong(payAmount) <= agent
-                .getMinChargeAmount()) {
-                throw new BizException("xn00000", "您的直推人数不满足半门槛人数，打款金额不能低于"
-                        + StringValidater.toLong(payAmount) / 1000);
-            }
-        }
-
-        AgentLevel auData = agentLevelBO
-            .getAgentByLevel(data.getLevel());
-        // 余额是否清零
-        if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
-            // 云仓是否有余额
-            List<WareHouse> list = wareHouseBO
-                .getWareHouseByUser(data.getUserId());
-            if (CollectionUtils.isNotEmpty(list)) {
-                throw new BizException("xn00000", "本等级升级云仓中不允许有余额");
-            }
-
-        }
-        String status = EUserStatus.TO_COMPANYUPGRADE.getCode();
-        if (StringUtils.isNotBlank(data.getHighUserId())) {
-            BUser highUser = buserBO.getUser(data.getHighUserId());
-            if (EUserKind.Merchant.getCode().equals(highUser.getKind())) {
-                status = EUserStatus.TO_UPGRADE.getCode();
-            }
-
-        }
-
-        data.setApplyLevel(StringValidater.toInteger(highLevel));
-        data.setStatus(status);
-        // data.setApplyDatetime(new Date());
-        // data.setPayAmount(StringValidater.toLong(payAmount));
-
-        // String logCode = agentAllotBO.upgradeLevel(data, payPdf);
-        // data.setLastAgentLog(logCode);
-        buserBO.upgradeLevel(data);
-
-        // 新增升级申请记录
-        UpLevelApply upData = new UpLevelApply();
-        upData.setApplyUser(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(status);
-        upData.setApplyDatetime(new Date());
-        upData.setPayAmount(StringValidater.toLong(payAmount));
-
-        uplevelApplyBO.addUplevelApply(upData);
-
-    }
-
     @Override
     public BUser doGetUser(String userId) {
         BUser user = buserBO.getUser(userId);
@@ -952,10 +494,9 @@ public class BUserAOImpl implements IBuserAO {
 
             // 意向归属人
             if (StringUtils.isNotBlank(user.getLastAgentLog())) {
-                AgentAllot log = agentAllotBO
-                    .getAgentAllot(user.getLastAgentLog());
-                if (StringUtils.isNotBlank(log.getToUserName())) {
-                    BUser toUser = buserBO.getUser(log.getToUserName());
+                YxForm log = agentAllotBO.getAgentAllot(user.getLastAgentLog());
+                if (StringUtils.isNotBlank(log.getToUserId())) {
+                    BUser toUser = buserBO.getUser(log.getToUserId());
                     // user.setToTeamName(toUser.getTeamName());
                     // user.setToLevel(toUser.getLevel());
                     // user.setToUserName(toUser.getRealName());
@@ -973,7 +514,8 @@ public class BUserAOImpl implements IBuserAO {
 
             // 授权金额
             if (null != user.getApplyLevel()) {
-                AgentLevel agent = agentLevelBO.getAgentByLevel(user.getApplyLevel());
+                AgentLevel agent = agentLevelBO
+                    .getAgentByLevel(user.getApplyLevel());
                 // user.setImpowerAmount(agent.getAmount());
             }
             if (null != user.getPayAmount() && 0 != user.getPayAmount()) {

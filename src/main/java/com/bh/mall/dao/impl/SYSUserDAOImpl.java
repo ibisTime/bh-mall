@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.bh.mall.dao.ISYSUserDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
-import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.SYSUser;
 
 @Repository("sysuserDAOImpl")
@@ -69,33 +68,6 @@ public class SYSUserDAOImpl extends AMybatisTemplate implements ISYSUserDAO {
     @Override
     public int updatePhoto(SYSUser data) {
         return super.update(NAMESPACE.concat("update_sysuser_photo"), data);
-    }
-
-    @Override
-    public void ignore(BUser data) {
-        super.update(NAMESPACE.concat("ignore_gency"), data);
-
-    }
-
-    @Override
-    public void cancelImpower(BUser data) {
-        super.update(NAMESPACE.concat("cancel_impower"), data);
-    }
-
-    @Override
-    public void approveImpower(BUser data) {
-        super.update(NAMESPACE.concat("approve_impower"), data);
-
-    }
-
-    @Override
-    public void approveUpgrade(BUser data) {
-        super.update(NAMESPACE.concat("approve_upgrade"), data);
-    }
-
-    @Override
-    public void allotAgency(BUser data) {
-        super.update(NAMESPACE.concat("allot_gency"), data);
     }
 
     @Override

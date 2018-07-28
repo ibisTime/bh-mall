@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.ISYSUserAO;
+import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -19,14 +19,14 @@ import com.bh.mall.spring.SpringContextHolder;
 
 public class XN627275 extends AProcessor {
 
-    private ISYSUserAO userAO = SpringContextHolder.getBean(ISYSUserAO.class);
+    private ISqFormAO userAO = SpringContextHolder.getBean(ISqFormAO.class);
 
     private XN627275Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         userAO.approveImpowerCanenl(req.getUserId(), req.getApprover(),
-            req.getResult(), req.getRemark());
+            req.getRemark());
         return new BooleanRes(true);
     }
 

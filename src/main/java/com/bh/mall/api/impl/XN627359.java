@@ -4,12 +4,12 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IAgentAllotAO;
+import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.AgentAllot;
+import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627359Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -23,14 +23,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627359 extends AProcessor {
 
-    private IAgentAllotAO agencyLogAO = SpringContextHolder
-        .getBean(IAgentAllotAO.class);
+    private IYxFormAO agencyLogAO = SpringContextHolder
+        .getBean(IYxFormAO.class);
 
     private XN627359Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        AgentAllot condition = new AgentAllot();
+        YxForm condition = new YxForm();
         condition.setKeyWord(req.getKeyword());
         condition.setStatus(req.getStatus());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
@@ -44,7 +44,7 @@ public class XN627359 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IAgentAllotAO.DEFAULT_ORDER_COLUMN;
+            column = IYxFormAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
