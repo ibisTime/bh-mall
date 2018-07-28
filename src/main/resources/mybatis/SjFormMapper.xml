@@ -92,7 +92,7 @@
 		,t.impower_datetime
 		,t.remark
 		FROM
-		tbh_uplevel_apply t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id   
+		tbh_sj_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id   
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -103,13 +103,13 @@
 
 	<select id="select_upLevelApply_count" parameterType="uplevelApply"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_uplevel_apply t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id   
+		SELECT count(1) FROM tbh_sj_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id   
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_upLevelApply" parameterType="uplevelApply">
 		INSERT INTO
-		tbh_uplevel_apply(
+		tbh_sj_form(
 		code
 		,apply_user
 		,apply_level
@@ -142,7 +142,7 @@
 	
 	<!-- update payment / status -->
 	<update id="update_upLevelApply" parameterType="uplevelApply">
-		UPDATE tbh_uplevel_apply
+		UPDATE tbh_sj_form
 		SET
 		apply_user = #{applyUser}
 		,apply_level = #{applyLevel}

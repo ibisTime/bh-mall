@@ -154,6 +154,18 @@
 	<bean id="sysUserBO" class="com.bh.mall.bo.impl.SYSUserBOImpl">
 		<property name="paginableDAO" ref="sysuserDAOImpl"/>
 	</bean>
+	
+	<bean id="agentAllotBO" class="com.bh.mall.bo.impl.YxFormBOImpl">
+		<property name="paginableDAO" ref="yxFormDAOImpl"/>
+	</bean>
+	
+	<bean id="impowerApplyBO" class="com.bh.mall.bo.impl.SqFormBOImpl">
+		<property name="paginableDAO" ref="sqFormDAOImpl"/>
+	</bean>
+	
+	<bean id="uplevelApplyBO" class="com.bh.mall.bo.impl.SjFormBOImpl">
+		<property name="paginableDAO" ref="sjFormDAOImpl"/>
+	</bean>
 		
 	
 </beans>

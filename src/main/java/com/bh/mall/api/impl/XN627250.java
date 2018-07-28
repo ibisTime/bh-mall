@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IYxFormAO;
+import com.bh.mall.ao.IBuserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;

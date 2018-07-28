@@ -58,9 +58,9 @@
 		<typeAlias alias="sysuser" type="com.bh.mall.domain.SYSUser"/>
 		<typeAlias alias="cuser" type="com.bh.mall.domain.CUser"/>
 		<typeAlias alias="buser" type="com.bh.mall.domain.BUser"/>
-		<typeAlias alias="agentAllot" type="com.bh.mall.domain.AgentAllot"/>
-		<typeAlias alias="impowerApply" type="com.bh.mall.domain.ImpowerApply"/>
-		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.UpLevelApply"/>
+		<typeAlias alias="agentAllot" type="com.bh.mall.domain.YxForm"/>
+		<typeAlias alias="impowerApply" type="com.bh.mall.domain.SqForm"/>
+		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.SjForm"/>
 		
 	</typeAliases>
 </configuration>	

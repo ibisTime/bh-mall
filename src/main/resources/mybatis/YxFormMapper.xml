@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.IAgentAllotDAO">
+<mapper namespace="com.bh.mall.dao.IYxFormDAO">
 	<resultMap  id="agentAllot_DB_Result" type="agentAllot" >
 		<result column="code" property="code"/>
 		<result column="apply_user" property="applyUser" />
@@ -68,7 +68,7 @@
 		,t.status
 		,t.approve_datetime
 		,t.remark
-		FROM tbh_agent_allot t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id 
+		FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
 			<if test="order != null and order != '' ">
@@ -78,13 +78,13 @@
 	</select>
 	
 	<select id="select_agentAllot_count" parameterType="agentAllot" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_agent_allot t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id 
+		SELECT count(1) FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id 
 		<include refid="where_condition"/>
 	</select>
 	
 	<insert id="insert_agentAllot" parameterType="agentAllot">
 		INSERT INTO
-		tbh_agent_allot(
+		tbh_yx_form(
 		code
 		,to_user_id		
 		,apply_user		
@@ -111,7 +111,7 @@
 	
 	
 	<update id="update_agentAllot" parameterType="agentAllot">
-		UPDATE tbh_agent_allot
+		UPDATE tbh_yx_form
 		SET
 		to_user_id=#{toUserId}
 		,apply_user = #{applyUser}
