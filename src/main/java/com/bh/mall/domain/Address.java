@@ -3,6 +3,7 @@ package com.bh.mall.domain;
 import com.bh.mall.dao.base.ABaseDO;
 
 /** 
+ * 地址
  * @author: xieyj 
  * @since: 2015年8月26日 下午10:45:36 
  * @history:

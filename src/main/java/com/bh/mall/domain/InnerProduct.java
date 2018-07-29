@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * 内购产品表
+ * 内购产品
  * @author: nyc 
  * @since: 2018年3月23日 下午1:36:21 
  * @history:

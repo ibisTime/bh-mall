@@ -3,7 +3,6 @@ package com.bh.mall.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.ao.IAgentAO;
-import com.bh.mall.ao.IUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
@@ -53,7 +52,7 @@ public class XN627266 extends AProcessor {
             DateUtil.getFrontDate(req.getCreateDatetimeEnd(), true));
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IUserAO.DEFAULT_ORDER_COLUMN;
+            column = IAgentAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
         int start = Integer.valueOf(req.getStart());

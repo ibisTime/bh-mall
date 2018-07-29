@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- *  授权申请 & 审核表
+ * 代理授权单
  * @author: clockorange 
  * @since: Jul 11, 2018 2:05:50 PM 
  * @history:

@@ -15,7 +15,7 @@ public interface IYxFormAO {
     // 接受意向 XN627268
     public void acceptIntention(String userId, String approver, String remark);
 
-    public void allotAgency(String userId, String toUserId, String approver);
+    public void allotAgent(String userId, String toUserId, String approver);
 
     public void ignore(String userId, String aprrover);
 

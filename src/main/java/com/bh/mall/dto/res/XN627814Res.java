@@ -2,24 +2,24 @@ package com.bh.mall.dto.res;
 
 import java.util.List;
 
-import com.bh.mall.domain.WareHouse;
+import com.bh.mall.domain.Ware;
 
 public class XN627814Res {
 
-    private List<WareHouse> list;
+    private List<Ware> list;
 
     private Long amount;
 
-    public XN627814Res(List<WareHouse> list, Long amount) {
+    public XN627814Res(List<Ware> list, Long amount) {
         this.list = list;
         this.amount = amount;
     }
 
-    public List<WareHouse> getList() {
+    public List<Ware> getList() {
         return list;
     }
 
-    public void setList(List<WareHouse> list) {
+    public void setList(List<Ware> list) {
         this.list = list;
     }
 

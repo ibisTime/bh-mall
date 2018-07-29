@@ -17,7 +17,7 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
-import com.bh.mall.bo.IWareHouseBO;
+import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -26,7 +26,7 @@ import com.bh.mall.domain.Award;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
-import com.bh.mall.domain.WareHouse;
+import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
@@ -58,7 +58,7 @@ public class ProductAOImpl implements IProductAO {
     IAwardBO awardBO;
 
     @Autowired
-    IWareHouseBO wareHouseBO;
+    IWareBO wareBO;
 
     @Override
     @Transactional
@@ -296,13 +296,13 @@ public class ProductAOImpl implements IProductAO {
             }
 
             // 获取各个代理云仓库存
-            List<WareHouse> whList = wareHouseBO
-                .getWareHouseByProduct(product.getCode());
+            List<Ware> whList = wareBO
+                .getWareByProduct(product.getCode());
             int whNumber = 0;
-            for (WareHouse wareHouse : whList) {
+            for (Ware ware : whList) {
                 int nowNumber = productSpecsBO
                     .getMinSpecsNumber(product.getCode());
-                whNumber = whNumber + nowNumber * wareHouse.getQuantity();
+                whNumber = whNumber + nowNumber * ware.getQuantity();
             }
             product.setWhNumber(whNumber);
         }

@@ -2,11 +2,11 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IWareHouseAO;
+import com.bh.mall.ao.IWareAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.WareHouse;
+import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627811Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -20,26 +20,26 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627811 extends AProcessor {
 
-    private IWareHouseAO wareHouseAO = SpringContextHolder
-        .getBean(IWareHouseAO.class);
+    private IWareAO wareAO = SpringContextHolder
+        .getBean(IWareAO.class);
 
     private XN627811Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        WareHouse condition = new WareHouse();
+        Ware condition = new Ware();
         condition.setType(req.getType());
         condition.setKeyword(req.getKeyword());
         condition.setUserId(req.getUserId());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IWareHouseAO.DEFAULT_ORDER_COLUMN;
+            column = IWareAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return wareHouseAO.queryWareHouseFrontPage(start, limit, condition);
+        return wareAO.queryWareFrontPage(start, limit, condition);
     }
 
     @Override

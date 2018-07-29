@@ -21,13 +21,13 @@ public class XN627805Res {
     private Long chargeAmount;
 
     // 是否启用云仓
-    private String isWareHouse;
+    private String isWare;
 
     public XN627805Res() {
     }
 
     public XN627805Res(String result, Long redAmount, Long minAmount,
-            Long amount, Long chargeAmount, Integer level, String isWareHouse) {
+            Long amount, Long chargeAmount, Integer level, String isWare) {
         super();
         this.result = result;
         this.redAmount = redAmount;
@@ -35,7 +35,7 @@ public class XN627805Res {
         this.amount = amount;
         this.chargeAmount = chargeAmount;
         this.level = level;
-        this.isWareHouse = isWareHouse;
+        this.isWare = isWare;
     }
 
     public String getResult() {
@@ -86,12 +86,12 @@ public class XN627805Res {
         this.level = level;
     }
 
-    public String getIsWareHouse() {
-        return isWareHouse;
+    public String getIsWare() {
+        return isWare;
     }
 
-    public void setIsWareHouse(String isWareHouse) {
-        this.isWareHouse = isWareHouse;
+    public void setIsWare(String isWare) {
+        this.isWare = isWare;
     }
 
 }

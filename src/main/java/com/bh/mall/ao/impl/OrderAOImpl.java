@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAwardBO;
@@ -31,8 +30,7 @@ import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
-import com.bh.mall.bo.IWareHouseBO;
-import com.bh.mall.bo.IWareHouseSpecsBO;
+import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.AmountUtil;
@@ -53,8 +51,7 @@ import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.SYSConfig;
-import com.bh.mall.domain.User;
-import com.bh.mall.domain.WareHouse;
+import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
@@ -117,19 +114,13 @@ public class OrderAOImpl implements IOrderAO {
     IAwardBO awardBO;
 
     @Autowired
-    IAgencyLogBO agencyLogBO;
-
-    @Autowired
-    IWareHouseBO wareHouseBO;
+    IWareBO wareBO;
 
     @Autowired
     IWeChatAO weChatAO;
 
     @Autowired
     IProductLogBO productLogBO;
-
-    @Autowired
-    IWareHouseSpecsBO wareHouseSpecsBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;
@@ -204,7 +195,7 @@ public class OrderAOImpl implements IOrderAO {
         String kind = EOrderKind.WH_Order.getCode();
 
         // 未开云仓的代理，判断是否为授权单
-        if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+        if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
             if (orderBO.checkImpowerOrder(applyUser.getUserId(),
                 applyUser.getImpowerDatetime())) {
                 kind = EOrderKind.Impower_Order.getCode();
@@ -257,7 +248,7 @@ public class OrderAOImpl implements IOrderAO {
 
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())
-                && EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+                && EBoolean.NO.getCode().equals(agent.getIsWare())) {
 
             int singleNumber = StringValidater.toInteger(req.getQuantity())
                     / psData.getSingleNumber();
@@ -317,10 +308,10 @@ public class OrderAOImpl implements IOrderAO {
                     // 该等级是否启用云仓
                     AgentLevel agent = agentLevelBO
                         .getAgentByLevel(uData.getLevel());
-                    if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
+                    if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
                         status = EOrderStatus.Received.getCode();
                         // 购买云仓
-                        wareHouseBO.buyWareHouse(data, uData);
+                        wareBO.buyWare(data, uData);
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
@@ -389,11 +380,10 @@ public class OrderAOImpl implements IOrderAO {
                 if (EUserKind.Merchant.getCode().equals(agent.getKind())) {
                     AgentLevel agentLevel = agentLevelBO
                         .getAgentByLevel(agent.getLevel());
-                    if (EBoolean.YES.getCode()
-                        .equals(agentLevel.getIsWareHouse())) {
+                    if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
                         status = EOrderStatus.Received.getCode();
                         // 购买云仓
-                        wareHouseBO.buyWareHouse(data, agent);
+                        wareBO.buyWare(data, agent);
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
@@ -442,7 +432,7 @@ public class OrderAOImpl implements IOrderAO {
 
             // 团队长,一级代理自己是团队长
             if (1 != agent.getLevel()) {
-                User teamLeader = agentBO.getTeamLeader(agent.getTeamName());
+                Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
                 order.setLeaderName(teamLeader.getRealName());
                 order.setLeaderMobile(teamLeader.getMobile());
             } else {
@@ -505,7 +495,7 @@ public class OrderAOImpl implements IOrderAO {
 
             // 团队长,一级代理自己是团队长
             if (1 != agent.getLevel()) {
-                User teamLeader = agentBO.getTeamLeader(agent.getTeamName());
+                Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
                 order.setLeaderName(teamLeader.getRealName());
                 order.setLeaderMobile(teamLeader.getMobile());
             } else {
@@ -698,8 +688,8 @@ public class OrderAOImpl implements IOrderAO {
                         "该产品云仓发货不能少于" + psp.getMinNumber() + ps.getName());
                 }
 
-                WareHouse toData = wareHouseBO.getWareHouseByProductSpec(
-                    data.getToUser(), data.getProductSpecsCode());
+                Ware toData = wareBO.getWareByProductSpec(data.getToUser(),
+                    data.getProductSpecsCode());
                 if (null == toData) {
                     throw new BizException("xn00000", "您的云仓中没有该规格的产品");
                 }
@@ -711,7 +701,7 @@ public class OrderAOImpl implements IOrderAO {
                         .getAgentByLevel(applyUser.getLevel());
 
                     // 没有开启云仓的发放奖励
-                    if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+                    if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
                         // 出货以及推荐奖励
                         this.payAward(data);
                     }
@@ -838,7 +828,7 @@ public class OrderAOImpl implements IOrderAO {
             // 云仓提货，归还云仓库存
             if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
                 Agent applyUser = agentBO.getAgent(data.getApplyUser());
-                wareHouseBO.buyWareHouse(data, applyUser);
+                wareBO.buyWare(data, applyUser);
             } else if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
                 String toUser = data.getToUser();
                 if (StringUtils.isBlank(toUser)) {
@@ -887,7 +877,7 @@ public class OrderAOImpl implements IOrderAO {
         return name;
     }
 
-    private String checkOrder(User applyUser, ProductSpecs psData) {
+    private String checkOrder(Agent applyUser, ProductSpecs psData) {
         String kind = EOrderKind.Normal_Order.getCode();
         // 是否完成授权单
         if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
@@ -931,20 +921,19 @@ public class OrderAOImpl implements IOrderAO {
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
             .getLevel()
-                && EBoolean.YES.getCode().equals(agentLevel.getIsWareHouse())) {
-            WareHouse toWareHouse = wareHouseBO.getWareHouseByProductSpec(
-                order.getToUser(), order.getProductSpecsCode());
+                && EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
+            Ware toWare = wareBO.getWareByProductSpec(order.getToUser(),
+                order.getProductSpecsCode());
             // 上级云仓没有该产品
-            if (null == toWareHouse) {
+            if (null == toWare) {
                 throw new BizException("xn00000", "上级代理云仓中没有该产品");
             } else {
                 // 改变上级云仓
-                wareHouseBO.changeWareHouse(toWareHouse.getCode(), number,
-                    EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
-                    order.getCode());
+                wareBO.changeWare(toWare.getCode(), number, EBizType.AJ_YCCH,
+                    EBizType.AJ_YCCH.getValue(), order.getCode());
             }
 
-        } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWareHouse())) {
+        } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
             // 无上级代理,扣减产品实际库存
             productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
                 pData.getRealNumber(), quantity, null);
@@ -1033,7 +1022,7 @@ public class OrderAOImpl implements IOrderAO {
 
             AgentLevel agent = agentLevelBO
                 .getAgentByLevel(applyUser.getLevel());
-            if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+            if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
 
                 // 产品不包邮，计算运费
                 if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
@@ -1113,7 +1102,7 @@ public class OrderAOImpl implements IOrderAO {
         // 提货单归还库存
         if (EOrderKind.Pick_Up.getCode().equals(data.getKind())) {
             Agent agent = agentBO.getAgent(data.getApplyUser());
-            wareHouseBO.buyWareHouse(data, agent);
+            wareBO.buyWare(data, agent);
         }
     }
 

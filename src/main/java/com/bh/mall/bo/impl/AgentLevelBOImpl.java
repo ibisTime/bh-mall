@@ -53,7 +53,7 @@ public class AgentLevelBOImpl extends PaginableBOImpl<AgentLevel> implements IAg
     @Override
     public List<AgentLevel> getAgentHaveWH() {
         AgentLevel condition = new AgentLevel();
-        condition.setIsWareHouse(EBoolean.YES.getCode());
+        condition.setIsWare(EBoolean.YES.getCode());
         return agentLevelDAO.selectList(condition);
     }
 

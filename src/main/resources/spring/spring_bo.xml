@@ -12,6 +12,9 @@
 
 	
 	<!-- 分页BO层注入paginableDao -->
+	<bean id="agentBO" class="com.bh.mall.bo.impl.AgentBOImpl">
+		<property name="paginableDAO" ref="agentDAOImpl"/>
+	</bean>	
 	<bean id="addressBO" class="com.bh.mall.bo.impl.AddressBOImpl">
 		<property name="paginableDAO" ref="addressDAOImpl"/>
 	</bean>	
@@ -63,9 +66,6 @@
 		<property name="paginableDAO" ref="bankcardDAOImpl"></property>
 	</bean>
 	
-	<bean id="companyChannelBO" class="com.bh.mall.bo.impl.CompanyChannelBOImpl">
-		<property name="paginableDAO" ref="companyChannelDAOImpl"></property>
-	</bean>
 
 	<bean id="productBO" class="com.bh.mall.bo.impl.ProductBOImpl">
 		<property name="paginableDAO" ref="productDAOImpl"></property>
@@ -95,10 +95,6 @@
 		<property name="paginableDAO" ref="innerOrderDAOImpl"></property>
 	</bean>
 	
-	<bean id="afterSaleBO" class="com.bh.mall.bo.impl.AfterSaleBOImpl">
-		<property name="paginableDAO" ref="afterSaleDAOImpl"></property>
-	</bean>
-	
 	
 	<bean id="cartBO" class="com.bh.mall.bo.impl.CartBOImpl">
 		<property name="paginableDAO" ref="cartDAOImpl"></property>
@@ -112,29 +108,23 @@
 		<property name="paginableDAO" ref="chargeDAOImpl"></property>
 	</bean>
 	
-	<bean id="agencyLogBO" class="com.bh.mall.bo.impl.AgencyLogBOImpl">
-		<property name="paginableDAO" ref="agencyLogDAOImpl"></property>
-	</bean>
 	
 	<bean id="introBO" class="com.bh.mall.bo.impl.IntroBOImpl">
 		<property name="paginableDAO" ref="introDAOImpl"></property>
 	</bean>
 	
-	<bean id="wareHouseBO" class="com.bh.mall.bo.impl.WareHouseBOImpl">
-		<property name="paginableDAO" ref="wareHouseDAOImpl"></property>
+	<bean id="wareBO" class="com.bh.mall.bo.impl.WareBOImpl">
+		<property name="paginableDAO" ref="wareDAOImpl"></property>
 	</bean>
 	
-	<bean id="wareHouseLogBO" class="com.bh.mall.bo.impl.WareHouseLogBOImpl">
-		<property name="paginableDAO" ref="wareHouseLogDAOImpl"></property>
+	<bean id="wareLogBO" class="com.bh.mall.bo.impl.WareLogBOImpl">
+		<property name="paginableDAO" ref="wareLogDAOImpl"></property>
 	</bean>
 	
 	<bean id="changeProductBO" class="com.bh.mall.bo.impl.ChangeProductBOImpl">
 		<property name="paginableDAO" ref="changeProductDAOImpl"></property>
 	</bean>
 	
-	<bean id="wareHouseSpecsBO" class="com.bh.mall.bo.impl.WareHouseSpecsBOImpl">
-		<property name="paginableDAO" ref="wareHouseSpecsDAOImpl"></property>
-	</bean>
 	<bean id="reportBO" class="com.bh.mall.bo.impl.ReportBOImpl">
 		<property name="paginableDAO" ref="reportDAOImpl"/>
 	</bean>
@@ -157,7 +147,7 @@
 		<property name="paginableDAO" ref="yxFormDAOImpl"/>
 	</bean>
 	
-	<bean id="impowerApplyBO" class="com.bh.mall.bo.impl.SqFormBOImpl">
+	<bean id="sqFormBO" class="com.bh.mall.bo.impl.SqFormBOImpl">
 		<property name="paginableDAO" ref="sqFormDAOImpl"/>
 	</bean>
 	

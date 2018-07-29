@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
-* 统计
+* 代理统计
 * @author: nyc 
 * @since: 2018-06-26 11:55:39
 * @history:

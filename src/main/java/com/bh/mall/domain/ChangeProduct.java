@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
-* 授权证书
+* 置换单
 * @author: chenshan 
 * @since: 2018-04-09 14:47:55
 * @history:

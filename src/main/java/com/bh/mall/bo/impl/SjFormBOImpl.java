@@ -32,7 +32,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     public String upgradeLevel(SjForm data) {
 
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SjForm alData = new SjForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.TO_APPROVE.getCode());
@@ -53,7 +53,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     public String approveUpgrade(SjForm data) {
 
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SjForm alData = new SjForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.UPGRADED.getCode());
@@ -72,7 +72,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     @Override
     public String approveCanenl(SjForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SjForm alData = new SjForm();
 
         alData.setCode(code);
@@ -93,9 +93,8 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     @Override
     public String addUplevelApply(SjForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
 
-        // save new agencylog to buser
         // SjForm buser = new SjForm();
 
         // UpLevelApply alData = new UpLevelApply();
@@ -107,7 +106,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     @Override
     public String saveUpLevelApply(SjForm data, String toUserId) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SjForm alData = new SjForm();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());

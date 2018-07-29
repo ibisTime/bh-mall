@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IWareHouseLogAO;
+import com.bh.mall.ao.IWareLogAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -16,15 +16,15 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627833 extends AProcessor {
-    private IWareHouseLogAO wareHouseLogAO = SpringContextHolder
-        .getBean(IWareHouseLogAO.class);
+    private IWareLogAO wareLogAO = SpringContextHolder
+        .getBean(IWareLogAO.class);
 
     private XN627833Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
 
-        return wareHouseLogAO.getWareHouseLog(req.getCode());
+        return wareLogAO.getWareLog(req.getCode());
     }
 
     @Override

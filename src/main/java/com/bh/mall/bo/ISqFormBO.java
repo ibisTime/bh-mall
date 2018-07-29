@@ -7,11 +7,11 @@ import com.bh.mall.domain.SqForm;
 
 public interface ISqFormBO extends IPaginableBO<SqForm> {
 
-    public List<SqForm> queryAgencyLogList(SqForm condition);
+    public List<SqForm> querySqFormList(SqForm condition);
 
-    public SqForm getImpowerApply(String code);
+    public SqForm getSqForm(String code);
 
-    public List<SqForm> queryImpowerApplyPage(int start, int limit,
+    public List<SqForm> querySqFormPage(int start, int limit,
             SqForm condition);
 
     public String approveImpower(SqForm user);
@@ -20,11 +20,11 @@ public interface ISqFormBO extends IPaginableBO<SqForm> {
 
     public String cancelImpower(SqForm data, String status);
 
-    public String saveImpowerApply(SqForm data, String toUserId);
+    public String saveSqForm(SqForm data, String toUserId);
 
     public String impowerApply(SqForm data);
 
-    public String addImpowerApply(SqForm data);
+    public String addSqForm(SqForm data);
 
     public String toApply(SqForm data);
 

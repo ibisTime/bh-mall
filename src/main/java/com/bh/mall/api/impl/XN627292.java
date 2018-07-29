@@ -24,7 +24,7 @@ import com.bh.mall.spring.SpringContextHolder;
 
 public class XN627292 extends AProcessor {
 
-    private ISjFormAO agencyLogAO = SpringContextHolder
+    private ISjFormAO sjFormAO = SpringContextHolder
         .getBean(ISjFormAO.class);
 
     private XN627292Req req = null;
@@ -52,7 +52,7 @@ public class XN627292 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agencyLogAO.queryUplevelApplyPage(start, limit, condition);
+        return sjFormAO.queryUplevelApplyPage(start, limit, condition);
     }
 
     @Override

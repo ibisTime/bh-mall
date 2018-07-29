@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
-import com.bh.mall.bo.IAfterSaleBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -28,7 +27,7 @@ import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.ISqFormBO;
-import com.bh.mall.bo.IWareHouseBO;
+import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
@@ -56,7 +55,7 @@ import com.google.gson.reflect.TypeToken;
 @Service
 public class AgentAOImpl implements IAgentAO {
 
-    private static Logger logger = Logger.getLogger(UserAOImpl.class);
+    private static Logger logger = Logger.getLogger(AgentAOImpl.class);
 
     @Autowired
     IAgentBO agentBO;
@@ -77,7 +76,7 @@ public class AgentAOImpl implements IAgentAO {
     IYxFormBO agentAllotBO;
 
     @Autowired
-    ISqFormBO impowerApplyBO;
+    ISqFormBO sqFormBO;
 
     @Autowired
     ISjFormBO sjFormBO;
@@ -92,16 +91,13 @@ public class AgentAOImpl implements IAgentAO {
     IInnerOrderBO innerOrderBO;
 
     @Autowired
-    IAfterSaleBO afterSaleBO;
-
-    @Autowired
     IIntroBO introBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;
 
     @Autowired
-    IWareHouseBO wareHouseBO;
+    IWareBO wareBO;
 
     @Autowired
     IReportBO reportBO;

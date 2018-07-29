@@ -8,7 +8,8 @@
  */
 package com.bh.mall.bo;
 
-import com.bh.mall.domain.CompanyChannel;
+import java.util.Map;
+
 import com.bh.mall.dto.res.XN627462Res;
 
 /** 
@@ -18,11 +19,11 @@ import com.bh.mall.dto.res.XN627462Res;
  */
 public interface IWeChatBO {
 
-    public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
+    public String getPrepayIdH5(Map<String, String> sysConfig, String openId,
             String bizNote, String code, Long transAmount, String ip,
             String bizBackUrl);
 
-    public XN627462Res getPayInfoH5(CompanyChannel companyChannel,
+    public XN627462Res getPayInfoH5(Map<String, String> sysConfig,
             String payCode, String prepayId);
 
 }

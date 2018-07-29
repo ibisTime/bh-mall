@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IJourAO;
-import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.bo.IJourBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Jour;
 import com.bh.mall.enums.EBizType;
@@ -27,21 +25,9 @@ public class JourAOImpl implements IJourAO {
     @Autowired
     private IJourBO jourBO;
 
-    @Autowired
-    private IOrderAO orderAO;
-
-    @Autowired
-    private IUserBO userBO;
-
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
 
-        // long count = jourBO.getTotalCount(condition);
-        // Page<Jour> page = new Page<Jour>(start, limit, count);
-        // List<Jour> list = jourBO.queryDetailPage(page.getStart(),
-        // page.getPageSize(), condition);
-        //
-        // page.setList(list);
         return jourBO.getPaginable(start, limit, condition);
     }
 

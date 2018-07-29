@@ -7,7 +7,7 @@ import java.util.List;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * B端代理用户
+ * 代理
  * @author: clockorange 
  * @since: Jul 5, 2018 8:29:39 PM 
  * @history:

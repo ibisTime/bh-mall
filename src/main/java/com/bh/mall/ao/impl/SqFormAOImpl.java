@@ -15,7 +15,6 @@ import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
-import com.bh.mall.bo.IAfterSaleBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -25,7 +24,6 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.AfterSale;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.InnerOrder;
@@ -36,7 +34,6 @@ import com.bh.mall.dto.req.XN627362Req;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAddressType;
-import com.bh.mall.enums.EAfterSaleStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -54,7 +51,7 @@ import com.bh.mall.exception.BizException;
 public class SqFormAOImpl implements ISqFormAO {
 
     @Autowired
-    private ISqFormBO impowerApplyBO;
+    private ISqFormBO sqFormBO;
 
     @Autowired
     private IAgentBO agentBO;
@@ -67,9 +64,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Autowired
     private IInnerOrderBO innerOrderBO;
-
-    @Autowired
-    private IAfterSaleBO afterSaleBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -171,7 +165,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // EUserStatus.TO_APPROVE.getCode());
         // data.setLastAgentLog(logCode);
 
-        impowerApplyBO.toApply(sqData);
+        sqFormBO.toApply(sqData);
         addressBO.saveAddress(sqData.getUserId(),
             EAddressType.User_Address.getCode(), req.getMobile(),
             req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
@@ -185,7 +179,7 @@ public class SqFormAOImpl implements ISqFormAO {
         alData.setApplyDatetime(new Date());
         alData.setStatus(EUserStatus.MIND.getCode());
 
-        impowerApplyBO.addImpowerApply(alData);
+        sqFormBO.addSqForm(alData);
         return result;
 
     }
@@ -196,7 +190,7 @@ public class SqFormAOImpl implements ISqFormAO {
     public void approveImpower(String userId, String approver, String result,
             String remark) {
         Agent data = agentBO.getAgent(userId);
-        SqForm log = impowerApplyBO.getImpowerApply(data.getLastAgentLog());
+        SqForm log = sqFormBO.getSqForm(data.getLastAgentLog());
         if (!(EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
                 || EUserStatus.TO_COMPANYAPPROVE.getCode()
                     .equals(data.getStatus()))) {
@@ -288,7 +282,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // imData.setPayAmount(payAmount);
         // imData.setPaymentPdf(payPdf);
         imData.setStatus(status);
-        impowerApplyBO.approveImpower(imData);
+        sqFormBO.approveImpower(imData);
 
     }
 
@@ -329,14 +323,6 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
         }
 
-        AfterSale asCondition = new AfterSale();
-        asCondition.setApplyUser(data.getUserId());
-        asCondition.setStatus(EAfterSaleStatus.NO_CallOff.getCode());
-        long asCount = afterSaleBO.selectCount(asCondition);
-        if (asCount != 0) {
-            throw new BizException("xn000", "您还有未完成的售后单,请在订单完成后申请");
-        }
-
         String status = EUserStatus.TO_COMPANYCANCEL.getCode();
         if (StringUtils.isNotBlank(data.getHighUserId())) {
             Agent buser = agentBO.getAgent(data.getHighUserId());
@@ -351,7 +337,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // imData.setPayAmount(payAmount);
         // imData.setPaymentPdf(payPdf);
         imData.setStatus(EUserStatus.TO_CANCEL.getCode());
-        impowerApplyBO.cancelImpower(imData);
+        sqFormBO.cancelImpower(imData);
     }
 
     /*************** 通过取消审核申请 **********************/
@@ -389,7 +375,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // imData.setPayAmount(payAmount);
         // imData.setPaymentPdf(payPdf);
         imData.setStatus(EUserStatus.CANCELED.getCode());
-        impowerApplyBO.addImpowerApply(imData);
+        sqFormBO.addSqForm(imData);
     }
 
     /***************   补全信息 **********************/
@@ -446,12 +432,6 @@ public class SqFormAOImpl implements ISqFormAO {
         data.setIdHand(req.getIdHand());
         data.setIntroducer(req.getIntroducer());
 
-        // 需添加等级以及to user审核
-        // get last agency log
-        // check approver
-        // if kind equals b - to approve
-        // if kind equals p - to company approve
-
         // insert new impower log
         SqForm imData = new SqForm();
         imData.setUserId(req.getUserId());
@@ -460,7 +440,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // imData.setPayAmount(payAmount);
         // imData.setPaymentPdf(payPdf);
         imData.setStatus(EUserStatus.TO_COMPANYAPPROVE.getCode());
-        impowerApplyBO.addInfo(imData);
+        sqFormBO.addInfo(imData);
     }
 
     /*********************** 查询 *************************/
@@ -475,29 +455,22 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        List<SqForm> list = impowerApplyBO.queryAgencyLogList(condition);
-        for (SqForm agencyLog : list) {
+        List<SqForm> list = sqFormBO.querySqFormList(condition);
+        for (SqForm sqForm : list) {
             Agent userReferee = null;
-            Agent buser = agentAO.getAgent(agencyLog.getUserId());
-            agencyLog.setUser(buser);
-            /*
-             * if (StringUtils.isNotBlank(agencyLog.getUserReferee())) {
-             * userReferee = userAO.getAgent(agencyLog.getUserReferee()); if
-             * (userReferee != null) {
-             * agencyLog.setRefereeName(userReferee.getRealName()); }
-             */
+            Agent buser = agentAO.getAgent(sqForm.getUserId());
+            sqForm.setUser(buser);
             // 审核人
-            if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
-                agencyLog.setApprover(agencyLog.getApprover());
+            if (EUser.ADMIN.getCode().equals(sqForm.getApprover())) {
+                sqForm.setApprover(sqForm.getApprover());
             } else {
-                if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-                    Agent aprrvoeName = agentAO
-                        .getAgent(agencyLog.getApprover());
+                if (StringUtils.isNotBlank(sqForm.getApprover())) {
+                    Agent aprrvoeName = agentAO.getAgent(sqForm.getApprover());
                     if (null != aprrvoeName) {
                         userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
-                            agencyLog.setApprover(userReferee.getRealName());
+                            sqForm.setApprover(userReferee.getRealName());
                         }
                     }
                 }
@@ -510,7 +483,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Override
     public SqForm getImpowerApply(String code) {
-        SqForm data = impowerApplyBO.getImpowerApply(code);
+        SqForm data = sqFormBO.getSqForm(code);
         Agent buser = agentAO.getAgent(data.getUserId());
         data.setUser(buser);
         Agent userReferee = null;
@@ -557,35 +530,32 @@ public class SqFormAOImpl implements ISqFormAO {
          * condition.setToUserId(condition.getUserIdForQuery()); //意向归属人 }
          */
 
-        Paginable<SqForm> page = impowerApplyBO.getPaginable(start, limit,
-            condition);
+        Paginable<SqForm> page = sqFormBO.getPaginable(start, limit, condition);
         Agent userReferee = null;
         Agent buser = null;
         for (Iterator<SqForm> iterator = page.getList().iterator(); iterator
             .hasNext();) {
-            SqForm agencyLog = iterator.next();
-            buser = agentAO.getAgent(agencyLog.getUserId());
-            if (!buser.getLastAgentLog().equals(agencyLog.getCode())) {
+            SqForm sqForm = iterator.next();
+            buser = agentAO.getAgent(sqForm.getUserId());
+            if (!buser.getLastAgentLog().equals(sqForm.getCode())) {
                 iterator.remove();
                 continue;
             }
-            agencyLog.setUser(buser);
+            sqForm.setUser(buser);
             if (StringUtils.isNotBlank(buser.getUserReferee())) {
                 userReferee = agentAO.getAgent(buser.getUserReferee());
-                /// agencyLog.setRefereeName(userReferee.getRealName());
             }
             // 审核人
-            if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
-                agencyLog.setApprover(EUser.ADMIN.getCode());
+            if (EUser.ADMIN.getCode().equals(sqForm.getApprover())) {
+                sqForm.setApprover(EUser.ADMIN.getCode());
             } else {
-                if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-                    Agent aprrvoeName = agentAO
-                        .getAgent(agencyLog.getApprover());
+                if (StringUtils.isNotBlank(sqForm.getApprover())) {
+                    Agent aprrvoeName = agentAO.getAgent(sqForm.getApprover());
                     if (null != aprrvoeName) {
                         userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
-                            agencyLog.setApprover(userReferee.getRealName());
+                            sqForm.setApprover(userReferee.getRealName());
                         }
                     }
                 }
@@ -598,7 +568,7 @@ public class SqFormAOImpl implements ISqFormAO {
     @Override
     public String addImpowerApply(SqForm data) {
         // insert new data
-        impowerApplyBO.addImpowerApply(data);
+        sqFormBO.addSqForm(data);
         return null;
     }
 
@@ -614,8 +584,7 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        Paginable<SqForm> page = impowerApplyBO.getPaginable(start, limit,
-            condition);
+        Paginable<SqForm> page = sqFormBO.getPaginable(start, limit, condition);
         List<SqForm> list = page.getList();
 
         for (SqForm impowerApply : list) {

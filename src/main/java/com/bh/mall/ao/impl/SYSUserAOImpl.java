@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.ISYSUserAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
-import com.bh.mall.bo.IAfterSaleBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -66,16 +65,13 @@ public class SYSUserAOImpl implements ISYSUserAO {
     IInnerOrderBO innerOrderBO;
 
     @Autowired
-    IAfterSaleBO afterSaleBO;
-
-    @Autowired
     IYxFormBO agentAllotBO;
 
     @Autowired
     ISjFormBO sjFormBO;
 
     @Autowired
-    ISqFormBO impowerApplyBO;
+    ISqFormBO sqFormBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;

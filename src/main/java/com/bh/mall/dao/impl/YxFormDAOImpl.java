@@ -12,7 +12,7 @@ import com.bh.mall.domain.YxForm;
 public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
 
     @Override
-    public void allotAgency(YxForm data) {
+    public void allotAgent(YxForm data) {
         super.update(NAMESPACE.concat("allot_gency"), data);
     }
 

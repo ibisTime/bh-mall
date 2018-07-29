@@ -10,9 +10,6 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class Material extends ABaseDO {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -8463329339507057225L;
 
     // 编码

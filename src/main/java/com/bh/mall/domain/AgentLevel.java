@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * 代理等级表 agent
+ * 代理等级
  * @author: nyc 
  * @since: 2018年1月31日 下午2:04:03 
  * @history:
@@ -39,7 +39,7 @@ public class AgentLevel extends ABaseDO {
     private String isSend;
 
     // 本等级是够开启云仓
-    private String isWareHouse;
+    private String isWare;
 
     // 本等级升级是否公司审核
     private String isCompanyApprove;
@@ -227,12 +227,12 @@ public class AgentLevel extends ABaseDO {
         this.minSurplus = minSurplus;
     }
 
-    public String getIsWareHouse() {
-        return isWareHouse;
+    public String getIsWare() {
+        return isWare;
     }
 
-    public void setIsWareHouse(String isWareHouse) {
-        this.isWareHouse = isWareHouse;
+    public void setIsWare(String isWare) {
+        this.isWare = isWare;
     }
 
     public String getIsSend() {

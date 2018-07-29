@@ -5,7 +5,6 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.ao.IAgentAO;
-import com.bh.mall.ao.IUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
@@ -48,7 +47,7 @@ public class XN627355 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IUserAO.DEFAULT_ORDER_COLUMN;
+            column = IAgentAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 

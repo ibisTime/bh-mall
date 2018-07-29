@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.IReportDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Report;
-import com.bh.mall.domain.User;
 
 @Component
 public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
@@ -18,7 +18,7 @@ public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
     @Autowired
     private IReportDAO reportDAO;
 
-    public void saveReport(User user) {
+    public void saveReport(Agent user) {
         Report data = new Report();
         data.setUserId(user.getUserId());
         data.setRealName(user.getRealName());

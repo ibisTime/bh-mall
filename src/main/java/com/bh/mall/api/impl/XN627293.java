@@ -20,7 +20,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 
 public class XN627293 extends AProcessor {
-    private ISjFormAO agencyLogAO = SpringContextHolder
+    private ISjFormAO sjFormAO = SpringContextHolder
         .getBean(ISjFormAO.class);
 
     private XN627293Req req = null;
@@ -39,7 +39,7 @@ public class XN627293 extends AProcessor {
         condition.setApproveDatetimeStart(approveDatetimeStart);
         condition.setApproveDatetimeEnd(approveDatetimeEnd);
 
-        return agencyLogAO.queryUplevelApplyList(condition);
+        return sjFormAO.queryUplevelApplyList(condition);
     }
 
     @Override

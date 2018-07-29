@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * 意向收集表
+ * 代理意向单
  * api接口： 
  * 627250 ：申请代理 （无推荐人）
  * @author: clockorange 

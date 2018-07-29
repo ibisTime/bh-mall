@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.ISYSMenuAO;
 import com.bh.mall.bo.ISYSMenuBO;
 import com.bh.mall.bo.ISYSMenuRoleBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
@@ -25,9 +24,6 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
 
     @Autowired
     ISYSMenuRoleBO sysMenuRoleBO;
-
-    @Autowired
-    IUserBO userBO;
 
     // 新增菜单
     @Override

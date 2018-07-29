@@ -11,7 +11,9 @@ import java.util.Map;
  */
 public enum ESysConfigType {
     QINIU("qiniu", "七牛参数"), WX_H5("wx_h5", "微信h5参数"), GIFT("gift",
-            "推广送积分参数"), SYS_TXT("sys_txt", "文本参数"), URL("fwsy_url", "防伪溯源");
+            "推广送积分参数"), SYS_TXT("sys_txt", "文本参数"), URL("fwsy_url",
+                    "防伪溯源"), WX_PAY("wx_pay",
+                            "微信支付"), XCX_PAY("xcx_pay", "小程序支付");
 
     public static Map<String, ESysConfigType> getMap() {
         Map<String, ESysConfigType> map = new HashMap<String, ESysConfigType>();

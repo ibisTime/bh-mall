@@ -2,7 +2,7 @@ package com.bh.mall.enums;
 
 public enum EAddressType {
 
-    User_Address("1", "用户地址"), AfterSale_Address("2", "售后地址");
+    User_Address("1", "用户地址");
     EAddressType(String code, String value) {
         this.code = code;
         this.value = value;

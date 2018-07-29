@@ -3,12 +3,12 @@ package com.bh.mall.bo;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Report;
-import com.bh.mall.domain.User;
 
 public interface IReportBO extends IPaginableBO<Report> {
 
-    public void saveReport(User data);
+    public void saveReport(Agent data);
 
     public int removeReport(String code);
 

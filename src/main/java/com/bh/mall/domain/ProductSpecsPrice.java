@@ -9,9 +9,7 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class ProductSpecsPrice extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = -8062643066643775877L;
 
     // 编号

@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IUserBO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext.xml",
@@ -16,9 +15,6 @@ import com.bh.mall.bo.IUserBO;
 public abstract class ABizTest {
 
     protected Logger logger = LoggerFactory.getLogger(ABizTest.class);
-
-    @Autowired
-    IUserBO userBO;
 
     @Autowired
     IAccountBO accountBO;

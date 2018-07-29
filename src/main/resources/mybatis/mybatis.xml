@@ -6,6 +6,7 @@
 		<setting name="logImpl" value="STDOUT_LOGGING"/>
 	</settings> -->
 	<typeAliases>		
+	    <typeAlias alias="agentLog" type="com.bh.mall.domain.AgentLog" />
 		<typeAlias alias="address" type="com.bh.mall.domain.Address" />
 		<typeAlias alias="sysMenu" type="com.bh.mall.domain.SYSMenu" />
 	    <typeAlias alias="sysRole" type="com.bh.mall.domain.SYSRole" />
@@ -31,21 +32,16 @@
 		<typeAlias alias="account" type="com.bh.mall.domain.Account"/>
 	    <typeAlias alias="jour" type="com.bh.mall.domain.Jour"/>
 	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
-	    <typeAlias alias="companyChannel" type="com.bh.mall.domain.CompanyChannel"/>
 	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
 	
 		<typeAlias alias="order" type="com.bh.mall.domain.Order"/>
-		<typeAlias alias="afterSale" type="com.bh.mall.domain.AfterSale"/>
 		<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
-		<typeAlias alias="agencyLog" type="com.bh.mall.domain.AgencyLog"/>
 
 		<typeAlias alias="intro" type="com.bh.mall.domain.Intro"/>
-		<typeAlias alias="wareHouse" type="com.bh.mall.domain.WareHouse"/>
-		<typeAlias alias="wareHouseLog" type="com.bh.mall.domain.WareHouseLog"/>
+		<typeAlias alias="ware" type="com.bh.mall.domain.Ware"/>
+		<typeAlias alias="wareLog" type="com.bh.mall.domain.WareLog"/>
 		<typeAlias alias="changeProduct" type="com.bh.mall.domain.ChangeProduct"/>
 		
-		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
-		<typeAlias alias="wareHouseSpecs" type="com.bh.mall.domain.WareHouseSpecs"/>
 		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
 		<typeAlias alias="report" type="com.bh.mall.domain.Report"/>
 		
@@ -60,7 +56,5 @@
 		<typeAlias alias="impowerApply" type="com.bh.mall.domain.SqForm"/>
 		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.SjForm"/>
 		
-		<typeAlias alias="securityTrace" type="com.bh.mall.domain.SecurityTrace"/>
-		<typeAlias alias="barCode" type="com.bh.mall.domain.BarCode"/>
 	</typeAliases>
 </configuration>	

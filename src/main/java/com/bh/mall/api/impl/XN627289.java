@@ -24,7 +24,7 @@ import com.bh.mall.spring.SpringContextHolder;
 
 public class XN627289 extends AProcessor {
 
-    private ISqFormAO agencyLogAO = SpringContextHolder
+    private ISqFormAO sqFormAO = SpringContextHolder
         .getBean(ISqFormAO.class);
 
     private XN627289Req req = null;
@@ -52,7 +52,7 @@ public class XN627289 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agencyLogAO.queryImpowerApplyPage(start, limit, condition);
+        return sqFormAO.queryImpowerApplyPage(start, limit, condition);
     }
 
     @Override

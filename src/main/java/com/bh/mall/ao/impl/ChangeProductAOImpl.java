@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IChangeProductAO;
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChangeProductBO;
@@ -20,8 +19,8 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
-import com.bh.mall.bo.IWareHouseBO;
-import com.bh.mall.bo.IWareHouseLogBO;
+import com.bh.mall.bo.IWareBO;
+import com.bh.mall.bo.IWareLogBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
@@ -36,7 +35,7 @@ import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
-import com.bh.mall.domain.WareHouse;
+import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627790Req;
 import com.bh.mall.dto.res.XN627805Res;
 import com.bh.mall.enums.EAccountStatus;
@@ -61,10 +60,10 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     IAgentBO agentBO;
 
     @Autowired
-    IWareHouseBO wareHouseBO;
+    IWareBO wareBO;
 
     @Autowired
-    IWareHouseLogBO wareHouseLogBO;
+    IWareLogBO wareLogBO;
 
     @Autowired
     IProductSpecsBO productSpecsBO;
@@ -90,14 +89,11 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     @Autowired
     IChargeBO chargeBO;
 
-    @Autowired
-    IAgencyLogBO agencyLogBO;
-
     @Override
     public String addChangeProduct(XN627790Req req) {
         Agent uData = agentBO.getAgent(req.getApplyUser());
-        WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
-            uData.getUserId(), req.getProductSpecsCode());
+        Ware whData = wareBO.getWareByProductSpec(uData.getUserId(),
+            req.getProductSpecsCode());
         if (whData == null) {
             throw new BizException("xn000", "您的仓库中没有该规格的产品");
         }
@@ -159,7 +155,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         data.setStatus(EChangeProductStatus.TO_CHANGE.getCode());
         changeProductBO.saveChangeProduct(data);
 
-        wareHouseBO.changeWareHouse(whData.getCode(),
+        wareBO.changeWare(whData.getCode(),
             -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCZH,
             "[" + product.getName() + "]申请置换为[" + changeProduct.getName() + "]",
             code);
@@ -251,15 +247,15 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
         int canChangeQuantity = (int) (data.getAmount()
                 / StringValidater.toLong(changePrice));
-        WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
-            data.getApplyUser(), data.getProductSpecsCode());
+        Ware whData = wareBO.getWareByProductSpec(data.getApplyUser(),
+            data.getProductSpecsCode());
 
-        String logCode = wareHouseLogBO.refreshChangePrice(data, whData,
+        String logCode = wareLogBO.refreshChangePrice(data, whData,
             StringValidater.toLong(changePrice), canChangeQuantity,
             data.getStatus(), "[" + data.getChangeProductName() + "]的换货价由["
                     + data.getChangePrice() + "]变为[" + changePrice + "]");
         whData.setLastChangeCode(logCode);
-        wareHouseBO.refreshLogCode(whData);
+        wareBO.refreshLogCode(whData);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setApproveNote(approveNote);
@@ -300,43 +296,42 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 -quantity, approver);
 
             // 云仓新增产品
-            WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
-                data.getApplyUser(), data.getChangeSpecsCode());
+            Ware whData = wareBO.getWareByProductSpec(data.getApplyUser(),
+                data.getChangeSpecsCode());
             if (whData == null) {
                 String whCode = OrderNoGenerater
-                    .generate(EGeneratePrefix.WareHouse.getCode());
-                WareHouse wareHouse = new WareHouse();
-                wareHouse.setCode(whCode);
-                wareHouse.setProductCode(data.getChangeProductCode());
-                wareHouse.setProductName(data.getChangeProductName());
-                wareHouse.setProductSpecsCode(data.getChangeSpecsCode());
-                wareHouse.setProductSpecsName(data.getChangeSpecsName());
+                    .generate(EGeneratePrefix.Ware.getCode());
+                Ware ware = new Ware();
+                ware.setCode(whCode);
+                ware.setProductCode(data.getChangeProductCode());
+                ware.setProductName(data.getChangeProductName());
+                ware.setProductSpecsCode(data.getChangeSpecsCode());
+                ware.setProductSpecsName(data.getChangeSpecsName());
 
-                wareHouse.setCurrency(ECurrency.YC_CNY.getCode());
-                wareHouse.setUserId(data.getApplyUser());
-                wareHouse.setRealName(data.getRealName());
-                wareHouse.setCreateDatetime(new Date());
+                ware.setCurrency(ECurrency.YC_CNY.getCode());
+                ware.setUserId(data.getApplyUser());
+                ware.setRealName(data.getRealName());
+                ware.setCreateDatetime(new Date());
                 ProductSpecsPrice pspData = productSpecsPriceBO.getPriceByLevel(
                     data.getChangeSpecsCode(), data.getLevel());
 
-                wareHouse.setPrice(pspData.getPrice());
+                ware.setPrice(pspData.getPrice());
 
-                wareHouse.setQuantity(data.getCanChangeQuantity());
+                ware.setQuantity(data.getCanChangeQuantity());
                 Long amount = data.getCanChangeQuantity() * pspData.getPrice();
-                wareHouse.setAmount(amount);
-                wareHouse.setLastChangeCode(data.getCode());
-                wareHouse.setStatus(EAccountStatus.NORMAL.getCode());
-                wareHouse.setCompanyCode(ESystemCode.BH.getCode());
-                wareHouse.setSystemCode(ESystemCode.BH.getCode());
-                wareHouseBO.saveWareHouse(wareHouse, data.getQuantity(),
-                    EBizType.AJ_YCZH,
+                ware.setAmount(amount);
+                ware.setLastChangeCode(data.getCode());
+                ware.setStatus(EAccountStatus.NORMAL.getCode());
+                ware.setCompanyCode(ESystemCode.BH.getCode());
+                ware.setSystemCode(ESystemCode.BH.getCode());
+                wareBO.saveWare(ware, data.getQuantity(), EBizType.AJ_YCZH,
                     "[" + data.getProductName() + "]置换为["
                             + data.getChangeProductName() + "]",
                     data.getCode());
             } else {
-                wareHouseBO.changeWareHouse(whData.getCode(),
-                    data.getQuantity(), EBizType.AJ_GMYC,
-                    EBizType.AJ_GMYC.getValue(), data.getCode());
+                wareBO.changeWare(whData.getCode(), data.getQuantity(),
+                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
+                    data.getCode());
             }
 
         }
@@ -368,8 +363,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     @Override
     public ChangeProduct getChangeProductMessage(XN627790Req req) {
         Agent uData = agentBO.getAgent(req.getApplyUser());
-        WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
-            uData.getUserId(), req.getProductSpecsCode());
+        Ware whData = wareBO.getWareByProductSpec(uData.getUserId(),
+            req.getProductSpecsCode());
         if (whData == null) {
             throw new BizException("xn000", "您的云仓中该规格的产品不存在");
         }
@@ -415,7 +410,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         // 门槛所需充值金额
         Long chargeAmount = 0L;
         String result = ECheckStatus.NORMAL.getCode();
-        String isWareHouse = EBoolean.YES.getCode();
+        String isWare = EBoolean.YES.getCode();
 
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
@@ -424,15 +419,15 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
             // 检查云仓红线
             Long whAmount = 0L;
-            List<WareHouse> list = wareHouseBO.getWareHouseByUser(userId);
-            for (WareHouse wareHouse : list) {
-                if (null != wareHouse.getAmount()) {
-                    whAmount = whAmount + wareHouse.getAmount();
+            List<Ware> list = wareBO.getWareByUser(userId);
+            for (Ware ware : list) {
+                if (null != ware.getAmount()) {
+                    whAmount = whAmount + ware.getAmount();
                 }
             }
 
             // 检查开启云仓代理的红线，
-            if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
+            if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
 
                 // 是否完成授权单
                 if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
@@ -454,16 +449,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             } else if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
                 user.getUserId(), user.getImpowerDatetime())) {
                 // 未完成授权单
-                // result = ECheckStatus.NO_WAREHOUSE.getCode();
                 result = ECheckStatus.RED_LOW.getCode();
             }
-
-            // 最后一条轨迹为升级时，检查升级单
-            // AgencyLog log = agencyLogBO.getAgencyLog(user.getLastAgentLog());
-            // if (EUserStatus.UPGRADED.getCode().equals(log.getStatus())) {
-            // amount = agent.getAmount();
-            // result = ECheckStatus.NO_Upgrae.getCode();
-            // }
 
             // 检查门槛余额
             Account account = accountBO.getAccountNocheck(user.getUserId(),
@@ -505,7 +492,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             }
             res = new XN627805Res(result, agent.getRedAmount(),
                 agent.getMinSurplus(), agent.getAmount(), chargeAmount,
-                user.getLevel(), isWareHouse);
+                user.getLevel(), isWare);
         }
         return res;
     }

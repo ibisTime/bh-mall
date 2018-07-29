@@ -5,7 +5,12 @@ import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
-//充值（2步骤）
+/**
+ * 充值订单
+ * @author: nyc 
+ * @since: 2018年7月29日 下午7:58:51 
+ * @history:
+ */
 public class Charge extends ABaseDO {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 

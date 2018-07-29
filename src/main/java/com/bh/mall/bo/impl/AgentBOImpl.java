@@ -19,8 +19,8 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.User;
-import com.bh.mall.enums.EAgencyType;
+import com.bh.mall.enums.EAgentType;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -543,11 +543,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public String refreshHighUser(Agent data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         Agent alData = new Agent();
         alData.setLastAgentLog(code);
         alData.setUserId(data.getUserId());
-        alData.setStatus(EAgencyType.Update.getCode());
+        alData.setStatus(EAgentType.Update.getCode());
         Date date = new Date();
         alData.setApplyDatetime(date);
         agentDAO.updateHigh(alData);
@@ -604,9 +604,18 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         }
     }
 
+    // TODO
     @Override
-    public User getTeamLeader(String teamName) {
-        return null;
+    public Agent getTeamLeader(String teamName) {
+        Agent condition = new Agent();
+        condition.setTeamName(teamName);
+        condition
+            .setLevel(StringValidater.toInteger(EAgentLevel.ONE.getCode()));
+        List<Agent> list = agentDAO.selectList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("xn00000", "该团队没有团队长");
+        }
+        return list.get(0);
     }
 
 }

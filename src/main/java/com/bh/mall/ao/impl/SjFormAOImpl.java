@@ -16,21 +16,21 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.ISjFormBO;
-import com.bh.mall.bo.IWareHouseBO;
+import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.SjForm;
-import com.bh.mall.domain.WareHouse;
+import com.bh.mall.domain.Ware;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -53,7 +53,7 @@ public class SjFormAOImpl implements ISjFormAO {
     private IAccountBO accountBO;
 
     @Autowired
-    IWareHouseBO wareHouseBO;
+    IWareBO wareBO;
 
     /*************** 升级申请 **********************/
     // 升级申请
@@ -95,8 +95,7 @@ public class SjFormAOImpl implements ISjFormAO {
         // 余额是否清零
         if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
             // 云仓是否有余额
-            List<WareHouse> list = wareHouseBO
-                .getWareHouseByUser(data.getUserId());
+            List<Ware> list = wareBO.getWareByUser(data.getUserId());
             if (CollectionUtils.isNotEmpty(list)) {
                 throw new BizException("xn00000", "本等级升级云仓中不允许有余额");
             }
@@ -268,28 +267,21 @@ public class SjFormAOImpl implements ISjFormAO {
         }
 
         List<SjForm> list = sjFormBO.queryUpLevelApplyList(condition);
-        for (SjForm agencyLog : list) {
+        for (SjForm sjFrom : list) {
             Agent userReferee = null;
-            Agent agent = agentAO.getAgent(agencyLog.getApplyUser());
-            agencyLog.setUser(agent);
-            /*
-             * if (StringUtils.isNotBlank(agencyLog.getUserReferee())) {
-             * userReferee = userAO.getAgent(agencyLog.getUserReferee()); if
-             * (userReferee != null) {
-             * agencyLog.setRefereeName(userReferee.getRealName()); }
-             */
+            Agent agent = agentAO.getAgent(sjFrom.getApplyUser());
+            sjFrom.setUser(agent);
             // 审核人 TODO
-            if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
-                agencyLog.setApprover(agencyLog.getApprover());
+            if (EUser.ADMIN.getCode().equals(sjFrom.getApprover())) {
+                sjFrom.setApprover(sjFrom.getApprover());
             } else {
-                if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-                    Agent aprrvoeName = agentAO
-                        .getAgent(agencyLog.getApprover());
+                if (StringUtils.isNotBlank(sjFrom.getApprover())) {
+                    Agent aprrvoeName = agentAO.getAgent(sjFrom.getApprover());
                     if (null != aprrvoeName) {
                         userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
-                            agencyLog.setApprover(userReferee.getRealName());
+                            sjFrom.setApprover(userReferee.getRealName());
                         }
                     }
                 }
@@ -354,29 +346,28 @@ public class SjFormAOImpl implements ISjFormAO {
         Agent agent = null;
         for (Iterator<SjForm> iterator = page.getList().iterator(); iterator
             .hasNext();) {
-            SjForm agencyLog = iterator.next();
-            agent = agentAO.getAgent(agencyLog.getApplyUser());
-            if (!agent.getLastAgentLog().equals(agencyLog.getCode())) {
+            SjForm agentLog = iterator.next();
+            agent = agentAO.getAgent(agentLog.getApplyUser());
+            if (!agent.getLastAgentLog().equals(agentLog.getCode())) {
                 iterator.remove();
                 continue;
             }
-            agencyLog.setUser(agent);
+            agentLog.setUser(agent);
             if (StringUtils.isNotBlank(agent.getUserReferee())) {
                 userReferee = agentAO.getAgent(agent.getUserReferee());
-                /// agencyLog.setRefereeName(userReferee.getRealName());
             }
             // 审核人
-            if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
-                agencyLog.setApprover(EUser.ADMIN.getCode());
+            if (EUser.ADMIN.getCode().equals(agentLog.getApprover())) {
+                agentLog.setApprover(EUser.ADMIN.getCode());
             } else {
-                if (StringUtils.isNotBlank(agencyLog.getApprover())) {
+                if (StringUtils.isNotBlank(agentLog.getApprover())) {
                     Agent aprrvoeName = agentAO
-                        .getAgent(agencyLog.getApprover());
+                        .getAgent(agentLog.getApprover());
                     if (null != aprrvoeName) {
                         userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
-                            agencyLog.setApprover(userReferee.getRealName());
+                            agentLog.setApprover(userReferee.getRealName());
                         }
                     }
                 }

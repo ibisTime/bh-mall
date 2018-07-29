@@ -5,7 +5,7 @@ import java.util.Date;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
-* 购物车
+* 内购订单
 * @author: chenshan 
 * @since: 2018-03-27 15:14:49
 * @history:

@@ -6,7 +6,7 @@ import java.util.List;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
- * 账户流水订单
+ * 账户流水
  * @author: xieyj 
  * @since: 2016年11月10日 下午5:48:27 
  * @history:
@@ -76,8 +76,6 @@ public class Jour extends ABaseDO {
     private List<String> bizTypeList;
 
     private Order orderInformation;
-
-    private User userInformation;
 
     // 查询条件1：创建起始时间
     private Date createDatetimeStart;
@@ -282,14 +280,6 @@ public class Jour extends ABaseDO {
 
     public void setOrderInformation(Order orderInformation) {
         this.orderInformation = orderInformation;
-    }
-
-    public User getUserInformation() {
-        return userInformation;
-    }
-
-    public void setUserInformation(User userInformation) {
-        this.userInformation = userInformation;
     }
 
     public String getKind() {

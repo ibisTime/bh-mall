@@ -10,7 +10,7 @@
 		<result column="red_amount" property="redAmount"/>
 		<result column="min_charge_amount" property="minChargeAmount"/>
 		<result column="min_surplus" property="minSurplus"/>
-		<result column="is_wareHouse" property="isWareHouse"/>
+		<result column="is_ware" property="isWare"/>
 		<result column="is_send" property="isSend"/>
 
 		<result column="is_company_approve" property="isCompanyApprove"/>
@@ -37,8 +37,8 @@
 			<if test="level != null and level !=''">
 				AND t.level = #{level}
 			</if>
-			<if test="isWareHouse != null and isWareHouse !=''">
-				AND t.is_wareHouse = #{isWareHouse}
+			<if test="isWare != null and isWare !=''">
+				AND t.is_ware = #{isWare}
 			</if>
 			<if test="isSend != null and isSend !=''">
 				AND t.is_send = #{isSend}
@@ -88,7 +88,7 @@
 		,t.red_amount
 		,t.min_charge_amount
 		,t.min_surplus
-		,t.is_wareHouse
+		,t.is_ware
 		,t.is_send
 		,t.updater
 		,t.update_datetime
@@ -129,7 +129,7 @@
 		,min_charge_amount=#{minChargeAmount}
 		
 		,min_surplus = #{minSurplus}
-		,is_wareHouse = #{isWareHouse}
+		,is_ware = #{isWare}
 		,is_send = #{isSend}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}

@@ -15,6 +15,8 @@ public class MiniCode extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
+    // **************db*************
+
     // 防伪码
     private String miniCode;
 
@@ -32,6 +34,9 @@ public class MiniCode extends ABaseDO {
 
     // 查询次数
     private Integer number;
+
+    // 生成批次
+    private String batch;
 
     // 生成时间
     private Date createDatetime;

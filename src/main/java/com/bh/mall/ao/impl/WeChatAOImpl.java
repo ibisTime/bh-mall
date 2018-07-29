@@ -19,13 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IUserAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChargeBO;
-import com.bh.mall.bo.ICompanyChannelBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IWeChatBO;
@@ -37,11 +35,12 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.domain.Charge;
-import com.bh.mall.domain.CompanyChannel;
 import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
+import com.bh.mall.enums.EPayType;
+import com.bh.mall.enums.ESysConfigType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.http.PostSimulater;
@@ -71,9 +70,6 @@ public class WeChatAOImpl implements IWeChatAO {
     IChargeBO chargeBO;
 
     @Autowired
-    ICompanyChannelBO companyChannelBO;
-
-    @Autowired
     IAccountBO accountBO;
 
     @Autowired
@@ -84,9 +80,6 @@ public class WeChatAOImpl implements IWeChatAO {
 
     @Autowired
     IAgentLevelBO agentLevelBO;
-
-    @Autowired
-    IUserAO userAO;
 
     @Override
     @Transactional
@@ -125,16 +118,12 @@ public class WeChatAOImpl implements IWeChatAO {
         if (StringUtils.isBlank(openId)) {
             throw new BizException("xn0000", "请先微信登录再支付");
         }
-        // 获取微信支付配置参数
-        String systemCode = ESystemCode.BH.getCode();
-        String companyCode = ESystemCode.BH.getCode();
-        CompanyChannel companyChannel = companyChannelBO
-            .getCompanyChannel(companyCode, systemCode, payType);
+        Map<String, String> sysConfig = sysConfigBO.getConfigsMap(payType);
         // 获取微信公众号支付prepayid
-        String prepayId = weChatBO.getPrepayIdH5(companyChannel, openId,
-            bizNote, refNo, transAmount, SysConstant.IP, backUrl);
+        String prepayId = weChatBO.getPrepayIdH5(sysConfig, openId, bizNote,
+            refNo, transAmount, SysConstant.IP, backUrl);
         // 返回微信APP支付所需信息
-        return weChatBO.getPayInfoH5(companyChannel, refNo, prepayId);
+        return weChatBO.getPayInfoH5(sysConfig, refNo, prepayId);
     }
 
     @Override
@@ -224,11 +213,25 @@ public class WeChatAOImpl implements IWeChatAO {
 
         String attach = map.get("attach");
         String[] codes = attach.split("\\|\\|");
-        CompanyChannel companyChannel = companyChannelBO
-            .getCompanyChannel(codes[0], codes[1], channelType);
+
+        Map<String, String> sysConfig = null;
+
+        if (EPayType.WEIXIN_H5.getCode().equals(channelType)) {
+            sysConfig = sysConfigBO
+                .getConfigsMap(ESysConfigType.WX_PAY.getCode());
+
+        } else {
+            sysConfig = sysConfigBO
+                .getConfigsMap(ESysConfigType.XCX_PAY.getCode());
+        }
+
+        if (null == sysConfig) {
+            throw new BizException("xn00000", "获取支付渠道异常");
+        }
+        String privateKey1 = sysConfig.get("private_key1");
 
         // 此处需要密钥PartnerKey，此处直接写死，自己的业务需要从持久化中获取此密钥，否则会报签名错误
-        orderQuery.setPartnerKey(companyChannel.getPrivateKey1());
+        orderQuery.setPartnerKey(privateKey1);
 
         Map<String, String> orderMap = orderQuery.reqOrderquery();
         // 此处添加支付成功后，支付金额和实际订单金额是否等价，防止钓鱼

@@ -21,7 +21,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627360 extends AProcessor {
 
-    private IYxFormAO agencyLogAO = SpringContextHolder
+    private IYxFormAO yxFormAO = SpringContextHolder
         .getBean(IYxFormAO.class);
 
     private XN627360Req req = null;
@@ -40,7 +40,7 @@ public class XN627360 extends AProcessor {
         condition.setApproveDatetimeStart(approveDatetimeStart);
         condition.setApproveDatetimeEnd(approveDatetimeEnd);
 
-        return agencyLogAO.queryAgentAllotList(condition);
+        return yxFormAO.queryAgentAllotList(condition);
     }
 
     @Override

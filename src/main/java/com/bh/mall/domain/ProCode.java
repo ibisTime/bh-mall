@@ -21,19 +21,21 @@ public class ProCode extends ABaseDO {
     // 状态（未使用，已使用）
     private String status;
 
+    // 生成批次
+    private String batch;
+
     // 生成时间
     private Date createDatetime;
 
     // 使用时间
     private Date useDatetime;
 
+    // *******************db***************
     // 状态List
     private List<String> statusList;
 
     // 关键字
     private String keyword;
-
-    // *******************db***************
 
     // 防伪、溯源码
     private List<MiniCode> stList;

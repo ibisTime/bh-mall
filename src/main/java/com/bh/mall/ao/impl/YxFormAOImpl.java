@@ -93,7 +93,7 @@ public class YxFormAOImpl implements IYxFormAO {
     /*************** 意向分配 **********************/
 
     @Override
-    public void allotAgency(String userId, String toUserId, String approver) {
+    public void allotAgent(String userId, String toUserId, String approver) {
 
         YxForm data = new YxForm();
         // set status
@@ -207,13 +207,13 @@ public class YxFormAOImpl implements IYxFormAO {
         Agent agent = null;
         for (Iterator<YxForm> iterator = page.getList().iterator(); iterator
             .hasNext();) {
-            YxForm agencyLog = iterator.next();
-            agent = agentAO.getAgent(agencyLog.getUserId());
-            if (!agent.getLastAgentLog().equals(agencyLog.getCode())) {
+            YxForm yxForm = iterator.next();
+            agent = agentAO.getAgent(yxForm.getUserId());
+            if (!agent.getLastAgentLog().equals(yxForm.getCode())) {
                 iterator.remove();
                 continue;
             }
-            agencyLog.setUser(agent);
+            yxForm.setUser(agent);
 
             // 审核人
 

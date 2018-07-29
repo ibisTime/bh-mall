@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IOrderBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -25,9 +24,6 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
 
     @Autowired
     IOrderDAO orderDAO;
-
-    @Autowired
-    IUserBO userBO;
 
     @Override
     public void saveOrder(Order data) {

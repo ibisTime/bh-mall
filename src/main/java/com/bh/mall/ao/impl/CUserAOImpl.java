@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.ICUserAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
-import com.bh.mall.bo.IAfterSaleBO;
-import com.bh.mall.bo.IAgencyLogBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -27,7 +25,7 @@ import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
-import com.bh.mall.bo.IWareHouseBO;
+import com.bh.mall.bo.IWareBO;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
@@ -66,10 +64,6 @@ public class CUserAOImpl implements ICUserAO {
     IAddressBO addressBO;
 
     @Autowired
-    IAgencyLogBO agencyLogBO;
-
-
-    @Autowired
     IAccountBO accountBO;
 
     @Autowired
@@ -79,17 +73,13 @@ public class CUserAOImpl implements ICUserAO {
     IInnerOrderBO innerOrderBO;
 
     @Autowired
-    IAfterSaleBO afterSaleBO;
-
-
-    @Autowired
     IIntroBO introBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;
 
     @Autowired
-    IWareHouseBO wareHouseBO;
+    IWareBO wareBO;
 
     @Autowired
     IReportBO reportBO;

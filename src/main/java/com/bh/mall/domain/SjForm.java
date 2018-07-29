@@ -4,6 +4,12 @@ import java.util.Date;
 
 import com.bh.mall.dao.base.ABaseDO;
 
+/**
+ * 代理升级单
+ * @author: nyc 
+ * @since: 2018年7月29日 下午8:03:07 
+ * @history:
+ */
 public class SjForm extends ABaseDO {
     private static final long serialVersionUID = 1L;
 

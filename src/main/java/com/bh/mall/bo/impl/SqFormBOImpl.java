@@ -28,7 +28,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     @Override
     public String toApply(SqForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());
@@ -47,7 +47,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     public String impowerApply(SqForm data) {
 
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.TO_APPROVE.getCode());
@@ -66,7 +66,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     @Override
     public String approveImpower(SqForm user) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
 
         alData.setCode(code);
@@ -86,7 +86,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     @Override
     public String cancelImpower(SqForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.CANCELED.getCode());
@@ -104,7 +104,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     @Override
     public String cancelImpower(SqForm data, String status) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.CANCELED.getCode());
@@ -122,13 +122,11 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     @Override
     public String addInfo(SqForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
 
-        // save new agencylog to buser
         SqForm buser = new SqForm();
         buser.setUserId(data.getUserId());
 
-        // add new impower apply log
         data.setCode(code);
         sqFormDAO.insert(data);
 
@@ -138,15 +136,13 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     /********************** 保存日志 ***************************/
 
     @Override
-    public String addImpowerApply(SqForm data) {
+    public String addSqForm(SqForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
 
-        // save new agencylog to buser
         SqForm buser = new SqForm();
         buser.setUserId(data.getUserId());
 
-        // add new impower apply log
         data.setCode(code);
         sqFormDAO.insert(data);
 
@@ -154,9 +150,9 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     }
 
     @Override
-    public String saveImpowerApply(SqForm data, String toUserId) {
+    public String saveSqForm(SqForm data, String toUserId) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());
@@ -173,7 +169,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     /********************** 查询 ***************************/
 
     @Override
-    public SqForm getImpowerApply(String code) {
+    public SqForm getSqForm(String code) {
         SqForm data = null;
         if (StringUtils.isNotBlank(code)) {
             SqForm condition = new SqForm();
@@ -187,7 +183,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     }
 
     @Override
-    public List<SqForm> queryImpowerApplyPage(int start, int limit,
+    public List<SqForm> querySqFormPage(int start, int limit,
             SqForm condition) {
         long totalCount = sqFormDAO.selectTotalCount(condition);
         Page<SqForm> page = new Page<SqForm>(start, limit, totalCount);
@@ -196,7 +192,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     }
 
     @Override
-    public List<SqForm> queryAgencyLogList(SqForm condition) {
+    public List<SqForm> querySqFormList(SqForm condition) {
         return sqFormDAO.selectList(condition);
     }
 

@@ -23,7 +23,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627359 extends AProcessor {
 
-    private IYxFormAO agencyLogAO = SpringContextHolder
+    private IYxFormAO yxFormAO = SpringContextHolder
         .getBean(IYxFormAO.class);
 
     private XN627359Req req = null;
@@ -51,7 +51,7 @@ public class XN627359 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agencyLogAO.queryAgentAllotPage(start, limit, condition);
+        return yxFormAO.queryAgentAllotPage(start, limit, condition);
     }
 
     @Override

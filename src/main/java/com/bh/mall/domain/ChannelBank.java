@@ -2,6 +2,12 @@ package com.bh.mall.domain;
 
 import com.bh.mall.dao.base.ABaseDO;
 
+/**
+ * 渠道银行
+ * @author: nyc 
+ * @since: 2018年7月29日 下午7:58:26 
+ * @history:
+ */
 public class ChannelBank extends ABaseDO {
 
     private static final long serialVersionUID = 1L;

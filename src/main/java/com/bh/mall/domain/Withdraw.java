@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.bh.mall.dao.base.ABaseDO;
 
-//取现（3步骤）
+//取现
 public class Withdraw extends ABaseDO {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IWeChatBO;
 import com.bh.mall.callback.CallbackBzdhConroller;
-import com.bh.mall.domain.CompanyChannel;
 import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EWeChatType;
 import com.bh.mall.util.wechat.MD5;
@@ -40,31 +39,30 @@ public class WeChatBOImpl implements IWeChatBO {
         .getLogger(CallbackBzdhConroller.class);
 
     @Override
-    public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
+    public String getPrepayIdH5(Map<String, String> sysConfig, String openId,
             String bizNote, String code, Long transAmount, String ip,
             String bizBackUrl) {
         logger.info("code:" + code);
         WXPrepay prePay = new WXPrepay();
-        prePay.setAppid(companyChannel.getPrivateKey2());// 微信支付分配的公众账号ID
-        prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
-        prePay.setBody(companyChannel.getCompanyName() + "-" + bizNote); // 商品描述
+        prePay.setAppid(sysConfig.get("private_key2"));// 微信支付分配的公众账号ID
+        prePay.setMch_id(sysConfig.get("company_code")); // 商户号
+        prePay.setBody(sysConfig.get("name") + "-" + bizNote); // 商品描述
         prePay.setOut_trade_no(code); // 订单号
         prePay.setTotal_fee(Long.toString(transAmount / 10)); // 订单总金额，厘转化成分
         prePay.setSpbill_create_ip(ip); // 用户IP
         prePay.setTrade_type(EWeChatType.JSAPI.getCode()); // 交易类型
         prePay.setNotify_url(bizBackUrl);// 回调地址
-        prePay.setPartnerKey(companyChannel.getPrivateKey1()); // 商户秘钥
+        prePay.setPartnerKey(sysConfig.get("private_key1")); // 商户秘钥
         prePay.setOpenid(openId); // 支付者openid
-        prePay.setAttach(companyChannel.getSystemCode() + "||"
-                + companyChannel.getCompanyCode() + "||" + bizBackUrl); // 附加字段，回调时返回
+        prePay.setAttach(bizBackUrl); // 附加字段，回调时返回
         return prePay.submitXmlGetPrepayId();
     }
 
     @Override
-    public XN627462Res getPayInfoH5(CompanyChannel companyChannel,
+    public XN627462Res getPayInfoH5(Map<String, String> sysConfig,
             String payCode, String prepayId) {
         SortedMap<String, String> nativeObj = new TreeMap<String, String>();
-        nativeObj.put("appId", companyChannel.getPrivateKey2());
+        nativeObj.put("appId", sysConfig.get("private_key2"));
         nativeObj.put("timeStamp", OrderUtil.GetTimestamp());
         Random random = new Random();
         String randomStr = MD5
@@ -74,7 +72,7 @@ public class WeChatBOImpl implements IWeChatBO {
         nativeObj.put("package", "prepay_id=" + prepayId);
         nativeObj.put("signType", "MD5");
         nativeObj.put("paySign",
-            createSign(nativeObj, companyChannel.getPrivateKey1()));
+            createSign(nativeObj, sysConfig.get("private_key1")));
 
         XN627462Res res = new XN627462Res();
         res.setPrepayId(prepayId);

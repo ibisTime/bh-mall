@@ -1,11 +1,11 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IWareHouseLogAO;
+import com.bh.mall.ao.IWareLogAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.domain.WareHouseLog;
+import com.bh.mall.domain.WareLog;
 import com.bh.mall.dto.req.XN627832Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -18,14 +18,14 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627832 extends AProcessor {
-    private IWareHouseLogAO wareHouseLogAO = SpringContextHolder
-        .getBean(IWareHouseLogAO.class);
+    private IWareLogAO wareLogAO = SpringContextHolder
+        .getBean(IWareLogAO.class);
 
     private XN627832Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        WareHouseLog condition = new WareHouseLog();
+        WareLog condition = new WareLog();
         condition.setKeyword(req.getKeyword());
         condition.setStatus(req.getStatus());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
@@ -33,7 +33,7 @@ public class XN627832 extends AProcessor {
         condition.setEndDatetime(
             DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));
 
-        return wareHouseLogAO.queryWareHouseLogList(condition);
+        return wareLogAO.queryWareLogList(condition);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IWareHouseAO;
+import com.bh.mall.ao.IWareAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.dto.req.XN627813Req;
@@ -16,14 +16,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627813 extends AProcessor {
 
-    private IWareHouseAO wareHouseAO = SpringContextHolder
-        .getBean(IWareHouseAO.class);
+    private IWareAO wareAO = SpringContextHolder
+        .getBean(IWareAO.class);
 
     private XN627813Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return wareHouseAO.getWareHouse(req.getCode());
+        return wareAO.getWare(req.getCode());
     }
 
     @Override

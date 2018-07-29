@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.User;
 import com.bh.mall.enums.EUserStatus;
 
 public interface IAgentBO extends IPaginableBO<Agent> {
@@ -122,6 +121,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public void checkTradePwd(String userId, String tradePwd);
 
-    public User getTeamLeader(String teamName);
+    public Agent getTeamLeader(String teamName);
 
 }

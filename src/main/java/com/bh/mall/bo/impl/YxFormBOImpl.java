@@ -16,7 +16,7 @@ import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.dao.IYxFormDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.YxForm;
-import com.bh.mall.enums.EAgencyType;
+import com.bh.mall.enums.EAgentType;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -33,7 +33,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String applyIntent(YxForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());
@@ -52,7 +52,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String ignore(YxForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.IGNORED.getCode()); // 已忽略
@@ -71,7 +71,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String acceptIntention(YxForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.TO_APPROVE.getCode()); // 等待授权审核
@@ -90,9 +90,8 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String addAgentAllot(YxForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
 
-        // save new agencylog to buser
         YxForm buser = new YxForm();
         Agent user = new Agent();
         buser.setUserId(data.getUserId());
@@ -107,12 +106,12 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String saveAgentAllot(YxForm data, String toUserId) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());
         alData.setToUserId(toUserId);
-        alData.setStatus(EAgencyType.Allot.getCode());
+        alData.setStatus(EAgentType.Allot.getCode());
         alData.setUserId(data.getUserId());
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setApproveDatetime(data.getApproveDatetime());
@@ -163,11 +162,11 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String refreshHighUser(YxForm data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgencyLog.getCode());
+            .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
         alData.setCode(code);
         alData.setUserId(data.getUserId());
-        alData.setStatus(EAgencyType.Update.getCode());
+        alData.setStatus(EAgentType.Update.getCode());
         Date date = new Date();
         alData.setApplyDatetime(date);
         agentAllotDAO.insert(alData);
