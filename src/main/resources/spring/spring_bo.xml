@@ -109,8 +109,8 @@
 	</bean>
 	
 	
-	<bean id="introBO" class="com.bh.mall.bo.impl.IntroBOImpl">
-		<property name="paginableDAO" ref="introDAOImpl"></property>
+	<bean id="jsAwardBO" class="com.bh.mall.bo.impl.JsAwardBOImpl">
+		<property name="paginableDAO" ref="jsAwardDAOImpl"></property>
 	</bean>
 	
 	<bean id="wareBO" class="com.bh.mall.bo.impl.WareBOImpl">
@@ -129,8 +129,8 @@
 		<property name="paginableDAO" ref="reportDAOImpl"/>
 	</bean>
 	
-	<bean id="awardIntervalBO" class="com.bh.mall.bo.impl.AwardIntervalBOImpl">
-		<property name="paginableDAO" ref="awardIntervalDAOImpl"/>
+	<bean id="chAwardBO" class="com.bh.mall.bo.impl.ChAwardBOImpl">
+		<property name="paginableDAO" ref="chAwardDAOImpl"/>
 	</bean>	
 	<bean id="proCodeBO" class="com.bh.mall.bo.impl.ProCodeBOImpl">
 		<property name="paginableDAO" ref="proCodeDAOImpl"/>

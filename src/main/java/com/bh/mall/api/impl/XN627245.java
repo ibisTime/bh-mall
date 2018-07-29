@@ -2,11 +2,11 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IIntroAO;
+import com.bh.mall.ao.IJsAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Intro;
+import com.bh.mall.domain.JsAward;
 import com.bh.mall.dto.req.XN627245Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -19,22 +19,22 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627245 extends AProcessor {
-    private IIntroAO introAO = SpringContextHolder.getBean(IIntroAO.class);
+    private IJsAwardAO jsAwardAO = SpringContextHolder.getBean(IJsAwardAO.class);
 
     private XN627245Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Intro condition = new Intro();
+        JsAward condition = new JsAward();
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = IIntroAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IJsAwardAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return introAO.queryIntroPage(start, limit, condition);
+        return jsAwardAO.queryJsAwardPage(start, limit, condition);
     }
 
     @Override

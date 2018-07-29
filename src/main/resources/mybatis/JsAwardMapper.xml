@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.IAwardIntervalDAO">
-	<resultMap id="awardInterval_DB_Result" type="awardInterval">
+<mapper namespace="com.bh.mall.dao.IJsAwardDAO">
+	<resultMap id="jsAward_DB_Result" type="jsAward">
 		<result column="code" property="code" />
 		<result column="level" property="level" />
-		<result column="start_amount" property="startAmount" />
-		<result column="end_amount" property="endAmount" />
+		<result column="intro_level" property="introLevel" />
 		<result column="percent" property="percent" />
-		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -21,25 +19,22 @@
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
 			</if>
-			<if test="amount != null and amount != '' ">
-				<![CDATA[AND t.start_amount <  #{amount} AND t.end_amount >= #{amount} ]]>
+			<if test="introLevel != null and introLevel != '' ">
+				AND t.intro_level = #{introLevel}
 			</if>
-			
 		</trim>
 	</sql>
-	<select id="select_awardInterval" parameterType="awardInterval" resultMap="awardInterval_DB_Result">
+	<select id="select_jsAward" parameterType="jsAward" resultMap="jsAward_DB_Result">
 		SELECT
 		t.code
 		,t.level
-		,t.start_amount
-		,t.end_amount
+		,t.intro_level
 		,t.percent
-		
 		,t.updater
 		,t.update_datetime
 		,t.remark
 		FROM
-		tbh_ch_award t
+		tbh_js_award t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -48,55 +43,49 @@
 		</trim>
 	</select>
 
-	<select id="select_awardInterval_count" parameterType="awardInterval"
+	<select id="select_jsAward_count" parameterType="jsAward"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_ch_award t
+		SELECT count(1) FROM tbh_js_award t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_awardInterval" parameterType="awardInterval">
+	<insert id="insert_jsAward" parameterType="jsAward">
 		INSERT INTO
-		tbh_ch_award(
+		tbh_js_award(
 		code
 		,level
-		,start_amount
-		,end_amount
+		,intro_level
 		,percent
-		
-		,updater         
-		,update_datetime 
-		,remark          
+		,updater
+		,update_datetime
+		,remark
 		)
 		VALUES(
 		#{code}
 		,#{level}
-		,#{startAmount}
-		,#{endAmount}
+		,#{introLevel}
 		,#{percent}
-		
-		,#{updater}        
-		,#{updateDatetime} 
-		,#{remark}          
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
 		)
 	</insert>
 
-	<update id="update_awardInterval" parameterType="awardInterval">
-		UPDATE tbh_ch_award
+	<update id="update_jsAward" parameterType="jsAward">
+		UPDATE tbh_js_award
 		SET
 		level = #{level}
-		,start_amount = #{startAmount}
-		,end_amount = #{endAmount}
+		,intro_level = #{introLevel}
 		,percent = #{percent}
-		
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
-	<delete id="delete_awardInterval" parameterType="awardInterval">
-		DELETE FROM 
-		tbh_ch_award
+	<delete id="delete_jsAward">
+		DELETE FROM  
+		tbh_js_award
 		WHERE 
 		code = #{code}
 	</delete>

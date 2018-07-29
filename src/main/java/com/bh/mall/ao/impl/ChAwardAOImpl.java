@@ -6,33 +6,33 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bh.mall.ao.IAwardIntervalAO;
-import com.bh.mall.bo.IAwardIntervalBO;
+import com.bh.mall.ao.IChAwardAO;
+import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.AwardInterval;
+import com.bh.mall.domain.ChAward;
 import com.bh.mall.dto.req.XN627862Req;
 import com.bh.mall.exception.BizException;
 
 //CHECK ��鲢��ע�� 
 @Service
-public class AwardIntervalAOImpl implements IAwardIntervalAO {
+public class ChAwardAOImpl implements IChAwardAO {
 
     @Autowired
-    private IAwardIntervalBO awardIntervalBO;
+    private IChAwardBO chAwardBO;
 
     @Override
-    public String addAwardInterval(String level, Long startAmount,
-            Long endAmount, String percent, String updater, String remark) {
+    public String addChAward(String level, Long startAmount, Long endAmount,
+            String percent, String updater, String remark) {
         if (endAmount < startAmount) {
             throw new BizException("xn00000", "起始金额不能大于截止金额");
         }
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AwardInterval.getCode());
-        AwardInterval data = new AwardInterval();
+        ChAward data = new ChAward();
         data.setCode(code);
         data.setLevel(StringValidater.toInteger(level));
         data.setStartAmount(startAmount);
@@ -44,19 +44,19 @@ public class AwardIntervalAOImpl implements IAwardIntervalAO {
         data.setUpdateDatetime(date);
 
         data.setRemark(remark);
-        awardIntervalBO.saveAwardInterval(data);
+        chAwardBO.saveChAward(data);
         return code;
     }
 
     @Override
-    public void editAwardInterval(XN627862Req req) {
+    public void editChAward(XN627862Req req) {
         Long startAmount = StringValidater.toLong(req.getStartAmount());
         Long endAmount = StringValidater.toLong(req.getEndAmount());
         if (endAmount < startAmount) {
             throw new BizException("xn00000", "起始金额不能大于截止金额");
         }
 
-        AwardInterval data = awardIntervalBO.getAwardInterval(req.getCode());
+        ChAward data = chAwardBO.getChAward(req.getCode());
         data.setStartAmount(startAmount);
         data.setEndAmount(endAmount);
         data.setPercent(StringValidater.toDouble(req.getPercent()));
@@ -65,28 +65,28 @@ public class AwardIntervalAOImpl implements IAwardIntervalAO {
         Date date = new Date();
         data.setUpdateDatetime(date);
         data.setRemark(req.getRemark());
-        awardIntervalBO.refreshAwardInterval(data);
+        chAwardBO.refreshChAward(data);
     }
 
     @Override
-    public void dropAwardInterval(String code) {
-        AwardInterval data = awardIntervalBO.getAwardInterval(code);
-        awardIntervalBO.removeAwardInterval(data);
+    public void dropChAward(String code) {
+        ChAward data = chAwardBO.getChAward(code);
+        chAwardBO.removeChAward(data);
     }
 
     @Override
-    public Paginable<AwardInterval> queryAwardIntervalPage(int start, int limit,
-            AwardInterval condition) {
-        return awardIntervalBO.getPaginable(start, limit, condition);
+    public Paginable<ChAward> queryChAwardPage(int start, int limit,
+            ChAward condition) {
+        return chAwardBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<AwardInterval> queryAwardIntervalList(AwardInterval condition) {
-        return awardIntervalBO.queryAwardIntervalList(condition);
+    public List<ChAward> queryChAwardList(ChAward condition) {
+        return chAwardBO.queryChAwardList(condition);
     }
 
     @Override
-    public AwardInterval getAwardInterval(String code) {
-        return awardIntervalBO.getAwardInterval(code);
+    public ChAward getChAward(String code) {
+        return chAwardBO.getChAward(code);
     }
 }

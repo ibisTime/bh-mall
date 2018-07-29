@@ -37,7 +37,7 @@
 		<typeAlias alias="order" type="com.bh.mall.domain.Order"/>
 		<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
 
-		<typeAlias alias="intro" type="com.bh.mall.domain.Intro"/>
+		<typeAlias alias="jsAward" type="com.bh.mall.domain.JsAward"/>
 		<typeAlias alias="ware" type="com.bh.mall.domain.Ware"/>
 		<typeAlias alias="wareLog" type="com.bh.mall.domain.WareLog"/>
 		<typeAlias alias="changeProduct" type="com.bh.mall.domain.ChangeProduct"/>
@@ -45,7 +45,7 @@
 		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
 		<typeAlias alias="report" type="com.bh.mall.domain.Report"/>
 		
-		<typeAlias alias="awardInterval" type="com.bh.mall.domain.AwardInterval"/>
+		<typeAlias alias="chAward" type="com.bh.mall.domain.ChAward"/>
 		<typeAlias alias="miniCode" type="com.bh.mall.domain.MiniCode"/>
 		<typeAlias alias="proCode" type="com.bh.mall.domain.ProCode"/>
 		

@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IIntroAO;
+import com.bh.mall.ao.IJsAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -16,13 +16,13 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627247 extends AProcessor {
-    private IIntroAO introAO = SpringContextHolder.getBean(IIntroAO.class);
+    private IJsAwardAO jsAwardAO = SpringContextHolder.getBean(IJsAwardAO.class);
 
     private XN627247Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return introAO.getIntro(req.getCode());
+        return jsAwardAO.getJsAward(req.getCode());
     }
 
     @Override

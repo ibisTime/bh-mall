@@ -2,12 +2,12 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IAwardIntervalAO;
+import com.bh.mall.ao.IChAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.AwardInterval;
+import com.bh.mall.domain.ChAward;
 import com.bh.mall.dto.req.XN627865Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -21,27 +21,27 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627865 extends AProcessor {
 
-    private IAwardIntervalAO awardIntervalAO = SpringContextHolder
-        .getBean(IAwardIntervalAO.class);
+    private IChAwardAO chAwardAO = SpringContextHolder
+        .getBean(IChAwardAO.class);
 
     private XN627865Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        AwardInterval condition = new AwardInterval();
+        ChAward condition = new ChAward();
         if (StringUtils.isNotBlank(req.getLevel())) {
             condition.setLevel(StringValidater.toInteger(req.getLevel()));
         }
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IAwardIntervalAO.DEFAULT_ORDER_COLUMN;
+            column = IChAwardAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return awardIntervalAO.queryAwardIntervalPage(start, limit, condition);
+        return chAwardAO.queryChAwardPage(start, limit, condition);
     }
 
     @Override

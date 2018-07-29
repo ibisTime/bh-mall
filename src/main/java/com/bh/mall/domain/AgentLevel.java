@@ -61,10 +61,8 @@ public class AgentLevel extends ABaseDO {
 
     private Integer impowerAmount;
 
-    private Integer min_charge;
-
     // 本等级是否可被介绍
-    private String isIntro;
+    private String isJsAward;
 
     // 本等级授权充值门槛
     private Long minCharge;
@@ -99,12 +97,12 @@ public class AgentLevel extends ABaseDO {
         this.isIntent = isIntent;
     }
 
-    public String getIsIntro() {
-        return isIntro;
+    public String getIsJsAward() {
+        return isJsAward;
     }
 
-    public void setIsIntro(String isIntro) {
-        this.isIntro = isIntro;
+    public void setIsJsAward(String isJsAward) {
+        this.isJsAward = isJsAward;
     }
 
     public Long getMinCharge() {
@@ -265,14 +263,6 @@ public class AgentLevel extends ABaseDO {
 
     public void setImpowerAmount(Integer impowerAmount) {
         this.impowerAmount = impowerAmount;
-    }
-
-    public Integer getMin_charge() {
-        return min_charge;
-    }
-
-    public void setMin_charge(Integer min_charge) {
-        this.min_charge = min_charge;
     }
 
 }

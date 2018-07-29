@@ -19,7 +19,7 @@ import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IInnerOrderBO;
-import com.bh.mall.bo.IIntroBO;
+import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
@@ -91,7 +91,7 @@ public class AgentAOImpl implements IAgentAO {
     IInnerOrderBO innerOrderBO;
 
     @Autowired
-    IIntroBO introBO;
+    IJsAwardBO jsAwardBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;

@@ -2,11 +2,11 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IAwardIntervalAO;
+import com.bh.mall.ao.IChAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.AwardInterval;
+import com.bh.mall.domain.ChAward;
 import com.bh.mall.dto.req.XN627866Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -20,22 +20,22 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627866 extends AProcessor {
 
-    private IAwardIntervalAO awardIntervalAO = SpringContextHolder
-        .getBean(IAwardIntervalAO.class);
+    private IChAwardAO chAwardAO = SpringContextHolder
+        .getBean(IChAwardAO.class);
 
     private XN627866Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        AwardInterval condition = new AwardInterval();
+        ChAward condition = new ChAward();
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IAwardIntervalAO.DEFAULT_ORDER_COLUMN;
+            column = IChAwardAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
-        return awardIntervalAO.queryAwardIntervalList(condition);
+        return chAwardAO.queryChAwardList(condition);
     }
 
     @Override

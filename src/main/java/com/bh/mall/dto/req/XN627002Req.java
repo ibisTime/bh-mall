@@ -70,7 +70,7 @@ public class XN627002Req {
     private String isIntent;
 
     // 是否可以被介绍 （必填）
-    private String isIntro;
+    private String isJsAward;
 
     // 是否需要实名 （必填）
     private String isRealName;
@@ -120,12 +120,12 @@ public class XN627002Req {
         this.isIntent = isIntent;
     }
 
-    public String getIsIntro() {
-        return isIntro;
+    public String getIsJsAward() {
+        return isJsAward;
     }
 
-    public void setIsIntro(String isIntro) {
-        this.isIntro = isIntro;
+    public void setIsJsAward(String isJsAward) {
+        this.isJsAward = isJsAward;
     }
 
     public String getIsRealName() {

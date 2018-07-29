@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAwardIntervalAO;
+import com.bh.mall.ao.IChAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.dto.req.XN627867Req;
@@ -16,14 +16,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627867 extends AProcessor {
 
-    private IAwardIntervalAO awardIntervalAO = SpringContextHolder
-        .getBean(IAwardIntervalAO.class);
+    private IChAwardAO chAwardAO = SpringContextHolder
+        .getBean(IChAwardAO.class);
 
     private XN627867Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return awardIntervalAO.getAwardInterval(req.getCode());
+        return chAwardAO.getChAward(req.getCode());
     }
 
     @Override

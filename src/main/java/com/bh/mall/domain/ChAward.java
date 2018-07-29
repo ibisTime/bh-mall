@@ -10,7 +10,7 @@ import com.bh.mall.dao.base.ABaseDO;
 * @since: 2018-06-28 16:54:46
 * @history:
 */
-public class AwardInterval extends ABaseDO {
+public class ChAward extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 

@@ -7,66 +7,66 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IIntroBO;
+import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.dao.IIntroDAO;
-import com.bh.mall.domain.Intro;
+import com.bh.mall.dao.IJsAwardDAO;
+import com.bh.mall.domain.JsAward;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
+public class JsAwardBOImpl extends PaginableBOImpl<JsAward> implements IJsAwardBO {
 
     @Autowired
-    private IIntroDAO introDAO;
+    private IJsAwardDAO jsAwardDAO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;
 
     @Override
-    public boolean isIntroExist(String code) {
-        Intro condition = new Intro();
+    public boolean isJsAwardExist(String code) {
+        JsAward condition = new JsAward();
         condition.setCode(code);
-        if (introDAO.selectTotalCount(condition) > 0) {
+        if (jsAwardDAO.selectTotalCount(condition) > 0) {
             return true;
         }
         return false;
     }
 
     @Override
-    public String saveIntro(Intro data) {
+    public String saveJsAward(JsAward data) {
         String code = null;
         if (data != null) {
             code = OrderNoGenerater.generate(EGeneratePrefix.Intro.getCode());
             data.setCode(code);
-            introDAO.insert(data);
+            jsAwardDAO.insert(data);
         }
         return code;
     }
 
     @Override
-    public void removeIntro(Intro data) {
-        introDAO.delete(data);
+    public void removeJsAward(JsAward data) {
+        jsAwardDAO.delete(data);
     }
 
     @Override
-    public void refreshIntro(Intro data) {
-        introDAO.update(data);
+    public void refreshJsAward(JsAward data) {
+        jsAwardDAO.update(data);
     }
 
     @Override
-    public List<Intro> queryIntroList(Intro condition) {
-        return introDAO.selectList(condition);
+    public List<JsAward> queryJsAwardList(JsAward condition) {
+        return jsAwardDAO.selectList(condition);
     }
 
     @Override
-    public Intro getIntro(String code) {
-        Intro data = null;
+    public JsAward getJsAward(String code) {
+        JsAward data = null;
         if (StringUtils.isNotBlank(code)) {
-            Intro condition = new Intro();
+            JsAward condition = new JsAward();
             condition.setCode(code);
-            data = introDAO.select(condition);
+            data = jsAwardDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "介绍奖励不存在");
             }
@@ -75,18 +75,18 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
     }
 
     @Override
-    public Intro getIntroByLevel(Integer level) {
-        Intro condition = new Intro();
+    public JsAward getJsAwardByLevel(Integer level) {
+        JsAward condition = new JsAward();
         condition.setLevel(level);
-        return introDAO.select(condition);
+        return jsAwardDAO.select(condition);
     }
 
     @Override
-    public Intro getIntroByLevel(Integer fromLevel, Integer toLevel) {
-        Intro condition = new Intro();
+    public JsAward getJsAwardByLevel(Integer fromLevel, Integer toLevel) {
+        JsAward condition = new JsAward();
         condition.setLevel(fromLevel);
         condition.setLevel(toLevel);
-        Intro data = introDAO.select(condition);
+        JsAward data = jsAwardDAO.select(condition);
         return data;
     }
 }

@@ -20,7 +20,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAwardBO;
-import com.bh.mall.bo.IAwardIntervalBO;
+import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IMiniCodeBO;
 import com.bh.mall.bo.IOrderBO;
@@ -42,7 +42,7 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Award;
-import com.bh.mall.domain.AwardInterval;
+import com.bh.mall.domain.ChAward;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.MiniCode;
 import com.bh.mall.domain.Order;
@@ -126,7 +126,7 @@ public class OrderAOImpl implements IOrderAO {
     IAgentLevelBO agentLevelBO;
 
     @Autowired
-    IAwardIntervalBO awardIntervalBO;
+    IChAwardBO chAwardBO;
 
     @Autowired
     IProCodeBO proCodeBO;
@@ -599,7 +599,7 @@ public class OrderAOImpl implements IOrderAO {
         // **********出货奖*******
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
-            AwardInterval award = awardIntervalBO.getAwardIntervalByLevel(
+            ChAward award = chAwardBO.getChAwardByLevel(
                 applyUser.getLevel(), data.getAmount());
             if (award != null) {
                 Long awardAmount = AmountUtil.mul(orderAmount,

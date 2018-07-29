@@ -19,69 +19,62 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
 
     @Autowired
     IAgentLevelBO agentLevelBO;
-    
+
     /**
      * 627002_修改代理管理
      */
     @Override
     public void editAgentLevel(XN627002Req req) {
-    	 AgentLevel data = agentLevelBO.getAgentLevel(req.getCode());
-    	    /*if() {
-    	    	
-    	    }*/
-    	        data.setName(req.getName());
-    	        data.setLevel(Integer.valueOf(req.getLevel()));
-    	        data.setAmount(StringValidater.toLong(req.getAmount()));
-    	        data.setRedAmount(StringValidater.toLong(req.getRedAmount()));
-    	        
-    	        data.setMinChargeAmount(
-    	            StringValidater.toLong(req.getMinChargeAmount()));
-    	        data.setMinSurplus(StringValidater.toLong(req.getMinSurplus()));
-    	        data.setIsSend(req.getIsSend());
-    	        data.setIsWare(req.getIsWare());
-    	        data.setIsCompanyApprove(req.getIsCompanyApprove());
-    	       
-    	       
-    	        
-    	        
-    	        data.setReNumber(Integer.valueOf(req.getReNumber()));
-    	        data.setIsIntent(req.getIsIntent());
-    	        data.setIsReset(req.getIsReset());
-    	        data.setIsRealName(req.getIsRealName());
-    	        data.setIsCompanyImpower(req.getIsCompanyImpower());
-    	        
-    	        data.setImpowerAmount(Integer.valueOf(req.getImpowerAmount()));
-    	        data.setMin_charge(Integer.valueOf(req.getMinCharge()));
-    	        data.setIsIntro(req.getIsIntro());
-    	        data.setMinCharge(Long.valueOf(req.getMinCharge()));
-    	        
-    	    
-    	       
-    	        data.setUpdater(req.getUpdater());
-    	        data.setUpdateDatetime(new Date());
-    	        data.setRemark(req.getRemark());
-    	        agentLevelBO.editAgent(data);
+        AgentLevel data = agentLevelBO.getAgentLevel(req.getCode());
+        /*
+         * if() { }
+         */
+        data.setName(req.getName());
+        data.setLevel(Integer.valueOf(req.getLevel()));
+        data.setAmount(StringValidater.toLong(req.getAmount()));
+        data.setRedAmount(StringValidater.toLong(req.getRedAmount()));
+
+        data.setMinChargeAmount(
+            StringValidater.toLong(req.getMinChargeAmount()));
+        data.setMinSurplus(StringValidater.toLong(req.getMinSurplus()));
+        data.setIsSend(req.getIsSend());
+        data.setIsWare(req.getIsWare());
+        data.setIsCompanyApprove(req.getIsCompanyApprove());
+
+        data.setReNumber(Integer.valueOf(req.getReNumber()));
+        data.setIsIntent(req.getIsIntent());
+        data.setIsReset(req.getIsReset());
+        data.setIsRealName(req.getIsRealName());
+        data.setIsCompanyImpower(req.getIsCompanyImpower());
+
+        data.setImpowerAmount(Integer.valueOf(req.getImpowerAmount()));
+        data.setIsJsAward(req.getIsJsAward());
+        data.setMinCharge(Long.valueOf(req.getMinCharge()));
+
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+        agentLevelBO.editAgent(data);
     }
-    
-    
+
     /**
      * 627005_分页查询代理管理
      */
     @Override
     public Paginable<AgentLevel> queryAgentListPage(int start, int limit,
             AgentLevel condition) {
-        Paginable<AgentLevel> page = agentLevelBO.getPaginable(start, limit, condition);
+        Paginable<AgentLevel> page = agentLevelBO.getPaginable(start, limit,
+            condition);
         for (AgentLevel agent : page.getList()) {
-        	//6代表c端用户
+            // 6代表c端用户
             if (6 != agent.getLevel()) {
-            	AgentLevel impower = agentLevelBO
+                AgentLevel impower = agentLevelBO
                     .getAgentByLevel(agent.getLevel());
                 agent.setIsRealName(impower.getIsRealName());
             }
         }
         return page;
     }
-    
 
     /**
      * 627006_列表查询代理管理
@@ -90,18 +83,16 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
     public List<AgentLevel> queryAgentList(AgentLevel condition) {
         List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
         for (AgentLevel agent : list) {
-        	//6代表c端用户
+            // 6代表c端用户
             if (6 != agent.getLevel()) {
-            	AgentLevel impower = agentLevelBO
+                AgentLevel impower = agentLevelBO
                     .getAgentByLevel(agent.getLevel());
                 agent.setIsRealName(impower.getIsRealName());
             }
         }
         return list;
     }
-    
-    
-    
+
     /**
      * 627007_详情查询代理管理
      */
@@ -109,15 +100,15 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
     public AgentLevel getAgentLevel(String code) {
         return agentLevelBO.getAgentLevel(code);
     }
-    
-    
+
     /**
      * 627008_无C端等级
      */
     @Override
     public Object queryAgentNoCList(AgentLevel condition) {
         List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
-        for (Iterator<AgentLevel> iterator = list.iterator(); iterator.hasNext();) {
+        for (Iterator<AgentLevel> iterator = list.iterator(); iterator
+            .hasNext();) {
             AgentLevel agent = iterator.next();
             if (6 == agent.getLevel()) {
                 iterator.remove();

@@ -6,31 +6,31 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bh.mall.ao.IIntroAO;
-import com.bh.mall.bo.IIntroBO;
+import com.bh.mall.ao.IJsAwardAO;
+import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Intro;
+import com.bh.mall.domain.JsAward;
 import com.bh.mall.dto.req.XN627241Req;
 import com.bh.mall.exception.BizException;
 
 @Service
-public class IntroAOImpl implements IIntroAO {
+public class JsAwardAOImpl implements IJsAwardAO {
 
     @Autowired
-    private IIntroBO introBO;
+    private IJsAwardBO jsAwardBO;
 
     @Override
-    public String addIntro(String level, String introLevel, String percent,
+    public String addJsAward(String level, String introLevel, String percent,
             String updater, String remark) {
         if (StringValidater.toInteger(introLevel) >= StringValidater
             .toInteger(level)) {
             throw new BizException("xn00000", "可介绍的等级不能低于本等级");
         }
 
-        Intro data = new Intro();
+        JsAward data = new JsAward();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Intro.getCode());
         data.setCode(code);
@@ -42,40 +42,40 @@ public class IntroAOImpl implements IIntroAO {
         Date date = new Date();
         data.setUpdateDatetime(date);
         data.setRemark(remark);
-        introBO.saveIntro(data);
+        jsAwardBO.saveJsAward(data);
 
         return code;
     }
 
     @Override
-    public void editIntro(XN627241Req req) {
-        Intro data = introBO.getIntro(req.getCode());
+    public void editJsAward(XN627241Req req) {
+        JsAward data = jsAwardBO.getJsAward(req.getCode());
         data.setPercent(StringValidater.toDouble(req.getPercent()));
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
-        introBO.refreshIntro(data);
+        jsAwardBO.refreshJsAward(data);
     }
 
     @Override
-    public void dropIntro(String code) {
-        Intro data = introBO.getIntro(code);
-        introBO.removeIntro(data);
+    public void dropJsAward(String code) {
+        JsAward data = jsAwardBO.getJsAward(code);
+        jsAwardBO.removeJsAward(data);
     }
 
     @Override
-    public Paginable<Intro> queryIntroPage(int start, int limit,
-            Intro condition) {
-        return introBO.getPaginable(start, limit, condition);
+    public Paginable<JsAward> queryJsAwardPage(int start, int limit,
+            JsAward condition) {
+        return jsAwardBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Intro> queryIntroList(Intro condition) {
-        return introBO.queryIntroList(condition);
+    public List<JsAward> queryJsAwardList(JsAward condition) {
+        return jsAwardBO.queryJsAwardList(condition);
     }
 
     @Override
-    public Intro getIntro(String code) {
-        return introBO.getIntro(code);
+    public JsAward getJsAward(String code) {
+        return jsAwardBO.getJsAward(code);
     }
 }

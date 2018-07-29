@@ -27,7 +27,7 @@ public class Award extends ABaseDO {
     // 等级
     private Integer level;
 
-    // 直接推荐/出货奖励
+    // 直接推荐
     private Double value1;
 
     // 间接推荐奖励
