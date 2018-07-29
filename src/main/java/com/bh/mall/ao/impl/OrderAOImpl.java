@@ -222,6 +222,7 @@ public class OrderAOImpl implements IOrderAO {
                     throw new BizException("xn00000", agent.getName()
                             + "授权单金额为[" + agent.getAmount() / 1000 + "]元");
                 }
+
             } else {
                 kind = EOrderKind.Normal_Order.getCode();
             }
@@ -265,7 +266,6 @@ public class OrderAOImpl implements IOrderAO {
                     / psData.getSingleNumber();
 
             for (int i = 0; i < singleNumber; i++) {
-
                 String orderCode = this.addOrder(applyUser, pData, psData,
                     psData.getSingleNumber(), req.getApplyNote(),
                     req.getSigner(), req.getMobile(), req.getProvince(),
@@ -274,7 +274,6 @@ public class OrderAOImpl implements IOrderAO {
                 list.add(orderCode);
             }
         } else {
-
             String orderCode = this.addOrder(applyUser, pData, psData,
                 StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
@@ -1075,12 +1074,14 @@ public class OrderAOImpl implements IOrderAO {
 
             // 检查是否可购买
             if (EBoolean.NO.getCode().equals(pspData.getIsBuy())) {
+
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
 
             // 未开启云仓，计算与运费
             Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
             if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
+
                 // 产品不包邮，计算运费
                 if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
                     SYSConfig sysConfig = sysConfigBO.getConfig(province,
