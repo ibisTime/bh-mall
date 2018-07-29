@@ -3,6 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bh.mall.dao.IAgentLevelDAO">
 	<resultMap id="agentLevel_DB_Result" type="agentLevel">
+		<result column="code" property="code"/>
 		<result column="level" property="level"/>
 		<result column="name" property="name"/>
 		<result column="amount" property="amount"/>
@@ -11,12 +12,7 @@
 		<result column="min_surplus" property="minSurplus"/>
 		<result column="is_wareHouse" property="isWareHouse"/>
 		<result column="is_send" property="isSend"/>
-		<result column="updater" property="updater"/>
-		<result column="update_datetime" property="updateDatetime"/>
-		<result column="remark" property="remark"/>
-		
-		<!-- 。。。 -->
-		<result column="code" property="code"/>
+
 		<result column="is_company_approve" property="isCompanyApprove"/>
 		<result column="re_number" property="reNumber"/>
 		<result column="is_reset" property="isReset"/>
@@ -27,6 +23,10 @@
 		<result column="is_company_impower" property="isCompanyImpower"/>
 		<result column="impower_amount" property="impowerAmount"/>
 		<result column="min_charge" property="minCharge"/>
+		
+		<result column="updater" property="updater"/>
+		<result column="update_datetime" property="updateDatetime"/>
+		<result column="remark" property="remark"/>
 	</resultMap>
 	
 	<sql id="where_condition">

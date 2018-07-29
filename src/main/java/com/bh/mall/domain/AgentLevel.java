@@ -13,22 +13,21 @@ import com.bh.mall.dao.base.ABaseDO;
 public class AgentLevel extends ABaseDO {
 
     private static final long serialVersionUID = -8708365669948607235L;
-   
-    
+
     // 编号
     private String code;
+
     // 等级名称
     private String name;
+
     // 等级
     private Integer level;
+
     // 首次授权金额
     private Long amount;
 
     // 红线金额
     private Long redAmount;
-    
-    
-    
 
     // 本等级每次最低充值金额
     private Long minChargeAmount;
@@ -38,45 +37,39 @@ public class AgentLevel extends ABaseDO {
 
     // 授权单是否可以自发
     private String isSend;
-    
+
     // 本等级是够开启云仓
     private String isWareHouse;
 
     // 本等级升级是否公司审核
     private String isCompanyApprove;
-    
-    
-    
+
     // 半门槛推荐人数
     private Integer reNumber;
-    
+
     // 本等级升级是否余额清零
     private String isReset;
-    
+
     // 本等级是够可被意向
     private String isIntent;
-    
+
     // 是够需要实名
     private String isRealName;
-    
+
     // 本等级是否需要公司审核(授权)
     private String isCompanyImpower;
-    
-    
-    
-    private Integer impowerAmount;
-    
-	private Integer min_charge;
-	 // 本等级是否可被介绍
-    private String isIntro;
 
+    private Integer impowerAmount;
+
+    private Integer min_charge;
+
+    // 本等级是否可被介绍
+    private String isIntro;
 
     // 本等级授权充值门槛
     private Long minCharge;
-    
-    
-    
-	 // 更新人
+
+    // 更新人
     private String updater;
 
     // 更新时间
@@ -85,82 +78,76 @@ public class AgentLevel extends ABaseDO {
     // 备注
     private String remark;
 
-	
-    
-   // ***************db*************
-   private Integer lowLevel;
+    // ***************db*************
+    private Integer lowLevel;
 
-   private Integer highLevel;
-   
-    
-
-    
+    private Integer highLevel;
 
     public String getCode() {
-		return code;
-	}
+        return code;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public String getIsIntent() {
-		return isIntent;
-	}
+    public String getIsIntent() {
+        return isIntent;
+    }
 
-	public void setIsIntent(String isIntent) {
-		this.isIntent = isIntent;
-	}
+    public void setIsIntent(String isIntent) {
+        this.isIntent = isIntent;
+    }
 
-	public String getIsIntro() {
-		return isIntro;
-	}
+    public String getIsIntro() {
+        return isIntro;
+    }
 
-	public void setIsIntro(String isIntro) {
-		this.isIntro = isIntro;
-	}
+    public void setIsIntro(String isIntro) {
+        this.isIntro = isIntro;
+    }
 
-	public Long getMinCharge() {
-		return minCharge;
-	}
+    public Long getMinCharge() {
+        return minCharge;
+    }
 
-	public void setMinCharge(Long minCharge) {
-		this.minCharge = minCharge;
-	}
+    public void setMinCharge(Long minCharge) {
+        this.minCharge = minCharge;
+    }
 
-	public String getIsCompanyImpower() {
-		return isCompanyImpower;
-	}
+    public String getIsCompanyImpower() {
+        return isCompanyImpower;
+    }
 
-	public void setIsCompanyImpower(String isCompanyImpower) {
-		this.isCompanyImpower = isCompanyImpower;
-	}
+    public void setIsCompanyImpower(String isCompanyImpower) {
+        this.isCompanyImpower = isCompanyImpower;
+    }
 
-	public String getIsCompanyApprove() {
-		return isCompanyApprove;
-	}
+    public String getIsCompanyApprove() {
+        return isCompanyApprove;
+    }
 
-	public void setIsCompanyApprove(String isCompanyApprove) {
-		this.isCompanyApprove = isCompanyApprove;
-	}
+    public void setIsCompanyApprove(String isCompanyApprove) {
+        this.isCompanyApprove = isCompanyApprove;
+    }
 
-	public Integer getReNumber() {
-		return reNumber;
-	}
+    public Integer getReNumber() {
+        return reNumber;
+    }
 
-	public void setReNumber(Integer reNumber) {
-		this.reNumber = reNumber;
-	}
+    public void setReNumber(Integer reNumber) {
+        this.reNumber = reNumber;
+    }
 
-	public String getIsReset() {
-		return isReset;
-	}
+    public String getIsReset() {
+        return isReset;
+    }
 
-	public void setIsReset(String isReset) {
-		this.isReset = isReset;
-	}
+    public void setIsReset(String isReset) {
+        this.isReset = isReset;
+    }
 
-	public Integer getLowLevel() {
+    public Integer getLowLevel() {
         return lowLevel;
     }
 
@@ -256,7 +243,7 @@ public class AgentLevel extends ABaseDO {
         this.isSend = isSend;
     }
 
-   public Integer getHighLevel() {
+    public Integer getHighLevel() {
         return highLevel;
     }
 
@@ -271,22 +258,21 @@ public class AgentLevel extends ABaseDO {
     public void setIsRealName(String isRealName) {
         this.isRealName = isRealName;
     }
-    
+
     public Integer getImpowerAmount() {
-		return impowerAmount;
-	}
+        return impowerAmount;
+    }
 
-	public void setImpowerAmount(Integer impowerAmount) {
-		this.impowerAmount = impowerAmount;
-	}
+    public void setImpowerAmount(Integer impowerAmount) {
+        this.impowerAmount = impowerAmount;
+    }
 
-	public Integer getMin_charge() {
-		return min_charge;
-	}
+    public Integer getMin_charge() {
+        return min_charge;
+    }
 
-	public void setMin_charge(Integer min_charge) {
-		this.min_charge = min_charge;
-	}
-
+    public void setMin_charge(Integer min_charge) {
+        this.min_charge = min_charge;
+    }
 
 }
