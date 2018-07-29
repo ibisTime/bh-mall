@@ -164,7 +164,7 @@
 		<property name="paginableDAO" ref="sqFormDAOImpl"/>
 	</bean>
 	
-	<bean id="uplevelApplyBO" class="com.bh.mall.bo.impl.SjFormBOImpl">
+	<bean id="sjFormBO" class="com.bh.mall.bo.impl.SjFormBOImpl">
 		<property name="paginableDAO" ref="sjFormDAOImpl"/>
 	</bean>
 		

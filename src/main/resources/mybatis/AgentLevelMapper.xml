@@ -20,6 +20,7 @@
 		<result column="is_company_approve" property="isCompanyApprove"/>
 		<result column="re_number" property="reNumber"/>
 		<result column="is_reset" property="isReset"/>
+		
 		<result column="is_intent" property="isIntent"/>
 		<result column="is_intro" property="isIntro"/>
 		<result column="is_real_name" property="isRealName"/>

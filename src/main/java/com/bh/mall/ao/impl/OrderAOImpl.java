@@ -52,6 +52,7 @@ import com.bh.mall.domain.ProCode;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627640Req;
@@ -1075,32 +1076,8 @@ public class OrderAOImpl implements IOrderAO {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
 
-<<<<<<< HEAD
-            // // 门槛余额是否高于限制
-            // AgentLevel agent =
-            // agentLevelBO.getAgentByLevel(applyUser.getLevel());
-            //
-            // boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
-            // applyUser.getImpowerDatetime());
-            // // 是否开启云仓
-            // if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
-            // // 改变产品数量
-            // this.changeProductNumber(applyUser, pData, psData, order,
-            // -order.getQuantity(), code);
-            // } else if (flag) {
-            // kind = EOrderKind.Impower_Order.getCode();
-            // // 未开启云仓，计算与运费
-            // if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
-            // // 产品不包邮，计算运费
-            // if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
-            // SYSConfig sysConfig = sysConfigBO.getConfig(province,
-            // ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            // yunfei = StringValidater.toLong(sysConfig.getCvalue());
-            // }
-            // }
-=======
-            // 未开启云仓，计算与运费
-            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+            AgentLevel agent = agentLevelBO
+                .getAgentByLevel(applyUser.getLevel());
             if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
 
                 // 产品不包邮，计算运费
@@ -1110,7 +1087,6 @@ public class OrderAOImpl implements IOrderAO {
                     yunfei = StringValidater.toLong(sysConfig.getCvalue());
                 }
             }
->>>>>>> refs/heads/bh-v2
         }
 
         order.setKind(kind);

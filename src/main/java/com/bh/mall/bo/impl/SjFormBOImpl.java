@@ -11,8 +11,7 @@ import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.dao.IBuserDAO;
-import com.bh.mall.dao.IUpLevelApplyDAO;
+import com.bh.mall.dao.ISjFormDAO;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -21,10 +20,7 @@ import com.bh.mall.exception.BizException;
 public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
     @Autowired
-    private IUpLevelApplyDAO uplevelApplyDAO;
-
-    @Autowired
-    private IBuserDAO buserDAO;
+    private ISjFormDAO sjFormDAO;
 
     /***************** 升级 *******************
      * 新增 代理升级申请审核表
@@ -48,7 +44,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
         alData.setStatus(data.getStatus());
         alData.setRemark(data.getRemark());
-        uplevelApplyDAO.insert(alData);
+        sjFormDAO.insert(alData);
         return code;
     }
 
@@ -68,7 +64,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         alData.setApproveDatetime(data.getApproveDatetime());
 
         alData.setRemark(data.getRemark());
-        uplevelApplyDAO.insert(alData);
+        sjFormDAO.insert(alData);
         return code;
     }
 
@@ -89,7 +85,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setRemark(data.getRemark());
 
-        uplevelApplyDAO.insert(alData);
+        sjFormDAO.insert(alData);
         return code;
     }
 
@@ -100,11 +96,11 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
             .generate(EGeneratePrefix.AgencyLog.getCode());
 
         // save new agencylog to buser
-        SjForm buser = new SjForm();
+        // SjForm buser = new SjForm();
 
         // UpLevelApply alData = new UpLevelApply();
         data.setCode(code);
-        uplevelApplyDAO.insert(data);
+        sjFormDAO.insert(data);
         return code;
     }
 
@@ -120,7 +116,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(data.getStatus());
-        uplevelApplyDAO.insert(alData);
+        sjFormDAO.insert(alData);
 
         return code;
     }
@@ -132,7 +128,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         if (StringUtils.isNotBlank(code)) {
             SjForm condition = new SjForm();
             condition.setCode(code);
-            data = uplevelApplyDAO.select(condition);
+            data = sjFormDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理记录不存在");
             }
@@ -143,15 +139,15 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     @Override
     public List<SjForm> queryUpLevelApplyPage(int start, int limit,
             SjForm condition) {
-        long totalCount = uplevelApplyDAO.selectTotalCount(condition);
+        long totalCount = sjFormDAO.selectTotalCount(condition);
         Page<SjForm> page = new Page<SjForm>(start, limit, totalCount);
-        return uplevelApplyDAO.selectList(condition, page.getPageNO(),
+        return sjFormDAO.selectList(condition, page.getPageNO(),
             page.getPageSize());
     }
 
     @Override
     public List<SjForm> queryUpLevelApplyList(SjForm condition) {
-        return uplevelApplyDAO.selectList(condition);
+        return sjFormDAO.selectList(condition);
     }
 
 }

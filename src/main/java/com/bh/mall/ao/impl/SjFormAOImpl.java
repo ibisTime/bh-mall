@@ -38,7 +38,7 @@ import com.bh.mall.exception.BizException;
 public class SjFormAOImpl implements ISjFormAO {
 
     @Autowired
-    private ISjFormBO uplevelApplyBO;
+    private ISjFormBO sjFormBO;
 
     @Autowired
     private IBuserAO buserAO;
@@ -122,7 +122,7 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setApplyDatetime(new Date());
         upData.setPayAmount(StringValidater.toLong(payAmount));
 
-        uplevelApplyBO.upgradeLevel(upData);
+        sjFormBO.upgradeLevel(upData);
 
     }
 
@@ -198,7 +198,7 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setStatus(status);
         upData.setApplyDatetime(new Date());
 
-        uplevelApplyBO.approveUpgrade(upData);
+        sjFormBO.approveUpgrade(upData);
 
     }
 
@@ -210,7 +210,7 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setStatus(EUserStatus.TO_CANCEL.getCode());
         upData.setApplyDatetime(new Date());
 
-        uplevelApplyBO.addUplevelApply(upData);
+        sjFormBO.addUplevelApply(upData);
 
     }
 
@@ -231,7 +231,7 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setStatus(EUserStatus.CANCELED.getCode());
         upData.setApplyDatetime(new Date());
 
-        uplevelApplyBO.approveCanenl(upData);
+        sjFormBO.approveCanenl(upData);
     }
 
     /*************** 通过取消升级申请 **********************/
@@ -251,7 +251,7 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setStatus(EUserStatus.CANCELED.getCode());
         upData.setApplyDatetime(new Date());
 
-        uplevelApplyBO.approveCanenl(upData);
+        sjFormBO.approveCanenl(upData);
     }
 
     /*********************** 查询 *************************/
@@ -266,7 +266,7 @@ public class SjFormAOImpl implements ISjFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        List<SjForm> list = uplevelApplyBO.queryUpLevelApplyList(condition);
+        List<SjForm> list = sjFormBO.queryUpLevelApplyList(condition);
         for (SjForm agencyLog : list) {
             BUser userReferee = null;
             BUser buser = buserAO.doGetUser(agencyLog.getApplyUser());
@@ -301,7 +301,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
     @Override
     public SjForm getUplevelApply(String code) {
-        SjForm data = uplevelApplyBO.getUpLevelApply(code);
+        SjForm data = sjFormBO.getUpLevelApply(code);
         BUser buser = buserAO.doGetUser(data.getApplyUser());
         data.setUser(buser);
         BUser userReferee = null;
@@ -348,8 +348,7 @@ public class SjFormAOImpl implements ISjFormAO {
          * condition.setToUserId(condition.getUserIdForQuery()); //意向归属人 }
          */
 
-        Paginable<SjForm> page = uplevelApplyBO.getPaginable(start, limit,
-            condition);
+        Paginable<SjForm> page = sjFormBO.getPaginable(start, limit, condition);
         BUser userReferee = null;
         BUser buser = null;
         for (Iterator<SjForm> iterator = page.getList().iterator(); iterator
@@ -389,7 +388,7 @@ public class SjFormAOImpl implements ISjFormAO {
     @Override
     public String addUplevelApply(SjForm data) {
         // insert new data
-        uplevelApplyBO.addUplevelApply(data);
+        sjFormBO.addUplevelApply(data);
         return null;
     }
 
@@ -405,8 +404,7 @@ public class SjFormAOImpl implements ISjFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        Paginable<SjForm> page = uplevelApplyBO.getPaginable(start, limit,
-            condition);
+        Paginable<SjForm> page = sjFormBO.getPaginable(start, limit, condition);
         List<SjForm> list = page.getList();
 
         for (SjForm uplevelApply : list) {

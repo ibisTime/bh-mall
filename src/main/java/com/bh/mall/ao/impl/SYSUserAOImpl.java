@@ -20,9 +20,9 @@ import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISYSUserBO;
+import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.ISqFormBO;
-import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
@@ -80,7 +80,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     IYxFormBO agentAllotBO;
 
     @Autowired
-    ISjFormBO uplevelApplyBO;
+    ISjFormBO sjFormBO;
 
     @Autowired
     ISqFormBO impowerApplyBO;

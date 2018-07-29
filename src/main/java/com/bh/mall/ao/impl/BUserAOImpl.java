@@ -25,9 +25,9 @@ import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
+import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.ISqFormBO;
-import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Page;
@@ -85,7 +85,7 @@ public class BUserAOImpl implements IBuserAO {
     ISqFormBO impowerApplyBO;
 
     @Autowired
-    ISjFormBO uplevelApplyBO;
+    ISjFormBO sjFormBO;
 
     @Autowired
     IAccountBO accountBO;
