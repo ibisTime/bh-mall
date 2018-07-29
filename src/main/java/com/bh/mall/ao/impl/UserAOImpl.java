@@ -19,9 +19,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
 import com.bh.mall.bo.IAgencyLogBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
-import com.bh.mall.bo.IAgentUpgradeBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IIntroBO;
 import com.bh.mall.bo.IOrderBO;
@@ -45,9 +43,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AfterSale;
 import com.bh.mall.domain.AgencyLog;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentImpower;
-import com.bh.mall.domain.AgentUpgrade;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.Intro;
 import com.bh.mall.domain.Order;
@@ -106,8 +102,6 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     IAgencyLogBO agencyLogBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
     IAccountBO accountBO;
@@ -121,14 +115,12 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     IAfterSaleBO afterSaleBO;
 
-    @Autowired
-    IAgentUpgradeBO agentUpgradeBO;
 
     @Autowired
     IIntroBO introBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Autowired
     IWareHouseBO wareHouseBO;
@@ -805,7 +797,7 @@ public class UserAOImpl implements IUserAO {
 
             // 授权金额
             if (null != user.getLevel() && 0 != user.getLevel()) {
-                Agent agent = agentBO.getAgentByLevel(user.getLevel());
+                AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
                 user.setLevelName(agent.getName());
                 user.setImpowerAmount(agent.getAmount());
             }
@@ -815,8 +807,8 @@ public class UserAOImpl implements IUserAO {
             // 该等级授权规则
             if (EUserKind.Merchant.getCode().equals(user.getKind())) {
                 if (null != user.getApplyLevel()) {
-                    AgentImpower impower = agentImpowerBO
-                        .getAgentImpowerByLevel(user.getApplyLevel());
+                    AgentLevel impower = agentLevelBO
+                        .getAgentByLevel(user.getApplyLevel());
                     user.setImpower(impower);
                 }
             }
@@ -856,7 +848,7 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(req.getMobile(), ESystemCode.BH.getCode(),
             ESystemCode.BH.getCode());
 
-        AgentImpower aiData = agentImpowerBO.getAgentImpowerByLevel(
+        AgentLevel aiData = agentLevelBO.getAgentByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.NO.getCode().equals(aiData.getIsIntent())) {
             throw new BizException("xn00000", "本等级不可被意向");
@@ -909,7 +901,7 @@ public class UserAOImpl implements IUserAO {
 
         XN627302Res result = null;
         // 是否可被意向
-        AgentImpower impower = agentImpowerBO.getAgentImpowerByLevel(
+        AgentLevel impower = agentLevelBO.getAgentByLevel(
             StringValidater.toInteger(req.getApplyLevel()));
 
         if (EBoolean.NO.getCode().equals(impower.getIsIntent())) {
@@ -1244,8 +1236,8 @@ public class UserAOImpl implements IUserAO {
 
         if (EResult.Result_YES.getCode().equals(result)) {
 
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(data.getApplyLevel());
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(data.getApplyLevel());
 
             if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
                 if (StringUtils.isBlank(data.getIdNo())
@@ -1378,8 +1370,8 @@ public class UserAOImpl implements IUserAO {
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
             // 该等级对应的郑策
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(data.getLevel());
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(data.getLevel());
 
             // 需要公司授权且审核人不是平台
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())
@@ -1525,9 +1517,9 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
         }
 
-        AgentUpgrade upgrade = agentUpgradeBO
-            .getAgentUpgradeByLevel(StringValidater.toInteger(highLevel));
-        Agent agent = agentBO
+        AgentLevel upgrade = agentLevelBO
+            .getAgentByLevel(StringValidater.toInteger(highLevel));
+        AgentLevel agent = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(highLevel));
 
         // 推荐人数是否满足半门槛
@@ -1540,8 +1532,8 @@ public class UserAOImpl implements IUserAO {
             }
         }
 
-        AgentUpgrade auData = agentUpgradeBO
-            .getAgentUpgradeByLevel(data.getLevel());
+        AgentLevel auData = agentLevelBO
+            .getAgentByLevel(data.getLevel());
         // 余额是否清零
         if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
             // 云仓是否有余额
@@ -1595,8 +1587,8 @@ public class UserAOImpl implements IUserAO {
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
             status = EUserStatus.UPGRADED.getCode();
-            AgentUpgrade auData = agentUpgradeBO
-                .getAgentUpgradeByLevel(data.getApplyLevel());
+            AgentLevel auData = agentLevelBO
+                .getAgentByLevel(data.getApplyLevel());
 
             // 是否需要公司审核
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
@@ -1844,8 +1836,8 @@ public class UserAOImpl implements IUserAO {
             userBO.getUserByIdNo(req.getIdNo());
         }
 
-        AgentImpower impower = agentImpowerBO
-            .getAgentImpowerByLevel(data.getApplyLevel());
+        AgentLevel impower = agentLevelBO
+            .getAgentByLevel(data.getApplyLevel());
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
             if (StringUtils.isBlank(req.getIdNo())
                     || StringUtils.isBlank(req.getIdHand())) {
@@ -1872,8 +1864,8 @@ public class UserAOImpl implements IUserAO {
     public boolean isRealName(String userId) {
         User user = userBO.getUser(userId);
         if (null != user.getApplyLevel()) {
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(user.getApplyLevel());
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(user.getApplyLevel());
             if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
                 return true;
             }

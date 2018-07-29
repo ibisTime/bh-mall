@@ -40,7 +40,7 @@
 		,t.update_datetime
 		,t.remark
 		FROM
-		tbh_award_interval t
+		tbh_ch_award t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -51,13 +51,13 @@
 
 	<select id="select_awardInterval_count" parameterType="awardInterval"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_award_interval t
+		SELECT count(1) FROM tbh_ch_award t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_awardInterval" parameterType="awardInterval">
 		INSERT INTO
-		tbh_award_interval(
+		tbh_ch_award(
 		code
 		,level
 		,start_amount
@@ -82,7 +82,7 @@
 	</insert>
 
 	<update id="update_awardInterval" parameterType="awardInterval">
-		UPDATE tbh_award_interval
+		UPDATE tbh_ch_award
 		SET
 		level = #{level}
 		,start_amount = #{startAmount}
@@ -97,7 +97,7 @@
 	
 	<delete id="delete_awardInterval" parameterType="awardInterval">
 		DELETE FROM 
-		tbh_award_interval
+		tbh_ch_award
 		WHERE 
 		code = #{code}
 	</delete>

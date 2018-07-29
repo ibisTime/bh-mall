@@ -42,46 +42,14 @@ public interface IBuserDAO extends IBaseDAO<BUser> {
 
     public void updateInformation(BUser data);
 
-    // 申请升级
-    public void upgradeLevel(BUser data);
-
     public void updateLog(BUser data);
 
     // 查询下级代理
     public List<BUser> selectAgentFront(BUser condition, int start, int limit);
 
-    // 意向分配
-    public void applyIntent(BUser data);
-
-    public void allotAgency(BUser data);
-
-    // 申请代理
-    public void toApply(BUser data);
-
-    // 接受意向分配
-    public void acceptIntention(BUser data);
-
-    public void updateHighUser(BUser data);
-
-    // 取消申请授权
-    public void cancelImpower(BUser data);
-
-    public void cancelUplevel(BUser data);
-
-    // 审核升级
-    public void approveUpgrade(BUser data);
-
-    // 补充授权所需信息
-    public void addInfo(BUser data);
-
     // 修改推荐的代理的上级
     public void updateHigh(BUser data);
 
-    // public void updateHighUser(BUser data);
-    public void ignore(BUser data);
-
     public void updateManager(BUser data);
-
-    public void approveImpower(BUser data);
 
 }

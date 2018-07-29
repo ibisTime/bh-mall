@@ -9,42 +9,34 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.ISYSUserAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
-import com.bh.mall.bo.IAgentAllotBO;
-import com.bh.mall.bo.IAgentImpowerBO;
-import com.bh.mall.bo.IAgentUpgradeBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IBuserBO;
-import com.bh.mall.bo.IImpowerApplyBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISmsOutBO;
-import com.bh.mall.bo.IUpLevelApplyBO;
+import com.bh.mall.bo.ISqFormBO;
+import com.bh.mall.bo.ISjFormBO;
+import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
+import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.AgentAllot;
-import com.bh.mall.domain.AgentImpower;
-import com.bh.mall.domain.AgentUpgrade;
 import com.bh.mall.domain.BUser;
-import com.bh.mall.domain.ImpowerApply;
+import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.SYSUser;
-import com.bh.mall.domain.UpLevelApply;
-import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EResult;
-import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserKind;
@@ -59,6 +51,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
     ISYSUserBO sysUserBO;
+
+    @Autowired
+    ISYSRoleBO sysRoleBO;
 
     @Autowired
     ISmsOutBO smsOutBO;
@@ -82,19 +77,16 @@ public class SYSUserAOImpl implements ISYSUserAO {
     IAfterSaleBO afterSaleBO;
 
     @Autowired
-    IAgentAllotBO agentAllotBO;
+    IYxFormBO agentAllotBO;
 
     @Autowired
-    IUpLevelApplyBO uplevelApplyBO;
+    ISjFormBO uplevelApplyBO;
 
     @Autowired
-    IImpowerApplyBO impowerApplyBO;
+    ISqFormBO impowerApplyBO;
 
     @Autowired
-    IAgentImpowerBO agentImpowerBO;
-
-    @Autowired
-    IAgentUpgradeBO agentUpgradeBO;
+    IAgentLevelBO agentLevelBO;
 
     /*************** 注册 **********************/
     @Override
@@ -108,7 +100,10 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setRealName(realName);
         data.setLoginName(mobile);
         data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         data.setPhoto(photo);
+        data.setStatus(EUserStatus.NORMAL.getCode());
+        data.setCreateDatetime(new Date());
         data.setSystemCode(ESystemCode.BH.getCode());
         sysUserBO.doSaveUser(data);
         return userId;
@@ -167,6 +162,22 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     }
 
+    /*************** 设置角色**********************/
+    // 设置角色
+    @Override
+    public void doRoleUser(String userId, String roleCode, String updater,
+            String remark) {
+        SYSUser user = sysUserBO.getUser(userId);
+        if (user == null) {
+            throw new BizException("li01004", "用户不存在");
+        }
+        SYSRole role = sysRoleBO.getSYSRole(roleCode);
+        if (role == null) {
+            throw new BizException("li01004", "角色不存在");
+        }
+        sysUserBO.refreshRole(userId, roleCode, updater, remark);
+    }
+
     /*************** 修改密码 **********************/
     // 重置登录密码
     @Override
@@ -223,8 +234,28 @@ public class SYSUserAOImpl implements ISYSUserAO {
     /*************** 修改登录名 **********************/
 
     /*************** 修改照片 **********************/
+    @Override
+    public void doModifyPhoto(String userId, String photo) {
+        sysUserBO.refreshPhoto(userId, photo);
+    }
 
     /*************** 查询 **********************/
+    @Override
+    public Paginable<SYSUser> queryUserPage(int start, int limit,
+            SYSUser condition) {
+        /*
+         * if (condition.getCreateDatetimeStart() != null &&
+         * condition.getApplyDatetimeEnd() != null &&
+         * condition.getApplyDatetimeStart()
+         * .after(condition.getApplyDatetimeEnd())) { throw new
+         * BizException("xn00000", "开始时间不能大于结束时间"); }
+         */
+        Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
+            condition);
+
+        return page;
+    }
+
     // 分页查询所有意向代理
     @Override
     public Paginable<BUser> queryIntentionAgentPage(int start, int limit,
@@ -275,324 +306,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         return list;
     }
 
-    /*************** 意向分配 **********************/
-
-    @Override
-    public void allotAgency(String userId, String toUserId, String manager,
-            String approver) {
-        BUser data = buserBO.getUser(userId);
-        String status = EUserStatus.TO_APPROVE.getCode();
-        if (!EUserKind.Merchant.getCode().equals(data.getKind())) {
-            throw new BizException("xn0000", "该用户不是代理，无法分配");
-        }
-        if (StringUtils.isNotBlank(toUserId)) {
-            BUser toUser = buserBO.getUser(toUserId);
-            if (data.getApplyLevel() <= toUser.getLevel()) {
-                throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
-            }
-            status = EUserStatus.ALLOTED.getCode(); // 已分配
-        } else {
-            status = EUserStatus.ADD_INFO.getCode();
-        }
-
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setManager(manager);
-        data.setStatus(status);
-
-        String logCode = agentAllotBO.saveAgentAllot(data, toUserId);
-        data.setLastAgentLog(logCode);
-        buserBO.allotAgency(data);
-
-        // add new agent allot log
-        AgentAllot alData = new AgentAllot();
-        alData.setApplyUser(userId);
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setApplyDatetime(new Date());
-        alData.setStatus(status);
-
-        agentAllotBO.addAgentAllot(alData);
-
-    }
-
-    /*************** 忽略意向分配 **********************/
-    @Override
-    public void ignore(String userId, String aprrover) {
-        BUser data = buserBO.getUser(userId);
-        if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
-                || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
-            throw new BizException("xn0000", "该代理不是有意向代理");
-        }
-
-        data.setApprover(aprrover);
-        data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.TO_MIND.getCode());
-        String logCode = agentAllotBO.ignore(data);
-        data.setLastAgentLog(logCode);
-        buserBO.ignore(data);
-
-        // add new agent allot log
-        AgentAllot alData = new AgentAllot();
-        alData.setApplyUser(userId);
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setApplyDatetime(new Date());
-        alData.setStatus(EUserStatus.TO_MIND.getCode());
-        agentAllotBO.addAgentAllot(alData);
-    }
-
-    /*************** 通过授权申请 **********************/
-    @Override
-    @Transactional
-    public boolean approveImpower(String userId, String approver, String result,
-            String remark) {
-        BUser data = buserBO.getUser(userId);
-        ImpowerApply log = impowerApplyBO
-            .getImpowerApply(data.getLastAgentLog());
-        if (!(EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
-                || EUserStatus.TO_COMPANYAPPROVE.getCode()
-                    .equals(data.getStatus()))) {
-            throw new BizException("xn000", "该代理未处于待授权状态");
-        }
-
-        String status = EUserStatus.IMPOWERED.getCode();
-        String fromUser = ESysUser.SYS_USER_BH.getCode();
-        BUser highUser = buserBO.getSysUser();
-
-        if (EResult.Result_YES.getCode().equals(result)) {
-            // 更新上级
-            /*
-             * if (StringUtils.isNotBlank(log.getToUserId())) { highUser =
-             * buserBO.getUser(log.getToUserId()); if
-             * (!EUserKind.Plat.getCode().equals(highUser.getKind())) { fromUser
-             * = highUser.getUserId(); } }
-             */
-            data.setHighUserId(highUser.getUserId());
-
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(data.getApplyLevel());
-
-            if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
-                if (StringUtils.isBlank(data.getIdNo())
-                        || StringUtils.isBlank(data.getIdHand())) {
-                    throw new BizException("xn0000", "本等级需要实名认证，该代理还未完成实名认证");
-                }
-            }
-            // 需要公司授权
-            if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())
-                    && !EUser.ADMIN.getCode().equals(approver)) {
-                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
-            } else {
-                data.setLevel(data.getApplyLevel());
-                // data.setImpowerDatetime(new Date());
-
-                // 根据用户类型获取账户列表
-                List<String> currencyList = distributeAccount(data.getUserId(),
-                    data.getRealName(), EUserKind.Merchant.getCode(),
-                    ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-                // 分配账户
-                accountBO.distributeAccount(data.getUserId(),
-                    data.getRealName(), EAccountType.Business, currencyList,
-                    ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-
-                // 介绍奖
-                /*
-                 * long amount = 0L; if
-                 * (StringUtils.isNotBlank(data.getIntroducer())) { BUser buser
-                 * = buserBO.getUser(data.getIntroducer()); Intro iData =
-                 * introBO.getIntroByLevel(buser.getLevel(),
-                 * data.getApplyLevel()); amount =
-                 * AmountUtil.mul(impower.getMinCharge(), iData.getPercent() /
-                 * 100); accountBO.transAmountCZB(fromUser,
-                 * ECurrency.YJ_CNY.getCode(), buser.getUserId(),
-                 * ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_JSJL, "介绍代理["
-                 * + data.getRealName() + "]的" + EBizType.AJ_JSJL.getCode() +
-                 * "支出", "介绍代理[" + data.getRealName() + "]的" +
-                 * EBizType.AJ_JSJL.getValue() + "收入", data.getUserId()); }
-                 */
-
-                // 统计
-                // reportBO.saveReport(data);
-            }
-
-            // 未通过，有推荐人
-        } else if (StringUtils.isNotBlank(data.getUserReferee())) {
-            status = EUserStatus.IMPOWERO_INFO.getCode();
-        } else {
-            status = EUserStatus.TO_MIND.getCode();
-        }
-
-        Date date = new Date();
-        if (EUserStatus.IMPOWERED.getCode().equals(status)) {
-            // data.setImpowerDatetime(date);
-        }
-
-        data.setApprover(approver);
-        data.setApplyDatetime(date);
-        data.setRemark(remark);
-        data.setStatus(status);
-
-        String logCode = impowerApplyBO.approveImpower(log, data);
-        data.setLastAgentLog(logCode);
-        buserBO.approveImpower(data);
-
-        // insert new impower log
-        ImpowerApply imData = new ImpowerApply();
-        imData.setApplyUser(userId);
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(status);
-        impowerApplyBO.addImpowerApply(imData);
-        return true;
-
-    }
-
-    /*************** 通过升级申请 **********************/
-    @Override
-    @Transactional
-    public void approveUpgrade(String userId, String approver, String remark,
-            String result) {
-        BUser data = buserBO.getUser(userId);
-        if (!(EUserStatus.TO_COMPANYUPGRADE.getCode().equals(data.getStatus())
-                || EUserStatus.TO_UPGRADE.getCode().equals(data.getStatus()))) {
-            throw new BizException("xn00000", "代理未申请升级");
-        }
-        String status = EUserStatus.IMPOWERED.getCode();
-        Integer level = data.getLevel();
-        if (EBoolean.YES.getCode().equals(result)) {
-            Account account = accountBO.getAccountByUser(data.getUserId(),
-                ECurrency.MK_CNY.getCode());
-            status = EUserStatus.UPGRADED.getCode();
-            AgentUpgrade auData = agentUpgradeBO
-                .getAgentUpgradeByLevel(data.getApplyLevel());
-
-            // 是否推荐的代理 TODO
-            if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
-                if (!EUser.ADMIN.getCode().equals(approver)) {
-                    BUser approveUser = buserBO.getUser(approver);
-                    if (!EUserKind.Plat.getCode()
-                        .equals(approveUser.getKind())) {
-                        status = EUserStatus.TO_COMPANYUPGRADE.getCode();
-                    }
-
-                } else {
-                    level = data.getApplyLevel();
-                    // 增加账户余额
-                    accountBO.changeAmount(account.getAccountNumber(),
-                        EChannelType.NBZ, null, null, data.getUserId(),
-                        EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
-                        data.getPayAmount());
-
-                    // 推荐人的上级变成自己
-                    changeHighUser(data.getUserId(), data.getUserId(), approver,
-                        remark);
-                    // 推荐人的上级的门槛转给自己
-                    changeAmount(data);
-                }
-            } else {
-                level = data.getApplyLevel();
-                // 增加账户余额
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, data.getUserId(),
-                    EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
-                    data.getPayAmount());
-
-                // 推荐人的上级变成自己
-                changeHighUser(data.getUserId(), data.getUserId(), approver,
-                    remark);
-                // 推荐人的上级的门槛转给自己
-                changeAmount(data);
-
-            }
-        }
-
-        data.setLevel(level);
-        data.setStatus(status);
-        data.setPayAmount(0L);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-
-        String logCode = uplevelApplyBO.approveUpgrade(data, status);
-        data.setLastAgentLog(logCode);
-        buserBO.approveUpgrade(data);
-
-        // 新增升级申请记录
-        UpLevelApply upData = new UpLevelApply();
-        upData.setApplyUser(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(status);
-        upData.setApplyDatetime(new Date());
-
-        uplevelApplyBO.addUplevelApply(upData);
-
-    }
-
-    /*************** 通过取消升级申请 **********************/
-    public void approveUplevelCanenl(String userId, String approver,
-            String result, String remark) {
-        BUser data = buserBO.getUser(userId);
-        String status = EUserStatus.IMPOWERED.getCode();
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-        String logCode = uplevelApplyBO.approveCanenl(data, status);
-        data.setLastAgentLog(logCode);
-        buserBO.cancelUplevel(data);
-
-        // 新增升级申请记录
-        UpLevelApply upData = new UpLevelApply();
-        upData.setApplyUser(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(EUserStatus.CANCELED.getCode());
-        upData.setApplyDatetime(new Date());
-
-        uplevelApplyBO.addUplevelApply(upData);
-    }
-
-    /*************** 通过取消审核申请 **********************/
-    @Override
-    public void approveImpowerCanenl(String userId, String approver,
-            String result, String remark) {
-        BUser data = buserBO.getUser(userId);
-        if (!(EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())
-                || EUserStatus.TO_COMPANYCANCEL.getCode()
-                    .equals(data.getStatus()))) {
-            throw new BizException("xn000", "该代理未处于申请取消状态");
-        }
-
-        String status = EUserStatus.IMPOWERED.getCode();
-        if (EResult.Result_YES.getCode().equals(result)) {
-            status = EUserStatus.CANCELED.getCode();
-            Account account = accountBO.getAccountByUser(data.getUserId(),
-                ECurrency.MK_CNY.getCode());
-            // 账户清零
-            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, null, data.getUserId(), EBizType.AJ_QXSQ,
-                EBizType.AJ_QXSQ.getValue(), -account.getAmount());
-
-        }
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-        String logCode = impowerApplyBO.cancelImpower(data, status);
-        data.setLastAgentLog(logCode);
-        buserBO.cancelImpower(data);
-
-        // insert new impower log
-        ImpowerApply imData = new ImpowerApply();
-        imData.setApplyUser(userId);
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(EUserStatus.CANCELED.getCode());
-        impowerApplyBO.addImpowerApply(imData);
-    }
-
     /*************** 更改上级 **********************/
     @Override
     public void editManager(String userId, String manager, String updater) {
@@ -612,7 +325,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             buser.setUpdateDatetime(date);
 
             buser.setRemark(remark);
-            String logCode = agentAllotBO.refreshHighUser(buser);
+            String logCode = buserBO.refreshHighUser(buser);
             buser.setLastAgentLog(logCode);
             buserBO.refreshHighUser(buser);
 

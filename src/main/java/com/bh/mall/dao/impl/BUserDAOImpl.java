@@ -107,18 +107,8 @@ public class BUserDAOImpl extends AMybatisTemplate implements IBuserDAO {
     }
 
     @Override
-    public void addInfo(BUser data) {
-        super.update(NAMESPACE.concat("add_info"), data);
-    }
-
-    @Override
     public void updateHigh(BUser data) {
         super.update(NAMESPACE.concat("update_high"), data);
-    }
-
-    @Override
-    public void updateHighUser(BUser data) {
-        super.update(NAMESPACE.concat("update_highUser"), data);
     }
 
     @Override
@@ -133,11 +123,6 @@ public class BUserDAOImpl extends AMybatisTemplate implements IBuserDAO {
     }
 
     @Override
-    public void upgradeLevel(BUser data) {
-        super.update(NAMESPACE.concat("upgrade_level"), data);
-    }
-
-    @Override
     public int update(BUser data) {
         return super.update(NAMESPACE.concat("update_buser"), data);
     }
@@ -148,56 +133,9 @@ public class BUserDAOImpl extends AMybatisTemplate implements IBuserDAO {
     }
 
     @Override
-    public void applyIntent(BUser data) {
-        super.update(NAMESPACE.concat("apply_intent"), data);
-
-    }
-
-    @Override
-    public void toApply(BUser data) {
-        super.update(NAMESPACE.concat("to_apply"), data);
-    }
-
-    @Override
-    public void acceptIntention(BUser data) {
-        super.update(NAMESPACE.concat("accept_intention"), data);
-    }
-
-    @Override
-    public void cancelImpower(BUser data) {
-        super.update(NAMESPACE.concat("cancel_impower"), data);
-    }
-
-    @Override
-    public void cancelUplevel(BUser data) {
-        super.update(NAMESPACE.concat("cancel_uplevel"), data);
-    }
-
-    @Override
-    public void allotAgency(BUser data) {
-        super.update(NAMESPACE.concat("allot_gency"), data);
-    }
-
-    @Override
-    public void ignore(BUser data) {
-        super.update(NAMESPACE.concat("ignore_gency"), data);
-
-    }
-
-    @Override
-    public void approveUpgrade(BUser data) {
-        super.update(NAMESPACE.concat("approve_upgrade"), data);
-    }
-
-    @Override
     public void updateManager(BUser data) {
         super.update(NAMESPACE.concat("update_manager"), data);
 
     }
 
-    @Override
-    public void approveImpower(BUser data) {
-        super.update(NAMESPACE.concat("approve_impower"), data);
-
-    }
 }

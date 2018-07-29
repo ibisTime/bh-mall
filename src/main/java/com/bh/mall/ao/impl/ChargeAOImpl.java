@@ -9,15 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IChargeAO;
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentImpower;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.User;
 import com.bh.mall.enums.EBizType;
@@ -40,10 +38,8 @@ public class ChargeAOImpl implements IChargeAO {
     IUserBO userBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Override
     public String applyOrder(String accountNumber, String type, Long amount,
@@ -57,8 +53,8 @@ public class ChargeAOImpl implements IChargeAO {
             user.getImpowerDatetime());
         if (CollectionUtils.isEmpty(charge)) {
             // 首次不能低于授权金额
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(user.getLevel());
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(user.getLevel());
             if (impower.getMinCharge() > amount) {
                 throw new BizException("xn000000",
                     "授权金额不能低于[" + impower.getMinCharge() / 1000 + "]");
@@ -66,7 +62,7 @@ public class ChargeAOImpl implements IChargeAO {
 
         }
         // 普通充值
-        Agent agent = agentBO.getAgentByLevel(user.getLevel());
+        AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
         if (agent.getMinChargeAmount() > amount) {
             throw new BizException("xn000000",
                 "充值金额不能低于[" + agent.getMinChargeAmount() / 1000 + "]");

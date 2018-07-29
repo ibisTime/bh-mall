@@ -259,7 +259,7 @@ public class User extends ABaseDO {
     private String toUserMobile;
 
     // 授权
-    private AgentImpower impower;
+    private AgentLevel impower;
 
     // 状态List
     private List<String> statusList;
@@ -843,12 +843,12 @@ public class User extends ABaseDO {
         this.result = result;
     }
 
-    public AgentImpower getImpower() {
+    public AgentLevel getImpower() {
         return impower;
     }
 
-    public void setImpower(AgentImpower impower) {
-        this.impower = impower;
+    public void setImpower(AgentLevel impower2) {
+        this.impower = impower2;
     }
 
     public Date getImpowerDatetime() {

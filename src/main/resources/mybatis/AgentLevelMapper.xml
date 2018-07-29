@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IAgentLevelDAO">
+	<resultMap id="agentLevel_DB_Result" type="agentLevel">
+		<result column="level" property="level"/>
+		<result column="name" property="name"/>
+		<result column="amount" property="amount"/>
+		<result column="red_amount" property="redAmount"/>
+		<result column="min_charge_amount" property="minChargeAmount"/>
+		<result column="min_surplus" property="minSurplus"/>
+		<result column="is_wareHouse" property="isWareHouse"/>
+		<result column="is_send" property="isSend"/>
+		<result column="updater" property="updater"/>
+		<result column="update_datetime" property="updateDatetime"/>
+		<result column="remark" property="remark"/>
+		
+		<!-- 。。。 -->
+		<result column="code" property="code"/>
+		<result column="is_company_approve" property="isCompanyApprove"/>
+		<result column="re_number" property="reNumber"/>
+		<result column="is_reset" property="isReset"/>
+		<result column="is_intent" property="isIntent"/>
+		<result column="is_intro" property="isIntro"/>
+		<result column="is_real_name" property="isRealName"/>
+		<result column="is_company_impower" property="isCompanyImpower"/>
+		<result column="impower_amount" property="impowerAmount"/>
+		<result column="min_charge" property="minCharge"/>
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="name != null and name != ''">
+				AND t.name like "%"#{name}"%"
+			</if>
+			<if test="level != null and level !=''">
+				AND t.level = #{level}
+			</if>
+			<if test="isWareHouse != null and isWareHouse !=''">
+				AND t.is_wareHouse = #{isWareHouse}
+			</if>
+			<if test="isSend != null and isSend !=''">
+				AND t.is_send = #{isSend}
+			</if>
+			
+			
+			<if test="code != null and code != ''">
+				AND t.code=#{code}
+			</if>
+			
+			<if test="isCompanyImpower != null and isCompanyImpower != ''">
+				AND t.is_company_impower=#{isCompanyImpower}
+			</if>
+			<if test="isRealName != null and isRealName != ''">
+				AND t.is_real_name=#{isRealName}
+			</if>
+			<if test="isIntro != null and isIntro != ''">
+				AND t.is_intro=#{isIntro}
+			</if>
+			
+			<if test="isIntent != null and isIntent != ''">
+				AND t.is_intent=#{isIntent}
+			</if>
+			
+			 <if test="code != null and code != ''">
+				AND t.code=#{code}
+			</if>
+			
+			<if test="lowLevel != null and lowLevel !=''">
+				<![CDATA[AND t.level > #{lowLevel}]]>
+			</if>
+			<if test="highLevel != null and highLevel !=''">
+				<![CDATA[AND t.level < #{highLevel}]]>
+			</if>
+			
+			
+			 
+		</trim>
+	</sql>
+	
+	
+	<select id="select_agentLevel" parameterType="agentLevel" resultMap="agentLevel_DB_Result">
+		SELECT 
+		t.name
+		,t.level 
+		,t.amount
+		,t.red_amount
+		,t.min_charge_amount
+		,t.min_surplus
+		,t.is_wareHouse
+		,t.is_send
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		
+		,t.code 
+		,t.is_intent 
+		,t.is_intro
+		,t.is_real_name
+		,t.is_company_impower
+		,t.min_charge
+		
+		,t.impower_amount
+		,t.is_company_approve
+		,t.re_number
+		,t.is_reset
+		FROM tbh_agent_level t
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	
+	<select id="select_agentLevel_count" parameterType="agentLevel" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_agent_level t
+		<include refid="where_condition"/>
+	</select>
+	
+	<update id="update_agentLevel" parameterType="agentLevel">
+		UPDATE tbh_agent_level 
+		SET 
+		name=#{name}
+		,amount=#{amount}
+		,red_amount=#{redAmount}
+		,min_charge_amount=#{minChargeAmount}
+		
+		,min_surplus = #{minSurplus}
+		,is_wareHouse = #{isWareHouse}
+		,is_send = #{isSend}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		
+		,level=#{level}
+		,is_intent=#{isIntent}
+		,is_intro=#{isIntro}
+		,is_real_name=#{isRealName}
+		,is_company_impower=#{isCompanyImpower}
+		,min_charge=#{minCharge}
+		
+		
+		,is_company_approve=#{isCompanyApprove}
+		,re_number=#{reNumber}
+		,is_reset=#{isReset}
+		
+		WHERE code=#{code}
+	</update>
+</mapper>

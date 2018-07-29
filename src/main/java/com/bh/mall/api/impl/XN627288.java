@@ -4,12 +4,12 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IImpowerApplyAO;
+import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.ImpowerApply;
+import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627288Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -22,14 +22,14 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627288 extends AProcessor {
-    private IImpowerApplyAO agentAllotAO = SpringContextHolder
-        .getBean(IImpowerApplyAO.class);
+    private ISqFormAO agentAllotAO = SpringContextHolder
+        .getBean(ISqFormAO.class);
 
     private XN627288Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        ImpowerApply condition = new ImpowerApply();
+        SqForm condition = new SqForm();
         condition.setKeyWord(req.getKeyword());
         condition.setUserIdForQuery(req.getUserId());
         // condition.setLevel(StringValidater.toInteger(req.getLevel()));
@@ -45,7 +45,7 @@ public class XN627288 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IImpowerApplyAO.DEFAULT_ORDER_COLUMN;
+            column = ISqFormAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 

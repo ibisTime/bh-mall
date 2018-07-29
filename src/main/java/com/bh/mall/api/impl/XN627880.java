@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.ISecurityTraceAO;
+import com.bh.mall.ao.IMiniCodeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -17,14 +17,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627880 extends AProcessor {
 
-    private ISecurityTraceAO securityTraceAO = SpringContextHolder
-        .getBean(ISecurityTraceAO.class);
+    private IMiniCodeAO miniCodeAO = SpringContextHolder
+        .getBean(IMiniCodeAO.class);
 
     private XN627880Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return securityTraceAO.getSecurity(req.getSecurityCode());
+        return miniCodeAO.getSecurity(req.getMiniCode());
     }
 
     @Override

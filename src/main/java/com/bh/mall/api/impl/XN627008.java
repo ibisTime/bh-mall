@@ -1,9 +1,9 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAgentAO;
+import com.bh.mall.ao.IAgentLevelAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.dto.req.XN627008Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -18,17 +18,17 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627008 extends AProcessor {
 
-    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
+    private IAgentLevelAO agentAO = SpringContextHolder.getBean(IAgentLevelAO.class);
 
     private XN627008Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Agent condition = new Agent();
+        AgentLevel condition = new AgentLevel();
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setName(req.getName());
-        condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
-        condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
+        //condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
+        //condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
 
         return agentAO.queryAgentNoCList(condition);
     }

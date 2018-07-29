@@ -16,10 +16,10 @@ public class XN627005Req extends APageReq {
     // 等级 （选填）
     private String level;
 
-    // 低于自己等级的等级（寻爱他那）
+    // 低于自己等级的等级（选填）
     private String lowLevel;
 
-    // 等级 （选填）
+    // 等级名称 （选填）
     private String name;
 
     public String getLevel() {

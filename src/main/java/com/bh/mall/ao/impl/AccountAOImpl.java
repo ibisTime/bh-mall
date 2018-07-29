@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.User;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
@@ -34,7 +34,7 @@ public class AccountAOImpl implements IAccountAO {
     IUserBO userBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Override
     @Transactional
@@ -136,9 +136,9 @@ public class AccountAOImpl implements IAccountAO {
         Account account = accountBO.getAccountByUser(userId,
             ECurrency.MK_CNY.getCode());
         User user = userBO.getUser(userId);
-        Agent agent = null;
+        AgentLevel agent = null;
         if (null != user.getLevel() && 0 != user.getLevel()) {
-            agent = agentBO.getAgentByLevel(user.getLevel());
+            agent = agentLevelBO.getAgentByLevel(user.getLevel());
         }
         if (account.getAmount() <= agent.getRedAmount()) {
             return false;

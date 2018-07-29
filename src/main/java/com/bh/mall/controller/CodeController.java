@@ -13,8 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bh.mall.ao.IBarCodeAO;
-import com.bh.mall.ao.ISecurityTraceAO;
+import com.bh.mall.ao.IMiniCodeAO;
+import com.bh.mall.ao.IProCodeAO;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.enums.EBoolean;
 
@@ -30,10 +30,10 @@ import com.bh.mall.enums.EBoolean;
 public class CodeController {
 
     @Autowired
-    IBarCodeAO barCodeAO;
+    IProCodeAO proCodeAO;
 
     @Autowired
-    ISecurityTraceAO securityTraceAO;
+    IMiniCodeAO miniCodeAO;
 
     @RequestMapping("/createCode")
     private void createCode(HttpServletRequest request,
@@ -49,9 +49,9 @@ public class CodeController {
         String type = json.getString("type");
         int number = StringValidater.toInteger(json.getString("number"));
         if (EBoolean.NO.getCode().equals(type)) {
-            barCodeAO.addBarCode(number);
+            proCodeAO.addProCode(number);
         } else {
-            securityTraceAO.addSecurityTrace(number);
+            miniCodeAO.addMiniCode(number);
         }
 
         response.setCharacterEncoding("UTF-8");

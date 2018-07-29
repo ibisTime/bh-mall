@@ -14,10 +14,12 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.PwdUtil;
+import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IBuserDAO;
 import com.bh.mall.domain.BUser;
+import com.bh.mall.enums.EAgencyType;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -433,11 +435,6 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
 
     /*************** 更新信息 **********************/
 
-    @Override
-    public void addInfo(BUser data) {
-        buserDAO.addInfo(data);
-    }
-
     // 重置密码
     @Override
     public void resetLoginPwd(BUser buser, String loginPwd) {
@@ -540,61 +537,20 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
         buserDAO.resetBindMobile(buser);
     }
 
-    /*************** 申请代理，审核，升级 **********************/
-
-    // 申请代理
-    @Override
-    public void applyIntent(BUser data) {
-        buserDAO.applyIntent(data);
-    }
+    //
 
     @Override
-    public void toApply(BUser data) {
-        buserDAO.toApply(data);
-    }
-
-    @Override
-    public void allotAgency(BUser data) {
-        buserDAO.allotAgency(data);
-    }
-
-    // 接受意向分配
-    @Override
-    public void acceptIntention(BUser data) {
-        buserDAO.acceptIntention(data);
-    }
-
-    // 向下分配
-    @Override
-    public void refreshHighUser(BUser data) {
-        buserDAO.updateHigh(data);
-    }
-
-    // 申请升级
-    @Override
-    public void upgradeLevel(BUser data) {
-        buserDAO.upgradeLevel(data);
-    }
-
-    // 取消授权申请
-    @Override
-    public void cancelImpower(BUser data) {
-        buserDAO.cancelImpower(data);
-    }
-
-    @Override
-    public void cancelUplevel(BUser data) {
-        buserDAO.cancelUplevel(data);
-    }
-
-    @Override
-    public void approveImpower(BUser data) {
-        buserDAO.approveImpower(data);
-    }
-
-    @Override
-    public void approveUpgrade(BUser data) {
-        buserDAO.approveUpgrade(data);
+    public String refreshHighUser(BUser data) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgencyLog.getCode());
+        BUser alData = new BUser();
+        alData.setLastAgentLog(code);
+        alData.setUserId(data.getUserId());
+        alData.setStatus(EAgencyType.Update.getCode());
+        Date date = new Date();
+        alData.setApplyDatetime(date);
+        buserDAO.updateHigh(alData);
+        return code;
     }
 
     @Override
@@ -608,12 +564,6 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         buserDAO.updateManager(data);
-    }
-
-    @Override
-    public void ignore(BUser data) {
-        data.setStatus(EUserStatus.IGNORED.getCode());
-        buserDAO.ignore(data);
     }
 
     /*************** 查询 **********************/

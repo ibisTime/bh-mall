@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IIntroBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
@@ -22,7 +22,7 @@ public class IntroBOImpl extends PaginableBOImpl<Intro> implements IIntroBO {
     private IIntroDAO introDAO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Override
     public boolean isIntroExist(String code) {

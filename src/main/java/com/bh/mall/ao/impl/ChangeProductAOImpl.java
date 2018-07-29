@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IChangeProductAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgencyLogBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChangeProductBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IOrderBO;
@@ -30,8 +29,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentImpower;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.ChangeProduct;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
@@ -81,7 +79,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     IProductLogBO productLogBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Autowired
     IOrderBO orderBO;
@@ -92,8 +90,6 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     @Autowired
     IChargeBO chargeBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
     IAgencyLogBO agencyLogBO;
@@ -424,9 +420,9 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
-            Agent agent = agentBO.getAgentByLevel(user.getLevel());
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(user.getLevel());
+            AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(user.getLevel());
 
             // 检查云仓红线
             Long whAmount = 0L;

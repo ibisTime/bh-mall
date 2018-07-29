@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAgentAO;
+import com.bh.mall.ao.IAgentLevelAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627007Req;
@@ -17,13 +17,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627007 extends AProcessor {
 
-    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
+    private IAgentLevelAO agentLevelAO = SpringContextHolder.getBean(IAgentLevelAO.class);
 
     private XN627007Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return agentAO.getAgent(req.getLevel());
+        return agentLevelAO.getAgentLevel(req.getCode());
     }
 
     @Override

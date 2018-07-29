@@ -37,7 +37,7 @@ public class Order extends ABaseDO {
     private String productSpecsName;
 
     // 关联箱码
-    private String barCode;
+    private String proCode;
 
     // 图片
     private String pic;
@@ -625,12 +625,12 @@ public class Order extends ABaseDO {
         this.kindList = kindList;
     }
 
-    public String getBarCode() {
-        return barCode;
+    public String getProCode() {
+        return proCode;
     }
 
-    public void setBarCode(String barCode) {
-        this.barCode = barCode;
+    public void setProCode(String proCode) {
+        this.proCode = proCode;
     }
 
     public String getSigneName() {

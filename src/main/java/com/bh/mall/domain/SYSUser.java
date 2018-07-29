@@ -38,6 +38,9 @@ public class SYSUser extends ABaseDO {
     // 头像
     private String photo;
 
+    //
+    private String roleCode;
+
     // 系统编号
     private String systemCode;
 
@@ -183,6 +186,14 @@ public class SYSUser extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
 }

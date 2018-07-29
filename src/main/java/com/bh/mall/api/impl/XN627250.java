@@ -18,7 +18,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627250 extends AProcessor {
 
-    private IBuserAO userAO = SpringContextHolder.getBean(IBuserAO.class);
+    private IYxFormAO userAO = SpringContextHolder.getBean(IYxFormAO.class);
 
     private XN627250Req req = null;
 

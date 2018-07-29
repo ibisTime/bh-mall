@@ -17,9 +17,7 @@
 	    <typeAlias alias="sysDict" type="com.bh.mall.domain.SYSDict" />
 	    <typeAlias alias="sysConfig" type="com.bh.mall.domain.SYSConfig" />
 	    
-	    <typeAlias alias="agent" type="com.bh.mall.domain.Agent"/>
-	    <typeAlias alias="agentImpower" type="com.bh.mall.domain.AgentImpower"/>
-	    <typeAlias alias="agentUpgrade" type="com.bh.mall.domain.AgentUpgrade"/>
+	    <typeAlias alias="agentLevel" type="com.bh.mall.domain.AgentLevel"/>
 	    <typeAlias alias="material" type="com.bh.mall.domain.Material"/>
 	    <typeAlias alias="product" type="com.bh.mall.domain.Product"/>
 	    
@@ -54,15 +52,15 @@
 		<typeAlias alias="report" type="com.bh.mall.domain.Report"/>
 		
 		<typeAlias alias="awardInterval" type="com.bh.mall.domain.AwardInterval"/>
-		<typeAlias alias="securityTrace" type="com.bh.mall.domain.SecurityTrace"/>
-		<typeAlias alias="barCode" type="com.bh.mall.domain.BarCode"/>
+		<typeAlias alias="miniCode" type="com.bh.mall.domain.MiniCode"/>
+		<typeAlias alias="proCode" type="com.bh.mall.domain.ProCode"/>
 		
 		<typeAlias alias="sysuser" type="com.bh.mall.domain.SYSUser"/>
 		<typeAlias alias="cuser" type="com.bh.mall.domain.CUser"/>
 		<typeAlias alias="buser" type="com.bh.mall.domain.BUser"/>
-		<typeAlias alias="agentAllot" type="com.bh.mall.domain.AgentAllot"/>
-		<typeAlias alias="impowerApply" type="com.bh.mall.domain.ImpowerApply"/>
-		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.UpLevelApply"/>
+		<typeAlias alias="agentAllot" type="com.bh.mall.domain.YxForm"/>
+		<typeAlias alias="impowerApply" type="com.bh.mall.domain.SqForm"/>
+		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.SjForm"/>
 		
 	</typeAliases>
 </configuration>	

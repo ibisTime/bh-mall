@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IUserAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
-import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.ICompanyChannelBO;
 import com.bh.mall.bo.IJourBO;
@@ -33,7 +33,7 @@ import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.CompanyChannel;
@@ -83,7 +83,7 @@ public class WeChatAOImpl implements IWeChatAO {
     ISYSConfigBO sysConfigBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Autowired
     IUserAO userAO;
@@ -94,7 +94,7 @@ public class WeChatAOImpl implements IWeChatAO {
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl) {
         User user = userBO.getUser(applyUser);
-        Agent aData = agentBO.getAgentByLevel(user.getLevel());
+        AgentLevel aData = agentLevelBO.getAgentByLevel(user.getLevel());
         if (null != aData.getMinChargeAmount()
                 && (aData.getMinChargeAmount() / 1000) > transAmount) {
             throw new BizException("xn000000",

@@ -18,19 +18,18 @@ import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgencyLogBO;
-import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentImpowerBO;
+import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAwardBO;
 import com.bh.mall.bo.IAwardIntervalBO;
-import com.bh.mall.bo.IBarCodeBO;
 import com.bh.mall.bo.ICartBO;
+import com.bh.mall.bo.IMiniCodeBO;
 import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
-import com.bh.mall.bo.ISecurityTraceBO;
 import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseSpecsBO;
@@ -43,18 +42,17 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentImpower;
+import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Award;
 import com.bh.mall.domain.AwardInterval;
-import com.bh.mall.domain.BarCode;
 import com.bh.mall.domain.Cart;
+import com.bh.mall.domain.MiniCode;
 import com.bh.mall.domain.Order;
+import com.bh.mall.domain.ProCode;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.SYSConfig;
-import com.bh.mall.domain.SecurityTrace;
 import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627640Req;
@@ -132,20 +130,18 @@ public class OrderAOImpl implements IOrderAO {
     @Autowired
     IWareHouseSpecsBO wareHouseSpecsBO;
 
-    @Autowired
-    IAgentImpowerBO agentImpowerBO;
 
     @Autowired
-    IAgentBO agentBO;
+    IAgentLevelBO agentLevelBO;
 
     @Autowired
     IAwardIntervalBO awardIntervalBO;
 
     @Autowired
-    IBarCodeBO barCodeBO;
+    IProCodeBO proCodeBO;
 
     @Autowired
-    ISecurityTraceBO securityTraceBO;
+    IMiniCodeBO miniCodeBO;
 
     @Override
     @Transactional
@@ -204,7 +200,7 @@ public class OrderAOImpl implements IOrderAO {
         }
 
         // 是否为授权单
-        Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+        AgentLevel agent = agentLevelBO.getAgentByLevel(applyUser.getLevel());
 
         // 未开云仓的代理，判断是否为授权单
         if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
@@ -315,7 +311,7 @@ public class OrderAOImpl implements IOrderAO {
                 // 代理下单
                 if (EUserKind.Merchant.getCode().equals(uData.getKind())) {
                     // 该等级是否启用云仓
-                    Agent agent = agentBO.getAgentByLevel(uData.getLevel());
+                    AgentLevel agent = agentLevelBO.getAgentByLevel(uData.getLevel());
                     if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                         status = EOrderStatus.Received.getCode();
                         // 购买云仓
@@ -391,7 +387,7 @@ public class OrderAOImpl implements IOrderAO {
                 // 代理进货且是购买云仓
                 User applyUser = userBO.getUser(data.getApplyUser());
                 if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
-                    Agent agent = agentBO.getAgentByLevel(user.getLevel());
+                    AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
                     if (EBoolean.YES.getCode().equals(agent.getIsWareHouse())) {
                         status = EOrderStatus.Received.getCode();
                         // 购买云仓
@@ -429,8 +425,8 @@ public class OrderAOImpl implements IOrderAO {
 
         // 获取开放云仓的等级
         List<Integer> levelList = new ArrayList<Integer>();
-        List<Agent> agentList = agentBO.getAgentHaveWH();
-        for (Agent agent : agentList) {
+        List<AgentLevel> agentList = agentLevelBO.getAgentHaveWH();
+        for (AgentLevel agent : agentList) {
             levelList.add(agent.getLevel());
         }
         condition.setLevelList(levelList);
@@ -493,8 +489,8 @@ public class OrderAOImpl implements IOrderAO {
 
         // 获取开放云仓的等级
         List<Integer> levelList = new ArrayList<Integer>();
-        List<Agent> agentList = agentBO.getAgentHaveWH();
-        for (Agent agent : agentList) {
+        List<AgentLevel> agentList = agentLevelBO.getAgentHaveWH();
+        for (AgentLevel agent : agentList) {
             levelList.add(agent.getLevel());
         }
         condition.setLevelList(levelList);
@@ -710,7 +706,7 @@ public class OrderAOImpl implements IOrderAO {
                 }
 
                 User applyUser = userBO.getUser(data.getApplyUser());
-                Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+                AgentLevel agent = agentLevelBO.getAgentByLevel(applyUser.getLevel());
                 // 没有开启云仓的发放奖励
                 if (EBoolean.NO.getCode().equals(agent.getIsWareHouse())) {
                     // 出货以及推荐奖励
@@ -737,51 +733,51 @@ public class OrderAOImpl implements IOrderAO {
         data.setRemark(req.getRemark());
 
         // 是否有填写箱码或盒码
-        if (StringUtils.isEmpty(req.getBarCode())
+        if (StringUtils.isEmpty(req.getProCode())
                 && CollectionUtils.isEmpty(req.getTraceCodeList())) {
             throw new BizException("xn000000", "请输入一个箱码或盒码！");
         }
 
         // 订单与箱码关联（整箱发货）
-        if (StringUtils.isNotBlank(req.getBarCode())) {
-            data.setBarCode(req.getBarCode());
+        if (StringUtils.isNotBlank(req.getProCode())) {
+            data.setProCode(req.getProCode());
             // 修改箱码状态
-            BarCode barData = barCodeBO.getBarCode(req.getBarCode());
+            ProCode barData = proCodeBO.getProCode(req.getProCode());
             if (ECodeStatus.USE_YES.equals(barData.getStatus())) {
                 throw new BizException("xn00000", "该箱码已经使用过");
             }
             if (ECodeStatus.SPLIT_SINGLE.equals(barData.getStatus())) {
                 throw new BizException("xn00000", "该箱码已拆分");
             }
-            barCodeBO.refreshBarCode(barData);
+            proCodeBO.refreshProCode(barData);
 
             // 更新箱码关联的盒码与订单编号
-            List<SecurityTrace> stList = securityTraceBO
-                .getSecurityTraceByBarCode(barData.getCode());
-            for (SecurityTrace securityTrace : stList) {
-                securityTraceBO.refreshStatus(securityTrace, data.getCode());
+            List<MiniCode> stList = miniCodeBO
+                .getMiniCodeByproCode(barData.getCode());
+            for (MiniCode miniCode : stList) {
+                miniCodeBO.refreshStatus(miniCode, data.getCode());
             }
         }
 
         // 订单与盒码关联（盒装发货）
         if (CollectionUtils.isNotEmpty(req.getTraceCodeList())) {
             for (String stCode : req.getTraceCodeList()) {
-                SecurityTrace stData = securityTraceBO.getSecurityTrace(stCode);
+                MiniCode stData = miniCodeBO.getMiniCode(stCode);
                 if (EBoolean.YES.getCode().equals(stData.getStatus())) {
                     throw new BizException("xn00000", "该盒码已被使用");
                 }
-                securityTraceBO.refreshStatus(stData, data.getCode());
+                miniCodeBO.refreshStatus(stData, data.getCode());
             }
 
-            SecurityTrace stData = securityTraceBO
-                .getSecurityTrace(req.getTraceCodeList().get(0));
-            BarCode barData = barCodeBO.getBarCode(stData.getRefCode());
+            MiniCode stData = miniCodeBO
+                .getMiniCode(req.getTraceCodeList().get(0));
+            ProCode barData = proCodeBO.getProCode(stData.getRefCode());
             // 关联箱码不是未使用和已拆分
             if (ECodeStatus.USE_YES.getCode().equals(barData.getCode())) {
                 throw new BizException("xn00000", "该箱码已被使用");
             }
             // 更新关联的箱码状态
-            barCodeBO.splitSingle(barData);
+            proCodeBO.splitSingle(barData);
         }
 
         orderBO.deliverOrder(data);
@@ -1035,8 +1031,8 @@ public class OrderAOImpl implements IOrderAO {
                 amount = amount + order.getAmount();
             }
 
-            AgentImpower impower = agentImpowerBO
-                .getAgentImpowerByLevel(user.getLevel());
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(user.getLevel());
 
             if (impower.getMinCharge() >= amount) {
                 return false;
@@ -1078,7 +1074,7 @@ public class OrderAOImpl implements IOrderAO {
             }
 
             // 门槛余额是否高于限制
-            Agent agent = agentBO.getAgentByLevel(applyUser.getLevel());
+            AgentLevel agent = agentLevelBO.getAgentByLevel(applyUser.getLevel());
 
             // 是否开启云仓
             boolean flag = orderBO.checkImpowerOrder(applyUser.getUserId(),
