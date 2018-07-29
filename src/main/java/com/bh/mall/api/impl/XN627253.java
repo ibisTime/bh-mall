@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -18,13 +18,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627253 extends AProcessor {
 
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private IYxFormAO yxForm = SpringContextHolder.getBean(IYxFormAO.class);
 
     private XN627253Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.acceptIntention(req.getUserId(), req.getApprover(),
+        yxForm.acceptIntention(req.getUserId(), req.getApprover(),
             req.getRemark());
         return new BooleanRes(true);
     }

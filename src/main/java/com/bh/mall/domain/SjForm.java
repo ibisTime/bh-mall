@@ -45,7 +45,7 @@ public class SjForm extends ABaseDO {
 
     /***************** DB **************************/
 
-    private BUser user;
+    private Agent user;
 
     private Long impowerAmount;
 
@@ -175,11 +175,11 @@ public class SjForm extends ABaseDO {
     }
 
     // 获取数据库 buser
-    public BUser getUser() {
+    public Agent getUser() {
         return user;
     }
 
-    public void setUser(BUser user) {
+    public void setUser(Agent user) {
         this.user = user;
     }
 

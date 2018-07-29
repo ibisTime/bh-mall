@@ -1,10 +1,10 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.ISYSUserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.req.XN627352Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -18,16 +18,16 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627352 extends AProcessor {
 
-    private ISYSUserAO userAO = SpringContextHolder.getBean(ISYSUserAO.class);
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627352Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        BUser condition = new BUser();
+        Agent condition = new Agent();
         condition.setKeyWord(req.getKeyword());
         condition.setHighUserId(req.getUserId());
-        return userAO.queryAgentPage(condition);
+        return agentAO.queryAgentList(condition);
     }
 
     @Override

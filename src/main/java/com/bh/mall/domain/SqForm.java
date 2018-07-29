@@ -86,7 +86,7 @@ public class SqForm extends ABaseDO {
 
     /***************** DB **************************/
 
-    private BUser user;
+    private Agent agent;
 
     private String keyWord;
 
@@ -320,12 +320,12 @@ public class SqForm extends ABaseDO {
     }
 
     // 获取数据库 buser
-    public BUser getUser() {
-        return user;
+    public Agent getUser() {
+        return agent;
     }
 
-    public void setUser(BUser user) {
-        this.user = user;
+    public void setUser(Agent agent) {
+        this.agent = agent;
     }
 
     // 获取升级金额

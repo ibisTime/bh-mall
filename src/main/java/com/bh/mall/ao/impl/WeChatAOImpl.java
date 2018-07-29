@@ -22,22 +22,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IUserAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.ICompanyChannelBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.ISYSConfigBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWeChatBO;
 import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.CompanyChannel;
-import com.bh.mall.domain.User;
 import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
@@ -77,7 +77,7 @@ public class WeChatAOImpl implements IWeChatAO {
     IAccountBO accountBO;
 
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Autowired
     ISYSConfigBO sysConfigBO;
@@ -93,7 +93,7 @@ public class WeChatAOImpl implements IWeChatAO {
     public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl) {
-        User user = userBO.getUser(applyUser);
+        Agent user = agentBO.getAgent(applyUser);
         AgentLevel aData = agentLevelBO.getAgentByLevel(user.getLevel());
         if (null != aData.getMinChargeAmount()
                 && (aData.getMinChargeAmount() / 1000) > transAmount) {
@@ -116,12 +116,12 @@ public class WeChatAOImpl implements IWeChatAO {
     public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl, String payType) {
-        User user = userBO.getCheckUser(applyUser);
+        Agent agent = agentBO.getAgent(applyUser);
 
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
         }
-        String openId = user.getH5OpenId();
+        String openId = agent.getH5OpenId();
         if (StringUtils.isBlank(openId)) {
             throw new BizException("xn0000", "请先微信登录再支付");
         }
@@ -176,9 +176,9 @@ public class WeChatAOImpl implements IWeChatAO {
                     EBizType.getBizTypeMap().get(order.getBizType()),
                     order.getBizNote(), order.getAmount());
 
-                // 上级加钱
-                User user = userBO.getUser(order.getApplyUser());
-                userAO.addHighAccount(user, order.getAmount());
+                // 上级加钱 TODO
+                // Agent agent = agentBO.getAgent(order.getApplyUser());
+                // userAO.addHighAccount(agent, order.getAmount());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);

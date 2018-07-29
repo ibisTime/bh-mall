@@ -1,7 +1,7 @@
 
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -19,14 +19,15 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627257 extends AProcessor {
 
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private ISqFormAO sqFormAO = SpringContextHolder.getBean(ISqFormAO.class);
 
     private XN627257Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return new BooleanRes(userAO.approveImpower(req.getUserId(),
-            req.getApprover(), req.getResult(), req.getRemark()));
+        sqFormAO.approveImpower(req.getUserId(), req.getApprover(),
+            req.getResult(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     @Override

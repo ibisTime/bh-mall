@@ -1,16 +1,11 @@
 package com.bh.mall.ao;
 
-import java.util.List;
-
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.SYSUser;
 
 public interface ISYSUserAO {
 
     String DEFAULT_ORDER_COLUMN = "user_id";
-
-    // 注册
 
     // 用户登录 XN627300
     public String doLogin(String loginName, String loginPwd);
@@ -39,25 +34,13 @@ public interface ISYSUserAO {
 
     public void doModifyPhoto(String userId, String photo);
 
-    /*************** 管理 *******************/
-
-    // 更改信息
-
-    // 修改上级 XN627261
-    public void editManager(String userId, String manager, String updater);
-
-    // 修改推荐人
-
     /*************** 查询 *******************/
 
     public Paginable<SYSUser> queryUserPage(int start, int limit,
             SYSUser condition);
 
-    // 分页查询意向代理/OSS XN627354 & XN627361
-    public Paginable<BUser> queryIntentionAgentPage(int start, int limit,
-            BUser condition);
-
-    // 代理结构OSS XN627352
-    public List<BUser> queryAgentPage(BUser condition);
+    // 登录密码
+    public void resetLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd);
 
 }

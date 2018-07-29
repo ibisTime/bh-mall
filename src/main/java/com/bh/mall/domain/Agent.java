@@ -13,7 +13,8 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 
-public class BUser extends ABaseDO {
+// TODO 交易密码
+public class Agent extends ABaseDO {
     private static final long serialVersionUID = 1L;
 
     /****** key ******/
@@ -66,6 +67,7 @@ public class BUser extends ABaseDO {
     private String loginPwdStrength;
 
     // 交易密码？
+    private String tradePwd;
 
     /****** 代理身份信息 ******/
     // 身份标识
@@ -171,12 +173,10 @@ public class BUser extends ABaseDO {
 
     /***********************************/
     // DB
-    private List<BUser> agentUserList;
-
-    private List<BUser> userList;
+    private List<Agent> agentList;
 
     // 上级用户
-    private BUser highUser;
+    private Agent highUser;
 
     // 申请时间起(选填)
     private Date applyDatetimeStart;
@@ -199,25 +199,20 @@ public class BUser extends ABaseDO {
 
     /***********************************/
 
-    public List<BUser> getAgentUserList() {
-        return agentUserList;
-    }
-
-    public void setAgentList(List<BUser> agentUserList) {
-        this.agentUserList = agentUserList;
-    }
-
-    public List<BUser> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<BUser> userList) {
-        this.userList = userList;
-    }
+    // 上级
+    private Integer highLevel;
 
     // 获取ID
     public String getUserId() {
         return userId;
+    }
+
+    public List<Agent> getAgentList() {
+        return agentList;
+    }
+
+    public void setAgentList(List<Agent> agentList) {
+        this.agentList = agentList;
     }
 
     public void setUserId(String userId) {
@@ -399,11 +394,11 @@ public class BUser extends ABaseDO {
         this.highUserId = highUserId;
     }
 
-    public BUser getHighUser() {
+    public Agent getHighUser() {
         return highUser;
     }
 
-    public void setHighUser(BUser highUser) {
+    public void setHighUser(Agent highUser) {
         this.highUser = highUser;
     }
 
@@ -703,4 +698,21 @@ public class BUser extends ABaseDO {
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
     }
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
+    public Integer getHighLevel() {
+        return highLevel;
+    }
+
+    public void setHighLevel(Integer highLevel) {
+        this.highLevel = highLevel;
+    }
+
 }

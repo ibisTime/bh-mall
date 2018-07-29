@@ -10,25 +10,25 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IWareHouseAO;
 import com.bh.mall.bo.IAddressBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseSpecsBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.SYSConfig;
-import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627814Res;
@@ -45,7 +45,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
     IWareHouseBO wareHouseBO;
 
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Autowired
     IProductBO productBO;
@@ -68,7 +68,6 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Autowired
     IProductSpecsPriceBO productSpecsPriceBO;
 
-
     @Autowired
     IOrderAO orderAO;
 
@@ -84,8 +83,8 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
         WareHouse specsCondition = new WareHouse();
         for (WareHouse wareHouse : list) {
-            User user = userBO.getUser(wareHouse.getUserId());
-            wareHouse.setUser(user);
+            Agent agent = agentBO.getAgent(wareHouse.getUserId());
+            wareHouse.setAgent(agent);
             Product product = productBO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
             specsCondition.setUserId(wareHouse.getUserId());
@@ -104,8 +103,8 @@ public class WareHouseAOImpl implements IWareHouseAO {
         List<WareHouse> list = wareHouseBO.queryWareHouseList(condition);
         WareHouse specsCondition = new WareHouse();
         for (WareHouse wareHouse : list) {
-            User user = userBO.getUser(wareHouse.getUserId());
-            wareHouse.setUser(user);
+            Agent agent = agentBO.getAgent(wareHouse.getUserId());
+            wareHouse.setAgent(agent);
             Product product = productBO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
             specsCondition.setUserId(wareHouse.getUserId());
@@ -123,14 +122,14 @@ public class WareHouseAOImpl implements IWareHouseAO {
     public WareHouse getWareHouse(String code) {
 
         WareHouse data = wareHouseBO.getWareHouse(code);
-        User user = userBO.getUser(data.getUserId());
+        Agent agent = agentBO.getAgent(data.getUserId());
         WareHouse condition = new WareHouse();
         condition.setUserId(data.getUserId());
         condition.setProductCode(data.getProductCode());
         List<WareHouse> specsList = wareHouseBO.queryWareHouseList(condition);
         for (WareHouse wh : specsList) {
             ProductSpecsPrice price = productSpecsPriceBO
-                .getPriceByLevel(wh.getProductSpecsCode(), user.getLevel());
+                .getPriceByLevel(wh.getProductSpecsCode(), agent.getLevel());
             wh.setPrice(price.getPrice());
         }
         data.setWhsList(specsList);
@@ -148,8 +147,8 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
         WareHouse specsCondition = new WareHouse();
         for (WareHouse wareHouse : list) {
-            User user = userBO.getUser(wareHouse.getUserId());
-            wareHouse.setUser(user);
+            Agent agent = agentBO.getAgent(wareHouse.getUserId());
+            wareHouse.setAgent(agent);
             Product product = productBO.getProduct(wareHouse.getProductCode());
             wareHouse.setProduct(product);
             specsCondition.setUserId(wareHouse.getUserId());
@@ -186,7 +185,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
     @Override
     @Transactional
     public void deliveProject(XN627815Req req) {
-        User user = userBO.getUser(req.getUserId());
+        Agent agent = agentBO.getAgent(req.getUserId());
         WareHouse data = wareHouseBO.getWareHouseByProductSpec(req.getUserId(),
             req.getProductSpecsCode());
         if (null == data) {
@@ -196,10 +195,10 @@ public class WareHouseAOImpl implements IWareHouseAO {
         ProductSpecs psData = productSpecsBO
             .getProductSpecs(data.getProductSpecsCode());
         ProductSpecsPrice pspData = productSpecsPriceBO
-            .getPriceByLevel(data.getProductSpecsCode(), user.getLevel());
+            .getPriceByLevel(data.getProductSpecsCode(), agent.getLevel());
 
         // 检查限购
-        orderAO.checkLimitNumber(user, psData, pspData,
+        orderAO.checkLimitNumber(agent, psData, pspData,
             StringValidater.toInteger(req.getQuantity()));
         if (pspData.getMinNumber() > data.getQuantity()) {
             throw new BizException("xn00000",
@@ -214,17 +213,17 @@ public class WareHouseAOImpl implements IWareHouseAO {
 
         // 获取授权单
         String kind = EOrderKind.Pick_Up.getCode();
-        AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
+        AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
 
         // 是否完成授权单
         Long amount = data.getPrice()
                 * StringValidater.toInteger(req.getQuantity());
 
-        if (orderBO.checkImpowerOrder(user.getUserId(),
-            user.getImpowerDatetime())) {
-            if (agent.getAmount() > amount) {
-                throw new BizException("xn00000", agent.getName() + "授权单金额为["
-                        + agent.getAmount() / 1000 + "]元");
+        if (orderBO.checkImpowerOrder(agent.getUserId(),
+            agent.getImpowerDatetime())) {
+            if (agentLevel.getAmount() > amount) {
+                throw new BizException("xn00000", agentLevel.getName()
+                        + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
             } else {
                 kind = EOrderKind.Impower_Order.getCode();
             }
@@ -261,7 +260,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
                     data.getProductSpecsCode(), data.getProductSpecsName(),
                     psData.getSingleNumber(), data.getPrice(),
                     psData.getSingleNumber() * data.getPrice(), yunfei,
-                    user.getHighUserId(), data.getUserId(), req.getSigner(),
+                    agent.getHighUserId(), data.getUserId(), req.getSigner(),
                     req.getMobile(), req.getProvince(), req.getCity(),
                     req.getArea(), req.getAddress(), kind);
 
@@ -276,7 +275,7 @@ public class WareHouseAOImpl implements IWareHouseAO {
                 data.getProductSpecsCode(), data.getProductSpecsName(),
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),
                 psData.getSingleNumber() * data.getPrice(), yunfei,
-                user.getHighUserId(), data.getUserId(), req.getSigner(),
+                agent.getHighUserId(), data.getUserId(), req.getSigner(),
                 req.getMobile(), req.getProvince(), req.getCity(),
                 req.getArea(), req.getAddress(), kind);
             // 减少云仓库存

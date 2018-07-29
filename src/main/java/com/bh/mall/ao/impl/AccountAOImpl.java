@@ -10,19 +10,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.User;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
+
+//  TODO  公司账户
 
 @Service
 public class AccountAOImpl implements IAccountAO {
@@ -31,7 +33,7 @@ public class AccountAOImpl implements IAccountAO {
     IAccountBO accountBO;
 
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;
@@ -83,8 +85,8 @@ public class AccountAOImpl implements IAccountAO {
         List<Account> list = page.getList();
         for (Account account : list) {
             if (!ESysUser.SYS_USER_BH.getCode().equals(account.getUserId())) {
-                User user = userBO.getUser(account.getUserId());
-                account.setUser(user);
+                Agent agent = agentBO.getAgent(account.getUserId());
+                account.setAgent(agent);
             }
         }
         page.setList(list);
@@ -95,8 +97,8 @@ public class AccountAOImpl implements IAccountAO {
     public Account getAccount(String accountNumber) {
         Account data = accountBO.getAccount(accountNumber);
         if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
-            User user = userBO.getUser(data.getUserId());
-            data.setUser(user);
+            Agent Agent = agentBO.getAgent(data.getUserId());
+            data.setAgent(Agent);
         }
         return data;
     }
@@ -113,8 +115,8 @@ public class AccountAOImpl implements IAccountAO {
         condition.setCurrency(currency);
         List<Account> list = accountBO.queryAccountList(condition);
         for (Account account : list) {
-            User user = userBO.getUser(account.getUserId());
-            account.setUser(user);
+            Agent Agent = agentBO.getAgent(account.getUserId());
+            account.setAgent(Agent);
         }
         return list;
     }
@@ -124,8 +126,8 @@ public class AccountAOImpl implements IAccountAO {
         List<Account> list = accountBO.queryAccountList(condition);
         for (Account account : list) {
             if (!ESysUser.SYS_USER_BH.getCode().equals(account.getUserId())) {
-                User user = userBO.getUser(account.getUserId());
-                account.setUser(user);
+                Agent Agent = agentBO.getAgent(account.getUserId());
+                account.setAgent(Agent);
             }
         }
         return list;
@@ -135,7 +137,7 @@ public class AccountAOImpl implements IAccountAO {
     public boolean checkAmount(String userId) {
         Account account = accountBO.getAccountByUser(userId,
             ECurrency.MK_CNY.getCode());
-        User user = userBO.getUser(userId);
+        Agent user = agentBO.getAgent(userId);
         AgentLevel agent = null;
         if (null != user.getLevel() && 0 != user.getLevel()) {
             agent = agentLevelBO.getAgentByLevel(user.getLevel());

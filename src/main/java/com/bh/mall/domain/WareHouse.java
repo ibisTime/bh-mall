@@ -70,7 +70,7 @@ public class WareHouse extends ABaseDO {
     private String keyword;
 
     // 用户
-    private User user;
+    private Agent agent;
 
     // 仓库货物总价值
     private Product product;
@@ -84,12 +84,12 @@ public class WareHouse extends ABaseDO {
     // 产品名称
     private List<WareHouse> specsList;
 
-    public User getUser() {
-        return user;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     public String getKeyword() {

@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.ISYSRoleAO;
 import com.bh.mall.bo.ISYSMenuRoleBO;
 import com.bh.mall.bo.ISYSRoleBO;
-import com.bh.mall.bo.IUserBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.SYSRole;
-import com.bh.mall.domain.User;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.req.XN627040Req;
 import com.bh.mall.exception.BizException;
 
@@ -26,7 +26,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
     ISYSRoleBO sysRoleBO;
 
     @Autowired
-    IUserBO userBO;
+    ISYSUserBO sysUserBO;
 
     @Autowired
     ISYSMenuRoleBO sysMenuRoleBO;
@@ -41,7 +41,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
         data.setSystemCode(req.getSystemCode());
-        sysRoleBO.saveSYSRole(data);  
+        sysRoleBO.saveSYSRole(data);
         return code;
     }
 
@@ -51,9 +51,9 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         if (!sysRoleBO.isSYSRoleExist(roleCode)) {
             throw new BizException("lh4000", "角色编号不存在！");
         }
-        User condition = new User();
+        SYSUser condition = new SYSUser();
         condition.setRoleCode(roleCode);
-        List<User> list = userBO.queryUserList(condition);
+        List<SYSUser> list = sysUserBO.queryUserList(condition);
         if (!CollectionUtils.sizeIsEmpty(list)) {
             throw new BizException("lh4000", "该角色已在使用，无法删除！");
         }
@@ -70,7 +70,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         } else {
             throw new BizException("lh4000", "角色编号不存在！");
         }
-         
+
         return true;
     }
 

@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.ISYSUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -17,13 +17,15 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627309 extends AProcessor {
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+
+    private ISYSUserAO sysUserAO = SpringContextHolder
+        .getBean(ISYSUserAO.class);
 
     private XN627309Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.resetLoginPwd(req.getMobile(), req.getSmsCaptcha(),
+        sysUserAO.resetLoginPwd(req.getMobile(), req.getSmsCaptcha(),
             req.getNewLoginPwd());
         return new BooleanRes(true);
     }

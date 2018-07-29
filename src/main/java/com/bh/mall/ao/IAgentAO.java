@@ -1,7 +1,9 @@
 package com.bh.mall.ao;
 
+import java.util.List;
+
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.res.XN627303Res;
 
@@ -11,7 +13,7 @@ import com.bh.mall.dto.res.XN627303Res;
  * @since: Jul 6, 2018 4:29:55 AM 
  * @history:
  */
-public interface IBuserAO {
+public interface IAgentAO {
 
     String DEFAULT_ORDER_COLUMN = "user_id";
 
@@ -48,20 +50,38 @@ public interface IBuserAO {
     /*************** 查询 *******************/
 
     // 我的下级 XN627350
-    public Paginable<BUser> queryLowUser(int start, int limit, BUser condition);
-
-    // 分页查询意向代理
-    public Paginable<BUser> queryIntentionAgentPageFront(int start, int limit,
-            BUser condition);
+    public Paginable<Agent> queryLowUser(int start, int limit, Agent condition);
 
     // 代理结构 XN627351
-    public Paginable<BUser> queryMyLowUserPage(int start, int limit,
-            BUser condition);
+    public Paginable<Agent> queryMyLowUserPage(int start, int limit,
+            Agent condition);
 
-    // 代理轨迹
+    public Agent getUserName(String userReferee);
 
-    public BUser doGetUser(String userId);
+    // 代理结构OSS XN627352
+    public List<Agent> queryAgentList(Agent condition);
 
-    public BUser getUserName(String userReferee);
+    // 修改上级
+    public void editHighUser(String userId, String highUser, String updater);
+
+    // 修改推荐人
+    public void editUserReferee(String userId, String userReferee,
+            String updater);
+
+    public Paginable<Agent> queryAgentPage(int start, int limit,
+            Agent condition);
+
+    public List<Agent> getAgentLog(Agent condition);
+
+    // 公司直接取消授权
+    public void abolishImpower(String userId, String updater, String remark);
+
+    // 根据手机号查询代理
+    public Agent doGetAgentByMobile(String mobile);
+
+    public Agent getAgent(String userId);
+
+    // 修改管理员
+    public void editManager(String userId, String manager, String updater);
 
 }

@@ -27,7 +27,7 @@ public class XN627473 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Charge condition = new Charge();
-        condition.setHighUserId(req.getUserId());
+        condition.setHighAgentId(req.getUserId());
         // condition.setApplyUser(req.getUserId());
         condition.setStatus(req.getStatus());
 

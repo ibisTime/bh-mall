@@ -5,11 +5,12 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.ao.ISYSUserAO;
+import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627361Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -23,19 +24,18 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627361 extends AProcessor {
 
-    private ISYSUserAO userAO = SpringContextHolder.getBean(ISYSUserAO.class);
+    private IYxFormAO yxFormAO = SpringContextHolder.getBean(IYxFormAO.class);
 
     private XN627361Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        BUser condition = new BUser();
+
+        YxForm condition = new YxForm();
         condition.setKeyWord(req.getKeyword());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         condition.setStatus(req.getStatus());
-
-        condition.setHighUserId(req.getUserId());
 
         Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
@@ -52,7 +52,7 @@ public class XN627361 extends AProcessor {
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return userAO.queryIntentionAgentPage(start, limit, condition);
+        return yxFormAO.queryYxFormPage(start, limit, condition);
     }
 
     @Override

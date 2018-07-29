@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IBuserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -18,13 +18,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627255 extends AProcessor {
 
-    private IBuserAO userAO = SpringContextHolder.getBean(IBuserAO.class);
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627255Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.updateInformation(req);
+        agentAO.updateInformation(req);
         return new BooleanRes(true);
     }
 

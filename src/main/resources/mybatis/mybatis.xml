@@ -6,7 +6,6 @@
 		<setting name="logImpl" value="STDOUT_LOGGING"/>
 	</settings> -->
 	<typeAliases>		
-		<typeAlias alias="user" type="com.bh.mall.domain.User" />
 		<typeAlias alias="address" type="com.bh.mall.domain.Address" />
 		<typeAlias alias="sysMenu" type="com.bh.mall.domain.SYSMenu" />
 	    <typeAlias alias="sysRole" type="com.bh.mall.domain.SYSRole" />
@@ -56,7 +55,7 @@
 		
 		<typeAlias alias="sysuser" type="com.bh.mall.domain.SYSUser"/>
 		<typeAlias alias="cuser" type="com.bh.mall.domain.CUser"/>
-		<typeAlias alias="buser" type="com.bh.mall.domain.BUser"/>
+		<typeAlias alias="agent" type="com.bh.mall.domain.Agent"/>
 		<typeAlias alias="agentAllot" type="com.bh.mall.domain.YxForm"/>
 		<typeAlias alias="impowerApply" type="com.bh.mall.domain.SqForm"/>
 		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.SjForm"/>

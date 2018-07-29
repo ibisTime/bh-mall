@@ -22,8 +22,6 @@ public class IUserBOTest extends ABizTest {
     @Autowired
     private IUserBO userBO;
 
-    @Autowired
-    private IBuserBO buserBO;
 
     @Test
     public void doRegister() {

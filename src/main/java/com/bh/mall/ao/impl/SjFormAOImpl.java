@@ -10,18 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IBuserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.ISjFormAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EBizType;
@@ -30,7 +30,7 @@ import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EUserLevel;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -41,10 +41,10 @@ public class SjFormAOImpl implements ISjFormAO {
     private ISjFormBO sjFormBO;
 
     @Autowired
-    private IBuserAO buserAO;
+    private IAgentAO agentAO;
 
     @Autowired
-    private IBuserBO buserBO;
+    private IAgentBO agentBO;
 
     @Autowired
     private IAgentLevelBO agentLevelBO;
@@ -60,7 +60,7 @@ public class SjFormAOImpl implements ISjFormAO {
     @Override
     public void upgradeLevel(String userId, String highLevel, String payPdf,
             String payAmount) {
-        BUser data = buserBO.getUser(userId);
+        Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
                 || EUserStatus.UPGRADED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn000", "您的状态无法申请升级");
@@ -69,7 +69,7 @@ public class SjFormAOImpl implements ISjFormAO {
         if (data.getLevel() <= StringValidater.toInteger(highLevel)) {
             throw new BizException("xn0000", "升级等级要大于当前等级");
         }
-        if (StringValidater.toInteger(EUserLevel.ONE.getCode()) == data
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
             throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
         }
@@ -81,7 +81,7 @@ public class SjFormAOImpl implements ISjFormAO {
             .getAgentByLevel(StringValidater.toInteger(highLevel));
 
         // 推荐人数是否满足半门槛
-        List<BUser> userReferee = buserBO
+        List<Agent> userReferee = agentBO
             .getUsersByUserReferee(data.getUserId());
         if (upgrade.getReNumber() >= userReferee.size()) {
             if (StringValidater.toLong(payAmount) <= agent
@@ -104,7 +104,7 @@ public class SjFormAOImpl implements ISjFormAO {
         }
         String status = EUserStatus.TO_COMPANYUPGRADE.getCode();
         if (StringUtils.isNotBlank(data.getHighUserId())) {
-            BUser highUser = buserBO.getUser(data.getHighUserId());
+            Agent highUser = agentBO.getAgent(data.getHighUserId());
             if (EUserKind.Merchant.getCode().equals(highUser.getKind())) {
                 status = EUserStatus.TO_UPGRADE.getCode();
             }
@@ -129,15 +129,16 @@ public class SjFormAOImpl implements ISjFormAO {
     /*************** 通过升级申请 **********************/
     @Override
     @Transactional
-    public void approveUpgrade(String userId, String approver, String remark) {
-        BUser data = buserBO.getUser(userId);
+    public void approveUpgrade(String userId, String approver, String result,
+            String remark) {
+        Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.TO_COMPANYUPGRADE.getCode().equals(data.getStatus())
                 || EUserStatus.TO_UPGRADE.getCode().equals(data.getStatus()))) {
             throw new BizException("xn00000", "代理未申请升级");
         }
         String status = EUserStatus.IMPOWERED.getCode();
         Integer level = data.getLevel();
-        if (EBoolean.YES.getCode().equals(' ')) {
+        if (EBoolean.YES.getCode().equals(result)) {
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
             status = EUserStatus.UPGRADED.getCode();
@@ -147,7 +148,7 @@ public class SjFormAOImpl implements ISjFormAO {
             // 是否推荐的代理 TODO
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
                 if (!EUser.ADMIN.getCode().equals(approver)) {
-                    BUser approveUser = buserBO.getUser(approver);
+                    Agent approveUser = agentBO.getAgent(approver);
                     if (!EUserKind.Plat.getCode()
                         .equals(approveUser.getKind())) {
                         status = EUserStatus.TO_COMPANYUPGRADE.getCode();
@@ -217,7 +218,7 @@ public class SjFormAOImpl implements ISjFormAO {
     /*************** 通过取消升级申请 **********************/
     public void approveUplevelCancel(String userId, String approver,
             String result, String remark) {
-        BUser data = buserBO.getUser(userId);
+        Agent data = agentBO.getAgent(userId);
         String status = EUserStatus.IMPOWERED.getCode();
         data.setStatus(status);
         data.setApprover(approver);
@@ -237,7 +238,7 @@ public class SjFormAOImpl implements ISjFormAO {
     /*************** 通过取消升级申请 **********************/
     public void approveUplevelCanenl(String userId, String approver,
             String result, String remark) {
-        BUser data = buserBO.getUser(userId);
+        Agent data = agentBO.getAgent(userId);
         String status = EUserStatus.IMPOWERED.getCode();
         data.setStatus(status);
         data.setApprover(approver);
@@ -268,24 +269,24 @@ public class SjFormAOImpl implements ISjFormAO {
 
         List<SjForm> list = sjFormBO.queryUpLevelApplyList(condition);
         for (SjForm agencyLog : list) {
-            BUser userReferee = null;
-            BUser buser = buserAO.doGetUser(agencyLog.getApplyUser());
-            agencyLog.setUser(buser);
+            Agent userReferee = null;
+            Agent agent = agentAO.getAgent(agencyLog.getApplyUser());
+            agencyLog.setUser(agent);
             /*
              * if (StringUtils.isNotBlank(agencyLog.getUserReferee())) {
-             * userReferee = userAO.doGetUser(agencyLog.getUserReferee()); if
+             * userReferee = userAO.getAgent(agencyLog.getUserReferee()); if
              * (userReferee != null) {
              * agencyLog.setRefereeName(userReferee.getRealName()); }
              */
-            // 审核人
+            // 审核人 TODO
             if (EUser.ADMIN.getCode().equals(agencyLog.getApprover())) {
                 agencyLog.setApprover(agencyLog.getApprover());
             } else {
                 if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-                    BUser aprrvoeName = buserAO
-                        .doGetUser(agencyLog.getApprover());
+                    Agent aprrvoeName = agentAO
+                        .getAgent(agencyLog.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = buserAO
+                        userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             agencyLog.setApprover(userReferee.getRealName());
@@ -302,23 +303,23 @@ public class SjFormAOImpl implements ISjFormAO {
     @Override
     public SjForm getUplevelApply(String code) {
         SjForm data = sjFormBO.getUpLevelApply(code);
-        BUser buser = buserAO.doGetUser(data.getApplyUser());
-        data.setUser(buser);
-        BUser userReferee = null;
-        data.setUser(buser);
+        Agent agent = agentAO.getAgent(data.getApplyUser());
+        data.setUser(agent);
+        Agent userReferee = null;
+        data.setUser(agent);
         /*
          * if (StringUtils.isNotBlank(data.getUserReferee())) { userReferee =
-         * buserAO.doGetUser(data.getUserReferee()); if (userReferee != null) {
+         * agentAO.getAgent(data.getUserReferee()); if (userReferee != null) {
          * data.setRefereeName(userReferee.getRealName()); } }
          */
-        // 审核人
+        // 审核人 TODO
         if (EUser.ADMIN.getCode().equals(data.getApprover())) {
             data.setApprover(data.getApprover());
         } else {
             if (StringUtils.isNotBlank(data.getApprover())) {
-                BUser aprrvoeName = buserAO.doGetUser(data.getApprover());
+                Agent aprrvoeName = agentAO.getAgent(data.getApprover());
                 if (null != aprrvoeName) {
-                    userReferee = buserAO.getUserName(aprrvoeName.getUserId());
+                    userReferee = agentAO.getUserName(aprrvoeName.getUserId());
                     if (userReferee != null) {
                         data.setApprover(userReferee.getRealName());
                     }
@@ -349,19 +350,19 @@ public class SjFormAOImpl implements ISjFormAO {
          */
 
         Paginable<SjForm> page = sjFormBO.getPaginable(start, limit, condition);
-        BUser userReferee = null;
-        BUser buser = null;
+        Agent userReferee = null;
+        Agent agent = null;
         for (Iterator<SjForm> iterator = page.getList().iterator(); iterator
             .hasNext();) {
             SjForm agencyLog = iterator.next();
-            buser = buserAO.doGetUser(agencyLog.getApplyUser());
-            if (!buser.getLastAgentLog().equals(agencyLog.getCode())) {
+            agent = agentAO.getAgent(agencyLog.getApplyUser());
+            if (!agent.getLastAgentLog().equals(agencyLog.getCode())) {
                 iterator.remove();
                 continue;
             }
-            agencyLog.setUser(buser);
-            if (StringUtils.isNotBlank(buser.getUserReferee())) {
-                userReferee = buserAO.doGetUser(buser.getUserReferee());
+            agencyLog.setUser(agent);
+            if (StringUtils.isNotBlank(agent.getUserReferee())) {
+                userReferee = agentAO.getAgent(agent.getUserReferee());
                 /// agencyLog.setRefereeName(userReferee.getRealName());
             }
             // 审核人
@@ -369,10 +370,10 @@ public class SjFormAOImpl implements ISjFormAO {
                 agencyLog.setApprover(EUser.ADMIN.getCode());
             } else {
                 if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-                    BUser aprrvoeName = buserAO
-                        .doGetUser(agencyLog.getApprover());
+                    Agent aprrvoeName = agentAO
+                        .getAgent(agencyLog.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = buserAO
+                        userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             agencyLog.setApprover(userReferee.getRealName());
@@ -408,33 +409,33 @@ public class SjFormAOImpl implements ISjFormAO {
         List<SjForm> list = page.getList();
 
         for (SjForm uplevelApply : list) {
-            BUser userReferee = null;
-            BUser buser = buserAO.doGetUser(uplevelApply.getApplyUser());
-            uplevelApply.setUser(buser);
+            Agent userReferee = null;
+            Agent agent = agentAO.getAgent(uplevelApply.getApplyUser());
+            uplevelApply.setUser(agent);
 
             /*
              * if (StringUtils.isNotBlank(impowerApply.getUserReferee())) {
-             * userReferee = buserAO
+             * userReferee = agentAO
              * .getUserName(impowerApply.getUserReferee()); if (userReferee !=
              * null) { impowerApply.setRefereeName(userReferee.getRealName()); }
              * }
              */
             // 补全授权金额
-            if (null != buser.getApplyLevel()) {
+            if (null != agent.getApplyLevel()) {
                 // 代理等级表
-                AgentLevel agent = agentLevelBO
-                    .getAgentByLevel(buser.getApplyLevel());
-                uplevelApply.setImpowerAmount(agent.getAmount());
+                AgentLevel agentLevle = agentLevelBO
+                    .getAgentByLevel(agent.getApplyLevel());
+                uplevelApply.setImpowerAmount(agentLevle.getAmount());
             }
             // 审核人
             if (EUser.ADMIN.getCode().equals(uplevelApply.getApprover())) {
                 uplevelApply.setApprover(uplevelApply.getApprover());
             } else {
                 if (StringUtils.isNotBlank(uplevelApply.getApprover())) {
-                    BUser aprrvoeName = buserAO
-                        .doGetUser(uplevelApply.getApprover());
+                    Agent aprrvoeName = agentAO
+                        .getAgent(uplevelApply.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = buserAO
+                        userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             uplevelApply.setApprover(userReferee.getRealName());
@@ -448,18 +449,18 @@ public class SjFormAOImpl implements ISjFormAO {
         return page;
     }
 
-    private void changeAmount(BUser data) {
-        BUser highUser = buserBO.getUser(data.getUserId());
+    private void changeAmount(Agent data) {
+        Agent highUser = agentBO.getAgent(data.getUserId());
         // 推荐人的上级门槛转入新上级
-        List<BUser> list = buserBO.getUsersByUserReferee(data.getUserId());
-        BUser oldHighUser = null;
-        for (BUser user : list) {
+        List<Agent> list = agentBO.getUsersByUserReferee(data.getUserId());
+        Agent oldHighUser = null;
+        for (Agent user : list) {
             // 被推荐代理门槛款
             Account refreeAccount = accountBO.getAccountByUser(user.getUserId(),
                 ECurrency.MK_CNY.getCode());
             Account account = accountBO.getAccountByUser(highUser.getUserId(),
                 ECurrency.MK_CNY.getCode());
-            oldHighUser = buserBO.getCheckUser(user.getUserId());
+            oldHighUser = agentBO.getCheckUser(user.getUserId());
 
             // 旧代理上级是代理
             if (null == oldHighUser
@@ -486,8 +487,8 @@ public class SjFormAOImpl implements ISjFormAO {
     private void changeHighUser(String highUserId, String userId,
             String approver, String remark) {
 
-        List<BUser> list = buserBO.getUsersByUserReferee(userId);
-        for (BUser user : list) {
+        List<Agent> list = agentBO.getUsersByUserReferee(userId);
+        for (Agent user : list) {
             Date date = new Date();
             user.setHighUserId(userId);
             user.setUpdater(approver);
@@ -496,10 +497,10 @@ public class SjFormAOImpl implements ISjFormAO {
             user.setRemark(remark);
             // String logCode = sjFormBO.refreshHighUser(user);
             // user.setLastAgentLog(logCode);
-            buserBO.refreshHighUser(user);
+            agentBO.refreshHighUser(user);
 
-            List<BUser> list2 = buserBO.getUsersByUserReferee(user.getUserId());
-            for (BUser user2 : list2) {
+            List<Agent> list2 = agentBO.getUsersByUserReferee(user.getUserId());
+            for (Agent user2 : list2) {
                 changeHighUser(highUserId, user2.getUserId(), approver, remark);
             }
 

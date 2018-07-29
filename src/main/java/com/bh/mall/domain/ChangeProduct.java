@@ -95,7 +95,7 @@ public class ChangeProduct extends ABaseDO {
 
     private String approveName;
 
-    private User user;
+    private Agent agent;
 
     public void setCode(String code) {
         this.code = code;
@@ -313,12 +313,12 @@ public class ChangeProduct extends ABaseDO {
         this.approveName = approveName;
     }
 
-    public User getUser() {
-        return user;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
 }

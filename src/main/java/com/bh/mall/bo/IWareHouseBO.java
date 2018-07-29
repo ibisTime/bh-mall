@@ -3,8 +3,8 @@ package com.bh.mall.bo;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Order;
-import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EBizType;
 
@@ -42,7 +42,7 @@ public interface IWareHouseBO extends IPaginableBO<WareHouse> {
 
     public List<WareHouse> queryWareHousePorductList(WareHouse condition);
 
-    public void buyWareHouse(Order order, User applyUser);
+    public void buyWareHouse(Order order, Agent agent);
 
     public void changeWareHousePrice(List<WareHouse> whList, Integer level);
 

@@ -9,17 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IBuserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.bo.IAddressBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.enums.EAddressType;
@@ -34,10 +34,10 @@ public class YxFormAOImpl implements IYxFormAO {
     private IYxFormBO agentAllotBO;
 
     @Autowired
-    private IBuserAO buserAO;
+    private IAgentAO agentAO;
 
     @Autowired
-    private IBuserBO buserBO;
+    private IAgentBO agentBO;
 
     @Autowired
     private IAddressBO addressBO;
@@ -53,7 +53,7 @@ public class YxFormAOImpl implements IYxFormAO {
         PhoneUtil.checkMobile(req.getMobile());
 
         // check mobile exist
-        buserBO.isMobileExist(req.getMobile());
+        agentBO.isMobileExist(req.getMobile());
 
         // 确认申请等级
         AgentLevel aiData = agentLevelBO
@@ -63,7 +63,7 @@ public class YxFormAOImpl implements IYxFormAO {
         }
 
         // 确认申请id
-        buserBO.getCheckUser(req.getUserId());
+        agentBO.getCheckUser(req.getUserId());
 
         YxForm data = new YxForm();
         // 获取申请信息
@@ -100,7 +100,7 @@ public class YxFormAOImpl implements IYxFormAO {
         String status = EUserStatus.TO_APPROVE.getCode();
 
         if (StringUtils.isNotBlank(toUserId)) {
-            BUser toUser = buserBO.getUser(toUserId);
+            Agent toUser = agentBO.getAgent(toUserId);
             if (data.getApplyLevel() <= toUser.getLevel()) {
                 throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
             }
@@ -185,7 +185,7 @@ public class YxFormAOImpl implements IYxFormAO {
     /***********************************************/
 
     @Override
-    public Paginable<YxForm> queryIntentionAgentFrontPage(int start, int limit,
+    public Paginable<YxForm> queryYxFormPage(int start, int limit,
             YxForm condition) {
 
         if (condition.getApplyDatetimeStart() != null
@@ -204,16 +204,16 @@ public class YxFormAOImpl implements IYxFormAO {
         Paginable<YxForm> page = agentAllotBO.getPaginable(start, limit,
             condition);
 
-        BUser buser = null;
+        Agent agent = null;
         for (Iterator<YxForm> iterator = page.getList().iterator(); iterator
             .hasNext();) {
             YxForm agencyLog = iterator.next();
-            buser = buserAO.doGetUser(agencyLog.getUserId());
-            if (!buser.getLastAgentLog().equals(agencyLog.getCode())) {
+            agent = agentAO.getAgent(agencyLog.getUserId());
+            if (!agent.getLastAgentLog().equals(agencyLog.getCode())) {
                 iterator.remove();
                 continue;
             }
-            agencyLog.setUser(buser);
+            agencyLog.setUser(agent);
 
             // 审核人
 
@@ -247,14 +247,14 @@ public class YxFormAOImpl implements IYxFormAO {
 
         for (YxForm agentAllot : list) {
 
-            BUser buser = buserAO.doGetUser(agentAllot.getUserId());
-            agentAllot.setUser(buser);
+            Agent agent = agentAO.getAgent(agentAllot.getUserId());
+            agentAllot.setUser(agent);
             // 补全授权金额
-            if (null != buser.getApplyLevel()) {
+            if (null != agent.getApplyLevel()) {
                 // 代理等级表
-                AgentLevel agent = agentLevelBO
-                    .getAgentByLevel(buser.getApplyLevel());
-                agentAllot.setImpowerAmount(agent.getAmount());
+                AgentLevel agentLevel = agentLevelBO
+                    .getAgentByLevel(agent.getApplyLevel());
+                agentAllot.setImpowerAmount(agentLevel.getAmount());
             }
             // 审核人
 

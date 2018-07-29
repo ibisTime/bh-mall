@@ -3,10 +3,11 @@ package com.bh.mall.bo;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.User;
 import com.bh.mall.enums.EUserStatus;
 
-public interface IBuserBO extends IPaginableBO<BUser> {
+public interface IAgentBO extends IPaginableBO<Agent> {
 
     // 前端用户注册
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
@@ -27,7 +28,7 @@ public interface IBuserBO extends IPaginableBO<BUser> {
             String nickname, String unionId, String h5OpenId, String logCode);
 
     // 微信登录
-    public BUser doGetUserByOpenId(String h5OpenId);
+    public Agent doGetUserByOpenId(String h5OpenId);
 
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile);
@@ -54,32 +55,32 @@ public interface IBuserBO extends IPaginableBO<BUser> {
     public void checkIdentify(String kind, String idKind, String idNo,
             String realName);
 
-    public BUser getCheckUser(String userId);
+    public Agent getCheckUser(String userId);
 
     /*************** 获取数据库信息 **********************/
     // 获取数据库user信息
-    public List<BUser> queryUserList(BUser condition);
+    public List<Agent> queryUserList(Agent condition);
 
     // 根据身份号获取用户信息
-    public BUser getUserByIdNo(String idNo);
+    public Agent getUserByIdNo(String idNo);
 
     public void checkTeamName(String teamName);
 
     // 判断推荐人是否存在(手机号)
     public void checkUserReferee(String userReferee, String systemCode);
 
-    public BUser getUser(String userId);
+    public Agent getAgent(String userId);
 
-    public List<BUser> queryUserList(String mobile, String kind);
+    public List<Agent> queryUserList(String mobile, String kind);
 
-    public List<BUser> getUsersByUserReferee(String userReferee);
+    public List<Agent> getUsersByUserReferee(String userReferee);
 
-    public BUser getUserByLoginName(String loginName, String systemCode);
+    public Agent getUserByLoginName(String loginName, String systemCode);
 
     public void refreshStatus(String userId, EUserStatus normal, String updater,
             String remark);
 
-    public BUser getUserByMobile(String introducer);
+    public Agent getUserByMobile(String introducer);
 
     /*************** 信息更新 **********************/
     // 保存， 更新
@@ -89,7 +90,7 @@ public interface IBuserBO extends IPaginableBO<BUser> {
     public String saveUser(String mobile, String kind);
 
     // 更新
-    public void resetLoginPwd(BUser buser, String loginPwd);
+    public void resetLoginPwd(Agent buser, String loginPwd);
 
     public void refreshLoginName(String userId, String loginName);
 
@@ -97,28 +98,30 @@ public interface IBuserBO extends IPaginableBO<BUser> {
 
     public void refreshPhoto(String userId, String photo);
 
-    public void refreshUser(BUser data);
+    public void refreshUser(Agent data);
 
     public void refreshRole(String userId, String roleCode, String updater,
             String remark);
 
-    public void resetBindMobile(BUser buser, String newMobile);
+    public void resetBindMobile(Agent buser, String newMobile);
 
-    public String refreshHighUser(BUser data);
+    public String refreshHighUser(Agent data);
 
-    BUser getSysUser();
-
-    public void refreshManager(BUser data, String manager, String updater);
+    public void refreshManager(Agent data, String manager, String updater);
 
     /*************** 查询 **********************/
 
-    public List<BUser> selectList(BUser condition, int pageNo, int pageSize);
+    public List<Agent> selectList(Agent condition, int pageNo, int pageSize);
 
-    public List<BUser> selectAgentFront(BUser condition, int pageNo,
+    public List<Agent> selectAgentFront(Agent condition, int pageNo,
             int pageSize);
 
-    public void updateInformation(BUser data);
+    public void updateInformation(Agent data);
 
-    public BUser getUserName(String userReferee);
+    public Agent getAgentName(String userReferee);
+
+    public void checkTradePwd(String userId, String tradePwd);
+
+    public User getTeamLeader(String teamName);
 
 }

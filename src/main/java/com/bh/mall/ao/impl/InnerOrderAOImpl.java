@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bh.mall.ao.IInnerOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IInnerProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PropertiesUtil;
@@ -25,10 +25,10 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.InnerProduct;
 import com.bh.mall.domain.SYSConfig;
-import com.bh.mall.domain.User;
 import com.bh.mall.dto.req.XN627720Req;
 import com.bh.mall.dto.req.XN627722Req;
 import com.bh.mall.dto.req.XN627723Req;
@@ -47,6 +47,8 @@ import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
+// TODO 发货人，更新人转义未修改
+
 @Service
 public class InnerOrderAOImpl implements IInnerOrderAO {
 
@@ -60,7 +62,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private IUserBO userBO;
+    private IAgentBO agentBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
@@ -70,7 +72,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     @Override
     public String addInnerOrder(XN627720Req req) {
-        User user = userBO.getCheckUser(req.getApplyUser());
+        Agent user = agentBO.getCheckUser(req.getApplyUser());
 
         InnerProduct innerProduct = innerProductBO
             .getInnerProduct(req.getProductCode());
@@ -159,10 +161,10 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     private Object payWXH5(InnerOrder order) {
         Long rmbAmount = order.getAmount() + order.getYunfei();
-        User user = userBO.getCheckUser(order.getApplyUser());
+        Agent agent = agentBO.getCheckUser(order.getApplyUser());
         String payGroup = innerOrderBO.addPayGroup(order,
             EBoolean.YES.getCode());
-        return weChatAO.getPrepayIdH5(user.getUserId(),
+        return weChatAO.getPrepayIdH5(agent.getUserId(),
             ESystemCode.BH.getCode(), payGroup, order.getCode(),
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
             PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
@@ -353,7 +355,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             return null;
         }
         String name = null;
-        User data = userBO.getUserNoCheck(user);
+        Agent data = agentBO.getAgent(user);
         if (data != null) {
             name = data.getRealName();
             if (EUserKind.Plat.getCode().equals(data.getKind())

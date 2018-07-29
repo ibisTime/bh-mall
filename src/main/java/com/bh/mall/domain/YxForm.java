@@ -70,7 +70,7 @@ public class YxForm extends ABaseDO {
 
     /***************** DB **************************/
 
-    private BUser user;
+    private Agent user;
 
     // 当前等级
     private Integer level;
@@ -246,11 +246,11 @@ public class YxForm extends ABaseDO {
     }
 
     // 获取数据库 buser
-    public BUser getUser() {
+    public Agent getUser() {
         return user;
     }
 
-    public void setUser(BUser user) {
+    public void setUser(Agent user) {
         this.user = user;
     }
 

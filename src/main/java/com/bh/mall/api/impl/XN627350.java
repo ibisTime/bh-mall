@@ -2,12 +2,12 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IBuserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.req.XN627350Req;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
@@ -23,14 +23,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627350 extends AProcessor {
 
-    private IBuserAO userAO = SpringContextHolder.getBean(IBuserAO.class);
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627350Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
 
-        BUser condition = new BUser();
+        Agent condition = new Agent();
 
         condition.setStatus(EUserStatus.IMPOWERED.getCode());
 
@@ -39,14 +39,14 @@ public class XN627350 extends AProcessor {
         condition.setKind(EUserKind.Merchant.getCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IBuserAO.DEFAULT_ORDER_COLUMN;
+            column = IAgentAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return userAO.queryLowUser(start, limit, condition);
+        return agentAO.queryLowUser(start, limit, condition);
     }
 
     @Override

@@ -2,13 +2,13 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IBuserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.BUser;
-import com.bh.mall.dto.req.XN627350Req;
+import com.bh.mall.domain.Agent;
+import com.bh.mall.dto.req.XN627351Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -21,31 +21,33 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627351 extends AProcessor {
 
-    private IBuserAO userAO = SpringContextHolder.getBean(IBuserAO.class);
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
-    private XN627350Req req = null;
+    private XN627351Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        BUser condition = new BUser();
+
+        Agent condition = new Agent();
+
         condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IBuserAO.DEFAULT_ORDER_COLUMN;
+            column = IAgentAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return userAO.queryMyLowUserPage(start, limit, condition);
+        return agentAO.queryMyLowUserPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627350Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627351Req.class);
         ObjValidater.validateReq(req);
     }
 

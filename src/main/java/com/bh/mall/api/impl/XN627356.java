@@ -2,12 +2,12 @@ package com.bh.mall.api.impl;
 
 import java.util.Date;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.User;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.req.XN627356Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -21,19 +21,18 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627356 extends AProcessor {
 
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627356Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        User condition = new User();
+        Agent condition = new Agent();
         condition.setTeamName(req.getTeamName());
         condition.setKeyWord(req.getKeyword());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStatus(req.getStatus());
 
-        condition.setStatusList(req.getStatusList());
         condition.setUserReferee(req.getUserReferee());
         condition.setKind(req.getKind());
         Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),
@@ -43,7 +42,7 @@ public class XN627356 extends AProcessor {
         condition.setApplyDatetimeStart(applyDatetimeStart);
         condition.setApplyDatetimeEnd(applyDatetimeEnd);
 
-        return userAO.queryUserList(condition);
+        return agentAO.queryAgentList(condition);
     }
 
     @Override

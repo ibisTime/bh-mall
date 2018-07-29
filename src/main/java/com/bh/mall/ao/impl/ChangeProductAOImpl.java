@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IChangeProductAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgencyLogBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChangeProductBO;
 import com.bh.mall.bo.IChargeBO;
@@ -19,7 +20,6 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWareHouseBO;
 import com.bh.mall.bo.IWareHouseLogBO;
 import com.bh.mall.bo.base.Page;
@@ -29,13 +29,13 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.ChangeProduct;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.ProductSpecs;
 import com.bh.mall.domain.ProductSpecsPrice;
-import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.dto.req.XN627790Req;
 import com.bh.mall.dto.res.XN627805Res;
@@ -58,7 +58,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     IChangeProductBO changeProductBO;
 
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Autowired
     IWareHouseBO wareHouseBO;
@@ -90,13 +90,12 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     @Autowired
     IChargeBO chargeBO;
 
-
     @Autowired
     IAgencyLogBO agencyLogBO;
 
     @Override
     public String addChangeProduct(XN627790Req req) {
-        User uData = userBO.getUser(req.getApplyUser());
+        Agent uData = agentBO.getAgent(req.getApplyUser());
         WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
             uData.getUserId(), req.getProductSpecsCode());
         if (whData == null) {
@@ -199,8 +198,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             String approveName = this.getName(changeProduct.getApprover());
             changeProduct.setApproveName(approveName);
             // 补充下单代理的信息
-            User user = userBO.getCheckUser(changeProduct.getApplyUser());
-            changeProduct.setUser(user);
+            Agent agent = agentBO.getAgent(changeProduct.getApplyUser());
+            changeProduct.setAgent(agent);
         }
         page.setList(list);
         return page;
@@ -220,8 +219,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         for (ChangeProduct changeProduct : list) {
             String approveName = this.getName(changeProduct.getApprover());
             changeProduct.setApproveName(approveName);
-            User user = userBO.getCheckUser(changeProduct.getApplyUser());
-            changeProduct.setUser(user);
+            Agent agent = agentBO.getAgent(changeProduct.getApplyUser());
+            changeProduct.setAgent(agent);
         }
 
         return list;
@@ -232,8 +231,8 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         ChangeProduct data = changeProductBO.getChangeProduct(code);
         String approveName = this.getName(data.getApprover());
         data.setApproveName(approveName);
-        User user = userBO.getCheckUser(data.getApplyUser());
-        data.setUser(user);
+        Agent agent = agentBO.getAgent(data.getApplyUser());
+        data.setAgent(agent);
         return data;
     }
 
@@ -349,13 +348,13 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         changeProductBO.approveChange(data);
     }
 
-    private String getName(String user) {
+    private String getName(String agentCode) {
 
-        if (StringUtils.isBlank(user)) {
+        if (StringUtils.isBlank(agentCode)) {
             return null;
         }
         String name = null;
-        User data = userBO.getUserNoCheck(user);
+        Agent data = agentBO.getAgent(agentCode);
         if (data != null) {
             name = data.getRealName();
             if (EUserKind.Plat.getCode().equals(data.getKind())
@@ -368,7 +367,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
 
     @Override
     public ChangeProduct getChangeProductMessage(XN627790Req req) {
-        User uData = userBO.getUser(req.getApplyUser());
+        Agent uData = agentBO.getAgent(req.getApplyUser());
         WareHouse whData = wareHouseBO.getWareHouseByProductSpec(
             uData.getUserId(), req.getProductSpecsCode());
         if (whData == null) {
@@ -412,7 +411,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     @Override
     public XN627805Res checkAmount(String userId) {
         XN627805Res res = new XN627805Res();
-        User user = userBO.getUser(userId);
+        Agent user = agentBO.getAgent(userId);
         // 门槛所需充值金额
         Long chargeAmount = 0L;
         String result = ECheckStatus.NORMAL.getCode();
@@ -421,8 +420,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
         // 代理已通过审核
         if (null != user.getLevel() && 0 != user.getLevel()) {
             AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
-            AgentLevel impower = agentLevelBO
-                .getAgentByLevel(user.getLevel());
+            AgentLevel impower = agentLevelBO.getAgentByLevel(user.getLevel());
 
             // 检查云仓红线
             Long whAmount = 0L;

@@ -11,15 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IWithdrawAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.ISYSConfigBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.IWithdrawBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
-import com.bh.mall.domain.User;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Withdraw;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
@@ -39,7 +39,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private IWithdrawBO withdrawBO;
 
     @Autowired
-    private IUserBO userBO;
+    private IAgentBO agentBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
@@ -57,7 +57,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 判断本月是否次数已满，且现在只能有一笔取现未支付记录
         withdrawBO.doCheckTimes(dbAccount);
         // 验证交易密码
-        userBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
+        agentBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
         if (dbAccount.getAmount() < amount) {
             throw new BizException("xn000000", "余额不足");
         }
@@ -180,8 +180,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (CollectionUtils.isNotEmpty(page.getList())) {
             List<Withdraw> list = page.getList();
             for (Withdraw withdraw : list) {
-                User user = userBO.getCheckUser(withdraw.getApplyUser());
-                withdraw.setUser(user);
+                Agent agent = agentBO.getAgent(withdraw.getApplyUser());
+                withdraw.setAgent(agent);
             }
         }
         return page;
@@ -192,8 +192,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         List<Withdraw> list = withdrawBO.queryWithdrawList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (Withdraw withdraw : list) {
-                User user = userBO.getCheckUser(withdraw.getApplyUser());
-                withdraw.setUser(user);
+                Agent agent = agentBO.getAgent(withdraw.getApplyUser());
+                withdraw.setAgent(agent);
             }
         }
         return list;
@@ -202,8 +202,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     public Withdraw getWithdraw(String code) {
         Withdraw withdraw = withdrawBO.getWithdraw(code);
-        User user = userBO.getCheckUser(withdraw.getApplyUser());
-        withdraw.setUser(user);
+        Agent agent = agentBO.getAgent(withdraw.getApplyUser());
+        withdraw.setAgent(agent);
         return withdraw;
     }
 

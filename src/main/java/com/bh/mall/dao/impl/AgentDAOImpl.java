@@ -4,138 +4,145 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.bh.mall.dao.IBuserDAO;
+import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.Agent;
 
-@Repository("buserDAOImpl")
-public class BUserDAOImpl extends AMybatisTemplate implements IBuserDAO {
+@Repository("agentDAOImpl")
+public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
 
     // IBaseDAO
     @Override
-    public BUser select(BUser condition) {
+    public Agent select(Agent condition) {
         return super.select(NAMESPACE.concat("select_buser"), condition,
-            BUser.class);
+            Agent.class);
     }
 
     @Override
-    public long selectTotalCount(BUser condition) {
+    public long selectTotalCount(Agent condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_buser_count"),
             condition);
     }
 
     @Override
-    public List<BUser> selectList(BUser condition) {
+    public List<Agent> selectList(Agent condition) {
         return super.selectList(NAMESPACE.concat("select_buser"), condition,
-            BUser.class);
+            Agent.class);
     }
 
     @Override
-    public List<BUser> selectList(BUser condition, int start, int count) {
+    public List<Agent> selectList(Agent condition, int start, int count) {
         return super.selectList(NAMESPACE.concat("select_buser"), start, count,
-            condition, BUser.class);
+            condition, Agent.class);
     }
 
     @Override
-    public int insert(BUser data) {
+    public int insert(Agent data) {
         return super.insert(NAMESPACE.concat("insert_buser"), data);
     }
 
     @Override
-    public int delete(BUser data) {
+    public int delete(Agent data) {
         return 0;
     }
 
-    // IBuserDAO
+    // IAgentDAO
 
     @Override
-    public int updateLoginPwd(BUser data) {
+    public int updateLoginPwd(Agent data) {
         return super.update(NAMESPACE.concat("update_login_pwd"), data);
     }
 
     @Override
-    public int updateStatus(BUser data) {
+    public int updateStatus(Agent data) {
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
     @Override
-    public int updateRole(BUser data) {
+    public int updateRole(Agent data) {
         return super.update(NAMESPACE.concat("update_role"), data);
     }
 
-    @Override
-    public void updateLog(BUser data) {
-        super.update(NAMESPACE.concat("update_log"), data);
-    }
+    // public void updateLog(Agent data) {
+    // super.update(NAMESPACE.concat("update_log"), data);
+    // }
 
     /** 
      * @see com.bh.mall.dao.IUserDAO#updateLoginName(com.bh.mall.domain.User)
      */
     @Override
-    public int updateLoginName(BUser data) {
+    public int updateLoginName(Agent data) {
         return super.update(NAMESPACE.concat("update_buser_loginName"), data);
     }
 
     @Override
-    public int updateNickname(BUser data) {
+    public int updateNickname(Agent data) {
         return super.update(NAMESPACE.concat("update_buser_nickname"), data);
     }
 
     @Override
-    public int updatePhoto(BUser data) {
+    public int updatePhoto(Agent data) {
         return super.update(NAMESPACE.concat("update_buser_photo"), data);
     }
 
     @Override
-    public int updateMobileIds(BUser data) {
+    public int updateMobileIds(Agent data) {
         return super.update(NAMESPACE.concat("update_buser_mobileIds"), data);
     }
 
     @Override
-    public int updateWxInfo(BUser data) {
+    public int updateWxInfo(Agent data) {
         return super.update(NAMESPACE.concat("update_wx_info"), data);
     }
 
     @Override
-    public void resetBindMobile(BUser buser) {
+    public void resetBindMobile(Agent buser) {
         super.update(NAMESPACE.concat("update_mobile"), buser);
     }
 
-    @Override
-    public int approveUser(BUser data) {
-        return super.update(NAMESPACE.concat("approve_buser"), data);
-    }
+    // public int approveUser(Agent data) {
+    // return super.update(NAMESPACE.concat("approve_buser"), data);
+    // }
 
     @Override
-    public void updateHigh(BUser data) {
+    public void updateHigh(Agent data) {
         super.update(NAMESPACE.concat("update_high"), data);
     }
 
     @Override
-    public List<BUser> selectAgentFront(BUser condition, int start, int limit) {
+    public List<Agent> selectAgentFront(Agent condition, int start, int limit) {
         return super.selectList(NAMESPACE.concat("select_agent_front"), start,
-            limit, condition, BUser.class);
+            limit, condition, Agent.class);
     }
 
     @Override
-    public int updateLevel(BUser data) {
+    public int updateLevel(Agent data) {
         return super.update(NAMESPACE.concat("update_level"), data);
     }
 
     @Override
-    public int update(BUser data) {
+    public int update(Agent data) {
         return super.update(NAMESPACE.concat("update_buser"), data);
     }
 
     @Override
-    public void updateInformation(BUser data) {
+    public void updateInformation(Agent data) {
         super.update(NAMESPACE.concat("update_information"), data);
     }
 
     @Override
-    public void updateManager(BUser data) {
+    public void updateManager(Agent data) {
         super.update(NAMESPACE.concat("update_manager"), data);
 
+    }
+
+    @Override
+    public int approveUser(Agent data) {
+        return 0;
+    }
+
+    @Override
+    public void updateLog(Agent data) {
     }
 
 }

@@ -24,10 +24,12 @@ public interface ISqFormAO {
 
     public String addImpowerApply(SqForm data);
 
-    public void approveImpowerCanenl(String userId, String approver,
+    // 审核授权
+    public void approveImpower(String userId, String approver, String result,
             String remark);
 
-    public boolean approveImpower(String userId, String approver,
+    // 审核取消授权
+    public void approveImpowerCanenl(String userId, String approver,
             String remark);
 
     //  实名认证信息补充
@@ -45,5 +47,9 @@ public interface ISqFormAO {
     // 分页查询轨迹 XN627290
     public Paginable<SqForm> queryIntentionAgentFrontPage(int start, int limit,
             SqForm condition);
+
+    // 审核取消授权
+    public void approveCancel(String userId, String approver, String result,
+            String remark);
 
 }

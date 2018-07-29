@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.IBuserBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
@@ -17,18 +17,19 @@ import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.dao.IBuserDAO;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.dao.IAgentDAO;
+import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.User;
 import com.bh.mall.enums.EAgencyType;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
+public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     @Autowired
-    private IBuserDAO buserDAO;
+    private IAgentDAO agentDAO;
 
     /*************** 注册并保存新用户 **********************/
     // 注册
@@ -37,7 +38,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
             String mobile, String kind, String loginPwd, String nickname,
             String photo, String status, Integer level, String userReferee) {
         String userId = OrderNoGenerater.generate("U");
-        BUser buser = new BUser();
+        Agent buser = new Agent();
         buser.setUserId(userId);
         buser.setUnionId(unionId);
         buser.setH5OpenId(h5OpenId);
@@ -58,7 +59,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
         buser.setCreateDatetime(date);
 
         buser.setLevel(level);
-        buserDAO.insert(buser);
+        agentDAO.insert(buser);
         return userId;
     }
 
@@ -69,7 +70,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
             String kind, String loginPwd, String nickname, String photo,
             String userReferee, String lastAgentLog) {
         String userId = OrderNoGenerater.generate("U");
-        BUser buser = new BUser();
+        Agent buser = new Agent();
         buser.setUserId(userId);
         buser.setLoginName(mobile);
         buser.setMobile(mobile);
@@ -100,7 +101,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
         buser.setCreateDatetime(new Date());
         buser.setLastAgentLog(lastAgentLog);
 
-        buserDAO.insert(buser);
+        agentDAO.insert(buser);
         return userId;
     }
 
@@ -111,7 +112,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
             String area, String address, String loginPwd, String photo,
             String nickname, String unionId, String h5OpenId, String logCode) {
         String userId = OrderNoGenerater.generate("U");
-        BUser data = new BUser();
+        Agent data = new Agent();
         data.setUserId(userId);
         data.setRealName(realName);
 
@@ -142,7 +143,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
 
         data.setCreateDatetime(new Date());
         data.setLastAgentLog(logCode);
-        buserDAO.insert(data);
+        agentDAO.insert(data);
 
         return userId;
 
@@ -154,11 +155,11 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
         String userId = null;
         if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
             userId = OrderNoGenerater.generate("U");
-            BUser data = new BUser();
+            Agent data = new Agent();
             data.setUserId(userId);
             data.setMobile(mobile);
             data.setKind(kind);
-            buserDAO.insert(data);
+            agentDAO.insert(data);
         }
         return userId;
     }
@@ -166,11 +167,11 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     /*************** 获取数据库信息 **********************/
 
     @Override
-    public BUser doGetUserByOpenId(String h5OpenId) {
-        BUser condition = new BUser();
+    public Agent doGetUserByOpenId(String h5OpenId) {
+        Agent condition = new Agent();
         condition.setH5OpenId(h5OpenId);
-        List<BUser> userList = buserDAO.selectList(condition);
-        BUser buser = null;
+        List<Agent> userList = agentDAO.selectList(condition);
+        Agent buser = null;
         if (CollectionUtils.isNotEmpty(userList)) {
             buser = userList.get(0);
         }
@@ -178,12 +179,12 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     }
 
     @Override
-    public BUser getUser(String userId) {
-        BUser data = null;
+    public Agent getAgent(String userId) {
+        Agent data = null;
         if (StringUtils.isNotBlank(userId)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setUserId(userId);
-            data = buserDAO.select(condition);
+            data = agentDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "用户不存在");
             }
@@ -192,12 +193,12 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     }
 
     @Override
-    public BUser getCheckUser(String userId) {
-        BUser data = null;
+    public Agent getCheckUser(String userId) {
+        Agent data = null;
         if (StringUtils.isNotBlank(userId)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setUserId(userId);
-            data = buserDAO.select(condition);
+            data = agentDAO.select(condition);
             if (null == data) {
                 throw new BizException("xn702002", userId + "用户不存在");
             }
@@ -206,29 +207,29 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     }
 
     /** 
-     * @see com.ibis.pz.user.IBUserBO#queryBUserList(com.BUser.pz.domain.BUserDO)
+     * @see com.ibis.pz.user.IAgentBO#queryAgentList(com.Agent.pz.domain.AgentDO)
      */
     @Override
-    public List<BUser> queryUserList(BUser data) {
-        return buserDAO.selectList(data);
+    public List<Agent> queryUserList(Agent data) {
+        return agentDAO.selectList(data);
     }
 
     @Override
-    public List<BUser> queryUserList(String mobile, String kind) {
-        BUser condition = new BUser();
+    public List<Agent> queryUserList(String mobile, String kind) {
+        Agent condition = new Agent();
         condition.setMobile(mobile);
         condition.setKind(kind);
-        return buserDAO.selectList(condition);
+        return agentDAO.selectList(condition);
     }
 
     /*************** 检查信息 **********************/
     /** 
-     * @see com.bh.mall.bo.IBUserBO#doCheckOpenId(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     * @see com.bh.mall.bo.IAgentBO#doCheckOpenId(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     public void doCheckOpenId(String unionId, String h5OpenId,
             String appOpenId) {
-        BUser condition = new BUser();
+        Agent condition = new Agent();
         condition.setUnionId(unionId);
         condition.setH5OpenId(h5OpenId);
         condition.setAppOpenId(appOpenId);
@@ -244,7 +245,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
         if (StringUtils.isNotBlank(mobile)) {
             // 判断格式
             PhoneUtil.checkMobile(mobile);
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setMobile(mobile);
             long count = getTotalCount(condition);
             if (count > 0) {
@@ -258,12 +259,12 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     public String getUserId(String mobile, String kind) {
         String userId = null;
         if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setMobile(mobile);
             condition.setKind(kind);
-            List<BUser> list = buserDAO.selectList(condition);
+            List<Agent> list = agentDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {
-                BUser data = list.get(0);
+                Agent data = list.get(0);
                 userId = data.getUserId();
             }
         }
@@ -275,7 +276,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     public void checkUserReferee(String userReferee, String systemCode) {
         if (StringUtils.isNotBlank(userReferee)) {
             // 判断格式
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setUserId(userReferee);
             long count = getTotalCount(condition);
             if (count <= 0) {
@@ -285,23 +286,23 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     }
 
     @Override
-    public List<BUser> getUsersByUserReferee(String userReferee) {
-        List<BUser> userList = new ArrayList<BUser>();
+    public List<Agent> getUsersByUserReferee(String userReferee) {
+        List<Agent> userList = new ArrayList<Agent>();
         if (StringUtils.isNotBlank(userReferee)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setUserReferee(userReferee);
-            userList = buserDAO.selectList(condition);
+            userList = agentDAO.selectList(condition);
         }
         return userList;
     }
 
     @Override
-    public BUser getUserByMobile(String introducer) {
-        BUser data = null;
+    public Agent getUserByMobile(String introducer) {
+        Agent data = null;
         if (StringUtils.isNotBlank(introducer)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setMobile(introducer);
-            data = buserDAO.select(condition);
+            data = agentDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn000000", "介绍人不存在");
             }
@@ -310,15 +311,15 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     }
 
     /** 
-     * @see com.ibis.pz.user.IBUserBO#getBUserByMobile(java.lang.String)
+     * @see com.ibis.pz.user.IAgentBO#getAgentByMobile(java.lang.String)
      */
     @Override
-    public BUser getUserByLoginName(String loginName, String systemCode) {
-        BUser data = null;
+    public Agent getUserByLoginName(String loginName, String systemCode) {
+        Agent data = null;
         if (StringUtils.isNotBlank(loginName)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setLoginName(loginName);
-            List<BUser> list = buserDAO.selectList(condition);
+            List<Agent> list = agentDAO.selectList(condition);
             if (list != null && list.size() > 1) {
                 throw new BizException("li01006", "登录名重复");
             }
@@ -333,7 +334,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     public void isLoginNameExist(String loginName, String kind) {
         if (StringUtils.isNotBlank(loginName)) {
             // 判断格式
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setLoginName(loginName);
             condition.setKind(kind);
             long count = getTotalCount(condition);
@@ -345,9 +346,9 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
 
     @Override
     public boolean isUserExist(String userId) {
-        BUser condition = new BUser();
+        Agent condition = new Agent();
         condition.setUserId(userId);
-        if (buserDAO.selectTotalCount(condition) > 0) {
+        if (agentDAO.selectTotalCount(condition) > 0) {
             return true;
         }
         return false;
@@ -357,7 +358,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     public void checkLoginPwd(String userId, String loginPwd) {
         if (StringUtils.isNotBlank(userId)
                 && StringUtils.isNotBlank(loginPwd)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
             long count = this.getTotalCount(condition);
@@ -373,7 +374,7 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
         if (StringUtils.isNotBlank(userId)
                 && StringUtils.isNotBlank(loginPwd)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
             long count = this.getTotalCount(condition);
@@ -386,19 +387,19 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     }
 
     /** 
-     * @see com.bh.mall.bo.IBUserBO#checkIdentify(java.lang.String, java.lang.String, java.lang.String)
+     * @see com.bh.mall.bo.IAgentBO#checkIdentify(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     public void checkIdentify(String kind, String idKind, String idNo,
             String realName) {
-        BUser condition = new BUser();
+        Agent condition = new Agent();
         condition.setKind(kind);
         condition.setIdKind(idKind);
         condition.setIdNo(idNo);
         condition.setRealName(realName);
-        List<BUser> userList = buserDAO.selectList(condition);
+        List<Agent> userList = agentDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(userList)) {
-            BUser data = userList.get(0);
+            Agent data = userList.get(0);
             throw new BizException("xn000001",
                 "用户[" + data.getMobile() + "]已使用该身份信息，请重新填写");
         }
@@ -407,11 +408,11 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     // 检查团队名称
     @Override
     public void checkTeamName(String teamName) {
-        List<BUser> list = null;
+        List<Agent> list = null;
         if (StringUtils.isNotBlank(teamName)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setTeamName(teamName);
-            list = buserDAO.selectList(condition);
+            list = agentDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {
                 throw new BizException("xn000000", "该团队名称已经存在喽，重新起一个吧！");
             }
@@ -420,12 +421,12 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
 
     // 检查身份证号
     @Override
-    public BUser getUserByIdNo(String idNo) {
-        BUser data = null;
+    public Agent getUserByIdNo(String idNo) {
+        Agent data = null;
         if (StringUtils.isNotBlank(idNo)) {
-            BUser condition = new BUser();
+            Agent condition = new Agent();
             condition.setIdNo(idNo);
-            data = buserDAO.select(condition);
+            data = agentDAO.select(condition);
             if (data != null) {
                 throw new BizException("xn000000", "身份证号已存在");
             }
@@ -437,10 +438,10 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
 
     // 重置密码
     @Override
-    public void resetLoginPwd(BUser buser, String loginPwd) {
+    public void resetLoginPwd(Agent buser, String loginPwd) {
         buser.setLoginPwd(MD5Util.md5(loginPwd));
         buser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        buserDAO.updateLoginPwd(buser);
+        agentDAO.updateLoginPwd(buser);
     }
 
     // 更新状态
@@ -448,13 +449,13 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     public void refreshStatus(String userId, EUserStatus status, String updater,
             String remark) {
         if (StringUtils.isNotBlank(userId)) {
-            BUser data = new BUser();
+            Agent data = new Agent();
             data.setUserId(userId);
             data.setStatus(status.getCode());
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);
-            buserDAO.updateStatus(data);
+            agentDAO.updateStatus(data);
         }
     }
 
@@ -462,10 +463,10 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     @Override
     public void refreshLoginName(String userId, String loginName) {
         if (StringUtils.isNotBlank(userId)) {
-            BUser data = new BUser();
+            Agent data = new Agent();
             data.setUserId(userId);
             data.setLoginName(loginName);
-            buserDAO.updateLoginName(data);
+            agentDAO.updateLoginName(data);
         }
     }
 
@@ -473,10 +474,10 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     @Override
     public void refreshNickname(String userId, String nickname) {
         if (StringUtils.isNotBlank(userId)) {
-            BUser data = new BUser();
+            Agent data = new Agent();
             data.setUserId(userId);
             data.setNickname(nickname);
-            buserDAO.updateNickname(data);
+            agentDAO.updateNickname(data);
         }
     }
 
@@ -484,115 +485,128 @@ public class BUserBOImpl extends PaginableBOImpl<BUser> implements IBuserBO {
     @Override
     public void refreshPhoto(String userId, String photo) {
         if (StringUtils.isNotBlank(userId)) {
-            BUser data = new BUser();
+            Agent data = new Agent();
             data.setUserId(userId);
             data.setPhoto(photo);
-            buserDAO.updatePhoto(data);
+            agentDAO.updatePhoto(data);
         }
     }
 
     /** 
-     * @see com.bh.mall.bo.IBUserBO#refreshBUser(com.bh.mall.domain.BUser)
+     * @see com.bh.mall.bo.IAgentBO#refreshAgent(com.bh.mall.domain.Agent)
      */
     @Override
-    public void refreshUser(BUser data) {
+    public void refreshUser(Agent data) {
         if (data != null) {
-            buserDAO.update(data);
+            agentDAO.update(data);
         }
     }
 
     @Override
     public void refreshWxInfo(String userId, String unionId, String h5OpenId,
             String appOpenId, String nickname, String photo) {
-        BUser dbBUser = getUser(userId);
-        dbBUser.setUnionId(unionId);
+        Agent dbAgent = getAgent(userId);
+        dbAgent.setUnionId(unionId);
         if (StringUtils.isNotBlank(h5OpenId)) {
-            dbBUser.setH5OpenId(h5OpenId);
+            dbAgent.setH5OpenId(h5OpenId);
         }
         if (StringUtils.isNotBlank(appOpenId)) {
-            dbBUser.setAppOpenId(appOpenId);
+            dbAgent.setAppOpenId(appOpenId);
         }
-        dbBUser.setNickname(nickname);
-        dbBUser.setPhoto(photo);
-        buserDAO.updateWxInfo(dbBUser);
+        dbAgent.setNickname(nickname);
+        dbAgent.setPhoto(photo);
+        agentDAO.updateWxInfo(dbAgent);
     }
 
     @Override
     public void refreshRole(String userId, String roleCode, String updater,
             String remark) {
         if (StringUtils.isNotBlank(userId)) {
-            BUser data = new BUser();
+            Agent data = new Agent();
             data.setUserId(userId);
             data.setRoleCode(roleCode);
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);
-            buserDAO.updateRole(data);
+            agentDAO.updateRole(data);
         }
     }
 
     @Override
-    public void resetBindMobile(BUser buser, String newMobile) {
+    public void resetBindMobile(Agent buser, String newMobile) {
         buser.setMobile(newMobile);
-        buserDAO.resetBindMobile(buser);
+        agentDAO.resetBindMobile(buser);
     }
 
     //
 
     @Override
-    public String refreshHighUser(BUser data) {
+    public String refreshHighUser(Agent data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgencyLog.getCode());
-        BUser alData = new BUser();
+        Agent alData = new Agent();
         alData.setLastAgentLog(code);
         alData.setUserId(data.getUserId());
         alData.setStatus(EAgencyType.Update.getCode());
         Date date = new Date();
         alData.setApplyDatetime(date);
-        buserDAO.updateHigh(alData);
+        agentDAO.updateHigh(alData);
         return code;
     }
 
     @Override
-    public void updateInformation(BUser data) {
-        buserDAO.updateInformation(data);
+    public void updateInformation(Agent data) {
+        agentDAO.updateInformation(data);
     }
 
     @Override
-    public void refreshManager(BUser data, String manager, String updater) {
+    public void refreshManager(Agent data, String manager, String updater) {
         data.setHighUserId(manager);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        buserDAO.updateManager(data);
+        agentDAO.updateManager(data);
     }
 
     /*************** 查询 **********************/
 
     // 查询下级代理
     @Override
-    public List<BUser> selectAgentFront(BUser condition, int start, int limit) {
-        return buserDAO.selectAgentFront(condition, start, limit);
+    public List<Agent> selectAgentFront(Agent condition, int start, int limit) {
+        return agentDAO.selectAgentFront(condition, start, limit);
     }
 
     // 分页查询
     @Override
-    public List<BUser> selectList(BUser condition, int pageNo, int pageSize) {
-        return buserDAO.selectList(condition, pageNo, pageSize);
+    public List<Agent> selectList(Agent condition, int pageNo, int pageSize) {
+        return agentDAO.selectList(condition, pageNo, pageSize);
     }
 
     @Override
-    public BUser getSysUser() {
-        BUser condition = new BUser();
-        condition.setKind(EUserKind.Plat.getCode());
-        List<BUser> list = buserDAO.selectList(condition);
-        return list.get(0);
-    }
-
-    @Override
-    public BUser getUserName(String userId) {
-        BUser condition = new BUser();
+    public Agent getAgentName(String userId) {
+        Agent condition = new Agent();
         condition.setUserId(userId);
-        return buserDAO.select(condition);
+        return agentDAO.select(condition);
+    }
+
+    @Override
+    public void checkTradePwd(String userId, String tradePwd) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
+            Agent condition = new Agent();
+            condition.setUserId(userId);
+            condition.setTradePwd(MD5Util.md5(tradePwd));
+            long count = this.getTotalCount(condition);
+            if (count != 1) {
+                throw new BizException("jd00001", "支付密码错误");
+            }
+        } else {
+            throw new BizException("jd00001", "支付密码错误");
+        }
+    }
+
+    @Override
+    public User getTeamLeader(String teamName) {
+        return null;
     }
 
 }

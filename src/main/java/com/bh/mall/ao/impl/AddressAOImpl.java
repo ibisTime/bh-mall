@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAddressAO;
 import com.bh.mall.bo.IAddressBO;
-import com.bh.mall.bo.IUserBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.domain.Address;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
@@ -29,7 +29,7 @@ import com.bh.mall.exception.BizException;
 @Service
 public class AddressAOImpl implements IAddressAO {
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Autowired
     IAddressBO addressBO;
@@ -37,7 +37,7 @@ public class AddressAOImpl implements IAddressAO {
     @Override
     @Transactional
     public String addAddress(Address data) {
-        userBO.getUser(data.getUserId());
+        agentBO.getAgent(data.getUserId());
         String code = null;
         if (data != null) {
             // 用户没有地址，则第一条地址为默认地址

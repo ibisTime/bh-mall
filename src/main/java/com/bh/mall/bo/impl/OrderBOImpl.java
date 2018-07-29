@@ -16,7 +16,6 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOrderDAO;
 import com.bh.mall.domain.Order;
-import com.bh.mall.domain.User;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.exception.BizException;
@@ -233,8 +232,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         data.setQuantity(singleNumber);
         data.setPrice(price);
 
-        User toUser = userBO.getSysUser();
-        data.setToUser(toUser.getUserId());
+        // TODO 获取订单归属人
+        // User toUser = userBO.getSysUser();
+        // data.setToUser(toUser.getUserId());
         data.setYunfei(yunfei);
         data.setAmount(amount + yunfei);
         data.setApplyUser(userId);

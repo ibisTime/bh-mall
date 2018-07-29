@@ -9,15 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IChargeAO;
 import com.bh.mall.bo.IAccountBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChargeBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Charge;
-import com.bh.mall.domain.User;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -35,11 +35,10 @@ public class ChargeAOImpl implements IChargeAO {
     IChargeBO chargeBO;
 
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;
-
 
     @Override
     public String applyOrder(String accountNumber, String type, Long amount,
@@ -47,14 +46,13 @@ public class ChargeAOImpl implements IChargeAO {
         if (amount < 0) {
             throw new BizException("xn000000", "金额需大于零");
         }
-        User user = userBO.getUser(applyUser);
+        Agent agent = agentBO.getAgent(applyUser);
         // 没有充值过
-        List<Charge> charge = chargeBO.getChargeByUser(user.getUserId(),
-            user.getImpowerDatetime());
+        List<Charge> charge = chargeBO.getChargeByUser(agent.getUserId(),
+            agent.getImpowerDatetime());
         if (CollectionUtils.isEmpty(charge)) {
             // 首次不能低于授权金额
-            AgentLevel impower = agentLevelBO
-                .getAgentByLevel(user.getLevel());
+            AgentLevel impower = agentLevelBO.getAgentByLevel(agent.getLevel());
             if (impower.getMinCharge() > amount) {
                 throw new BizException("xn000000",
                     "授权金额不能低于[" + impower.getMinCharge() / 1000 + "]");
@@ -62,10 +60,10 @@ public class ChargeAOImpl implements IChargeAO {
 
         }
         // 普通充值
-        AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
-        if (agent.getMinChargeAmount() > amount) {
+        AgentLevel agentLevl = agentLevelBO.getAgentByLevel(agent.getLevel());
+        if (agentLevl.getMinChargeAmount() > amount) {
             throw new BizException("xn000000",
-                "充值金额不能低于[" + agent.getMinChargeAmount() / 1000 + "]");
+                "充值金额不能低于[" + agentLevl.getMinChargeAmount() / 1000 + "]");
         }
 
         Account account = accountBO.getAccount(accountNumber);
@@ -124,14 +122,14 @@ public class ChargeAOImpl implements IChargeAO {
             Charge condition) {
 
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
-        for (Charge charge : page.getList()) {
-            // 获取一级代理
-            if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
-                    && charge.getPayUser() != null) {
-                User payUser = userBO.getCheckUser(charge.getPayUser());
-                charge.setPayUser(payUser.getLoginName());
-            }
-        }
+        // for (Charge charge : page.getList()) {
+        // // 获取一级代理
+        // if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
+        // && charge.getPayUser() != null) {
+        // Agent agent = agentBO.getAgent(charge.getPayUser());
+        // charge.setPayUser(agent.getLoginName());
+        // }
+        // }
         return page;
     }
 
@@ -140,15 +138,9 @@ public class ChargeAOImpl implements IChargeAO {
         List<Charge> list = chargeBO.queryChargeList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (Charge charge : list) {
-                if (!"admin".equals(charge.getApplyUser())
-                        && charge.getApplyUser() != null) {
-                    User user = userBO.getCheckUser(charge.getApplyUser());
-                    charge.setUser(user);
-                }
-                if (!"admin".equals(charge.getPayUser())
-                        && charge.getPayUser() != null) {
-                    User payUser = userBO.getCheckUser(charge.getPayUser());
-                    charge.setPayUser(payUser.getLoginName());
+                if (charge.getApplyUser() != null) {
+                    Agent user = agentBO.getAgent(charge.getApplyUser());
+                    charge.setAgent(user);
                 }
             }
         }
@@ -158,15 +150,9 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Charge getCharge(String code) {
         Charge charge = chargeBO.getCharge(code);
-        if (!"admin".equals(charge.getApplyUser())
-                && charge.getApplyUser() != null) {
-            User user = userBO.getCheckUser(charge.getApplyUser());
-            charge.setUser(user);
-        }
-        if (!"admin".equals(charge.getPayUser())
-                && charge.getPayUser() != null) {
-            User payUser = userBO.getCheckUser(charge.getPayUser());
-            charge.setPayUser(payUser.getLoginName());
+        if (charge.getApplyUser() != null) {
+            Agent user = agentBO.getAgent(charge.getApplyUser());
+            charge.setAgent(user);
         }
         return charge;
     }
@@ -183,12 +169,12 @@ public class ChargeAOImpl implements IChargeAO {
         for (Charge charge : list) {
             if (!EUser.ADMIN.getCode().equals(charge.getApplyUser())
                     && charge.getApplyUser() != null) {
-                User user = userBO.getCheckUser(charge.getApplyUser());
-                charge.setUser(user);
+                Agent agent = agentBO.getAgent(charge.getApplyUser());
+                charge.setAgent(agent);
             }
             if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
                     && charge.getPayUser() != null) {
-                User payUser = userBO.getCheckUser(charge.getPayUser());
+                Agent payUser = agentBO.getAgent(charge.getPayUser());
                 charge.setPayUser(payUser.getLoginName());
             }
         }

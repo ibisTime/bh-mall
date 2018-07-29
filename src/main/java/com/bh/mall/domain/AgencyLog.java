@@ -72,7 +72,7 @@ public class AgencyLog extends ABaseDO {
 
     private Date approveDatetimeEnd;
 
-    private User user;
+    private Agent agent;
 
     private String refereeName;
 
@@ -88,12 +88,12 @@ public class AgencyLog extends ABaseDO {
         this.refereeName = refereeName;
     }
 
-    public User getUser() {
-        return user;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     public void setCode(String code) {

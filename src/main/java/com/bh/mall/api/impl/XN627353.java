@@ -23,8 +23,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627353 extends AProcessor {
 
-    private IYxFormAO agentAllotAO = SpringContextHolder
-        .getBean(IYxFormAO.class);
+    private IYxFormAO yxFormAO = SpringContextHolder.getBean(IYxFormAO.class);
 
     private XN627353Req req = null;
 
@@ -53,8 +52,7 @@ public class XN627353 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentAllotAO.queryIntentionAgentFrontPage(start, limit,
-            condition);
+        return yxFormAO.queryYxFormPage(start, limit, condition);
     }
 
     @Override

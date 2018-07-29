@@ -30,7 +30,9 @@ public interface ISjFormAO {
     public Paginable<SjForm> queryIntentionAgentFrontPage(int start, int limit,
             SjForm condition);
 
-    public void approveUpgrade(String userId, String approver, String remark);
+    // 审核升级
+    public void approveUpgrade(String userId, String approver, String result,
+            String remark);
 
     public void approveUplevelCancel(String userId, String approver,
             String result, String remark);

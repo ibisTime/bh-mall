@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IUserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
@@ -10,19 +10,19 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 根据userId获取用户信息
- * @author: myb858 
- * @since: 2015年8月23日 下午1:48:57 
+ * 获取代理详情
+ * @author: nyc 
+ * @since: 2018年7月29日 下午5:16:47 
  * @history:
  */
 public class XN627230 extends AProcessor {
-    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627230Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return userAO.doGetUser(req.getUserId());
+        return agentAO.getAgent(req.getUserId());
     }
 
     @Override

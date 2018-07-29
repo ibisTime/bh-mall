@@ -83,10 +83,10 @@ public class Charge extends ABaseDO {
     private Date payDatetimeEnd;
 
     // 用户信息
-    private User user;
+    private Agent agent;
 
     // 上级
-    private String highUserId;
+    private String highAgentId;
 
     // 充值人等级
     private Integer level;
@@ -158,14 +158,6 @@ public class Charge extends ABaseDO {
         this.status = status;
     }
 
-    public String getApplyUser() {
-        return applyUser;
-    }
-
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
-    }
-
     public Date getApplyDatetime() {
         return applyDatetime;
     }
@@ -174,20 +166,12 @@ public class Charge extends ABaseDO {
         this.applyDatetime = applyDatetime;
     }
 
-    public String getHighUserId() {
-        return highUserId;
+    public String getHighAgentId() {
+        return highAgentId;
     }
 
-    public void setHighUserId(String highUserId) {
-        this.highUserId = highUserId;
-    }
-
-    public String getPayUser() {
-        return payUser;
-    }
-
-    public void setPayUser(String payUser) {
-        this.payUser = payUser;
+    public void setHighAgentId(String highAgentId) {
+        this.highAgentId = highAgentId;
     }
 
     public String getPayNote() {
@@ -238,12 +222,12 @@ public class Charge extends ABaseDO {
         this.payDatetimeEnd = payDatetimeEnd;
     }
 
-    public User getUser() {
-        return user;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     public String getPayGroup() {
@@ -308,6 +292,22 @@ public class Charge extends ABaseDO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public String getPayUser() {
+        return payUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    public void setPayUser(String payUser) {
+        this.payUser = payUser;
     }
 
 }

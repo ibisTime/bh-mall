@@ -35,8 +35,8 @@ public interface IYxFormAO {
 
     public YxForm getAgentAllot(String code);
 
-    // 分页查询轨迹 XN627353
-    public Paginable<YxForm> queryIntentionAgentFrontPage(int start, int limit,
+    // 分页查询意向代理
+    public Paginable<YxForm> queryYxFormPage(int start, int limit,
             YxForm condition);
 
 }

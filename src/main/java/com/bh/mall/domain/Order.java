@@ -173,7 +173,7 @@ public class Order extends ABaseDO {
     private Integer level;
 
     // 用户
-    private User user;
+    private Agent agent;
 
     // 产品
     private Product product;
@@ -221,12 +221,12 @@ public class Order extends ABaseDO {
         this.isCompanySend = isCompanySend;
     }
 
-    public User getUser() {
-        return user;
+    public Agent getAgent() {
+        return agent;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
     public String getIsCompanySend() {

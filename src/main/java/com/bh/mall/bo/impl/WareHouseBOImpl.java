@@ -16,9 +16,9 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareHouseDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.ProductSpecsPrice;
-import com.bh.mall.domain.User;
 import com.bh.mall.domain.WareHouse;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
@@ -172,9 +172,9 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
     }
 
     @Override
-    public void buyWareHouse(Order data, User applyUser) {
-        WareHouse wareHouse = this.getWareHouseByProductSpec(
-            applyUser.getUserId(), data.getProductSpecsCode());
+    public void buyWareHouse(Order data, Agent agent) {
+        WareHouse wareHouse = this.getWareHouseByProductSpec(agent.getUserId(),
+            data.getProductSpecsCode());
 
         // 没有该产品
         if (null == wareHouse) {
@@ -188,8 +188,8 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
             whData.setProductSpecsName(data.getProductSpecsName());
 
             whData.setCurrency(ECurrency.YC_CNY.getCode());
-            whData.setUserId(applyUser.getUserId());
-            whData.setRealName(applyUser.getRealName());
+            whData.setUserId(agent.getUserId());
+            whData.setRealName(agent.getRealName());
             whData.setCreateDatetime(new Date());
             whData.setPrice(data.getPrice());
 

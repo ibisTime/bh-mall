@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IOrderAO;
 import com.bh.mall.ao.IReportAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IReportBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Report;
-import com.bh.mall.domain.User;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -25,7 +25,7 @@ public class ReportAOImpl implements IReportAO {
     IOrderAO orderAO;
 
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Override
     public Paginable<Report> queryReportPage(int start, int limit,
@@ -37,16 +37,15 @@ public class ReportAOImpl implements IReportAO {
         }
 
         Paginable<Report> page = reportBO.getPaginable(start, limit, condition);
-        User userName = null;
+        Agent userName = null;
         for (Report report : page.getList()) {
             if (StringUtils.isNotBlank(report.getUserReferee())) {
                 // 推荐/介绍人转义
-                userName = userBO.getUser(report.getUserReferee());
+                userName = agentBO.getAgent(report.getUserReferee());
                 report.setUserRefereeName(userName.getRealName());
-                userName = userBO.getUser(report.getIntroducer());
+                userName = agentBO.getAgent(report.getIntroducer());
                 report.setIntroduceName(userName.getRealName());
-                userName = userBO.getUser(report.getManager());
-                report.setManageName(userName.getRealName());
+                // TODO 关联管理员
             }
         }
 

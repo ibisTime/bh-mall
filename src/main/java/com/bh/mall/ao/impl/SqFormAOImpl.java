@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IBuserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.ISqFormBO;
@@ -26,8 +26,8 @@ import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.AfterSale;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.SqForm;
@@ -57,10 +57,10 @@ public class SqFormAOImpl implements ISqFormAO {
     private ISqFormBO impowerApplyBO;
 
     @Autowired
-    private IBuserBO buserBO;
+    private IAgentBO agentBO;
 
     @Autowired
-    private IBuserAO buserAO;
+    private IAgentAO agentAO;
 
     @Autowired
     private IAddressBO addressBO;
@@ -90,7 +90,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // 校验介绍人
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
-            BUser buser = buserBO.getUserByMobile(req.getIntroducer());
+            Agent buser = agentBO.getUserByMobile(req.getIntroducer());
             introducer = buser.getUserId();
             if (buser.getLevel() <= StringValidater
                 .toInteger(req.getApplyLevel())) {
@@ -98,10 +98,10 @@ public class SqFormAOImpl implements ISqFormAO {
             }
         }
         // 校验手机号
-        buserBO.isMobileExist(req.getMobile());
+        agentBO.isMobileExist(req.getMobile());
         // 校验身份证
         if (StringUtils.isNotBlank(req.getIdNo())) {
-            buserBO.getUserByIdNo(req.getIdNo());
+            agentBO.getUserByIdNo(req.getIdNo());
         }
 
         XN627303Res result = null;
@@ -120,12 +120,12 @@ public class SqFormAOImpl implements ISqFormAO {
             }
         }
 
-        BUser data = buserBO.getUser(req.getUserId());
+        Agent data = agentBO.getAgent(req.getUserId());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         String status = EUserStatus.TO_APPROVE.getCode(); // 待审核授权
         String toUser = data.getUserReferee();
 
-        BUser userReferee = buserBO.getUser(data.getUserReferee());
+        Agent userReferee = agentBO.getAgent(data.getUserReferee());
         data.setTeamName(userReferee.getTeamName());
         if (data.getApplyLevel() < userReferee.getLevel()) {
             throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
@@ -138,7 +138,7 @@ public class SqFormAOImpl implements ISqFormAO {
         if (1 == data.getApplyLevel()) {
             status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             // 防止团队名称重复
-            buserBO.checkTeamName(req.getTeamName());
+            agentBO.checkTeamName(req.getTeamName());
             data.setTeamName(req.getTeamName());
         }
         if (data.getApplyLevel() > userReferee.getLevel()) {
@@ -193,9 +193,9 @@ public class SqFormAOImpl implements ISqFormAO {
     /*************** 通过授权申请 **********************/
     @Override
     @Transactional
-    public boolean approveImpower(String userId, String approver,
+    public void approveImpower(String userId, String approver, String result,
             String remark) {
-        BUser data = buserBO.getUser(userId);
+        Agent data = agentBO.getAgent(userId);
         SqForm log = impowerApplyBO.getImpowerApply(data.getLastAgentLog());
         if (!(EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
                 || EUserStatus.TO_COMPANYAPPROVE.getCode()
@@ -205,17 +205,19 @@ public class SqFormAOImpl implements ISqFormAO {
 
         String status = EUserStatus.IMPOWERED.getCode();
         String fromUser = ESysUser.SYS_USER_BH.getCode();
-        BUser highUser = buserBO.getSysUser();
 
-        if (EResult.Result_YES.getCode().equals(' ')) {
+        // TODO 上级
+        // Agent highUser = agentBO.getSysUser();
+
+        if (EResult.Result_YES.getCode().equals(result)) {
             // 更新上级
             /*
              * if (StringUtils.isNotBlank(log.getToUserId())) { highUser =
-             * buserBO.getUser(log.getToUserId()); if
+             * agentBO.getUser(log.getToUserId()); if
              * (!EUserKind.Plat.getCode().equals(highUser.getKind())) { fromUser
              * = highUser.getUserId(); } }
              */
-            data.setHighUserId(highUser.getUserId());
+            // data.setHighUserId(highUser.getUserId());
 
             AgentLevel impower = agentLevelBO
                 .getAgentByLevel(data.getApplyLevel());
@@ -245,8 +247,8 @@ public class SqFormAOImpl implements ISqFormAO {
                 // 介绍奖
                 /*
                  * long amount = 0L; if
-                 * (StringUtils.isNotBlank(data.getIntroducer())) { BUser buser
-                 * = buserBO.getUser(data.getIntroducer()); Intro iData =
+                 * (StringUtils.isNotBlank(data.getIntroducer())) { Agent buser
+                 * = agentBO.getUser(data.getIntroducer()); Intro iData =
                  * introBO.getIntroByLevel(buser.getLevel(),
                  * data.getApplyLevel()); amount =
                  * AmountUtil.mul(impower.getMinCharge(), iData.getPercent() /
@@ -287,19 +289,18 @@ public class SqFormAOImpl implements ISqFormAO {
         // imData.setPaymentPdf(payPdf);
         imData.setStatus(status);
         impowerApplyBO.approveImpower(imData);
-        return true;
 
     }
 
     /*************** 取消授权申请 **********************/
     @Override
     public void cancelImpower(String userId) {
-        BUser data = buserBO.getUser(userId);
+        Agent data = agentBO.getAgent(userId);
 
         // 是否有下级
-        BUser uCondition = new BUser();
+        Agent uCondition = new Agent();
         uCondition.setHighUserId(data.getUserId());
-        List<BUser> list = buserBO.queryUserList(uCondition);
+        List<Agent> list = agentBO.queryUserList(uCondition);
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn000", "您还有下级，无法申请退出");
         }
@@ -338,7 +339,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
         String status = EUserStatus.TO_COMPANYCANCEL.getCode();
         if (StringUtils.isNotBlank(data.getHighUserId())) {
-            BUser buser = buserBO.getUser(data.getHighUserId());
+            Agent buser = agentBO.getAgent(data.getHighUserId());
             if (!EUserKind.Plat.getCode().equals(buser.getKind())) {
                 status = EUserStatus.TO_CANCEL.getCode();
             }
@@ -357,7 +358,7 @@ public class SqFormAOImpl implements ISqFormAO {
     @Override
     public void approveImpowerCanenl(String userId, String approver,
             String remark) {
-        BUser data = buserBO.getUser(userId);
+        Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())
                 || EUserStatus.TO_COMPANYCANCEL.getCode()
                     .equals(data.getStatus()))) {
@@ -395,10 +396,10 @@ public class SqFormAOImpl implements ISqFormAO {
     // 补全授权所需资料
     @Override
     public void addInfo(XN627362Req req) {
-        BUser data = buserBO.getUser(req.getUserId());
+        Agent data = agentBO.getAgent(req.getUserId());
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
-            BUser user = buserBO.getUserByMobile(req.getIntroducer());
+            Agent user = agentBO.getUserByMobile(req.getIntroducer());
             if (user.getUserId().equals(req.getUserId())) {
                 throw new BizException("xn0000", "推荐人不能填自己哦！");
             }
@@ -412,11 +413,11 @@ public class SqFormAOImpl implements ISqFormAO {
             }
         }
 
-        buserBO.checkTeamName(req.getTeamName());
+        agentBO.checkTeamName(req.getTeamName());
 
         // 校验身份证
         if (StringUtils.isNotBlank(req.getIdNo())) {
-            buserBO.getUserByIdNo(req.getIdNo());
+            agentBO.getUserByIdNo(req.getIdNo());
         }
 
         AgentLevel impower = agentLevelBO.getAgentByLevel(data.getApplyLevel());
@@ -425,7 +426,7 @@ public class SqFormAOImpl implements ISqFormAO {
                     || StringUtils.isBlank(req.getIdHand())) {
                 throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
             } else {
-                buserBO.getUserByIdNo(req.getIdNo());
+                agentBO.getUserByIdNo(req.getIdNo());
             }
         }
 
@@ -476,12 +477,12 @@ public class SqFormAOImpl implements ISqFormAO {
 
         List<SqForm> list = impowerApplyBO.queryAgencyLogList(condition);
         for (SqForm agencyLog : list) {
-            BUser userReferee = null;
-            BUser buser = buserAO.doGetUser(agencyLog.getUserId());
+            Agent userReferee = null;
+            Agent buser = agentAO.getAgent(agencyLog.getUserId());
             agencyLog.setUser(buser);
             /*
              * if (StringUtils.isNotBlank(agencyLog.getUserReferee())) {
-             * userReferee = userAO.doGetUser(agencyLog.getUserReferee()); if
+             * userReferee = userAO.getAgent(agencyLog.getUserReferee()); if
              * (userReferee != null) {
              * agencyLog.setRefereeName(userReferee.getRealName()); }
              */
@@ -490,10 +491,10 @@ public class SqFormAOImpl implements ISqFormAO {
                 agencyLog.setApprover(agencyLog.getApprover());
             } else {
                 if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-                    BUser aprrvoeName = buserAO
-                        .doGetUser(agencyLog.getApprover());
+                    Agent aprrvoeName = agentAO
+                        .getAgent(agencyLog.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = buserAO
+                        userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             agencyLog.setApprover(userReferee.getRealName());
@@ -510,13 +511,13 @@ public class SqFormAOImpl implements ISqFormAO {
     @Override
     public SqForm getImpowerApply(String code) {
         SqForm data = impowerApplyBO.getImpowerApply(code);
-        BUser buser = buserAO.doGetUser(data.getUserId());
+        Agent buser = agentAO.getAgent(data.getUserId());
         data.setUser(buser);
-        BUser userReferee = null;
+        Agent userReferee = null;
         data.setUser(buser);
         /*
          * if (StringUtils.isNotBlank(data.getUserReferee())) { userReferee =
-         * buserAO.doGetUser(data.getUserReferee()); if (userReferee != null) {
+         * agentAO.getAgent(data.getUserReferee()); if (userReferee != null) {
          * data.setRefereeName(userReferee.getRealName()); } }
          */
         // 审核人
@@ -524,9 +525,9 @@ public class SqFormAOImpl implements ISqFormAO {
             data.setApprover(data.getApprover());
         } else {
             if (StringUtils.isNotBlank(data.getApprover())) {
-                BUser aprrvoeName = buserAO.doGetUser(data.getApprover());
+                Agent aprrvoeName = agentAO.getAgent(data.getApprover());
                 if (null != aprrvoeName) {
-                    userReferee = buserAO.getUserName(aprrvoeName.getUserId());
+                    userReferee = agentAO.getUserName(aprrvoeName.getUserId());
                     if (userReferee != null) {
                         data.setApprover(userReferee.getRealName());
                     }
@@ -558,19 +559,19 @@ public class SqFormAOImpl implements ISqFormAO {
 
         Paginable<SqForm> page = impowerApplyBO.getPaginable(start, limit,
             condition);
-        BUser userReferee = null;
-        BUser buser = null;
+        Agent userReferee = null;
+        Agent buser = null;
         for (Iterator<SqForm> iterator = page.getList().iterator(); iterator
             .hasNext();) {
             SqForm agencyLog = iterator.next();
-            buser = buserAO.doGetUser(agencyLog.getUserId());
+            buser = agentAO.getAgent(agencyLog.getUserId());
             if (!buser.getLastAgentLog().equals(agencyLog.getCode())) {
                 iterator.remove();
                 continue;
             }
             agencyLog.setUser(buser);
             if (StringUtils.isNotBlank(buser.getUserReferee())) {
-                userReferee = buserAO.doGetUser(buser.getUserReferee());
+                userReferee = agentAO.getAgent(buser.getUserReferee());
                 /// agencyLog.setRefereeName(userReferee.getRealName());
             }
             // 审核人
@@ -578,10 +579,10 @@ public class SqFormAOImpl implements ISqFormAO {
                 agencyLog.setApprover(EUser.ADMIN.getCode());
             } else {
                 if (StringUtils.isNotBlank(agencyLog.getApprover())) {
-                    BUser aprrvoeName = buserAO
-                        .doGetUser(agencyLog.getApprover());
+                    Agent aprrvoeName = agentAO
+                        .getAgent(agencyLog.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = buserAO
+                        userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             agencyLog.setApprover(userReferee.getRealName());
@@ -618,13 +619,13 @@ public class SqFormAOImpl implements ISqFormAO {
         List<SqForm> list = page.getList();
 
         for (SqForm impowerApply : list) {
-            BUser userReferee = null;
-            BUser buser = buserAO.doGetUser(impowerApply.getUserId());
+            Agent userReferee = null;
+            Agent buser = agentAO.getAgent(impowerApply.getUserId());
             impowerApply.setUser(buser);
 
             /*
              * if (StringUtils.isNotBlank(impowerApply.getUserReferee())) {
-             * userReferee = buserAO
+             * userReferee = agentAO
              * .getUserName(impowerApply.getUserReferee()); if (userReferee !=
              * null) { impowerApply.setRefereeName(userReferee.getRealName()); }
              * }
@@ -641,10 +642,10 @@ public class SqFormAOImpl implements ISqFormAO {
                 impowerApply.setApprover(impowerApply.getApprover());
             } else {
                 if (StringUtils.isNotBlank(impowerApply.getApprover())) {
-                    BUser aprrvoeName = buserAO
-                        .doGetUser(impowerApply.getApprover());
+                    Agent aprrvoeName = agentAO
+                        .getAgent(impowerApply.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = buserAO
+                        userReferee = agentAO
                             .getUserName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             impowerApply.setApprover(userReferee.getRealName());
@@ -670,6 +671,11 @@ public class SqFormAOImpl implements ISqFormAO {
             currencyList.add(ECurrency.MK_CNY.getCode());
         }
         return currencyList;
+    }
+
+    @Override
+    public void approveCancel(String userId, String approver, String result,
+            String remark) {
     }
 
 }

@@ -12,9 +12,9 @@ import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.dao.IBuserDAO;
+import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.dao.IYxFormDAO;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.enums.EAgencyType;
 import com.bh.mall.enums.EUserStatus;
@@ -27,7 +27,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     private IYxFormDAO agentAllotDAO;
 
     @Autowired
-    private IBuserDAO buserDAO;
+    private IAgentDAO agentDAO;
 
     /************************ 意向分配 ***********************/
     @Override
@@ -94,9 +94,9 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
         // save new agencylog to buser
         YxForm buser = new YxForm();
-        BUser user = new BUser();
+        Agent user = new Agent();
         buser.setUserId(data.getUserId());
-        buserDAO.updateLog(user);
+        agentDAO.updateLog(user);
 
         // add new agent allot log
         data.setCode(code);

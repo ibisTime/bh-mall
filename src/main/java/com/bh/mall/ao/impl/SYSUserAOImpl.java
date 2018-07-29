@@ -1,11 +1,9 @@
 package com.bh.mall.ao.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +12,8 @@ import com.bh.mall.ao.ISYSUserAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.ISYSRoleBO;
@@ -30,16 +28,10 @@ import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.domain.Account;
-import com.bh.mall.domain.BUser;
 import com.bh.mall.domain.SYSRole;
 import com.bh.mall.domain.SYSUser;
-import com.bh.mall.enums.EBizType;
-import com.bh.mall.enums.EChannelType;
-import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUser;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -59,7 +51,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     ISmsOutBO smsOutBO;
 
     @Autowired
-    IBuserBO buserBO;
+    IAgentBO agentBO;
 
     @Autowired
     IAddressBO addressBO;
@@ -256,135 +248,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
         return page;
     }
 
-    // 分页查询所有意向代理
     @Override
-    public Paginable<BUser> queryIntentionAgentPage(int start, int limit,
-            BUser condition) {
-        if (condition.getApplyDatetimeStart() != null
-                && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .after(condition.getApplyDatetimeEnd())) {
-            throw new BizException("xn00000", "开始时间不能大于结束时间");
-        }
-        Paginable<BUser> page = buserBO.getPaginable(start, limit, condition);
-        BUser highUser = null;
-        for (BUser data : page.getList()) {
-            if (StringUtils.isNotBlank(data.getHighUserId())) {
-                highUser = buserBO.getUser(data.getHighUserId());
-                data.setHighUser(highUser);
-            }
-        }
-
-        return page;
-    }
-
-    // 分页查询所有代理
-    @Override
-    public List<BUser> queryAgentPage(BUser condition) {
-        if (StringUtils.isBlank(condition.getHighUserId())) {
-            condition.setLevel(1);
-        }
-        List<BUser> list = buserBO.queryUserList(condition);
-        if (StringUtils.isNotBlank(condition.getHighUserId())) {
-            list = getAllLowUser(list);
-        }
-        return list;
-    }
-
-    // 下级
-    public List<BUser> getAllLowUser(List<BUser> list) {
-        for (int i = 0; i < list.size(); i++) {
-            BUser buser = list.get(i);
-            BUser condition = new BUser();
-            condition.setHighUserId(buser.getUserId());
-            List<BUser> userList = buserBO.queryUserList(condition);
-            if (CollectionUtils.isNotEmpty(userList)) {
-                buser.setUserList(userList);
-                getAllLowUser(userList);
-            }
-        }
-        return list;
-    }
-
-    /*************** 更改上级 **********************/
-    @Override
-    public void editManager(String userId, String manager, String updater) {
-        BUser data = buserBO.getUser(userId);
-        buserBO.getCheckUser(manager);
-        buserBO.refreshManager(data, manager, updater);
-    }
-
-    private void changeHighUser(String highUserId, String userId,
-            String approver, String remark) {
-
-        List<BUser> list = buserBO.getUsersByUserReferee(userId);
-        for (BUser buser : list) {
-            Date date = new Date();
-            buser.setHighUserId(userId);
-            buser.setUpdater(approver);
-            buser.setUpdateDatetime(date);
-
-            buser.setRemark(remark);
-            String logCode = buserBO.refreshHighUser(buser);
-            buser.setLastAgentLog(logCode);
-            buserBO.refreshHighUser(buser);
-
-            List<BUser> list2 = buserBO
-                .getUsersByUserReferee(buser.getUserId());
-            for (BUser user2 : list2) {
-                changeHighUser(highUserId, user2.getUserId(), approver, remark);
-            }
-
-        }
-
-    }
-
-    private void changeAmount(BUser data) {
-        BUser highUser = buserBO.getUser(data.getUserId());
-        // 推荐人的上级门槛转入新上级
-        List<BUser> list = buserBO.getUsersByUserReferee(data.getUserId());
-        BUser oldHighUser = null;
-        for (BUser buser : list) {
-            // 被推荐代理门槛款
-            Account refreeAccount = accountBO.getAccountByUser(
-                buser.getUserId(), ECurrency.MK_CNY.getCode());
-            Account account = accountBO.getAccountByUser(highUser.getUserId(),
-                ECurrency.MK_CNY.getCode());
-            oldHighUser = buserBO.getCheckUser(buser.getUserId());
-
-            // 旧代理上级是代理
-            if (null == oldHighUser
-                    || EUserKind.Plat.getCode().equals(oldHighUser.getKind())) {
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, data.getUserId(),
-                    EBizType.AJ_XGSH, EBizType.AJ_XGSH.getValue(),
-                    refreeAccount.getAmount());
-            }
-            if (EUserKind.Merchant.getCode().equals(oldHighUser.getKind())) {
-                String oldHighUserId = oldHighUser.getUserId();
-                accountBO.transAmountCZB(oldHighUserId,
-                    ECurrency.MK_CNY.getCode(), highUser.getUserId(),
-                    ECurrency.MK_CNY.getCode(), refreeAccount.getAmount(),
-                    EBizType.AJ_XGSH, EBizType.AJ_XGSH.getValue(),
-                    EBizType.AJ_XGSH.getValue(), data.getUserId());
-            }
-
-            changeAmount(buser);
-
-        }
-    }
-
-    // 分配账号 ----- buser
-    private List<String> distributeAccount(String userId, String mobile,
-            String kind, String companyCode, String systemCode) {
-        List<String> currencyList = new ArrayList<String>();
-        if (EUserKind.Customer.getCode().equals(kind)) {
-            currencyList.add(ECurrency.YJ_CNY.getCode());
-        } else if (EUserKind.Merchant.getCode().equals(kind)) {
-            currencyList.add(ECurrency.YJ_CNY.getCode());
-            currencyList.add(ECurrency.MK_CNY.getCode());
-        }
-        return currencyList;
+    public void resetLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd) {
     }
 
 }

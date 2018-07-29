@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IBuserAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAfterSaleBO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IBuserBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IIntroBO;
 import com.bh.mall.bo.IOrderBO;
@@ -38,16 +38,11 @@ import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Account;
-import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.BUser;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SYSRole;
-import com.bh.mall.domain.WareHouse;
-import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EConfigType;
-import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ELoginType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
@@ -59,12 +54,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 @Service
-public class BUserAOImpl implements IBuserAO {
+public class AgentAOImpl implements IAgentAO {
 
     private static Logger logger = Logger.getLogger(UserAOImpl.class);
 
     @Autowired
-    IBuserBO buserBO;
+    IAgentBO agentBO;
 
     @Autowired
     ISYSRoleBO sysRoleBO;
@@ -116,12 +111,12 @@ public class BUserAOImpl implements IBuserAO {
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
             String h5OpenId, String nickname, String photo, String userKind,
             String highUser, String status) {
-        buserBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
+        agentBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
         Integer level = 0;
         if (EUserKind.Customer.getCode().equals(userKind)) {
             level = 6;
         }
-        String userId = buserBO.doRegister(unionId, h5OpenId, appOpenId, null,
+        String userId = agentBO.doRegister(unionId, h5OpenId, appOpenId, null,
             userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status,
             level, highUser);
         XN627303Res result = new XN627303Res(userId, status);
@@ -132,7 +127,7 @@ public class BUserAOImpl implements IBuserAO {
     // 用户名登录
     @Override
     public String doLogin(String loginName, String loginPwd, String kind) {
-        BUser condition = new BUser();
+        Agent condition = new Agent();
         if (EUserKind.Customer.getCode().equals(kind)
                 || EUserKind.Merchant.getCode().equals(kind)) {
             condition.setLoginName(loginName);
@@ -141,16 +136,16 @@ public class BUserAOImpl implements IBuserAO {
             condition.setLoginName(loginName);
         }
         condition.setKind(kind);
-        List<BUser> userList1 = buserBO.queryUserList(condition);
+        List<Agent> userList1 = agentBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn805050", "登录名不存在");
         }
         condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<BUser> userList2 = buserBO.queryUserList(condition);
+        List<Agent> userList2 = agentBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {
             throw new BizException("xn805050", "登录密码错误");
         }
-        BUser buser = userList2.get(0);
+        Agent buser = userList2.get(0);
         if (!EUserStatus.NORMAL.getCode().equals(buser.getStatus())) {
             throw new BizException("xn805050", "该用户操作存在异常");
         }
@@ -225,7 +220,7 @@ public class BUserAOImpl implements IBuserAO {
             String h5OpenId = (String) wxRes.get("openid");
             System.out.println("unionId:" + unionId);
             // Step4：根据openId，unionId从数据库中查询用户信息
-            BUser dbUser = buserBO.doGetUserByOpenId(h5OpenId);
+            Agent dbUser = agentBO.doGetUserByOpenId(h5OpenId);
 
             // 用户是否关注了公众号
             // 1、获取全局token
@@ -294,7 +289,7 @@ public class BUserAOImpl implements IBuserAO {
     // 注销 | 激活
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
-        BUser buser = buserBO.getUser(userId);
+        Agent buser = agentBO.getAgent(userId);
         if (buser == null) {
             throw new BizException("li01004", "用户不存在");
         }
@@ -309,7 +304,7 @@ public class BUserAOImpl implements IBuserAO {
             smsContent = "您的账号已被管理员解封,请遵守平台相关规则";
             userStatus = EUserStatus.NORMAL;
         }
-        buserBO.refreshStatus(userId, userStatus, updater, remark);
+        agentBO.refreshStatus(userId, userStatus, updater, remark);
         if (!EUserKind.Plat.getCode().equals(buser.getKind())
                 && PhoneUtil.isMobile(mobile)) {
             // 发送短信
@@ -323,7 +318,7 @@ public class BUserAOImpl implements IBuserAO {
     @Override
     public void doRoleUser(String userId, String roleCode, String updater,
             String remark) {
-        BUser buser = buserBO.getUser(userId);
+        Agent buser = agentBO.getAgent(userId);
         if (buser == null) {
             throw new BizException("li01004", "用户不存在");
         }
@@ -331,21 +326,21 @@ public class BUserAOImpl implements IBuserAO {
         if (role == null) {
             throw new BizException("li01004", "角色不存在");
         }
-        buserBO.refreshRole(userId, roleCode, updater, remark);
+        agentBO.refreshRole(userId, roleCode, updater, remark);
     }
 
     /*************** 检查**********************/
     // 检查登录密码
     @Override
     public void doCheckLoginPwd(String userId, String loginPwd) {
-        BUser condition = new BUser();
+        Agent condition = new Agent();
         condition.setUserId(userId);
-        List<BUser> userList1 = buserBO.queryUserList(condition);
+        List<Agent> userList1 = agentBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn702002", "用户不存在");
         }
         condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<BUser> userList2 = buserBO.queryUserList(condition);
+        List<Agent> userList2 = agentBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {
             throw new BizException("xn702002", "登录密码错误");
         }
@@ -356,30 +351,30 @@ public class BUserAOImpl implements IBuserAO {
     // 重置登录密码
     @Override
     public void resetLoginPwd(String userId, String newLoginPwd) {
-        BUser buser = buserBO.getCheckUser(userId);
-        buserBO.resetLoginPwd(buser, newLoginPwd);
+        Agent buser = agentBO.getCheckUser(userId);
+        agentBO.resetLoginPwd(buser, newLoginPwd);
     }
 
     // 修改头像
     @Override
     public void doModifyPhoto(String userId, String photo) {
-        buserBO.refreshPhoto(userId, photo);
+        agentBO.refreshPhoto(userId, photo);
     }
 
     // 更换绑定手机号
     @Override
     public void doResetMoblie(String userId, String kind, String newMobile,
             String smsCaptcha) {
-        BUser buser = buserBO.getCheckUser(userId);
+        Agent buser = agentBO.getCheckUser(userId);
         String oldMobile = buser.getMobile();
         if (newMobile.equals(oldMobile)) {
             throw new BizException("xn000000", "新手机与原手机一致");
         }
         // 判断手机号是否存在
-        buserBO.isMobileExist(newMobile);
+        agentBO.isMobileExist(newMobile);
         // 新手机号验证
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627310");
-        buserBO.resetBindMobile(buser, newMobile);
+        agentBO.resetBindMobile(buser, newMobile);
         // 发送短信
         smsOutBO.sendSmsOut(oldMobile,
             "尊敬的" + PhoneUtil.hideMobile(oldMobile) + "用户，您于"
@@ -394,7 +389,7 @@ public class BUserAOImpl implements IBuserAO {
     // 补全授权信息
     @Override
     public void updateInformation(XN627255Req req) {
-        BUser data = buserBO.getUser(req.getUserId());
+        Agent data = agentBO.getAgent(req.getUserId());
         data.setLevel(StringValidater.toInteger(req.getLevel()));
         data.setProvince(req.getProvince());
         data.setCity(req.getCity());
@@ -404,7 +399,7 @@ public class BUserAOImpl implements IBuserAO {
         data.setWxId(req.getWxId());
         data.setMobile(req.getMobile());
         data.setTeamName(req.getTeamName());
-        buserBO.updateInformation(data);
+        agentBO.updateInformation(data);
     }
 
     /*************** 数据库查询 **********************/
@@ -412,148 +407,83 @@ public class BUserAOImpl implements IBuserAO {
     /*************** 查询 **********************/
     // 查询下级代理
     @Override
-    public Paginable<BUser> queryLowUser(int start, int limit,
-            BUser condition) {
-        return buserBO.getPaginable(start, limit, condition);
+    public Paginable<Agent> queryLowUser(int start, int limit,
+            Agent condition) {
+        return agentBO.getPaginable(start, limit, condition);
     }
 
     // 查询下级代理分页
     @Override
-    public Paginable<BUser> queryMyLowUserPage(int start, int limit,
-            BUser condition) {
-        long totalCount = buserBO.getTotalCount(condition);
-        Page<BUser> page = new Page<BUser>(start, limit, totalCount);
-        List<BUser> list = buserBO.selectList(condition, page.getPageNo(),
+    public Paginable<Agent> queryMyLowUserPage(int start, int limit,
+            Agent condition) {
+        long totalCount = agentBO.getTotalCount(condition);
+        Page<Agent> page = new Page<Agent>(start, limit, totalCount);
+        List<Agent> list = agentBO.selectList(condition, page.getPageNo(),
             page.getPageSize());
         page.setList(list);
         return page;
     }
 
-    // 意向代理查询
     @Override
-    public Paginable<BUser> queryIntentionAgentPageFront(int start, int limit,
-            BUser condition) {
-        if (condition.getApplyDatetimeStart() != null
-                && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .before(condition.getApplyDatetimeEnd())) {
-            throw new BizException("xn00000", "开始时间不能大于结束时间");
-        }
-        condition.setKind(EUserKind.Merchant.getCode());
-        long totalCount = buserBO.getTotalCount(condition);
-        Page<BUser> page = new Page<BUser>(start, limit, totalCount);
-        List<BUser> list = buserBO.selectAgentFront(condition, page.getPageNo(),
-            page.getPageSize());
+    public Agent getUserName(String userReferee) {
+        return null;
+    }
 
-        for (BUser data : list) {
-            if (StringUtils.isNotBlank(data.getHighUserId())) {
-                BUser highUser = buserBO.getUser(data.getHighUserId());
-                data.setHighUser(highUser);
+    // 下级
+    public List<Agent> getAllLowAgent(List<Agent> list) {
+        for (int i = 0; i < list.size(); i++) {
+            Agent agent = list.get(i);
+            Agent condition = new Agent();
+            condition.setHighUserId(agent.getUserId());
+            List<Agent> agentList = agentBO.queryUserList(condition);
+            if (CollectionUtils.isNotEmpty(agentList)) {
+                agent.setAgentList(agentList);
+                getAllLowAgent(agentList);
             }
         }
-        page.setList(list);
-        return page;
+        return list;
     }
 
     @Override
-    public BUser doGetUser(String userId) {
-        BUser user = buserBO.getUser(userId);
-        if (EUserKind.Merchant.getCode().equals(user.getKind())) {
-            // 推荐人、上级、介绍人转义
-            if (StringUtils.isNotBlank(user.getUserReferee())) {
-                // BUser userReferee =
-                // buserBO.getUserName(user.getUserReferee());
-                // if (userReferee != null) {
-                // user.setRefereeUser(userReferee);
-                // }
-            }
-            // 上级
-            if (StringUtils.isNotBlank(user.getHighUserId())) {
-                // BUser highUser = buserBO.getUserName(user.getHighUserId());
-                // if (highUser != null) {
-                // user.setHighUser(highUser);
-                // }//
-            }
-
-            // 介绍人
-            if (StringUtils.isNotBlank(user.getIntroducer())) {
-                // BUser introduceName =
-                // buserBO.getUserName(user.getIntroducer());
-                // if (introduceName != null) {
-                // user.setIntroduceName(introduceName.getRealName());
-                // }
-            }
-
-            // 关联管理员
-            if (StringUtils.isNotBlank(user.getManager())) {
-                BUser manageName = buserBO.getUserName(user.getManager());
-                if (manageName != null) {
-                    user.setManager(manageName.getLoginName());
-                }
-            }
-
-            // 意向归属人
-            if (StringUtils.isNotBlank(user.getLastAgentLog())) {
-                YxForm log = agentAllotBO.getAgentAllot(user.getLastAgentLog());
-                if (StringUtils.isNotBlank(log.getToUserId())) {
-                    BUser toUser = buserBO.getUser(log.getToUserId());
-                    // user.setToTeamName(toUser.getTeamName());
-                    // user.setToLevel(toUser.getLevel());
-                    // user.setToUserName(toUser.getRealName());
-                    // user.setToUserMobile(toUser.getToUserMobile());
-                }
-
-            } else if (StringUtils.isNotBlank(user.getUserReferee())) {
-                // 有推荐人的时候，同步推荐人的团队等信息
-                BUser userReferee = buserBO.getUser(user.getUserReferee());
-                // user.setToTeamName(userReferee.getTeamName());
-                // user.setToLevel(userReferee.getLevel());
-                // user.setToUserName(userReferee.getRealName());
-                // user.setToUserMobile(userReferee.getToUserMobile());
-            }
-
-            // 授权金额
-            if (null != user.getApplyLevel()) {
-                AgentLevel agent = agentLevelBO
-                    .getAgentByLevel(user.getApplyLevel());
-                // user.setImpowerAmount(agent.getAmount());
-            }
-            if (null != user.getPayAmount() && 0 != user.getPayAmount()) {
-                // user.setResult(false);
-            }
-            // 该等级授权规则
-            if (EUserKind.Merchant.getCode().equals(user.getKind())) {
-                if (null != user.getApplyLevel()) {
-                    AgentLevel impower = agentLevelBO
-                        .getAgentByLevel(user.getApplyLevel());
-                    // user.setImpower(impower);
-                }
-            }
-
-            // 门槛余额
-            Long mkAmount = 0L;
-            Account account = accountBO.getAccountNocheck(user.getUserId(),
-                ECurrency.MK_CNY.getCode());
-            if (null != account) {
-                mkAmount = account.getAmount();
-            }
-            // user.setMkAmount(mkAmount);
-            // 云仓余额
-            List<WareHouse> whList = wareHouseBO
-                .getWareHouseByUser(user.getUserId());
-            Long whAmount = 0L;
-            for (WareHouse wareHouse : whList) {
-                whAmount = whAmount + wareHouse.getAmount();
-            }
-            // user.setWhAmount(whAmount);
-        }
-
-        return user;
+    public List<Agent> queryAgentList(Agent condition) {
+        return null;
     }
 
     @Override
-    public BUser getUserName(String userReferee) {
-        return buserBO.getUserName(userReferee);
+    public void editHighUser(String userId, String highUser, String updater) {
     }
 
+    @Override
+    public void editUserReferee(String userId, String userReferee,
+            String updater) {
+    }
+
+    @Override
+    public Paginable<Agent> queryAgentPage(int start, int limit,
+            Agent condition) {
+        return null;
+    }
+
+    @Override
+    public List<Agent> getAgentLog(Agent condition) {
+        return null;
+    }
+
+    @Override
+    public void abolishImpower(String userId, String updater, String remark) {
+    }
+
+    @Override
+    public Agent doGetAgentByMobile(String mobile) {
+        return null;
+    }
+
+    @Override
+    public Agent getAgent(String userId) {
+        return null;
+    }
+
+    @Override
+    public void editManager(String userId, String manager, String updater) {
+    }
 }

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IBankcardAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IBankcardBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Bankcard;
 import com.bh.mall.dto.req.XN627520Req;
@@ -28,7 +28,7 @@ public class BankcardAOImpl implements IBankcardAO {
     private IBankcardBO bankcardBO;
 
     @Autowired
-    private IUserBO userBO;
+    private IAgentBO agentBO;
 
     @Override
     public String addBankcard(XN627520Req req) {
@@ -93,7 +93,7 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public void editBankcard(XN627523Req req) {
         Bankcard bankcard = bankcardBO.getBankcard(req.getCode());
-        userBO.checkTradePwd(bankcard.getUserId(), req.getTradePwd());
+        agentBO.checkTradePwd(bankcard.getUserId(), req.getTradePwd());
         if (!bankcard.getBankcardNumber().equals(req.getBankcardNumber())) { // 有修改就去判断是否唯一
             List<Bankcard> list = bankcardBO
                 .queryBankcardList(bankcard.getUserId());

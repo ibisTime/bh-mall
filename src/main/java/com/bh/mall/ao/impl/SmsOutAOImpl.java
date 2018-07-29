@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.ISmsOutAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.ISmsOutBO;
-import com.bh.mall.bo.IUserBO;
 import com.bh.mall.common.PhoneUtil;
-import com.bh.mall.domain.User;
+import com.bh.mall.domain.Agent;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -17,7 +18,7 @@ public class SmsOutAOImpl implements ISmsOutAO {
     ISmsOutBO smsOutBO;
 
     @Autowired
-    IUserBO userBO;
+    IAgentBO agentBO;
 
     @Override
     public void sendCaptcha(String mobile, String bizType, String companyCode,
@@ -27,12 +28,12 @@ public class SmsOutAOImpl implements ISmsOutAO {
 
     @Override
     public void sendContent(String tokenId, String userId, String content) {
-        User user = userBO.getUser(userId);
-        if (user == null) {
+        Agent agent = agentBO.getAgent(userId);
+        if (agent == null) {
             throw new BizException("xn0000", "该用户编号不存在");
         }
-        smsOutBO.sendSmsOut(user.getMobile(), content, "001200",
-            user.getCompanyCode(), user.getSystemCode());
+        smsOutBO.sendSmsOut(agent.getMobile(), content, "001200",
+            ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
     }
 
     @Override
