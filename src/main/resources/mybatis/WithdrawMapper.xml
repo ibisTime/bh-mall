@@ -29,7 +29,6 @@
 		<result column="channel_order" property="channelOrder" />
 		<result column="pay_datetime" property="payDatetime" />
 	</resultMap>
-	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">

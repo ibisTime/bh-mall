@@ -12,7 +12,6 @@ import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.dao.IBuserDAO;
 import com.bh.mall.dao.ISqFormDAO;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EUserStatus;
@@ -22,10 +21,7 @@ import com.bh.mall.exception.BizException;
 public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
 
     @Autowired
-    private ISqFormDAO impowerApplyDAO;
-
-    @Autowired
-    private IBuserDAO buserDAO;
+    private ISqFormDAO sqFormDAO;
 
     /********************** 授权申请 ***************************/
 
@@ -42,7 +38,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         Date date = new Date();
         alData.setApplyDatetime(date);
 
-        impowerApplyDAO.insert(alData);
+        sqFormDAO.insert(alData);
         return code;
     }
 
@@ -62,7 +58,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
 
         // alData.setStatus(data.getStatus());
         alData.setRemark(data.getRemark());
-        impowerApplyDAO.insert(alData);
+        sqFormDAO.insert(alData);
         return code;
     }
 
@@ -82,7 +78,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         alData.setApplyLevel(user.getApplyLevel());
         alData.setApproveDatetime(user.getApproveDatetime());
         alData.setRemark(user.getRemark());
-        impowerApplyDAO.insert(alData);
+        sqFormDAO.insert(alData);
         return code;
     }
 
@@ -100,7 +96,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setRemark(data.getRemark());
-        impowerApplyDAO.insert(alData);
+        sqFormDAO.insert(alData);
         return code;
 
     }
@@ -118,7 +114,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setRemark(data.getRemark());
-        impowerApplyDAO.insert(alData);
+        sqFormDAO.insert(alData);
         return code;
 
     }
@@ -134,7 +130,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
 
         // add new impower apply log
         data.setCode(code);
-        impowerApplyDAO.insert(data);
+        sqFormDAO.insert(data);
 
         return code;
     }
@@ -152,7 +148,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
 
         // add new impower apply log
         data.setCode(code);
-        impowerApplyDAO.insert(data);
+        sqFormDAO.insert(data);
 
         return code;
     }
@@ -169,7 +165,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(data.getStatus());
-        impowerApplyDAO.insert(alData);
+        sqFormDAO.insert(alData);
 
         return code;
     }
@@ -182,7 +178,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         if (StringUtils.isNotBlank(code)) {
             SqForm condition = new SqForm();
             condition.setCode(code);
-            data = impowerApplyDAO.select(condition);
+            data = sqFormDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理记录不存在");
             }
@@ -193,15 +189,15 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     @Override
     public List<SqForm> queryImpowerApplyPage(int start, int limit,
             SqForm condition) {
-        long totalCount = impowerApplyDAO.selectTotalCount(condition);
+        long totalCount = sqFormDAO.selectTotalCount(condition);
         Page<SqForm> page = new Page<SqForm>(start, limit, totalCount);
-        return impowerApplyDAO.selectList(condition, page.getPageNO(),
+        return sqFormDAO.selectList(condition, page.getPageNO(),
             page.getPageSize());
     }
 
     @Override
     public List<SqForm> queryAgencyLogList(SqForm condition) {
-        return impowerApplyDAO.selectList(condition);
+        return sqFormDAO.selectList(condition);
     }
 
 }

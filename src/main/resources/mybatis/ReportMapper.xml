@@ -24,9 +24,8 @@
 		<result column="send_award" property="sendAward" />
 		<result column="intr_award" property="intrAward" />
 		<result column="refree_award" property="refreeAward" />
-		<result column="price_spread"  property="priceSpread" />
+		<result column="price_spread" property="priceSpread" />
 	</resultMap>
-	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="userId != null and userId != '' ">
@@ -70,18 +69,21 @@
 		,t.mobile
 		,t.wxId
 		,t.level
+		
 		,t.user_referee
 		,t.introducer
 		,t.high_user_id
 		,t.team_name
 		,t.manager
 		,t.province
+		
 		,t.city
 		,t.area
 		,t.address
 		,t.impower_datetime
 		,t.send_award
 		,t.intr_award
+		
 		,t.refree_award
 		,t.price_spread
 		FROM
@@ -157,6 +159,9 @@
 		,area = #{area}
 		,address = #{address}
 		,impower_datetime = #{impowerDatetime}
+		send_award = #{sendAward}
+		,intr_award = #{intrAward}
+		,refree_award = #{refreeAward}
 		WHERE user_id = #{userId}
 	</update>
 

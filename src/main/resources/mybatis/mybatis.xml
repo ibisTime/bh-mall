@@ -5,7 +5,6 @@
 	<!-- <settings>
 		<setting name="logImpl" value="STDOUT_LOGGING"/>
 	</settings> -->
-	
 	<typeAliases>		
 		<typeAlias alias="user" type="com.bh.mall.domain.User" />
 		<typeAlias alias="address" type="com.bh.mall.domain.Address" />
@@ -62,5 +61,7 @@
 		<typeAlias alias="impowerApply" type="com.bh.mall.domain.SqForm"/>
 		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.SjForm"/>
 		
+		<typeAlias alias="securityTrace" type="com.bh.mall.domain.SecurityTrace"/>
+		<typeAlias alias="barCode" type="com.bh.mall.domain.BarCode"/>
 	</typeAliases>
 </configuration>	

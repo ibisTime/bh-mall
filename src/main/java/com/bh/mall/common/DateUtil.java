@@ -330,7 +330,21 @@ public class DateUtil {
         return calendar.getTime();
     }
 
+    /**
+     * 获取当天日
+     * @param args 
+     * @create: 2018年7月27日 下午7:35:12 nyc
+     * @history:
+     */
+
+    public static String getToDay() {
+        Calendar calendar = Calendar.getInstance();
+        String date = calendar.get(Calendar.YEAR) + "-"
+                + (calendar.get(Calendar.MONTH) + 1) + "-"
+                + calendar.get(Calendar.DAY_OF_MONTH);
+        return date;
+    }
+
     public static void main(String[] args) {
-        System.out.println(getWeeklyEnd());
     }
 }

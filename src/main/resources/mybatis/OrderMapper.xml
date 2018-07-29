@@ -79,7 +79,6 @@
 			<if test="statusForQuery != null and statusForQuery != '' ">
 				AND t.status IN ${statusForQuery}
 			</if>
-			
 			<choose>
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
@@ -375,4 +374,11 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	<delete id="delete_order" parameterType="innerOrder">
+		DELETE FROM
+		tbh_order
+		WHERE
+		code = #{code}
+	</delete>
 </mapper>

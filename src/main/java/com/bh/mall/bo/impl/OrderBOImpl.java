@@ -265,4 +265,9 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
         orderDAO.invalidOrder(data);
     }
 
+    @Override
+    public void removeOrder(Order data) {
+        orderDAO.delete(data);
+    }
+
 }

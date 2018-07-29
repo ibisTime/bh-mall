@@ -12,26 +12,26 @@ public class XN627871Req {
 
     // 每页数量
     @NotBlank(message = "每页数量不能为空")
-    private String number;
+    private String pageSize;
 
     // 张数
     @NotBlank(message = "张数不能为空")
-    private String quantity;
+    private String pageNo;
 
-    public String getNumber() {
-        return number;
+    public String getPageSize() {
+        return pageSize;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getPageNo() {
+        return pageNo;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPageSize(String pageSize) {
+        this.pageSize = pageSize;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setPageNo(String pageNo) {
+        this.pageNo = pageNo;
     }
 
 }

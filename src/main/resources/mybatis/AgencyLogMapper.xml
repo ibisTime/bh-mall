@@ -8,7 +8,6 @@
 		<result column="type" property="type" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_datetime" property="applyDatetime" />
-		
 		<result column="level" property="level" />
 		<result column="apply_level" property="applyLevel" />
 		<result column="high_user_id" property="highUserId" />

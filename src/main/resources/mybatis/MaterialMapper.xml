@@ -56,7 +56,6 @@
 		</trim>
 	</select>
 	
-	
 	<select id="select_material_count" parameterType="material" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_material t
 		<include refid="where_condition"/>

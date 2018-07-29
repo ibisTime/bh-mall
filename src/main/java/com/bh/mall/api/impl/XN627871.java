@@ -1,10 +1,13 @@
 package com.bh.mall.api.impl;
 
+import java.util.List;
+
 import com.bh.mall.ao.IProCodeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.ProCode;
 import com.bh.mall.dto.req.XN627871Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -25,8 +28,13 @@ public class XN627871 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return proCodeAO.downLoad(StringValidater.toInteger(req.getNumber()),
-            StringValidater.toInteger(req.getQuantity()));
+        List<ProCode> list = null;
+        synchronized (IProCodeAO.class) {
+            list = proCodeAO.downLoad(
+                StringValidater.toInteger(req.getPageNo()),
+                StringValidater.toInteger(req.getPageSize()));
+        }
+        return list;
     }
 
     @Override

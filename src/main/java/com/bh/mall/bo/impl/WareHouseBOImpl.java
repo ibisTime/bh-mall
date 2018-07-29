@@ -178,9 +178,6 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
 
         // 没有该产品
         if (null == wareHouse) {
-            ProductSpecsPrice pspData = productSpecsPriceBO.getPriceByLevel(
-                data.getProductSpecsCode(), applyUser.getLevel());
-
             String code = OrderNoGenerater
                 .generate(EGeneratePrefix.WareHouse.getCode());
             WareHouse whData = new WareHouse();
@@ -194,10 +191,10 @@ public class WareHouseBOImpl extends PaginableBOImpl<WareHouse>
             whData.setUserId(applyUser.getUserId());
             whData.setRealName(applyUser.getRealName());
             whData.setCreateDatetime(new Date());
-            whData.setPrice(pspData.getPrice());
+            whData.setPrice(data.getPrice());
 
             whData.setQuantity(data.getQuantity());
-            Long amount = data.getQuantity() * pspData.getPrice();
+            Long amount = data.getQuantity() * data.getPrice();
             whData.setAmount(amount);
             whData.setStatus(EProductStatus.Shelf_YES.getCode());
 

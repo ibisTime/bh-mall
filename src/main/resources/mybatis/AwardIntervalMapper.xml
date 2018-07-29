@@ -27,7 +27,6 @@
 			
 		</trim>
 	</sql>
-	
 	<select id="select_awardInterval" parameterType="awardInterval" resultMap="awardInterval_DB_Result">
 		SELECT
 		t.code

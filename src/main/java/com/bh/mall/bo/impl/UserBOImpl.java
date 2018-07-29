@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +38,8 @@ import com.bh.mall.exception.BizException;
  */
 @Component
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
+
+    private static Logger logger = Logger.getLogger(UserBOImpl.class);
 
     @Autowired
     private IUserDAO userDAO;
@@ -732,6 +735,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public User getTeamLeader(String teamName) {
         List<User> list = null;
+        logger.info("teamName==" + teamName);
         if (StringUtils.isNotBlank(teamName)) {
             User condition = new User();
             condition.setTeamName(teamName);

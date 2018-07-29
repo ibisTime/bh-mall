@@ -11,7 +11,6 @@
 		
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -44,7 +43,7 @@
 		
 		,t.update_datetime
 		,t.remark
-		
+
 		FROM
 		tsys_config t 
 		<include refid="where_condition" />
@@ -60,7 +59,6 @@
 		<include refid="where_condition" />
 	</select>
 	
-	
 	<insert id="insert_sysConfig" parameterType="sysConfig" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tsys_config(
 		type
@@ -70,7 +68,6 @@
 		,update_datetime
 		
 		,remark
-	
 		)
 		VALUES(
 		#{type}
@@ -80,7 +77,6 @@
 		,#{updateDatetime}
 		
 		,#{remark}
-	
 		)
 	</insert>
 	
