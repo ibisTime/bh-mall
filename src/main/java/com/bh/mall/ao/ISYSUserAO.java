@@ -39,7 +39,7 @@ public interface ISYSUserAO {
     public Paginable<SYSUser> queryUserPage(int start, int limit,
             SYSUser condition);
 
-    // 登录密码
+    // 重置密码
     public void resetLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd);
 
