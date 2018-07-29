@@ -30,7 +30,7 @@ public class ProCodeBOImpl extends PaginableBOImpl<ProCode>
 
     @Override
     public void refreshProCode(ProCode data) {
-        data.setStatus(ECodeStatus.USE_NO.getCode());
+        data.setStatus(ECodeStatus.USE_YES.getCode());
         data.setUseDatetime(new Date());
         proCodeDAO.update(data);
     }
