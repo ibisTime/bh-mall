@@ -6,24 +6,23 @@
 		<result column="code" property="code"/>
 		<result column="level" property="level"/>
 		<result column="name" property="name"/>
+		<result column="is_intent" property="isIntent"/>
+		<result column="is_jsAward" property="isJsAward"/>
+		
+		<result column="is_real_name" property="isRealName"/>
+		<result column="is_company_impower" property="isCompanyImpower"/>
+		<result column="is_ware" property="isWare"/>
+		<result column="is_send" property="isSend"/>
+		<result column="min_charge" property="minCharge"/>
+		
 		<result column="amount" property="amount"/>
 		<result column="red_amount" property="redAmount"/>
 		<result column="min_charge_amount" property="minChargeAmount"/>
 		<result column="min_surplus" property="minSurplus"/>
-		<result column="is_ware" property="isWare"/>
-		<result column="is_send" property="isSend"/>
-
 		<result column="is_company_approve" property="isCompanyApprove"/>
+		
 		<result column="re_number" property="reNumber"/>
 		<result column="is_reset" property="isReset"/>
-		
-		<result column="is_intent" property="isIntent"/>
-		<result column="is_intro" property="isIntro"/>
-		<result column="is_real_name" property="isRealName"/>
-		<result column="is_company_impower" property="isCompanyImpower"/>
-		<result column="impower_amount" property="impowerAmount"/>
-		<result column="min_charge" property="minCharge"/>
-		
 		<result column="updater" property="updater"/>
 		<result column="update_datetime" property="updateDatetime"/>
 		<result column="remark" property="remark"/>
@@ -55,8 +54,8 @@
 			<if test="isRealName != null and isRealName != ''">
 				AND t.is_real_name=#{isRealName}
 			</if>
-			<if test="isIntro != null and isIntro != ''">
-				AND t.is_intro=#{isIntro}
+			<if test="isJsAward != null and isJsAward != ''">
+				AND t.is_jsAward=#{isJsAward}
 			</if>
 			
 			<if test="isIntent != null and isIntent != ''">
@@ -96,12 +95,11 @@
 		
 		,t.code 
 		,t.is_intent 
-		,t.is_intro
+		,t.is_jsAward
 		,t.is_real_name
 		,t.is_company_impower
 		,t.min_charge
 		
-		,t.impower_amount
 		,t.is_company_approve
 		,t.re_number
 		,t.is_reset
@@ -137,7 +135,7 @@
 		
 		,level=#{level}
 		,is_intent=#{isIntent}
-		,is_intro=#{isIntro}
+		,is_jsAward=#{isJsAward}
 		,is_real_name=#{isRealName}
 		,is_company_impower=#{isCompanyImpower}
 		,min_charge=#{minCharge}
