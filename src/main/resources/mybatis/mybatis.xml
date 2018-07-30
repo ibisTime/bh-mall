@@ -20,11 +20,11 @@
 	    <typeAlias alias="material" type="com.bh.mall.domain.Material"/>
 	    <typeAlias alias="product" type="com.bh.mall.domain.Product"/>
 	    
-	    <typeAlias alias="productSpecs" type="com.bh.mall.domain.ProductSpecs"/>
-	    <typeAlias alias="productSpecsPrice" type="com.bh.mall.domain.ProductSpecsPrice"/>
+	    <typeAlias alias="specs" type="com.bh.mall.domain.Specs"/>
+	    <typeAlias alias="agentPrice" type="com.bh.mall.domain.AgentPrice"/>
 	    <typeAlias alias="innerProduct" type="com.bh.mall.domain.InnerProduct"/>
-	    <typeAlias alias="productLog" type="com.bh.mall.domain.ProductLog"/>
-	    <typeAlias alias="award" type="com.bh.mall.domain.Award"/>
+	    <typeAlias alias="specsLog" type="com.bh.mall.domain.SpecsLog"/>
+	    <typeAlias alias="tjAward" type="com.bh.mall.domain.TjAward"/>
 	    
 	    <typeAlias alias="cart" type="com.bh.mall.domain.Cart"/>
 	    <typeAlias alias="innerOrder" type="com.bh.mall.domain.InnerOrder"/>

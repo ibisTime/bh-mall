@@ -1,10 +1,10 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IChangeProductAO;
+import com.bh.mall.ao.IExchangeProductAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.ChangeProduct;
+import com.bh.mall.domain.ExchangeProduct;
 import com.bh.mall.dto.req.XN627802Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -17,18 +17,18 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627802 extends AProcessor {
-    private IChangeProductAO changeProductAO = SpringContextHolder
-        .getBean(IChangeProductAO.class);
+    private IExchangeProductAO exchangeProductAO = SpringContextHolder
+        .getBean(IExchangeProductAO.class);
 
     private XN627802Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        ChangeProduct condition = new ChangeProduct();
+        ExchangeProduct condition = new ExchangeProduct();
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setKeyword(req.getKeyword());
 
-        return changeProductAO.queryChangeProductList(condition);
+        return exchangeProductAO.queryChangeProductList(condition);
     }
 
     @Override

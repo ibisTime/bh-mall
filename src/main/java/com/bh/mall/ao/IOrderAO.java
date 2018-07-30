@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Order;
-import com.bh.mall.domain.ProductSpecs;
-import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.Specs;
+import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
@@ -54,8 +54,8 @@ public interface IOrderAO {
 
     void paySuccess(String result);
 
-    void checkLimitNumber(Agent agent, ProductSpecs psData,
-            ProductSpecsPrice pspData, Integer quantity);
+    void checkLimitNumber(Agent agent, Specs psData,
+            AgentPrice pspData, Integer quantity);
 
     // 订单作废
     public void invalidOrder(String code, String updater, String remark);

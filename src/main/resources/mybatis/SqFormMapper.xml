@@ -4,17 +4,33 @@
 
 <mapper namespace="com.bh.mall.dao.IImpowerApplyDAO">
 	<resultMap id="impowerApply_DB_Result" type="impowerApply">
-		<result column="code" property="code" />
-		<result column="apply_user" property="applyUser" />
+		<result column="code" property="code"/>
+		<result column="wx_id" property="wxId"/>
+		<result column="user_id" property="userId" />
+		<result column ="to_user_id" property="toUserId"/>
 		<result column="apply_level" property="applyLevel" />
-		<result column="apply_datetime" property="applyDatetime" />
-		<result column="pay_amount" property="payAmount" />
-		<result column="pay_pdf" property="payPdf" />
-		<result column="status" property="status" />
-		<result column="approver" property="approver" />
-		<result column="approve_datetime" property="approveDatetime" />
-		<result column="impower_datetime" property="impowerDatetime" />
-		<result column="remark" property="remark" />
+		
+		<result column="real_name" property="realName"/>
+		<result column="address" property="address"/>
+		<result column="area" property="area"/>
+		<result column="mobile" property="mobile"/>
+		<result column="city" property="city"/>
+		<result column="province" property="province"/>
+		
+		<result column="id_front" property="idFront"/>
+		<result column="id_behind" property="idBehind"/>
+		<result column="id_hand" property="idHand"/>
+		<result column="id_kind" property="idKind"/>
+		<result column="id_no" property="idNo"/>
+		
+		<result column="introducer_mobile" property="introducerMobile"/>
+		<result column="user_referee" property="userReferee"/>
+				
+		<result column ="status" property="status"/>
+		<result column ="approver" property="approver"/>
+		<result column ="apply_datetime" property="applyDatetime"/>		
+		<result column="approve_datetime" property="approveDatetime" />		
+		<result column="remark" property="remark"/>
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -24,8 +40,8 @@
 			</if>
 		
 			
-			<if test="applyUser != null and applyUser != '' ">
-				AND t.apply_user = #{applyUser}
+			<if test="userId != null and userId != '' ">
+				AND t.user_id= #{userId}
 			</if>
 			
 			<if test="approver != null and approver != '' ">
@@ -62,12 +78,6 @@
 				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
 			</if>
 			
-			<if test="impowerDatetimeStart != null and impowerDatetimeStart != '' ">
-				<![CDATA[AND t.approve_datetime >= #{approveDatetimeStart}]]>
-			</if>
-			<if test="impowerDatetimeEnd != null and impowerDatetimeEnd != '' ">
-				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
-			</if>
 			
 		</trim>
 	</sql>
@@ -75,18 +85,33 @@
 	<select id="select_impowerapply" parameterType="impowerApply" resultMap="impowerApply_DB_Result">
 		SELECT
 		t.code
-		,t.apply_user
+		,t.wx_id
+		,t.user_id
 		,t.apply_level
-		,t.apply_datetime
-		,t.pay_amount
-		,t.pay_pdf
+		
+		,t.real_name
+		,t.address
+		,t.area
+		,t.mobile
+		,t.city
+		,t.province
+		
+		,t.id_front
+		,t.id_behind
+		,t.id_hand
+		,t.id_kind
+		,t.id_no
+		
+		,t.introducer_mobile
+		,t.user_referee
+		
 		,t.status
-		,t.approver
+		,t.approver		
+		,t.apply_datetime
 		,t.approve_datetime
-		,t.impower_datetime
 		,t.remark
 		FROM
-		tbh_sq_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id   
+		tbh_sq_form t LEFT JOIN tbh_buser u ON t.user_id= u.user_id   
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -97,7 +122,7 @@
 
 	<select id="select_impowerapply_count" parameterType="impowerApply"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_sq_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id   
+		SELECT count(1) FROM tbh_sq_form t LEFT JOIN tbh_buser u ON t.user_id= u.user_id   
 		<include refid="where_condition" />
 	</select>
 
@@ -105,20 +130,36 @@
 		INSERT INTO
 		tbh_sq_form(
 		code
-		,apply_user
+		,wx_id
+		,user_id
 		,apply_level
-		,apply_datetime
-	    ,pay_amount
-		,pay_pdf
+		
+		,real_name
+		,address
+		,area
+		,mobile
+		,city
+		,province
+		
+		,id_front
+		,id_behind
+		,id_hand
+		,id_kind
+		,id_no
+		
+		,introducer_mobile
+		,user_referee
+		
 		,status
 		,approver
+		,apply_datetime		
 		,approve_datetime
-		,impower_datetime
 		,remark
 		)
 		VALUES(
 		#{code}
-        ,#{applyUser}
+		,#{wxId}
+        ,#{userId}
 		,#{applyLevel}
 		,#{applyDatetime}
 		,#{payAmount}
@@ -135,7 +176,7 @@
 	<update id="update_impowerapply" parameterType="impowerApply">
 		UPDATE tbh_sq_form
 		SET
-		apply_user = #{applyUser}
+		user_id= #{userId}
 		,apply_level = #{applyLevel}
         ,pay_amount = #{payAmount}
         ,apply_datetime = #{applyDatetime}

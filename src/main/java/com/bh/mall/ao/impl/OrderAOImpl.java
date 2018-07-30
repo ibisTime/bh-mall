@@ -19,17 +19,17 @@ import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IAwardBO;
-import com.bh.mall.bo.IChAwardBO;
+import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.ICartBO;
+import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.IMiniCodeBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.IProductBO;
-import com.bh.mall.bo.IProductLogBO;
-import com.bh.mall.bo.IProductSpecsBO;
-import com.bh.mall.bo.IProductSpecsPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.ISpecsBO;
+import com.bh.mall.bo.ISpecsLogBO;
+import com.bh.mall.bo.ITjAwardBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.callback.CallbackBzdhConroller;
@@ -41,16 +41,16 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.Award;
-import com.bh.mall.domain.ChAward;
+import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Cart;
+import com.bh.mall.domain.ChAward;
 import com.bh.mall.domain.MiniCode;
 import com.bh.mall.domain.Order;
 import com.bh.mall.domain.ProCode;
 import com.bh.mall.domain.Product;
-import com.bh.mall.domain.ProductSpecs;
-import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.SYSConfig;
+import com.bh.mall.domain.Specs;
+import com.bh.mall.domain.TjAward;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
@@ -96,10 +96,10 @@ public class OrderAOImpl implements IOrderAO {
     IProductBO productBO;
 
     @Autowired
-    IProductSpecsBO productSpecsBO;
+    ISpecsBO specsBO;
 
     @Autowired
-    IProductSpecsPriceBO productSpecsPriceBO;
+    IAgentPriceBO agentPriceBO;
 
     @Autowired
     IAccountBO accountBO;
@@ -111,7 +111,7 @@ public class OrderAOImpl implements IOrderAO {
     ISYSConfigBO sysConfigBO;
 
     @Autowired
-    IAwardBO awardBO;
+    ITjAwardBO tjAwardBO;
 
     @Autowired
     IWareBO wareBO;
@@ -120,7 +120,7 @@ public class OrderAOImpl implements IOrderAO {
     IWeChatAO weChatAO;
 
     @Autowired
-    IProductLogBO productLogBO;
+    ISpecsLogBO specsLogBO;
 
     @Autowired
     IAgentLevelBO agentLevelBO;
@@ -141,8 +141,7 @@ public class OrderAOImpl implements IOrderAO {
         for (String code : req.getCartList()) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
-            ProductSpecs psData = productSpecsBO
-                .getProductSpecs(cart.getProductSpecsCode());
+            Specs psData = specsBO.getProductSpecs(cart.getProductSpecsCode());
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
             }
@@ -172,13 +171,12 @@ public class OrderAOImpl implements IOrderAO {
     @Transactional
     public List<String> addOrderNoCart(XN627641Req req) {
         Agent applyUser = agentBO.getAgent(req.getApplyUser());
-        ProductSpecs psData = productSpecsBO
-            .getProductSpecs(req.getProductSpecsCode());
+        Specs psData = specsBO.getProductSpecs(req.getProductSpecsCode());
         Product pData = productBO.getProduct(psData.getProductCode());
 
         List<String> list = new ArrayList<String>();
         // 获取该产品中最小规格的数量
-        int minNumber = productSpecsBO.getMinSpecsNumber(pData.getCode());
+        int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
         Integer nowNumber = pData.getRealNumber()
                 - (StringValidater.toInteger(req.getQuantity()) * minNumber);
 
@@ -201,7 +199,7 @@ public class OrderAOImpl implements IOrderAO {
                 kind = EOrderKind.Impower_Order.getCode();
 
                 // 订单金额
-                ProductSpecsPrice pspData = productSpecsPriceBO
+                AgentPrice pspData = agentPriceBO
                     .getPriceByLevel(psData.getCode(), applyUser.getLevel());
                 Long orderAmount = pspData.getPrice()
                         * StringValidater.toInteger(req.getQuantity());
@@ -217,8 +215,8 @@ public class OrderAOImpl implements IOrderAO {
         }
 
         // 门槛余额是否高于限制
-        ProductSpecsPrice pspData = productSpecsPriceBO
-            .getPriceByLevel(psData.getCode(), applyUser.getLevel());
+        AgentPrice pspData = agentPriceBO.getPriceByLevel(psData.getCode(),
+            applyUser.getLevel());
         Long amount = StringValidater.toInteger(req.getQuantity())
                 * pspData.getPrice();
         Account account = accountBO.getAccountByUser(applyUser.getUserId(),
@@ -240,8 +238,8 @@ public class OrderAOImpl implements IOrderAO {
         }
 
         // 检查起购数量
-        int minQuantity = productSpecsPriceBO
-            .checkMinQuantity(pspData.getCode(), applyUser.getLevel());
+        int minQuantity = agentPriceBO.checkMinQuantity(pspData.getCode(),
+            applyUser.getLevel());
         if (minQuantity > StringValidater.toInteger(req.getQuantity())) {
             throw new BizException("xn0000", "您购买的数量不能低于" + minQuantity + "]");
         }
@@ -599,8 +597,8 @@ public class OrderAOImpl implements IOrderAO {
         // **********出货奖*******
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
-            ChAward award = chAwardBO.getChAwardByLevel(
-                applyUser.getLevel(), data.getAmount());
+            ChAward award = chAwardBO.getChAwardByLevel(applyUser.getLevel(),
+                data.getAmount());
             if (award != null) {
                 Long awardAmount = AmountUtil.mul(orderAmount,
                     award.getPercent() / 100);
@@ -618,7 +616,7 @@ public class OrderAOImpl implements IOrderAO {
                 // 直接推荐人
                 Agent firstReferee = agentBO
                     .getAgent(applyUser.getUserReferee());
-                Award aData = awardBO.getAwardByType(applyUser.getLevel(),
+                TjAward aData = tjAwardBO.getAwardByType(applyUser.getLevel(),
                     data.getProductCode(), EAwardType.DirectAward.getCode());
 
                 Long amount = 0L;
@@ -679,10 +677,9 @@ public class OrderAOImpl implements IOrderAO {
             }
             if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
 
-                ProductSpecsPrice psp = productSpecsPriceBO.getPriceByLevel(
+                AgentPrice psp = agentPriceBO.getPriceByLevel(
                     data.getProductSpecsCode(), toUser.getLevel());
-                ProductSpecs ps = productSpecsBO
-                    .getProductSpecs(psp.getProductSpecsCode());
+                Specs ps = specsBO.getProductSpecs(psp.getProductSpecsCode());
                 if (psp.getMinNumber() > data.getQuantity()) {
                     throw new BizException("xn00000",
                         "该产品云仓发货不能少于" + psp.getMinNumber() + ps.getName());
@@ -877,7 +874,7 @@ public class OrderAOImpl implements IOrderAO {
         return name;
     }
 
-    private String checkOrder(Agent applyUser, ProductSpecs psData) {
+    private String checkOrder(Agent applyUser, Specs psData) {
         String kind = EOrderKind.Normal_Order.getCode();
         // 是否完成授权单
         if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
@@ -912,9 +909,9 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     // 变动产品数量
-    private void changeProductNumber(Agent agent, Product pData,
-            ProductSpecs psData, Order order, Integer number, String code) {
-        int minNumber = productSpecsBO.getMinSpecsNumber(pData.getCode());
+    private void changeProductNumber(Agent agent, Product pData, Specs psData,
+            Order order, Integer number, String code) {
+        int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
         int quantity = number * minNumber;
 
         // 有上级代理,扣减上级代理云仓,且自己开启云仓
@@ -935,7 +932,7 @@ public class OrderAOImpl implements IOrderAO {
 
         } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
             // 无上级代理,扣减产品实际库存
-            productLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
+            specsLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
                 pData.getRealNumber(), quantity, null);
             pData.setRealNumber(pData.getRealNumber() + quantity);
             productBO.refreshRealNumber(pData);
@@ -949,8 +946,7 @@ public class OrderAOImpl implements IOrderAO {
         List<Order> list = orderBO.getProductQuantity(agentId, startDatetime,
             endDatetime);
         for (Order order : list) {
-            ProductSpecs ps = productSpecsBO
-                .getProductSpecs(order.getProductSpecsCode());
+            Specs ps = specsBO.getProductSpecs(order.getProductSpecsCode());
             number = number + ps.getNumber();
         }
         return number;
@@ -988,14 +984,14 @@ public class OrderAOImpl implements IOrderAO {
         return true;
     }
 
-    private String addOrder(Agent applyUser, Product pData, ProductSpecs psData,
+    private String addOrder(Agent applyUser, Product pData, Specs psData,
             int quantity, String applyNote, String signer, String mobile,
             String province, String city, String area, String address,
             String kind) {
 
         Order order = new Order();
-        ProductSpecsPrice pspData = productSpecsPriceBO
-            .getPriceByLevel(psData.getCode(), applyUser.getLevel());
+        AgentPrice pspData = agentPriceBO.getPriceByLevel(psData.getCode(),
+            applyUser.getLevel());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
 
@@ -1058,8 +1054,7 @@ public class OrderAOImpl implements IOrderAO {
 
         // 改变产品数量
         Product pData = productBO.getProduct(data.getProductCode());
-        ProductSpecs psData = productSpecsBO
-            .getProductSpecs(data.getProductSpecsCode());
+        Specs psData = specsBO.getProductSpecs(data.getProductSpecsCode());
         this.changeProductNumber(agent, pData, psData, data,
             -data.getQuantity(), data.getCode());
 
@@ -1120,7 +1115,7 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
-    public void checkLimitNumber(Agent agent, ProductSpecs psData,
-            ProductSpecsPrice pspData, Integer quantity) {
+    public void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
+            Integer quantity) {
     }
 }
