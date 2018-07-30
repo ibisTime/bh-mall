@@ -28,8 +28,33 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     IInOrderDAO inOrderDAO;
 
     @Override
-    public void saveInOrder(InOrder data) {
+    public String saveInOrder(String userId, String toUserId,
+            String productCode, String productName, String specsCode,
+            String specsName, String pic, Long price, Integer quantity,
+            String applyNote) {
+        InOrder data = new InOrder();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Order.getCode());
+
+        data.setCode(code);
+        data.setApplyUser(userId);
+        data.setToUser(toUserId);
+        data.setProductCode(productCode);
+        data.setProductName(productName);
+
+        data.setProductSpecsCode(specsCode);
+        data.setProductSpecsName(specsName);
+        data.setQuantity(quantity);
+        data.setPrice(price);
+        data.setPic(pic);
+
+        data.setStatus(EOrderStatus.Unpaid.getCode());
+        Date date = new Date();
+        data.setApplyDatetime(date);
+        data.setApplyNote(applyNote);
         inOrderDAO.insert(data);
+
+        return code;
     }
 
     @Override

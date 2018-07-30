@@ -163,7 +163,7 @@ public class ProCodeAOImpl implements IProCodeAO {
 
         // 校验是否重复
         for (MiniCode miniCode : stList) {
-            if (miniCode.getminiCode().equals(code)) {
+            if (miniCode.getMiniCode().equals(code)) {
                 return true;
             }
             if (miniCode.getTraceCode().equals(code)) {

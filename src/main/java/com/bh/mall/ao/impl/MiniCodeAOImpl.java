@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IMiniCodeAO;
-import com.bh.mall.ao.IInOrderAO;
+import com.bh.mall.ao.IOutOrderAO;
 import com.bh.mall.ao.IProCodeAO;
 import com.bh.mall.bo.IMiniCodeBO;
 import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.MiniCode;
-import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.ProCode;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.exception.BizException;
@@ -34,7 +34,7 @@ public class MiniCodeAOImpl implements IMiniCodeAO {
     IProCodeAO proCodeAO;
 
     @Autowired
-    IInOrderAO inOrderAO;
+    IOutOrderAO outOrderAO;
 
     @Override
     public Paginable<MiniCode> queryMiniCodePage(int start, int limit,
@@ -93,7 +93,7 @@ public class MiniCodeAOImpl implements IMiniCodeAO {
 
             Date date = new Date();
             MiniCode data = new MiniCode();
-            data.setminiCode(miniCode);
+            data.setMiniCode(miniCode);
             data.setTraceCode(traceCode);
             data.setStatus(ECodeStatus.TO_USER.getCode());
             data.setCreateDatetime(date);
@@ -126,8 +126,8 @@ public class MiniCodeAOImpl implements IMiniCodeAO {
             throw new BizException("xn00000", "该溯源码还未绑定任何订单");
         }
 
-        InOrder inOrder = inOrderAO.getInOrder(data.getOrderCode());
-        data.setOrderData(inOrder);
+        OutOrder inOrder = outOrderAO.getOutOrder(data.getOrderCode());
+        data.setOutOrder(inOrder);
         return data;
     }
 }

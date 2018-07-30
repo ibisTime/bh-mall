@@ -47,21 +47,13 @@ public class MiniCode extends ABaseDO {
     // **************db*************
 
     // 订单
-    private InOrder orderData;
+    private OutOrder outOrder;
 
     // 状态List
     private List<String> statusList;
 
     // 关键字
     private String keyword;
-
-    public void setminiCode(String miniCode) {
-        this.miniCode = miniCode;
-    }
-
-    public String getminiCode() {
-        return miniCode;
-    }
 
     public void setTraceCode(String traceCode) {
         this.traceCode = traceCode;
@@ -119,12 +111,12 @@ public class MiniCode extends ABaseDO {
         this.number = number;
     }
 
-    public InOrder getOrderData() {
-        return orderData;
+    public OutOrder getOutOrder() {
+        return outOrder;
     }
 
-    public void setOrderData(InOrder orderData) {
-        this.orderData = orderData;
+    public void setOutOrder(OutOrder orderData) {
+        this.outOrder = orderData;
     }
 
     public List<String> getStatusList() {
@@ -141,6 +133,22 @@ public class MiniCode extends ABaseDO {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getMiniCode() {
+        return miniCode;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setMiniCode(String miniCode) {
+        this.miniCode = miniCode;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 
 }

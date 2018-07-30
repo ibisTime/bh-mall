@@ -23,7 +23,7 @@ public interface IInOrderAO {
 
     public InOrder getInOrder(String code);
 
-    public List<String> addInOrderNoCart(XN627641Req req);
+    public String addInOrderNoCart(XN627641Req req);
 
     // 付款
     public Object payInOrder(List<String> codeList, String payType);

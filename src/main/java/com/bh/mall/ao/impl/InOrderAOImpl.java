@@ -33,8 +33,6 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.PropertiesUtil;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -127,26 +125,26 @@ public class InOrderAOImpl implements IInOrderAO {
         for (String code : req.getCartList()) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
-            Specs psData = specsBO.getSpecs(cart.getSpecsCode());
+            Specs specs = specsBO.getSpecs(cart.getSpecsCode());
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
             }
-            Agent applyUser = agentBO.getAgent(req.getApplyUser());
 
-            // 订单拆单
-            if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
-                for (int i = 0; i < cart.getQuantity(); i++) {
-                    list.add(this.addOrder(applyUser, pData, psData,
-                        cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                        req.getMobile(), req.getProvince(), req.getCity(),
-                        req.getArea(), req.getAddress(), null));
-                }
-            } else {
-                list.add(this.addOrder(applyUser, pData, psData,
-                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(), null));
+            // 下单人及下单代理
+            Agent applyUser = agentBO.getAgent(req.getApplyUser());
+            AgentPrice agentPrice = agentPriceBO
+                .getPriceByLevel(specs.getCode(), applyUser.getLevel());
+
+            // 检查是否可购买
+            if (EBoolean.NO.getCode().equals(agentPrice.getIsBuy())) {
+                throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
+
+            String orderCode = inOrderBO.saveInOrder(applyUser.getUserId(),
+                applyUser.getHighUserId(), pData.getCode(), pData.getName(),
+                specs.getCode(), specs.getName(), pData.getAdvPic(),
+                agentPrice.getPrice(), cart.getQuantity(), req.getApplyNote());
+            list.add(orderCode);
             // 删除购物车记录
             cartBO.removeCart(cart);
         }
@@ -155,14 +153,13 @@ public class InOrderAOImpl implements IInOrderAO {
 
     @Override
     @Transactional
-    public List<String> addInOrderNoCart(XN627641Req req) {
+    public String addInOrderNoCart(XN627641Req req) {
         Agent applyUser = agentBO.getAgent(req.getApplyUser());
-        Specs psData = specsBO.getSpecs(req.getSpecsCode());
-        Product pData = productBO.getProduct(psData.getProductCode());
+        Specs specs = specsBO.getSpecs(req.getSpecsCode());
+        Product pData = productBO.getProduct(specs.getProductCode());
 
         // 获取该产品中最小规格的数量
         int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
-
         AgentLevel agentLevel = agentLevelBO
             .getAgentByLevel(applyUser.getLevel());
 
@@ -181,10 +178,10 @@ public class InOrderAOImpl implements IInOrderAO {
         }
 
         // 门槛余额是否高于限制
-        AgentPrice pspData = agentPriceBO.getPriceByLevel(psData.getCode(),
+        AgentPrice agentPrice = agentPriceBO.getPriceByLevel(specs.getCode(),
             applyUser.getLevel());
         Long amount = StringValidater.toInteger(req.getQuantity())
-                * pspData.getPrice();
+                * agentPrice.getPrice();
         Account account = accountBO.getAccountByUser(applyUser.getUserId(),
             ECurrency.MK_CNY.getCode());
 
@@ -204,15 +201,17 @@ public class InOrderAOImpl implements IInOrderAO {
         }
 
         // 检查起购数量
-        int minQuantity = agentPriceBO.checkMinQuantity(pspData.getCode(),
+        int minQuantity = agentPriceBO.checkMinQuantity(agentPrice.getCode(),
             applyUser.getLevel());
         if (minQuantity > StringValidater.toInteger(req.getQuantity())) {
             throw new BizException("xn0000", "您购买的数量不能低于" + minQuantity + "]");
         }
 
-        return inOrderBO.addOrder(applyUser, pData, psData,
-            StringValidater.toInteger(req.getQuantity()), req.getApplyNote());
-
+        return inOrderBO.saveInOrder(applyUser.getUserId(),
+            applyUser.getHighUserId(), pData.getCode(), pData.getName(),
+            specs.getCode(), specs.getName(), pData.getAdvPic(),
+            agentPrice.getPrice(), StringValidater.toInteger(req.getQuantity()),
+            req.getApplyNote());
     }
 
     @Override
@@ -225,13 +224,7 @@ public class InOrderAOImpl implements IInOrderAO {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
             Agent uData = agentBO.getAgent(data.getApplyUser());
-            if (EUserKind.Customer.getCode().equals(uData.getKind())) {
-                data.setPayType(EChannelType.WeChat_XCX.getCode());
-                Object payResult = this.payWXH5(data,
-                    PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
-                result = payResult;
-
-            } else if (EPayType.RMB_YE.getCode().equals(payType)) {
+            if (EPayType.RMB_YE.getCode().equals(payType)) {
                 // 账户扣钱
                 String payGroup = inOrderBO.addPayGroup(data);
                 Account mkAccount = accountBO.getAccountByUser(
@@ -243,18 +236,17 @@ public class InOrderAOImpl implements IInOrderAO {
                     -data.getAmount());
                 String status = EOrderStatus.Paid.getCode();
 
-                // 代理下单
-                if (EUserKind.Merchant.getCode().equals(uData.getKind())) {
-                    // 该等级是否启用云仓
-                    AgentLevel agent = agentLevelBO
-                        .getAgentByLevel(uData.getLevel());
-                    if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
-                        status = EOrderStatus.Received.getCode();
-                        // 购买云仓
-                        wareBO.buyWare(data, uData);
-                        // 出货以及推荐奖励
-                        this.payAward(data);
-                    }
+                // 该等级是否启用云仓
+                AgentLevel agent = agentLevelBO
+                    .getAgentByLevel(uData.getLevel());
+                if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
+                    status = EOrderStatus.Received.getCode();
+                    // 购买云仓
+                    wareBO.buyWare(data, uData);
+                    // 出货以及推荐奖励
+                    this.payAward(data);
+                } else {
+                    throw new BizException("xn00000", "您的等级还未开启云仓哦！");
                 }
 
                 data.setPayDatetime(new Date());
@@ -355,18 +347,9 @@ public class InOrderAOImpl implements IInOrderAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        // 获取开放云仓的等级
-        List<Integer> levelList = new ArrayList<Integer>();
-        List<AgentLevel> agentList = agentLevelBO.getAgentHaveWH();
-        for (AgentLevel agent : agentList) {
-            levelList.add(agent.getLevel());
-        }
-        condition.setLevelList(levelList);
-
         Paginable<InOrder> page = inOrderBO.getPaginable(start, limit,
             condition);
-        List<InOrder> list = page.getList();
-        for (InOrder inOrder : list) {
+        for (InOrder inOrder : page.getList()) {
             // 下单人
             Agent agent = agentBO.getAgent(inOrder.getApplyUser());
             inOrder.setAgent(agent);
@@ -391,7 +374,6 @@ public class InOrderAOImpl implements IInOrderAO {
 
             inOrder.setPic(product.getAdvPic());
         }
-        page.setList(list);
         return page;
     }
 
@@ -402,14 +384,6 @@ public class InOrderAOImpl implements IInOrderAO {
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-
-        // 获取开放云仓的等级
-        List<Integer> levelList = new ArrayList<Integer>();
-        List<AgentLevel> agentList = agentLevelBO.getAgentHaveWH();
-        for (AgentLevel agent : agentList) {
-            levelList.add(agent.getLevel());
-        }
-        condition.setLevelList(levelList);
 
         List<InOrder> list = inOrderBO.queryInOrderList(condition);
         for (InOrder inOrder : list) {
@@ -591,17 +565,9 @@ public class InOrderAOImpl implements IInOrderAO {
         if (StringUtils.isNotBlank(agent.getIntroducer())
                 && StringUtils.isNotBlank(agent.getUserReferee())) {
             // 下单金额是否超过授权金额
-            List<String> statusList = new ArrayList<String>();
-            statusList.add(EOrderStatus.Paid.getCode());
-            statusList.add(EOrderStatus.TO_Apprvoe.getCode());
-            statusList.add(EOrderStatus.TO_Deliver.getCode());
-            statusList.add(EOrderStatus.Received.getCode());
-
             InOrder condition = new InOrder();
             condition.setApplyUser(agent.getUserId());
             condition.setStatus(EOrderStatus.Received.getCode());
-            condition.setStatusList(statusList);
-
             List<InOrder> list = inOrderBO.queryInOrderList(condition);
             Long amount = 0L;
             for (InOrder inOrder : list) {
@@ -609,45 +575,11 @@ public class InOrderAOImpl implements IInOrderAO {
             }
 
             AgentLevel impower = agentLevelBO.getAgentByLevel(agent.getLevel());
-
             if (impower.getMinCharge() >= amount) {
                 return false;
             }
         }
         return true;
-    }
-
-    private String addOrder(Agent applyUser, Product pData, Specs psData,
-            int quantity, String applyNote, String signer, String mobile,
-            String province, String city, String area, String address,
-            String kind) {
-        AgentPrice agentPrice = agentPriceBO.getPriceByLevel(psData.getCode(),
-            applyUser.getLevel());
-        // 检查是否可购买
-        if (EBoolean.NO.getCode().equals(agentPrice.getIsBuy())) {
-            throw new BizException("xn0000", "您的等级无法购买该规格的产品");
-        }
-
-        InOrder inOrder = new InOrder();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
-
-        inOrder.setCode(code);
-        inOrder.setProductCode(pData.getCode());
-        inOrder.setProductName(pData.getName());
-        inOrder.setProductSpecsCode(psData.getCode());
-        inOrder.setProductSpecsName(psData.getName());
-
-        inOrder.setToUser(applyUser.getHighUserId());
-        inOrder.setQuantity(quantity);
-        inOrder.setPrice(agentPrice.getPrice());
-
-        inOrder.setPic(pData.getAdvPic());
-        inOrder.setApplyUser(applyUser.getUserId());
-        inOrder.setStatus(EOrderStatus.Unpaid.getCode());
-
-        inOrderBO.saveInOrder(inOrder);
-        return code;
     }
 
     private void payOrder(Agent agent, InOrder data, String wechatOrderNo) {
@@ -685,11 +617,9 @@ public class InOrderAOImpl implements IInOrderAO {
     @Override
     @Transactional
     public void invalidInOrder(String code, String updater, String remark) {
-
         InOrder data = inOrderBO.getInOrder(code);
         // 非待支付与未审核订单无法作废
-        if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())
-                || !EOrderStatus.Paid.getCode().equals(data.getStatus())) {
+        if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "该订单无法作废");
         }
         inOrderBO.invalidOrder(data, updater, remark);

@@ -6,7 +6,7 @@ import java.util.List;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
-* 产品订单
+* 云仓订单
 * @author: chenshan 
 * @since: 2018-03-28 10:30:22
 * @history:

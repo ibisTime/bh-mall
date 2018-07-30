@@ -115,7 +115,7 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
         MiniCode data = null;
         if (StringUtils.isNotBlank(miniCode)) {
             MiniCode condition = new MiniCode();
-            condition.setminiCode(miniCode);
+            condition.setMiniCode(miniCode);
             data = miniCodeDAO.select(condition);
             if (null == data) {
                 throw new BizException("xn00000", "防伪码不存在");

@@ -70,17 +70,6 @@
 				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
 			</if>
 			
-			<choose>
-				<when test="level != null and level != '' ">
-					AND u.level = #{level}
-				</when>
-				<when test="levelList != null and levelList.size() > 0 ">
-					AND u.level IN
-					<foreach collection="levelList" index="index" item="item" open="(" separator="," close=")" >
-						#{item}
-					</foreach>
-				</when>
-			</choose>
 		</trim>
 	</sql>
 	
@@ -114,7 +103,7 @@
 		,t.approve_datetime
 		,t.remark
 		FROM
-		tbh_in_order t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		tbh_in_order t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -126,7 +115,7 @@
 
 	<select id="select_inOrder_count" parameterType="inOrder"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_in_order t  LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		SELECT count(1) FROM tbh_in_order t  
 		<include refid="where_condition" />
 	</select>
 
