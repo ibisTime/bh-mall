@@ -17,13 +17,34 @@ public class AgentLevel extends ABaseDO {
     // 编号
     private String code;
 
-    // 等级名称
-    private String name;
-
     // 等级
     private Integer level;
 
-    // 首次授权金额
+    // 等级名称
+    private String name;
+
+    // 本等级是够可被意向
+    private String isIntent;
+
+    // 本等级是否可被介绍
+    private String isJsAward;
+
+    // 是够需要实名
+    private String isRealName;
+
+    // 本等级是够开启云仓
+    private String isWare;
+
+    // 本等级授权是否需要公司审核
+    private String isCompanyImpower;
+
+    // 授权单是否可以自发
+    private String isSend;
+
+    // 本等级门槛款
+    private Long minCharge;
+
+    // 授权单金额
     private Long amount;
 
     // 红线金额
@@ -32,14 +53,8 @@ public class AgentLevel extends ABaseDO {
     // 本等级每次最低充值金额
     private Long minChargeAmount;
 
-    // 本等级门槛最低余额
+    // 本等级门槛可有余额
     private Long minSurplus;
-
-    // 授权单是否可以自发
-    private String isSend;
-
-    // 本等级是够开启云仓
-    private String isWare;
 
     // 本等级升级是否公司审核
     private String isCompanyApprove;
@@ -49,23 +64,6 @@ public class AgentLevel extends ABaseDO {
 
     // 本等级升级是否余额清零
     private String isReset;
-
-    // 本等级是够可被意向
-    private String isIntent;
-
-    // 是够需要实名
-    private String isRealName;
-
-    // 本等级是否需要公司审核(授权)
-    private String isCompanyImpower;
-
-    private Integer impowerAmount;
-
-    // 本等级是否可被介绍
-    private String isJsAward;
-
-    // 本等级授权充值门槛
-    private Long minCharge;
 
     // 更新人
     private String updater;
@@ -169,14 +167,6 @@ public class AgentLevel extends ABaseDO {
         this.level = level;
     }
 
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
-
     public Long getRedAmount() {
         return redAmount;
     }
@@ -257,12 +247,12 @@ public class AgentLevel extends ABaseDO {
         this.isRealName = isRealName;
     }
 
-    public Integer getImpowerAmount() {
-        return impowerAmount;
+    public Long getAmount() {
+        return amount;
     }
 
-    public void setImpowerAmount(Integer impowerAmount) {
-        this.impowerAmount = impowerAmount;
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
 }
