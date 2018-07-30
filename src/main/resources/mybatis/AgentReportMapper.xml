@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.IReportDAO">
-	<resultMap id="report_DB_Result" type="report">
+<mapper namespace="com.bh.mall.dao.IAgentReportDAO">
+	<resultMap id="agentReport_DB_Result" type="agentReport">
 		<result column="user_id" property="userId" />
 		<result column="real_name" property="realName" />
 		<result column="mobile" property="mobile" />
@@ -62,7 +62,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_report" parameterType="report" resultMap="report_DB_Result">
+	<select id="select_agentReport" parameterType="agentReport" resultMap="agentReport_DB_Result">
 		SELECT
 		t.user_id
 		,t.real_name
@@ -87,7 +87,7 @@
 		,t.refree_award
 		,t.price_spread
 		FROM
-		tbh_report t
+		tbh_agent_report t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -96,15 +96,15 @@
 		</trim>
 	</select>
 
-	<select id="select_report_count" parameterType="report"
+	<select id="select_agentReport_count" parameterType="agentReport"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_report t
+		SELECT count(1) FROM tbh_agent_report t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_report" parameterType="report">
+	<insert id="insert_agentReport" parameterType="agentReport">
 		INSERT INTO
-		tbh_report(
+		tbh_agent_report(
 		user_id
 		,real_name
 		,mobile
@@ -142,8 +142,8 @@
 		)
 	</insert>
 
-	<update id="update_report" parameterType="report">
-		UPDATE tbh_report
+	<update id="update_agentReport" parameterType="agentReport">
+		UPDATE tbh_agent_report
 		SET
 		real_name = #{realName}
 		,mobile = #{mobile}

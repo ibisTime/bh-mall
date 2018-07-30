@@ -16,9 +16,9 @@ import com.bh.mall.domain.AgentReport;
 public class AgentReportBOImpl extends PaginableBOImpl<AgentReport> implements IAgentReportBO {
 
     @Autowired
-    private IAgentReportDAO reportDAO;
+    private IAgentReportDAO agentReportDAO;
 
-    public void saveReport(Agent user) {
+    public void saveAgentReport(Agent user) {
         AgentReport data = new AgentReport();
         data.setUserId(user.getUserId());
         data.setRealName(user.getRealName());
@@ -37,37 +37,37 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport> implements I
         data.setAddress(user.getAddress());
         data.setImpowerDatetime(user.getImpowerDatetime());
 
-        reportDAO.insert(data);
+        agentReportDAO.insert(data);
 
     }
 
     @Override
-    public int removeReport(String code) {
+    public int removeAgentReport(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             AgentReport data = new AgentReport();
-            count = reportDAO.delete(data);
+            count = agentReportDAO.delete(data);
         }
         return count;
     }
 
     @Override
-    public int refreshReport(AgentReport data) {
+    public int refreshAgentReport(AgentReport data) {
         int count = 0;
         return count;
     }
 
     @Override
-    public List<AgentReport> queryReportList(AgentReport condition) {
-        return reportDAO.selectList(condition);
+    public List<AgentReport> queryAgentReportList(AgentReport condition) {
+        return agentReportDAO.selectList(condition);
     }
 
     @Override
-    public AgentReport getReport(String code) {
+    public AgentReport getAgentReport(String code) {
         AgentReport data = null;
         if (StringUtils.isNotBlank(code)) {
             AgentReport condition = new AgentReport();
-            data = reportDAO.select(condition);
+            data = agentReportDAO.select(condition);
         }
         return data;
     }

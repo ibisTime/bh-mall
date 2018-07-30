@@ -11,11 +11,11 @@ import com.bh.mall.domain.AgentReport;
 public interface IAgentReportAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public Paginable<AgentReport> queryReportPage(int start, int limit,
+    public Paginable<AgentReport> queryAgentReportPage(int start, int limit,
             AgentReport condition);
 
-    public List<AgentReport> queryReportList(AgentReport condition);
+    public List<AgentReport> queryAgentReportList(AgentReport condition);
 
-    public AgentReport getReport(String code);
+    public AgentReport getAgentReport(String code);
 
 }

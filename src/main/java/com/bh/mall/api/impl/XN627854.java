@@ -24,7 +24,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627854 extends AProcessor {
 
-    private IAgentReportAO reportAO = SpringContextHolder.getBean(IAgentReportAO.class);
+    private IAgentReportAO agentReportAO = SpringContextHolder.getBean(IAgentReportAO.class);
 
     private XN627854Req req = null;
 
@@ -49,7 +49,7 @@ public class XN627854 extends AProcessor {
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return reportAO.queryReportPage(start, limit, condition);
+        return agentReportAO.queryAgentReportPage(start, limit, condition);
     }
 
     @Override

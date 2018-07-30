@@ -82,7 +82,7 @@ public class CUserAOImpl implements ICUserAO {
     IWareBO wareBO;
 
     @Autowired
-    IAgentReportBO reportBO;
+    IAgentReportBO agentReportBO;
 
     /***************** 登录 **********************/
     @Override

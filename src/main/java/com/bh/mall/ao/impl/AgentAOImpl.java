@@ -100,7 +100,7 @@ public class AgentAOImpl implements IAgentAO {
     IWareBO wareBO;
 
     @Autowired
-    IAgentReportBO reportBO;
+    IAgentReportBO agentReportBO;
 
     /*************** 微信注册**********************/
     // 微信注册

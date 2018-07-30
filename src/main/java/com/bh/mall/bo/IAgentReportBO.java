@@ -8,14 +8,14 @@ import com.bh.mall.domain.AgentReport;
 
 public interface IAgentReportBO extends IPaginableBO<AgentReport> {
 
-    public void saveReport(Agent data);
+    public void saveAgentReport(Agent data);
 
-    public int removeReport(String code);
+    public int removeAgentReport(String code);
 
-    public int refreshReport(AgentReport data);
+    public int refreshAgentReport(AgentReport data);
 
-    public List<AgentReport> queryReportList(AgentReport condition);
+    public List<AgentReport> queryAgentReportList(AgentReport condition);
 
-    public AgentReport getReport(String code);
+    public AgentReport getAgentReport(String code);
 
 }
