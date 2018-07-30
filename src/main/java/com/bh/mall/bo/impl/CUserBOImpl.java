@@ -14,7 +14,7 @@ import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.dao.ICuserDAO;
+import com.bh.mall.dao.ICUserDAO;
 import com.bh.mall.domain.CUser;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -23,7 +23,7 @@ import com.bh.mall.exception.BizException;
 public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
 
     @Autowired
-    private ICuserDAO cuserDAO;
+    private ICUserDAO cuserDAO;
 
     @Override
     public CUser doGetUserByOpenId(String h5OpenId) {
@@ -281,16 +281,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
     }
 
     @Override
-    public void refreshLoginName(String userId, String loginName) {
-        if (StringUtils.isNotBlank(userId)) {
-            CUser data = new CUser();
-            data.setUserId(userId);
-            data.setLoginName(loginName);
-            cuserDAO.updateLoginName(data);
-        }
-    }
-
-    @Override
     public void refreshNickname(String userId, String nickname) {
         if (StringUtils.isNotBlank(userId)) {
             CUser data = new CUser();
@@ -356,19 +346,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         if (count > 0) {
             throw new BizException("xn702002", "微信编号已存在");
         }
-    }
-
-    @Override
-    public void setTradePwd(CUser user, String tradePwd) {
-        user.setTradePwd(MD5Util.md5(tradePwd));
-        user.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePwd));
-        cuserDAO.setTradePwd(user);
-    }
-
-    @Override
-    public void resetBindMobile(CUser user, String newMobile) {
-        user.setMobile(newMobile);
-        cuserDAO.resetBindMobile(user);
     }
 
 }

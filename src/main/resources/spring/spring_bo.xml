@@ -154,6 +154,10 @@
 	<bean id="sjFormBO" class="com.bh.mall.bo.impl.SjFormBOImpl">
 		<property name="paginableDAO" ref="sjFormDAOImpl"/>
 	</bean>
+	
+	<bean id="cuserBO" class="com.bh.mall.bo.impl.CUserBOImpl">
+		<property name="paginableDAO" ref="cuserDAOImpl"/>
+	</bean>
 		
 	
 </beans>
