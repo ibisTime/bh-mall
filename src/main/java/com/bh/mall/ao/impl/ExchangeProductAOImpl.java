@@ -190,12 +190,12 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
         List<ExchangeProduct> list = exchangeProductBO.queryChangeProductPage(
             page.getStart(), page.getPageSize(), condition);
 
-        for (ExchangeProduct changeProduct : list) {
-            String approveName = this.getName(changeProduct.getApprover());
-            changeProduct.setApproveName(approveName);
+        for (ExchangeProduct ecchangeProduct : list) {
+            String approveName = this.getName(ecchangeProduct.getApprover());
+            ecchangeProduct.setApproveName(approveName);
             // 补充下单代理的信息
-            Agent agent = agentBO.getAgent(changeProduct.getApplyUser());
-            changeProduct.setAgent(agent);
+            Agent agent = agentBO.getAgent(ecchangeProduct.getApplyUser());
+            ecchangeProduct.setAgent(agent);
         }
         page.setList(list);
         return page;

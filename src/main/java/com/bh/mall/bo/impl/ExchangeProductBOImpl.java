@@ -17,11 +17,11 @@ public class ExchangeProductBOImpl extends PaginableBOImpl<ExchangeProduct>
         implements IExchangeProductBO {
 
     @Autowired
-    private IExchangeProductDAO changeProductDAO;
+    private IExchangeProductDAO exchangeProductDAO;
 
     @Override
     public void saveChangeProduct(ExchangeProduct data) {
-        changeProductDAO.insert(data);
+        exchangeProductDAO.insert(data);
 
     }
 
@@ -31,7 +31,7 @@ public class ExchangeProductBOImpl extends PaginableBOImpl<ExchangeProduct>
         if (StringUtils.isNotBlank(code)) {
             ExchangeProduct data = new ExchangeProduct();
             data.setCode(code);
-            count = changeProductDAO.delete(data);
+            count = exchangeProductDAO.delete(data);
         }
         return count;
     }
@@ -46,7 +46,7 @@ public class ExchangeProductBOImpl extends PaginableBOImpl<ExchangeProduct>
 
     @Override
     public List<ExchangeProduct> queryChangeProductList(ExchangeProduct condition) {
-        return changeProductDAO.selectList(condition);
+        return exchangeProductDAO.selectList(condition);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ExchangeProductBOImpl extends PaginableBOImpl<ExchangeProduct>
         if (StringUtils.isNotBlank(code)) {
             ExchangeProduct condition = new ExchangeProduct();
             condition.setCode(code);
-            data = changeProductDAO.select(condition);
+            data = exchangeProductDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "置换单不存在");
             }
@@ -65,18 +65,18 @@ public class ExchangeProductBOImpl extends PaginableBOImpl<ExchangeProduct>
 
     @Override
     public void refreshChangePrice(ExchangeProduct data) {
-        changeProductDAO.updateChangePrice(data);
+        exchangeProductDAO.updateChangePrice(data);
     }
 
     @Override
     public void approveChange(ExchangeProduct data) {
-        changeProductDAO.approveChange(data);
+        exchangeProductDAO.approveChange(data);
     }
 
     @Override
     public List<ExchangeProduct> queryChangeProductPage(int start, int pageSize,
             ExchangeProduct condition) {
-        return changeProductDAO.queryChangeProductPage(start, pageSize,
+        return exchangeProductDAO.queryChangeProductPage(start, pageSize,
             condition);
     }
 }
