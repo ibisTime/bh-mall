@@ -43,7 +43,7 @@
 		<typeAlias alias="exchangeProduct" type="com.bh.mall.domain.ExchangeProduct"/>
 		
 		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
-		<typeAlias alias="report" type="com.bh.mall.domain.Report"/>
+		<typeAlias alias="agentReport" type="com.bh.mall.domain.AgentReport"/>
 		
 		<typeAlias alias="chAward" type="com.bh.mall.domain.ChAward"/>
 		<typeAlias alias="miniCode" type="com.bh.mall.domain.MiniCode"/>

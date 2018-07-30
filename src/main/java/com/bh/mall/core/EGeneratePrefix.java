@@ -23,7 +23,7 @@ public enum EGeneratePrefix {
             "WH", "云仓库编号"), WareHourseLog("WHL",
                     "云仓库记录编号"), WareHourseSpecs("WHP", "云仓产品规格"),
 
-    ChangeProduct("CP", "置换单编号"), Report("R", "统计表编号"), IntroLevel("IL",
+    ChangeProduct("CP", "置换单编号"), AgentReport("R", "统计表编号"), IntroLevel("IL",
             "可介绍等级"), AwardInterval("AI", "出货奖区间"), proCode("BC", "条形码表");
 
     public static Map<String, EGeneratePrefix> getOrderTypeMap() {

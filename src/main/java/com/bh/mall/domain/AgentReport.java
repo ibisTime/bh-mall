@@ -10,7 +10,7 @@ import com.bh.mall.dao.base.ABaseDO;
 * @since: 2018-06-26 11:55:39
 * @history:
 */
-public class Report extends ABaseDO {
+public class AgentReport extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 

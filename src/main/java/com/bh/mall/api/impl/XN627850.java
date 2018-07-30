@@ -4,13 +4,13 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IReportAO;
+import com.bh.mall.ao.IAgentReportAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Report;
+import com.bh.mall.domain.AgentReport;
 import com.bh.mall.dto.req.XN627850Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -24,13 +24,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627850 extends AProcessor {
 
-    private IReportAO reportAO = SpringContextHolder.getBean(IReportAO.class);
+    private IAgentReportAO agentReportAO = SpringContextHolder.getBean(IAgentReportAO.class);
 
     private XN627850Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Report condition = new Report();
+        AgentReport condition = new AgentReport();
         condition.setUserId(req.getUserId());
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
@@ -41,13 +41,13 @@ public class XN627850 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IReportAO.DEFAULT_ORDER_COLUMN;
+            column = IAgentReportAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return reportAO.queryReportPage(start, limit, condition);
+        return agentReportAO.queryAgentReportPage(start, limit, condition);
     }
 
     @Override

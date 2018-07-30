@@ -16,11 +16,11 @@ import com.bh.mall.ao.ICUserAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.IOrderBO;
-import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
@@ -80,7 +80,7 @@ public class CUserAOImpl implements ICUserAO {
     IWareBO wareBO;
 
     @Autowired
-    IReportBO reportBO;
+    IAgentReportBO agentReportBO;
 
     /***************** 登录 **********************/
     @Override
@@ -323,6 +323,13 @@ public class CUserAOImpl implements ICUserAO {
             throw new BizException("xn000000", e.getMessage());
         }
         return wxRes;
+    }
+
+    @Override
+    public void doResetMoblie(String userId, String newMobile,
+            String smsCaptcha) {
+        // TODO Auto-generated method stub
+
     }
 
 }

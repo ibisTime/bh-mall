@@ -125,8 +125,8 @@
 		<property name="paginableDAO" ref="exchangeProductDAOImpl"></property>
 	</bean>
 	
-	<bean id="reportBO" class="com.bh.mall.bo.impl.ReportBOImpl">
-		<property name="paginableDAO" ref="reportDAOImpl"/>
+	<bean id="agentReportBO" class="com.bh.mall.bo.impl.AgentReportBOImpl">
+		<property name="paginableDAO" ref="agentReportDAOImpl"/>
 	</bean>
 	
 	<bean id="chAwardBO" class="com.bh.mall.bo.impl.ChAwardBOImpl">
