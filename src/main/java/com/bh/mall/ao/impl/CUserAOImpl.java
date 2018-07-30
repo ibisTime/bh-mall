@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IWareBO;
-import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
@@ -249,16 +247,6 @@ public class CUserAOImpl implements ICUserAO {
     }
 
     /******************** 更新信息********************/
-    // 设置交易密码
-    @Override
-    public void setTradePwd(String userId, String smsCaptcha, String tradePwd) {
-        CUser user = cuserBO.getCheckUser(userId);
-        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "627306");
-        if (user.getTradePwd().equals(MD5Util.md5(tradePwd))) {
-            throw new BizException("xn0000", "新旧密码不能相同");
-        }
-        cuserBO.setTradePwd(user, tradePwd);
-    }
 
     @Override
     public void doModifyPhoto(String userId, String photo) {
@@ -278,31 +266,6 @@ public class CUserAOImpl implements ICUserAO {
         if (CollectionUtils.isEmpty(userList2)) {
             throw new BizException("xn702002", "登录密码错误");
         }
-
-    }
-
-    // 更换绑定手机号
-    @Override
-    public void doResetMoblie(String userId, String newMobile,
-            String smsCaptcha) {
-        CUser user = cuserBO.getCheckUser(userId);
-        String oldMobile = user.getMobile();
-        if (newMobile.equals(oldMobile)) {
-            throw new BizException("xn000000", "新手机与原手机一致");
-        }
-        // 判断手机号是否存在
-        cuserBO.isMobileExist(newMobile);
-        // 新手机号验证
-        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627287");
-        cuserBO.resetBindMobile(user, newMobile);
-        // 发送短信
-        smsOutBO.sendSmsOut(oldMobile,
-            "尊敬的" + PhoneUtil.hideMobile(oldMobile) + "用户，您于"
-                    + DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1)
-                    + "已将手机号码改为" + newMobile + "，您的登录名更改为" + newMobile
-                    + "，请妥善保管您的账户相关信息。",
-            "631072");
 
     }
 

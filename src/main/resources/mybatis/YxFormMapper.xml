@@ -4,12 +4,20 @@
 <mapper namespace="com.bh.mall.dao.IYxFormDAO">
 	<resultMap  id="agentAllot_DB_Result" type="agentAllot" >
 		<result column="code" property="code"/>
-		<result column="apply_user" property="applyUser" />
+		<result column="wx_id" property="wxId"/>
+		<result column="user_id" property="userId" />
 		<result column ="to_user_id" property="toUserId"/>
 		<result column="apply_level" property="applyLevel" />
-		<result column ="apply_datetime" property="applyDatetime"/>
-		<result column ="manager" property="manager"/>
+		<result column="real_name" property="realName"/>
+		<result column="mobile" property="mobile"/>
+		<result column="address" property="address"/>
+		<result column="area" property="area"/>
+		<result column="city" property="city"/>
+		<result column="province" property="province"/>
+		<result column="from_info" property="fromInfo"/>
 		<result column ="status" property="status"/>
+		<result column ="approver" property="approver"/>
+		<result column ="apply_datetime" property="applyDatetime"/>		
 		<result column="approve_datetime" property="approveDatetime" />		
 		<result column="remark" property="remark"/>
 	</resultMap>
@@ -19,12 +27,11 @@
 			<if test="code != null and code != ''">
 				AND t.code=#{code}
 			</if>
-			<if test="applyUser != null and applyUser != '' ">
-				AND t.apply_user = #{applyUser}
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
 			</if>
 			
-			<choose>
-				
+			<choose>				
 				<when test="status == '3,4,5' "> <!--  有意愿，已忽略，已分配 -->
 					AND t.status = '3' OR t.status = '4' OR t.status = '5' 
 				</when> 
@@ -50,8 +57,8 @@
 				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
 			</if>
 			
-			<if test="manager != null and manager != '' ">
-				AND t.manager = #{manager}
+			<if test="approver != null and approver != '' ">
+				AND t.approver = #{approver}
 			</if>
 						
 		</trim>
@@ -60,15 +67,23 @@
 	<select id="select_agentAllot" parameterType="agentAllot" resultMap="agentAllot_DB_Result">
 		SELECT 
 		t.code 
-		,t.apply_user
+		,t.wx_id
+		,t.user_id
 		,t.to_user_id
 		,t.apply_level
-		,t.apply_datetime
-		,t.manager
+		,t.real_name
+		,t.mobile
+		,t.address
+		,t.area
+		,t.city
+		,t.province
+		,t.from_info
 		,t.status
+		,t.approver
+		,t.apply_datetime		
 		,t.approve_datetime
 		,t.remark
-		FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id 
+		FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.user_id = u.user_id 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
 			<if test="order != null and order != '' ">
@@ -78,7 +93,7 @@
 	</select>
 	
 	<select id="select_agentAllot_count" parameterType="agentAllot" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.apply_user = u.user_id 
+		SELECT count(1) FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.user_id = u.user_id 
 		<include refid="where_condition"/>
 	</select>
 	
@@ -86,23 +101,39 @@
 		INSERT INTO
 		tbh_yx_form(
 		code
-		,to_user_id		
-		,apply_user		
-		,apply_level		
+		,wx_id
+		,user_id
+		,to_user_id				
+		,apply_level	
+		,real_name	
+		,mobile
+		,address
+		,area
+		,city
+		,province
+		,from_info
 		,status
-		,apply_datetime
-		,manager
+		,approver
+		,apply_datetime		
 		,approve_datetime
 		,remark
 		)
 		VALUES(
 		#{code}
+		,#{wxId}
+		,#{userId}
 		,#{toUserId}
-		,#{applyUser}
 		,#{applyLevel}	
+		,#{realName}
+		,#{mobile}
+		,#{address}
+		,#{area}
+		,#{city}
+		,#{province}
+		,#{fromInfo}
 		,#{status}
+		,#{approver}
 		,#{applyDatetime}
-		,#{manager}
 		,#{approveDatetime}
 		,#{remark}
 		)
@@ -113,12 +144,19 @@
 	<update id="update_agentAllot" parameterType="agentAllot">
 		UPDATE tbh_yx_form
 		SET
-		to_user_id=#{toUserId}
-		,apply_user = #{applyUser}
+		wx_id=#{wxId}
+		,user_id = #{userId}
+		,to_user_id=#{toUserId}		
 		,apply_level = #{applyLevel}
-		,apply_datetime=#{applyDatetime}
-		,manager=#{manager}
+		,real_name = #{realName}
+		,address = #{address}
+		,area = #{area}
+		,city = #{city}
+		,province = #{province}
+		,from_info = #{fromInfo}
 		,status=#{status}	
+		,approver=#{approver}
+		,apply_datetime=#{applyDatetime}
 		,remark=#{remark}
 		WHERE code=#{code}
 	</update>

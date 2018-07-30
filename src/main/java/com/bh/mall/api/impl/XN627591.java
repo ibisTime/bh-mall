@@ -1,11 +1,11 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAwardAO;
+import com.bh.mall.ao.ITjAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Award;
+import com.bh.mall.domain.TjAward;
 import com.bh.mall.dto.req.XN627591Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -19,13 +19,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627591 extends AProcessor {
 
-    private IAwardAO awardAO = SpringContextHolder.getBean(IAwardAO.class);
+    private ITjAwardAO awardAO = SpringContextHolder.getBean(ITjAwardAO.class);
 
     private XN627591Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Award condition = new Award();
+        TjAward condition = new TjAward();
         condition.setType(req.getType());
         condition.setProductCode(req.getProductCode());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));

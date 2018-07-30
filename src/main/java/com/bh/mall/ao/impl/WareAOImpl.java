@@ -14,8 +14,8 @@ import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
-import com.bh.mall.bo.IProductSpecsBO;
-import com.bh.mall.bo.IProductSpecsPriceBO;
+import com.bh.mall.bo.ISpecsBO;
+import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Page;
@@ -25,8 +25,8 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Product;
-import com.bh.mall.domain.ProductSpecs;
-import com.bh.mall.domain.ProductSpecsPrice;
+import com.bh.mall.domain.Specs;
+import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627815Req;
@@ -59,10 +59,10 @@ public class WareAOImpl implements IWareAO {
     ISYSConfigBO sysConfigBO;
 
     @Autowired
-    IProductSpecsBO productSpecsBO;
+    ISpecsBO specsBO;
 
     @Autowired
-    IProductSpecsPriceBO productSpecsPriceBO;
+    IAgentPriceBO agentPriceBO;
 
     @Autowired
     IOrderAO orderAO;
@@ -104,7 +104,7 @@ public class WareAOImpl implements IWareAO {
             specsCondition.setUserId(ware.getUserId());
             specsCondition.setProductCode(ware.getProductCode());
             ware.setWhsList(wareBO.queryWareList(specsCondition));
-            int minSpecsNumber = productSpecsBO
+            int minSpecsNumber = specsBO
                 .getMinSpecsNumber(product.getCode());
             ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
         }
@@ -121,7 +121,7 @@ public class WareAOImpl implements IWareAO {
         condition.setProductCode(data.getProductCode());
         List<Ware> specsList = wareBO.queryWareList(condition);
         for (Ware wh : specsList) {
-            ProductSpecsPrice price = productSpecsPriceBO
+            AgentPrice price = agentPriceBO
                 .getPriceByLevel(wh.getProductSpecsCode(), agent.getLevel());
             wh.setPrice(price.getPrice());
         }
@@ -147,7 +147,7 @@ public class WareAOImpl implements IWareAO {
             specsCondition.setUserId(ware.getUserId());
             specsCondition.setProductCode(ware.getProductCode());
             ware.setWhsList(wareBO.queryWareList(specsCondition));
-            int minSpecsNumber = productSpecsBO
+            int minSpecsNumber = specsBO
                 .getMinSpecsNumber(product.getCode());
             ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
 
@@ -183,9 +183,9 @@ public class WareAOImpl implements IWareAO {
             throw new BizException("xn00000", "您仓库中没有该规格的产品");
         }
 
-        ProductSpecs psData = productSpecsBO
+        Specs psData = specsBO
             .getProductSpecs(data.getProductSpecsCode());
-        ProductSpecsPrice pspData = productSpecsPriceBO
+        AgentPrice pspData = agentPriceBO
             .getPriceByLevel(data.getProductSpecsCode(), agent.getLevel());
 
         // 检查限购
@@ -292,7 +292,7 @@ public class WareAOImpl implements IWareAO {
             specsCondition.setProductCode(ware.getProductCode());
             List<Ware> whList = wareBO.queryWareList(specsCondition);
             for (Ware wh : whList) {
-                ProductSpecsPrice price = productSpecsPriceBO
+                AgentPrice price = agentPriceBO
                     .getPriceByLevel(wh.getProductSpecsCode(), 6);
                 wh.setPrice(price.getPrice());
             }
@@ -310,7 +310,7 @@ public class WareAOImpl implements IWareAO {
         condition.setProductCode(data.getProductCode());
         List<Ware> specsList = wareBO.queryWareList(condition);
         for (Ware ware : specsList) {
-            ProductSpecsPrice price = productSpecsPriceBO
+            AgentPrice price = agentPriceBO
                 .getPriceByLevel(ware.getProductSpecsCode(), 6);
             ware.setPrice(price.getPrice());
         }

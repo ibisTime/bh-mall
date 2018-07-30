@@ -67,13 +67,13 @@ public class Product extends ABaseDO {
     private String remark;
 
     // 产品规格
-    private List<ProductSpecs> specsList;
+    private List<Specs> specsList;
 
     // 推荐奖励
-    private List<Award> directAwardList;
+    private List<TjAward> directAwardList;
 
     // 介绍奖励
-    private List<Award> sendAwardList;
+    private List<TjAward> sendAwardList;
 
     // ***********************db******************
     private Integer level;
@@ -84,10 +84,10 @@ public class Product extends ABaseDO {
     private Integer whNumber;
 
     // 产品规格
-    private ProductSpecs specs;
+    private Specs specs;
 
     // 规格价格
-    private ProductSpecsPrice specsPrice;
+    private AgentPrice specsPrice;
 
     public String getCode() {
         return code;
@@ -225,11 +225,11 @@ public class Product extends ABaseDO {
         this.remark = remark;
     }
 
-    public List<ProductSpecs> getSpecsList() {
+    public List<Specs> getSpecsList() {
         return specsList;
     }
 
-    public void setSpecsList(List<ProductSpecs> specsList) {
+    public void setSpecsList(List<Specs> specsList) {
         this.specsList = specsList;
     }
 
@@ -249,19 +249,19 @@ public class Product extends ABaseDO {
         this.userId = userId;
     }
 
-    public List<Award> getDirectAwardList() {
+    public List<TjAward> getDirectAwardList() {
         return directAwardList;
     }
 
-    public void setDirectAwardList(List<Award> directAwardList) {
+    public void setDirectAwardList(List<TjAward> directAwardList) {
         this.directAwardList = directAwardList;
     }
 
-    public List<Award> getSendAwardList() {
+    public List<TjAward> getSendAwardList() {
         return sendAwardList;
     }
 
-    public void setSendAwardList(List<Award> sendAwardList) {
+    public void setSendAwardList(List<TjAward> sendAwardList) {
         this.sendAwardList = sendAwardList;
     }
 
@@ -273,19 +273,19 @@ public class Product extends ABaseDO {
         this.whNumber = whNumber;
     }
 
-    public ProductSpecs getSpecs() {
+    public Specs getSpecs() {
         return specs;
     }
 
-    public ProductSpecsPrice getSpecsPrice() {
+    public AgentPrice getSpecsPrice() {
         return specsPrice;
     }
 
-    public void setSpecs(ProductSpecs specs) {
+    public void setSpecs(Specs specs) {
         this.specs = specs;
     }
 
-    public void setSpecsPrice(ProductSpecsPrice specsPrice) {
+    public void setSpecsPrice(AgentPrice specsPrice) {
         this.specsPrice = specsPrice;
     }
 

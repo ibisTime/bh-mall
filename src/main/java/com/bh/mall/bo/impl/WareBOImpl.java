@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.bo.IProductSpecsPriceBO;
+import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.IWareLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
@@ -17,8 +17,8 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareDAO;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Order;
-import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
@@ -28,8 +28,7 @@ import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class WareBOImpl extends PaginableBOImpl<Ware>
-        implements IWareBO {
+public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
     @Autowired
     IWareDAO wareDAO;
@@ -38,13 +37,13 @@ public class WareBOImpl extends PaginableBOImpl<Ware>
     IWareLogBO wareLogBO;
 
     @Autowired
-    IProductSpecsPriceBO productSpecsPriceBO;
+    IAgentPriceBO agentPriceBO;
 
     @Override
-    public void saveWare(Ware data, Integer quantity,
-            EBizType bizType, String bizNote, String refNo) {
-        String logCode = wareLogBO.saveWareLog(data, quantity,
-            bizType, bizNote, refNo);
+    public void saveWare(Ware data, Integer quantity, EBizType bizType,
+            String bizNote, String refNo) {
+        String logCode = wareLogBO.saveWareLog(data, quantity, bizType, bizNote,
+            refNo);
         data.setType(EUserKind.Merchant.getCode());
         data.setLastChangeCode(logCode);
         wareDAO.insert(data);
@@ -80,8 +79,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware>
     }
 
     @Override
-    public Ware getWareByProductSpec(String userId,
-            String productSpecsCode) {
+    public Ware getWareByProductSpec(String userId, String productSpecsCode) {
         Ware condition = new Ware();
         condition.setUserId(userId);
         condition.setProductSpecsCode(productSpecsCode);
@@ -100,21 +98,19 @@ public class WareBOImpl extends PaginableBOImpl<Ware>
             String toSpecs, Integer quantity, EBizType fromBizType,
             EBizType toBizType, String fromBizNote, String toBizNote,
             String refNo) {
-        Ware fromWare = this.getWareByProductSpec(fromUser,
-            fromSpecs);
+        Ware fromWare = this.getWareByProductSpec(fromUser, fromSpecs);
         Ware toWare = this.getWareByProductSpec(toUser, toSpecs);
 
-        transQuantity(fromWare, toWare, quantity, fromBizType,
-            toBizType, fromBizNote, toBizNote, refNo);
+        transQuantity(fromWare, toWare, quantity, fromBizType, toBizType,
+            fromBizNote, toBizNote, refNo);
     }
 
-    private void transQuantity(Ware fromWare, Ware toWare,
-            Integer quantity, EBizType fromBizType, EBizType toBizType,
-            String fromBizNote, String toBizNote, String refNo) {
+    private void transQuantity(Ware fromWare, Ware toWare, Integer quantity,
+            EBizType fromBizType, EBizType toBizType, String fromBizNote,
+            String toBizNote, String refNo) {
         String fromCode = fromWare.getCode();
         String toCode = toWare.getCode();
-        this.changeWare(fromCode, quantity, fromBizType, fromBizNote,
-            refNo);
+        this.changeWare(fromCode, quantity, fromBizType, fromBizNote, refNo);
         this.changeWare(toCode, -quantity, toBizType, toBizNote, refNo);
     }
 
@@ -131,8 +127,8 @@ public class WareBOImpl extends PaginableBOImpl<Ware>
         }
 
         // 记录流水
-        String logCode = wareLogBO.saveWareLog(dbData, quantity,
-            bizType, bizNote, refNo);
+        String logCode = wareLogBO.saveWareLog(dbData, quantity, bizType,
+            bizNote, refNo);
         // 改变数量
         Ware data = new Ware();
         data.setCode(code);
@@ -212,7 +208,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware>
     @Override
     public void changeWarePrice(List<Ware> whList, Integer level) {
         for (Ware data : whList) {
-            ProductSpecsPrice psPrice = productSpecsPriceBO
+            AgentPrice psPrice = agentPriceBO
                 .getPriceByLevel(data.getProductSpecsCode(), level);
             data.setPrice(psPrice.getPrice());
             data.setAmount(data.getQuantity() * psPrice.getPrice());

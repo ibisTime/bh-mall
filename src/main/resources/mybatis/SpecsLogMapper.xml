@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.ISpecsLogDAO">
+	<resultMap id="specsLog_DB_Result" type="specsLog">
+		<result column="code" property="code"/>
+		<result column="product_code" property="productCode"/>
+		<result column="type" property="type"/>
+		<result column="tran_count" property="tranCount"/>
+		<result column="pre_count" property="preCount"/>
+		
+		<result column="post_count" property="postCount"/>
+		<result column="updater" property="updater"/>
+		<result column="update_datetime" property="updateDatetime"/>
+		<result column="remark" property="remark"/>
+		
+		<result column="name" property="productName" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != ''">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != ''">
+				AND t.type = #{type}
+			</if>
+			<if test="productCode != null and productCode != ''">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="startDatetime != null and startDatetime != ''">
+				<![CDATA[AND t.update_datetime >= #{startDatetime} ]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != ''">
+				<![CDATA[AND t.update_datetime <= #{endDatetime}]]>
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_specsLog" parameterType="specsLog" resultMap="specsLog_DB_Result">
+		SELECT 
+		t.code
+		,t.product_code
+		,t.type
+		,t.tran_count
+		,t.pre_count
+		
+		,t.post_count
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,p.name
+		FROM tbh_specs_log t LEFT JOIN tbh_product p ON t.product_code = p.code
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	
+	<select id="select_specsLog_count" parameterType="specsLog" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_specs_log t
+		<include refid="where_condition"/>
+	</select>
+	
+	<insert id="insert_specsLog" parameterType="specsLog">
+		INSERT INTO tbh_specs_log(
+		code
+		,product_code
+		,type
+		,tran_count
+		,pre_count
+		
+		,post_count
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{productCode}
+		,#{type}
+		,#{tranCount}
+		,#{preCount}
+		
+		,#{postCount}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+		
+	</insert>
+	
+	
+	<update id="update_specsLog" parameterType="specsLog">
+		UPDATE tbh_specs_log 
+		SET 
+		,product_code = #{productCode}
+		,type = #{type}
+		,tran_count = #{tranCount}
+		,pre_count  = #{preCount}
+		
+		,post_count = #{postCount}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code=#{code}
+	</update>
+	
+	<delete id="delete_byProductCode" parameterType="specsLog">
+		DELETE FROM 
+		tbh_specs_log 
+		WHERE
+		product_code = #{productCode}
+	</delete>
+</mapper>

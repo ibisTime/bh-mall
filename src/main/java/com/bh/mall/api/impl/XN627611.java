@@ -1,10 +1,10 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IProductLogAO;
+import com.bh.mall.ao.ISpecsLogAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.domain.ProductLog;
+import com.bh.mall.domain.SpecsLog;
 import com.bh.mall.dto.req.XN627611Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -18,14 +18,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627611 extends AProcessor {
 
-    private IProductLogAO productLogAO = SpringContextHolder
-        .getBean(IProductLogAO.class);
+    private ISpecsLogAO productLogAO = SpringContextHolder
+        .getBean(ISpecsLogAO.class);
 
     private XN627611Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        ProductLog condition = new ProductLog();
+        SpecsLog condition = new SpecsLog();
         condition.setProductCode(req.getProductCode());
         condition.setType(req.getType());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
