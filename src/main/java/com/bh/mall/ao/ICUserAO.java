@@ -19,4 +19,7 @@ public interface ICUserAO {
     // 检查登录密码 XN627287
     public void doCheckLoginPwd(String userId, String loginPwd);
 
+    public void doResetMoblie(String userId, String newMobile,
+            String smsCaptcha);
+
 }
