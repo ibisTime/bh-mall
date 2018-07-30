@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IOrderAO;
+import com.bh.mall.ao.IInOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -17,13 +17,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627641 extends AProcessor {
 
-    private IOrderAO orderAO = SpringContextHolder.getBean(IOrderAO.class);
+    private IInOrderAO inOrderAO = SpringContextHolder.getBean(IInOrderAO.class);
 
     private XN627641Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return orderAO.addOrderNoCart(req);
+        return inOrderAO.addInOrderNoCart(req);
     }
 
     @Override

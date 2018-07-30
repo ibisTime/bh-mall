@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bh.mall.ao.IInnerOrderAO;
-import com.bh.mall.ao.IOrderAO;
+import com.bh.mall.ao.IInOrderAO;
 
 /**
  * 币种兑换回调控制层
@@ -34,7 +34,7 @@ public class CallbackBzdhConroller {
     IInnerOrderAO innerOrderAO;
 
     @Autowired
-    IOrderAO orderAO;
+    IInOrderAO inOrderAO;
 
     // 自身支付回调
     @RequestMapping("/bzdh/callback")
@@ -52,7 +52,7 @@ public class CallbackBzdhConroller {
 
             String noticeStr = setXML("SUCCESS", "");
             // 解析回调结果并通知业务biz
-            orderAO.paySuccess(result);
+            inOrderAO.paySuccess(result);
             out.print(new ByteArrayInputStream(
                 noticeStr.getBytes(Charset.forName("UTF-8"))));
         } catch (Exception e) {

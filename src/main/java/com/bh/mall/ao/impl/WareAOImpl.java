@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IOrderAO;
+import com.bh.mall.ao.IInOrderAO;
 import com.bh.mall.ao.IWareAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductSpecsBO;
 import com.bh.mall.bo.IProductSpecsPriceBO;
@@ -53,7 +53,7 @@ public class WareAOImpl implements IWareAO {
     IAgentLevelBO agentLevelBO;
 
     @Autowired
-    IOrderBO orderBO;
+    IInOrderBO inOrderBO;
 
     @Autowired
     ISYSConfigBO sysConfigBO;
@@ -65,7 +65,7 @@ public class WareAOImpl implements IWareAO {
     IProductSpecsPriceBO productSpecsPriceBO;
 
     @Autowired
-    IOrderAO orderAO;
+    IInOrderAO inOrderAO;
 
     @Autowired
     IAddressBO addressBO;
@@ -189,7 +189,7 @@ public class WareAOImpl implements IWareAO {
             .getPriceByLevel(data.getProductSpecsCode(), agent.getLevel());
 
         // 检查限购
-        orderAO.checkLimitNumber(agent, psData, pspData,
+        inOrderAO.checkLimitNumber(agent, psData, pspData,
             StringValidater.toInteger(req.getQuantity()));
         if (pspData.getMinNumber() > data.getQuantity()) {
             throw new BizException("xn00000",
@@ -210,7 +210,7 @@ public class WareAOImpl implements IWareAO {
         Long amount = data.getPrice()
                 * StringValidater.toInteger(req.getQuantity());
 
-        if (orderBO.checkImpowerOrder(agent.getUserId(),
+        if (inOrderBO.checkImpowerOrder(agent.getUserId(),
             agent.getImpowerDatetime())) {
             if (agentLevel.getAmount() > amount) {
                 throw new BizException("xn00000", agentLevel.getName()
@@ -246,7 +246,7 @@ public class WareAOImpl implements IWareAO {
 
             for (int i = 0; i < singleNumber; i++) {
 
-                String code = orderBO.pickUpGoods(data.getProductCode(),
+                String code = inOrderBO.pickUpGoods(data.getProductCode(),
                     data.getProductName(), product.getPic(),
                     data.getProductSpecsCode(), data.getProductSpecsName(),
                     psData.getSingleNumber(), data.getPrice(),
@@ -261,7 +261,7 @@ public class WareAOImpl implements IWareAO {
                     EBizType.AJ_YCTH, EBizType.AJ_YCTH.getValue(), code);
             }
         } else {
-            String code = orderBO.pickUpGoods(data.getProductCode(),
+            String code = inOrderBO.pickUpGoods(data.getProductCode(),
                 data.getProductName(), product.getPic(),
                 data.getProductSpecsCode(), data.getProductSpecsName(),
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),

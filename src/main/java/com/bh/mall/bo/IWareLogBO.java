@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.ChangeProduct;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.domain.WareLog;
 import com.bh.mall.enums.EBizType;
@@ -15,7 +15,7 @@ public interface IWareLogBO extends IPaginableBO<WareLog> {
 
     public WareLog getWareLog(String code);
 
-    public String saveWareLog(Order data, Ware whData, Integer tranNumber,
+    public String saveWareLog(InOrder data, Ware whData, Integer tranNumber,
             String bizType, String bizNote);
 
     public String saveWareLog(Ware dbData, Integer quantity,
@@ -25,7 +25,7 @@ public interface IWareLogBO extends IPaginableBO<WareLog> {
             Long changePirce, int canChangeQuantity, String status,
             String bizNote);
 
-    public String saveWareLog(Order order, String wareCode,
+    public String saveWareLog(InOrder inOrder, String wareCode,
             Integer beforeNumber, Integer changeNumber, String bizType,
             String bizNote, String refNo);
 

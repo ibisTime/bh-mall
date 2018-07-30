@@ -17,7 +17,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareDAO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.ProductSpecsPrice;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EBizType;
@@ -172,7 +172,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware>
     }
 
     @Override
-    public void buyWare(Order data, Agent agent) {
+    public void buyWare(InOrder data, Agent agent) {
         Ware ware = this.getWareByProductSpec(agent.getUserId(),
             data.getProductSpecsCode());
 

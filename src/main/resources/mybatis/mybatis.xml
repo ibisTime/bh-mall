@@ -34,7 +34,7 @@
 	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
 	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
 	
-		<typeAlias alias="order" type="com.bh.mall.domain.Order"/>
+		<typeAlias alias="inOrder" type="com.bh.mall.domain.InOrder"/>
 		<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
 
 		<typeAlias alias="jsAward" type="com.bh.mall.domain.JsAward"/>

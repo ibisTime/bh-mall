@@ -20,7 +20,7 @@ import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
-import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
@@ -67,7 +67,7 @@ public class CUserAOImpl implements ICUserAO {
     IAccountBO accountBO;
 
     @Autowired
-    IOrderBO orderBO;
+    IInOrderBO inOrderBO;
 
     @Autowired
     IInnerOrderBO innerOrderBO;

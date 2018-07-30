@@ -47,7 +47,7 @@ public class MiniCode extends ABaseDO {
     // **************db*************
 
     // 订单
-    private Order orderData;
+    private InOrder orderData;
 
     // 状态List
     private List<String> statusList;
@@ -119,11 +119,11 @@ public class MiniCode extends ABaseDO {
         this.number = number;
     }
 
-    public Order getOrderData() {
+    public InOrder getOrderData() {
         return orderData;
     }
 
-    public void setOrderData(Order orderData) {
+    public void setOrderData(InOrder orderData) {
         this.orderData = orderData;
     }
 

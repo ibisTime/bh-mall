@@ -14,7 +14,7 @@ import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IInnerOrderBO;
-import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISjFormBO;
@@ -59,7 +59,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     IAccountBO accountBO;
 
     @Autowired
-    IOrderBO orderBO;
+    IInOrderBO inOrderBO;
 
     @Autowired
     IInnerOrderBO innerOrderBO;

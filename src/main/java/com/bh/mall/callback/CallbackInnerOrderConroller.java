@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bh.mall.ao.IInnerOrderAO;
-import com.bh.mall.ao.IOrderAO;
+import com.bh.mall.ao.IInOrderAO;
 
 /**
  * 内购订单回调
@@ -34,7 +34,7 @@ public class CallbackInnerOrderConroller {
     IInnerOrderAO innerOrderAO;
 
     @Autowired
-    IOrderAO orderAO;
+    IInOrderAO inOrderAO;
 
     // 自身支付回调
     @RequestMapping("/order/callback")

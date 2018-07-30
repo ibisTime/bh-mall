@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bh.mall.ao.IOrderAO;
+import com.bh.mall.ao.IInOrderAO;
 import com.bh.mall.ao.IReportAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IReportBO;
@@ -22,7 +22,7 @@ public class ReportAOImpl implements IReportAO {
     IReportBO reportBO;
 
     @Autowired
-    IOrderAO orderAO;
+    IInOrderAO inOrderAO;
 
     @Autowired
     IAgentBO agentBO;

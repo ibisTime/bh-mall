@@ -14,7 +14,7 @@ import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChangeProductBO;
 import com.bh.mall.bo.IChargeBO;
-import com.bh.mall.bo.IOrderBO;
+import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductLogBO;
 import com.bh.mall.bo.IProductSpecsBO;
@@ -81,7 +81,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
     IAgentLevelBO agentLevelBO;
 
     @Autowired
-    IOrderBO orderBO;
+    IInOrderBO inOrderBO;
 
     @Autowired
     IAccountBO accountBO;
@@ -430,7 +430,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
             if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
 
                 // 是否完成授权单
-                if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
+                if (0 != impower.getMinCharge() && inOrderBO.checkImpowerOrder(
                     user.getUserId(), user.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
@@ -438,7 +438,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                 // 红线设置为零视为无限制
                 if (0 < agent.getRedAmount()) {
                     // 订单金额
-                    Long orderAmount = orderBO.getOrderByUser(user.getUserId());
+                    Long orderAmount = inOrderBO.getInOrderByUser(user.getUserId());
                     // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
                     if (orderAmount < agent.getAmount()) {
                         // result = ECheckStatus.TO_BUY.getCode();
@@ -446,7 +446,7 @@ public class ChangeProductAOImpl implements IChangeProductAO {
                     }
                 }
                 // 未开启云仓，只检查是否完成授权单
-            } else if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
+            } else if (0 != impower.getMinCharge() && inOrderBO.checkImpowerOrder(
                 user.getUserId(), user.getImpowerDatetime())) {
                 // 未完成授权单
                 result = ECheckStatus.RED_LOW.getCode();

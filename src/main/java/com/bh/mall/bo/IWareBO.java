@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EBizType;
 
@@ -42,7 +42,7 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public List<Ware> queryWareProductList(Ware condition);
 
-    public void buyWare(Order order, Agent agent);
+    public void buyWare(InOrder inOrder, Agent agent);
 
     public void changeWarePrice(List<Ware> whList, Integer level);
 

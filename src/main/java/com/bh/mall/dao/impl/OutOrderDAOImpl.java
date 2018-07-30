@@ -4,118 +4,118 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.bh.mall.dao.IOrderDAO;
+import com.bh.mall.dao.IInOrderDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.InOrder;
 
 @Repository("orderDAOImpl")
-public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
+public class OutOrderDAOImpl extends AMybatisTemplate implements IInOrderDAO {
 
     @Override
-    public int insert(Order data) {
+    public int insert(InOrder data) {
         return super.insert(NAMESPACE.concat("insert_order"), data);
     }
 
     @Override
-    public int delete(Order data) {
+    public int delete(InOrder data) {
         return super.delete(NAMESPACE.concat("delete_order"), data);
     }
 
     @Override
-    public Order select(Order condition) {
+    public InOrder select(InOrder condition) {
         return super.select(NAMESPACE.concat("select_order"), condition,
-            Order.class);
+            InOrder.class);
     }
 
     @Override
-    public long selectTotalCount(Order condition) {
+    public long selectTotalCount(InOrder condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_order_count"),
             condition);
     }
 
     @Override
-    public List<Order> selectList(Order condition) {
+    public List<InOrder> selectList(InOrder condition) {
         return super.selectList(NAMESPACE.concat("select_order"), condition,
-            Order.class);
+            InOrder.class);
     }
 
     @Override
-    public List<Order> selectList(Order condition, int start, int count) {
+    public List<InOrder> selectList(InOrder condition, int start, int count) {
         return super.selectList(NAMESPACE.concat("select_order"), start, count,
-            condition, Order.class);
+            condition, InOrder.class);
     }
 
     @Override
-    public void payOrder(Order data) {
+    public void payInOrder(InOrder data) {
         super.update(NAMESPACE.concat("pay_order"), data);
 
     }
 
     @Override
-    public void update(Order data) {
+    public void update(InOrder data) {
         super.update(NAMESPACE.concat("update_order"), data);
     }
 
     @Override
-    public void deliverOrder(Order data) {
+    public void deliverOrder(InOrder data) {
         super.update(NAMESPACE.concat("deliver_order"), data);
 
     }
 
     @Override
-    public void approveOrder(Order data) {
+    public void approveOrder(InOrder data) {
         super.update(NAMESPACE.concat("approve_order"), data);
 
     }
 
     @Override
-    public void cancelOrder(Order data) {
+    public void cancelOrder(InOrder data) {
         super.update(NAMESPACE.concat("update_status"), data);
 
     }
 
     @Override
-    public void approveCancel(Order data) {
+    public void approveCancel(InOrder data) {
         super.update(NAMESPACE.concat("approve_cancel"), data);
     }
 
     @Override
-    public void receivedOrder(Order data) {
+    public void receivedOrder(InOrder data) {
         super.update(NAMESPACE.concat("update_status"), data);
     }
 
     @Override
-    public List<Order> queryToDealList(int pageNo, int pageSize,
-            Order condition) {
+    public List<InOrder> queryToDealList(int pageNo, int pageSize,
+            InOrder condition) {
         return super.selectList(NAMESPACE.concat("select_to_deal"), pageNo,
-            pageSize, condition, Order.class);
+            pageSize, condition, InOrder.class);
     }
 
     @Override
-    public void addPayGroup(Order data) {
+    public void addPayGroup(InOrder data) {
         super.update(NAMESPACE.concat("add_payGroup"), data);
 
     }
 
     @Override
-    public List<Order> selectOrderPage(int pageNO, int pageSize,
-            Order condition) {
+    public List<InOrder> selectOrderPage(int pageNO, int pageSize,
+            InOrder condition) {
         return super.selectList(NAMESPACE.concat("select_order"), pageNO,
-            pageSize, condition, Order.class);
+            pageSize, condition, InOrder.class);
     }
 
     @Override
-    public void payNo(Order data) {
+    public void payNo(InOrder data) {
         super.update(NAMESPACE.concat("pay_no"), data);
     }
 
     @Override
-    public void paySuccess(Order data) {
+    public void paySuccess(InOrder data) {
         super.update(NAMESPACE.concat("pay_success"), data);
     }
 
     @Override
-    public void invalidOrder(Order data) {
+    public void invalidOrder(InOrder data) {
         super.update(NAMESPACE.concat("invalid_order"), data);
     }
 

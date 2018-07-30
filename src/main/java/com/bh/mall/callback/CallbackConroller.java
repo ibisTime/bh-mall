@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bh.mall.ao.IInnerOrderAO;
-import com.bh.mall.ao.IOrderAO;
+import com.bh.mall.ao.IInOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 
 /** 
@@ -36,7 +36,7 @@ public class CallbackConroller {
     IInnerOrderAO innerOrderAO;
 
     @Autowired
-    IOrderAO orderAO;
+    IInOrderAO inOrderAO;
 
     // 微信H5支付回调
     @RequestMapping("/wechat/H5/callback")

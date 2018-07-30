@@ -14,7 +14,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareLogDAO;
 import com.bh.mall.domain.ChangeProduct;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.domain.WareLog;
 import com.bh.mall.enums.EBizType;
@@ -28,7 +28,7 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
     private IWareLogDAO wareLogDAO;
 
     @Override
-    public String saveWareLog(Order data, Ware whData, Integer tranNumber,
+    public String saveWareLog(InOrder data, Ware whData, Integer tranNumber,
             String bizType, String bizNote) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.WareHourseLog.getCode());
@@ -141,7 +141,7 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
     }
 
     @Override
-    public String saveWareLog(Order order, String wareCode,
+    public String saveWareLog(InOrder inOrder, String wareCode,
             Integer beforeNumber, Integer changeNumber, String bizType,
             String bizNote, String refNo) {
         String code = OrderNoGenerater
@@ -150,16 +150,16 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setCode(code);
         logData.setRefNo(refNo);
         logData.setWareCode(wareCode);
-        logData.setProductCode(order.getProductCode());
-        logData.setProductName(order.getProductName());
+        logData.setProductCode(inOrder.getProductCode());
+        logData.setProductName(inOrder.getProductName());
 
-        logData.setProductSpecsCode(order.getProductSpecsCode());
-        logData.setProductSpecsName(order.getProductSpecsName());
-        logData.setPrice(order.getPrice());
+        logData.setProductSpecsCode(inOrder.getProductSpecsCode());
+        logData.setProductSpecsName(inOrder.getProductSpecsName());
+        logData.setPrice(inOrder.getPrice());
         logData.setTranNumber(changeNumber);
         logData.setBeforeNumber(beforeNumber);
 
-        Long amount = AmountUtil.mul(order.getPrice(),
+        Long amount = AmountUtil.mul(inOrder.getPrice(),
             (beforeNumber + changeNumber));
         logData.setAfterNumber(beforeNumber + changeNumber);
         logData.setAmount(amount);
