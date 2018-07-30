@@ -7,21 +7,21 @@ import com.bh.mall.domain.SjForm;
 
 public interface ISjFormBO extends IPaginableBO<SjForm> {
 
-    public SjForm getUpLevelApply(String code);
+    public SjForm getSjForm(String code);
 
-    public List<SjForm> queryUpLevelApplyPage(int start, int limit,
+    public List<SjForm> querySjFormPage(int start, int limit,
             SjForm condition);
 
-    public List<SjForm> queryUpLevelApplyList(SjForm condition);
+    public List<SjForm> querySjFormList(SjForm condition);
 
-    public String upgradeLevel(SjForm data);
+    public String applySjForm(SjForm data);
 
-    public String approveUpgrade(SjForm data);
+    public String approveSjForm(SjForm data);
 
-    public String approveCanenl(SjForm data);
+    public String approveCanenlSjForm(SjForm data);
 
-    public String saveUpLevelApply(SjForm data, String toUserId);
+    public String saveSjForm(SjForm data, String toUserId);
 
-    public String addUplevelApply(SjForm data);
+    public String addSjForm(SjForm data);
 
 }

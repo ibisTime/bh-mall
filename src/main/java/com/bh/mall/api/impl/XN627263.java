@@ -25,7 +25,7 @@ public class XN627263 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        sjFormAO.approveUpgrade(req.getUserId(), req.getApprover(),
+        sjFormAO.approveSjForm(req.getUserId(), req.getApprover(),
             req.getRemark(), req.getResult());
         return new BooleanRes(true);
     }

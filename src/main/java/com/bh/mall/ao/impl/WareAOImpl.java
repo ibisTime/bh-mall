@@ -183,7 +183,12 @@ public class WareAOImpl implements IWareAO {
             throw new BizException("xn00000", "您仓库中没有该规格的产品");
         }
 
+<<<<<<< HEAD
         Specs psData = specsBO.getSpecs(data.getProductSpecsCode());
+=======
+        Specs psData = specsBO
+            .getSpecs(data.getProductSpecsCode());
+>>>>>>> refs/remotes/origin/master
         AgentPrice pspData = agentPriceBO
             .getPriceByLevel(data.getProductSpecsCode(), agent.getLevel());
 

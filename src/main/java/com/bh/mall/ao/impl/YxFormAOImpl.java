@@ -49,7 +49,7 @@ public class YxFormAOImpl implements IYxFormAO {
     // 代理申请 （无推荐人）
     @Override
     @Transactional
-    public void applyIntent(XN627250Req req) {
+    public void applyYxForm(XN627250Req req) {
         PhoneUtil.checkMobile(req.getMobile());
 
         // check mobile exist
@@ -83,7 +83,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setSource(req.getFromInfo());
 
         // 数据库
-        agentAllotBO.applyIntent(data);
+        agentAllotBO.applyYxForm(data);
         addressBO.saveAddress(data.getUserId(),
             EAddressType.User_Address.getCode(), req.getMobile(),
             req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
@@ -93,7 +93,7 @@ public class YxFormAOImpl implements IYxFormAO {
     /*************** 意向分配 **********************/
 
     @Override
-    public void allotAgent(String userId, String toUserId, String approver) {
+    public void allotYxForm(String userId, String toUserId, String approver) {
 
         YxForm data = new YxForm();
         // set status
@@ -112,7 +112,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setStatus(status);
-        agentAllotBO.addAgentAllot(data);
+        agentAllotBO.addYxForm(data);
 
     }
 
@@ -133,7 +133,7 @@ public class YxFormAOImpl implements IYxFormAO {
     /***************  接受意向分配 **********************/
 
     @Override
-    public void acceptIntention(String userId, String approver, String remark) {
+    public void acceptYxForm(String userId, String approver, String remark) {
         YxForm data = new YxForm();
         if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
@@ -146,7 +146,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setRemark(remark);
 
         data.setStatus(EUserStatus.ADD_INFO.getCode()); // 补全授权资料
-        String logCode = agentAllotBO.acceptIntention(data);
+        String logCode = agentAllotBO.accepYxForm(data);
         // insert new agent allot log
         YxForm imData = new YxForm();
         imData.setUserId(userId);
@@ -154,14 +154,14 @@ public class YxFormAOImpl implements IYxFormAO {
         imData.setApplyDatetime(new Date());
         imData.setStatus(EUserStatus.ADD_INFO.getCode());
 
-        agentAllotBO.addAgentAllot(imData);
+        agentAllotBO.addYxForm(imData);
 
     }
 
     /*********************** 查询 *************************/
 
     @Override
-    public List<YxForm> queryAgentAllotList(YxForm condition) {
+    public List<YxForm> queryYxFormList(YxForm condition) {
 
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
@@ -170,15 +170,15 @@ public class YxFormAOImpl implements IYxFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        List<YxForm> list = agentAllotBO.queryAgentAllotList(condition);
+        List<YxForm> list = agentAllotBO.queryYxFormList(condition);
         return list;
     }
 
     /************************************************/
 
     @Override
-    public YxForm getAgentAllot(String code) {
-        YxForm data = agentAllotBO.getAgentAllot(code);
+    public YxForm getYxForm(String code) {
+        YxForm data = agentAllotBO.getYxForm(code);
         return data;
     }
 
@@ -223,15 +223,15 @@ public class YxFormAOImpl implements IYxFormAO {
 
     /*********************** 新增日志 *************************/
     @Override
-    public String addAgentAllot(YxForm data) {
+    public String addYxForm(YxForm data) {
         // insert new data
-        agentAllotBO.addAgentAllot(data);
+        agentAllotBO.addYxForm(data);
         return null;
     }
 
     /*********************** 查询是否需要补全金额 *************************/
     @Override
-    public Paginable<YxForm> queryAgentAllotPage(int start, int limit,
+    public Paginable<YxForm> queryYxFormFrontPage(int start, int limit,
             YxForm condition) {
 
         if (condition.getApplyDatetimeStart() != null

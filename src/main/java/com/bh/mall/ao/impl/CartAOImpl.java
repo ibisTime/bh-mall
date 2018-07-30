@@ -97,7 +97,11 @@ public class CartAOImpl implements ICartAO {
             Product product = productBO.getProduct(data.getProductCode());
             data.setProduct(product);
             Specs specs = specsBO
+<<<<<<< HEAD
                 .getSpecs(data.getSpecsCode());
+=======
+                .getSpecs(data.getProductSpecsCode());
+>>>>>>> refs/remotes/origin/master
             data.setSpecsName(specs.getName());
         }
         return page;
@@ -114,7 +118,11 @@ public class CartAOImpl implements ICartAO {
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
         Specs specs = specsBO
+<<<<<<< HEAD
             .getSpecs(data.getSpecsCode());
+=======
+            .getSpecs(data.getProductSpecsCode());
+>>>>>>> refs/remotes/origin/master
         data.setSpecsName(specs.getName());
         return data;
     }

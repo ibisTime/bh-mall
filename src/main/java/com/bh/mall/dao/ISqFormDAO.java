@@ -7,9 +7,9 @@ public interface ISqFormDAO extends IBaseDAO<SqForm> {
 
     String NAMESPACE = ISYSConfigDAO.class.getName().concat(".");
 
-    void cancelImpower(SqForm data);
+    void cancelSqForm(SqForm data);
 
-    void approveImpower(SqForm data);
+    void approveSqForm(SqForm data);
 
     void addInfo(SqForm data);
 

@@ -11,14 +11,14 @@ import com.bh.mall.domain.AgentPrice;
 public interface IAgentPriceAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addProductSpecsPrice(AgentPrice data);
+    public String addAgentPrice(AgentPrice data);
 
-    public Paginable<AgentPrice> queryProductSpecsPricePage(int start,
+    public Paginable<AgentPrice> queryAgentPricePage(int start,
             int limit, AgentPrice condition);
 
-    public List<AgentPrice> queryProductSpecsPriceList(
+    public List<AgentPrice> queryAgentPriceList(
             AgentPrice condition);
 
-    public AgentPrice getProductSpecsPrice(String code);
+    public AgentPrice getAgentPrice(String code);
 
 }

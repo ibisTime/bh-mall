@@ -24,7 +24,7 @@ public class XN627250 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.applyIntent(req);
+        userAO.applyYxForm(req);
         return new BooleanRes(true);
     }
 

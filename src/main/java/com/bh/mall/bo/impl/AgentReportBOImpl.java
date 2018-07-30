@@ -6,20 +6,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.IReportBO;
+import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.dao.IReportDAO;
+import com.bh.mall.dao.IAgentReportDAO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.Report;
+import com.bh.mall.domain.AgentReport;
 
 @Component
-public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
+public class AgentReportBOImpl extends PaginableBOImpl<AgentReport> implements IAgentReportBO {
 
     @Autowired
-    private IReportDAO reportDAO;
+    private IAgentReportDAO agentReportDAO;
 
-    public void saveReport(Agent user) {
-        Report data = new Report();
+    public void saveAgentReport(Agent user) {
+        AgentReport data = new AgentReport();
         data.setUserId(user.getUserId());
         data.setRealName(user.getRealName());
         data.setWxId(user.getWxId());
@@ -37,37 +37,37 @@ public class ReportBOImpl extends PaginableBOImpl<Report> implements IReportBO {
         data.setAddress(user.getAddress());
         data.setImpowerDatetime(user.getImpowerDatetime());
 
-        reportDAO.insert(data);
+        agentReportDAO.insert(data);
 
     }
 
     @Override
-    public int removeReport(String code) {
+    public int removeAgentReport(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
-            Report data = new Report();
-            count = reportDAO.delete(data);
+            AgentReport data = new AgentReport();
+            count = agentReportDAO.delete(data);
         }
         return count;
     }
 
     @Override
-    public int refreshReport(Report data) {
+    public int refreshAgentReport(AgentReport data) {
         int count = 0;
         return count;
     }
 
     @Override
-    public List<Report> queryReportList(Report condition) {
-        return reportDAO.selectList(condition);
+    public List<AgentReport> queryAgentReportList(AgentReport condition) {
+        return agentReportDAO.selectList(condition);
     }
 
     @Override
-    public Report getReport(String code) {
-        Report data = null;
+    public AgentReport getAgentReport(String code) {
+        AgentReport data = null;
         if (StringUtils.isNotBlank(code)) {
-            Report condition = new Report();
-            data = reportDAO.select(condition);
+            AgentReport condition = new AgentReport();
+            data = agentReportDAO.select(condition);
         }
         return data;
     }

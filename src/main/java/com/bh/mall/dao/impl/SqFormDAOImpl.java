@@ -13,13 +13,13 @@ import com.bh.mall.domain.SqForm;
 public class SqFormDAOImpl extends AMybatisTemplate implements ISqFormDAO {
 
     @Override
-    public void approveImpower(SqForm data) {
+    public void approveSqForm(SqForm data) {
         super.update(NAMESPACE.concat("approve_impower"), data);
 
     }
 
     @Override
-    public void cancelImpower(SqForm data) {
+    public void cancelSqForm(SqForm data) {
         super.update(NAMESPACE.concat("cancel_impower"), data);
     }
 

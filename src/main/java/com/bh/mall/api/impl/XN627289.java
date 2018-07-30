@@ -52,7 +52,7 @@ public class XN627289 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return sqFormAO.queryImpowerApplyPage(start, limit, condition);
+        return sqFormAO.querySqFormPage(start, limit, condition);
     }
 
     @Override

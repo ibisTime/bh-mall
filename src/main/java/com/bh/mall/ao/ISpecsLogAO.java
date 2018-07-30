@@ -11,15 +11,15 @@ import com.bh.mall.domain.SpecsLog;
 public interface ISpecsLogAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void dropProductLog(String code);
+    public void dropSpecstLog(String code);
 
-    public void editProductLog(SpecsLog data);
+    public void editSpecsLog(SpecsLog data);
 
-    public Paginable<SpecsLog> queryProductLogPage(int start, int limit,
+    public Paginable<SpecsLog> querySpecsLogPage(int start, int limit,
             SpecsLog condition);
 
-    public List<SpecsLog> queryProductLogList(SpecsLog condition);
+    public List<SpecsLog> querySpecsLogList(SpecsLog condition);
 
-    public SpecsLog getProductLog(String code);
+    public SpecsLog getSpecsLog(String code);
 
 }

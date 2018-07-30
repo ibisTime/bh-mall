@@ -26,7 +26,7 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     private ISpecsLogDAO specsLogDAO;
 
     @Override
-    public void saveProductLog(String code, String updater, String realNumber) {
+    public void saveSpecsLog(String code, String updater, String realNumber) {
         SpecsLog data = new SpecsLog();
         String plCode = OrderNoGenerater
             .generate(EGeneratePrefix.ProductLog.getCode());
@@ -42,7 +42,7 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     }
 
     @Override
-    public void removeProductLog(String code) {
+    public void removeSpecsLog(String code) {
         if (StringUtils.isNotBlank(code)) {
             SpecsLog data = new SpecsLog();
             data.setProductCode(code);
@@ -51,17 +51,17 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     }
 
     @Override
-    public void refreshProductLog(SpecsLog data) {
+    public void refreshSpecsLog(SpecsLog data) {
         specsLogDAO.select(data);
     }
 
     @Override
-    public List<SpecsLog> queryProductLogList(SpecsLog condition) {
+    public List<SpecsLog> querySpecsLogList(SpecsLog condition) {
         return specsLogDAO.selectList(condition);
     }
 
     @Override
-    public SpecsLog getProductLog(String code) {
+    public SpecsLog getSpecsLog(String code) {
         SpecsLog data = null;
         if (StringUtils.isNotBlank(code)) {
             SpecsLog condition = new SpecsLog();
@@ -75,7 +75,7 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     }
 
     @Override
-    public void saveChangeLog(Product data, String type, Integer realNumber,
+    public void saveExchangeLog(Product data, String type, Integer realNumber,
             Integer changeNumber, String updater) {
         SpecsLog plData = new SpecsLog();
         String plCode = OrderNoGenerater
@@ -93,7 +93,7 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     }
 
     @Override
-    public void saveChangeProductLog(Product data, String type,
+    public void saveExchangeProductLog(Product data, String type,
             Integer realNumber, Integer changeNumber, String approver) {
         SpecsLog plData = new SpecsLog();
         String plCode = OrderNoGenerater

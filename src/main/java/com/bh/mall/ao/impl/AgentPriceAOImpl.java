@@ -17,23 +17,23 @@ public class AgentPriceAOImpl implements IAgentPriceAO {
     IAgentPriceBO agentPriceBO;
 
     @Override
-    public String addProductSpecsPrice(AgentPrice data) {
-        return agentPriceBO.saveProductSpecsPrice(data);
+    public String addAgentPrice(AgentPrice data) {
+        return agentPriceBO.saveAgentPrice(data);
     }
 
     @Override
-    public Paginable<AgentPrice> queryProductSpecsPricePage(int start,
+    public Paginable<AgentPrice> queryAgentPricePage(int start,
             int limit, AgentPrice condition) {
         return agentPriceBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<AgentPrice> queryProductSpecsPriceList(AgentPrice condition) {
-        return agentPriceBO.queryProductSpecsPriceList(condition);
+    public List<AgentPrice> queryAgentPriceList(AgentPrice condition) {
+        return agentPriceBO.queryAgentPriceList(condition);
     }
 
     @Override
-    public AgentPrice getProductSpecsPrice(String code) {
-        return agentPriceBO.getProductSpecsPrice(code);
+    public AgentPrice getAgentPrice(String code) {
+        return agentPriceBO.getAgentPrice(code);
     }
 }

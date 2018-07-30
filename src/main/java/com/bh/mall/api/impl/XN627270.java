@@ -24,7 +24,7 @@ public class XN627270 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.allotAgent(req.getUserId(), req.getToUserId(),
+        userAO.allotYxForm(req.getUserId(), req.getToUserId(),
             req.getApprover());
         return new BooleanRes(true);
     }

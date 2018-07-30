@@ -8,23 +8,23 @@ import com.bh.mall.dto.req.XN627547Req;
 
 public interface IAgentPriceBO extends IPaginableBO<AgentPrice> {
 
-    public boolean isProductSpecsPriceExist(String code);
+    public boolean isAgentPriceExist(String code);
 
-    public String saveProductSpecsPrice(AgentPrice data);
+    public String saveAgentPrice(AgentPrice data);
 
-    public int removeProductSpecsPrice(String code);
+    public int removeAgentPrice(String code);
 
-    public void refreshProductSpecsPrice(List<XN627547Req> list);
+    public void refreshAgentPrice(List<XN627547Req> list);
 
-    public List<AgentPrice> queryProductSpecsPriceList(
+    public List<AgentPrice> queryAgentPriceList(
             AgentPrice pspConditon);
 
-    public AgentPrice getProductSpecsPrice(String code);
+    public AgentPrice getAgentPrice(String code);
 
     public AgentPrice getPriceByLevel(String productSpecsCode,
             Integer level);
 
-    public List<AgentPrice> getPspBySpecsCode(String productSpecs);
+    public List<AgentPrice> getApBySpecsCode(String productSpecs);
 
     // 检查机构数量
     public int checkMinQuantity(String productSpecsCode, Integer level);

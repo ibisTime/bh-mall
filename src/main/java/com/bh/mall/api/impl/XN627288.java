@@ -52,7 +52,7 @@ public class XN627288 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentAllotAO.queryIntentionAgentFrontPage(start, limit,
+        return agentAllotAO.querySqFormFrontPage(start, limit,
             condition);
     }
 

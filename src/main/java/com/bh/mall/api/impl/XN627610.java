@@ -44,7 +44,7 @@ public class XN627610 extends AProcessor {
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return specsLogAO.queryProductLogPage(start, limit, condition);
+        return specsLogAO.querySpecsLogPage(start, limit, condition);
     }
 
     @Override

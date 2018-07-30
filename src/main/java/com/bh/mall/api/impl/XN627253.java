@@ -24,7 +24,7 @@ public class XN627253 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        yxForm.acceptIntention(req.getUserId(), req.getApprover(),
+        yxForm.acceptYxForm(req.getUserId(), req.getApprover(),
             req.getRemark());
         return new BooleanRes(true);
     }

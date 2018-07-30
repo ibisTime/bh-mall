@@ -29,7 +29,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
      */
     // 升级申请
     @Override
-    public String upgradeLevel(SjForm data) {
+    public String applySjForm(SjForm data) {
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
@@ -50,7 +50,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
     // 升级审核通过
     @Override
-    public String approveUpgrade(SjForm data) {
+    public String approveSjForm(SjForm data) {
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
@@ -70,7 +70,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
     // 取消升级申请
     @Override
-    public String approveCanenl(SjForm data) {
+    public String approveCanenlSjForm(SjForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         SjForm alData = new SjForm();
@@ -91,7 +91,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
     /***************** 保存日志 *******************/
     @Override
-    public String addUplevelApply(SjForm data) {
+    public String addSjForm(SjForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
 
@@ -104,7 +104,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     }
 
     @Override
-    public String saveUpLevelApply(SjForm data, String toUserId) {
+    public String saveSjForm(SjForm data, String toUserId) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         SjForm alData = new SjForm();
@@ -122,7 +122,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
     /***************** 查询日志 *******************/
     @Override
-    public SjForm getUpLevelApply(String code) {
+    public SjForm getSjForm(String code) {
         SjForm data = null;
         if (StringUtils.isNotBlank(code)) {
             SjForm condition = new SjForm();
@@ -136,7 +136,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     }
 
     @Override
-    public List<SjForm> queryUpLevelApplyPage(int start, int limit,
+    public List<SjForm> querySjFormPage(int start, int limit,
             SjForm condition) {
         long totalCount = sjFormDAO.selectTotalCount(condition);
         Page<SjForm> page = new Page<SjForm>(start, limit, totalCount);
@@ -145,7 +145,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     }
 
     @Override
-    public List<SjForm> queryUpLevelApplyList(SjForm condition) {
+    public List<SjForm> querySjFormList(SjForm condition) {
         return sjFormDAO.selectList(condition);
     }
 

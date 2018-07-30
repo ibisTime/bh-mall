@@ -11,14 +11,14 @@ import com.bh.mall.domain.TjAward;
 public interface ITjAwardAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public Paginable<TjAward> queryAwardPage(int start, int limit,
+    public Paginable<TjAward> queryTjAwardPage(int start, int limit,
             TjAward condition);
 
-    public List<TjAward> queryAwardList(TjAward condition);
+    public List<TjAward> queryTjAwardList(TjAward condition);
 
-    public TjAward getAward(String code);
+    public TjAward getTjAward(String code);
 
-    public void editAward(String code, String value1, String value2,
+    public void editTjAward(String code, String value1, String value2,
             String value3);
 
 }

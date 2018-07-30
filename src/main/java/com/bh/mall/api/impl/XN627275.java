@@ -25,7 +25,7 @@ public class XN627275 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.approveImpowerCanenl(req.getUserId(), req.getApprover(),
+        userAO.approveCanenlSqForm(req.getUserId(), req.getApprover(),
             req.getRemark());
         return new BooleanRes(true);
     }

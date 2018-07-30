@@ -187,7 +187,7 @@ public class SqFormAOImpl implements ISqFormAO {
     /*************** 通过授权申请 **********************/
     @Override
     @Transactional
-    public void approveImpower(String userId, String approver, String result,
+    public void approveSqForm(String userId, String approver, String result,
             String remark) {
         Agent data = agentBO.getAgent(userId);
         SqForm log = sqFormBO.getSqForm(data.getLastAgentLog());
@@ -282,13 +282,13 @@ public class SqFormAOImpl implements ISqFormAO {
         // imData.setPayAmount(payAmount);
         // imData.setPaymentPdf(payPdf);
         imData.setStatus(status);
-        sqFormBO.approveImpower(imData);
+        sqFormBO.approveSqForm(imData);
 
     }
 
     /*************** 取消授权申请 **********************/
     @Override
-    public void cancelImpower(String userId) {
+    public void cancelSqForm(String userId) {
         Agent data = agentBO.getAgent(userId);
 
         // 是否有下级
@@ -336,12 +336,12 @@ public class SqFormAOImpl implements ISqFormAO {
         // imData.setPayAmount(payAmount);
         // imData.setPaymentPdf(payPdf);
         imData.setStatus(EUserStatus.TO_CANCEL.getCode());
-        sqFormBO.cancelImpower(imData);
+        sqFormBO.cancelSqForm(imData);
     }
 
     /*************** 通过取消审核申请 **********************/
     @Override
-    public void approveImpowerCanenl(String userId, String approver,
+    public void approveCanenlSqForm(String userId, String approver,
             String remark) {
         Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())
@@ -445,7 +445,7 @@ public class SqFormAOImpl implements ISqFormAO {
     /*********************** 查询 *************************/
 
     @Override
-    public List<SqForm> queryImpowerApplyList(SqForm condition) {
+    public List<SqForm> querySqFormList(SqForm condition) {
 
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
@@ -481,7 +481,7 @@ public class SqFormAOImpl implements ISqFormAO {
     /************************************************/
 
     @Override
-    public SqForm getImpowerApply(String code) {
+    public SqForm getSqForm(String code) {
         SqForm data = sqFormBO.getSqForm(code);
         Agent buser = agentAO.getAgent(data.getUserId());
         data.setUser(buser);
@@ -513,7 +513,7 @@ public class SqFormAOImpl implements ISqFormAO {
     /***********************************************/
 
     @Override
-    public Paginable<SqForm> queryIntentionAgentFrontPage(int start, int limit,
+    public Paginable<SqForm> querySqFormFrontPage(int start, int limit,
             SqForm condition) {
 
         if (condition.getApplyDatetimeStart() != null
@@ -565,7 +565,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
     /*********************** 新增日志 *************************/
     @Override
-    public String addImpowerApply(SqForm data) {
+    public String addSqForm(SqForm data) {
         // insert new data
         sqFormBO.addSqForm(data);
         return null;
@@ -573,7 +573,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
     /*********************** 查询是否需要补全金额 *************************/
     @Override
-    public Paginable<SqForm> queryImpowerApplyPage(int start, int limit,
+    public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition) {
 
         if (condition.getApplyDatetimeStart() != null
@@ -642,7 +642,7 @@ public class SqFormAOImpl implements ISqFormAO {
     }
 
     @Override
-    public void approveCancel(String userId, String approver, String result,
+    public void approveCancelSqForm(String userId, String approver, String result,
             String remark) {
     }
 

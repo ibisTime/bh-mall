@@ -18,17 +18,17 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
     private ISpecsLogBO specsLogBO;
 
     @Override
-    public void editProductLog(SpecsLog data) {
-        specsLogBO.refreshProductLog(data);
+    public void editSpecsLog(SpecsLog data) {
+        specsLogBO.refreshSpecsLog(data);
     }
 
     @Override
-    public void dropProductLog(String code) {
-        specsLogBO.removeProductLog(code);
+    public void dropSpecstLog(String code) {
+        specsLogBO.removeSpecsLog(code);
     }
 
     @Override
-    public Paginable<SpecsLog> queryProductLogPage(int start, int limit,
+    public Paginable<SpecsLog> querySpecsLogPage(int start, int limit,
             SpecsLog condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
@@ -40,17 +40,17 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
     }
 
     @Override
-    public List<SpecsLog> queryProductLogList(SpecsLog condition) {
+    public List<SpecsLog> querySpecsLogList(SpecsLog condition) {
         if (condition.getStartDatetime() != null
                 && condition.getEndDatetime() != null && condition
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        return specsLogBO.queryProductLogList(condition);
+        return specsLogBO.querySpecsLogList(condition);
     }
 
     @Override
-    public SpecsLog getProductLog(String code) {
-        return specsLogBO.getProductLog(code);
+    public SpecsLog getSpecsLog(String code) {
+        return specsLogBO.getSpecsLog(code);
     }
 }

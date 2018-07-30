@@ -40,7 +40,7 @@ public class XN627360 extends AProcessor {
         condition.setApproveDatetimeStart(approveDatetimeStart);
         condition.setApproveDatetimeEnd(approveDatetimeEnd);
 
-        return yxFormAO.queryAgentAllotList(condition);
+        return yxFormAO.queryYxFormList(condition);
     }
 
     @Override

@@ -7,14 +7,14 @@ public interface IYxFormDAO extends IBaseDAO<YxForm> {
 
     String NAMESPACE = IYxFormDAO.class.getName().concat(".");
 
-    public void allotAgent(YxForm data);
+    public void allotYxForm(YxForm data);
 
     public void ignore(YxForm data);
 
-    public void applyIntent(YxForm data);
+    public void applyYxForm(YxForm data);
 
     public void toApply(YxForm data);
 
-    public void acceptIntention(YxForm data);
+    public void acceptYxForm(YxForm data);
 
 }

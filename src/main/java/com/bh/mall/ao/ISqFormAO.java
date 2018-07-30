@@ -20,36 +20,36 @@ public interface ISqFormAO {
     public XN627303Res applyHaveUserReferee(XN627251Req req);
 
     // 取消授权申请 XN626273
-    public void cancelImpower(String userId);
+    public void cancelSqForm(String userId);
 
-    public String addImpowerApply(SqForm data);
+    public String addSqForm(SqForm data);
 
     // 审核授权
-    public void approveImpower(String userId, String approver, String result,
+    public void approveSqForm(String userId, String approver, String result,
             String remark);
 
     // 审核取消授权
-    public void approveImpowerCanenl(String userId, String approver,
+    public void approveCanenlSqForm(String userId, String approver,
             String remark);
 
     //  实名认证信息补充
     public void addInfo(XN627362Req req);
 
     // 查询授权申请 XN627288
-    public Paginable<SqForm> queryImpowerApplyPage(int start, int limit,
+    public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition);
 
     // 列表查询轨迹 XN627289
-    public List<SqForm> queryImpowerApplyList(SqForm condition);
+    public List<SqForm> querySqFormList(SqForm condition);
 
-    public SqForm getImpowerApply(String code);
+    public SqForm getSqForm(String code);
 
     // 分页查询轨迹 XN627290
-    public Paginable<SqForm> queryIntentionAgentFrontPage(int start, int limit,
+    public Paginable<SqForm> querySqFormFrontPage(int start, int limit,
             SqForm condition);
 
     // 审核取消授权
-    public void approveCancel(String userId, String approver, String result,
+    public void approveCancelSqForm(String userId, String approver, String result,
             String remark);
 
 }

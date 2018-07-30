@@ -9,25 +9,25 @@ import com.bh.mall.domain.YxForm;
 public interface IYxFormBO extends IPaginableBO<YxForm> {
 
     // public void editAgentAllot(AgentAllot data);
-    public String applyIntent(YxForm data);
+    public String applyYxForm(YxForm data);
 
-    public List<YxForm> queryAgentAllotList(YxForm condition);
+    public List<YxForm> queryYxFormList(YxForm condition);
 
-    public YxForm getAgentAllot(String code);
+    public YxForm getYxForm(String code);
 
-    public YxForm getAgentAllotByLevel(Integer integer);
+    public YxForm getYxFormByLevel(Integer integer);
 
-    public String acceptIntention(YxForm data);
+    public String accepYxForm(YxForm data);
 
     public String ignore(YxForm data);
 
-    public String addAgentAllot(YxForm data);
+    public String addYxForm(YxForm data);
 
     public String refreshHighUser(YxForm data);
 
-    public String saveAgentAllot(YxForm data, String toUserId);
+    public String saveYxForm(YxForm data, String toUserId);
 
-    public List<YxForm> queryAgentAllotPage(int start, int limit,
+    public List<YxForm> queryYxFormPage(int start, int limit,
             YxForm condition);
 
 }

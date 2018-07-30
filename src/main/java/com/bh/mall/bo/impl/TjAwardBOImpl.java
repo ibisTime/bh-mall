@@ -25,7 +25,7 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     private ITjAwardDAO tjAwardDAO;
 
     @Override
-    public void saveAward(String code, List<XN627548Req> awardList) {
+    public void saveTjAward(String code, List<XN627548Req> awardList) {
 
         for (XN627548Req req : awardList) {
             EAwardType.getAwardTypeMap().get(req.getType());
@@ -44,7 +44,7 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     }
 
     @Override
-    public void removeAward(String productCode) {
+    public void removeTjAward(String productCode) {
         if (StringUtils.isNotBlank(productCode)) {
             TjAward data = new TjAward();
             data.setProductCode(productCode);
@@ -56,13 +56,13 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     }
 
     @Override
-    public void refreshAwardList(List<XN627548Req> list) {
+    public void refreshTjAwardList(List<XN627548Req> list) {
         for (XN627548Req req : list) {
             EAwardType.getAwardTypeMap().get(req.getType());
             if (StringUtils.isBlank(req.getCode())) {
                 throw new BizException("xn000", "编号不能为空");
             }
-            TjAward data = this.getAward(req.getCode());
+            TjAward data = this.getTjAward(req.getCode());
             data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setValue1(StringValidater.toDouble(req.getValue1()));
             data.setValue2(StringValidater.toDouble(req.getValue2()));
@@ -72,12 +72,12 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     }
 
     @Override
-    public List<TjAward> queryAwardList(TjAward condition) {
+    public List<TjAward> queryTjAwardList(TjAward condition) {
         return tjAwardDAO.selectList(condition);
     }
 
     @Override
-    public TjAward getAward(String code) {
+    public TjAward getTjAward(String code) {
         TjAward data = null;
         if (StringUtils.isNotBlank(code)) {
             TjAward condition = new TjAward();
@@ -91,33 +91,35 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     }
 
     @Override
-    public void refreshAward(TjAward data) {
+    public void refreshTjAward(TjAward data) {
         tjAwardDAO.update(data);
     }
 
     @Override
-    public List<TjAward> queryAwardList(String type, String productCode,
-            Integer level) {
-        TjAward condition = new TjAward();
-        condition.setType(type);
-        condition.setProductCode(productCode);
-        condition.setLevel(level);
-        return tjAwardDAO.selectList(condition);
-    }
-
-    @Override
-    public TjAward getAwardByLevel(Integer level, String productCode) {
+    public TjAward getTjAwardByType(Integer level, String productCode,
+            String type) {
         TjAward data = null;
         if (level != 0 && StringUtils.isNotBlank(productCode)) {
             TjAward condition = new TjAward();
             condition.setLevel(level);
             condition.setProductCode(productCode);
+            condition.setType(type);
             data = tjAwardDAO.select(condition);
             if (null == data) {
                 throw new BizException("xn00000", "该产品奖励不存在");
             }
         }
         return data;
+    }
+
+    @Override
+    public List<TjAward> queryTjAwardList(String type, String productCode,
+            Integer level) {
+        TjAward condition = new TjAward();
+        condition.setType(type);
+        condition.setProductCode(productCode);
+        condition.setLevel(level);
+        return tjAwardDAO.selectList(condition);
     }
 
 }

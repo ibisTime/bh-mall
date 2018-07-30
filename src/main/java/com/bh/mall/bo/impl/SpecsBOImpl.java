@@ -205,7 +205,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
 
         for (XN627547Req specsPrice : pspList) {
             AgentPrice pspData = agentPriceBO
-                .getProductSpecsPrice(specsPrice.getCode());
+                .getAgentPrice(specsPrice.getCode());
             pspData.setCode(specsPrice.getCode());
             pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
             pspData.setChangePrice(

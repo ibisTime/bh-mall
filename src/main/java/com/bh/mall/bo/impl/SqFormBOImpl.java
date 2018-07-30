@@ -44,7 +44,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
 
     // 新增授权申请
     @Override
-    public String impowerApply(SqForm data) {
+    public String applySqForm(SqForm data) {
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
@@ -64,7 +64,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
 
     // 通过该授权申请
     @Override
-    public String approveImpower(SqForm user) {
+    public String approveSqForm(SqForm user) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
@@ -84,7 +84,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
 
     // 代理取消申请
     @Override
-    public String cancelImpower(SqForm data) {
+    public String cancelSqForm(SqForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
@@ -102,7 +102,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     }
 
     @Override
-    public String cancelImpower(SqForm data, String status) {
+    public String cancelSqForm(SqForm data, String status) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();

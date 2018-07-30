@@ -31,7 +31,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
     /************************ 意向分配 ***********************/
     @Override
-    public String applyIntent(YxForm data) {
+    public String applyYxForm(YxForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
@@ -69,7 +69,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
     /************ 接受意向分配 *************/
     @Override
-    public String acceptIntention(YxForm data) {
+    public String accepYxForm(YxForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
@@ -88,7 +88,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     /********************* 保存 ************************/
 
     @Override
-    public String addAgentAllot(YxForm data) {
+    public String addYxForm(YxForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
 
@@ -104,7 +104,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     }
 
     @Override
-    public String saveAgentAllot(YxForm data, String toUserId) {
+    public String saveYxForm(YxForm data, String toUserId) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
@@ -123,7 +123,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     /********************* 查询 ***********************/
 
     @Override
-    public YxForm getAgentAllot(String code) {
+    public YxForm getYxForm(String code) {
         YxForm data = null;
         if (StringUtils.isNotBlank(code)) {
             YxForm condition = new YxForm();
@@ -137,12 +137,12 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     }
 
     @Override
-    public List<YxForm> queryAgentAllotList(YxForm condition) {
+    public List<YxForm> queryYxFormList(YxForm condition) {
         return agentAllotDAO.selectList(condition);
     }
 
     @Override
-    public YxForm getAgentAllotByLevel(Integer level) {
+    public YxForm getYxFormByLevel(Integer level) {
         YxForm condition = new YxForm();
         // condition.setLevel(level);
         return agentAllotDAO.select(condition);
@@ -150,7 +150,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     }
 
     @Override
-    public List<YxForm> queryAgentAllotPage(int start, int limit,
+    public List<YxForm> queryYxFormPage(int start, int limit,
             YxForm condition) {
         long totalCount = agentAllotDAO.selectTotalCount(condition);
         Page<YxForm> page = new Page<YxForm>(start, limit, totalCount);
