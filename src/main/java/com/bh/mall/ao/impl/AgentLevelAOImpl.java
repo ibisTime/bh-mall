@@ -26,9 +26,7 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
     @Override
     public void editAgentLevel(XN627002Req req) {
         AgentLevel data = agentLevelBO.getAgentLevel(req.getCode());
-        /*
-         * if() { }
-         */
+
         data.setName(req.getName());
         data.setLevel(Integer.valueOf(req.getLevel()));
         data.setAmount(StringValidater.toLong(req.getAmount()));
@@ -48,6 +46,7 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         data.setIsCompanyImpower(req.getIsCompanyImpower());
 
         data.setImpowerAmount(Integer.valueOf(req.getImpowerAmount()));
+        // data.setImpowerAmount(Integer.valueOf(req.getImpowerAmount()));
         data.setIsJsAward(req.getIsJsAward());
         data.setMinCharge(Long.valueOf(req.getMinCharge()));
 

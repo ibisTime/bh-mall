@@ -18,7 +18,7 @@
 		<result column="is_reset" property="isReset"/>
 		
 		<result column="is_intent" property="isIntent"/>
-		<result column="is_intro" property="isIntro"/>
+		<!-- <result column="is_intro" property="isIntro"/> -->
 		<result column="is_real_name" property="isRealName"/>
 		<result column="is_company_impower" property="isCompanyImpower"/>
 		<result column="impower_amount" property="impowerAmount"/>
@@ -55,9 +55,9 @@
 			<if test="isRealName != null and isRealName != ''">
 				AND t.is_real_name=#{isRealName}
 			</if>
-			<if test="isIntro != null and isIntro != ''">
+			<!-- <if test="isIntro != null and isIntro != ''">
 				AND t.is_intro=#{isIntro}
-			</if>
+			</if> -->
 			
 			<if test="isIntent != null and isIntent != ''">
 				AND t.is_intent=#{isIntent}
@@ -96,7 +96,7 @@
 		
 		,t.code 
 		,t.is_intent 
-		,t.is_intro
+		<!-- ,t.is_intro -->
 		,t.is_real_name
 		,t.is_company_impower
 		,t.min_charge
@@ -137,7 +137,7 @@
 		
 		,level=#{level}
 		,is_intent=#{isIntent}
-		,is_intro=#{isIntro}
+		<!-- ,is_intro=#{isIntro} -->
 		,is_real_name=#{isRealName}
 		,is_company_impower=#{isCompanyImpower}
 		,min_charge=#{minCharge}

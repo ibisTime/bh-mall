@@ -21,7 +21,7 @@ import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.IOrderBO;
-import com.bh.mall.bo.IReportBO;
+import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
@@ -82,7 +82,7 @@ public class CUserAOImpl implements ICUserAO {
     IWareBO wareBO;
 
     @Autowired
-    IReportBO reportBO;
+    IAgentReportBO reportBO;
 
     /***************** 登录 **********************/
     @Override
