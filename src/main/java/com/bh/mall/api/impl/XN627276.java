@@ -18,7 +18,7 @@ public class XN627276 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.approveUplevelCancel(req.getUserId(), req.getApprover(),
+        userAO.approveCancelSjForm(req.getUserId(), req.getApprover(),
             req.getResult(), req.getRemark());
         return new BooleanRes(true);
     }

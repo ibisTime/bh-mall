@@ -23,7 +23,7 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
     private IAgentPriceDAO agentPriceDAO;
 
     @Override
-    public boolean isProductSpecsPriceExist(String code) {
+    public boolean isAgentPriceExist(String code) {
         AgentPrice condition = new AgentPrice();
         condition.setCode(code);
         if (agentPriceDAO.selectTotalCount(condition) > 0) {
@@ -33,12 +33,12 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
     }
 
     @Override
-    public String saveProductSpecsPrice(AgentPrice data) {
+    public String saveAgentPrice(AgentPrice data) {
         return null;
     }
 
     @Override
-    public int removeProductSpecsPrice(String code) {
+    public int removeAgentPrice(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             AgentPrice data = new AgentPrice();
@@ -49,7 +49,7 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
     }
 
     @Override
-    public void refreshProductSpecsPrice(List<XN627547Req> list) {
+    public void refreshAgentPrice(List<XN627547Req> list) {
         AgentPrice data = new AgentPrice();
         for (XN627547Req req : list) {
             data.setCode(req.getCode());
@@ -60,12 +60,12 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
     }
 
     @Override
-    public List<AgentPrice> queryProductSpecsPriceList(AgentPrice condition) {
+    public List<AgentPrice> queryAgentPriceList(AgentPrice condition) {
         return agentPriceDAO.selectList(condition);
     }
 
     @Override
-    public AgentPrice getProductSpecsPrice(String code) {
+    public AgentPrice getAgentPrice(String code) {
         AgentPrice data = null;
         if (StringUtils.isNotBlank(code)) {
             AgentPrice condition = new AgentPrice();
@@ -96,7 +96,7 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
     }
 
     @Override
-    public List<AgentPrice> getPspBySpecsCode(String specsCode) {
+    public List<AgentPrice> getApBySpecsCode(String specsCode) {
         List<AgentPrice> list = null;
         if (StringUtils.isNotBlank(specsCode)) {
             AgentPrice condition = new AgentPrice();

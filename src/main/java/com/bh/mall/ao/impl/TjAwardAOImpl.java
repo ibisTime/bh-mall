@@ -19,7 +19,7 @@ public class TjAwardAOImpl implements ITjAwardAO {
     private ITjAwardBO tjAwardBO;
 
     @Override
-    public Paginable<TjAward> queryAwardPage(int start, int limit,
+    public Paginable<TjAward> queryTjAwardPage(int start, int limit,
             TjAward condition) {
 
         Paginable<TjAward> page = tjAwardBO.getPaginable(start, limit,
@@ -36,8 +36,8 @@ public class TjAwardAOImpl implements ITjAwardAO {
     }
 
     @Override
-    public List<TjAward> queryAwardList(TjAward condition) {
-        List<TjAward> list = tjAwardBO.queryAwardList(condition);
+    public List<TjAward> queryTjAwardList(TjAward condition) {
+        List<TjAward> list = tjAwardBO.queryTjAwardList(condition);
         for (Iterator<TjAward> iterator = list.iterator(); iterator
             .hasNext();) {
             TjAward award = iterator.next();
@@ -49,18 +49,18 @@ public class TjAwardAOImpl implements ITjAwardAO {
     }
 
     @Override
-    public TjAward getAward(String code) {
-        return tjAwardBO.getAward(code);
+    public TjAward getTjAward(String code) {
+        return tjAwardBO.getTjAward(code);
     }
 
     @Override
-    public void editAward(String code, String value1, String value2,
+    public void editTjAward(String code, String value1, String value2,
             String value3) {
-        TjAward data = tjAwardBO.getAward(code);
+        TjAward data = tjAwardBO.getTjAward(code);
         data.setValue1(StringValidater.toDouble(value1));
         data.setValue2(StringValidater.toDouble(value2));
         data.setValue3(StringValidater.toDouble(value3));
-        tjAwardBO.refreshAward(data);
+        tjAwardBO.refreshTjAward(data);
     }
 
 }

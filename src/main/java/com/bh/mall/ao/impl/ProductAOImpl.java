@@ -93,10 +93,10 @@ public class ProductAOImpl implements IProductAO {
             }
         }
 
-        specsBO.saveProductSpecsList(code, req.getSpecList());
-        specsLogBO.saveProductLog(code, req.getUpdater(),
+        specsBO.saveSpecsList(code, req.getSpecList());
+        specsLogBO.saveSpecsLog(code, req.getUpdater(),
             req.getRealNumber());
-        tjAwardBO.saveAward(code, req.getAwardList());
+        tjAwardBO.saveTjAward(code, req.getAwardList());
         return code;
     }
 
@@ -126,27 +126,27 @@ public class ProductAOImpl implements IProductAO {
         Specs psCondition = new Specs();
         psCondition.setProductCode(data.getCode());
         List<Specs> dbPsList = specsBO
-            .queryProductSpecsList(psCondition);
+            .querySpecsList(psCondition);
 
         // 如果数据库未存在此规格，表示已经删除
         for (Specs specs : dbPsList) {
             boolean result = this.checkCode(specs.getCode(), psList);
             if (result) {
-                specsBO.removeProductSpecs(specs.getCode());
+                specsBO.removeSpecs(specs.getCode());
             }
         }
 
         // 无code为新增，否则修改
         for (XN627546Req psReq : psList) {
             if (StringUtils.isBlank(psReq.getCode())) {
-                specsBO.saveProductSpecs(data.getCode(), psReq);
+                specsBO.saveSpecs(data.getCode(), psReq);
             } else {
-                specsBO.refreshProductSpecs(psReq,
+                specsBO.refreshSpecs(psReq,
                     psReq.getSpecsPriceList());
             }
         }
 
-        tjAwardBO.refreshAwardList(req.getAwardList());
+        tjAwardBO.refreshTjAwardList(req.getAwardList());
 
     }
 
@@ -157,16 +157,16 @@ public class ProductAOImpl implements IProductAO {
         psCondition.setProductCode(data.getCode());
 
         List<Specs> psList = specsBO
-            .queryProductSpecsList(psCondition);
+            .querySpecsList(psCondition);
         // 推荐奖励
         TjAward aCondition = new TjAward();
         aCondition.setType(EAwardType.DirectAward.getCode());
         aCondition.setProductCode(data.getCode());
-        List<TjAward> directAwardList = tjAwardBO.queryAwardList(aCondition);
+        List<TjAward> directAwardList = tjAwardBO.queryTjAwardList(aCondition);
 
         // 出货奖励
         aCondition.setType(EAwardType.SendAward.getCode());
-        List<TjAward> sendAwardList = tjAwardBO.queryAwardList(aCondition);
+        List<TjAward> sendAwardList = tjAwardBO.queryTjAwardList(aCondition);
         data.setDirectAwardList(directAwardList);
         data.setSendAwardList(sendAwardList);
         if (CollectionUtils.isNotEmpty(psList)) {
@@ -176,7 +176,7 @@ public class ProductAOImpl implements IProductAO {
                 pspCondition.setProductSpecsCode(productSpecs.getCode());
 
                 List<AgentPrice> pspList = agentPriceBO
-                    .queryProductSpecsPriceList(pspCondition);
+                    .queryAgentPriceList(pspCondition);
 
                 if (CollectionUtils.isNotEmpty(pspList)) {
                     productSpecs.setPriceList(pspList);
@@ -196,9 +196,9 @@ public class ProductAOImpl implements IProductAO {
         }
         productBO.removeProduct(data);
         // 删除规格、价格、库存记录
-        specsBO.removeProductSpecs(code);
-        specsLogBO.removeProductLog(code);
-        tjAwardBO.removeAward(code);
+        specsBO.removeSpecs(code);
+        specsLogBO.removeSpecsLog(code);
+        tjAwardBO.removeTjAward(code);
     }
 
     @Override
@@ -247,7 +247,7 @@ public class ProductAOImpl implements IProductAO {
             if (EProductLogType.Output.getCode().equals(req.getType())) {
                 changeNumber = -changeNumber;
             }
-            specsLogBO.saveChangeLog(data, req.getType(),
+            specsLogBO.saveExchangeLog(data, req.getType(),
                 data.getRealNumber(), changeNumber, req.getUpdater());
             data.setRealNumber(data.getRealNumber() + changeNumber);
             productBO.refreshRealNumber(data);
@@ -279,7 +279,7 @@ public class ProductAOImpl implements IProductAO {
             psCondition.setProductCode(product.getCode());
 
             List<Specs> psList = specsBO
-                .queryProductSpecsList(psCondition);
+                .querySpecsList(psCondition);
             if (CollectionUtils.isNotEmpty(psList)) {
                 for (Specs productSpecs : psList) {
 
@@ -287,7 +287,7 @@ public class ProductAOImpl implements IProductAO {
                     pspCondition.setProductSpecsCode(productSpecs.getCode());
 
                     List<AgentPrice> pspList = agentPriceBO
-                        .queryProductSpecsPriceList(pspCondition);
+                        .queryAgentPriceList(pspCondition);
                     if (CollectionUtils.isNotEmpty(pspList)) {
                         productSpecs.setPriceList(pspList);
                     }
@@ -318,16 +318,16 @@ public class ProductAOImpl implements IProductAO {
             psCondition.setProductCode(product.getCode());
 
             List<Specs> psList = specsBO
-                .queryProductSpecsList(psCondition);
+                .querySpecsList(psCondition);
             // 推荐奖励
             TjAward aCondition = new TjAward();
             aCondition.setType(EAwardType.DirectAward.getCode());
             aCondition.setProductCode(product.getCode());
-            List<TjAward> directAwardList = tjAwardBO.queryAwardList(aCondition);
+            List<TjAward> directAwardList = tjAwardBO.queryTjAwardList(aCondition);
 
             // 出货奖励
             aCondition.setType(EAwardType.SendAward.getCode());
-            List<TjAward> sendAwardList = tjAwardBO.queryAwardList(aCondition);
+            List<TjAward> sendAwardList = tjAwardBO.queryTjAwardList(aCondition);
             product.setDirectAwardList(directAwardList);
             product.setSendAwardList(sendAwardList);
 
@@ -338,7 +338,7 @@ public class ProductAOImpl implements IProductAO {
                     pspCondition.setProductSpecsCode(productSpecs.getCode());
                     pspCondition.setLevel(condition.getLevel());
                     List<AgentPrice> pspList = agentPriceBO
-                        .queryProductSpecsPriceList(pspCondition);
+                        .queryAgentPriceList(pspCondition);
                     if (CollectionUtils.isNotEmpty(pspList)) {
                         productSpecs.setPriceList(pspList);
                     }
@@ -363,7 +363,7 @@ public class ProductAOImpl implements IProductAO {
             Specs psCondition = new Specs();
             psCondition.setProductCode(product.getCode());
             List<Specs> specsList = specsBO
-                .queryProductSpecsList(psCondition);
+                .querySpecsList(psCondition);
 
             for (Specs productSpecs : specsList) {
                 // 查询该等级能够看到的规格
@@ -372,7 +372,7 @@ public class ProductAOImpl implements IProductAO {
                         condition.getLevel());
                 if (EBoolean.YES.getCode().equals(specsPrice.getIsBuy())) {
                     Specs ps = specsBO
-                        .getProductSpecs(specsPrice.getProductSpecsCode());
+                        .getSpecs(specsPrice.getProductSpecsCode());
 
                     // 补充规格价格
                     List<AgentPrice> pspList = new ArrayList<AgentPrice>();
@@ -396,7 +396,7 @@ public class ProductAOImpl implements IProductAO {
     public Product getProduct(String code, Integer level) {
         Product data = productBO.getProduct(code);
         List<Specs> specsList = specsBO
-            .getProductSpecsByProduct(data.getCode());
+            .getSpecsByProduct(data.getCode());
 
         List<Specs> list = new ArrayList<Specs>();
         for (Specs productSpecs : specsList) {
@@ -405,7 +405,7 @@ public class ProductAOImpl implements IProductAO {
                 .getPriceByLevel(productSpecs.getCode(), level);
             if (EBoolean.YES.getCode().equals(specsPrice.getIsBuy())) {
                 Specs ps = specsBO
-                    .getProductSpecs(specsPrice.getProductSpecsCode());
+                    .getSpecs(specsPrice.getProductSpecsCode());
                 ps.setPrice(specsPrice);
                 list.add(ps);
             }
@@ -427,7 +427,7 @@ public class ProductAOImpl implements IProductAO {
 
     @Override
     public Product getProductBySpecs(String specsCode, String level) {
-        Specs specs = specsBO.getProductSpecs(specsCode);
+        Specs specs = specsBO.getSpecs(specsCode);
         Product product = productBO.getProduct(specs.getProductCode());
         AgentPrice specsPrice = agentPriceBO
             .getPriceByLevel(specs.getCode(), StringValidater.toInteger(level));

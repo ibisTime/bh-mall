@@ -14,15 +14,15 @@ public interface ISqFormBO extends IPaginableBO<SqForm> {
     public List<SqForm> querySqFormPage(int start, int limit,
             SqForm condition);
 
-    public String approveImpower(SqForm user);
+    public String approveSqForm(SqForm user);
 
-    public String cancelImpower(SqForm data);
+    public String cancelSqForm(SqForm data);
 
-    public String cancelImpower(SqForm data, String status);
+    public String cancelSqForm(SqForm data, String status);
 
     public String saveSqForm(SqForm data, String toUserId);
 
-    public String impowerApply(SqForm data);
+    public String applySqForm(SqForm data);
 
     public String addSqForm(SqForm data);
 

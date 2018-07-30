@@ -8,21 +8,21 @@ import com.bh.mall.dto.req.XN627548Req;
 
 public interface ITjAwardBO extends IPaginableBO<TjAward> {
 
-    public void removeAward(String productCode);
+    public void removeTjAward(String productCode);
 
-    public void refreshAwardList(List<XN627548Req> list);
+    public void refreshTjAwardList(List<XN627548Req> list);
 
-    public List<TjAward> queryAwardList(TjAward condition);
+    public List<TjAward> queryTjAwardList(TjAward condition);
 
-    public TjAward getAward(String code);
+    public TjAward getTjAward(String code);
 
-    public void saveAward(String code, List<XN627548Req> awardList);
+    public void saveTjAward(String code, List<XN627548Req> awardList);
 
-    public void refreshAward(TjAward data);
+    public void refreshTjAward(TjAward data);
 
-    public TjAward getAwardByType(Integer level, String productCode, String type);
+    public TjAward getTjAwardByType(Integer level, String productCode, String type);
 
-    public List<TjAward> queryAwardList(String type, String productCode,
+    public List<TjAward> queryTjAwardList(String type, String productCode,
             Integer level);
 
 }

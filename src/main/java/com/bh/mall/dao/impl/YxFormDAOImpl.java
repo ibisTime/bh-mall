@@ -12,7 +12,7 @@ import com.bh.mall.domain.YxForm;
 public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
 
     @Override
-    public void allotAgent(YxForm data) {
+    public void allotYxForm(YxForm data) {
         super.update(NAMESPACE.concat("allot_gency"), data);
     }
 
@@ -23,7 +23,7 @@ public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
     }
 
     @Override
-    public void applyIntent(YxForm data) {
+    public void applyYxForm(YxForm data) {
         super.update(NAMESPACE.concat("apply_intent"), data);
 
     }
@@ -34,7 +34,7 @@ public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
     }
 
     @Override
-    public void acceptIntention(YxForm data) {
+    public void acceptYxForm(YxForm data) {
         super.update(NAMESPACE.concat("accept_intention"), data);
     }
 

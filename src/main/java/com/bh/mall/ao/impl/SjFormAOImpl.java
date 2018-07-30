@@ -58,7 +58,7 @@ public class SjFormAOImpl implements ISjFormAO {
     /*************** 升级申请 **********************/
     // 升级申请
     @Override
-    public void upgradeLevel(String userId, String highLevel, String payPdf,
+    public void applySjForm(String userId, String highLevel, String payPdf,
             String payAmount) {
         Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
@@ -121,14 +121,14 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setApplyDatetime(new Date());
         upData.setPayAmount(StringValidater.toLong(payAmount));
 
-        sjFormBO.upgradeLevel(upData);
+        sjFormBO.applySjForm(upData);
 
     }
 
     /*************** 通过升级申请 **********************/
     @Override
     @Transactional
-    public void approveUpgrade(String userId, String approver, String result,
+    public void approveSjForm(String userId, String approver, String result,
             String remark) {
         Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.TO_COMPANYUPGRADE.getCode().equals(data.getStatus())
@@ -198,24 +198,24 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setStatus(status);
         upData.setApplyDatetime(new Date());
 
-        sjFormBO.approveUpgrade(upData);
+        sjFormBO.approveSjForm(upData);
 
     }
 
     /*************** 取消升级申请 **********************/
     @Override
-    public void cancelUplevel(String userId) {
+    public void cancelSjForm(String userId) {
         SjForm upData = new SjForm();
         upData.setApplyUser(userId);
         upData.setStatus(EUserStatus.TO_CANCEL.getCode());
         upData.setApplyDatetime(new Date());
 
-        sjFormBO.addUplevelApply(upData);
+        sjFormBO.addSjForm(upData);
 
     }
 
     /*************** 通过取消升级申请 **********************/
-    public void approveUplevelCancel(String userId, String approver,
+    public void approveCancelSjForm(String userId, String approver,
             String result, String remark) {
         Agent data = agentBO.getAgent(userId);
         String status = EUserStatus.IMPOWERED.getCode();
@@ -231,7 +231,7 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setStatus(EUserStatus.CANCELED.getCode());
         upData.setApplyDatetime(new Date());
 
-        sjFormBO.approveCanenl(upData);
+        sjFormBO.approveCanenlSjForm(upData);
     }
 
     /*************** 通过取消升级申请 **********************/
@@ -251,13 +251,13 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setStatus(EUserStatus.CANCELED.getCode());
         upData.setApplyDatetime(new Date());
 
-        sjFormBO.approveCanenl(upData);
+        sjFormBO.approveCanenlSjForm(upData);
     }
 
     /*********************** 查询 *************************/
 
     @Override
-    public List<SjForm> queryUplevelApplyList(SjForm condition) {
+    public List<SjForm> querySjFormList(SjForm condition) {
 
         if (condition.getApplyDatetimeStart() != null
                 && condition.getApplyDatetimeEnd() != null
@@ -266,7 +266,7 @@ public class SjFormAOImpl implements ISjFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        List<SjForm> list = sjFormBO.queryUpLevelApplyList(condition);
+        List<SjForm> list = sjFormBO.querySjFormList(condition);
         for (SjForm sjFrom : list) {
             Agent userReferee = null;
             Agent agent = agentAO.getAgent(sjFrom.getApplyUser());
@@ -293,8 +293,8 @@ public class SjFormAOImpl implements ISjFormAO {
     /************************************************/
 
     @Override
-    public SjForm getUplevelApply(String code) {
-        SjForm data = sjFormBO.getUpLevelApply(code);
+    public SjForm getSjForm(String code) {
+        SjForm data = sjFormBO.getSjForm(code);
         Agent agent = agentAO.getAgent(data.getApplyUser());
         data.setUser(agent);
         Agent userReferee = null;
@@ -325,7 +325,7 @@ public class SjFormAOImpl implements ISjFormAO {
     /***********************************************/
 
     @Override
-    public Paginable<SjForm> queryIntentionAgentFrontPage(int start, int limit,
+    public Paginable<SjForm> queryISjFormFrontPage(int start, int limit,
             SjForm condition) {
 
         if (condition.getApplyDatetimeStart() != null
@@ -378,15 +378,15 @@ public class SjFormAOImpl implements ISjFormAO {
 
     /*********************** 新增日志 *************************/
     @Override
-    public String addUplevelApply(SjForm data) {
+    public String addSjForm(SjForm data) {
         // insert new data
-        sjFormBO.addUplevelApply(data);
+        sjFormBO.addSjForm(data);
         return null;
     }
 
     /*********************** 查询是否需要补全金额 *************************/
     @Override
-    public Paginable<SjForm> queryUplevelApplyPage(int start, int limit,
+    public Paginable<SjForm> querySjFormPage(int start, int limit,
             SjForm condition) {
 
         if (condition.getApplyDatetimeStart() != null

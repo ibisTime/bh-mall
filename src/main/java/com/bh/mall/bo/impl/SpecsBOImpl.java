@@ -35,7 +35,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
     private IAgentPriceBO agentPriceBO;
 
     @Override
-    public void saveProductSpecsList(String code, List<XN627546Req> specList) {
+    public void saveSpecsList(String code, List<XN627546Req> specList) {
         // 添加产品规格
         for (XN627546Req productSpec : specList) {
             if (StringUtils.isBlank(productSpec.getCode())) {
@@ -93,7 +93,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
     }
 
     @Override
-    public void removeProductSpecs(String productCode) {
+    public void removeSpecs(String productCode) {
         if (StringUtils.isNotBlank(productCode)) {
             Specs data = new Specs();
             data.setProductCode(productCode);
@@ -106,12 +106,12 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
     }
 
     @Override
-    public List<Specs> queryProductSpecsList(Specs condition) {
+    public List<Specs> querySpecsList(Specs condition) {
         return specsDAO.selectList(condition);
     }
 
     @Override
-    public Specs getProductSpecs(String code) {
+    public Specs getSpecs(String code) {
         Specs data = null;
         if (StringUtils.isNotBlank(code)) {
             Specs condition = new Specs();
@@ -125,7 +125,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
     }
 
     @Override
-    public void saveProductSpecs(String code, XN627546Req psReq) {
+    public void saveSpecs(String code, XN627546Req psReq) {
         Specs data = new Specs();
         String psCode = OrderNoGenerater
             .generate(EGeneratePrefix.ProductSpecs.getCode());
@@ -177,16 +177,16 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
     }
 
     @Override
-    public List<Specs> getProductSpecsByProduct(String productCode) {
+    public List<Specs> getSpecsByProduct(String productCode) {
         Specs condition = new Specs();
         condition.setProductCode(productCode);
         return specsDAO.selectList(condition);
     }
 
     @Override
-    public void refreshProductSpecs(XN627546Req psReq,
+    public void refreshSpecs(XN627546Req psReq,
             List<XN627547Req> specsPriceList) {
-        Specs psData = this.getProductSpecs(psReq.getCode());
+        Specs psData = this.getSpecs(psReq.getCode());
         psData.setIsSingle(psReq.getIsSingle());
         psData.setSingleNumber(
             StringValidater.toInteger(psReq.getSingleNumber()));
@@ -205,7 +205,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
 
         for (XN627547Req specsPrice : pspList) {
             AgentPrice pspData = agentPriceBO
-                .getProductSpecsPrice(specsPrice.getCode());
+                .getAgentPrice(specsPrice.getCode());
             pspData.setCode(specsPrice.getCode());
             pspData.setPrice(StringValidater.toLong(specsPrice.getPrice()));
             pspData.setChangePrice(
@@ -248,7 +248,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
             // 规格之间有关联
             if (StringUtils.isNotBlank(data.getRefCode())) {
                 Specs productSpecs = this
-                    .getProductSpecs(data.getRefCode());
+                    .getSpecs(data.getRefCode());
                 number = getMinSpecsNumber(productSpecs, number);
             } else {
                 // 各规格之前没有关联
@@ -259,7 +259,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
     }
 
     private Integer getMinSpecsNumber(Specs data, int number) {
-        Specs productSpecs = this.getProductSpecs(data.getRefCode());
+        Specs productSpecs = this.getSpecs(data.getRefCode());
         number = number * productSpecs.getNumber();
         if (StringUtils.isNotBlank(productSpecs.getRefCode())) {
             getMinSpecsNumber(productSpecs, number);

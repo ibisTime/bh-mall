@@ -29,7 +29,7 @@ public class XN627591 extends AProcessor {
         condition.setType(req.getType());
         condition.setProductCode(req.getProductCode());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
-        return awardAO.queryAwardList(condition);
+        return awardAO.queryTjAwardList(condition);
     }
 
     @Override

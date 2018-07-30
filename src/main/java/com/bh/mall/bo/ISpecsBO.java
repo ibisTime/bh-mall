@@ -9,19 +9,19 @@ import com.bh.mall.dto.req.XN627547Req;
 
 public interface ISpecsBO extends IPaginableBO<Specs> {
 
-    void removeProductSpecs(String productCode);
+    void removeSpecs(String productCode);
 
-    List<Specs> queryProductSpecsList(Specs condition);
+    List<Specs> querySpecsList(Specs condition);
 
-    void saveProductSpecs(String code, XN627546Req psReq);
+    void saveSpecs(String code, XN627546Req psReq);
 
-    void saveProductSpecsList(String code, List<XN627546Req> specList);
+    void saveSpecsList(String code, List<XN627546Req> specList);
 
-    List<Specs> getProductSpecsByProduct(String productCode);
+    List<Specs> getSpecsByProduct(String productCode);
 
-    Specs getProductSpecs(String productSpecsCode);
+    Specs getSpecs(String productSpecsCode);
 
-    void refreshProductSpecs(XN627546Req psReq,
+    void refreshSpecs(XN627546Req psReq,
             List<XN627547Req> specsPriceList);
 
     // 获取最小规格数量

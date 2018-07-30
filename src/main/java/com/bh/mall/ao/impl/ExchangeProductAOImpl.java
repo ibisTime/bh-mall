@@ -103,14 +103,14 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
         }
 
         Specs specs = specsBO
-            .getProductSpecs(req.getProductSpecsCode());
+            .getSpecs(req.getProductSpecsCode());
         Product product = productBO.getProduct(specs.getProductCode());
 
         AgentPrice specsPrice = agentPriceBO
             .getPriceByLevel(specs.getCode(), uData.getLevel());
 
         Specs changeSpecs = specsBO
-            .getProductSpecs(req.getChangeSpecsCode());
+            .getSpecs(req.getChangeSpecsCode());
         Product exchangeProduct = productBO
             .getProduct(changeSpecs.getProductCode());
         AgentPrice changeSpecsPrice = agentPriceBO
@@ -282,16 +282,16 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
             Product changeData = productBO
                 .getProduct(data.getChangeProductCode());
             Specs psData = specsBO
-                .getProductSpecs(data.getProductSpecsCode());
+                .getSpecs(data.getProductSpecsCode());
 
             int quantity = data.getQuantity() * psData.getNumber();
             pData.setRealNumber(pData.getRealNumber() - quantity);
             productBO.refreshRealNumber(pData);
 
-            specsLogBO.saveChangeProductLog(pData,
+            specsLogBO.saveExchangeProductLog(pData,
                 EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
                 quantity, approver);
-            specsLogBO.saveChangeProductLog(changeData,
+            specsLogBO.saveExchangeProductLog(changeData,
                 EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
                 -quantity, approver);
 
@@ -374,13 +374,13 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
         }
 
         Specs specs = specsBO
-            .getProductSpecs(req.getProductSpecsCode());
+            .getSpecs(req.getProductSpecsCode());
 
         AgentPrice specsPrice = agentPriceBO
             .getPriceByLevel(specs.getCode(), uData.getLevel());
 
         Specs changeSpecs = specsBO
-            .getProductSpecs(req.getChangeSpecsCode());
+            .getSpecs(req.getChangeSpecsCode());
         AgentPrice changeSpecsPrice = agentPriceBO
             .getPriceByLevel(changeSpecs.getCode(), uData.getLevel());
 

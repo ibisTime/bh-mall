@@ -18,7 +18,7 @@ public class XN627580 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        awardAO.editAward(req.getCode(), req.getValue1(), req.getValue2(),
+        awardAO.editTjAward(req.getCode(), req.getValue1(), req.getValue2(),
             req.getValue3());
         return new BooleanRes(true);
     }

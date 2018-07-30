@@ -184,7 +184,7 @@ public class WareAOImpl implements IWareAO {
         }
 
         Specs psData = specsBO
-            .getProductSpecs(data.getProductSpecsCode());
+            .getSpecs(data.getProductSpecsCode());
         AgentPrice pspData = agentPriceBO
             .getPriceByLevel(data.getProductSpecsCode(), agent.getLevel());
 

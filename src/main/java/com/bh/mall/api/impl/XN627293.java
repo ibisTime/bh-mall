@@ -39,7 +39,7 @@ public class XN627293 extends AProcessor {
         condition.setApproveDatetimeStart(approveDatetimeStart);
         condition.setApproveDatetimeEnd(approveDatetimeEnd);
 
-        return sjFormAO.queryUplevelApplyList(condition);
+        return sjFormAO.querySjFormList(condition);
     }
 
     @Override

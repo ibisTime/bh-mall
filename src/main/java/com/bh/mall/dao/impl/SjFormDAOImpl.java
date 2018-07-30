@@ -12,17 +12,17 @@ import com.bh.mall.domain.SjForm;
 public class SjFormDAOImpl extends AMybatisTemplate implements ISjFormDAO {
 
     @Override
-    public void approveUpgrade(SjForm data) {
+    public void approveSjForm(SjForm data) {
         super.update(NAMESPACE.concat("approve_upgrade"), data);
     }
 
     @Override
-    public void cancelUplevel(SjForm data) {
+    public void cancelSjForm(SjForm data) {
         super.update(NAMESPACE.concat("cancel_uplevel"), data);
     }
 
     @Override
-    public void upgradeLevel(SjForm data) {
+    public void applySjForm(SjForm data) {
         super.update(NAMESPACE.concat("upgrade_level"), data);
     }
 

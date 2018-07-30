@@ -141,7 +141,7 @@ public class OrderAOImpl implements IOrderAO {
         for (String code : req.getCartList()) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
-            Specs psData = specsBO.getProductSpecs(cart.getProductSpecsCode());
+            Specs psData = specsBO.getSpecs(cart.getProductSpecsCode());
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
             }
@@ -171,7 +171,7 @@ public class OrderAOImpl implements IOrderAO {
     @Transactional
     public List<String> addOrderNoCart(XN627641Req req) {
         Agent applyUser = agentBO.getAgent(req.getApplyUser());
-        Specs psData = specsBO.getProductSpecs(req.getProductSpecsCode());
+        Specs psData = specsBO.getSpecs(req.getProductSpecsCode());
         Product pData = productBO.getProduct(psData.getProductCode());
 
         List<String> list = new ArrayList<String>();
@@ -616,7 +616,7 @@ public class OrderAOImpl implements IOrderAO {
                 // 直接推荐人
                 Agent firstReferee = agentBO
                     .getAgent(applyUser.getUserReferee());
-                TjAward aData = tjAwardBO.getAwardByType(applyUser.getLevel(),
+                TjAward aData = tjAwardBO.getTjAwardByType(applyUser.getLevel(),
                     data.getProductCode(), EAwardType.DirectAward.getCode());
 
                 Long amount = 0L;
@@ -679,7 +679,7 @@ public class OrderAOImpl implements IOrderAO {
 
                 AgentPrice psp = agentPriceBO.getPriceByLevel(
                     data.getProductSpecsCode(), toUser.getLevel());
-                Specs ps = specsBO.getProductSpecs(psp.getProductSpecsCode());
+                Specs ps = specsBO.getSpecs(psp.getProductSpecsCode());
                 if (psp.getMinNumber() > data.getQuantity()) {
                     throw new BizException("xn00000",
                         "该产品云仓发货不能少于" + psp.getMinNumber() + ps.getName());
@@ -932,7 +932,7 @@ public class OrderAOImpl implements IOrderAO {
 
         } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
             // 无上级代理,扣减产品实际库存
-            specsLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
+            specsLogBO.saveExchangeLog(pData, EProductLogType.Order.getCode(),
                 pData.getRealNumber(), quantity, null);
             pData.setRealNumber(pData.getRealNumber() + quantity);
             productBO.refreshRealNumber(pData);
@@ -946,7 +946,7 @@ public class OrderAOImpl implements IOrderAO {
         List<Order> list = orderBO.getProductQuantity(agentId, startDatetime,
             endDatetime);
         for (Order order : list) {
-            Specs ps = specsBO.getProductSpecs(order.getProductSpecsCode());
+            Specs ps = specsBO.getSpecs(order.getProductSpecsCode());
             number = number + ps.getNumber();
         }
         return number;
@@ -1054,7 +1054,7 @@ public class OrderAOImpl implements IOrderAO {
 
         // 改变产品数量
         Product pData = productBO.getProduct(data.getProductCode());
-        Specs psData = specsBO.getProductSpecs(data.getProductSpecsCode());
+        Specs psData = specsBO.getSpecs(data.getProductSpecsCode());
         this.changeProductNumber(agent, pData, psData, data,
             -data.getQuantity(), data.getCode());
 

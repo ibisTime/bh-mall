@@ -39,7 +39,7 @@ public class XN627290 extends AProcessor {
         condition.setApproveDatetimeStart(approveDatetimeStart);
         condition.setApproveDatetimeEnd(approveDatetimeEnd);
 
-        return sqFormAO.queryImpowerApplyList(condition);
+        return sqFormAO.querySqFormList(condition);
     }
 
     @Override

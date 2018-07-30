@@ -8,20 +8,20 @@ import com.bh.mall.domain.SpecsLog;
 
 public interface ISpecsLogBO extends IPaginableBO<SpecsLog> {
 
-    public void removeProductLog(String code);
+    public void removeSpecsLog(String code);
 
-    public void refreshProductLog(SpecsLog data);
+    public void refreshSpecsLog(SpecsLog data);
 
-    public List<SpecsLog> queryProductLogList(SpecsLog condition);
+    public List<SpecsLog> querySpecsLogList(SpecsLog condition);
 
-    public SpecsLog getProductLog(String code);
+    public SpecsLog getSpecsLog(String code);
 
-    public void saveProductLog(String code, String updater, String virNumber);
+    public void saveSpecsLog(String code, String updater, String virNumber);
 
-    public void saveChangeLog(Product data, String type, Integer realNumber,
+    public void saveExchangeLog(Product data, String type, Integer realNumber,
             Integer changeNumber, String updater);
 
-    public void saveChangeProductLog(Product pData, String code,
+    public void saveExchangeProductLog(Product pData, String code,
             Integer realNumber, Integer quantity, String approver);
 
 }

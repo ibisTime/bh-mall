@@ -25,7 +25,7 @@ public class XN627273 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.cancelImpower(req.getUserId());
+        userAO.cancelSqForm(req.getUserId());
         return new BooleanRes(true);
     }
 

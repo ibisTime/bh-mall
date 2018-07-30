@@ -11,17 +11,17 @@ import com.bh.mall.domain.Specs;
 public interface ISpecsAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addProductSpecs(Specs data);
+    public String addSpecs(Specs data);
 
-    public void dropProductSpecs(String code);
+    public void dropSpecs(String code);
 
-    public void editProductSpecs(Specs data);
+    public void editSpecs(Specs data);
 
-    public Paginable<Specs> queryProductSpecsPage(int start, int limit,
+    public Paginable<Specs> querySpecsPage(int start, int limit,
             Specs condition);
 
-    public List<Specs> queryProductSpecsList(Specs condition);
+    public List<Specs> querySpecsList(Specs condition);
 
-    public Specs getProductSpecs(String code);
+    public Specs getSpecs(String code);
 
 }

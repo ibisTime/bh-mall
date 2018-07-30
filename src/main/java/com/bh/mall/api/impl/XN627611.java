@@ -33,7 +33,7 @@ public class XN627611 extends AProcessor {
         condition.setEndDatetime(
             DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));
 
-        return productLogAO.queryProductLogList(condition);
+        return productLogAO.querySpecsLogList(condition);
     }
 
     @Override

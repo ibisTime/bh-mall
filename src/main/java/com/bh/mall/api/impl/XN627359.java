@@ -51,7 +51,7 @@ public class XN627359 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return yxFormAO.queryAgentAllotPage(start, limit, condition);
+        return yxFormAO.queryYxFormFrontPage(start, limit, condition);
     }
 
     @Override

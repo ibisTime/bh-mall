@@ -97,7 +97,7 @@ public class CartAOImpl implements ICartAO {
             Product product = productBO.getProduct(data.getProductCode());
             data.setProduct(product);
             Specs specs = specsBO
-                .getProductSpecs(data.getProductSpecsCode());
+                .getSpecs(data.getProductSpecsCode());
             data.setSpecsName(specs.getName());
         }
         return page;
@@ -114,14 +114,14 @@ public class CartAOImpl implements ICartAO {
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
         Specs specs = specsBO
-            .getProductSpecs(data.getProductSpecsCode());
+            .getSpecs(data.getProductSpecsCode());
         data.setSpecsName(specs.getName());
         return data;
     }
 
     @Override
     public Product getCartProduct(String productSpecsCode) {
-        Specs psData = specsBO.getProductSpecs(productSpecsCode);
+        Specs psData = specsBO.getSpecs(productSpecsCode);
         List<Specs> list = new ArrayList<Specs>();
         list.add(psData);
         Product data = productBO.getProduct(psData.getProductCode());

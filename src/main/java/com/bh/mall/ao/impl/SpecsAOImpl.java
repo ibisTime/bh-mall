@@ -17,33 +17,33 @@ public class SpecsAOImpl implements ISpecsAO {
     private ISpecsBO specsBO;
 
     @Override
-    public void dropProductSpecs(String code) {
-        specsBO.removeProductSpecs(code);
+    public void dropSpecs(String code) {
+        specsBO.removeSpecs(code);
     }
 
     @Override
-    public Paginable<Specs> queryProductSpecsPage(int start, int limit,
+    public Paginable<Specs> querySpecsPage(int start, int limit,
             Specs condition) {
         return specsBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Specs> queryProductSpecsList(Specs condition) {
-        return specsBO.queryProductSpecsList(condition);
+    public List<Specs> querySpecsList(Specs condition) {
+        return specsBO.querySpecsList(condition);
     }
 
     @Override
-    public Specs getProductSpecs(String code) {
-        return specsBO.getProductSpecs(code);
+    public Specs getSpecs(String code) {
+        return specsBO.getSpecs(code);
     }
 
     @Override
-    public String addProductSpecs(Specs data) {
+    public String addSpecs(Specs data) {
         return null;
     }
 
     @Override
-    public void editProductSpecs(Specs data) {
+    public void editSpecs(Specs data) {
     }
 
 }

@@ -25,7 +25,7 @@ public class XN627257 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        sqFormAO.approveImpower(req.getUserId(), req.getApprover(),
+        sqFormAO.approveSqForm(req.getUserId(), req.getApprover(),
             req.getResult(), req.getRemark());
         return new BooleanRes(true);
     }
