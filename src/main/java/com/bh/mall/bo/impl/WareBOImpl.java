@@ -205,7 +205,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     public void changeWarePrice(List<Ware> whList, Integer level) {
         for (Ware data : whList) {
             AgentPrice psPrice = agentPriceBO
-                .getPriceByLevel(data.getProductSpecsCode(), level);
+                .getPriceByLevel(data.getSpecsCode(), level);
             data.setPrice(psPrice.getPrice());
             data.setAmount(data.getQuantity() * psPrice.getPrice());
             wareDAO.changePrice(data);

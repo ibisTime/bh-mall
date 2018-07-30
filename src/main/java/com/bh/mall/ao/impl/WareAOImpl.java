@@ -122,8 +122,8 @@ public class WareAOImpl implements IWareAO {
         condition.setProductCode(data.getProductCode());
         List<Ware> specsList = wareBO.queryWareList(condition);
         for (Ware wh : specsList) {
-            AgentPrice price = agentPriceBO
-                .getPriceByLevel(wh.getProductSpecsCode(), agent.getLevel());
+            AgentPrice price = agentPriceBO.getPriceByLevel(wh.getSpecsCode(),
+                agent.getLevel());
             wh.setPrice(price.getPrice());
         }
         data.setWhsList(specsList);
@@ -183,14 +183,9 @@ public class WareAOImpl implements IWareAO {
             throw new BizException("xn00000", "您仓库中没有该规格的产品");
         }
 
-<<<<<<< HEAD
-        Specs psData = specsBO.getSpecs(data.getProductSpecsCode());
-=======
-        Specs psData = specsBO
-            .getSpecs(data.getProductSpecsCode());
->>>>>>> refs/remotes/origin/master
-        AgentPrice pspData = agentPriceBO
-            .getPriceByLevel(data.getProductSpecsCode(), agent.getLevel());
+        Specs psData = specsBO.getSpecs(data.getSpecsCode());
+        AgentPrice pspData = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
+            agent.getLevel());
 
         // 检查限购
         // inOrderAO.checkLimitNumber(agent, psData, pspData,
@@ -252,7 +247,7 @@ public class WareAOImpl implements IWareAO {
 
                 String code = inOrderBO.pickUpGoods(data.getProductCode(),
                     data.getProductName(), product.getPic(),
-                    data.getProductSpecsCode(), data.getSpecsName(),
+                    data.getSpecsCode(), data.getSpecsName(),
                     psData.getSingleNumber(), data.getPrice(),
                     psData.getSingleNumber() * data.getPrice(), yunfei,
                     agent.getHighUserId(), data.getUserId(), req.getSigner(),
@@ -266,8 +261,8 @@ public class WareAOImpl implements IWareAO {
             }
         } else {
             String code = inOrderBO.pickUpGoods(data.getProductCode(),
-                data.getProductName(), product.getPic(),
-                data.getProductSpecsCode(), data.getSpecsName(),
+                data.getProductName(), product.getPic(), data.getSpecsCode(),
+                data.getSpecsName(),
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),
                 psData.getSingleNumber() * data.getPrice(), yunfei,
                 agent.getHighUserId(), data.getUserId(), req.getSigner(),
@@ -297,7 +292,7 @@ public class WareAOImpl implements IWareAO {
             List<Ware> whList = wareBO.queryWareList(specsCondition);
             for (Ware wh : whList) {
                 AgentPrice price = agentPriceBO
-                    .getPriceByLevel(wh.getProductSpecsCode(), 6);
+                    .getPriceByLevel(wh.getSpecsCode(), 6);
                 wh.setPrice(price.getPrice());
             }
             ware.setWhsList(whList);
@@ -314,8 +309,8 @@ public class WareAOImpl implements IWareAO {
         condition.setProductCode(data.getProductCode());
         List<Ware> specsList = wareBO.queryWareList(condition);
         for (Ware ware : specsList) {
-            AgentPrice price = agentPriceBO
-                .getPriceByLevel(ware.getProductSpecsCode(), 6);
+            AgentPrice price = agentPriceBO.getPriceByLevel(ware.getSpecsCode(),
+                6);
             ware.setPrice(price.getPrice());
         }
         data.setWhsList(specsList);

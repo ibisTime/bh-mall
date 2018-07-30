@@ -124,7 +124,7 @@ public class Ware extends ABaseDO {
         return productName;
     }
 
-    public String getProductSpecsCode() {
+    public String getSpecsCode() {
         return specsCode;
     }
 

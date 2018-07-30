@@ -18,15 +18,10 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentReportBO;
+import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
-<<<<<<< HEAD
-import com.bh.mall.bo.IInOrderBO;
-import com.bh.mall.bo.IReportBO;
-=======
-import com.bh.mall.bo.IOrderBO;
-import com.bh.mall.bo.IAgentReportBO;
->>>>>>> refs/remotes/origin/master
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISjFormBO;

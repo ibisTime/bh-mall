@@ -664,8 +664,9 @@ public class InOrderAOImpl implements IInOrderAO {
 
             } else {
                 // 无上级代理,扣减产品实际库存
-                specsLogBO.saveChangeLog(pData, EProductLogType.Order.getCode(),
-                    pData.getRealNumber(), quantity, null);
+                specsLogBO.saveExchangeLog(pData,
+                    EProductLogType.Order.getCode(), pData.getRealNumber(),
+                    quantity, null);
                 pData.setRealNumber(pData.getRealNumber() + quantity);
                 productBO.refreshRealNumber(pData);
             }

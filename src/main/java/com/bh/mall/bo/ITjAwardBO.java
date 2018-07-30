@@ -20,9 +20,12 @@ public interface ITjAwardBO extends IPaginableBO<TjAward> {
 
     public void refreshTjAward(TjAward data);
 
-    public TjAward getTjAwardByType(Integer level, String productCode, String type);
+    public TjAward getTjAwardByType(Integer level, String productCode,
+            String type);
 
     public List<TjAward> queryTjAwardList(String type, String productCode,
             Integer level);
+
+    public TjAward getAwardByLevel(Integer level, String productCode);
 
 }

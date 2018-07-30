@@ -270,12 +270,9 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             pData.setRealNumber(pData.getRealNumber() - quantity);
             productBO.refreshRealNumber(pData);
 
-            specsLogBO.saveChangeProductLog(pData,
+            specsLogBO.saveExchangeProductLog(pData,
                 EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
                 quantity, approver);
-            specsLogBO.saveChangeProductLog(changeData,
-                EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
-                -quantity, approver);
 
             // 云仓新增产品
             Ware whData = wareBO.getWareByProductSpec(data.getApplyUser(),

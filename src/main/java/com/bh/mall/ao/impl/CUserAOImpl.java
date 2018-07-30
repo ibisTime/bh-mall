@@ -21,11 +21,6 @@ import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
-<<<<<<< HEAD
-import com.bh.mall.bo.IReportBO;
-=======
-import com.bh.mall.bo.IOrderBO;
->>>>>>> refs/remotes/origin/master
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
@@ -332,11 +327,8 @@ public class CUserAOImpl implements ICUserAO {
     @Override
     public void doResetMoblie(String userId, String newMobile,
             String smsCaptcha) {
-<<<<<<< HEAD
-=======
         // TODO Auto-generated method stub
 
->>>>>>> refs/remotes/origin/master
     }
 
 }
