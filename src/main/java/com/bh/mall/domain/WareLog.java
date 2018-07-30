@@ -33,10 +33,10 @@ public class WareLog extends ABaseDO {
     private String productName;
 
     // 规格编号
-    private String productSpecsCode;
+    private String specsCode;
 
     // 规格名称
-    private String productSpecsName;
+    private String specsName;
 
     // 变动数量
     private Integer tranNumber;
@@ -156,19 +156,19 @@ public class WareLog extends ABaseDO {
     }
 
     public String getProductSpecsCode() {
-        return productSpecsCode;
+        return specsCode;
     }
 
-    public void setProductSpecsCode(String productSpecsCode) {
-        this.productSpecsCode = productSpecsCode;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
-    public String getProductSpecsName() {
-        return productSpecsName;
+    public String getSpecsName() {
+        return specsName;
     }
 
-    public void setProductSpecsName(String productSpecsName) {
-        this.productSpecsName = productSpecsName;
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
     public Integer getTranNumber() {

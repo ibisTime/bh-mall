@@ -17,10 +17,6 @@ public class XN627306Req {
     @NotBlank
     private String smsCaptcha;
 
-    // 交易密码
-    @NotBlank
-    private String tradePwd;
-
     public String getUserId() {
         return userId;
     }
@@ -37,11 +33,4 @@ public class XN627306Req {
         this.smsCaptcha = smsCaptcha;
     }
 
-    public String getTradePwd() {
-        return tradePwd;
-    }
-
-    public void setTradePwd(String tradePwd) {
-        this.tradePwd = tradePwd;
-    }
 }

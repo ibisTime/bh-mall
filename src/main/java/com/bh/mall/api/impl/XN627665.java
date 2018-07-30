@@ -3,12 +3,12 @@ package com.bh.mall.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.ao.IInnerOrderAO;
-import com.bh.mall.ao.IInOrderAO;
+import com.bh.mall.ao.IOutOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.OutOrder;
 import com.bh.mall.dto.req.XN627665Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -22,13 +22,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627665 extends AProcessor {
 
-    private IInOrderAO inOrderAO = SpringContextHolder.getBean(IInOrderAO.class);
+    private IOutOrderAO outOrderAO = SpringContextHolder
+        .getBean(IOutOrderAO.class);
 
     private XN627665Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        InOrder condition = new InOrder();
+        OutOrder condition = new OutOrder();
         condition.setToUser(req.getToUserId());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
@@ -46,7 +47,7 @@ public class XN627665 extends AProcessor {
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return inOrderAO.queryInOrderPage(start, limit, condition);
+        return outOrderAO.queryOutOrderPage(start, limit, condition);
     }
 
     @Override

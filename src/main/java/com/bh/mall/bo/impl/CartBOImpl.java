@@ -57,7 +57,7 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
             String productSpecsCode) {
         Cart condition = new Cart();
         condition.setProductCode(productCode);
-        condition.setProductSpecsCode(productSpecsCode);
+        condition.setSpecsCode(productSpecsCode);
         return cartDAO.select(condition);
     }
 }

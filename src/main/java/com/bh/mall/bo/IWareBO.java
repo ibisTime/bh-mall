@@ -10,16 +10,13 @@ import com.bh.mall.enums.EBizType;
 
 public interface IWareBO extends IPaginableBO<Ware> {
 
-    public void removeWare(String code);
-
     public void refreshWare(Ware data);
 
     public List<Ware> queryWareList(Ware condition);
 
     public Ware getWare(String code);
 
-    public Ware getWareByProductSpec(String userId,
-            String productSpecsCode);
+    public Ware getWareByProductSpec(String userId, String productSpecsCode);
 
     public List<Ware> getWareByProduct(String productCode);
 
@@ -31,8 +28,8 @@ public interface IWareBO extends IPaginableBO<Ware> {
             EBizType toBizType, String fromBizNote, String toBizNote,
             String refNo);
 
-    public void saveWare(Ware data, Integer quantity,
-            EBizType bizType, String bizNote, String refNo);
+    public void saveWare(Ware data, Integer quantity, EBizType bizType,
+            String bizNote, String refNo);
 
     public void refreshLogCode(Ware whData);
 
@@ -45,5 +42,7 @@ public interface IWareBO extends IPaginableBO<Ware> {
     public void buyWare(InOrder inOrder, Agent agent);
 
     public void changeWarePrice(List<Ware> whList, Integer level);
+
+    public void checkProduct(String toUser, String specsCode);
 
 }

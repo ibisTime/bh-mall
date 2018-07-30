@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IChangeProductAO;
+import com.bh.mall.ao.IExchangeOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -17,14 +17,14 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627805 extends AProcessor {
 
-    private IChangeProductAO changeProductAO = SpringContextHolder
-        .getBean(IChangeProductAO.class);
+    private IExchangeOrderAO echangeProductAO = SpringContextHolder
+        .getBean(IExchangeOrderAO.class);
 
     private XN627805Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return changeProductAO.checkAmount(req.getUserId());
+        return echangeProductAO.checkAmount(req.getUserId());
     }
 
     @Override

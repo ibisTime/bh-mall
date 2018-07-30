@@ -38,6 +38,6 @@ public interface IInOrderAO {
     void paySuccess(String result);
 
     // 订单作废
-    public void invalidInOrder(String code, String updater, String remark);
+    public void invalidInOrder(String code, String approver, String remark);
 
 }

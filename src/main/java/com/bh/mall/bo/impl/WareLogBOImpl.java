@@ -13,7 +13,7 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareLogDAO;
-import com.bh.mall.domain.ChangeProduct;
+import com.bh.mall.domain.ExchangeOrder;
 import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.domain.WareLog;
@@ -39,8 +39,8 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setProductCode(data.getProductCode());
         logData.setProductName(data.getProductName());
 
-        logData.setProductSpecsCode(data.getProductSpecsCode());
-        logData.setProductSpecsName(data.getProductSpecsName());
+        logData.setSpecsCode(data.getProductSpecsCode());
+        logData.setSpecsName(data.getProductSpecsName());
         logData.setPrice(data.getPrice());
         logData.setTranNumber(tranNumber);
         logData.setBeforeNumber(0);
@@ -72,8 +72,8 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
     }
 
     @Override
-    public String saveWareLog(Ware dbData, Integer quantity,
-            EBizType bizType, String bizNote, String refNo) {
+    public String saveWareLog(Ware dbData, Integer quantity, EBizType bizType,
+            String bizNote, String refNo) {
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.WareHourseLog.getCode());
@@ -84,8 +84,8 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setProductCode(dbData.getProductCode());
         logData.setProductName(dbData.getProductName());
 
-        logData.setProductSpecsCode(dbData.getProductSpecsCode());
-        logData.setProductSpecsName(dbData.getProductSpecsName());
+        logData.setSpecsCode(dbData.getProductSpecsCode());
+        logData.setSpecsName(dbData.getSpecsName());
         logData.setPrice(dbData.getPrice());
         logData.setTranNumber(quantity);
         logData.setBeforeNumber(dbData.getQuantity());
@@ -104,7 +104,7 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
     }
 
     @Override
-    public String refreshChangePrice(ChangeProduct data, Ware dbData,
+    public String refreshChangePrice(ExchangeOrder data, Ware dbData,
             Long changePirce, int canChangeQuantity, String status,
             String bizNote) {
         String code = OrderNoGenerater
@@ -116,8 +116,8 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setProductCode(data.getProductCode());
         logData.setProductName(data.getProductName());
 
-        logData.setProductSpecsCode(data.getProductSpecsCode());
-        logData.setProductSpecsName(data.getProductSpecsName());
+        logData.setSpecsCode(data.getProductSpecsCode());
+        logData.setSpecsName(data.getSpecsName());
         logData.setPrice(data.getPrice());
         logData.setTranNumber(0);
         logData.setBeforeNumber(dbData.getQuantity());
@@ -153,8 +153,8 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setProductCode(inOrder.getProductCode());
         logData.setProductName(inOrder.getProductName());
 
-        logData.setProductSpecsCode(inOrder.getProductSpecsCode());
-        logData.setProductSpecsName(inOrder.getProductSpecsName());
+        logData.setSpecsCode(inOrder.getProductSpecsCode());
+        logData.setSpecsName(inOrder.getProductSpecsName());
         logData.setPrice(inOrder.getPrice());
         logData.setTranNumber(changeNumber);
         logData.setBeforeNumber(beforeNumber);

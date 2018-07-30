@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAwardAO;
+import com.bh.mall.ao.ITjAwardAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -16,7 +16,7 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627592 extends AProcessor {
-    private IAwardAO awardAO = SpringContextHolder.getBean(IAwardAO.class);
+    private ITjAwardAO awardAO = SpringContextHolder.getBean(ITjAwardAO.class);
 
     private XN627592Req req = null;
 

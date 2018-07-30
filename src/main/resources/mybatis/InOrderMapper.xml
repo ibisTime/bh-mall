@@ -114,11 +114,11 @@
 		,t.approve_datetime
 		,t.remark
 		FROM
-		tbh_inOrder t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		tbh_in_order t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
-				t.${inOrder}
+				t.${order}
 			</if>
 		</trim>
 	</select>
@@ -126,13 +126,13 @@
 
 	<select id="select_inOrder_count" parameterType="inOrder"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_inOrder t  LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		SELECT count(1) FROM tbh_in_order t  LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_inOrder" parameterType="inOrder">
 		INSERT INTO
-		tbh_inOrder(
+		tbh_in_order(
 		code
 		,product_code
 		,product_name
@@ -171,7 +171,7 @@
 	</insert>
 
 	<update id="pay_inOrder" parameterType="inOrder">
-		UPDATE tbh_inOrder
+		UPDATE tbh_in_order
 		SET
 		pay_code = #{pay_code}
 		,pay_group = #{pay_group}
@@ -184,7 +184,7 @@
 	
 
 	<update id="approve_inOrder" parameterType="inOrder">
-		UPDATE tbh_inOrder
+		UPDATE tbh_in_order
 		SET
 		status = #{status}
 		,approver = #{approver}
@@ -196,7 +196,7 @@
 	
 	
 	<update id="approve_cancel" parameterType="inOrder">
-		UPDATE tbh_inOrder
+		UPDATE tbh_in_order
 		SET
 		status = #{status}
 		,updater = #{updater}
@@ -207,7 +207,7 @@
 
 
 	<update id="add_payGroup" parameterType="inOrder">
-		UPDATE tbh_inOrder
+		UPDATE tbh_in_order
 		SET
 		pay_group = #{payGroup}
 		,pay_type = #{payType}
@@ -225,7 +225,7 @@
 	
 	
 	<update id="pay_success" parameterType="inOrder">
-		UPDATE tbh_inOrder
+		UPDATE tbh_in_order
 		SET
 		status = #{status}
 		,pay_type = #{payType}
@@ -236,7 +236,7 @@
 	</update>
 	
 	<update id="invalid_inOrder" parameterType="inOrder">
-		UPDATE tbh_inOrder
+		UPDATE tbh_in_order
 		SET
 		status = #{status}
 		,updater = #{updater}
@@ -247,7 +247,7 @@
 	
 	<delete id="delete_inOrder" parameterType="inOrder">
 		DELETE FROM
-		tbh_inOrder
+		tbh_in_order
 		WHERE
 		code = #{code}
 	</delete>

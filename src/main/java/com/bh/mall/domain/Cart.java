@@ -22,7 +22,7 @@ public class Cart extends ABaseDO {
     private String productCode;
 
     // 规格编号
-    private String productSpecsCode;
+    private String specsCode;
 
     // 数量
     private Integer quantity;
@@ -78,12 +78,12 @@ public class Cart extends ABaseDO {
         return productCode;
     }
 
-    public void setProductSpecsCode(String productSpecsCode) {
-        this.productSpecsCode = productSpecsCode;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
-    public String getProductSpecsCode() {
-        return productSpecsCode;
+    public String getSpecsCode() {
+        return specsCode;
     }
 
     public Integer getQuantity() {

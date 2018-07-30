@@ -52,18 +52,12 @@ public interface ICUserBO {
 
     public CUser getCheckUser(String userId);
 
-    public void setTradePwd(CUser user, String tradePwd);
-
-    public void refreshLoginName(String userId, String loginName);
-
     public void refreshNickname(String userId, String nickname);
 
     public void refreshUser(CUser data);
 
     public void refreshWxInfo(String userId, String unionId, String h5OpenId,
             String appOpenId, String nickname, String photo);
-
-    public void resetBindMobile(CUser user, String newMobile);
 
     //
     public void refreshPhoto(String userId, String photo);

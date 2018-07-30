@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.Product;
+import com.bh.mall.domain.Specs;
 
 public interface IInOrderBO extends IPaginableBO<InOrder> {
 
@@ -54,5 +57,8 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
 
     // 删除未支付订单
     public void removeOrder(InOrder data);
+
+    public List<String> addOrder(Agent applyUser, Product pData, Specs psData,
+            Integer integer, String applyNote);
 
 }

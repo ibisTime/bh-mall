@@ -17,8 +17,8 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IInOrderBO;
+import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
@@ -26,8 +26,8 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
@@ -306,10 +306,9 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
         }
 
-        // 是否有未完成的订单
+        // TODO 是否有未完成的订单
         InOrder oCondition = new InOrder();
         oCondition.setApplyUser(data.getUserId());
-        oCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
         long count = inOrderBO.selectCount(oCondition);
         if (count != 0) {
             throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");

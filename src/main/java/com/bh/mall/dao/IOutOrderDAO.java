@@ -3,34 +3,36 @@ package com.bh.mall.dao;
 import java.util.List;
 
 import com.bh.mall.dao.base.IBaseDAO;
-import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.OutOrder;
 
-public interface IOutOrderDAO extends IBaseDAO<InOrder> {
+public interface IOutOrderDAO extends IBaseDAO<OutOrder> {
     String NAMESPACE = IOutOrderDAO.class.getName().concat(".");
 
-    void payOrder(InOrder data);
+    void payOutOrder(OutOrder data);
 
-    void update(InOrder data);
+    void update(OutOrder data);
 
-    void deliverOrder(InOrder data);
+    void deliverOutOrder(OutOrder data);
 
-    void approveOrder(InOrder data);
+    void approveOutOrder(OutOrder data);
 
-    void cancelOrder(InOrder data);
+    void cancelOutOrder(OutOrder data);
 
-    void approveCancel(InOrder data);
+    void approveCancel(OutOrder data);
 
-    void receivedOrder(InOrder data);
+    void receivedOutOrder(OutOrder data);
 
-    List<InOrder> queryToDealList(int pageNo, int pageSize, InOrder condition);
+    List<OutOrder> queryToDealList(int pageNo, int pageSize,
+            OutOrder condition);
 
-    void addPayGroup(InOrder data);
+    void addPayGroup(OutOrder data);
 
-    List<InOrder> selectOrderPage(int pageNO, int pageSize, InOrder condition);
+    List<OutOrder> selectOutOrderPage(int pageNO, int pageSize,
+            OutOrder condition);
 
-    void payNo(InOrder data);
+    void payNo(OutOrder data);
 
-    void paySuccess(InOrder data);
+    void paySuccess(OutOrder data);
 
-    void invalidOrder(InOrder data);
+    void invalidOutOrder(OutOrder data);
 }
