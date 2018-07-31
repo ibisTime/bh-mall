@@ -174,7 +174,7 @@ public class YxFormAOImpl implements IYxFormAO {
         return list;
     }
 
-    /************************************************/
+    /**********************详细查询**************************/
 
     @Override
     public YxForm getYxForm(String code) {

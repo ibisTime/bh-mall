@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.ICUserDAO">
+<resultMap id="cuser_DB_Result" type="cuser">
+		<result column="user_id" property="userId" />
+		<result column="wx_id" property="wxId" />
+		<result column="union_id" property="unionId"/>
+		<result column="h5_open_id" property="h5OpenId" />
+		<result column="app_open_id" property="appOpenId" />
+		<result column="photo" property="photo" />	
+		<result column="nickname" property="nickname" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
+		
+	</resultMap>
+		
+		<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">			
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+						
+			<if test="wxId != null and wxId != '' ">
+				AND t.wx_id = #{wxId}
+			</if>
+			
+			<if test="unionId != null and unionId != '' ">
+				AND t.union_id = #{unionId}
+			</if>
+			
+			<if test="h5OpenId != null and h5OpenId != '' ">
+				AND t.h5_open_id= #{h5OpenId}
+			</if>
+			
+			<if test="appOpenId != null and appOpenId != '' ">
+				AND t.app_open_id = #{appOpenId}
+			</if>
+						
+		</trim>
+	</sql>
+	
+	<insert id="insert_cuser" parameterType="cuser">		
+		INSERT INTO
+		tbh_cuser(
+		user_id
+		,wx_id
+		,union_id
+		,h5_open_id
+		,app_open_id
+		,photo
+		,nickname
+		,create_datetime
+		,status
+		)
+		VALUES(
+		#{userId}
+		,#{wxId}
+		,#{unionId}
+		,#{h5OpenId}
+		,#{appOpenId}
+		,#{photo}
+		,#{nickname}
+		,#{createDatetime}
+	    ,#{status}
+
+		)
+	</insert>
+	
+	<select id="select_cuser" parameterType="cuser" resultMap="cuser_DB_Result">
+		SELECT
+		t.user_id
+		,t.wx_id
+		,t.union_id
+		,t.h5_open_id
+		,t.app_open_id
+		,t.photo
+		,t.nickname
+		,t.create_datetime
+		,t.status
+		FROM
+		tbh_cuser t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_cuser_count" parameterType="cuser" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_cuser t 
+		<include refid="where_condition"/>
+	</select>
+	
+	<update id="update_cuser" parameterType="cuser">
+		UPDATE tbh_cuser
+		SET
+		,wx_id = #{wxId}
+		,union_id = #{unionId}
+		,h5_open_id = #{h5OpenId}
+		,app_open_id=#{appOpenId}
+		,photo = #{photo}
+		,nickname = #{nickname}
+		,create_datetime = #{createDatetime}
+		,status = #{status}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_cuser_photo" parameterType="cuser">
+		UPDATE tbh_cuser
+		SET
+		 photo = #{photo}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_cuser_nickname" parameterType="cuser">
+		UPDATE tbh_cuser
+		SET
+		 nickname = #{nickname}
+		WHERE
+		user_id = #{userId}	
+	</update>
+		
+			
+	<update id="update_wx_info" parameterType="cuser">
+		UPDATE tbh_cuser
+		SET
+		 wx_id = #{wxId}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	
+	<update id="update_status" parameterType="cuser">
+		UPDATE tbh_cuser
+		SET
+		status=#{status}
+		WHERE user_id = #{userId}
+	</update>
+	
+	
+</mapper>

@@ -15,8 +15,10 @@ public interface IYxFormAO {
     // 接受意向 XN627268
     public void acceptYxForm(String userId, String approver, String remark);
 
+    // 意向分配
     public void allotYxForm(String userId, String toUserId, String approver);
 
+    // 忽略意向
     public void ignore(String userId, String aprrover);
 
     // 新增意向分配表
