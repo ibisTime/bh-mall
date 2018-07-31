@@ -25,15 +25,12 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IWareBO;
-import com.bh.mall.common.MD5Util;
-import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
 import com.bh.mall.domain.CUser;
 import com.bh.mall.dto.res.XN627304Res;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -87,15 +84,11 @@ public class CUserAOImpl implements ICUserAO {
     public String doLogin(String loginName, String loginPwd) {
         CUser condition = new CUser();
 
-        condition.setLoginName(loginName);
-        // condition.setLoginType(ELoginType.MOBILE.getCode());
-        condition.setLoginName(loginName);
-
         List<CUser> userList1 = cuserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn805050", "登录名不存在");
         }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
+
         List<CUser> userList2 = cuserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {
             throw new BizException("xn805050", "登录密码错误");
@@ -223,11 +216,7 @@ public class CUserAOImpl implements ICUserAO {
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
-        // admin 不注销
-        if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
-            throw new BizException("li01004", "管理员无法注销");
-        }
-        String mobile = user.getMobile();
+
         String smsContent = "";
         EUserStatus userStatus = null;
         if (EUserStatus.NORMAL.getCode().equalsIgnoreCase(user.getStatus())) {
@@ -238,11 +227,7 @@ public class CUserAOImpl implements ICUserAO {
             userStatus = EUserStatus.NORMAL;
         }
         cuserBO.refreshStatus(userId, userStatus);
-        if (PhoneUtil.isMobile(mobile)) {
-            // 发送短信
-            smsOutBO.sendSmsOut(mobile,
-                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091");
-        }
+
     }
 
     /******************** 更新信息********************/
@@ -260,7 +245,7 @@ public class CUserAOImpl implements ICUserAO {
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn702002", "用户不存在");
         }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
+
         List<CUser> userList2 = cuserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {
             throw new BizException("xn702002", "登录密码错误");

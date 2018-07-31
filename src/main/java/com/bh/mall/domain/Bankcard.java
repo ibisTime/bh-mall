@@ -65,6 +65,8 @@ public class Bankcard extends ABaseDO {
     // 最近一次变动对应的流水编号
     private String lastOrder;
 
+    // ********db*************
+
     public String getBankCode() {
         return bankCode;
     }

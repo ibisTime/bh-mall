@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
-import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.ICUserDAO;
 import com.bh.mall.domain.CUser;
@@ -43,7 +41,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
             // 判断格式
             PhoneUtil.checkMobile(mobile);
             CUser condition = new CUser();
-            condition.setMobile(mobile);
+
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");
@@ -56,7 +54,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         String userId = null;
         if (StringUtils.isNotBlank(mobile)) {
             CUser condition = new CUser();
-            condition.setMobile(mobile);
 
             List<CUser> list = cuserDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {
@@ -77,11 +74,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         user.setUnionId(unionId);
         user.setH5OpenId(h5OpenId);
         user.setAppOpenId(appOpenId);
-        user.setLoginName(mobile);
-        user.setMobile(mobile);
 
-        user.setLoginPwd(MD5Util.md5(loginPwd));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         user.setNickname(nickname);
         user.setPhoto(photo);
         user.setStatus(status);
@@ -100,8 +93,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         String userId = OrderNoGenerater.generate("U");
         CUser user = new CUser();
         user.setUserId(userId);
-        user.setLoginName(mobile);
-        user.setMobile(mobile);
+
         user.setWxId(wxId);
         user.setPhoto(photo);
         user.setNickname(nickname);
@@ -110,9 +102,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         user.setUnionId(unionId);
         user.setH5OpenId(h5OpenId);
         user.setAppOpenId(appOpenId);
-
-        user.setLoginPwd(MD5Util.md5(loginPwd));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
 
         user.setNickname(nickname);
         user.setPhoto(photo);
@@ -129,7 +118,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
             userId = OrderNoGenerater.generate("U");
             CUser data = new CUser();
             data.setUserId(userId);
-            data.setMobile(mobile);
 
             cuserDAO.insert(data);
         }
@@ -176,7 +164,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         CUser data = null;
         if (StringUtils.isNotBlank(loginName)) {
             CUser condition = new CUser();
-            condition.setLoginName(loginName);
+
             List<CUser> list = cuserDAO.selectList(condition);
             if (list != null && list.size() > 1) {
                 throw new BizException("li01006", "登录名重复");
@@ -201,7 +189,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         if (StringUtils.isNotBlank(loginName)) {
             // 判断格式
             CUser condition = new CUser();
-            condition.setLoginName(loginName);
 
             long count = getTotalCount(condition);
             if (count > 0) {
@@ -227,7 +214,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
                 && StringUtils.isNotBlank(tradePwd)) {
             CUser condition = new CUser();
             condition.setUserId(userId);
-            condition.setTradePwd(MD5Util.md5(tradePwd));
+
             long count = this.getTotalCount(condition);
             if (count != 1) {
                 throw new BizException("jd00001", "支付密码错误");
@@ -243,7 +230,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
                 && StringUtils.isNotBlank(loginPwd)) {
             CUser condition = new CUser();
             condition.setUserId(userId);
-            condition.setLoginPwd(MD5Util.md5(loginPwd));
+
             long count = this.getTotalCount(condition);
             if (count != 1) {
                 throw new BizException("jd00001", "原登录密码错误");
@@ -259,7 +246,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
                 && StringUtils.isNotBlank(loginPwd)) {
             CUser condition = new CUser();
             condition.setUserId(userId);
-            condition.setLoginPwd(MD5Util.md5(loginPwd));
+
             long count = this.getTotalCount(condition);
             if (count != 1) {
                 throw new BizException("jd00001", alertStr + "错误");
@@ -326,7 +313,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
     @Override
     public List<CUser> queryUserList(String mobile) {
         CUser condition = new CUser();
-        condition.setMobile(mobile);
 
         return cuserDAO.selectList(condition);
     }

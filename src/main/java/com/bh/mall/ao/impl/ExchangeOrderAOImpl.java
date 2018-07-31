@@ -128,11 +128,11 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
                     / changeSpecsPrice.getChangePrice());
         }
 
-        data.setChangeProductCode(exchangeProduct.getCode());
-        data.setChangeProductName(exchangeProduct.getName());
-        data.setChangeSpecsName(changeSpecs.getName());
-        data.setChangeSpecsCode(changeSpecs.getCode());
-        data.setCanChangeQuantity(canChangeQuantity);
+        data.setExchangeProductCode(exchangeProduct.getCode());
+        data.setExchangeProductName(exchangeProduct.getName());
+        data.setExchangeSpecsName(changeSpecs.getName());
+        data.setExchangeSpecsCode(changeSpecs.getCode());
+        data.setCanExchangeQuantity(canChangeQuantity);
 
         data.setApplyUser(req.getApplyUser());
         data.setRealName(uData.getRealName());
@@ -235,16 +235,16 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
         String logCode = wareLogBO.refreshChangePrice(data, whData,
             StringValidater.toLong(changePrice), canChangeQuantity,
-            data.getStatus(), "[" + data.getChangeProductName() + "]的换货价由["
-                    + data.getChangePrice() + "]变为[" + changePrice + "]");
+            data.getStatus(), "[" + data.getExchangeProductName() + "]的换货价由["
+                    + data.getExchangePrice() + "]变为[" + changePrice + "]");
         whData.setLastChangeCode(logCode);
         wareBO.refreshLogCode(whData);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setApproveNote(approveNote);
-        data.setChangePrice(StringValidater.toLong(changePrice));
+        data.setExchangePrice(StringValidater.toLong(changePrice));
 
-        data.setCanChangeQuantity(canChangeQuantity);
+        data.setCanExchangeQuantity(canChangeQuantity);
 
         exchangeOrderBO.refreshChangePrice(data);
     }
@@ -263,7 +263,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             status = EChangeProductStatus.THROUGH_YES.getCode();
             Product pData = productBO.getProduct(data.getProductCode());
             Product changeData = productBO
-                .getProduct(data.getChangeProductCode());
+                .getProduct(data.getExchangeProductCode());
             Specs psData = specsBO.getSpecs(data.getProductSpecsCode());
 
             int quantity = data.getQuantity() * psData.getNumber();
@@ -276,28 +276,28 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
             // 云仓新增产品
             Ware whData = wareBO.getWareByProductSpec(data.getApplyUser(),
-                data.getChangeSpecsCode());
+                data.getExchangeSpecsCode());
             if (whData == null) {
                 String whCode = OrderNoGenerater
                     .generate(EGeneratePrefix.Ware.getCode());
                 Ware ware = new Ware();
                 ware.setCode(whCode);
-                ware.setProductCode(data.getChangeProductCode());
-                ware.setProductName(data.getChangeProductName());
-                ware.setSpecsCode(data.getChangeSpecsCode());
-                ware.setSpecsName(data.getChangeSpecsName());
+                ware.setProductCode(data.getExchangeProductCode());
+                ware.setProductName(data.getExchangeProductName());
+                ware.setSpecsCode(data.getExchangeSpecsCode());
+                ware.setSpecsName(data.getExchangeSpecsName());
 
                 ware.setCurrency(ECurrency.YC_CNY.getCode());
                 ware.setUserId(data.getApplyUser());
                 ware.setRealName(data.getRealName());
                 ware.setCreateDatetime(new Date());
                 AgentPrice pspData = agentPriceBO.getPriceByLevel(
-                    data.getChangeSpecsCode(), data.getLevel());
+                    data.getExchangeSpecsCode(), data.getLevel());
 
                 ware.setPrice(pspData.getPrice());
 
-                ware.setQuantity(data.getCanChangeQuantity());
-                Long amount = data.getCanChangeQuantity() * pspData.getPrice();
+                ware.setQuantity(data.getExcanChangeQuantity());
+                Long amount = data.getExcanChangeQuantity() * pspData.getPrice();
                 ware.setAmount(amount);
                 ware.setLastChangeCode(data.getCode());
                 ware.setStatus(EAccountStatus.NORMAL.getCode());
@@ -305,7 +305,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
                 ware.setSystemCode(ESystemCode.BH.getCode());
                 wareBO.saveWare(ware, data.getQuantity(), EBizType.AJ_YCZH,
                     "[" + data.getProductName() + "]置换为["
-                            + data.getChangeProductName() + "]",
+                            + data.getExchangeProductName() + "]",
                     data.getCode());
             } else {
                 wareBO.changeWare(whData.getCode(), data.getQuantity(),
@@ -375,7 +375,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             canChangeQuantity = (int) (amount
                     / changeSpecsPrice.getChangePrice());
         }
-        cpData.setCanChangeQuantity(canChangeQuantity);
+        cpData.setCanExchangeQuantity(canChangeQuantity);
 
         return cpData;
     }

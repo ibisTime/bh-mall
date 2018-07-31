@@ -20,6 +20,9 @@ public class SjForm extends ABaseDO {
     // 申请人
     private String userId;
 
+    // 新上级
+    private String toUserId;
+
     // 申请等级
     private Integer applyLevel;
 
@@ -84,13 +87,21 @@ public class SjForm extends ABaseDO {
         this.code = code;
     }
 
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
     // 获取申请人
-    public String getApplyUser() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setApplyUser(String applyUser) {
-        this.userId = applyUser;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     // 获取申请等级

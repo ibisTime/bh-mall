@@ -45,7 +45,6 @@ public class Agent extends ABaseDO {
     // 交易密码？
     private String tradePwd;
 
-    /****** 代理身份信息 ******/
     // 身份标识
     private String kind;
 
@@ -67,7 +66,6 @@ public class Agent extends ABaseDO {
     // 团队名称
     private String teamName;
 
-    /****** 基本信息 ******/
     // 证件类型
     private String idKind;
 
@@ -92,7 +90,6 @@ public class Agent extends ABaseDO {
     // 状态
     private String status;
 
-    /****** 代理申请信息 ******/
     // 来源
     private String source;
 
@@ -147,12 +144,11 @@ public class Agent extends ABaseDO {
     // 备注
     private String remark;
 
-    /****************DB*******************/
+    // ****************DB*******************
 
     // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
     private String loginType;
 
-    /***** 模糊查询使用字段 ******/
     // 登录名模糊查询
     private String loginNameForQuery;
 
@@ -192,11 +188,11 @@ public class Agent extends ABaseDO {
     // 门槛费
     private Long payAmount;
 
+    // 付款截图
     private Long payPdf;
 
+    // 关键词
     private String keyWord;
-
-    /***********************************/
 
     // 上级
     private Integer highLevel;

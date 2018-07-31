@@ -72,7 +72,7 @@ public class Charge extends ABaseDO {
     // 支付时间
     private Date payDatetime;
 
-    // *******************************
+    // ************** db *****************
     // 申请时间起
     private Date applyDatetimeStart;
 
