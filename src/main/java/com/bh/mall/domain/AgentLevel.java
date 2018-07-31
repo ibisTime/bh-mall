@@ -75,8 +75,10 @@ public class AgentLevel extends ABaseDO {
     private String remark;
 
     // ***************db*************
+    // 开始等级
     private Integer lowLevel;
 
+    // 结束等级
     private Integer highLevel;
 
     public String getCode() {

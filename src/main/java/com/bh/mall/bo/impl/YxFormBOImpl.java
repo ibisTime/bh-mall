@@ -24,7 +24,7 @@ import com.bh.mall.exception.BizException;
 public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
     @Autowired
-    private IYxFormDAO agentAllotDAO;
+    private IYxFormDAO yxFormDAO;
 
     @Autowired
     private IAgentDAO agentDAO;
@@ -43,7 +43,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         Date date = new Date();
         alData.setApplyDatetime(date);
 
-        agentAllotDAO.insert(alData);
+        yxFormDAO.insert(alData);
         return code;
     }
 
@@ -62,7 +62,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         alData.setApplyLevel(data.getApplyLevel());
         alData.setApproveDatetime(data.getApproveDatetime());
         // alData.setStatus(data.getStatus());
-        agentAllotDAO.insert(alData);
+        yxFormDAO.insert(alData);
         return code;
 
     }
@@ -81,7 +81,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         alData.setApplyLevel(data.getApplyLevel());
         // alData.setStatus(data.getStatus());
         alData.setApproveDatetime(data.getApproveDatetime());
-        agentAllotDAO.insert(alData);
+        yxFormDAO.insert(alData);
         return code;
     }
 
@@ -99,7 +99,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
         // add new agent allot log
         data.setCode(code);
-        agentAllotDAO.insert(data);
+        yxFormDAO.insert(data);
         return code;
     }
 
@@ -116,7 +116,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setApproveDatetime(data.getApproveDatetime());
         alData.setStatus(data.getStatus());
-        agentAllotDAO.insert(alData);
+        yxFormDAO.insert(alData);
         return code;
     }
 
@@ -128,7 +128,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         if (StringUtils.isNotBlank(code)) {
             YxForm condition = new YxForm();
             condition.setCode(code);
-            data = agentAllotDAO.select(condition);
+            data = yxFormDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理授权编号不存在");
             }
@@ -138,23 +138,23 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
     @Override
     public List<YxForm> queryYxFormList(YxForm condition) {
-        return agentAllotDAO.selectList(condition);
+        return yxFormDAO.selectList(condition);
     }
 
     @Override
     public YxForm getYxFormByLevel(Integer level) {
         YxForm condition = new YxForm();
         // condition.setLevel(level);
-        return agentAllotDAO.select(condition);
+        return yxFormDAO.select(condition);
 
     }
 
     @Override
     public List<YxForm> queryYxFormPage(int start, int limit,
             YxForm condition) {
-        long totalCount = agentAllotDAO.selectTotalCount(condition);
+        long totalCount = yxFormDAO.selectTotalCount(condition);
         Page<YxForm> page = new Page<YxForm>(start, limit, totalCount);
-        return agentAllotDAO.selectList(condition, page.getPageNO(),
+        return yxFormDAO.selectList(condition, page.getPageNO(),
             page.getPageSize());
     }
 
@@ -169,7 +169,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         alData.setStatus(EAgentType.Update.getCode());
         Date date = new Date();
         alData.setApplyDatetime(date);
-        agentAllotDAO.insert(alData);
+        yxFormDAO.insert(alData);
         return code;
     }
 

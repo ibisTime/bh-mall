@@ -8,7 +8,7 @@ import com.bh.mall.dao.IYxFormDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.YxForm;
 
-@Repository("DAOImpl")
+@Repository("yxFormDAOImpl")
 public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
 
     @Override

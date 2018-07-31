@@ -9,9 +9,7 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class Address extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID :  
-     */
+
     private static final long serialVersionUID = -2168684738489818621L;
 
     // 收件编号
@@ -44,6 +42,7 @@ public class Address extends ABaseDO {
     // 是否默认地址
     private String isDefault;
 
+    // **************************db properties **************************
     public String getCode() {
         return code;
     }

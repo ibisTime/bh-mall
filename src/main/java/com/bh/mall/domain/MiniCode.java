@@ -13,7 +13,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class MiniCode extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7039113947224265920L;
 
     // **************db*************
 

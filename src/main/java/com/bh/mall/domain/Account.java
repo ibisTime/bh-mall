@@ -52,6 +52,7 @@ public class Account extends ABaseDO {
     // 创建终止时间
     private Date createDatetimeEnd;
 
+    // 代理
     private Agent agent;
 
     public Agent getAgent() {

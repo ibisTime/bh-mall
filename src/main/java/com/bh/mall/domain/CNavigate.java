@@ -10,7 +10,7 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class CNavigate extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2396031262084162062L;
 
     // 编号
     private String code;

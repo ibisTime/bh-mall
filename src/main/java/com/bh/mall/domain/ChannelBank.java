@@ -10,7 +10,7 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class ChannelBank extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3396263861065182972L;
 
     // 序号
     private Long id;

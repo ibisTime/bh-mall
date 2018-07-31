@@ -12,9 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class Jour extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 1255747682967604091L;
 
     // 流水编号
