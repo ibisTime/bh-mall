@@ -7,5 +7,12 @@ import com.bh.mall.domain.AgentReport;
 public interface IAgentReportDAO extends IBaseDAO<AgentReport> {
     String NAMESPACE = IAgentReportDAO.class.getName().concat(".");
 
+    /**
+     * 跟新代理统计
+     * @param data
+     * @return 
+     * @create: 2018年7月31日 下午2:23:06 LENOVO
+     * @history:
+     */
     int update(AgentReport data);
 }
