@@ -326,7 +326,7 @@ public class WareAOImpl implements IWareAO {
         List<InOrder> list = inOrderBO.getProductQuantity(agentId,
             startDatetime, endDatetime);
         for (InOrder inOrder : list) {
-            Specs specs = specsBO.getSpecs(inOrder.getProductSpecsCode());
+            Specs specs = specsBO.getSpecs(inOrder.getSpecsCode());
             number = number + specs.getNumber();
         }
         return number;

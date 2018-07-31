@@ -31,7 +31,7 @@ public class InnerProductAOImpl implements IInnerProductAO {
         String code = OrderNoGenerater.generate(EGeneratePrefix.InnerProduct
             .getCode());
         data.setCode(code);
-        data.setName(req.getName());
+        data.setProductName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
@@ -53,7 +53,7 @@ public class InnerProductAOImpl implements IInnerProductAO {
         if (EInnerProductStatus.Shelf_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "产品已上架,请下架后再修改");
         }
-        data.setName(req.getName());
+        data.setProductName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());

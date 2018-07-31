@@ -10,9 +10,6 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class TjAward extends ABaseDO {
 
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = 4595892553641554152L;
 
     // 编号
@@ -38,6 +35,7 @@ public class TjAward extends ABaseDO {
 
     // *******************db*****************
 
+    // 产品名称
     private String productName;
 
     public String getCode() {

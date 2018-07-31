@@ -15,8 +15,6 @@ public class MiniCode extends ABaseDO {
 
     private static final long serialVersionUID = 7039113947224265920L;
 
-    // **************db*************
-
     // 防伪码
     private String miniCode;
 
@@ -29,11 +27,11 @@ public class MiniCode extends ABaseDO {
     // 关联订单编号
     private String orderCode;
 
-    // 状态（未使用，已使用）
-    private String status;
-
     // 查询次数
     private Integer number;
+
+    // 状态（未使用，已使用）
+    private String status;
 
     // 生成批次
     private String batch;

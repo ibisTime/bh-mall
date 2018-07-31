@@ -11,10 +11,14 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class SYSMenu extends ABaseDO {
+
     private static final long serialVersionUID = 4733016091171187458L;
 
     // 菜单编号
     private String code;
+
+    // 父菜单编号
+    private String parentCode;
 
     // 菜单名称
     private String name;
@@ -24,9 +28,6 @@ public class SYSMenu extends ABaseDO {
 
     // 请求url
     private String url;
-
-    // 父菜单编号
-    private String parentCode;
 
     // 序号
     private Integer orderNo;
@@ -43,7 +44,8 @@ public class SYSMenu extends ABaseDO {
     // 系统编号（必填）
     private String systemCode;
 
-    // ************* 模糊查询 *****************
+    // *************db*****************
+
     // 名称模糊查询
     private String nameForQuery;
 

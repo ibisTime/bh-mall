@@ -146,7 +146,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setRemark(remark);
 
         data.setStatus(EUserStatus.ADD_INFO.getCode()); // 补全授权资料
-        String logCode = yxFormBO.accepYxForm(data);
+        // String logCode = yxFormBO.accepYxForm(data);
         // insert new agent allot log
         YxForm imData = new YxForm();
         imData.setUserId(userId);
@@ -201,8 +201,7 @@ public class YxFormAOImpl implements IYxFormAO {
             condition.setToUserId(condition.getUserIdForQuery()); // 意向归属人
         }
 
-        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit,
-            condition);
+        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit, condition);
 
         Agent agent = null;
         for (Iterator<YxForm> iterator = page.getList().iterator(); iterator
@@ -241,8 +240,7 @@ public class YxFormAOImpl implements IYxFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit,
-            condition);
+        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit, condition);
         List<YxForm> list = page.getList();
 
         for (YxForm yxForm : list) {

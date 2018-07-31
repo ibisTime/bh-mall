@@ -42,8 +42,8 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         data.setProductCode(productCode);
         data.setProductName(productName);
 
-        data.setProductSpecsCode(specsCode);
-        data.setProductSpecsName(specsName);
+        data.setSpecsCode(specsCode);
+        data.setSpecsName(specsName);
         data.setQuantity(quantity);
         data.setPrice(price);
         data.setPic(pic);
@@ -187,8 +187,8 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         data.setProductName(productName);
         data.setPic(pic);
 
-        data.setProductSpecsCode(productSpecsCode);
-        data.setProductSpecsName(productSpecsName);
+        data.setSpecsCode(productSpecsCode);
+        data.setSpecsName(productSpecsName);
         data.setQuantity(singleNumber);
         data.setPrice(price);
 

@@ -17,8 +17,11 @@ public class InnerProduct extends ABaseDO {
     // 编号
     private String code;
 
+    // 是否包邮
+    private String isFree;
+
     // 产品名称
-    private String name;
+    private String productName;
 
     // 缩略图
     private String pic;
@@ -38,9 +41,6 @@ public class InnerProduct extends ABaseDO {
     // 排序
     private Integer orderNo;
 
-    // 是否包邮
-    private String isFree;
-
     // 状态
     private String status;
 
@@ -56,6 +56,8 @@ public class InnerProduct extends ABaseDO {
     // 备注
     private String remark;
 
+    // ***********db****************
+
     public String getCode() {
         return code;
     }
@@ -64,12 +66,12 @@ public class InnerProduct extends ABaseDO {
         this.code = code;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getPic() {

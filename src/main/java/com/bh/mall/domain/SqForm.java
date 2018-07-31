@@ -12,32 +12,40 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class SqForm extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
-
-    // 微信号
-    private String wxId;
+    private static final long serialVersionUID = -3497398052556679737L;
 
     // 编码
     private String code;
 
+    // 微信号
+    private String wxId;
+
     // 申请人
     private String userId;
 
+    // 分配上级
     private String toUserId;
-
-    private String mobile;
 
     // 申请等级
     private Integer applyLevel;
 
-    // 申请时间
-    private Date applyDatetime;
+    // 真实姓名
+    private String realName;
 
-    // 打款金额
-    private Long payAmount;
+    // 具体地址
+    private String address;
 
-    // 打款截图
-    private String payPdf;
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 电话
+    private String mobile;
 
     // 证件类型
     private String idKind;
@@ -54,59 +62,50 @@ public class SqForm extends ABaseDO {
     // 手持身份证照片
     private String idHand;
 
-    // 真实姓名
-    private String realName;
+    // 介绍人电话
 
-    // 省
-    private String province;
+    private String introducerMobile;
 
-    // 市
-    private String city;
-
-    // 区(县)
-    private String area;
-
-    // 具体地址
-    private String address;
-
-    // 审核人
-    private String approver;
-
-    // 审核时间
-    private Date approveDatetime;
-
-    // 授权书时间
-    private Date impowerDatetime;
+    // 推荐人
+    private String userReferee;
 
     // 状态
     private String status;
 
+    // 审核人
+    private String approver;
+
+    // 申请时间
+    private Date applyDatetime;
+
+    // 审核时间
+    private Date approveDatetime;
+
     // 备注
     private String remark;
 
-    /***************** DB **************************/
+    // *******************db*****************
 
+    // 代理
     private Agent agent;
 
+    // 关键词
     private String keyWord;
 
-    private Long impowerAmount;
-
+    // 申请开始时间
     private Date applyDatetimeStart;
 
+    // 申请结束时间
     private Date applyDatetimeEnd;
 
+    // 通过授权开始时间
     private Date approveDatetimeStart;
 
+    // 通过授权结束时间
     private Date approveDatetimeEnd;
 
-    private Date impowerDatetimeStart;
-
-    private Date impowerDatetimeEnd;
-
+    // 用户id 查询
     private String userIdForQuery;
-
-    /*******************************************/
 
     // 获取微信号
     public String getWxId() {
@@ -256,24 +255,6 @@ public class SqForm extends ABaseDO {
         this.applyDatetime = applyDatetime;
     }
 
-    // 获取付款金额
-    public Long getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(Long payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    // 获取付款截图
-    public String getPaymentPdf() {
-        return payPdf;
-    }
-
-    public void setPaymentPdf(String paymentPdf) {
-        this.payPdf = paymentPdf;
-    }
-
     // 获取审核人
     public String getApprover() {
         return approver;
@@ -290,15 +271,6 @@ public class SqForm extends ABaseDO {
 
     public void setApproveDatetime(Date approveDatetime) {
         this.approveDatetime = approveDatetime;
-    }
-
-    // 获取授权书时间
-    public Date getImpowerDatetime() {
-        return impowerDatetime;
-    }
-
-    public void setImpowerDatetime(Date impowerDatetime) {
-        this.impowerDatetime = impowerDatetime;
     }
 
     // 获取备注
@@ -328,13 +300,20 @@ public class SqForm extends ABaseDO {
         this.agent = agent;
     }
 
-    // 获取升级金额
-    public Long getImpowerAmount() {
-        return impowerAmount;
+    public String getIntroducerMobile() {
+        return introducerMobile;
     }
 
-    public void setImpowerAmount(Long impowerAmount) {
-        this.impowerAmount = impowerAmount;
+    public void setIntroducerMobile(String introducerMobile) {
+        this.introducerMobile = introducerMobile;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 
     public Date getApplyDatetimeStart() {
@@ -367,22 +346,6 @@ public class SqForm extends ABaseDO {
 
     public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
         this.approveDatetimeEnd = approveDatetimeEnd;
-    }
-
-    public Date getImpowerDatetimeStart() {
-        return impowerDatetimeStart;
-    }
-
-    public void setImpowerDatetimeStart(Date impowerDatetimeStart) {
-        this.impowerDatetimeStart = impowerDatetimeStart;
-    }
-
-    public Date getImpowerDatetimeEnd() {
-        return impowerDatetimeEnd;
-    }
-
-    public void setImpowerDatetimeEnd(Date impowerDatetimeEnd) {
-        this.impowerDatetimeEnd = impowerDatetimeEnd;
     }
 
     public String getUserIdForQuery() {

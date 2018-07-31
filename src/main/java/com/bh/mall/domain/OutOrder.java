@@ -19,7 +19,7 @@ public class OutOrder extends ABaseDO {
     // 编号
     private String code;
 
-    // 是否云仓发货
+    // 是否公司发货
     private String isCompanySend;
 
     // 分类
@@ -52,7 +52,7 @@ public class OutOrder extends ABaseDO {
     // 向谁提货
     private String toUser;
 
-    // 单价
+    // 总价
     private Long amount;
 
     // 运费

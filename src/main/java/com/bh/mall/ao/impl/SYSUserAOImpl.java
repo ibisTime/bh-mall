@@ -13,8 +13,8 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IInOrderBO;
+import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISjFormBO;
@@ -144,8 +144,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         if (PhoneUtil.isMobile(mobile)) {
             // 发送短信
             smsOutBO.sendSmsOut(mobile,
-                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091",
-                user.getCompanyCode(), user.getSystemCode());
+                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091");
         }
 
     }
@@ -215,7 +214,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
                         DateUtil.DATA_TIME_PATTERN_1)
                     + "已将手机号码改为" + newMobile + "，您的登录名更改为" + newMobile
                     + "，请妥善保管您的账户相关信息。",
-            "631072", user.getCompanyCode(), user.getSystemCode());
+            "631072");
 
     }
 

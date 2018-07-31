@@ -94,10 +94,13 @@ public class WareLog extends ABaseDO {
 
     // *************db**************
 
+    // 开始时间
     private Date startDatetime;
 
+    // 结束时间
     private Date endDatetime;
 
+    // 关键词
     private String keyword;
 
     public void setCode(String code) {

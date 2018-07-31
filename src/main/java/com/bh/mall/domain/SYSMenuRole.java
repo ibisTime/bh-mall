@@ -15,7 +15,6 @@ public class SYSMenuRole extends ABaseDO {
 
     private static final long serialVersionUID = -7807345988462178233L;
 
-    // ***********db properties***********
     // 序号
     private Long id;
 
@@ -37,7 +36,7 @@ public class SYSMenuRole extends ABaseDO {
     // 系统编号
     private String systemCode;
 
-    // ***********db properties***********
+    // ***********db***********
 
     // 菜单列表
     private List<String> menuCodeList;

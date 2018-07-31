@@ -42,10 +42,14 @@ public class SpecsLog extends ABaseDO {
     private String remark;
 
     // ********************db****************
+
+    // 开始时间
     private Date startDatetime;
 
+    // 结束时间
     private Date endDatetime;
 
+    // 产品名称
     private String productName;
 
     public String getCode() {

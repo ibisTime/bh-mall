@@ -18,114 +18,97 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class SYSDict extends ABaseDO {
-	/**
-	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
-	 */
-	private static final long serialVersionUID = -9204995364517866187L;
 
-	// 编号（自增长）
-	private Long id;
+    private static final long serialVersionUID = -9204995364517866187L;
 
-	// 类型（第一层/第二层）
-	private String type;
+    // 编号（自增长）
+    private Long id;
 
-	// 父key
-	private String parentKey;
+    // 类型（第一层/第二层）
+    private String type;
 
-	// key
-	private String dkey;
+    // 父key
+    private String parentKey;
 
-	// value
-	private String dvalue;
+    // key
+    private String dkey;
 
-	// 修改人
-	private String updater;
+    // value
+    private String dvalue;
 
-	// 修改时间
-	private Date updateDatetime;
+    // 修改人
+    private String updater;
 
-	// 备注
-	private String remark;
+    // 修改时间
+    private Date updateDatetime;
 
-	// // 公司编号
-	// private String companyCode;
-	//
-	// // 系统编号
-	// private String systemCode;
+    // 备注
+    private String remark;
 
-	public Long getId() {
-		return id;
-	}
+    // **********DB***************
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public String getParentKey() {
-		return parentKey;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setParentKey(String parentKey) {
-		this.parentKey = parentKey;
-	}
+    public String getParentKey() {
+        return parentKey;
+    }
 
-	public String getDkey() {
-		return dkey;
-	}
+    public void setParentKey(String parentKey) {
+        this.parentKey = parentKey;
+    }
 
-	public void setDkey(String dkey) {
-		this.dkey = dkey;
-	}
+    public String getDkey() {
+        return dkey;
+    }
 
-	public String getDvalue() {
-		return dvalue;
-	}
+    public void setDkey(String dkey) {
+        this.dkey = dkey;
+    }
 
-	public void setDvalue(String dvalue) {
-		this.dvalue = dvalue;
-	}
+    public String getDvalue() {
+        return dvalue;
+    }
 
-	public String getUpdater() {
-		return updater;
-	}
+    public void setDvalue(String dvalue) {
+        this.dvalue = dvalue;
+    }
 
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
+    public String getUpdater() {
+        return updater;
+    }
 
-	public Date getUpdateDatetime() {
-		return updateDatetime;
-	}
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
 
-	public void setUpdateDatetime(Date updateDatetime) {
-		this.updateDatetime = updateDatetime;
-	}
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	/*
-	 * public String getCompanyCode() { return companyCode; }
-	 * 
-	 * public void setCompanyCode(String companyCode) { this.companyCode =
-	 * companyCode; }
-	 * 
-	 * public String getSystemCode() { return systemCode; }
-	 * 
-	 * public void setSystemCode(String systemCode) { this.systemCode = systemCode;
-	 * }
-	 */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
 }

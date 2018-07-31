@@ -23,13 +23,11 @@ public class SmsOutBOImpl implements ISmsOutBO {
     static Logger logger = Logger.getLogger(SmsOutBOImpl.class);
 
     @Override
-    public void sendCaptcha(String mobile, String bizType, String companyCode,
-            String systemCode) {
+    public void sendCaptcha(String mobile, String bizType, String systemCode) {
         try {
             XN804081Req req = new XN804081Req();
             req.setMobile(mobile);
             req.setBizType(bizType);
-            req.setCompanyCode(companyCode);
             req.setSystemCode(systemCode);
             BizConnecter.getBizData("804081", JsonUtils.object2Json(req),
                 PKCodeRes.class);

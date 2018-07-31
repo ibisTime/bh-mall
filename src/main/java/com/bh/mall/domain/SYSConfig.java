@@ -18,9 +18,7 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class SYSConfig extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = -6136818068168453506L;
 
     // 编号（自增长）
@@ -44,9 +42,9 @@ public class SYSConfig extends ABaseDO {
     // 备注
     private String remark;
 
-    // *************db properties*************
+    // *************db*************
 
-    // ************* 模糊查询 *****************
+    // 查询key
     private String ckeyForQuery;
 
     public Long getId() {

@@ -18,14 +18,17 @@ public class Jour extends ABaseDO {
     // 流水编号
     private String code;
 
-    // 订单分组组号（信息代表）---核心字段1
-    private String payGroup;
-
     // 流水分组组号（橙账本代表）---核心字段2
     private String refNo;
 
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
     // 支付渠道单号（支付渠道代表）---核心字段3
     private String channelOrder;
+
+    // 支付渠道（线下/招商代付/支付宝/内部转账）
+    private String channelType;
 
     // 流水所属账号---核心字段4
     private String accountNumber;
@@ -66,13 +69,11 @@ public class Jour extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
-    // 支付渠道（线下/招商代付/支付宝/内部转账）
-    private String channelType;
-
-    // ***********************db properties *************************
+    // ***********************db************************
     // 业务类型列表
     private List<String> bizTypeList;
 
+    // 订单信息
     private InOrder orderInformation;
 
     // 查询条件1：创建起始时间
@@ -81,12 +82,16 @@ public class Jour extends ABaseDO {
     // 查询条件2：创建终止时间
     private Date createDatetimeEnd;
 
+    // 转出金额
     private String outAmount;
 
+    // 转入金额
     private String inAmount;
 
     // 判断支出与收入
     private String kind;
+
+    // ********db************
 
     public String getCurrency() {
         return currency;

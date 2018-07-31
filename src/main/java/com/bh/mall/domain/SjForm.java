@@ -18,13 +18,10 @@ public class SjForm extends ABaseDO {
     private String code;
 
     // 申请人
-    private String applyUser;
+    private String userId;
 
     // 申请等级
     private Integer applyLevel;
-
-    // 申请时间
-    private Date applyDatetime;
 
     // 团队人数
     private String reNumber;
@@ -38,11 +35,11 @@ public class SjForm extends ABaseDO {
     // 审核人
     private String approver;
 
+    // 申请时间
+    private Date applyDatetime;
+
     // 审核时间
     private Date approveDatetime;
-
-    // 授权书时间
-    private Date impowerDatetime;
 
     // 状态
     private String status;
@@ -50,26 +47,30 @@ public class SjForm extends ABaseDO {
     // 备注
     private String remark;
 
-    /***************** DB **************************/
+    // *******************db*****************
 
+    // 代理
     private Agent user;
 
-    private Long impowerAmount;
+    // 门槛费
+    private Long requireAmount;
 
+    // 申请开始时间
     private Date applyDatetimeStart;
 
+    // 申请结束时间
     private Date applyDatetimeEnd;
 
+    // 通过开始时间
     private Date approveDatetimeStart;
 
+    // 通过结束时间
     private Date approveDatetimeEnd;
 
+    // 查询用户id
     private String userIdForQuery;
 
-    private Date impowerDatetimeStart;
-
-    private Date impowerDatetimeEnd;
-
+    // 关键词
     private String keyWord;
 
     /*******************************************/
@@ -85,11 +86,11 @@ public class SjForm extends ABaseDO {
 
     // 获取申请人
     public String getApplyUser() {
-        return applyUser;
+        return userId;
     }
 
     public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
+        this.userId = applyUser;
     }
 
     // 获取申请等级
@@ -154,15 +155,6 @@ public class SjForm extends ABaseDO {
         this.approveDatetime = approveDatetime;
     }
 
-    // 获取授权书时间
-    public Date getImpowerDatetime() {
-        return impowerDatetime;
-    }
-
-    public void setImpowerDatetime(Date impowerDatetime) {
-        this.impowerDatetime = impowerDatetime;
-    }
-
     // 获取备注
     public String getRemark() {
         return remark;
@@ -191,12 +183,12 @@ public class SjForm extends ABaseDO {
     }
 
     // 获取升级金额
-    public Long getImpowerAmount() {
-        return impowerAmount;
+    public Long getRequireAmount() {
+        return requireAmount;
     }
 
-    public void setImpowerAmount(Long impowerAmount) {
-        this.impowerAmount = impowerAmount;
+    public void setRequireAmount(Long requireAmount) {
+        this.requireAmount = requireAmount;
     }
 
     public Date getApplyDatetimeStart() {
@@ -245,22 +237,6 @@ public class SjForm extends ABaseDO {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
-    }
-
-    public Date getImpowerDatetimeStart() {
-        return impowerDatetimeStart;
-    }
-
-    public void setImpowerDatetimeStart(Date impowerDatetimeStart) {
-        this.impowerDatetimeStart = impowerDatetimeStart;
-    }
-
-    public Date getImpowerDatetimeEnd() {
-        return impowerDatetimeEnd;
-    }
-
-    public void setImpowerDatetimeEnd(Date impowerDatetimeEnd) {
-        this.impowerDatetimeEnd = impowerDatetimeEnd;
     }
 
 }
