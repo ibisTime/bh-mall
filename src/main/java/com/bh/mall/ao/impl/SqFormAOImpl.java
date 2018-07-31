@@ -2,7 +2,6 @@ package com.bh.mall.ao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -341,7 +340,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
     /*************** 通过取消审核申请 **********************/
     @Override
-    public void approveCanenlSqForm(String userId, String approver,
+    public void cancelSqForm(String userId, String approver, String result,
             String remark) {
         Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())
@@ -351,7 +350,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         String status = EUserStatus.IMPOWERED.getCode();
-        if (EResult.Result_YES.getCode().equals(' ')) {
+        if (EResult.Result_YES.getCode().equals(result)) {
             status = EUserStatus.CANCELED.getCode();
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
@@ -510,67 +509,6 @@ public class SqFormAOImpl implements ISqFormAO {
         return data;
     }
 
-    /***********************************************/
-
-    @Override
-    public Paginable<SqForm> querySqFormFrontPage(int start, int limit,
-            SqForm condition) {
-
-        if (condition.getApplyDatetimeStart() != null
-                && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .after(condition.getApplyDatetimeEnd())) {
-            throw new BizException("xn00000", "开始时间不能大于结束时间");
-        }
-
-        /*
-         * if (EUserStatus.IGNORED.getCode().equals(condition.getStatus())) {
-         * condition.setApprover(condition.getUserIdForQuery()); } else {
-         * condition.setToUserId(condition.getUserIdForQuery()); //意向归属人 }
-         */
-
-        Paginable<SqForm> page = sqFormBO.getPaginable(start, limit, condition);
-        Agent userReferee = null;
-        Agent buser = null;
-        for (Iterator<SqForm> iterator = page.getList().iterator(); iterator
-            .hasNext();) {
-            SqForm sqForm = iterator.next();
-            buser = agentAO.getAgent(sqForm.getUserId());
-            if (!buser.getLastAgentLog().equals(sqForm.getCode())) {
-                iterator.remove();
-                continue;
-            }
-            sqForm.setUser(buser);
-            if (StringUtils.isNotBlank(buser.getUserReferee())) {
-                userReferee = agentAO.getAgent(buser.getUserReferee());
-            }
-            // 审核人
-            if (EUser.ADMIN.getCode().equals(sqForm.getApprover())) {
-                sqForm.setApprover(EUser.ADMIN.getCode());
-            } else {
-                if (StringUtils.isNotBlank(sqForm.getApprover())) {
-                    Agent aprrvoeName = agentAO.getAgent(sqForm.getApprover());
-                    if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getUserName(aprrvoeName.getUserId());
-                        if (userReferee != null) {
-                            sqForm.setApprover(userReferee.getRealName());
-                        }
-                    }
-                }
-            }
-        }
-        return page;
-    }
-
-    /*********************** 新增日志 *************************/
-    @Override
-    public String addSqForm(SqForm data) {
-        // insert new data
-        sqFormBO.addSqForm(data);
-        return null;
-    }
-
     /*********************** 查询是否需要补全金额 *************************/
     @Override
     public Paginable<SqForm> querySqFormPage(int start, int limit,
@@ -639,11 +577,6 @@ public class SqFormAOImpl implements ISqFormAO {
             currencyList.add(ECurrency.MK_CNY.getCode());
         }
         return currencyList;
-    }
-
-    @Override
-    public void approveCancelSqForm(String userId, String approver,
-            String result, String remark) {
     }
 
 }

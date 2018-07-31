@@ -7,6 +7,7 @@ import com.bh.mall.domain.SYSMenu;
 import com.bh.mall.dto.req.XN627050Req;
 
 /**
+ * 系统菜单
  * @author: Gejin 
  * @since: 2016年4月16日 下午7:38:53 
  * @history:
@@ -15,64 +16,22 @@ public interface ISYSMenuAO {
 
     String DEFAULT_ORDER_COLUMN = "order_no";
 
-    /**
-     * 添加菜单
-     * @param req
-     * @return 
-     * @create: 2016年4月16日 下午7:39:51 Gejin
-     * @history:
-     */
+    // 添加系统菜单
     public String addSYSMenu(XN627050Req req);
 
-    /**
-     * 删除菜单
-     * @param code
-     * @return 
-     * @create: 2016年4月16日 下午7:40:31 Gejin
-     * @history:
-     */
+    // 删除系统菜单
     public boolean dropSYSMenu(String code);
 
-    /**
-     * 修改菜单
-     * @param data
-     * @return 
-     * @create: 2016年4月16日 下午7:41:17 Gejin
-     * @history:
-     */
-
+    // 修改系统菜单
     public boolean editSYSMenu(SYSMenu data);
 
-    /**
-     * 分页查询
-     * @param start
-     * @param limit
-     * @param condition
-     * @return 
-     * @create: 2016年4月16日 下午7:42:47 Gejin
-     * @history:
-     */
+    // 分页查询
     public Paginable<SYSMenu> querySYSMenuPage(int start, int limit,
             SYSMenu condition);
 
-    /**
-     * 列表查询
-     * @param condition
-     * @return 
-     * @create: 2016年4月16日 下午7:42:17 Gejin
-     * @history:
-     */
-
+    // 列表查询
     public List<SYSMenu> querySYSMenuList(SYSMenu condition);
 
-    /**
-     * 获取详情
-     * @param start
-     * @param limit
-     * @param condition
-     * @return 
-     * @create: 2016年4月16日 下午7:42:47 Gejin
-     * @history:
-     */
+    // 详细查询
     public SYSMenu getSYSMenu(String code);
 }

@@ -23,7 +23,7 @@ public class XN627311 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doRoleUser(req.getUserId(), req.getRoleCode(), req.getUpdater(),
+        userAO.doRoleSYSUser(req.getUserId(), req.getRoleCode(), req.getUpdater(),
             req.getRemark());
         return new BooleanRes(true);
     }

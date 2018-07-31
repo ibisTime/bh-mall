@@ -2,7 +2,6 @@ package com.bh.mall.ao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -341,46 +340,6 @@ public class ProductAOImpl implements IProductAO {
             }
         }
         return list;
-    }
-
-    @Override
-    public Paginable<Product> selectProductByFrontPage(int start, int limit,
-            Product condition) {
-
-        Paginable<Product> page = productBO.getPaginable(start, limit,
-            condition);
-
-        for (Iterator<Product> iterator = page.getList().iterator(); iterator
-            .hasNext();) {
-            Product product = iterator.next();
-            List<Specs> psList = new ArrayList<Specs>();
-            Specs psCondition = new Specs();
-            psCondition.setProductCode(product.getCode());
-            List<Specs> specsList = specsBO.querySpecsList(psCondition);
-
-            for (Specs productSpecs : specsList) {
-                // 查询该等级能够看到的规格
-                AgentPrice specsPrice = agentPriceBO.getPriceByLevel(
-                    productSpecs.getCode(), condition.getLevel());
-                if (EBoolean.YES.getCode().equals(specsPrice.getIsBuy())) {
-                    Specs ps = specsBO.getSpecs(specsPrice.getSpecsCode());
-
-                    // 补充规格价格
-                    List<AgentPrice> pspList = new ArrayList<AgentPrice>();
-                    pspList.add(specsPrice);
-                    ps.setPriceList(pspList);
-                    psList.add(ps);
-                }
-
-            }
-            // 该产品没有符合的规格时，从List中删除
-            if (CollectionUtils.sizeIsEmpty(psList)) {
-                iterator.remove();
-            }
-            product.setSpecsList(psList);
-        }
-
-        return page;
     }
 
     @Override
