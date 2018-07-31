@@ -15,16 +15,22 @@ import com.bh.mall.dao.base.ABaseDO;
 
 public class YxForm extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5337739036346581691L;
 
     // 编号
     private String code;
 
+    // 微信号
+    private String wxId;
+
     // 申请人
     private String userId;
 
-    // 微信号
-    private String wxId;
+    // 意向归属人名字
+    private String toUserId;
+
+    // 申请等级
+    private Integer applyLevel;
 
     // 真实姓名
     private String realName;
@@ -32,26 +38,23 @@ public class YxForm extends ABaseDO {
     // 手机号
     private String mobile;
 
-    // 申请等级
-    private Integer applyLevel;
-
-    // 意向归属人名字
-    private String toUserId;
-
-    // 来源
-    private String source;
-
-    // 省
-    private String province;
-
-    // 市
-    private String city;
+    // 具体地址
+    private String address;
 
     // 区(县)
     private String area;
 
-    // 具体地址
-    private String address;
+    // 市
+    private String city;
+
+    // 省
+    private String province;
+
+    // 来源
+    private String fromInfo;
+
+    // 状态
+    private String status;
 
     // 最后审核人
     private String approver;
@@ -62,34 +65,37 @@ public class YxForm extends ABaseDO {
     // 审核时间
     private Date approveDatetime;
 
-    // 状态
-    private String status;
-
     // 备注
     private String remark;
 
-    /***************** DB **************************/
+    // *************** db****************
 
+    // 代理
     private Agent user;
 
     // 当前等级
     private Integer level;
 
+    // 授权所需金额
     private Long impowerAmount;
 
+    // 申请开始时间
     private Date applyDatetimeStart;
 
+    // 申请结束时间
     private Date applyDatetimeEnd;
 
+    // 通过开始时间
     private Date approveDatetimeStart;
 
+    // 通过结束时间
     private Date approveDatetimeEnd;
 
+    // 数据字段
     private String userIdForQuery;
 
+    // 查询关键词
     private String keyWord;
-
-    /***********************************/
 
     // 获取编号
     public String getCode() {
@@ -186,11 +192,11 @@ public class YxForm extends ABaseDO {
 
     // 来源
     public String getSource() {
-        return source;
+        return fromInfo;
     }
 
     public void setSource(String source) {
-        this.source = source;
+        this.fromInfo = source;
     }
 
     // 获取申请时间

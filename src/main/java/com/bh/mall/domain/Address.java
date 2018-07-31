@@ -42,6 +42,7 @@ public class Address extends ABaseDO {
     // 是否默认地址
     private String isDefault;
 
+    // **************************db properties **************************
     public String getCode() {
         return code;
     }

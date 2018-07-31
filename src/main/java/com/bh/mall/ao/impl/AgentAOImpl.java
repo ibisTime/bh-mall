@@ -73,7 +73,7 @@ public class AgentAOImpl implements IAgentAO {
     IAddressBO addressBO;
 
     @Autowired
-    IYxFormBO agentAllotBO;
+    IYxFormBO yxFormBO;
 
     @Autowired
     ISqFormBO sqFormBO;

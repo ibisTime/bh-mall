@@ -13,7 +13,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class ProCode extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2812636929457896863L;
 
     // 码号
     private String code;

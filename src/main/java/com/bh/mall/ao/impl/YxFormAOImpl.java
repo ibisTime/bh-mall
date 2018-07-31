@@ -31,7 +31,7 @@ import com.bh.mall.exception.BizException;
 public class YxFormAOImpl implements IYxFormAO {
 
     @Autowired
-    private IYxFormBO agentAllotBO;
+    private IYxFormBO yxFormBO;
 
     @Autowired
     private IAgentAO agentAO;
@@ -83,7 +83,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setSource(req.getFromInfo());
 
         // 数据库
-        agentAllotBO.applyYxForm(data);
+        yxFormBO.applyYxForm(data);
         addressBO.saveAddress(data.getUserId(),
             EAddressType.User_Address.getCode(), req.getMobile(),
             req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
@@ -112,7 +112,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setStatus(status);
-        agentAllotBO.addYxForm(data);
+        yxFormBO.addYxForm(data);
 
     }
 
@@ -127,7 +127,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
         data.setStatus(EUserStatus.TO_MIND.getCode());
-        agentAllotBO.ignore(data);
+        yxFormBO.ignore(data);
     }
 
     /***************  接受意向分配 **********************/
@@ -146,7 +146,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setRemark(remark);
 
         data.setStatus(EUserStatus.ADD_INFO.getCode()); // 补全授权资料
-        String logCode = agentAllotBO.accepYxForm(data);
+        String logCode = yxFormBO.accepYxForm(data);
         // insert new agent allot log
         YxForm imData = new YxForm();
         imData.setUserId(userId);
@@ -154,7 +154,7 @@ public class YxFormAOImpl implements IYxFormAO {
         imData.setApplyDatetime(new Date());
         imData.setStatus(EUserStatus.ADD_INFO.getCode());
 
-        agentAllotBO.addYxForm(imData);
+        yxFormBO.addYxForm(imData);
 
     }
 
@@ -170,7 +170,7 @@ public class YxFormAOImpl implements IYxFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        List<YxForm> list = agentAllotBO.queryYxFormList(condition);
+        List<YxForm> list = yxFormBO.queryYxFormList(condition);
         return list;
     }
 
@@ -178,7 +178,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
     @Override
     public YxForm getYxForm(String code) {
-        YxForm data = agentAllotBO.getYxForm(code);
+        YxForm data = yxFormBO.getYxForm(code);
         return data;
     }
 
@@ -201,7 +201,7 @@ public class YxFormAOImpl implements IYxFormAO {
             condition.setToUserId(condition.getUserIdForQuery()); // 意向归属人
         }
 
-        Paginable<YxForm> page = agentAllotBO.getPaginable(start, limit,
+        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit,
             condition);
 
         Agent agent = null;
@@ -225,7 +225,7 @@ public class YxFormAOImpl implements IYxFormAO {
     @Override
     public String addYxForm(YxForm data) {
         // insert new data
-        agentAllotBO.addYxForm(data);
+        yxFormBO.addYxForm(data);
         return null;
     }
 
@@ -241,20 +241,20 @@ public class YxFormAOImpl implements IYxFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        Paginable<YxForm> page = agentAllotBO.getPaginable(start, limit,
+        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit,
             condition);
         List<YxForm> list = page.getList();
 
-        for (YxForm agentAllot : list) {
+        for (YxForm yxForm : list) {
 
-            Agent agent = agentAO.getAgent(agentAllot.getUserId());
-            agentAllot.setUser(agent);
+            Agent agent = agentAO.getAgent(yxForm.getUserId());
+            yxForm.setUser(agent);
             // 补全授权金额
             if (null != agent.getApplyLevel()) {
                 // 代理等级表
                 AgentLevel agentLevel = agentLevelBO
                     .getAgentByLevel(agent.getApplyLevel());
-                agentAllot.setImpowerAmount(agentLevel.getAmount());
+                yxForm.setImpowerAmount(agentLevel.getAmount());
             }
             // 审核人
 
