@@ -9,20 +9,31 @@ import com.bh.mall.domain.InOrder;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 
+/**
+ * 云仓订单
+ * @author: LENOVO 
+ * @since: 2018年7月31日 下午9:50:31 
+ * @history:
+ */
 @Component
 public interface IInOrderAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
+    //
     public List<String> addInOrder(XN627640Req req);
 
+    //
     public Paginable<InOrder> queryInOrderPage(int start, int limit,
             InOrder condition);
 
+    //
     public List<InOrder> queryInOrderList(InOrder condition);
 
+    //
     public InOrder getInOrder(String code);
 
+    //
     public String addInOrderNoCart(XN627641Req req);
 
     // 付款

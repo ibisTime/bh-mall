@@ -236,10 +236,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     }
 
     @Override
-    public void dropInnerOrder(String code) {
-    }
-
-    @Override
     public Paginable<InnerOrder> queryInnerOrderPage(int start, int limit,
             InnerOrder condition) {
         if (condition.getStartDatetime() != null
