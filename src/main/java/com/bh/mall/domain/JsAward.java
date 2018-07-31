@@ -12,7 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class JsAward extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -3551159782560962844L;
 
     // 编号
     private String code;
@@ -50,8 +50,6 @@ public class JsAward extends ABaseDO {
     public void setLevel(Integer level) {
         this.level = level;
     }
-    
-    
 
     public Integer getIntroLevel() {
         return introLevel;

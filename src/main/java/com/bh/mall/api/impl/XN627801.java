@@ -46,11 +46,7 @@ public class XN627801 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-<<<<<<< HEAD
-        return exchangeOrderAO.queryExchangeOrderPage(start, limit, condition);
-=======
         return exchangeOrderAO.queryChangeOrderPage(start, limit, condition);
->>>>>>> refs/remotes/origin/master
     }
 
     @Override

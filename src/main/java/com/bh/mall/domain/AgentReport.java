@@ -12,7 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class AgentReport extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2947372888992001581L;
 
     // 代理Id
     private String userId;

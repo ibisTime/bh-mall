@@ -14,11 +14,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareLogDAO;
 import com.bh.mall.domain.ExchangeOrder;
-<<<<<<< HEAD
-import com.bh.mall.domain.Order;
-=======
 import com.bh.mall.domain.InOrder;
->>>>>>> refs/remotes/origin/master
 import com.bh.mall.domain.Ware;
 import com.bh.mall.domain.WareLog;
 import com.bh.mall.enums.EBizType;

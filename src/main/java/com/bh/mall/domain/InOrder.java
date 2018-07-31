@@ -13,7 +13,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class InOrder extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2257248845684488091L;
 
     // 编号
     private String code;

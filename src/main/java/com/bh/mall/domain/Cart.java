@@ -10,7 +10,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class Cart extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8252737737985469825L;
 
     // 编号
     private String code;

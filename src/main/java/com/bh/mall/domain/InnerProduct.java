@@ -12,9 +12,6 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class InnerProduct extends ABaseDO {
 
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = 1774421757831686452L;
 
     // 编号

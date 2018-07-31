@@ -15,7 +15,8 @@ import com.bh.mall.dao.base.ABaseDO;
 
 // TODO 交易密码
 public class Agent extends ABaseDO {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 502999162977851542L;
 
     /****** key ******/
     // 代理用户id
@@ -171,8 +172,8 @@ public class Agent extends ABaseDO {
     // 备注
     private String remark;
 
-    /***********************************/
-    // DB
+    /****************DB*******************/
+    // 代理列表
     private List<Agent> agentList;
 
     // 上级用户

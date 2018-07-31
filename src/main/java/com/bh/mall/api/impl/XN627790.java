@@ -19,11 +19,7 @@ public class XN627790 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-<<<<<<< HEAD
-        return new PKCodeRes(exchangeOrderAO.addExchangeOrder(req));
-=======
         return new PKCodeRes(exchangeOrderAO.addChangeOrder(req));
->>>>>>> refs/remotes/origin/master
     }
 
     @Override

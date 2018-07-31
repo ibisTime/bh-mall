@@ -12,10 +12,6 @@ public interface IExchangeOrderDAO extends IBaseDAO<ExchangeOrder> {
 
     void approveChange(ExchangeOrder data);
 
-<<<<<<< HEAD
-    List<ExchangeOrder> queryExchangeOrderPage(int start, int pageSize,
-=======
     List<ExchangeOrder> queryChangeOrderPage(int start, int pageSize,
->>>>>>> refs/remotes/origin/master
             ExchangeOrder condition);
 }

@@ -12,7 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class ChAward extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 150949363895516912L;
 
     // 编号
     private String code;
