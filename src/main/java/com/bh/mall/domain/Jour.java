@@ -83,9 +83,9 @@ public class Jour extends ABaseDO {
     private Date createDatetimeEnd;
 
     // 转出金额
-
-
     private String outAmount;
+
+    // 转入金额
     private String inAmount;
 
     // 判断支出与收入

@@ -45,6 +45,8 @@ public class ChannelBank extends ABaseDO {
     // 备注
     private String remark;
 
+    // ********db**********8
+
     public Long getId() {
         return id;
     }
