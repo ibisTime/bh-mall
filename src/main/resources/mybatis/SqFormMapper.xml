@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bh.mall.dao.IImpowerApplyDAO">
-	<resultMap id="impowerApply_DB_Result" type="impowerApply">
+<mapper namespace="com.bh.mall.dao.ISqFormDAO">
+	<resultMap id="sqForm_DB_Result" type="sqForm">
 		<result column="code" property="code"/>
 		<result column="wx_id" property="wxId"/>
 		<result column="user_id" property="userId" />
@@ -82,7 +82,7 @@
 		</trim>
 	</sql>
 	
-	<select id="select_impowerapply" parameterType="impowerApply" resultMap="impowerApply_DB_Result">
+	<select id="select_sqForm" parameterType="sqForm" resultMap="sqForm_DB_Result">
 		SELECT
 		t.code
 		,t.wx_id
@@ -120,16 +120,16 @@
 		</trim>
 	</select>
 
-	<select id="select_impowerapply_count" parameterType="impowerApply"
+	<select id="select_sqForm_count" parameterType="sqForm"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_sq_form t LEFT JOIN tbh_buser u ON t.user_id= u.user_id   
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_impowerapply" parameterType="impowerApply">
+	<insert id="insert_sqForm" parameterType="sqForm">
 		INSERT INTO
 		tbh_sq_form(
-		code
+		t.code
 		,wx_id
 		,user_id
 		,apply_level
@@ -151,8 +151,8 @@
 		,user_referee
 		
 		,status
-		,approver
-		,apply_datetime		
+		,approver		
+		,apply_datetime
 		,approve_datetime
 		,remark
 		)
@@ -161,31 +161,41 @@
 		,#{wxId}
         ,#{userId}
 		,#{applyLevel}
-		,#{applyDatetime}
-		,#{payAmount}
-		,#{payPdf}
+		
+		,#{ealName}
+		,#{address}
+		,#{area}
+		,#{mobile}
+		,#{city}
+		,#{province}
+		
+		,#{idFront}
+		,#{idBehind}
+		,#{idHand}
+		,#{idKind}
+		,#{idNo}
+		
+		,#{introducerMobile}
+		,#{userReferee}
+				
 		,#{status}
 		,#{approver}
+		,#{applyDatetime}
 		,#{approveDatetime}
-		,#{impowerDatetime}
 		,#{remark}
 		)
 	</insert>
 
 	<!-- update payment / status -->
-	<update id="update_impowerapply" parameterType="impowerApply">
+	<update id="update_sqForm" parameterType="sqForm">
 		UPDATE tbh_sq_form
 		SET
 		user_id= #{userId}
 		,apply_level = #{applyLevel}
-        ,pay_amount = #{payAmount}
         ,apply_datetime = #{applyDatetime}
-		,pay_pdf = #{payPdf}
 		,status = #{status}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
-		,impower_datetime = #{impowerDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	

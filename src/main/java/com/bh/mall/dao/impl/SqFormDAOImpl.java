@@ -14,13 +14,13 @@ public class SqFormDAOImpl extends AMybatisTemplate implements ISqFormDAO {
 
     @Override
     public void approveSqForm(SqForm data) {
-        super.update(NAMESPACE.concat("approve_impower"), data);
+        super.update(NAMESPACE.concat("approve_sqForm"), data);
 
     }
 
     @Override
     public void cancelSqForm(SqForm data) {
-        super.update(NAMESPACE.concat("cancel_impower"), data);
+        super.update(NAMESPACE.concat("cancel_sqForm"), data);
     }
 
     @Override
@@ -31,36 +31,36 @@ public class SqFormDAOImpl extends AMybatisTemplate implements ISqFormDAO {
     // 新增日志
     @Override
     public int insert(SqForm data) {
-        return super.insert(NAMESPACE.concat("insert_impowerapply"), data);
+        return super.insert(NAMESPACE.concat("insert_sqForm"), data);
     }
 
     @Override
     public int delete(SqForm data) {
-        return super.delete(NAMESPACE.concat("delete_impowerapply"), data);
+        return super.delete(NAMESPACE.concat("delete_sqForm"), data);
     }
 
     @Override
     public SqForm select(SqForm condition) {
-        return super.select(NAMESPACE.concat("select_impowerapply"), condition,
+        return super.select(NAMESPACE.concat("select_sqForm"), condition,
             SqForm.class);
     }
 
     @Override
     public long selectTotalCount(SqForm condition) {
-        return super.selectTotalCount(
-            NAMESPACE.concat("select_impowerapply_count"), condition);
+        return super.selectTotalCount(NAMESPACE.concat("select_sqForm_count"),
+            condition);
     }
 
     @Override
     public List<SqForm> selectList(SqForm condition) {
-        return super.selectList(NAMESPACE.concat("select_impowerapply"),
-            condition, SqForm.class);
+        return super.selectList(NAMESPACE.concat("select_sqForm"), condition,
+            SqForm.class);
     }
 
     @Override
     public List<SqForm> selectList(SqForm condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_impowerapply"), start,
-            count, condition, SqForm.class);
+        return super.selectList(NAMESPACE.concat("select_sqForm"), start, count,
+            condition, SqForm.class);
     }
 
 }
