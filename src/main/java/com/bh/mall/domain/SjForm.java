@@ -40,7 +40,7 @@ public class SjForm extends ABaseDO {
     // 审核时间
     private Date approveDatetime;
 
-    // 授权书时间
+    // 授权时间
     private Date impowerDatetime;
 
     // 状态
