@@ -46,9 +46,30 @@ public interface IAccountDAO extends IBaseDAO<Account> {
      */
     public int updateStatus(Account data);
 
+    /**
+     * 冻结金额
+     * @param data
+     * @return 
+     * @create: 2018年7月31日 下午1:57:49 LENOVO
+     * @history:
+     */
     public int frozenAmount(Account data);
 
+    /**
+     * 解冻账户
+     * @param data
+     * @return 
+     * @create: 2018年7月31日 下午1:59:27 LENOVO
+     * @history:
+     */
     public int unfrozenAmount(Account data);
 
+    /**
+     * 扣减冻结金额
+     * @param data
+     * @return 
+     * @create: 2018年7月31日 下午2:00:58 LENOVO
+     * @history:
+     */
     public int cutFrozenAmount(Account data);
 }

@@ -21,29 +21,6 @@ public class Agent extends ABaseDO {
     // 代理用户id
     private String userId;
 
-    // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
-    private String loginType;
-
-    /***** 模糊查询使用字段 ******/
-    // 登录名模糊查询
-    private String loginNameForQuery;
-
-    // 手机号模糊查询
-    private String mobileForQuery;
-
-    // 真实姓名模糊查询
-    private String realNameForQuery;
-
-    // 省份模糊查询
-    private String provinceForQuery;
-
-    // 城市模糊查询
-    private String cityForQuery;
-
-    // 县区模糊查询
-    private String areaForQuery;
-
-    /****** 登录信息 ******/
     // 登陆名
     private String loginName;
 
@@ -171,6 +148,29 @@ public class Agent extends ABaseDO {
     private String remark;
 
     /****************DB*******************/
+
+    // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
+    private String loginType;
+
+    /***** 模糊查询使用字段 ******/
+    // 登录名模糊查询
+    private String loginNameForQuery;
+
+    // 手机号模糊查询
+    private String mobileForQuery;
+
+    // 真实姓名模糊查询
+    private String realNameForQuery;
+
+    // 省份模糊查询
+    private String provinceForQuery;
+
+    // 城市模糊查询
+    private String cityForQuery;
+
+    // 县区模糊查询
+    private String areaForQuery;
+
     // 代理列表
     private List<Agent> agentList;
 

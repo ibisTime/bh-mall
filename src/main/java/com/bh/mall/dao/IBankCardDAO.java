@@ -12,5 +12,12 @@ import com.bh.mall.domain.Bankcard;
 public interface IBankCardDAO extends IBaseDAO<Bankcard> {
     String NAMESPACE = IBankCardDAO.class.getName().concat(".");
 
+    /**
+     * 更新银行卡
+     * @param data
+     * @return 
+     * @create: 2018年7月31日 下午2:23:35 LENOVO
+     * @history:
+     */
     public int update(Bankcard data);
 }

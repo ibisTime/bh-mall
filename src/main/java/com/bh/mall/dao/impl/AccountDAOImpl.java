@@ -24,6 +24,9 @@ import com.bh.mall.domain.Account;
 @Repository("accountDAOImpl")
 public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
 
+    /**
+     * @see com.bh.mall.dao.base.IBaseDAO#insert(java.lang.Object)
+     */
     @Override
     public int insert(Account data) {
         return super.insert(NAMESPACE.concat("insert_account"), data);
