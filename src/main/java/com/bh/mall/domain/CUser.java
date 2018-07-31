@@ -19,24 +19,11 @@ public class CUser extends ABaseDO {
     // 用户编号
     private String userId;
 
-    /****** 登录信息 ******/
-    // 登陆名
-    private String loginName;
-
-    // 昵称
-    private String nickname;
-
-    // 手机号
-    private String mobile;
-
     // 微信号
     private String wxId;
 
     // 开放平台和公众平台唯一号
     private String unionId;
-
-    // 微信h5第三方登录开放编号,微信app第三方登录开放编号,省,市,区(县),
-    // h5_open_id,app_open_id,province,city,area,
 
     // 微信h5第三方登录开放编号
     private String h5OpenId;
@@ -47,11 +34,8 @@ public class CUser extends ABaseDO {
     // 头像
     private String photo;
 
-    // 登陆密码
-    private String loginPwd;
-
-    // 登陆密码强度
-    private String loginPwdStrength;
+    // 昵称
+    private String nickname;
 
     // 状态
     private String status;
@@ -59,14 +43,11 @@ public class CUser extends ABaseDO {
     // 注册时间
     private Date createDatetime;
 
-    /****** 交易信息 ******/
-    // 交易密码
-    private String tradePwd;
+    // *******db***********
 
-    // 交易密码强度
-    private String tradePwdStrength;
+    // 用户list
+    private List<CUser> cUserList;
 
-    /****** 地址信息 ******/
     // 省
     private String province;
 
@@ -79,9 +60,6 @@ public class CUser extends ABaseDO {
     // 具体地址
     private String address;
 
-    // DB
-    private List<CUser> cUserList;
-
     // 登录名模糊查询
     private String loginNameForQuery;
 
@@ -92,8 +70,6 @@ public class CUser extends ABaseDO {
 
     // 最后更新人
     private String updater;
-
-    /********************************/
 
     public List<CUser> getCUserList() {
         return cUserList;
@@ -112,30 +88,12 @@ public class CUser extends ABaseDO {
         this.userId = userId;
     }
 
-    // 登录名 & 昵称
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
     public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    // 手机号 & 微信号
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getWxId() {
@@ -153,40 +111,6 @@ public class CUser extends ABaseDO {
 
     public void setPhoto(String photo) {
         this.photo = photo;
-    }
-
-    // 登录密码
-    public String getLoginPwd() {
-        return loginPwd;
-    }
-
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
-    }
-
-    public String getLoginPwdStrength() {
-        return loginPwdStrength;
-    }
-
-    public void setLoginPwdStrength(String loginPwdStrength) {
-        this.loginPwdStrength = loginPwdStrength;
-    }
-
-    // 交易密码
-    public String getTradePwd() {
-        return tradePwd;
-    }
-
-    public void setTradePwd(String tradePwd) {
-        this.tradePwd = tradePwd;
-    }
-
-    public String getTradePwdStrength() {
-        return tradePwdStrength;
-    }
-
-    public void setTradePwdStrength(String tradePwdStrength) {
-        this.tradePwdStrength = tradePwdStrength;
     }
 
     // 省，市，区 & 详细地址

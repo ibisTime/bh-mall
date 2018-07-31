@@ -38,7 +38,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         alData.setStatus(EUserStatus.TO_APPROVE.getCode());
         alData.setPaymentPdf(data.getPaymentPdf());
 
-        alData.setApplyUser(data.getApplyUser());
+        alData.setUserId(data.getUserId());
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setApplyLevel(data.getApplyLevel());
 
@@ -57,7 +57,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         SjForm alData = new SjForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.UPGRADED.getCode());
-        alData.setApplyUser(data.getApplyUser());
+        alData.setUserId(data.getUserId());
         alData.setApplyDatetime(data.getApplyDatetime());
 
         alData.setApprover(data.getApprover());
@@ -76,7 +76,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         SjForm alData = new SjForm();
 
         alData.setCode(code);
-        alData.setApplyUser(data.getApplyUser());
+        alData.setUserId(data.getUserId());
         alData.setStatus(EUserStatus.CANCELED.getCode());
 
         alData.setApplyLevel(data.getApplyLevel());
@@ -110,7 +110,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         SjForm alData = new SjForm();
         alData.setCode(code);
         alData.setApplyLevel(data.getApplyLevel());
-        alData.setApplyUser(data.getApplyUser());
+        alData.setUserId(data.getUserId());
         alData.setApplyDatetime(data.getApplyDatetime());
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(data.getApproveDatetime());

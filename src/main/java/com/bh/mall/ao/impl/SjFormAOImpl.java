@@ -114,8 +114,9 @@ public class SjFormAOImpl implements ISjFormAO {
         data.setStatus(status);
 
         // 新增升级申请记录
+
         SjForm upData = new SjForm();
-        upData.setApplyUser(userId);
+        upData.setUserId(userId);
         upData.setApplyLevel(data.getApplyLevel());
         upData.setStatus(status);
         upData.setApplyDatetime(new Date());
@@ -193,7 +194,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         // 新增升级申请记录
         SjForm upData = new SjForm();
-        upData.setApplyUser(userId);
+        upData.setUserId(userId);
         upData.setApplyLevel(data.getApplyLevel());
         upData.setStatus(status);
         upData.setApplyDatetime(new Date());
@@ -206,7 +207,7 @@ public class SjFormAOImpl implements ISjFormAO {
     @Override
     public void cancelSjForm(String userId) {
         SjForm upData = new SjForm();
-        upData.setApplyUser(userId);
+        upData.setUserId(userId);
         upData.setStatus(EUserStatus.TO_CANCEL.getCode());
         upData.setApplyDatetime(new Date());
 
@@ -226,7 +227,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         // 新增升级申请记录
         SjForm upData = new SjForm();
-        upData.setApplyUser(userId);
+        upData.setUserId(userId);
         upData.setApplyLevel(data.getApplyLevel());
         upData.setStatus(EUserStatus.CANCELED.getCode());
         upData.setApplyDatetime(new Date());
@@ -246,7 +247,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         // 新增升级申请记录
         SjForm upData = new SjForm();
-        upData.setApplyUser(userId);
+        upData.setUserId(userId);
         upData.setApplyLevel(data.getApplyLevel());
         upData.setStatus(EUserStatus.CANCELED.getCode());
         upData.setApplyDatetime(new Date());
@@ -269,7 +270,7 @@ public class SjFormAOImpl implements ISjFormAO {
         List<SjForm> list = sjFormBO.querySjFormList(condition);
         for (SjForm sjFrom : list) {
             Agent userReferee = null;
-            Agent agent = agentAO.getAgent(sjFrom.getApplyUser());
+            Agent agent = agentAO.getAgent(sjFrom.getUserId());
             sjFrom.setUser(agent);
             // 审核人 TODO
             if (EUser.ADMIN.getCode().equals(sjFrom.getApprover())) {
@@ -295,7 +296,7 @@ public class SjFormAOImpl implements ISjFormAO {
     @Override
     public SjForm getSjForm(String code) {
         SjForm data = sjFormBO.getSjForm(code);
-        Agent agent = agentAO.getAgent(data.getApplyUser());
+        Agent agent = agentAO.getAgent(data.getUserId());
         data.setUser(agent);
         Agent userReferee = null;
         data.setUser(agent);
@@ -347,7 +348,7 @@ public class SjFormAOImpl implements ISjFormAO {
         for (Iterator<SjForm> iterator = page.getList().iterator(); iterator
             .hasNext();) {
             SjForm agentLog = iterator.next();
-            agent = agentAO.getAgent(agentLog.getApplyUser());
+            agent = agentAO.getAgent(agentLog.getUserId());
             if (!agent.getLastAgentLog().equals(agentLog.getCode())) {
                 iterator.remove();
                 continue;
@@ -401,7 +402,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         for (SjForm uplevelApply : list) {
             Agent userReferee = null;
-            Agent agent = agentAO.getAgent(uplevelApply.getApplyUser());
+            Agent agent = agentAO.getAgent(uplevelApply.getUserId());
             uplevelApply.setUser(agent);
 
             /*

@@ -39,19 +39,19 @@ public class ExchangeOrder extends ABaseDO {
     private Long amount;
 
     // 置换产品编号
-    private String changeProductCode;
+    private String exchangeProductCode;
 
     // 置换产品名称
-    private String changeProductName;
+    private String exchangeProductName;
 
     // 置换产品规格编号
-    private String changeSpecsCode;
+    private String exchangeSpecsCode;
 
     // 置换规格名称
-    private String changeSpecsName;
+    private String exchangeSpecsName;
 
     // 置换价格
-    private Long changePrice;
+    private Long exchangePrice;
 
     // 申请人
     private String applyUser;
@@ -63,7 +63,7 @@ public class ExchangeOrder extends ABaseDO {
     private Integer level;
 
     // 可换数量
-    private Integer canChangeQuantity;
+    private Integer canExchangeQuantity;
 
     // 申请时间
     private Date applyDatetime;
@@ -148,12 +148,12 @@ public class ExchangeOrder extends ABaseDO {
         this.specsName = specsName;
     }
 
-    public String getChangeSpecsName() {
-        return changeSpecsName;
+    public String getExchangeSpecsName() {
+        return exchangeSpecsName;
     }
 
-    public void setChangeSpecsName(String changeSpecsName) {
-        this.changeSpecsName = changeSpecsName;
+    public void setExchangeSpecsName(String exchangeSpecsName) {
+        this.exchangeSpecsName = exchangeSpecsName;
     }
 
     public String getKeyword() {
@@ -188,20 +188,20 @@ public class ExchangeOrder extends ABaseDO {
         this.amount = amount;
     }
 
-    public Long getChangePrice() {
-        return changePrice;
+    public Long getExchangePrice() {
+        return exchangePrice;
     }
 
-    public void setChangePrice(Long changePrice) {
-        this.changePrice = changePrice;
+    public void setExchangePrice(Long exchangePrice) {
+        this.exchangePrice = exchangePrice;
     }
 
-    public Integer getCanChangeQuantity() {
-        return canChangeQuantity;
+    public Integer getExcanChangeQuantity() {
+        return canExchangeQuantity;
     }
 
-    public void setCanChangeQuantity(Integer canChangeQuantity) {
-        this.canChangeQuantity = canChangeQuantity;
+    public void setCanExchangeQuantity(Integer canExchangeQuantity) {
+        this.canExchangeQuantity = canExchangeQuantity;
     }
 
     public void setLevel(Integer level) {
@@ -212,28 +212,28 @@ public class ExchangeOrder extends ABaseDO {
         this.applyDatetime = applyDatetime;
     }
 
-    public void setChangeProductCode(String changeProductCode) {
-        this.changeProductCode = changeProductCode;
+    public void setExchangeProductCode(String exchangeProductCode) {
+        this.exchangeProductCode = exchangeProductCode;
     }
 
-    public String getChangeProductCode() {
-        return changeProductCode;
+    public String getExchangeProductCode() {
+        return exchangeProductCode;
     }
 
-    public void setChangeProductName(String changeProductName) {
-        this.changeProductName = changeProductName;
+    public void setExchangeProductName(String exchangeProductName) {
+        this.exchangeProductName = exchangeProductName;
     }
 
-    public String getChangeProductName() {
-        return changeProductName;
+    public String getExchangeProductName() {
+        return exchangeProductName;
     }
 
-    public void setChangeSpecsCode(String changeSpecsCode) {
-        this.changeSpecsCode = changeSpecsCode;
+    public void setExchangeSpecsCode(String exchangeSpecsCode) {
+        this.exchangeSpecsCode = exchangeSpecsCode;
     }
 
-    public String getChangeSpecsCode() {
-        return changeSpecsCode;
+    public String getExchangeSpecsCode() {
+        return exchangeSpecsCode;
     }
 
     public void setApplyUser(String applyUser) {
