@@ -7,7 +7,7 @@
 	<resultMap id="sjForm_DB_Result" type="sjForm">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
-		<resule column="to_user_id" property="toUserId"/>
+		<result column="to_user_id" property="toUserId"/>
 		<result column="apply_level" property="applyLevel" />
 		<result column="re_number" property="reNumber" />
 		<result column="pay_amount" property="payAmount" />
