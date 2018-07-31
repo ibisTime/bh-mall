@@ -32,6 +32,8 @@ public class SYSRole extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // *****************DB****************
+
     public String getSystemCode() {
         return systemCode;
     }
@@ -55,7 +57,6 @@ public class SYSRole extends ABaseDO {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getUpdater() {
         return updater;

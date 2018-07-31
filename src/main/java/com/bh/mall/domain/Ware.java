@@ -13,13 +13,16 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class Ware extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8670922643881478307L;
 
     // 编号
     private String code;
 
     // 类型 P平台/B代理
     private String type;
+
+    // 用户编号
+    private String userId;
 
     // 币种
     private String currency;
@@ -45,9 +48,6 @@ public class Ware extends ABaseDO {
     // 总价值
     private Long amount;
 
-    // 用户编号
-    private String userId;
-
     // 用户名称
     private String realName;
 
@@ -67,6 +67,8 @@ public class Ware extends ABaseDO {
     private String systemCode;
 
     // ****************db***************
+
+    // 关键词
     private String keyword;
 
     // 用户

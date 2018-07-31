@@ -23,6 +23,12 @@ public class InnerOrder extends ABaseDO {
     // 产品名称
     private String productName;
 
+    // 规格编号
+    private String specsCode;
+
+    // 规格名称
+    private String specsName;
+
     // 缩略图
     private String pic;
 
@@ -32,26 +38,10 @@ public class InnerOrder extends ABaseDO {
     // 单价
     private Long price;
 
-    // 下单代理
-    private String applyUser;
-
-    // 下单代理等级
-    private Integer level;
-
-    // 团队名称
-    private String teamName;
-
-    // 下单备注
-    private String applyNote;
-
-    // 下单时间
-    private Date applyDatetime;
+    private String toUser;
 
     // 下单订单金额
     private Long amount;
-
-    // 运费
-    private Long yunfei;
 
     // 状态
     private String status;
@@ -62,14 +52,32 @@ public class InnerOrder extends ABaseDO {
     // 支付组号
     private String payGroup;
 
-    // 支付编号
-    private String payCode;
-
     // 支付金额
     private Long payAmount;
 
     // 支付时间
     private Date payDatetime;
+
+    // 下单代理等级
+    private Integer level;
+
+    // 团队名称
+    private String teamName;
+
+    // 下单备注
+    private String applyNote;
+
+    // 支付编号
+    private String payCode;
+
+    // 下单代理
+    private String applyUser;
+
+    // 运费
+    private Long yunfei;
+
+    // 下单时间
+    private Date applyDatetime;
 
     // 接收人名称
     private String signer;

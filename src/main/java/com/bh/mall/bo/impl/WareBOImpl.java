@@ -166,7 +166,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     public void buyWare(InOrder data, Agent agent) {
         Ware ware = this.getWareByProductSpec(agent.getUserId(),
-            data.getProductSpecsCode());
+            data.getSpecsCode());
 
         // 没有该产品
         if (null == ware) {
@@ -176,8 +176,8 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
             whData.setCode(code);
             whData.setProductCode(data.getProductCode());
             whData.setProductName(data.getProductName());
-            whData.setSpecsCode(data.getProductSpecsCode());
-            whData.setSpecsName(data.getProductSpecsName());
+            whData.setSpecsCode(data.getSpecsCode());
+            whData.setSpecsName(data.getSpecsName());
 
             whData.setCurrency(ECurrency.YC_CNY.getCode());
             whData.setUserId(agent.getUserId());

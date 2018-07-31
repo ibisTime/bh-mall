@@ -28,7 +28,7 @@ public class XN627710 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         InnerProduct condition = new InnerProduct();
-        condition.setName(req.getName());
+        condition.setProductName(req.getName());
         condition.setStatus(req.getStatus());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

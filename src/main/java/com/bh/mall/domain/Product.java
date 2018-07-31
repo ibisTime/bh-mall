@@ -18,6 +18,9 @@ public class Product extends ABaseDO {
     // 编号
     private String code;
 
+    // 是否包邮
+    private String isFree;
+
     // 产品名称
     private String name;
 
@@ -60,11 +63,15 @@ public class Product extends ABaseDO {
     // 更新时间
     private Date updateDatetime;
 
-    // 是否包邮
-    private String isFree;
-
     // 备注
     private String remark;
+
+    // ***********************db******************
+    // 当前等级
+    private Integer level;
+
+    // 当前用户id
+    private String userId;
 
     // 产品规格
     private List<Specs> specsList;
@@ -74,11 +81,6 @@ public class Product extends ABaseDO {
 
     // 介绍奖励
     private List<TjAward> sendAwardList;
-
-    // ***********************db******************
-    private Integer level;
-
-    private String userId;
 
     // 各级代理云仓该产品最小规格数量
     private Integer whNumber;

@@ -23,7 +23,7 @@ public class SmsOutAOImpl implements ISmsOutAO {
     @Override
     public void sendCaptcha(String mobile, String bizType, String companyCode,
             String systemCode) {
-        smsOutBO.sendCaptcha(mobile, bizType, companyCode, systemCode);
+        smsOutBO.sendCaptcha(mobile, bizType, systemCode);
     }
 
     @Override

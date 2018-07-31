@@ -39,10 +39,10 @@ public class Specs extends ABaseDO {
     private Double weight;
 
     // 是否允许授权单下单
-    private String isImpowerOrder;
+    private String isSqOrder;
 
     // 是否允许升级单下单
-    private String isUpgradeOrder;
+    private String isSjOrder;
 
     // 是否允许普通单下单
     private String isNormalOrder;
@@ -88,19 +88,19 @@ public class Specs extends ABaseDO {
     }
 
     public String getIsImpowerOrder() {
-        return isImpowerOrder;
+        return isSjOrder;
     }
 
     public void setIsImpowerOrder(String isImpowerOrder) {
-        this.isImpowerOrder = isImpowerOrder;
+        this.isSjOrder = isImpowerOrder;
     }
 
     public String getIsUpgradeOrder() {
-        return isUpgradeOrder;
+        return isSqOrder;
     }
 
     public void setIsUpgradeOrder(String isUpgradeOrder) {
-        this.isUpgradeOrder = isUpgradeOrder;
+        this.isSqOrder = isUpgradeOrder;
     }
 
     public String getIsNormalOrder() {

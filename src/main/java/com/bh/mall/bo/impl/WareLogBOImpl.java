@@ -39,8 +39,8 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setProductCode(data.getProductCode());
         logData.setProductName(data.getProductName());
 
-        logData.setSpecsCode(data.getProductSpecsCode());
-        logData.setSpecsName(data.getProductSpecsName());
+        logData.setSpecsCode(data.getSpecsCode());
+        logData.setSpecsName(data.getSpecsName());
         logData.setPrice(data.getPrice());
         logData.setTranNumber(tranNumber);
         logData.setBeforeNumber(0);
@@ -153,8 +153,8 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setProductCode(inOrder.getProductCode());
         logData.setProductName(inOrder.getProductName());
 
-        logData.setSpecsCode(inOrder.getProductSpecsCode());
-        logData.setSpecsName(inOrder.getProductSpecsName());
+        logData.setSpecsCode(inOrder.getSpecsCode());
+        logData.setSpecsName(inOrder.getSpecsName());
         logData.setPrice(inOrder.getPrice());
         logData.setTranNumber(changeNumber);
         logData.setBeforeNumber(beforeNumber);

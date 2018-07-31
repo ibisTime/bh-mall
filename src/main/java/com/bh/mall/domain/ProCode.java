@@ -6,7 +6,7 @@ import java.util.List;
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
-* 条形码
+* 条形码（箱码）
 * @author: nyc 
 * @since: 2018-07-01 21:28:34
 * @history:
@@ -57,6 +57,14 @@ public class ProCode extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 
     public Date getCreateDatetime() {

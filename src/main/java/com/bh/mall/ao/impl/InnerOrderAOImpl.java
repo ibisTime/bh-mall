@@ -89,7 +89,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             .generate(EGeneratePrefix.InnerOrder.getCode());
         data.setCode(code);
         data.setProductCode(req.getProductCode());
-        data.setProductName(innerProduct.getName());
+        data.setProductName(innerProduct.getProductName());
         data.setPic(innerProduct.getPic());
         data.setPrice(innerProduct.getPrice());
 

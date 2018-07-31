@@ -35,6 +35,8 @@ public class JsAward extends ABaseDO {
     // 备注
     private String remark;
 
+    // ********db***************
+
     public void setCode(String code) {
         this.code = code;
     }

@@ -25,10 +25,10 @@ public class InOrder extends ABaseDO {
     private String productName;
 
     // 规格编号
-    private String productSpecsCode;
+    private String specsCode;
 
     // 规格名称
-    private String productSpecsName;
+    private String specsName;
 
     // 图片
     private String pic;
@@ -95,6 +95,7 @@ public class InOrder extends ABaseDO {
     // 状态
     private List<String> fialStatus;
 
+    // 关键词
     private String keyword;
 
     // 更信人名字
@@ -180,20 +181,20 @@ public class InOrder extends ABaseDO {
         return productName;
     }
 
-    public void setProductSpecsCode(String productSpecsCode) {
-        this.productSpecsCode = productSpecsCode;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
-    public String getProductSpecsCode() {
-        return productSpecsCode;
+    public String getSpecsCode() {
+        return specsCode;
     }
 
-    public void setProductSpecsName(String productSpecsName) {
-        this.productSpecsName = productSpecsName;
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
-    public String getProductSpecsName() {
-        return productSpecsName;
+    public String getSpecsName() {
+        return specsName;
     }
 
     public void setPic(String pic) {

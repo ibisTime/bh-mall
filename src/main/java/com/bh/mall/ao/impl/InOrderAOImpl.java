@@ -586,7 +586,7 @@ public class InOrderAOImpl implements IInOrderAO {
 
         // 改变产品数量
         Product pData = productBO.getProduct(data.getProductCode());
-        Specs psData = specsBO.getSpecs(data.getProductSpecsCode());
+        Specs psData = specsBO.getSpecs(data.getSpecsCode());
         this.changeProductNumber(agent, pData, psData, data,
             -data.getQuantity(), data.getCode());
 
@@ -651,7 +651,7 @@ public class InOrderAOImpl implements IInOrderAO {
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agent
                 .getLevel()) {
                 Ware toWare = wareBO.getWareByProductSpec(inOrder.getToUser(),
-                    inOrder.getProductSpecsCode());
+                    inOrder.getSpecsCode());
                 // 上级云仓没有该产品
                 if (null == toWare) {
                     throw new BizException("xn00000", "上级代理云仓中没有该产品");

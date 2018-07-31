@@ -603,7 +603,7 @@ public class SqFormAOImpl implements ISqFormAO {
                 // 代理等级表
                 AgentLevel agent = agentLevelBO
                     .getAgentByLevel(buser.getApplyLevel());
-                impowerApply.setImpowerAmount(agent.getAmount());
+
             }
             // 审核人
             if (EUser.ADMIN.getCode().equals(impowerApply.getApprover())) {
@@ -642,8 +642,8 @@ public class SqFormAOImpl implements ISqFormAO {
     }
 
     @Override
-    public void approveCancelSqForm(String userId, String approver, String result,
-            String remark) {
+    public void approveCancelSqForm(String userId, String approver,
+            String result, String remark) {
     }
 
 }

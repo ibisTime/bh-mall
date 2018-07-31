@@ -16,50 +16,52 @@ public class SYSUser extends ABaseDO {
 
     private static final long serialVersionUID = -332310384678966884L;
 
-    /****** key ******/
     // 管理人员id
     private String userId;
 
-    /****** 登陆信息 ******/
+    // 角色编号
+    private String roleCode;
+
+    // 真实姓名
+    private String realName;
+
+    // 头像
+    private String photo;
+
+    // 电话
+    private String mobile;
+
     // 登陆名
     private String loginName;
 
     // 登陆密码
     private String loginPwd;
 
+    // 登录密码强度
     private String loginPwdStrength;
 
-    //
-    private String realName;
+    // 创建时间
+    private Date createDatetime;
 
-    //
-    private String mobile;
+    // 状态
+    private String status;
 
-    // 头像
-    private String photo;
+    // 更新人
+    private String updater;
 
-    //
-    private String roleCode;
+    // 更新时间
+    private Date updateDatetime;
 
     // 系统编号
     private String systemCode;
 
-    private String companyCode;
-
-    private Date createDatetime;
-
-    private String status;
-
-    private String updater;
-
-    private Date updateDatetime;
-
+    // 备注
     private String remark;
 
-    // DB
-    private List<SYSUser> sysUserList;
+    // *****************DB****************
 
-    /*****************************/
+    // 系统用户列表
+    private List<SYSUser> sysUserList;
 
     public List<SYSUser> getSysUserList() {
         return sysUserList;
@@ -101,14 +103,6 @@ public class SYSUser extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getRealName() {

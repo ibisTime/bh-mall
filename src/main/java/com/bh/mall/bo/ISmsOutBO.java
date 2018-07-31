@@ -10,8 +10,7 @@ public interface ISmsOutBO {
      * @create: 2017年2月13日 下午3:02:02 xieyj
      * @history:
      */
-    public void sendCaptcha(String mobile, String bizType, String companyCode,
-            String systemCode);
+    public void sendCaptcha(String mobile, String bizType, String systemCode);
 
     /**
      * 验证用户验证码是否正确

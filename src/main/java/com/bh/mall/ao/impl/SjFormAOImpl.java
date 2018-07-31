@@ -416,7 +416,7 @@ public class SjFormAOImpl implements ISjFormAO {
                 // 代理等级表
                 AgentLevel agentLevle = agentLevelBO
                     .getAgentByLevel(agent.getApplyLevel());
-                uplevelApply.setImpowerAmount(agentLevle.getAmount());
+                uplevelApply.setRequireAmount(agentLevle.getAmount());
             }
             // 审核人
             if (EUser.ADMIN.getCode().equals(uplevelApply.getApprover())) {
