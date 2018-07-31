@@ -13,56 +13,56 @@ public class SjFormDAOImpl extends AMybatisTemplate implements ISjFormDAO {
 
     @Override
     public void approveSjForm(SjForm data) {
-        super.update(NAMESPACE.concat("approve_upgrade"), data);
+        super.update(NAMESPACE.concat("insert_sjForm"), data);
     }
 
     @Override
     public void cancelSjForm(SjForm data) {
-        super.update(NAMESPACE.concat("cancel_uplevel"), data);
+        super.update(NAMESPACE.concat("insert_sjForm"), data);
     }
 
     @Override
     public void applySjForm(SjForm data) {
-        super.update(NAMESPACE.concat("upgrade_level"), data);
+        super.update(NAMESPACE.concat("insert_sjForm"), data);
     }
 
     @Override
     public void updateHighUser(SjForm data) {
-        super.update(NAMESPACE.concat("update_highUser"), data);
+        super.update(NAMESPACE.concat("insert_sjForm"), data);
     }
 
     @Override
     public int insert(SjForm data) {
-        return super.insert(NAMESPACE.concat("insert_upLevelApply"), data);
+        return super.insert(NAMESPACE.concat("insert_sjForm"), data);
     }
 
     @Override
     public int delete(SjForm data) {
-        return super.delete(NAMESPACE.concat("delete_upLevelApply"), data);
+        return super.delete(NAMESPACE.concat("delete_sjForm"), data);
     }
 
     @Override
     public SjForm select(SjForm condition) {
-        return super.select(NAMESPACE.concat("select_upLevelApply"), condition,
+        return super.select(NAMESPACE.concat("select_sjForm"), condition,
             SjForm.class);
     }
 
     @Override
     public long selectTotalCount(SjForm condition) {
-        return super.selectTotalCount(
-            NAMESPACE.concat("select_upLevelApply_count"), condition);
+        return super.selectTotalCount(NAMESPACE.concat("select_sjForm_count"),
+            condition);
     }
 
     @Override
     public List<SjForm> selectList(SjForm condition) {
-        return super.selectList(NAMESPACE.concat("select_upLevelApply"),
-            condition, SjForm.class);
+        return super.selectList(NAMESPACE.concat("select_sjForm"), condition,
+            SjForm.class);
     }
 
     @Override
     public List<SjForm> selectList(SjForm condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_upLevelApply"), start,
-            count, condition, SjForm.class);
+        return super.selectList(NAMESPACE.concat("select_sjForm"), start, count,
+            condition, SjForm.class);
     }
 
 }

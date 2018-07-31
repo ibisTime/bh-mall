@@ -146,7 +146,7 @@
 		<property name="paginableDAO" ref="sysuserDAOImpl"/>
 	</bean>
 	
-	<bean id="agentAllotBO" class="com.bh.mall.bo.impl.YxFormBOImpl">
+	<bean id="yxFormBO" class="com.bh.mall.bo.impl.YxFormBOImpl">
 		<property name="paginableDAO" ref="yxFormDAOImpl"/>
 	</bean>
 	
