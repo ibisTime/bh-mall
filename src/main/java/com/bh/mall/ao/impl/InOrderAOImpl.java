@@ -141,6 +141,7 @@ public class InOrderAOImpl implements IInOrderAO {
             }
 
             String orderCode = inOrderBO.saveInOrder(applyUser.getUserId(),
+                applyUser.getRealName(), applyUser.getTeamName(),
                 applyUser.getHighUserId(), pData.getCode(), pData.getName(),
                 specs.getCode(), specs.getName(), pData.getAdvPic(),
                 agentPrice.getPrice(), cart.getQuantity(), req.getApplyNote());
@@ -208,6 +209,7 @@ public class InOrderAOImpl implements IInOrderAO {
         }
 
         return inOrderBO.saveInOrder(applyUser.getUserId(),
+            applyUser.getRealName(), applyUser.getTeamName(),
             applyUser.getHighUserId(), pData.getCode(), pData.getName(),
             specs.getCode(), specs.getName(), pData.getAdvPic(),
             agentPrice.getPrice(), StringValidater.toInteger(req.getQuantity()),

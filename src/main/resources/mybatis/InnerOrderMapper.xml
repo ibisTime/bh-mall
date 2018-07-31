@@ -8,12 +8,14 @@
 		<result column="product_name" property="productName" />
 		<result column="pic" property="pic" />
 		<result column="quantity" property="quantity" />
+		
 		<result column="price" property="price" />
 		<result column="apply_user" property="applyUser" />
 		<result column="level" property="level" />
 		<result column="team_name" property="teamName" />
-		<result column="apply_note" property="applyNote" />
+		
 		<result column="apply_datetime" property="applyDatetime" />
+		<result column="apply_note" property="applyNote" />
 		<result column="amount" property="amount" />
 		<result column="yunfei" property="yunfei" />
 		<result column="status" property="status" />

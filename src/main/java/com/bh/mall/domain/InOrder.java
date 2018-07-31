@@ -66,6 +66,12 @@ public class InOrder extends ABaseDO {
     // 下单人
     private String applyUser;
 
+    // 下单人姓名
+    private String realName;
+
+    // 团队名称
+    private String teamName;
+
     // 下单备注
     private String applyNote;
 
@@ -411,6 +417,22 @@ public class InOrder extends ABaseDO {
 
     public void setLevelList(List<Integer> levelList) {
         this.levelList = levelList;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }
