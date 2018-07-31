@@ -122,4 +122,19 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
         return tjAwardDAO.selectList(condition);
     }
 
+    @Override
+    public TjAward getAwardByLevel(Integer level, String productCode) {
+        TjAward data = null;
+        if (StringUtils.isNotBlank(productCode)) {
+            TjAward condition = new TjAward();
+            condition.setProductCode(productCode);
+            condition.setLevel(level);
+            data = tjAwardDAO.select(condition);
+            if (null == data) {
+                throw new BizException("xn00000", "该产品奖励不存在");
+            }
+        }
+        return data;
+    }
+
 }

@@ -7,18 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.ICartAO;
+import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISpecsBO;
-import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
-import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -37,8 +37,8 @@ public class CartAOImpl implements ICartAO {
     IAgentPriceBO agentPriceBO;
 
     @Override
-    public String addCart(String userId, String productCode,
-            String specsCode, String quantity) {
+    public String addCart(String userId, String productCode, String specsCode,
+            String quantity) {
 
         if (StringValidater.toInteger(quantity) <= 0) {
             throw new BizException("xn00000", "添加数量不能少于零");
@@ -46,8 +46,7 @@ public class CartAOImpl implements ICartAO {
 
         productBO.getProduct(productCode);
         Cart data = cartBO.getCartByProductCode(productCode, specsCode);
-        AgentPrice specsPrice = agentPriceBO
-            .getPriceByLevel(specsCode, 6);
+        AgentPrice specsPrice = agentPriceBO.getPriceByLevel(specsCode, 6);
 
         String code = OrderNoGenerater.generate(EGeneratePrefix.Cart.getCode());
         if (data != null) {
@@ -61,7 +60,7 @@ public class CartAOImpl implements ICartAO {
             data.setUserId(userId);
 
             data.setProductCode(productCode);
-            data.setProductSpecsCode(specsCode);
+            data.setSpecsCode(specsCode);
             data.setQuantity(StringValidater.toInteger(quantity));
             data.setPrice(specsPrice.getPrice());
             cartBO.saveCart(data);
@@ -96,8 +95,7 @@ public class CartAOImpl implements ICartAO {
         for (Cart data : page.getList()) {
             Product product = productBO.getProduct(data.getProductCode());
             data.setProduct(product);
-            Specs specs = specsBO
-                .getSpecs(data.getProductSpecsCode());
+            Specs specs = specsBO.getSpecs(data.getSpecsCode());
             data.setSpecsName(specs.getName());
         }
         return page;
@@ -113,8 +111,7 @@ public class CartAOImpl implements ICartAO {
         Cart data = cartBO.getCart(code);
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
-        Specs specs = specsBO
-            .getSpecs(data.getProductSpecsCode());
+        Specs specs = specsBO.getSpecs(data.getSpecsCode());
         data.setSpecsName(specs.getName());
         return data;
     }

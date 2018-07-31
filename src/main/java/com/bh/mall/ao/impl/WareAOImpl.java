@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,16 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IOrderAO;
+import com.bh.mall.ao.IInOrderAO;
 import com.bh.mall.ao.IWareAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IOrderBO;
-import com.bh.mall.bo.IProductBO;
-import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.IAgentPriceBO;
+import com.bh.mall.bo.IInOrderBO;
+import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
@@ -24,10 +25,11 @@ import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.Product;
-import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.AgentPrice;
+import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.Product;
 import com.bh.mall.domain.SYSConfig;
+import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627814Res;
@@ -53,7 +55,7 @@ public class WareAOImpl implements IWareAO {
     IAgentLevelBO agentLevelBO;
 
     @Autowired
-    IOrderBO orderBO;
+    IInOrderBO inOrderBO;
 
     @Autowired
     ISYSConfigBO sysConfigBO;
@@ -65,7 +67,7 @@ public class WareAOImpl implements IWareAO {
     IAgentPriceBO agentPriceBO;
 
     @Autowired
-    IOrderAO orderAO;
+    IInOrderAO inOrderAO;
 
     @Autowired
     IAddressBO addressBO;
@@ -104,8 +106,7 @@ public class WareAOImpl implements IWareAO {
             specsCondition.setUserId(ware.getUserId());
             specsCondition.setProductCode(ware.getProductCode());
             ware.setWhsList(wareBO.queryWareList(specsCondition));
-            int minSpecsNumber = specsBO
-                .getMinSpecsNumber(product.getCode());
+            int minSpecsNumber = specsBO.getMinSpecsNumber(product.getCode());
             ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
         }
         return list;
@@ -121,8 +122,8 @@ public class WareAOImpl implements IWareAO {
         condition.setProductCode(data.getProductCode());
         List<Ware> specsList = wareBO.queryWareList(condition);
         for (Ware wh : specsList) {
-            AgentPrice price = agentPriceBO
-                .getPriceByLevel(wh.getProductSpecsCode(), agent.getLevel());
+            AgentPrice price = agentPriceBO.getPriceByLevel(wh.getSpecsCode(),
+                agent.getLevel());
             wh.setPrice(price.getPrice());
         }
         data.setWhsList(specsList);
@@ -147,8 +148,7 @@ public class WareAOImpl implements IWareAO {
             specsCondition.setUserId(ware.getUserId());
             specsCondition.setProductCode(ware.getProductCode());
             ware.setWhsList(wareBO.queryWareList(specsCondition));
-            int minSpecsNumber = specsBO
-                .getMinSpecsNumber(product.getCode());
+            int minSpecsNumber = specsBO.getMinSpecsNumber(product.getCode());
             ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
 
         }
@@ -183,14 +183,13 @@ public class WareAOImpl implements IWareAO {
             throw new BizException("xn00000", "您仓库中没有该规格的产品");
         }
 
-        Specs psData = specsBO
-            .getSpecs(data.getProductSpecsCode());
-        AgentPrice pspData = agentPriceBO
-            .getPriceByLevel(data.getProductSpecsCode(), agent.getLevel());
+        Specs psData = specsBO.getSpecs(data.getSpecsCode());
+        AgentPrice pspData = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
+            agent.getLevel());
 
         // 检查限购
-        orderAO.checkLimitNumber(agent, psData, pspData,
-            StringValidater.toInteger(req.getQuantity()));
+        // inOrderAO.checkLimitNumber(agent, psData, pspData,
+        // StringValidater.toInteger(req.getQuantity()));
         if (pspData.getMinNumber() > data.getQuantity()) {
             throw new BizException("xn00000",
                 "该产品云仓提货不能少于" + pspData.getMinNumber() + psData.getName());
@@ -210,18 +209,18 @@ public class WareAOImpl implements IWareAO {
         Long amount = data.getPrice()
                 * StringValidater.toInteger(req.getQuantity());
 
-        if (orderBO.checkImpowerOrder(agent.getUserId(),
-            agent.getImpowerDatetime())) {
-            if (agentLevel.getAmount() > amount) {
-                throw new BizException("xn00000", agentLevel.getName()
-                        + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
-            } else {
-                kind = EOrderKind.Impower_Order.getCode();
-            }
-
-        } else {
-            kind = EOrderKind.Pick_Up.getCode();
-        }
+        // if (inOrderBO.checkImpowerOrder(agent.getUserId(),
+        // agent.getImpowerDatetime())) {
+        // if (agentLevel.getAmount() > amount) {
+        // throw new BizException("xn00000", agentLevel.getName()
+        // + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
+        // } else {
+        // kind = EOrderKind.Impower_Order.getCode();
+        // }
+        //
+        // } else {
+        // kind = EOrderKind.Pick_Up.getCode();
+        // }
 
         // 是否完成升级单
         // if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
@@ -246,9 +245,9 @@ public class WareAOImpl implements IWareAO {
 
             for (int i = 0; i < singleNumber; i++) {
 
-                String code = orderBO.pickUpGoods(data.getProductCode(),
+                String code = inOrderBO.pickUpGoods(data.getProductCode(),
                     data.getProductName(), product.getPic(),
-                    data.getProductSpecsCode(), data.getProductSpecsName(),
+                    data.getSpecsCode(), data.getSpecsName(),
                     psData.getSingleNumber(), data.getPrice(),
                     psData.getSingleNumber() * data.getPrice(), yunfei,
                     agent.getHighUserId(), data.getUserId(), req.getSigner(),
@@ -261,9 +260,9 @@ public class WareAOImpl implements IWareAO {
                     EBizType.AJ_YCTH, EBizType.AJ_YCTH.getValue(), code);
             }
         } else {
-            String code = orderBO.pickUpGoods(data.getProductCode(),
-                data.getProductName(), product.getPic(),
-                data.getProductSpecsCode(), data.getProductSpecsName(),
+            String code = inOrderBO.pickUpGoods(data.getProductCode(),
+                data.getProductName(), product.getPic(), data.getSpecsCode(),
+                data.getSpecsName(),
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),
                 psData.getSingleNumber() * data.getPrice(), yunfei,
                 agent.getHighUserId(), data.getUserId(), req.getSigner(),
@@ -293,7 +292,7 @@ public class WareAOImpl implements IWareAO {
             List<Ware> whList = wareBO.queryWareList(specsCondition);
             for (Ware wh : whList) {
                 AgentPrice price = agentPriceBO
-                    .getPriceByLevel(wh.getProductSpecsCode(), 6);
+                    .getPriceByLevel(wh.getSpecsCode(), 6);
                 wh.setPrice(price.getPrice());
             }
             ware.setWhsList(whList);
@@ -310,13 +309,26 @@ public class WareAOImpl implements IWareAO {
         condition.setProductCode(data.getProductCode());
         List<Ware> specsList = wareBO.queryWareList(condition);
         for (Ware ware : specsList) {
-            AgentPrice price = agentPriceBO
-                .getPriceByLevel(ware.getProductSpecsCode(), 6);
+            AgentPrice price = agentPriceBO.getPriceByLevel(ware.getSpecsCode(),
+                6);
             ware.setPrice(price.getPrice());
         }
         data.setWhsList(specsList);
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
         return data;
+    }
+
+    // 日、周、月已购数量
+    private int getNumber(String agentId, Date startDatetime,
+            Date endDatetime) {
+        int number = 0;
+        List<InOrder> list = inOrderBO.getProductQuantity(agentId,
+            startDatetime, endDatetime);
+        for (InOrder inOrder : list) {
+            Specs specs = specsBO.getSpecs(inOrder.getProductSpecsCode());
+            number = number + specs.getNumber();
+        }
+        return number;
     }
 }

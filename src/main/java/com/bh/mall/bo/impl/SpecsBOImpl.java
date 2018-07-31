@@ -65,7 +65,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
                     String pspCode = OrderNoGenerater
                         .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
                     agentPrice.setCode(pspCode);
-                    agentPrice.setProductSpecsCode(psCode);
+                    agentPrice.setSpecsCode(psCode);
                     agentPrice.setLevel(
                         StringValidater.toInteger(specsPrice.getLevel()));
 
@@ -99,7 +99,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
             data.setProductCode(productCode);
 
             AgentPrice pspData = new AgentPrice();
-            pspData.setProductSpecsCode(productCode);
+            pspData.setSpecsCode(productCode);
             specsDAO.delete(data);
             agentPriceDAO.delete(pspData);
         }
@@ -152,7 +152,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
             String pspCode = OrderNoGenerater
                 .generate(EGeneratePrefix.ProductSpecsPrice.getCode());
             agentPrice.setCode(pspCode);
-            agentPrice.setProductSpecsCode(psCode);
+            agentPrice.setSpecsCode(psCode);
             agentPrice
                 .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
 

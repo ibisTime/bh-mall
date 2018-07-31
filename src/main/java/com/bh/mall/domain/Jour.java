@@ -75,7 +75,7 @@ public class Jour extends ABaseDO {
     // 业务类型列表
     private List<String> bizTypeList;
 
-    private Order orderInformation;
+    private InOrder orderInformation;
 
     // 查询条件1：创建起始时间
     private Date createDatetimeStart;
@@ -274,11 +274,11 @@ public class Jour extends ABaseDO {
         this.payGroup = payGroup;
     }
 
-    public Order getOrderInformation() {
+    public InOrder getOrderInformation() {
         return orderInformation;
     }
 
-    public void setOrderInformation(Order orderInformation) {
+    public void setOrderInformation(InOrder orderInformation) {
         this.orderInformation = orderInformation;
     }
 

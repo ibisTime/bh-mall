@@ -19,8 +19,8 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.enums.EAgentType;
 import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EAgentType;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -616,6 +616,16 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             throw new BizException("xn00000", "该团队没有团队长");
         }
         return list.get(0);
+    }
+
+    @Override
+    public boolean isHighest(String userId) {
+        Agent data = this.getAgent(userId);
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getLevel()) {
+            return true;
+        }
+        return false;
     }
 
 }

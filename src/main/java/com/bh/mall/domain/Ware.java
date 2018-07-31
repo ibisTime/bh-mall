@@ -31,10 +31,10 @@ public class Ware extends ABaseDO {
     private String productName;
 
     // 规格编号
-    private String productSpecsCode;
+    private String specsCode;
 
     // 规格名称
-    private String productSpecsName;
+    private String specsName;
 
     // 价格
     private Long price;
@@ -124,8 +124,8 @@ public class Ware extends ABaseDO {
         return productName;
     }
 
-    public String getProductSpecsCode() {
-        return productSpecsCode;
+    public String getSpecsCode() {
+        return specsCode;
     }
 
     public String getType() {
@@ -136,16 +136,16 @@ public class Ware extends ABaseDO {
         this.type = type;
     }
 
-    public void setProductSpecsCode(String productSpecsCode) {
-        this.productSpecsCode = productSpecsCode;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
-    public String getProductSpecsName() {
-        return productSpecsName;
+    public String getSpecsName() {
+        return specsName;
     }
 
-    public void setProductSpecsName(String productSpecsName) {
-        this.productSpecsName = productSpecsName;
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
     public String getCurrency() {

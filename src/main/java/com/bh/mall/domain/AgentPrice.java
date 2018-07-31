@@ -16,7 +16,7 @@ public class AgentPrice extends ABaseDO {
     private String code;
 
     // 规格编号
-    private String productSpecsCode;
+    private String specsCode;
 
     // 等级
     private Integer level;
@@ -53,12 +53,12 @@ public class AgentPrice extends ABaseDO {
         this.code = code;
     }
 
-    public String getProductSpecsCode() {
-        return productSpecsCode;
+    public String getSpecsCode() {
+        return specsCode;
     }
 
-    public void setProductSpecsCode(String productSpecsCode) {
-        this.productSpecsCode = productSpecsCode;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
     public Integer getLevel() {

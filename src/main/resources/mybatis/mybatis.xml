@@ -15,46 +15,47 @@
  	    <typeAlias alias="cNavigate" type="com.bh.mall.domain.CNavigate" />
 	    <typeAlias alias="sysDict" type="com.bh.mall.domain.SYSDict" />
 	    <typeAlias alias="sysConfig" type="com.bh.mall.domain.SYSConfig" />
-	    
 	    <typeAlias alias="agentLevel" type="com.bh.mall.domain.AgentLevel"/>
 	    <typeAlias alias="material" type="com.bh.mall.domain.Material"/>
+	   
 	    <typeAlias alias="product" type="com.bh.mall.domain.Product"/>
-	    
 	    <typeAlias alias="specs" type="com.bh.mall.domain.Specs"/>
 	    <typeAlias alias="agentPrice" type="com.bh.mall.domain.AgentPrice"/>
 	    <typeAlias alias="innerProduct" type="com.bh.mall.domain.InnerProduct"/>
 	    <typeAlias alias="specsLog" type="com.bh.mall.domain.SpecsLog"/>
-	    <typeAlias alias="tjAward" type="com.bh.mall.domain.TjAward"/>
 	    
+	    <typeAlias alias="tjAward" type="com.bh.mall.domain.TjAward"/>
 	    <typeAlias alias="cart" type="com.bh.mall.domain.Cart"/>
 	    <typeAlias alias="innerOrder" type="com.bh.mall.domain.InnerOrder"/>
-	
 		<typeAlias alias="account" type="com.bh.mall.domain.Account"/>
 	    <typeAlias alias="jour" type="com.bh.mall.domain.Jour"/>
+	   
 	    <typeAlias alias="bankcard" type="com.bh.mall.domain.Bankcard"/>
 	    <typeAlias alias="withdraw" type="com.bh.mall.domain.Withdraw"/>
-	
-		<typeAlias alias="order" type="com.bh.mall.domain.Order"/>
+		<typeAlias alias="inOrder" type="com.bh.mall.domain.InOrder"/>
+		<typeAlias alias="outOrder" type="com.bh.mall.domain.OutOrder"/>
 		<typeAlias alias="charge" type="com.bh.mall.domain.Charge"/>
 
 		<typeAlias alias="jsAward" type="com.bh.mall.domain.JsAward"/>
 		<typeAlias alias="ware" type="com.bh.mall.domain.Ware"/>
 		<typeAlias alias="wareLog" type="com.bh.mall.domain.WareLog"/>
 		<typeAlias alias="exchangeOrder" type="com.bh.mall.domain.ExchangeOrder"/>
+<<<<<<< HEAD
 		
+=======
+>>>>>>> refs/remotes/origin/master
 		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
 		<typeAlias alias="agentReport" type="com.bh.mall.domain.AgentReport"/>
 		
 		<typeAlias alias="chAward" type="com.bh.mall.domain.ChAward"/>
 		<typeAlias alias="miniCode" type="com.bh.mall.domain.MiniCode"/>
 		<typeAlias alias="proCode" type="com.bh.mall.domain.ProCode"/>
-		
 		<typeAlias alias="sysuser" type="com.bh.mall.domain.SYSUser"/>
+		
 		<typeAlias alias="cuser" type="com.bh.mall.domain.CUser"/>
 		<typeAlias alias="agent" type="com.bh.mall.domain.Agent"/>
 		<typeAlias alias="agentAllot" type="com.bh.mall.domain.YxForm"/>
 		<typeAlias alias="impowerApply" type="com.bh.mall.domain.SqForm"/>
 		<typeAlias alias="uplevelApply" type="com.bh.mall.domain.SjForm"/>
-		
 	</typeAliases>
 </configuration>	

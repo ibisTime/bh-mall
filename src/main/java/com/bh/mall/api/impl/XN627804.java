@@ -24,7 +24,11 @@ public class XN627804 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+<<<<<<< HEAD
         return exchangeOrderAO.getExchangeOrderMessage(req);
+=======
+        return exchangeOrderAO.getChangeOrderMessage(req);
+>>>>>>> refs/remotes/origin/master
     }
 
     @Override

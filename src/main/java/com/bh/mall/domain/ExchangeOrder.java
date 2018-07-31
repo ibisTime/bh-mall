@@ -24,6 +24,7 @@ public class ExchangeOrder extends ABaseDO {
     private String productName;
 
     // 规格编号
+<<<<<<< HEAD
     private String productSpecsCode;
 
     // 规格名称
@@ -143,6 +144,127 @@ public class ExchangeOrder extends ABaseDO {
 
     public void setProductSpecsName(String productSpecsName) {
         this.productSpecsName = productSpecsName;
+=======
+    private String specsCode;
+
+    // 规格名称
+    private String specsName;
+
+    // 置换数量
+    private Integer quantity;
+
+    // 产品单价
+    private Long price;
+
+    // 置换总价
+    private Long amount;
+
+    // 置换产品编号
+    private String changeProductCode;
+
+    // 置换产品名称
+    private String changeProductName;
+
+    // 置换产品规格编号
+    private String changeSpecsCode;
+
+    // 置换规格名称
+    private String changeSpecsName;
+
+    // 置换价格
+    private Long changePrice;
+
+    // 申请人
+    private String applyUser;
+
+    // 姓名
+    private String realName;
+
+    // 申请人等级
+    private Integer level;
+
+    // 可换数量
+    private Integer canChangeQuantity;
+
+    // 申请时间
+    private Date applyDatetime;
+
+    // 申请备注
+    private String applyNote;
+
+    // 状态
+    private String status;
+
+    // 审核人
+    private String approver;
+
+    // 审核时间
+    private Date approveDatetime;
+
+    // 审核备注
+    private String approveNote;
+
+    // ***************db****************
+
+    // 申请开始时间
+    private Date applyStartDatetime;
+
+    // 申请结束时间
+    private Date applyEndDatetime;
+
+    private String keyword;
+
+    private String approveName;
+
+    private Agent agent;
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getProductSpecsCode() {
+        return specsCode;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
+>>>>>>> refs/remotes/origin/master
     }
 
     public String getChangeSpecsName() {

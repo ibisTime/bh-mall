@@ -28,7 +28,11 @@ public class XN627802 extends AProcessor {
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setKeyword(req.getKeyword());
 
+<<<<<<< HEAD
         return exchangeOrderAO.queryExchangeOrderList(condition);
+=======
+        return exchangeOrderAO.queryChangeOrderList(condition);
+>>>>>>> refs/remotes/origin/master
     }
 
     @Override

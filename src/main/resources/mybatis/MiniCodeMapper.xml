@@ -3,7 +3,6 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bh.mall.dao.IMiniCodeDAO">
 	<resultMap id="miniCode_DB_Result" type="miniCode">
-	
 		<result column="mini_code" property="miniCode" />
 		<result column="trace_code" property="traceCode" />
 		<result column="ref_code" property="refCode" />
@@ -16,6 +15,7 @@
 	</resultMap>
 	
 	<sql id="where_condition">
+	
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="miniCode != null and miniCode != '' ">
 				AND t.mini_code = #{miniCode}

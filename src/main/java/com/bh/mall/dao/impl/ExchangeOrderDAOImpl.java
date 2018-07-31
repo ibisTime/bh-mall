@@ -58,7 +58,11 @@ public class ExchangeOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+<<<<<<< HEAD
     public List<ExchangeOrder> queryExchangeOrderPage(int start, int pageSize,
+=======
+    public List<ExchangeOrder> queryChangeOrderPage(int start, int pageSize,
+>>>>>>> refs/remotes/origin/master
             ExchangeOrder condition) {
         return super.selectList(NAMESPACE.concat("select_exchangeOrder"), start,
             pageSize, condition, ExchangeOrder.class);

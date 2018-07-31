@@ -123,4 +123,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public Agent getTeamLeader(String teamName);
 
+    // 是否为最高等级代理
+    public boolean isHighest(String userId);
+
 }

@@ -18,9 +18,9 @@ import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ICUserBO;
+import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
-import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
@@ -65,7 +65,7 @@ public class CUserAOImpl implements ICUserAO {
     IAccountBO accountBO;
 
     @Autowired
-    IOrderBO orderBO;
+    IInOrderBO inOrderBO;
 
     @Autowired
     IInnerOrderBO innerOrderBO;
@@ -209,7 +209,6 @@ public class CUserAOImpl implements ICUserAO {
     private XN627304Res doWxLoginReg(String unionId, String appOpenId,
             String h5OpenId, String nickname, String photo, String status) {
         cuserBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
-        Integer level = 0;
 
         String userId = cuserBO.doRegister(unionId, h5OpenId, appOpenId, null,
             EUserPwd.InitPwd.getCode(), nickname, photo, null);

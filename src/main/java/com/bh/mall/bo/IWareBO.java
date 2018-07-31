@@ -4,13 +4,11 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EBizType;
 
 public interface IWareBO extends IPaginableBO<Ware> {
-
-    public void removeWare(String code);
 
     public void refreshWare(Ware data);
 
@@ -18,8 +16,7 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public Ware getWare(String code);
 
-    public Ware getWareByProductSpec(String userId,
-            String productSpecsCode);
+    public Ware getWareByProductSpec(String userId, String productSpecsCode);
 
     public List<Ware> getWareByProduct(String productCode);
 
@@ -31,8 +28,8 @@ public interface IWareBO extends IPaginableBO<Ware> {
             EBizType toBizType, String fromBizNote, String toBizNote,
             String refNo);
 
-    public void saveWare(Ware data, Integer quantity,
-            EBizType bizType, String bizNote, String refNo);
+    public void saveWare(Ware data, Integer quantity, EBizType bizType,
+            String bizNote, String refNo);
 
     public void refreshLogCode(Ware whData);
 
@@ -42,8 +39,10 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public List<Ware> queryWareProductList(Ware condition);
 
-    public void buyWare(Order order, Agent agent);
+    public void buyWare(InOrder inOrder, Agent agent);
 
     public void changeWarePrice(List<Ware> whList, Integer level);
+
+    public void checkProduct(String toUser, String specsCode);
 
 }

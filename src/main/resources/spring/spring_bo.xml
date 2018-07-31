@@ -100,8 +100,11 @@
 		<property name="paginableDAO" ref="cartDAOImpl"></property>
 	</bean>
 	
-	<bean id="orderBO" class="com.bh.mall.bo.impl.OrderBOImpl">
-		<property name="paginableDAO" ref="orderDAOImpl"></property>
+	<bean id="inOrderBO" class="com.bh.mall.bo.impl.InOrderBOImpl">
+		<property name="paginableDAO" ref="inOrderDAOImpl"></property>
+	</bean>
+	<bean id="outOrderBO" class="com.bh.mall.bo.impl.OutOrderBOImpl">
+		<property name="paginableDAO" ref="outOrderDAOImpl"></property>
 	</bean>
 	
 	<bean id="chargeBO" class="com.bh.mall.bo.impl.ChargeBOImpl">

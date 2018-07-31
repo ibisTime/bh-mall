@@ -18,7 +18,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentPrice;
-import com.bh.mall.domain.Order;
+import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
@@ -51,10 +51,6 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     @Override
-    public void removeWare(String code) {
-    }
-
-    @Override
     public void refreshWare(Ware data) {
         wareDAO.updateQuantity(data);
     }
@@ -82,7 +78,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     public Ware getWareByProductSpec(String userId, String productSpecsCode) {
         Ware condition = new Ware();
         condition.setUserId(userId);
-        condition.setProductSpecsCode(productSpecsCode);
+        condition.setSpecsCode(productSpecsCode);
         return wareDAO.select(condition);
     }
 
@@ -168,7 +164,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     @Override
-    public void buyWare(Order data, Agent agent) {
+    public void buyWare(InOrder data, Agent agent) {
         Ware ware = this.getWareByProductSpec(agent.getUserId(),
             data.getProductSpecsCode());
 
@@ -180,8 +176,8 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
             whData.setCode(code);
             whData.setProductCode(data.getProductCode());
             whData.setProductName(data.getProductName());
-            whData.setProductSpecsCode(data.getProductSpecsCode());
-            whData.setProductSpecsName(data.getProductSpecsName());
+            whData.setSpecsCode(data.getProductSpecsCode());
+            whData.setSpecsName(data.getProductSpecsName());
 
             whData.setCurrency(ECurrency.YC_CNY.getCode());
             whData.setUserId(agent.getUserId());
@@ -209,11 +205,27 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     public void changeWarePrice(List<Ware> whList, Integer level) {
         for (Ware data : whList) {
             AgentPrice psPrice = agentPriceBO
-                .getPriceByLevel(data.getProductSpecsCode(), level);
+                .getPriceByLevel(data.getSpecsCode(), level);
             data.setPrice(psPrice.getPrice());
             data.setAmount(data.getQuantity() * psPrice.getPrice());
             wareDAO.changePrice(data);
         }
+    }
+
+    @Override
+    public void checkProduct(String userId, String specsCode) {
+        Ware data = new Ware();
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(specsCode)) {
+            Ware condition = new Ware();
+            condition.setUserId(userId);
+            condition.setSpecsCode(specsCode);
+            data = wareDAO.select(condition);
+            if (null == data) {
+                throw new BizException("xn00000", "上级云仓中没有改产品");
+            }
+        }
+
     }
 
 }

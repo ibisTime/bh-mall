@@ -50,10 +50,6 @@ public class XN627641Req {
     // （选填）省
     private String province;
 
-    public String getQuantity() {
-        return quantity;
-    }
-
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
@@ -66,11 +62,11 @@ public class XN627641Req {
         this.isSendHome = isSendHome;
     }
 
-    public String getProductSpecsCode() {
+    public String getSpecsCode() {
         return productSpecsCode;
     }
 
-    public void setProductSpecsCode(String productSpecsCode) {
+    public void setSpecsCode(String productSpecsCode) {
         this.productSpecsCode = productSpecsCode;
     }
 
@@ -144,6 +140,10 @@ public class XN627641Req {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getQuantity() {
+        return quantity;
     }
 
 }

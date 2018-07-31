@@ -85,7 +85,7 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
         AgentPrice data = null;
         if (StringUtils.isNotBlank(productSpecsCode)) {
             AgentPrice condition = new AgentPrice();
-            condition.setProductSpecsCode(productSpecsCode);
+            condition.setSpecsCode(productSpecsCode);
             condition.setLevel(level);
             data = agentPriceDAO.select(condition);
             if (data == null) {
@@ -100,7 +100,7 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
         List<AgentPrice> list = null;
         if (StringUtils.isNotBlank(specsCode)) {
             AgentPrice condition = new AgentPrice();
-            condition.setProductSpecsCode(specsCode);
+            condition.setSpecsCode(specsCode);
             list = agentPriceDAO.selectList(condition);
             if (CollectionUtils.isEmpty(list)) {
                 throw new BizException("xn0000", "该规格价格不存在");
