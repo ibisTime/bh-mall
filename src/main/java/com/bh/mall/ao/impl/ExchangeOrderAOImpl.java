@@ -8,11 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bh.mall.ao.IExchangeProductAO;
+import com.bh.mall.ao.IExchangeOrderAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IExchangeProductBO;
+import com.bh.mall.bo.IExchangeOrderBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IOrderBO;
 import com.bh.mall.bo.IProductBO;
@@ -30,7 +30,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.ExchangeProduct;
+import com.bh.mall.domain.ExchangeOrder;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
@@ -51,10 +51,10 @@ import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 
 @Service
-public class ExchangeProductAOImpl implements IExchangeProductAO {
+public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
     @Autowired
-    IExchangeProductBO exchangeProductBO;
+    IExchangeOrderBO exchangeOrderBO;
 
     @Autowired
     IAgentBO agentBO;
@@ -90,7 +90,7 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
     IChargeBO chargeBO;
 
     @Override
-    public String addChangeProduct(XN627790Req req) {
+    public String addExchangeOrder(XN627790Req req) {
         Agent uData = agentBO.getAgent(req.getApplyUser());
         Ware whData = wareBO.getWareByProductSpec(uData.getUserId(),
             req.getProductSpecsCode());
@@ -119,7 +119,7 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ChangeProduct.getCode());
 
-        ExchangeProduct data = new ExchangeProduct();
+        ExchangeOrder data = new ExchangeOrder();
         data.setCode(code);
         data.setProductCode(product.getCode());
         data.setProductName(product.getName());
@@ -153,7 +153,7 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
         data.setApplyNote(req.getApplyNote());
 
         data.setStatus(EChangeProductStatus.TO_CHANGE.getCode());
-        exchangeProductBO.saveChangeProduct(data);
+        exchangeOrderBO.saveExchangeOrder(data);
 
         wareBO.changeWare(whData.getCode(),
             -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCZH,
@@ -164,20 +164,20 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
     }
 
     @Override
-    public int editChangeProduct(ExchangeProduct data) {
-        return exchangeProductBO.refreshChangeProduct(data);
+    public int editExchangeOrder(ExchangeOrder data) {
+        return exchangeOrderBO.refreshExchangeOrder(data);
 
     }
 
     @Override
-    public int dropChangeProduct(String code) {
-        return exchangeProductBO.removeChangeProduct(code);
+    public int dropExchangeOrder(String code) {
+        return exchangeOrderBO.removeExchangeOrder(code);
 
     }
 
     @Override
-    public Paginable<ExchangeProduct> queryChangeProductPage(int start, int limit,
-            ExchangeProduct condition) {
+    public Paginable<ExchangeOrder> queryExchangeOrderPage(int start, int limit,
+            ExchangeOrder condition) {
         if (condition.getApplyStartDatetime() != null
                 && condition.getApplyEndDatetime() != null
                 && condition.getApplyStartDatetime()
@@ -185,12 +185,12 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        long totalCount = exchangeProductBO.getTotalCount(condition);
-        Page<ExchangeProduct> page = new Page<>(start, limit, totalCount);
-        List<ExchangeProduct> list = exchangeProductBO.queryChangeProductPage(
+        long totalCount = exchangeOrderBO.getTotalCount(condition);
+        Page<ExchangeOrder> page = new Page<>(start, limit, totalCount);
+        List<ExchangeOrder> list = exchangeOrderBO.queryExchangeOrderPage(
             page.getStart(), page.getPageSize(), condition);
 
-        for (ExchangeProduct ecchangeProduct : list) {
+        for (ExchangeOrder ecchangeProduct : list) {
             String approveName = this.getName(ecchangeProduct.getApprover());
             ecchangeProduct.setApproveName(approveName);
             // 补充下单代理的信息
@@ -202,17 +202,17 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
     }
 
     @Override
-    public List<ExchangeProduct> queryChangeProductList(ExchangeProduct condition) {
+    public List<ExchangeOrder> queryExchangeOrderList(ExchangeOrder condition) {
         if (condition.getApplyStartDatetime() != null
                 && condition.getApplyEndDatetime() != null
                 && condition.getApplyStartDatetime()
                     .after(condition.getApplyEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        List<ExchangeProduct> list = exchangeProductBO
-            .queryChangeProductList(condition);
+        List<ExchangeOrder> list = exchangeOrderBO
+            .queryExchangeOrderList(condition);
 
-        for (ExchangeProduct changeProduct : list) {
+        for (ExchangeOrder changeProduct : list) {
             String approveName = this.getName(changeProduct.getApprover());
             changeProduct.setApproveName(approveName);
             Agent agent = agentBO.getAgent(changeProduct.getApplyUser());
@@ -223,8 +223,8 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
     }
 
     @Override
-    public ExchangeProduct getChangeProduct(String code) {
-        ExchangeProduct data = exchangeProductBO.getChangeProduct(code);
+    public ExchangeOrder getExchangeOrder(String code) {
+        ExchangeOrder data = exchangeOrderBO.getExchangeOrder(code);
         String approveName = this.getName(data.getApprover());
         data.setApproveName(approveName);
         Agent agent = agentBO.getAgent(data.getApplyUser());
@@ -236,7 +236,7 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
     public void editChangePrice(String code, String changePrice,
             String approver, String approveNote) {
 
-        ExchangeProduct data = exchangeProductBO.getChangeProduct(code);
+        ExchangeOrder data = exchangeOrderBO.getExchangeOrder(code);
         if (!EChangeProductStatus.TO_CHANGE.getCode()
             .equals(data.getStatus())) {
             throw new BizException("xn0000", "该置换单已经审核完成,无需修改换货价");
@@ -263,13 +263,13 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
 
         data.setCanChangeQuantity(canChangeQuantity);
 
-        exchangeProductBO.refreshChangePrice(data);
+        exchangeOrderBO.refreshChangePrice(data);
     }
 
     @Override
     public void approveChange(String code, String approver, String approveNote,
             String result) {
-        ExchangeProduct data = exchangeProductBO.getChangeProduct(code);
+        ExchangeOrder data = exchangeOrderBO.getExchangeOrder(code);
         if (!EChangeProductStatus.TO_CHANGE.getCode()
             .equals(data.getStatus())) {
             throw new BizException("xn000", "该置换单未处于待审核状态");
@@ -340,7 +340,7 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
         data.setApproveDatetime(new Date());
         data.setApproveNote(approveNote);
         data.setStatus(status);
-        exchangeProductBO.approveChange(data);
+        exchangeOrderBO.approveChange(data);
     }
 
     private String getName(String agentCode) {
@@ -361,7 +361,7 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
     }
 
     @Override
-    public ExchangeProduct getChangeProductMessage(XN627790Req req) {
+    public ExchangeOrder getExchangeOrderMessage(XN627790Req req) {
         Agent uData = agentBO.getAgent(req.getApplyUser());
         Ware whData = wareBO.getWareByProductSpec(uData.getUserId(),
             req.getProductSpecsCode());
@@ -384,7 +384,7 @@ public class ExchangeProductAOImpl implements IExchangeProductAO {
         AgentPrice changeSpecsPrice = agentPriceBO
             .getPriceByLevel(changeSpecs.getCode(), uData.getLevel());
 
-        ExchangeProduct cpData = new ExchangeProduct();
+        ExchangeOrder cpData = new ExchangeOrder();
         cpData.setPrice(specsPrice.getPrice());
         cpData.setQuantity(StringValidater.toInteger(req.getQuantity()));
         Long amount = AmountUtil.eraseLiUp(specsPrice.getPrice()

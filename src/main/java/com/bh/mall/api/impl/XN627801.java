@@ -2,13 +2,13 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IExchangeProductAO;
+import com.bh.mall.ao.IExchangeOrderAO;
 import com.bh.mall.ao.IInnerOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.ExchangeProduct;
+import com.bh.mall.domain.ExchangeOrder;
 import com.bh.mall.dto.req.XN627801Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -21,14 +21,14 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627801 extends AProcessor {
-    private IExchangeProductAO exchangeProductAO = SpringContextHolder
-        .getBean(IExchangeProductAO.class);
+    private IExchangeOrderAO exchangeOrderAO = SpringContextHolder
+        .getBean(IExchangeOrderAO.class);
 
     private XN627801Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        ExchangeProduct condition = new ExchangeProduct();
+        ExchangeOrder condition = new ExchangeOrder();
         condition.setApplyUser(req.getApplyUser());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setKeyword(req.getKeyword());
@@ -46,7 +46,7 @@ public class XN627801 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return exchangeProductAO.queryChangeProductPage(start, limit, condition);
+        return exchangeOrderAO.queryExchangeOrderPage(start, limit, condition);
     }
 
     @Override

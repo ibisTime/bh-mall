@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IExchangeProductAO;
+import com.bh.mall.ao.IExchangeOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -17,8 +17,8 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627805 extends AProcessor {
 
-    private IExchangeProductAO echangeProductAO = SpringContextHolder
-        .getBean(IExchangeProductAO.class);
+    private IExchangeOrderAO echangeProductAO = SpringContextHolder
+        .getBean(IExchangeOrderAO.class);
 
     private XN627805Req req = null;
 

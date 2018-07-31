@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.IExchangeProductDAO">
-	<resultMap id="exchangeProduct_DB_Result" type="exchangeProduct">
+<mapper namespace="com.bh.mall.dao.IExchangeOrderDAO">
+	<resultMap id="exchangeOrder_DB_Result" type="exchangeOrder">
 		<result column="code" property="code" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
@@ -59,7 +59,7 @@
 			</if>
 		</trim>
 	</sql>
-	<select id="select_exchangeProduct" parameterType="exchangeProduct" resultMap="exchangeProduct_DB_Result">
+	<select id="select_exchangeOrder" parameterType="exchangeOrder" resultMap="exchangeOrder_DB_Result">
 		SELECT
 		t.code
 		,t.product_code
@@ -89,7 +89,7 @@
 		,t.approve_datetime
 		,t.approve_note
 		FROM
-		tbh_exchange_product t
+		tbh_exchange_order t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -98,15 +98,15 @@
 		</trim>
 	</select>
 
-	<select id="select_exchangeProduct_count" parameterType="exchangeProduct"
+	<select id="select_exchangeOrder_count" parameterType="exchangeOrder"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_exchange_product t
+		SELECT count(1) FROM tbh_exchange_order t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_exchangeProduct" parameterType="exchangeProduct">
+	<insert id="insert_exchangeOrder" parameterType="exchangeOrder">
 		INSERT INTO
-		tbh_exchange_product(
+		tbh_exchange_order(
 		code
 		,product_code
 		,product_name
@@ -165,8 +165,8 @@
 		)
 	</insert>
 
-	<update id="update_exchangeProduct" parameterType="exchangeProduct">
-		UPDATE tbh_exchange_product
+	<update id="update_exchangeOrder" parameterType="exchangeOrder">
+		UPDATE tbh_exchange_order
 		SET
 		product_code = #{productCode}
 		,product_name = #{productName}
@@ -189,8 +189,8 @@
 		WHERE code = #{code}
 	</update>
 
-	<update id="update_exchangePrice" parameterType="exchangeProduct">
-		UPDATE tbh_exchange_product
+	<update id="update_exchangePrice" parameterType="exchangeOrder">
+		UPDATE tbh_exchange_order
 		SET
 		change_price = #{changePrice}
 		,approver = #{approver}
@@ -199,8 +199,8 @@
 		WHERE code = #{code}
 	</update>
 
-	<update id="approve_exchange" parameterType="exchangeProduct">
-		UPDATE tbh_exchange_product
+	<update id="approve_exchange" parameterType="exchangeOrder">
+		UPDATE tbh_exchange_order
 		SET
 		status = #{status}
 		,approver = #{approver}

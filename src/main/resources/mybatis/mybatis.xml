@@ -40,7 +40,7 @@
 		<typeAlias alias="jsAward" type="com.bh.mall.domain.JsAward"/>
 		<typeAlias alias="ware" type="com.bh.mall.domain.Ware"/>
 		<typeAlias alias="wareLog" type="com.bh.mall.domain.WareLog"/>
-		<typeAlias alias="exchangeProduct" type="com.bh.mall.domain.ExchangeProduct"/>
+		<typeAlias alias="exchangeOrder" type="com.bh.mall.domain.ExchangeOrder"/>
 		
 		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
 		<typeAlias alias="agentReport" type="com.bh.mall.domain.AgentReport"/>

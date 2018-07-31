@@ -10,7 +10,7 @@ import com.bh.mall.dao.base.ABaseDO;
 * @since: 2018-04-09 14:47:55
 * @history:
 */
-public class ExchangeProduct extends ABaseDO {
+public class ExchangeOrder extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
