@@ -72,6 +72,7 @@ public class WareAOImpl implements IWareAO {
     @Autowired
     IAddressBO addressBO;
 
+    // 分页查询
     @Override
     public Paginable<Ware> queryWarePage(int start, int limit, Ware condition) {
         long count = wareBO.getTotalCountByProduct(condition);
@@ -94,6 +95,7 @@ public class WareAOImpl implements IWareAO {
         return page;
     }
 
+    // 列表查询
     @Override
     public List<Ware> queryWareList(Ware condition) {
         List<Ware> list = wareBO.queryWareList(condition);
@@ -112,6 +114,7 @@ public class WareAOImpl implements IWareAO {
         return list;
     }
 
+    // 详细查询
     @Override
     public Ware getWare(String code) {
 
@@ -132,6 +135,7 @@ public class WareAOImpl implements IWareAO {
         return data;
     }
 
+    // 前端分页查询
     @Override
     public Paginable<Ware> queryWareFrontPage(int start, int limit,
             Ware condition) {
@@ -156,6 +160,7 @@ public class WareAOImpl implements IWareAO {
         return page;
     }
 
+    // 通过用户id查询
     @Override
     public XN627814Res getWareByUser(String userId) {
         XN627814Res res = null;

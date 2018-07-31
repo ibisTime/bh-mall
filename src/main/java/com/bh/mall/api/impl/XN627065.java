@@ -39,7 +39,7 @@ public class XN627065 extends AProcessor {
         }
         data.setOrder(column, req.getOrderDir());
 
-        return sysMenuRoleAO.querySYSMenuList(data);
+        return sysMenuRoleAO.querySYSMenuRoleList(data);
     }
 
     @Override

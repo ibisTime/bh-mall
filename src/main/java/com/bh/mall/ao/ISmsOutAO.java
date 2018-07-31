@@ -1,6 +1,14 @@
 package com.bh.mall.ao;
 
+/**
+ * 短信验证
+ * @author: clockorange 
+ * @since: Jul 31, 2018 5:49:43 PM 
+ * @history:
+ */
+
 public interface ISmsOutAO {
+
     // 发送短信验证码
     public void sendCaptcha(String mobile, String bizType, String companyCode,
             String systemCode);

@@ -2,39 +2,42 @@ package com.bh.mall.ao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.SjForm;
 
+/**
+ * 升级单
+ * @author: clockorange 
+ * @since: Jul 31, 2018 5:37:54 PM 
+ * @history:
+ */
+@Component
 public interface ISjFormAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addSjForm(SjForm data);
-
-    // 取消升级申请 XN627276
-    public void cancelSjForm(String userId);
-
-    // 升级申请 XN627267
+    // 升级申请
     public void applySjForm(String userId, String highLevel, String payPdf,
             String teamName);
 
-    // 查询升级申请 XN627291
-    public Paginable<SjForm> querySjFormPage(int start, int limit,
-            SjForm condition);
+    // 取消升级申请
+    public void cancelSjForm(String userId, String approver, String result,
+            String remark);
 
-    // 列表查询轨迹 XN627292
-    public List<SjForm> querySjFormList(SjForm condition);
-
-    public SjForm getSjForm(String code);
-
-    // 分页查询轨迹 XN627293
-    public Paginable<SjForm> queryISjFormFrontPage(int start, int limit,
-            SjForm condition);
-
-    // 审核升级
+    // 通过审核升级
     public void approveSjForm(String userId, String approver, String result,
             String remark);
 
-    public void approveCancelSjForm(String userId, String approver,
-            String result, String remark);
+    // 分页查询
+    public Paginable<SjForm> querySjFormPage(int start, int limit,
+            SjForm condition);
+
+    // 列表查询
+    public List<SjForm> querySjFormList(SjForm condition);
+
+    // 详细查询
+    public SjForm getSjForm(String code);
 
 }

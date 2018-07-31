@@ -78,7 +78,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     /*************** 注册 **********************/
     @Override
-    public String addUser(String mobile, String loginPwd, String realName,
+    public String addSYSUser(String mobile, String loginPwd, String realName,
             String photo) {
         sysUserBO.isMobileExist(mobile, ESystemCode.BH.getCode());
         SYSUser data = new SYSUser();
@@ -152,7 +152,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     /*************** 设置角色**********************/
     // 设置角色
     @Override
-    public void doRoleUser(String userId, String roleCode, String updater,
+    public void doRoleSYSUser(String userId, String roleCode, String updater,
             String remark) {
         SYSUser user = sysUserBO.getUser(userId);
         if (user == null) {
@@ -171,24 +171,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
     public void resetAdminLoginPwd(String userId, String newLoginPwd) {
         SYSUser user = sysUserBO.getCheckUser(userId);
         sysUserBO.resetAdminLoginPwd(user, newLoginPwd);
-    }
-
-    /*************** 验证密码 **********************/
-    // 验证登录密码
-    @Override
-    public void doCheckLoginPwd(String userId, String loginPwd) {
-        SYSUser condition = new SYSUser();
-        condition.setUserId(userId);
-        List<SYSUser> userList1 = sysUserBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "用户不存在");
-        }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<SYSUser> userList2 = sysUserBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn702002", "登录密码错误");
-        }
-
     }
 
     /*************** 修改手机号 **********************/
@@ -246,6 +228,20 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public void resetLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd) {
+
     }
 
+    // 列表查询
+    public List<SYSUser> querySYSUserList(SYSUser condition) {
+        List<SYSUser> list = sysUserBO.queryUserList(condition);
+        return list;
+
+    }
+
+    // 详细查询
+    public SYSUser getSYSUser(String code) {
+
+        SYSUser sysuser = new SYSUser();
+        return sysuser;
+    }
 }

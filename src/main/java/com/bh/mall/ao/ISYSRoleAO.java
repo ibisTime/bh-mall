@@ -12,6 +12,7 @@ import com.bh.mall.dto.req.XN627040Req;
  * @history:
  */
 public interface ISYSRoleAO {
+
     String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增角色
@@ -21,7 +22,7 @@ public interface ISYSRoleAO {
     public boolean dropSYSRole(String roleCode);
 
     // 修改角色
-    public boolean editSYSRole(SYSRole data); 
+    public boolean editSYSRole(SYSRole data);
 
     // 列表查询
     public List<SYSRole> querySYSRoleList(SYSRole condition);

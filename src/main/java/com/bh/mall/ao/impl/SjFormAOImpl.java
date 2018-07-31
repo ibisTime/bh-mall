@@ -1,7 +1,6 @@
 package com.bh.mall.ao.impl;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -205,7 +204,8 @@ public class SjFormAOImpl implements ISjFormAO {
 
     /*************** 取消升级申请 **********************/
     @Override
-    public void cancelSjForm(String userId) {
+    public void cancelSjForm(String userId, String approver, String result,
+            String remark) {
         SjForm upData = new SjForm();
         upData.setUserId(userId);
         upData.setStatus(EUserStatus.TO_CANCEL.getCode());
@@ -321,68 +321,6 @@ public class SjFormAOImpl implements ISjFormAO {
 
         }
         return data;
-    }
-
-    /***********************************************/
-
-    @Override
-    public Paginable<SjForm> queryISjFormFrontPage(int start, int limit,
-            SjForm condition) {
-
-        if (condition.getApplyDatetimeStart() != null
-                && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .after(condition.getApplyDatetimeEnd())) {
-            throw new BizException("xn00000", "开始时间不能大于结束时间");
-        }
-
-        /*
-         * if (EUserStatus.IGNORED.getCode().equals(condition.getStatus())) {
-         * condition.setApprover(condition.getUserIdForQuery()); } else {
-         * condition.setToUserId(condition.getUserIdForQuery()); //意向归属人 }
-         */
-
-        Paginable<SjForm> page = sjFormBO.getPaginable(start, limit, condition);
-        Agent userReferee = null;
-        Agent agent = null;
-        for (Iterator<SjForm> iterator = page.getList().iterator(); iterator
-            .hasNext();) {
-            SjForm agentLog = iterator.next();
-            agent = agentAO.getAgent(agentLog.getUserId());
-            if (!agent.getLastAgentLog().equals(agentLog.getCode())) {
-                iterator.remove();
-                continue;
-            }
-            agentLog.setUser(agent);
-            if (StringUtils.isNotBlank(agent.getUserReferee())) {
-                userReferee = agentAO.getAgent(agent.getUserReferee());
-            }
-            // 审核人
-            if (EUser.ADMIN.getCode().equals(agentLog.getApprover())) {
-                agentLog.setApprover(EUser.ADMIN.getCode());
-            } else {
-                if (StringUtils.isNotBlank(agentLog.getApprover())) {
-                    Agent aprrvoeName = agentAO
-                        .getAgent(agentLog.getApprover());
-                    if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getUserName(aprrvoeName.getUserId());
-                        if (userReferee != null) {
-                            agentLog.setApprover(userReferee.getRealName());
-                        }
-                    }
-                }
-            }
-        }
-        return page;
-    }
-
-    /*********************** 新增日志 *************************/
-    @Override
-    public String addSjForm(SjForm data) {
-        // insert new data
-        sjFormBO.addSjForm(data);
-        return null;
     }
 
     /*********************** 查询是否需要补全金额 *************************/

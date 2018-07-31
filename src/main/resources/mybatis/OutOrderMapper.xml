@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bh.mall.dao.IOutOrderDAO">
+	<resultMap id="order_DB_Result" type="outOrder">
+		<result column="code" property="code" />
+		<result column="is_company_send" property="isCompanySend" />
+		<result column="kind" property="kind" />
+		<result column="product_code" property="productCode" />
+		
+		<result column="product_name" property="productName" />
+		<result column="product_specs_code" property="productSpecsCode" />
+		<result column="product_specs_name" property="productSpecsName" />
+		<result column="bar_code" property="barCode" />
+		<result column="pic" property="pic" />
+		<result column="quantity" property="quantity" />
+		
+		<result column="price" property="price" />
+		<result column="to_user" property="toUser" />
+		<result column="amount" property="amount" />
+		<result column="yunfei" property="yunfei" />
+		<result column="status" property="status" />
+		
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="pay_code" property="payCode" />
+		
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_note" property="applyNote" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="signer" property="signer" />
+		
+		<result column="mobile" property="mobile" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="address" property="address" />
+		
+		<result column="deliver" property="deliver" />
+		<result column="delive_datetime" property="deliveDatetime" />
+		<result column="logistics_code" property="logisticsCode" />
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="pdf" property="pdf" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="update_note" property="updateNote" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
+		
+		<result column="approve_note" property="approveNote" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<choose>
+				<when test="kind != null and kind != '' ">
+					AND t.kind = #{kind}
+				</when>
+				<when test="kindList != null and kindList.size() > 0 ">
+					AND t.kind IN 
+					<foreach collection="kindList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser}
+			</if>
+			<if test="statusForQuery != null and statusForQuery != '' ">
+				AND t.status IN ${statusForQuery}
+			</if>
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+				<when test="fialStatus != null and fialStatus > 0 ">
+					AND t.status NOT IN
+					<foreach collection="fialStatus" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			<if test="keyword != null and keyword != '' ">
+				AND (t.product_name like "%"#{keyword}"%" or u.real_name like "%"#{keyword}"%" or u.team_name like "%"#{keyword}"%" )
+			</if>
+			<if test="startDatetime != null and startDatetime != ''">
+				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
+			</if>
+			<if test="endDatetime != null and endDatetime != ''">
+				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
+			</if>
+			
+			<if test="statusForQuery != null and statusForQuery != '' ">
+				AND t.status IN (3,4)
+			</if>
+			
+			<choose>
+				<when test="level != null and level != '' ">
+					AND u.level = #{level}
+				</when>
+				<when test="levelList != null and levelList.size() > 0 ">
+					AND u.level IN
+					<foreach collection="levelList" index="index" item="item" open="(" separator="," close=")" >
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			<if test="barCode != null and barCode != '' ">
+				AND t.bar_code = #{barCode}
+			</if>
+			<if test="deliver != null and deliver != '' ">
+				AND t.deliver = #{deliver}
+			</if>
+		</trim>
+	</sql>
+	
+	
+	<select id="select_outOrder" parameterType="outOrder" resultMap="order_DB_Result">
+		SELECT
+		t.code
+		,t.is_company_send
+		,t.kind
+		,t.product_code
+		
+		,t.product_name
+		,t.product_specs_code
+		,t.product_specs_name
+		,t.bar_code
+		,t.pic
+		,t.quantity
+		
+		,t.price
+		,t.to_user
+		,t.amount
+		,t.yunfei
+		,t.status
+		
+		,t.pay_type
+		,t.pay_group
+		,t.pay_amount
+		,t.pay_datetime
+		,t.pay_code
+		
+		,t.apply_user
+		,t.apply_note
+		,t.apply_datetime
+		,t.signer
+		
+		,t.mobile
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+		
+		,t.deliver
+		,t.delive_datetime
+		,t.logistics_code
+		,t.logistics_company
+		,t.pdf
+		
+		,t.updater
+		,t.update_datetime
+		,t.update_note
+		,t.approver
+		,t.approve_datetime
+		
+		,t.approve_note
+		,t.remark
+		FROM
+		tbh_out_order t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
+
+	<select id="select_outOrder_count" parameterType="outOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_out_order t  LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_outOrder" parameterType="outOrder">
+		INSERT INTO
+		tbh_out_order(
+		code
+		,is_company_send
+		,kind
+		,product_code
+		,product_name
+		
+		,product_specs_code
+		,product_specs_name
+		,bar_code
+		,pic
+		,quantity
+		,price
+		
+		,to_user
+		,amount
+		,yunfei
+		,status
+		,apply_user
+		
+		,apply_note
+		,apply_datetime
+		,signer
+		,mobile
+		
+		,province
+		,city
+		,area
+		,address
+		)
+		VALUES(
+		#{code}
+		,#{isCompanySend}
+		,#{kind}
+		,#{productCode}
+		,#{productName}
+		
+		,#{productSpecsCode}
+		,#{productSpecsName}
+		,#{barCode}
+		,#{pic}
+		,#{quantity}
+		,#{price}
+		
+		,#{toUser}
+		,#{amount}
+		,#{yunfei}
+		,#{status}
+		,#{applyUser}
+		
+		,#{applyNote}
+		,#{applyDatetime}
+		,#{signer}
+		,#{mobile}
+		
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{address}
+		)
+	</insert>
+
+	<update id="update_outOrder" parameterType="outOrder">
+		UPDATE tbh_out_order
+		SET
+		signer = #{signer}
+		,mobile = #{mobile}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
+		
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,update_note = #{updateNote}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="pay_outOrder" parameterType="outOrder">
+		UPDATE tbh_out_order
+		SET
+		pay_code = #{pay_code}
+		,pay_group = #{pay_group}
+		,pay_type = #{pay_type}
+		,pay_datetime = #{pay_datetime}
+		,pay_amount = #{pay_amount}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="deliver_outOrder" parameterType="outOrder">
+		UPDATE tbh_out_order
+		SET
+		deliver = #{deliver}
+		,delive_datetime = #{deliveDatetime}
+		,logistics_code = #{logisticsCode}
+		,logistics_company = #{logisticsCompany}
+		,pdf = #{pdf}
+		
+		,bar_code = #{barCode}
+		,is_company_send = #{isCompanySend}
+		,status = #{status}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="approve_outOrder" parameterType="outOrder">
+		UPDATE tbh_out_order
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,approve_note = #{approveNote}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_status" parameterType="outOrder">
+		UPDATE tbh_outOrder
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="approve_cancel" parameterType="outOrder">
+		UPDATE tbh_out_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+	<update id="add_payGroup" parameterType="innerOrder">
+		UPDATE tbh_out_order
+		SET
+		pay_group = #{payGroup}
+		,pay_type = #{payType}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="pay_no" parameterType="innerOrder">
+		UPDATE tbh_out_order
+		SET
+		status = #{status}
+		,pay_group = #{payGroup}
+		,pay_type = #{payType}
+		WHERE code = #{code}
+	</update>
+	
+	
+	<update id="pay_success" parameterType="innerOrder">
+		UPDATE tbh_out_order
+		SET
+		status = #{status}
+		,pay_type = #{payType}
+		,pay_code = #{payCode}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="invalid_outOrder" parameterType="innerOrder">
+		UPDATE tbh_out_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_outOrder" parameterType="innerOrder">
+		DELETE FROM
+		tbh_out_order
+		WHERE
+		code = #{code}
+	</delete>
+</mapper>

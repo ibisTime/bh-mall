@@ -20,20 +20,26 @@ import com.bh.mall.dto.res.XN627462Res;
  */
 public interface IWeChatAO {
 
+    // 获取微信支付参数
     public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl, String payType);
 
+    // 回调
     public void doCallbackH5(String result);
 
+    // 获取token
     public String getAccessToken(String appId, String appSecret);
 
+    // 回调
     public void doBizCallback(CallbackResult callbackResult);
 
+    // 获取微信充值参数
     public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl);
 
+    // 查询订单是否支付成功
     boolean reqOrderquery(Map<String, String> map, String channelType);
 
 }

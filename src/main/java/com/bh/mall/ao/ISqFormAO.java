@@ -11,6 +11,12 @@ import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
 import com.bh.mall.dto.res.XN627303Res;
 
+/**
+ * 授权单
+ * @author: clockorange 
+ * @since: Jul 31, 2018 5:29:27 PM 
+ * @history:
+ */
 @Component
 public interface ISqFormAO {
 
@@ -22,34 +28,25 @@ public interface ISqFormAO {
     // 取消授权申请 XN626273
     public void cancelSqForm(String userId);
 
-    public String addSqForm(SqForm data);
-
     // 审核授权
     public void approveSqForm(String userId, String approver, String result,
             String remark);
 
     // 审核取消授权
-    public void approveCanenlSqForm(String userId, String approver,
+    public void cancelSqForm(String userId, String approver, String result,
             String remark);
 
     //  实名认证信息补充
     public void addInfo(XN627362Req req);
 
-    // 查询授权申请 XN627288
+    // 查询授权申请
     public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition);
 
-    // 列表查询轨迹 XN627289
+    // 列表查询
     public List<SqForm> querySqFormList(SqForm condition);
 
+    // 详细查询
     public SqForm getSqForm(String code);
-
-    // 分页查询轨迹 XN627290
-    public Paginable<SqForm> querySqFormFrontPage(int start, int limit,
-            SqForm condition);
-
-    // 审核取消授权
-    public void approveCancelSqForm(String userId, String approver, String result,
-            String remark);
 
 }

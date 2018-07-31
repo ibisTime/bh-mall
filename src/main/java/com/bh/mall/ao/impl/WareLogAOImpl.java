@@ -17,6 +17,7 @@ public class WareLogAOImpl implements IWareLogAO {
     @Autowired
     private IWareLogBO wareLogBO;
 
+    // 分页查询
     @Override
     public Paginable<WareLog> queryWareLogPage(int start, int limit,
             WareLog condition) {
@@ -28,6 +29,7 @@ public class WareLogAOImpl implements IWareLogAO {
         return wareLogBO.getPaginable(start, limit, condition);
     }
 
+    // 列表查询
     @Override
     public List<WareLog> queryWareLogList(WareLog condition) {
         if (condition.getStartDatetime() != null
@@ -38,6 +40,7 @@ public class WareLogAOImpl implements IWareLogAO {
         return wareLogBO.queryWareLogList(condition);
     }
 
+    // 详细查询
     @Override
     public WareLog getWareLog(String code) {
         return wareLogBO.getWareLog(code);
