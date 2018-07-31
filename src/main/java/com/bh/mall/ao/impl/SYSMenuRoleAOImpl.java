@@ -57,7 +57,7 @@ public class SYSMenuRoleAOImpl implements ISYSMenuRoleAO {
     }
 
     @Override
-    public List<SYSMenu> querySYSMenuList(SYSMenuRole data) {
+    public List<SYSMenu> querySYSMenuRoleList(SYSMenuRole data) {
         return sysMenuRoleBO.querySYSMenuList(data);
     }
 

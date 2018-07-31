@@ -25,7 +25,7 @@ public class XN627258 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        sqFormAO.approveCancelSqForm(req.getUserId(), req.getApprover(),
+        sqFormAO.cancelSqForm(req.getUserId(), req.getApprover(),
             req.getResult(), req.getRemark());
         return new BooleanRes(true);
     }

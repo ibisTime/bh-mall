@@ -45,7 +45,6 @@ public class YxFormAOImpl implements IYxFormAO {
     @Autowired
     private IAgentLevelBO agentLevelBO;
 
-    /*************** 代理申请 **********************/
     // 代理申请 （无推荐人）
     @Override
     @Transactional
@@ -90,8 +89,7 @@ public class YxFormAOImpl implements IYxFormAO {
             req.getAddress(), EBoolean.YES.getCode());
     }
 
-    /*************** 意向分配 **********************/
-
+    // 意向分配
     @Override
     public void allotYxForm(String userId, String toUserId, String approver) {
 
@@ -116,7 +114,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
     }
 
-    /*************** 忽略意向分配 **********************/
+    // 忽略意向
     @Override
     public void ignore(String userId, String aprrover) {
         YxForm data = new YxForm();
@@ -130,8 +128,7 @@ public class YxFormAOImpl implements IYxFormAO {
         yxFormBO.ignore(data);
     }
 
-    /***************  接受意向分配 **********************/
-
+    // 接受意向
     @Override
     public void acceptYxForm(String userId, String approver, String remark) {
         YxForm data = new YxForm();
@@ -158,8 +155,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
     }
 
-    /*********************** 查询 *************************/
-
+    // 列表查询意向代理
     @Override
     public List<YxForm> queryYxFormList(YxForm condition) {
 
@@ -174,16 +170,14 @@ public class YxFormAOImpl implements IYxFormAO {
         return list;
     }
 
-    /**********************详细查询**************************/
-
+    // 详细查询意向代理
     @Override
     public YxForm getYxForm(String code) {
         YxForm data = yxFormBO.getYxForm(code);
         return data;
     }
 
-    /***********************************************/
-
+    // 分页查询意向代理
     @Override
     public Paginable<YxForm> queryYxFormPage(int start, int limit,
             YxForm condition) {
@@ -214,50 +208,8 @@ public class YxFormAOImpl implements IYxFormAO {
             }
             yxForm.setUser(agent);
 
-            // 审核人
-
         }
         return page;
     }
 
-    /*********************** 新增日志 *************************/
-    @Override
-    public String addYxForm(YxForm data) {
-        // insert new data
-        yxFormBO.addYxForm(data);
-        return null;
-    }
-
-    /*********************** 查询是否需要补全金额 *************************/
-    @Override
-    public Paginable<YxForm> queryYxFormFrontPage(int start, int limit,
-            YxForm condition) {
-
-        if (condition.getApplyDatetimeStart() != null
-                && condition.getApplyDatetimeEnd() != null
-                && condition.getApplyDatetimeStart()
-                    .after(condition.getApplyDatetimeEnd())) {
-            throw new BizException("xn00000", "开始时间不能大于结束时间");
-        }
-
-        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit, condition);
-        List<YxForm> list = page.getList();
-
-        for (YxForm yxForm : list) {
-
-            Agent agent = agentAO.getAgent(yxForm.getUserId());
-            yxForm.setUser(agent);
-            // 补全授权金额
-            if (null != agent.getApplyLevel()) {
-                // 代理等级表
-                AgentLevel agentLevel = agentLevelBO
-                    .getAgentByLevel(agent.getApplyLevel());
-                yxForm.setImpowerAmount(agentLevel.getAmount());
-            }
-            // 审核人
-
-        }
-        page.setList(list);
-        return page;
-    }
 }

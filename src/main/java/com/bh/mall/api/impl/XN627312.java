@@ -23,7 +23,7 @@ public class XN627312 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN627312Res(userAO.addUser(req.getMobile(),
+        return new XN627312Res(userAO.addSYSUser(req.getMobile(),
             req.getLoginPwd(), req.getRealName(), req.getPhoto()));
     }
 
