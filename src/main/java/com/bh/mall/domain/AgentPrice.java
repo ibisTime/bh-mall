@@ -45,7 +45,7 @@ public class AgentPrice extends ABaseDO {
     // 每月限购
     private Integer monthlyNumber;
 
-    // ********************db*******************
+    // **************************db properties **************************
     public String getCode() {
         return code;
     }

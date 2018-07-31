@@ -30,8 +30,7 @@ public class Cart extends ABaseDO {
     // 价格
     private Long price;
 
-    // ***********************db****************
-
+    // **************************db properties **************************
     // 产品
     private Product product;
 

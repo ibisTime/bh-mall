@@ -27,7 +27,7 @@ public class XN627006 extends AProcessor {
         AgentLevel condition = new AgentLevel();
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setName(req.getName());
-        return agentAO.queryAgentList(condition);
+        return agentAO.queryAgentLevelList(condition);
     }
 
     @Override

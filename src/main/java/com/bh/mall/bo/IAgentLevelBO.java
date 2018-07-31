@@ -7,7 +7,7 @@ import com.bh.mall.domain.AgentLevel;
 
 public interface IAgentLevelBO extends IPaginableBO<AgentLevel> {
 
-    public void editAgent(AgentLevel data);
+    public void editAgentLevel(AgentLevel data);
 
     public AgentLevel getAgentLevel(String code);
 

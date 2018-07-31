@@ -4,7 +4,7 @@
 <mapper namespace="com.bh.mall.dao.IAgentPriceDAO">
 	<resultMap id="agentPrice_DB_Result" type="agentPrice">
 		<result column="code" property="code"/>
-		<result column="product_specs_code" property="productSpecsCode"/>
+		<result column="specs_code" property="specsCode"/>
 		<result column="level" property="level"/>
 		<result column="price" property="price"/>
 		<result column="change_price" property="changePrice"/>
@@ -22,8 +22,8 @@
 			<if test="code != null and code != ''">
 				AND t.code = #{code}
 			</if>
-			<if test="productSpecsCode != null and productSpecsCode != ''">
-				AND t.product_specs_code = #{productSpecsCode}
+			<if test="specsCode != null and specsCode != ''">
+				AND t.specs_code = #{specsCode}
 			</if>
 			<if test="level != null and level !=''">
 				AND t.level  = #{level}
@@ -37,7 +37,7 @@
 	<select id="select_agentPrice" parameterType="agentPrice" resultMap="agentPrice_DB_Result">
 		SELECT 
 		t.code
-		,t.product_specs_code
+		,t.specs_code
 		,t.level
 		,t.price
 		,t.change_price
@@ -66,7 +66,7 @@
 	<insert id="insert_agentPrice" parameterType="agentPrice">
 		INSERT INTO tbh_agent_price(
 		code
-		,product_specs_code
+		,specs_code
 		,level
 		,price
 		,change_price
@@ -80,7 +80,7 @@
 		)
 		VALUES(
 		#{code}
-		,#{productSpecsCode}
+		,#{specsCode}
 		,#{level}
 		,#{price}
 		,#{changePrice}
@@ -114,6 +114,6 @@
 		DELETE FROM 
 		tbh_agent_price 
 		WHERE
-		product_specs_code = #{productSpecsCode}
+		specs_code = #{specsCode}
 	</delete>
 </mapper>

@@ -13,7 +13,8 @@
 		<result column="high_user_id" property="highUserId" />
 		<result column="user_referee" property="userReferee" />
 		<result column="team_name" property="teamName" />
-		<result column="pay_pdf" property="payPdf" />
+		<result column="payment_pdf" property="paymentPdf" />
+		<result column="margin_pdf" property="marginPdf" />
 		<result column="status" property="status" />
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
@@ -90,7 +91,8 @@
 		,t.high_user_id
 		,t.user_referee
 		,t.team_name
-		,t.pay_pdf
+		,t.payment_pdf
+		,t.margin_pdf
 		,t.status
 		,t.approver
 		,t.approve_datetime
@@ -124,7 +126,8 @@
 		,high_user_id
 		,user_referee
 		,team_name
-		,pay_pdf
+		,payment_pdf
+		,margin_pdf
 		,status
 		,approver
 		,approve_datetime
@@ -141,7 +144,8 @@
 		,#{highUserId}
 		,#{userReferee}
 		,#{teamName}
-		,#{payPdf}
+		,#{paymentPdf}
+		,#{marginPdf}
 		,#{status}
 		,#{approver}
 		,#{approveDatetime}
@@ -161,7 +165,8 @@
 		,high_user_id = #{highUserId}
 		,user_referee = #{userReferee}
 		,team_name = #{teamName}
-		,pay_pdf = #{payPdf}
+		,payment_pdf = #{paymentPdf}
+		,margin_pdf = #{marginPdf}
 		,status = #{status}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}

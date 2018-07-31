@@ -62,7 +62,7 @@ public class AgentLog extends ABaseDO {
     // 备注
     private String remark;
 
-    // ********************db*******************
+    // **************************db properties **************************
     // 代理
     private Agent agent;
 

@@ -69,7 +69,7 @@ public class Jour extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
-    // ***********************db************************
+    // **************************db properties **************************
     // 业务类型列表
     private List<String> bizTypeList;
 

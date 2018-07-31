@@ -74,7 +74,7 @@ public class AgentLevel extends ABaseDO {
     // 备注
     private String remark;
 
-    // ***************db*************
+    // **************************db properties **************************
     // 开始等级
     private Integer lowLevel;
 

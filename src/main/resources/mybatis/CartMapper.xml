@@ -6,7 +6,7 @@
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
 		<result column="product_code" property="productCode" />
-		<result column="product_specs_code" property="productSpecsCode" />
+		<result column="specs_code" property="specsCode" />
 		<result column="quantity" property="quantity" />
 		
 		<result column="price" property="price" />
@@ -19,8 +19,8 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
-			<if test="productSpecsCode != null and productSpecsCode != '' ">
-				AND t.product_specs_code = #{productSpecsCode}
+			<if test="specsCode != null and specsCode != '' ">
+				AND t.specs_code = #{specsCode}
 			</if>
 		</trim>
 	</sql>
@@ -29,7 +29,7 @@
 		t.code
 		,t.user_id
 		,t.product_code
-		,t.product_specs_code
+		,t.specs_code
 		,t.quantity
 		,t.price
 		FROM
@@ -54,7 +54,7 @@
 		code
 		,user_id
 		,product_code
-		,product_specs_code
+		,specs_code
 		,quantity
 		,price
 		)
@@ -62,7 +62,7 @@
 		#{code}
 		,#{userId}
 		,#{productCode}
-		,#{productSpecsCode}
+		,#{specsCode}
 		,#{quantity}
 		,#{price}
 		)

@@ -24,7 +24,7 @@ public interface IAgentLevelAO {
      * @create: 2018年1月31日 下午2:30:59 nyc
      * @history:
      */
-    public Paginable<AgentLevel> queryAgentListPage(int start, int limit,
+    public Paginable<AgentLevel> queryAgentLevelListPage(int start, int limit,
             AgentLevel condition);
     /**
      * 列表查询代理
@@ -33,7 +33,7 @@ public interface IAgentLevelAO {
      * @create: 2018年1月31日 下午2:31:23 nyc
      * @history:
      */
-    public List<AgentLevel> queryAgentList(AgentLevel condition);
+    public List<AgentLevel> queryAgentLevelList(AgentLevel condition);
     /**
      * 查询代理详情
      * @param code
@@ -50,7 +50,7 @@ public interface IAgentLevelAO {
      * @param condition
      * @return
      */
-    public Object queryAgentNoCList(AgentLevel condition);
+    public Object queryAgentLevelCList(AgentLevel condition);
     
     
 }

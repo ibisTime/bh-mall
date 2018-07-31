@@ -51,23 +51,23 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
-        agentLevelBO.editAgent(data);
+        agentLevelBO.editAgentLevel(data);
     }
 
     /**
      * 627005_分页查询代理管理
      */
     @Override
-    public Paginable<AgentLevel> queryAgentListPage(int start, int limit,
+    public Paginable<AgentLevel> queryAgentLevelListPage(int start, int limit,
             AgentLevel condition) {
         Paginable<AgentLevel> page = agentLevelBO.getPaginable(start, limit,
             condition);
-        for (AgentLevel agent : page.getList()) {
+        for (AgentLevel agentLevel : page.getList()) {
             // 6代表c端用户
-            if (6 != agent.getLevel()) {
+            if (6 != agentLevel.getLevel()) {
                 AgentLevel impower = agentLevelBO
-                    .getAgentByLevel(agent.getLevel());
-                agent.setIsRealName(impower.getIsRealName());
+                    .getAgentByLevel(agentLevel.getLevel());
+                agentLevel.setIsRealName(impower.getIsRealName());
             }
         }
         return page;
@@ -77,7 +77,7 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
      * 627006_列表查询代理管理
      */
     @Override
-    public List<AgentLevel> queryAgentList(AgentLevel condition) {
+    public List<AgentLevel> queryAgentLevelList(AgentLevel condition) {
         List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
         for (AgentLevel agent : list) {
             // 6代表c端用户
@@ -102,7 +102,7 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
      * 627008_无C端等级
      */
     @Override
-    public Object queryAgentNoCList(AgentLevel condition) {
+    public Object queryAgentLevelCList(AgentLevel condition) {
         List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
         for (Iterator<AgentLevel> iterator = list.iterator(); iterator
             .hasNext();) {

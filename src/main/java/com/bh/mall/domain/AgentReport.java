@@ -71,8 +71,7 @@ public class AgentReport extends ABaseDO {
     // 累积差额利润
     private Long priceSpread;
 
-    // ******************db*******************
-
+    // **************************db properties **************************
     // 授权开始时间
     private Date startDatetime;
 

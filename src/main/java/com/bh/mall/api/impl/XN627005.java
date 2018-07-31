@@ -38,7 +38,7 @@ public class XN627005 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentAO.queryAgentListPage(start, limit, condition);
+        return agentAO.queryAgentLevelListPage(start, limit, condition);
     }
 
     @Override

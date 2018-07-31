@@ -51,8 +51,7 @@ public class CNavigate extends ABaseDO {
     // 是否公司修改
     private String isCompanyEdit;
 
-    /******************db data******************/
-
+    // **************************db properties **************************
     // 是否前端查询
     private String isFront;
 

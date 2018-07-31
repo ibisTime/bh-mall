@@ -42,7 +42,7 @@ public class Agent extends ABaseDO {
     // 登陆密码强度
     private String loginPwdStrength;
 
-    // 交易密码？
+    // 交易密码
     private String tradePwd;
 
     // 身份标识

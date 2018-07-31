@@ -81,8 +81,7 @@ public class InOrder extends ABaseDO {
     // 备注
     private String remark;
 
-    // ************************db*********************
-
+    // **************************db properties **************************
     // 下单开始时间
     private Date startDatetime;
 

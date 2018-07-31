@@ -207,7 +207,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     /** 
-     * @see com.ibis.pz.user.IAgentBO#queryAgentList(com.Agent.pz.domain.AgentDO)
+     * @see com.ibis.pz.user.IAgentBO#queryAgentLevelList(com.Agent.pz.domain.AgentDO)
      */
     @Override
     public List<Agent> queryUserList(Agent data) {

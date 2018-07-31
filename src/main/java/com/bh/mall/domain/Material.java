@@ -33,8 +33,6 @@ public class Material extends ABaseDO {
     // 状态
     private String status;
 
-    // *******DB****************
-
     public String getCode() {
         return code;
     }

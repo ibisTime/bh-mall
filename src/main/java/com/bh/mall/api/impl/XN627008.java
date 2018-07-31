@@ -30,7 +30,7 @@ public class XN627008 extends AProcessor {
         //condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
         //condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
 
-        return agentAO.queryAgentNoCList(condition);
+        return agentAO.queryAgentLevelCList(condition);
     }
 
     @Override

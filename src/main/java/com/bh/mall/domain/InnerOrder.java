@@ -113,7 +113,7 @@ public class InnerOrder extends ABaseDO {
     // 备注
     private String remark;
 
-    // *************************db*****************
+    // **************************db properties **************************
     // 开始时间
     private Date startDatetime;
 

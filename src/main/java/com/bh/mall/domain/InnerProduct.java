@@ -56,8 +56,6 @@ public class InnerProduct extends ABaseDO {
     // 备注
     private String remark;
 
-    // ***********db****************
-
     public String getCode() {
         return code;
     }

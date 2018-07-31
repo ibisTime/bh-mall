@@ -43,8 +43,7 @@ public class CUser extends ABaseDO {
     // 注册时间
     private Date createDatetime;
 
-    // *******db***********
-
+    // **************************db properties **************************
     // 用户list
     private List<CUser> cUserList;
 

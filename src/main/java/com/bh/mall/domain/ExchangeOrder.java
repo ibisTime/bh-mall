@@ -83,8 +83,7 @@ public class ExchangeOrder extends ABaseDO {
     // 审核备注
     private String approveNote;
 
-    // ***************db****************
-
+    // **************************db properties **************************
     // 申请开始时间
     private Date applyStartDatetime;
 

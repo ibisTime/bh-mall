@@ -20,7 +20,7 @@ public class AgentLevelBOImpl extends PaginableBOImpl<AgentLevel> implements IAg
     private IAgentLevelDAO agentLevelDAO;
 
     @Override
-    public void editAgent(AgentLevel data) {
+    public void editAgentLevel(AgentLevel data) {
         agentLevelDAO.update(data);
     }
 

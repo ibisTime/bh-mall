@@ -45,7 +45,6 @@ public class Account extends ABaseDO {
     private String lastOrder;
 
     // **************************db properties **************************
-
     // 创建起始时间
     private Date createDatetimeStart;
 

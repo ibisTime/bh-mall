@@ -38,8 +38,7 @@ public class ChAward extends ABaseDO {
     // 备注
     private String remark;
 
-    // *******************DB******************
-
+    // **************************db properties **************************
     // 等级名称
     private String name;
 
