@@ -40,13 +40,9 @@
 		<typeAlias alias="ware" type="com.bh.mall.domain.Ware"/>
 		<typeAlias alias="wareLog" type="com.bh.mall.domain.WareLog"/>
 		<typeAlias alias="exchangeOrder" type="com.bh.mall.domain.ExchangeOrder"/>
-<<<<<<< HEAD
-		
-=======
->>>>>>> refs/remotes/origin/master
 		<typeAlias alias="channelBank" type="com.bh.mall.domain.ChannelBank"/>
-		<typeAlias alias="agentReport" type="com.bh.mall.domain.AgentReport"/>
 		
+		<typeAlias alias="agentReport" type="com.bh.mall.domain.AgentReport"/>
 		<typeAlias alias="chAward" type="com.bh.mall.domain.ChAward"/>
 		<typeAlias alias="miniCode" type="com.bh.mall.domain.MiniCode"/>
 		<typeAlias alias="proCode" type="com.bh.mall.domain.ProCode"/>

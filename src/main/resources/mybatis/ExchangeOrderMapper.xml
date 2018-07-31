@@ -6,176 +6,8 @@
 		<result column="code" property="code" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
-<<<<<<< HEAD
-		<result column="product_specs_code" property="productSpecsCode" />
-		<result column="product_specs_name" property="productSpecsName" />
-		
-		<result column="quantity" property="quantity" />
-		<result column="price" property="price" />
-		<result column="amount" property="amount" />
-		<result column="change_product_code" property="changeProductCode" />
-		<result column="change_product_name" property="changeProductName" />
-		
-		<result column="change_specs_code" property="changeSpecsCode" />
-		<result column="change_specs_name" property="changeSpecsName" />
-		<result column="change_price" property="changePrice" />
-		<result column="can_change_quantity" property="canChangeQuantity" />
-		<result column="apply_user" property="applyUser" />
-		
-		<result column="real_name" property="realName" />
-		<result column="level" property="level" />
-		<result column="apply_datetime" property="applyDatetime" />
-		<result column="apply_note" property="applyNote" />
-		<result column="status" property="status" />
-		
-		<result column="approver" property="approver" />
-		<result column="approve_datetime" property="approveDatetime" />
-		<result column="approve_note" property="approveNote" />
-	</resultMap>
-	<sql id="where_condition">
-		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
-			</if>
-			<if test="level != null and level != '' ">
-				AND t.level = #{level}
-			</if>
-			<if test="productCode != null and productCode != '' ">
-				AND t.product_code = #{productCode}
-			</if>
-			<if test="productSpecsCode != null and productSpecsCode != '' ">
-				AND t.product_specs_code = #{productSpecsCode}
-			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
-			<if test="keyword != null and keyword != '' ">
-				AND t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%"
-			</if>
-			<if test="applyStartDatetime != null and applyStartDatetime != ''">
-				<![CDATA[AND t.apply_datetime >= #{applyStartDatetime}]]>
-			</if>
-			<if test="applyEndDatetime != null and applyEndDatetime != ''">
-				<![CDATA[AND t.apply_datetime <= #{applyEndDatetime}]]>
-			</if>
-		</trim>
-	</sql>
-	<select id="select_exchangeOrder" parameterType="exchangeOrder" resultMap="exchangeOrder_DB_Result">
-		SELECT
-		t.code
-		,t.product_code
-		,t.product_name
-		,t.product_specs_code
-		,t.product_specs_name
-		
-		,t.quantity
-		,t.price
-		,t.amount
-		,t.change_product_code
-		,t.change_product_name
-		
-		,t.change_specs_code
-		,t.change_specs_name
-		,t.change_price
-		,t.can_change_quantity
-		,t.apply_user
-		
-		,t.level
-		,t.real_name
-		,t.apply_datetime
-		,t.apply_note
-		,t.status
-		,t.approver
-		
-		,t.approve_datetime
-		,t.approve_note
-		FROM
-		tbh_exchange_order t
-		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>
-	</select>
-
-	<select id="select_exchangeOrder_count" parameterType="exchangeOrder"
-		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_exchange_order t
-		<include refid="where_condition" />
-	</select>
-
-	<insert id="insert_exchangeOrder" parameterType="exchangeOrder">
-		INSERT INTO
-		tbh_exchange_order(
-		code
-		,product_code
-		,product_name
-		,product_specs_code
-		,product_specs_name
-		
-		,quantity
-		,price
-		,amount
-		,change_product_code
-		,change_product_name
-		
-		,change_specs_code
-		,change_specs_name
-		,change_price
-		,can_change_quantity
-		,apply_user
-		
-		,real_name
-		,level
-		,apply_datetime
-		,apply_note
-		,status
-		,approver
-		
-		,approve_datetime
-		,approve_note
-		)
-		VALUES(
-		#{code}
-		,#{productCode}
-		,#{productName}
-		,#{productSpecsCode}
-		,#{productSpecsName}
-		
-		,#{quantity}
-		,#{price}
-		,#{amount}
-		,#{changeProductCode}
-		,#{changeProductName}
-		
-		,#{changeSpecsCode}
-		,#{changeSpecsName}
-		,#{changePrice}
-		,#{canChangeQuantity}
-		
-		,#{applyUser}
-		,#{realName}
-		,#{level}
-		,#{applyDatetime}
-		,#{applyNote}
-		,#{status}
-		,#{approver}
-		,#{approveDatetime}
-		,#{approveNote}
-		)
-	</insert>
-
-	<update id="update_exchangeOrder" parameterType="exchangeOrder">
-		UPDATE tbh_exchange_order
-		SET
-		product_code = #{productCode}
-		,product_name = #{productName}
-		,product_specs_code = #{productSpecsCode}
-		,product_specs_name = #{productSpecsName}
-=======
-		<result column="product_specs_code" property="specsCode" />
-		<result column="product_specs_name" property="specsName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
 		
 		<result column="quantity" property="quantity" />
 		<result column="price" property="price" />
@@ -211,7 +43,7 @@
 				AND t.product_code = #{productCode}
 			</if>
 			<if test="specsCode != null and specsCode != '' ">
-				AND t.product_specs_code = #{specsCode}
+				AND t.specs_code = #{specsCode}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -232,8 +64,8 @@
 		t.code
 		,t.product_code
 		,t.product_name
-		,t.product_specs_code
-		,t.product_specs_name
+		,t.specs_code
+		,t.specs_name
 		
 		,t.quantity
 		,t.price
@@ -278,8 +110,8 @@
 		code
 		,product_code
 		,product_name
-		,product_specs_code
-		,product_specs_name
+		,specs_code
+		,specs_name
 		
 		,quantity
 		,price
@@ -338,9 +170,9 @@
 		SET
 		product_code = #{productCode}
 		,product_name = #{productName}
-		,product_specs_code = #{specsCode}
-		,product_specs_name = #{specsName}
->>>>>>> refs/remotes/origin/master
+		,specs_code = #{specsCode}
+		,specs_name = #{specsName}
+
 		,quantity = #{quantity}
 		,price = #{price}
 		,change_product_code = #{changeProductCode}
