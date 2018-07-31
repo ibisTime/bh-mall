@@ -12,7 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 public class Specs extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7966448311753734050L;
 
     // 编号
     private String code;

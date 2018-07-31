@@ -11,7 +11,8 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class SjForm extends ABaseDO {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 4666159752651876262L;
 
     // 编码
     private String code;

@@ -4,11 +4,14 @@ import java.util.Date;
 
 import com.bh.mall.dao.base.ABaseDO;
 
-//取现
+/**
+ * 取现单
+ * @author: clockorange 
+ * @since: Jul 31, 2018 11:21:38 AM 
+ * @history:
+ */
 public class Withdraw extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = -6551310796135984342L;
 
     // 订单编号
@@ -77,7 +80,8 @@ public class Withdraw extends ABaseDO {
     // 支付回录时间
     private Date payDatetime;
 
-    // *******************************
+    // *************** db****************
+
     // 申请时间起
     private Date applyDatetimeStart;
 

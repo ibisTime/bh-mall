@@ -12,7 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class ExchangeOrder extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3348124905713470558L;
 
     // 编号
     private String code;
@@ -91,10 +91,13 @@ public class ExchangeOrder extends ABaseDO {
     // 申请结束时间
     private Date applyEndDatetime;
 
+    // 关键字
     private String keyword;
 
+    // 审核人姓名
     private String approveName;
 
+    // 代理
     private Agent agent;
 
     public void setCode(String code) {

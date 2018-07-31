@@ -13,9 +13,10 @@ import com.bh.mall.dao.base.ABaseDO;
  */
 
 public class CUser extends ABaseDO {
-    private static final long serialVersionUID = 1L;
 
-    // userId
+    private static final long serialVersionUID = -2848056033919199562L;
+
+    // 用户编号
     private String userId;
 
     /****** 登录信息 ******/

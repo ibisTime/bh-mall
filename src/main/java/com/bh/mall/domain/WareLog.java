@@ -12,7 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
 */
 public class WareLog extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -6430930550692545587L;
 
     // 编号
     private String code;
@@ -53,12 +53,6 @@ public class WareLog extends ABaseDO {
     // 总价
     private Long amount;
 
-    // 申请时间
-    private Date applyDatetime;
-
-    // 申请备注
-    private String applyNote;
-
     // 可置换数量
     private Integer changeNumber;
 
@@ -77,6 +71,12 @@ public class WareLog extends ABaseDO {
     // 用户名称
     private String realName;
 
+    // 申请时间
+    private Date applyDatetime;
+
+    // 申请备注
+    private String applyNote;
+
     // 审核人
     private String approver;
 
@@ -93,6 +93,7 @@ public class WareLog extends ABaseDO {
     private String bizNote;
 
     // *************db**************
+
     private Date startDatetime;
 
     private Date endDatetime;

@@ -65,7 +65,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     IInnerOrderBO innerOrderBO;
 
     @Autowired
-    IYxFormBO agentAllotBO;
+    IYxFormBO yxFormBO;
 
     @Autowired
     ISjFormBO sjFormBO;

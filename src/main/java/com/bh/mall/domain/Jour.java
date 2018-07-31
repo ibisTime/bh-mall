@@ -12,9 +12,7 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 public class Jour extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 1255747682967604091L;
 
     // 流水编号
@@ -75,6 +73,7 @@ public class Jour extends ABaseDO {
     // 业务类型列表
     private List<String> bizTypeList;
 
+    // 订单信息
     private InOrder orderInformation;
 
     // 查询条件1：创建起始时间
@@ -83,8 +82,10 @@ public class Jour extends ABaseDO {
     // 查询条件2：创建终止时间
     private Date createDatetimeEnd;
 
+    // 支出金额
     private String outAmount;
 
+    // 收入金额
     private String inAmount;
 
     // 判断支出与收入
