@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bh.mall.dao.IYxFormDAO">
-	<resultMap  id="agentAllot_DB_Result" type="agentAllot" >
+	<resultMap  id="yxForm_DB_Result" type="yxForm" >
 		<result column="code" property="code"/>
 		<result column="wx_id" property="wxId"/>
 		<result column="user_id" property="userId" />
@@ -64,7 +64,7 @@
 		</trim>
 	</sql>
 	
-	<select id="select_agentAllot" parameterType="agentAllot" resultMap="agentAllot_DB_Result">
+	<select id="select_yxForm" parameterType="yxForm" resultMap="yxForm_DB_Result">
 		SELECT 
 		t.code 
 		,t.wx_id
@@ -92,12 +92,12 @@
 		</trim>
 	</select>
 	
-	<select id="select_agentAllot_count" parameterType="agentAllot" resultType="java.lang.Long">
+	<select id="select_yxForm_count" parameterType="yxForm" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.user_id = u.user_id 
 		<include refid="where_condition"/>
 	</select>
 	
-	<insert id="insert_agentAllot" parameterType="agentAllot">
+	<insert id="insert_yxForm" parameterType="yxForm">
 		INSERT INTO
 		tbh_yx_form(
 		code
@@ -141,7 +141,7 @@
 	
 	
 	
-	<update id="update_agentAllot" parameterType="agentAllot">
+	<update id="update_yxForm" parameterType="yxForm">
 		UPDATE tbh_yx_form
 		SET
 		wx_id=#{wxId}
