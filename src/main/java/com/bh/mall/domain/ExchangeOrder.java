@@ -91,10 +91,13 @@ public class ExchangeOrder extends ABaseDO {
     // 申请结束时间
     private Date applyEndDatetime;
 
+    // 关键字
     private String keyword;
 
+    // 审核人姓名
     private String approveName;
 
+    // 代理
     private Agent agent;
 
     public void setCode(String code) {

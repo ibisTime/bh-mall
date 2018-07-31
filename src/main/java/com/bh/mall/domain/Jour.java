@@ -82,10 +82,18 @@ public class Jour extends ABaseDO {
     // 查询条件2：创建终止时间
     private Date createDatetimeEnd;
 
+<<<<<<< HEAD
     // 转出金额
+=======
+    // 支出金额
+>>>>>>> refs/remotes/origin/master
     private String outAmount;
 
+<<<<<<< HEAD
     // 转入金额
+=======
+    // 收入金额
+>>>>>>> refs/remotes/origin/master
     private String inAmount;
 
     // 判断支出与收入

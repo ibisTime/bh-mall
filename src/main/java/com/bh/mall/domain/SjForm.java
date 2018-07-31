@@ -41,6 +41,12 @@ public class SjForm extends ABaseDO {
     // 审核时间
     private Date approveDatetime;
 
+<<<<<<< HEAD
+=======
+    // 授权时间
+    private Date impowerDatetime;
+
+>>>>>>> refs/remotes/origin/master
     // 状态
     private String status;
 

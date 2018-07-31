@@ -122,20 +122,28 @@ public class InnerOrder extends ABaseDO {
     private String remark;
 
     // *************************db*****************
+    // 开始时间
     private Date startDatetime;
 
+    // 结束时间
     private Date endDatetime;
 
+    // 状态查询
     private String statusForQuery;
 
+    // 真实姓名
     private String realName;
 
+    // 审核人姓名
     private String approveName;
 
+    // 发货人姓名
     private String deliveName;
 
+    // 更新时间
     private String updateName;
 
+    // 申请人姓名
     private String applyName;
 
     public String getStatusForQuery() {
