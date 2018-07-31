@@ -961,11 +961,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
         data.setQuantity(quantity);
         data.setPrice(apData.getPrice());
         Long amount = quantity * apData.getPrice();
-        Long yunfei = 0L;
-
         // 下单人是否是代理
         if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
-
             // 检查是否可购买
             if (EBoolean.NO.getCode().equals(apData.getIsBuy())) {
 
