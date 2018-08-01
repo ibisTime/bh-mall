@@ -76,7 +76,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Autowired
     IAgentLevelBO agentLevelBO;
 
-    /*************** 注册 **********************/
     @Override
     public String addSYSUser(String mobile, String loginPwd, String realName,
             String photo) {
@@ -97,7 +96,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         return userId;
     }
 
-    /*************** 登录 **********************/
     // 用户登录
     @Override
     public String doLogin(String loginName, String loginPwd) {
@@ -117,8 +115,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
         return user.getUserId();
     }
-
-    /*************** 注销 / 激活 **********************/
 
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
@@ -149,7 +145,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     }
 
-    /*************** 设置角色**********************/
     // 设置角色
     @Override
     public void doRoleSYSUser(String userId, String roleCode, String updater,
@@ -165,7 +160,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.refreshRole(userId, roleCode, updater, remark);
     }
 
-    /*************** 修改密码 **********************/
     // 重置登录密码
     @Override
     public void resetAdminLoginPwd(String userId, String newLoginPwd) {
@@ -173,7 +167,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.resetAdminLoginPwd(user, newLoginPwd);
     }
 
-    /*************** 修改手机号 **********************/
     // 更换绑定手机号
     @Override
     public void doResetMoblie(String userId, String kind, String newMobile,
@@ -200,35 +193,32 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     }
 
-    /*************** 修改登录名 **********************/
-
-    /*************** 修改照片 **********************/
     @Override
     public void doModifyPhoto(String userId, String photo) {
         sysUserBO.refreshPhoto(userId, photo);
-    }
-
-    /*************** 查询 **********************/
-    @Override
-    public Paginable<SYSUser> queryUserPage(int start, int limit,
-            SYSUser condition) {
-        /*
-         * if (condition.getCreateDatetimeStart() != null &&
-         * condition.getApplyDatetimeEnd() != null &&
-         * condition.getApplyDatetimeStart()
-         * .after(condition.getApplyDatetimeEnd())) { throw new
-         * BizException("xn00000", "开始时间不能大于结束时间"); }
-         */
-        Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
-            condition);
-
-        return page;
     }
 
     @Override
     public void resetLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd) {
 
+    }
+
+    @Override
+    public Paginable<SYSUser> queryUserPage(int start, int limit,
+            SYSUser condition) {
+
+        // if (condition.getCreateDatetimeStart() != null
+        // && condition.getApplyDatetimeEnd() != null
+        // && condition.getApplyDatetimeStart()
+        // .after(condition.getApplyDatetimeEnd())) {
+        // throw new BizException("xn00000", "开始时间不能大于结束时间");
+        // }
+
+        Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
+            condition);
+
+        return page;
     }
 
     // 列表查询
