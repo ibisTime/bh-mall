@@ -25,9 +25,6 @@ public interface ISqFormAO {
     // 代理申请，包含推荐人
     public XN627303Res applyHaveUserReferee(XN627251Req req);
 
-    // 取消授权申请 XN626273
-    public void cancelSqForm(String userId);
-
     // 审核授权
     public void approveSqForm(String userId, String approver, String result,
             String remark);

@@ -11,6 +11,7 @@ import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 
 /**
+ * 账户
  * @author: xieyj
  * @since: 2016年11月11日 上午11:23:06 
  * @history:
@@ -27,6 +28,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
             String channelOrder, String payGroup, String refNo,
             EBizType bizType, String bizNote, Long transAmount);
 
+    // 变更账户余额
     public void changeAmountNotJour(String accountNumber, Long transAmount,
             String lastOrder);
 
@@ -69,6 +71,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 获取账户列表
     public List<Account> queryAccountList(Account data);
 
+    // 获取账户
     public Account getAccountNocheck(String userId, String code);
 
 }

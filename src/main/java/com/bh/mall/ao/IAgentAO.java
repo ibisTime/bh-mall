@@ -21,18 +21,6 @@ public interface IAgentAO {
     public XN627303Res doLoginWeChatByAgent(String code, String userKind,
             String userReferee);
 
-    // 用户登录
-    public String doLogin(String loginName, String loginPwd, String kind);
-
-    // 检查登录密码是否正确
-    public void doCheckLoginPwd(String userId, String password);
-
-    // 注销/激活用户
-    public void doCloseOpen(String userId, String updater, String remark);
-
-    // 重置登录密码
-    public void resetLoginPwd(String userId, String newLoginPwd);
-
     // 修改头像
     public void doModifyPhoto(String userId, String photo);
 
@@ -42,9 +30,6 @@ public interface IAgentAO {
 
     // 更新信
     public void updateInformation(XN627255Req req);
-
-    // 我的下级
-    public Paginable<Agent> queryLowUser(int start, int limit, Agent condition);
 
     // 修改上级
     public void editHighUser(String userId, String highUser, String updater);
@@ -56,19 +41,17 @@ public interface IAgentAO {
     // 修改管理员
     public void editManager(String userId, String manager, String updater);
 
+    // 分页我的下级
+    public Paginable<Agent> queryLowUserPage(int start, int limit,
+            Agent condition);
+
     // 分页查询
     public Paginable<Agent> queryAgentPage(int start, int limit,
             Agent condition);
 
-    // 代理结构
+    // 分页查询代理结构
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition);
-
-    // 查询推荐人
-    public Agent getRefereeName(String userReferee);
-
-    // 代理结构OSS
-    public List<Agent> queryAgentList(Agent condition);
 
     // 列表查询代理轨迹
     public List<Agent> getAgentLog(Agent condition);
@@ -81,5 +64,8 @@ public interface IAgentAO {
 
     // 详细查询
     public Agent getAgent(String userId);
+
+    // 列表查询代理结构OSS
+    public List<Agent> queryAgentList(Agent condition);
 
 }

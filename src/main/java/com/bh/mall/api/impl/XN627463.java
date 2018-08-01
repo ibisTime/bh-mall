@@ -32,7 +32,7 @@ public class XN627463 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        chargeAO.payOrder(req.getCode(), req.getPayUser(), req.getPayResult(),
+        chargeAO.payCharge(req.getCode(), req.getPayUser(), req.getPayResult(),
             req.getPayNote());
         return new BooleanRes(true);
     }

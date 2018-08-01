@@ -24,7 +24,7 @@ public class XN627461 extends AProcessor {
     @Override
     public synchronized Object doBusiness() throws BizException {
         for (String code : req.getCodeList()) {
-            chargeAO.payOrder(code, req.getPayUser(), req.getPayResult(),
+            chargeAO.payCharge(code, req.getPayUser(), req.getPayResult(),
                 req.getPayNote());
         }
         return new BooleanRes(true);

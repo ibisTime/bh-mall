@@ -16,11 +16,6 @@ import com.bh.mall.dto.req.XN627522Req;
 import com.bh.mall.dto.req.XN627523Req;
 import com.bh.mall.exception.BizException;
 
-/**
- * @author: asus 
- * @since: 2016年12月22日 下午5:35:09 
- * @history:
- */
 @Service
 public class BankcardAOImpl implements IBankcardAO {
 

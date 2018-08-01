@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,6 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IInOrderBO;
-import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
@@ -25,8 +22,6 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.InOrder;
-import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
@@ -37,7 +32,6 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
@@ -62,18 +56,11 @@ public class SqFormAOImpl implements ISqFormAO {
     private IAddressBO addressBO;
 
     @Autowired
-    private IInnerOrderBO innerOrderBO;
-
-    @Autowired
     private IAccountBO accountBO;
-
-    @Autowired
-    private IInOrderBO inOrderBO;
 
     @Autowired
     private IAgentLevelBO agentLevelBO;
 
-    /*************** 代理申请，有推荐人 **********************/
     // 申请代理， 有推荐人
     @Override
     @Transactional
@@ -183,7 +170,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
-    /*************** 通过授权申请 **********************/
     @Override
     @Transactional
     public void approveSqForm(String userId, String approver, String result,
@@ -285,60 +271,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
-    /*************** 取消授权申请 **********************/
-    @Override
-    public void cancelSqForm(String userId) {
-        Agent data = agentBO.getAgent(userId);
-
-        // 是否有下级
-        Agent uCondition = new Agent();
-        uCondition.setHighUserId(data.getUserId());
-        List<Agent> list = agentBO.queryUserList(uCondition);
-        if (CollectionUtils.isNotEmpty(list)) {
-            throw new BizException("xn000", "您还有下级，无法申请退出");
-        }
-
-        // 可提现账户是否余额
-        Account txAccount = accountBO.getAccountByUser(data.getUserId(),
-            ECurrency.YJ_CNY.getCode());
-        if (txAccount.getAmount() > 0) {
-            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
-        }
-
-        // TODO 是否有未完成的订单
-        InOrder oCondition = new InOrder();
-        oCondition.setApplyUser(data.getUserId());
-        long count = inOrderBO.selectCount(oCondition);
-        if (count != 0) {
-            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
-        }
-
-        InnerOrder ioCondition = new InnerOrder();
-        ioCondition.setApplyUser(data.getUserId());
-        ioCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
-        long ioCount = innerOrderBO.selectCount(ioCondition);
-        if (ioCount != 0) {
-            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
-        }
-
-        String status = EUserStatus.TO_COMPANYCANCEL.getCode();
-        if (StringUtils.isNotBlank(data.getHighUserId())) {
-            Agent buser = agentBO.getAgent(data.getHighUserId());
-            if (!EUserKind.Plat.getCode().equals(buser.getKind())) {
-                status = EUserStatus.TO_CANCEL.getCode();
-            }
-        }
-        // insert new impower log
-        SqForm imData = new SqForm();
-        imData.setUserId(userId);
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(EUserStatus.TO_CANCEL.getCode());
-        sqFormBO.cancelSqForm(imData);
-    }
-
-    /*************** 通过取消审核申请 **********************/
     @Override
     public void cancelSqForm(String userId, String approver, String result,
             String remark) {
@@ -376,7 +308,6 @@ public class SqFormAOImpl implements ISqFormAO {
         sqFormBO.addSqForm(imData);
     }
 
-    /***************   补全信息 **********************/
     // 补全授权所需资料
     @Override
     public void addInfo(XN627362Req req) {
@@ -441,8 +372,6 @@ public class SqFormAOImpl implements ISqFormAO {
         sqFormBO.addInfo(imData);
     }
 
-    /*********************** 查询 *************************/
-
     @Override
     public List<SqForm> querySqFormList(SqForm condition) {
 
@@ -465,8 +394,7 @@ public class SqFormAOImpl implements ISqFormAO {
                 if (StringUtils.isNotBlank(sqForm.getApprover())) {
                     Agent aprrvoeName = agentAO.getAgent(sqForm.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getRefereeName(aprrvoeName.getUserId());
+                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             sqForm.setApprover(userReferee.getRealName());
                         }
@@ -476,8 +404,6 @@ public class SqFormAOImpl implements ISqFormAO {
         }
         return list;
     }
-
-    /************************************************/
 
     @Override
     public SqForm getSqForm(String code) {
@@ -498,7 +424,7 @@ public class SqFormAOImpl implements ISqFormAO {
             if (StringUtils.isNotBlank(data.getApprover())) {
                 Agent aprrvoeName = agentAO.getAgent(data.getApprover());
                 if (null != aprrvoeName) {
-                    userReferee = agentAO.getRefereeName(aprrvoeName.getUserId());
+                    userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                     if (userReferee != null) {
                         data.setApprover(userReferee.getRealName());
                     }
@@ -509,7 +435,6 @@ public class SqFormAOImpl implements ISqFormAO {
         return data;
     }
 
-    /*********************** 查询是否需要补全金额 *************************/
     @Override
     public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition) {
@@ -551,8 +476,7 @@ public class SqFormAOImpl implements ISqFormAO {
                     Agent aprrvoeName = agentAO
                         .getAgent(impowerApply.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getRefereeName(aprrvoeName.getUserId());
+                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             impowerApply.setApprover(userReferee.getRealName());
                         }
@@ -565,7 +489,6 @@ public class SqFormAOImpl implements ISqFormAO {
         return page;
     }
 
-    /*************** 分配账号**********************/
     // 分配账号
     private List<String> distributeAccount(String userId, String mobile,
             String kind) {

@@ -29,8 +29,8 @@ import com.bh.mall.enums.EWithdrawStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
-        IWithdrawBO {
+public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
+        implements IWithdrawBO {
     @Autowired
     private IBankcardBO bankcardBO; // 取现银行卡户名
 
@@ -50,8 +50,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         if (amount == 0) {
             throw new BizException("xn000000", "取现金额不能为0");
         }
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Withdraw
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Withdraw.getCode());
         Withdraw data = new Withdraw();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
@@ -70,8 +70,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
             data.setAccountName(bankcard.getRealName());
             data.setPayCardInfo(bankcard.getBankName());
             // 获取银行编号
-            ChannelBank channelBank = channelBankBO.getChannelBank(bankcard
-                .getBankCode());
+            ChannelBank channelBank = channelBankBO
+                .getChannelBank(bankcard.getBankCode());
             if (null != channelBank) {
                 data.setChannelBank(channelBank.getChannelBank());
             }
@@ -148,8 +148,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
             long totalCount = withdrawDAO.selectTotalCount(condition);
             long maxMonthTimes = Long.valueOf(monthTimesValue);
             if (totalCount >= maxMonthTimes) {
-                throw new BizException("xn0000", "每月取现最多" + maxMonthTimes
-                        + "次,本月申请次数已用尽");
+                throw new BizException("xn0000",
+                    "每月取现最多" + maxMonthTimes + "次,本月申请次数已用尽");
             }
         }
 
@@ -169,8 +169,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         if (amount <= 0) {
             throw new BizException("xn000000", "回录金额不能为0");
         }
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Withdraw
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Withdraw.getCode());
         Withdraw data = new Withdraw();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
@@ -191,4 +191,5 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         withdrawDAO.insertBackRecord(data);
         return code;
     }
+
 }

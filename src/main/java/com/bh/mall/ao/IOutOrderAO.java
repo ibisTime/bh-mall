@@ -25,7 +25,7 @@ public interface IOutOrderAO {
     // C端下单
     public List<String> addOutOrderC(XN627640Req req);
 
-    // 修改订单
+    // 修改收货地址及运费
     public void editOutOrder(XN627643Req req);
 
     public List<String> addOutOrderNoCart(XN627641Req req);

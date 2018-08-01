@@ -24,8 +24,6 @@ import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 
-//  TODO  公司账户
-
 @Service
 public class AccountAOImpl implements IAccountAO {
 

@@ -54,7 +54,6 @@ public class SjFormAOImpl implements ISjFormAO {
     @Autowired
     IWareBO wareBO;
 
-    /*************** 升级申请 **********************/
     // 升级申请
     @Override
     public void applySjForm(String userId, String highLevel, String payPdf,
@@ -125,7 +124,6 @@ public class SjFormAOImpl implements ISjFormAO {
 
     }
 
-    /*************** 通过升级申请 **********************/
     @Override
     @Transactional
     public void approveSjForm(String userId, String approver, String result,
@@ -202,7 +200,6 @@ public class SjFormAOImpl implements ISjFormAO {
 
     }
 
-    /*************** 取消升级申请 **********************/
     @Override
     public void cancelSjForm(String userId, String approver, String result,
             String remark) {
@@ -214,48 +211,6 @@ public class SjFormAOImpl implements ISjFormAO {
         sjFormBO.addSjForm(upData);
 
     }
-
-    /*************** 通过取消升级申请 **********************/
-    public void approveCancelSjForm(String userId, String approver,
-            String result, String remark) {
-        Agent data = agentBO.getAgent(userId);
-        String status = EUserStatus.IMPOWERED.getCode();
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-
-        // 新增升级申请记录
-        SjForm upData = new SjForm();
-        upData.setUserId(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(EUserStatus.CANCELED.getCode());
-        upData.setApplyDatetime(new Date());
-
-        sjFormBO.approveCanenlSjForm(upData);
-    }
-
-    /*************** 通过取消升级申请 **********************/
-    public void approveUplevelCanenl(String userId, String approver,
-            String result, String remark) {
-        Agent data = agentBO.getAgent(userId);
-        String status = EUserStatus.IMPOWERED.getCode();
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-
-        // 新增升级申请记录
-        SjForm upData = new SjForm();
-        upData.setUserId(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(EUserStatus.CANCELED.getCode());
-        upData.setApplyDatetime(new Date());
-
-        sjFormBO.approveCanenlSjForm(upData);
-    }
-
-    /*********************** 查询 *************************/
 
     @Override
     public List<SjForm> querySjFormList(SjForm condition) {
@@ -279,8 +234,7 @@ public class SjFormAOImpl implements ISjFormAO {
                 if (StringUtils.isNotBlank(sjFrom.getApprover())) {
                     Agent aprrvoeName = agentAO.getAgent(sjFrom.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getRefereeName(aprrvoeName.getUserId());
+                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             sjFrom.setApprover(userReferee.getRealName());
                         }
@@ -290,8 +244,6 @@ public class SjFormAOImpl implements ISjFormAO {
         }
         return list;
     }
-
-    /************************************************/
 
     @Override
     public SjForm getSjForm(String code) {
@@ -312,7 +264,7 @@ public class SjFormAOImpl implements ISjFormAO {
             if (StringUtils.isNotBlank(data.getApprover())) {
                 Agent aprrvoeName = agentAO.getAgent(data.getApprover());
                 if (null != aprrvoeName) {
-                    userReferee = agentAO.getRefereeName(aprrvoeName.getUserId());
+                    userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                     if (userReferee != null) {
                         data.setApprover(userReferee.getRealName());
                     }
@@ -323,7 +275,6 @@ public class SjFormAOImpl implements ISjFormAO {
         return data;
     }
 
-    /*********************** 查询是否需要补全金额 *************************/
     @Override
     public Paginable<SjForm> querySjFormPage(int start, int limit,
             SjForm condition) {
@@ -365,8 +316,7 @@ public class SjFormAOImpl implements ISjFormAO {
                     Agent aprrvoeName = agentAO
                         .getAgent(uplevelApply.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getRefereeName(aprrvoeName.getUserId());
+                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             uplevelApply.setApprover(userReferee.getRealName());
                         }

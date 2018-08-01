@@ -1071,5 +1071,4 @@ public class OutOrderAOImpl implements IOutOrderAO {
             outOrderBO.removeOutOrder(data);
         }
     }
-
 }

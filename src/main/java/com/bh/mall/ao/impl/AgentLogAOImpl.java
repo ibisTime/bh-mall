@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IAgentLogAO;
 import com.bh.mall.bo.IAddressBO;
-import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;

@@ -21,11 +21,6 @@ import com.bh.mall.domain.SYSDict;
 import com.bh.mall.enums.EDictType;
 import com.bh.mall.exception.BizException;
 
-/** 
- * @author: haiqingzheng 
- * @since: 2016年4月17日 下午5:19:00 
- * @history:
- */
 @Service
 public class SYSDictAOImpl implements ISYSDictAO {
 
@@ -74,8 +69,10 @@ public class SYSDictAOImpl implements ISYSDictAO {
         sysDict.setDvalue(value);
         sysDict.setUpdater(updater);
         sysDict.setRemark(remark);
-        /*sysDict.setCompanyCode(companyCode);
-        sysDict.setSystemCode(systemCode);*/
+        /*
+         * sysDict.setCompanyCode(companyCode);
+         * sysDict.setSystemCode(systemCode);
+         */
         return sysDictBO.saveSYSDict(sysDict);
     }
 
@@ -94,7 +91,8 @@ public class SYSDictAOImpl implements ISYSDictAO {
     }
 
     @Override
-    public int editSYSDict(Long id, String value, String updater, String remark) {
+    public int editSYSDict(Long id, String value, String updater,
+            String remark) {
         SYSDict data = new SYSDict();
         data.setId(id);
         data.setDvalue(value);

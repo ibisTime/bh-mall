@@ -16,11 +16,11 @@ public interface IChargeAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
     // 线下充值订单录入（front/oss）
-    public String applyOrder(String accountNumber, String type, Long amount,
-            String applyUser, String applyNote, String chhargePdf);
+    public String applyCharge(String accountNumber, String type, Long amount,
+            String applyUser, String applyNote, String chargePdf);
 
     // 审批线下充值订单
-    public void payOrder(String code, String payUser, String payResult,
+    public void payCharge(String code, String payUser, String payResult,
             String payNote);
 
     // 分页查询充值订单列表(oss)

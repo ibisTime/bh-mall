@@ -40,6 +40,9 @@ public class CUser extends ABaseDO {
     // 状态
     private String status;
 
+    // 最后更新人
+    private String updater;
+
     // 注册时间
     private Date createDatetime;
 
@@ -65,10 +68,14 @@ public class CUser extends ABaseDO {
     // 手机号模糊查询
     private String mobileForQuery;
 
+    // 关键词
     private String keyWord;
 
-    // 最后更新人
-    private String updater;
+    // 注册时间起
+    private Date createDatetimeStart;
+
+    // 注册时间止
+    private Date createDatetimeEnd;
 
     public List<CUser> getCUserList() {
         return cUserList;
@@ -215,5 +222,21 @@ public class CUser extends ABaseDO {
 
     public void setUpDater(String updater) {
         this.updater = updater;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 }

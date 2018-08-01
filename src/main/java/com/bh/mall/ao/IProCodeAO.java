@@ -16,6 +16,7 @@ import com.bh.mall.domain.ProCode;
  */
 @Component
 public interface IProCodeAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增箱码
@@ -34,8 +35,10 @@ public interface IProCodeAO {
     // 取出一个未使用的箱码
     public ProCode queryProCode();
 
+    // 下载打印
     public List<ProCode> downLoad(int number, int quantity);
 
+    // 校验是否重复
     public boolean checkCode(String proCode, List<ProCode> barList,
             List<MiniCode> stList);
 

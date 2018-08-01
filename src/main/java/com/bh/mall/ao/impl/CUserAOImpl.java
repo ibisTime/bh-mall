@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.IWareBO;
+import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
 import com.bh.mall.domain.CUser;
@@ -78,27 +78,6 @@ public class CUserAOImpl implements ICUserAO {
 
     @Autowired
     IAgentReportBO agentReportBO;
-
-    /***************** 登录 **********************/
-    @Override
-    public String doLogin(String loginName, String loginPwd) {
-        CUser condition = new CUser();
-
-        List<CUser> userList1 = cuserBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn805050", "登录名不存在");
-        }
-
-        List<CUser> userList2 = cuserBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn805050", "登录密码错误");
-        }
-        CUser user = userList2.get(0);
-        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-            throw new BizException("xn805050", "该用户操作存在异常");
-        }
-        return user.getUserId();
-    }
 
     @Override
     public XN627304Res doLoginWeChatByCustomer(String code, String nickname,
@@ -198,7 +177,6 @@ public class CUserAOImpl implements ICUserAO {
         return result;
     }
 
-    /************************ 注册 ******************/
     private XN627304Res doWxLoginReg(String unionId, String appOpenId,
             String h5OpenId, String nickname, String photo, String status) {
         cuserBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
@@ -209,48 +187,9 @@ public class CUserAOImpl implements ICUserAO {
         return result;
     }
 
-    /******************** 登录检测 ********************/
-    @Override
-    public void doCloseOpen(String userId, String updater, String remark) {
-        CUser user = cuserBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", "用户不存在");
-        }
-
-        String smsContent = "";
-        EUserStatus userStatus = null;
-        if (EUserStatus.NORMAL.getCode().equalsIgnoreCase(user.getStatus())) {
-            smsContent = "您的账号已被管理员封禁";
-            userStatus = EUserStatus.Ren_Locked;
-        } else {
-            smsContent = "您的账号已被管理员解封,请遵守平台相关规则";
-            userStatus = EUserStatus.NORMAL;
-        }
-        cuserBO.refreshStatus(userId, userStatus);
-
-    }
-
-    /******************** 更新信息********************/
-
     @Override
     public void doModifyPhoto(String userId, String photo) {
         cuserBO.refreshPhoto(userId, photo);
-    }
-
-    @Override
-    public void doCheckLoginPwd(String userId, String loginPwd) {
-        CUser condition = new CUser();
-        condition.setUserId(userId);
-        List<CUser> userList1 = cuserBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "用户不存在");
-        }
-
-        List<CUser> userList2 = cuserBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn702002", "登录密码错误");
-        }
-
     }
 
     private Map<String, Object> getUserInfo(String code) {
@@ -310,10 +249,33 @@ public class CUserAOImpl implements ICUserAO {
     }
 
     @Override
-    public void doResetMoblie(String userId, String newMobile,
-            String smsCaptcha) {
-        // TODO Auto-generated method stub
+    public Paginable<CUser> queryCuserPage(int start, int limit,
+            CUser condition) {
 
+        if (condition.getCreateDatetimeStart() != null
+                && condition.getCreateDatetimeEnd() != null
+                && condition.getCreateDatetimeStart()
+                    .after(condition.getCreateDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
+
+        Paginable<CUser> page = cuserBO.getPaginable(start, limit, condition);
+
+        return page;
+    }
+
+    // 列表查询
+    public List<CUser> queryCuserList(CUser condition) {
+        List<CUser> list = cuserBO.queryUserList(condition);
+        return list;
+
+    }
+
+    // 详细查询
+    public CUser getCuser(String code) {
+
+        CUser cuser = new CUser();
+        return cuser;
     }
 
 }

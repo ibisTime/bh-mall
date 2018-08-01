@@ -41,7 +41,7 @@ public class ChargeAOImpl implements IChargeAO {
     IAgentLevelBO agentLevelBO;
 
     @Override
-    public String applyOrder(String accountNumber, String type, Long amount,
+    public String applyCharge(String accountNumber, String type, Long amount,
             String applyUser, String applyNote, String chargePdf) {
         if (amount < 0) {
             throw new BizException("xn000000", "金额需大于零");
@@ -80,7 +80,7 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Override
     @Transactional
-    public void payOrder(String code, String payUser, String payResult,
+    public void payCharge(String code, String payUser, String payResult,
             String payNote) {
         Charge data = chargeBO.getCharge(code);
         if (!EChargeStatus.TO_Cancel.getCode().equals(data.getStatus())) {

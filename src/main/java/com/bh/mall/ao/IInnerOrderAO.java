@@ -18,6 +18,7 @@ import com.bh.mall.dto.req.XN627723Req;
  */
 @Component
 public interface IInnerOrderAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 提交订单
