@@ -29,17 +29,17 @@ public interface ISYSUserAO {
     public void doRoleSYSUser(String userId, String roleCode, String updater,
             String remark);
 
-    // 重置登录密码 XN627304
+    // 重置登录密码
     public void resetAdminLoginPwd(String userId, String newLoginPwd);
 
     // 重置代理密码
-    public void resetLoginPwd(String mobile, String smsCaptcha,
+    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd);
 
-    // 修改照片 XN627279
+    // 修改照片
     public void doModifyPhoto(String userId, String photo);
 
-    // 修改电话 XN627282
+    // 修改电话
     public void doResetMoblie(String userId, String kind, String newMobile,
             String smsCaptcha);
 

@@ -14,7 +14,6 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.dao.IYxFormDAO;
-import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.enums.EAgentType;
 import com.bh.mall.enums.EUserStatus;
@@ -29,9 +28,27 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Autowired
     private IAgentDAO agentDAO;
 
-    /************************ 意向分配 ***********************/
+    /************************ 代理申请 ***********************/
     @Override
     public String applyYxForm(YxForm data) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentLog.getCode());
+        YxForm alData = new YxForm();
+        alData.setCode(code);
+        alData.setApplyLevel(data.getApplyLevel());
+        alData.setToUserId(data.getToUserId());
+        alData.setStatus(EUserStatus.TO_APPROVE.getCode());
+        alData.setUserId(data.getUserId());
+        Date date = new Date();
+        alData.setApplyDatetime(date);
+
+        yxFormDAO.insert(alData);
+        return code;
+    }
+
+    // 意向分配
+    @Override
+    public String allotYxForm(YxForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         YxForm alData = new YxForm();
@@ -88,22 +105,6 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     /********************* 保存 ************************/
 
     @Override
-    public String addYxForm(YxForm data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        YxForm buser = new YxForm();
-        Agent user = new Agent();
-        buser.setUserId(data.getUserId());
-        agentDAO.updateLog(user);
-
-        // add new agent allot log
-        data.setCode(code);
-        yxFormDAO.insert(data);
-        return code;
-    }
-
-    @Override
     public String saveYxForm(YxForm data, String toUserId) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
@@ -156,21 +157,6 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         Page<YxForm> page = new Page<YxForm>(start, limit, totalCount);
         return yxFormDAO.selectList(condition, page.getPageNO(),
             page.getPageSize());
-    }
-
-    /*********************** 向下分配 *************************/
-    @Override
-    public String refreshHighUser(YxForm data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        YxForm alData = new YxForm();
-        alData.setCode(code);
-        alData.setUserId(data.getUserId());
-        alData.setStatus(EAgentType.Update.getCode());
-        Date date = new Date();
-        alData.setApplyDatetime(date);
-        yxFormDAO.insert(alData);
-        return code;
     }
 
 }

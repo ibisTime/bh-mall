@@ -63,6 +63,12 @@ public class SYSUser extends ABaseDO {
     // 系统用户列表
     private List<SYSUser> sysUserList;
 
+    // 注册时间起
+    private Date createDatetimeStart;
+
+    // 注册时间止
+    private Date createDatetimeEnd;
+
     public List<SYSUser> getSysUserList() {
         return sysUserList;
     }
@@ -188,6 +194,22 @@ public class SYSUser extends ABaseDO {
 
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
 }

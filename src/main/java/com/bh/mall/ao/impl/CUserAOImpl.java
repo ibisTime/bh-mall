@@ -252,12 +252,12 @@ public class CUserAOImpl implements ICUserAO {
     public Paginable<CUser> queryCuserPage(int start, int limit,
             CUser condition) {
 
-        // if (condition.getCreateDatetimeStart() != null
-        // && condition.getApplyDatetimeEnd() != null
-        // && condition.getApplyDatetimeStart()
-        // .after(condition.getApplyDatetimeEnd())) {
-        // throw new BizException("xn00000", "开始时间不能大于结束时间");
-        // }
+        if (condition.getCreateDatetimeStart() != null
+                && condition.getCreateDatetimeEnd() != null
+                && condition.getCreateDatetimeStart()
+                    .after(condition.getCreateDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
 
         Paginable<CUser> page = cuserBO.getPaginable(start, limit, condition);
 

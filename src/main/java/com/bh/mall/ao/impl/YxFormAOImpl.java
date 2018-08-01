@@ -110,7 +110,7 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setStatus(status);
-        yxFormBO.addYxForm(data);
+        yxFormBO.allotYxForm(data);
 
     }
 
@@ -151,7 +151,7 @@ public class YxFormAOImpl implements IYxFormAO {
         imData.setApplyDatetime(new Date());
         imData.setStatus(EUserStatus.ADD_INFO.getCode());
 
-        yxFormBO.addYxForm(imData);
+        yxFormBO.allotYxForm(imData);
 
     }
 

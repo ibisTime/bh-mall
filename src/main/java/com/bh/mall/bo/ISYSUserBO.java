@@ -12,23 +12,39 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public String doRegister(String loginName, String loginPwd,
             String systemCode);
 
-    // 保存
-    public String saveUser(String mobile, String loginPwd, String photo,
-            String loginName, String systemCode, String status);
+    // 新增系统用户
+    public void doSaveSYSuser(SYSUser data);
 
-    public void doSaveUser(SYSUser data);
+    // 分配角色
+    public void refreshRole(String userId, String roleCode, String updater,
+            String remark);
+
+    // 重置密码
+    public void resetAdminLoginPwd(SYSUser user, String loginPwd);
+
+    // 重置代理密码
+    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd);
+
+    // 修改照片
+    public void refreshPhoto(String userId, String photo);
+
+    // 判断手机号是否存在
+    public void isMobileExist(String mobile, String systemCode);
+
+    // 修改绑定手机号
+    public void resetBindMobile(SYSUser user, String newMobile);
+
+    // 列表查询
+    public List<SYSUser> queryUserList(SYSUser condition);
 
     // 登录判断
     public SYSUser getUserByLoginName(String loginName, String systemCode);
 
     public void checkLoginPwd(String userId, String loginPwd);
 
-    public void isMobileExist(String mobile, String systemCode);
-
     // 判断登录名是否存在
     public void isLoginNameExist(String loginName, String systemCode);
-
-    public String getUserId(String systemCode);
 
     public SYSUser getCheckUser(String userId);
 
@@ -40,20 +56,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 判断用户编号是否存在
     public boolean isUserExist(String userId, String systemCode);
 
-    public void resetAdminLoginPwd(SYSUser user, String loginPwd);
-
-    public List<SYSUser> queryUserList(SYSUser condition);
-
-    //
-    public void refreshPhoto(String userId, String photo);
-
-    //
-    public void resetBindMobile(SYSUser user, String newMobile);
-
     public void refreshStatus(String userId, EUserStatus status, String updater,
-            String remark);
-
-    public void refreshRole(String userId, String roleCode, String updater,
             String remark);
 
 }
