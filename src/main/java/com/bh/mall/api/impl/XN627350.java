@@ -31,12 +31,11 @@ public class XN627350 extends AProcessor {
     public Object doBusiness() throws BizException {
 
         Agent condition = new Agent();
-
         condition.setStatus(EUserStatus.IMPOWERED.getCode());
-
         condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
         condition.setKind(EUserKind.Merchant.getCode());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IAgentAO.DEFAULT_ORDER_COLUMN;
@@ -46,7 +45,7 @@ public class XN627350 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentAO.queryAgentPage(start, limit, condition);
+        return agentAO.queryMyLowAgentPage(start, limit, condition);
     }
 
     @Override

@@ -36,37 +36,27 @@ public interface IAgentAO {
     // 修改管理员
     public void editManager(String userId, String manager, String updater);
 
-    // 我的下级
-
-    // 列表查询代理
-    public List<Agent> queryAgentList(Agent condition);
-
     // 分页查询代理
     public Paginable<Agent> queryAgentPage(int start, int limit,
             Agent condition);
 
-<<<<<<< HEAD
-    // 列表查询代理结构
-    public List<Agent> queryAgentJgList(Agent condition);
-=======
-    // 分页查询代理结构
+    // 列表查询代理
+    public List<Agent> queryAgentList(Agent condition);
+
+    // 详细查询
+    public Agent getAgent(String userId);
+
+    // 分页我的下级
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition);
 
     // 列表查询代理结构
-    public List<Agent> queryAgentList(Agent condition);
-
-    // 列表查询代理轨迹
-    public List<Agent> getAgentLog(Agent condition);
->>>>>>> refs/remotes/origin/master
+    public List<Agent> queryAgentJgList(Agent condition);
 
     // 公司直接取消授权
     public void abolishSqForm(String userId, String updater, String remark);
 
     // 根据手机号查询代理
     public Agent doGetAgentByMobile(String mobile);
-
-    // 详细查询
-    public Agent getAgent(String userId);
 
 }

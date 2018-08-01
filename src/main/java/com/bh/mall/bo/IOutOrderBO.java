@@ -4,17 +4,18 @@ import java.util.Date;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
-import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
 
 public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
-    public String saveOutOrder(Agent applyUser, Product pData, Specs specs,
-            Long price, Integer quantity, String applyNote, String signer,
-            String mobile, String province, String city, String area,
-            String address, String status, String kind);
+    public String saveOutOrder(String applyUser, String name, String toUserId,
+            String toUserName, String teamName, String teamLeader,
+            Product pData, Specs specs, Long price, Integer quantity,
+            String applyNote, String signer, String mobile, String province,
+            String city, String area, String address, String status,
+            String kind);
 
     public void refreshOutOrder(OutOrder data);
 

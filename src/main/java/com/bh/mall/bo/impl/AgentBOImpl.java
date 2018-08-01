@@ -449,12 +449,8 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshHighUser(Agent data, String highUser, String updater) {
 
         String code = OrderNoGenerater
-<<<<<<< HEAD
             .generate(EGeneratePrefix.AgentLog.getCode());
 
-=======
-            .generate(EGeneratePrefix.Agent.getCode());
->>>>>>> refs/remotes/origin/master
         Agent alData = new Agent();
         alData.setLastAgentLog(code);
         alData.setUserId(data.getUserId());

@@ -286,7 +286,6 @@ public class AgentAOImpl implements IAgentAO {
         Agent data = agentBO.getAgent(userId);
         agentBO.getAgent(highUser);
         agentBO.refreshHighUser(data, highUser, updater);
-
     }
 
     // 修改推荐人
@@ -307,14 +306,13 @@ public class AgentAOImpl implements IAgentAO {
 
     // 列表查询代理
     @Override
-<<<<<<< HEAD
     public List<Agent> queryAgentList(Agent condition) {
         return agentBO.queryUserList(condition);
-=======
+    }
+
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition) {
         return agentBO.getPaginable(start, limit, condition);
->>>>>>> refs/remotes/origin/master
     }
 
     // 列表查询代理结构
@@ -340,7 +338,6 @@ public class AgentAOImpl implements IAgentAO {
                 getAgentList(agentList);
             }
         }
-
         return list;
     }
 
@@ -348,19 +345,16 @@ public class AgentAOImpl implements IAgentAO {
     public void abolishSqForm(String userId, String updater, String remark) {
         Agent data = agentBO.getAgent(userId);
         agentBO.refreshStatus(data, updater, remark);
-
     }
 
     @Override
     public Agent doGetAgentByMobile(String mobile) {
         return agentBO.getAgentByMobile(mobile);
-
     }
 
     @Override
     public Agent getAgent(String userId) {
         return agentBO.getAgent(userId);
-
     }
 
 }

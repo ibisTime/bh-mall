@@ -14,7 +14,6 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOutOrderDAO;
-import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
@@ -30,10 +29,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     IOutOrderDAO outOrderDAO;
 
     @Override
-    public String saveOutOrder(Agent applyUser, Product pData, Specs specs,
-            Long price, Integer quantity, String applyNote, String signer,
-            String mobile, String province, String city, String area,
-            String address, String status, String kind) {
+    public String saveOutOrder(String applyUser, String name, String toUserId,
+            String toUserName, String teamName, String teamLeader,
+            Product pData, Specs specs, Long price, Integer quantity,
+            String applyNote, String signer, String mobile, String province,
+            String city, String area, String address, String status,
+            String kind) {
 
         OutOrder data = new OutOrder();
         String code = OrderNoGenerater
@@ -44,12 +45,17 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
         data.setSpecsCode(specs.getCode());
         data.setSpecsName(specs.getName());
-        data.setToUserId(applyUser.getHighUserId());
+        data.setToUserId(toUserId);
+        data.setToUserName(toUserName);
+
         data.setQuantity(quantity);
         data.setPrice(price);
-
         data.setPic(pData.getAdvPic());
-        data.setApplyUser(applyUser.getUserId());
+        data.setApplyUser(applyUser);
+        data.setRealName(name);
+
+        data.setTeamName(teamName);
+        data.setTeamLeader(teamLeader);
         data.setAmount(price * quantity);
         data.setApplyDatetime(new Date());
         data.setApplyNote(applyNote);

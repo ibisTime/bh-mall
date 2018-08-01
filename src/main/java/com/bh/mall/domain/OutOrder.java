@@ -88,6 +88,9 @@ public class OutOrder extends ABaseDO {
     // 团队名称
     private String teamName;
 
+    // 团队长名称
+    private String teamLeader;
+
     // 下单备注
     private String applyNote;
 
@@ -675,6 +678,14 @@ public class OutOrder extends ABaseDO {
 
     public void setToUserId(String toUserId) {
         this.toUserId = toUserId;
+    }
+
+    public String getTeamLeader() {
+        return teamLeader;
+    }
+
+    public void setTeamLeader(String teamLeader) {
+        this.teamLeader = teamLeader;
     }
 
 }

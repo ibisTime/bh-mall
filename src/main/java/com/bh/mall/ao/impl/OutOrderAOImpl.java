@@ -20,6 +20,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentPriceBO;
+import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.IMiniCodeBO;
@@ -130,6 +131,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     @Autowired
     IMiniCodeBO miniCodeBO;
+
+    @Autowired
+    ICUserBO cUserBO;
 
     @Override
     @Transactional
@@ -249,6 +253,71 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     @Transactional
     public List<String> addOutOrderNoCart(XN627641Req req) {
+        List<String> list = new ArrayList<String>();
+        Agent applyUser = agentBO.getAgent(req.getApplyUser());
+        Specs specs = specsBO.getSpecs(req.getSpecsCode());
+        Product pData = productBO.getProduct(specs.getProductCode());
+
+        if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
+            throw new BizException("xn0000", "产品包含未上架商品,不能下单");
+        }
+        // 该等级对应的规则及价格
+        AgentLevel agentLevel = agentLevelBO
+            .getAgentByLevel(applyUser.getLevel());
+        AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(),
+            applyUser.getLevel());
+
+        // 订单类型
+        String kind = EOutOrderKind.Normal_Order.getCode();
+        // 未开云仓的代理，判断是否为授权单
+        Long amount = StringValidater.toInteger(req.getQuantity())
+                * price.getPrice();
+        if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
+            if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
+                applyUser.getImpowerDatetime())) {
+                kind = EOutOrderKind.Impower_Order.getCode();
+                if (agentLevel.getAmount() > amount) {
+                    throw new BizException("xn00000", agentLevel.getName()
+                            + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
+                }
+            }
+        }
+
+        // 门槛余额是否高于限制
+        this.checkAmount(applyUser, agentLevel, amount);
+
+        // 检查起购数量
+        if (price.getMinQuantity() > StringValidater
+            .toInteger(req.getQuantity())) {
+            throw new BizException("xn0000",
+                "您购买的数量不能低于" + price.getMinQuantity() + "]");
+        }
+
+        // 订单拆单
+        if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
+            int singleNumber = StringValidater.toInteger(req.getQuantity())
+                    / specs.getSingleNumber();
+            for (int i = 0; i < singleNumber; i++) {
+                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                    price.getPrice(), specs.getSingleNumber(),
+                    req.getApplyNote(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+            }
+        } else {
+            // 不可拆单
+            list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                price.getPrice(), StringValidater.toInteger(req.getQuantity()),
+                req.getApplyNote(), req.getSigner(), req.getMobile(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+        }
+        return list;
+    }
+
+    @Override
+    @Transactional
+    public List<String> addOutOrderNoCartC(XN627641Req req) {
         List<String> list = new ArrayList<String>();
         Agent applyUser = agentBO.getAgent(req.getApplyUser());
         Specs specs = specsBO.getSpecs(req.getSpecsCode());
