@@ -11,6 +11,7 @@ import com.bh.mall.domain.Address;
  * @history:
  */
 public interface IAddressAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增地址

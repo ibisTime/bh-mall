@@ -15,6 +15,7 @@ import com.bh.mall.dto.req.XN627523Req;
  * @history:
  */
 public interface IBankcardAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增银行卡

@@ -465,8 +465,7 @@ public class SqFormAOImpl implements ISqFormAO {
                 if (StringUtils.isNotBlank(sqForm.getApprover())) {
                     Agent aprrvoeName = agentAO.getAgent(sqForm.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getUserName(aprrvoeName.getUserId());
+                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             sqForm.setApprover(userReferee.getRealName());
                         }
@@ -498,7 +497,7 @@ public class SqFormAOImpl implements ISqFormAO {
             if (StringUtils.isNotBlank(data.getApprover())) {
                 Agent aprrvoeName = agentAO.getAgent(data.getApprover());
                 if (null != aprrvoeName) {
-                    userReferee = agentAO.getUserName(aprrvoeName.getUserId());
+                    userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                     if (userReferee != null) {
                         data.setApprover(userReferee.getRealName());
                     }
@@ -551,8 +550,7 @@ public class SqFormAOImpl implements ISqFormAO {
                     Agent aprrvoeName = agentAO
                         .getAgent(impowerApply.getApprover());
                     if (null != aprrvoeName) {
-                        userReferee = agentAO
-                            .getUserName(aprrvoeName.getUserId());
+                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             impowerApply.setApprover(userReferee.getRealName());
                         }

@@ -43,8 +43,6 @@ public interface ISYSUserAO {
     public void doResetMoblie(String userId, String kind, String newMobile,
             String smsCaptcha);
 
-    /*************** 查询 *******************/
-
     // 分页查询
     public Paginable<SYSUser> queryUserPage(int start, int limit,
             SYSUser condition);

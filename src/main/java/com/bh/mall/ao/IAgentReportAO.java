@@ -15,6 +15,7 @@ import com.bh.mall.domain.AgentReport;
  */
 @Component
 public interface IAgentReportAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 分页查询代理统计

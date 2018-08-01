@@ -25,7 +25,7 @@ public class XN627278 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return agentAO.doLoginWeChatByMerchant(req.getCode(),
+        return agentAO.doLoginWeChatByAgent(req.getCode(),
             EUserKind.Merchant.getCode(), req.getUserReferee());
     }
 

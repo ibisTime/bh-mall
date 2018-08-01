@@ -12,6 +12,7 @@ import com.bh.mall.domain.ChannelBank;
  * @history:
  */
 public interface IChannelBankAO {
+
     static final String DEFAULT_ORDER_COLUMN = "id";
 
     // 添加渠道银行
