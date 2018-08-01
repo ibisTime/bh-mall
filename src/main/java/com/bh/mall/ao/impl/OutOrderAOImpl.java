@@ -189,8 +189,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 订单拆单
             if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
                 for (int i = 0; i < cart.getQuantity(); i++) {
-                    // outOrderBO.saveOutOrder(data);
-                    list.add(this.addOrder(applyUser, pData, psData,
+                    outOrderBO.saveOutOrder(applyUser, pData, psData,
                         cart.getQuantity(), req.getApplyNote(), req.getSigner(),
                         req.getMobile(), req.getProvince(), req.getCity(),
                         req.getArea(), req.getAddress()));

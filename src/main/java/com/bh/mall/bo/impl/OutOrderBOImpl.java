@@ -14,7 +14,10 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOutOrderDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.OutOrder;
+import com.bh.mall.domain.Product;
+import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.exception.BizException;
@@ -27,7 +30,11 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     IOutOrderDAO outOrderDAO;
 
     @Override
-    public void saveOutOrder(OutOrder data) {
+    public void saveOutOrder(Agent applyUser, Product pData, Specs psData,
+            Integer quantity, String applyNote, String signer, String mobile,
+            String province, String city, String area, String address) {
+        OutOrder data = new OutOrder();
+
         outOrderDAO.insert(data);
     }
 
