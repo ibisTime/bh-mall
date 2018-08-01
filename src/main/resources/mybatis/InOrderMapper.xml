@@ -6,8 +6,8 @@
 		<result column="code" property="code" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
-		<result column="product_specs_code" property="productSpecsCode" />
-		<result column="product_specs_name" property="productSpecsName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="productSpecsName" />
 		
 		<result column="pic" property="pic" />
 		<result column="quantity" property="quantity" />
@@ -23,6 +23,8 @@
 		
 		<result column="pay_code" property="payCode" />
 		<result column="apply_user" property="applyUser" />
+		<result column="real_name" property="realName" />
+		
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="apply_note" property="applyNote" />
 		<result column="approver" property="approver" />
@@ -61,7 +63,7 @@
 			</choose>
 			
 			<if test="keyword != null and keyword != '' ">
-				AND (t.product_name like "%"#{keyword}"%" or u.real_name like "%"#{keyword}"%" or u.team_name like "%"#{keyword}"%" )
+				AND (t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%" or t.team_name like "%"#{keyword}"%" )
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
@@ -69,7 +71,6 @@
 			<if test="endDatetime != null and endDatetime != ''">
 				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
 			</if>
-			
 		</trim>
 	</sql>
 	
@@ -79,8 +80,8 @@
 		t.code
 		,t.product_code
 		,t.product_name
-		,t.product_specs_code
-		,t.product_specs_name
+		,t.specs_code
+		,t.specs_name
 
 		,t.pic
 		,t.quantity
@@ -96,10 +97,12 @@
 		
 		,t.pay_code
 		,t.apply_user
-		,t.apply_note
+		,t.real_name
+		,t.team_name
 		,t.apply_datetime
-		,t.approver
 		
+		,t.apply_note
+		,t.approver
 		,t.approve_datetime
 		,t.remark
 		FROM
@@ -125,8 +128,8 @@
 		code
 		,product_code
 		,product_name
-		,product_specs_code
-		,product_specs_name
+		,specs_code
+		,specs_name
 
 		,pic
 		,quantity
@@ -136,6 +139,8 @@
 
 		,status
 		,apply_user
+		,real_name
+		,team_name
 		,apply_datetime
 		,apply_note
 		)
@@ -143,7 +148,7 @@
 		#{code}
 		,#{productCode}
 		,#{productName}
-		,#{productSpecsCode}
+		,#{specsCode}
 		,#{productSpecsName}
 
 		,#{pic}
@@ -154,6 +159,8 @@
 
 		,#{status}
 		,#{applyUser}
+		,#{realName}
+		,#{teamName}
 		,#{applyDatetime}
 		,#{applyNote}
 		)

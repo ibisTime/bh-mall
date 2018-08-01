@@ -29,8 +29,10 @@
 		<result column="pay_code" property="payCode" />
 		
 		<result column="apply_user" property="applyUser" />
-		<result column="apply_note" property="applyNote" />
+		<result column="real_name" property="realName" />
+		<result column="team_name" property="teamName" />
 		<result column="apply_datetime" property="applyDatetime" />
+		<result column="apply_note" property="applyNote" />
 		<result column="signer" property="signer" />
 		
 		<result column="mobile" property="mobile" />
@@ -98,7 +100,7 @@
 				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
-				AND (t.product_name like "%"#{keyword}"%" or u.real_name like "%"#{keyword}"%" or u.team_name like "%"#{keyword}"%" )
+				AND (t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%" or t.team_name like "%"#{keyword}"%" )
 			</if>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
@@ -159,8 +161,10 @@
 		,t.pay_code
 		
 		,t.apply_user
-		,t.apply_note
+		,t.real_name
+		,t.team_name
 		,t.apply_datetime
+		,t.apply_note
 		,t.signer
 		
 		,t.mobile
@@ -184,7 +188,7 @@
 		,t.approve_note
 		,t.remark
 		FROM
-		tbh_out_order t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		tbh_out_order 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -196,7 +200,7 @@
 
 	<select id="select_outOrder_count" parameterType="outOrder"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_out_order t  LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		SELECT count(1) FROM tbh_out_order t 
 		<include refid="where_condition" />
 	</select>
 
@@ -221,9 +225,11 @@
 		,yunfei
 		,status
 		,apply_user
-		
-		,apply_note
+
+		,real_name
+		,team_name		
 		,apply_datetime
+		,apply_note
 		,signer
 		,mobile
 		
@@ -251,9 +257,11 @@
 		,#{yunfei}
 		,#{status}
 		,#{applyUser}
-		
-		,#{applyNote}
+
+		,#{realName}
+		,#{teamName}		
 		,#{applyDatetime}
+		,#{applyNote}
 		,#{signer}
 		,#{mobile}
 		

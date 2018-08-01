@@ -11,10 +11,10 @@ import com.bh.mall.domain.Specs;
 
 public interface IInOrderBO extends IPaginableBO<InOrder> {
 
-    public String saveInOrder(String userId, String toUserId,
-            String productCode, String productName, String specsCode,
-            String specsName, String pic, Long price, Integer quantity,
-            String applyNote);
+    public String saveInOrder(String userId, String realName, String teamName,
+            String toUserId, String productCode, String productName,
+            String specsCode, String specsName, String pic, Long price,
+            Integer quantity, String applyNote);
 
     public List<InOrder> queryInOrderList(InOrder condition);
 
