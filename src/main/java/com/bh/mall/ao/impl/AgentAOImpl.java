@@ -29,7 +29,6 @@ import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.IYxFormBO;
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.PhoneUtil;
@@ -306,12 +305,7 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition) {
-        long totalCount = agentBO.getTotalCount(condition);
-        Page<Agent> page = new Page<Agent>(start, limit, totalCount);
-        List<Agent> list = agentBO.selectList(condition, page.getPageNo(),
-            page.getPageSize());
-        page.setList(list);
-        return page;
+        return agentBO.getPaginable(start, limit, condition);
     }
 
     // 下级

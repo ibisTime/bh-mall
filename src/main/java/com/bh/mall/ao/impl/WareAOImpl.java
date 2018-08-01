@@ -35,7 +35,7 @@ import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
-import com.bh.mall.enums.EOrderKind;
+import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
@@ -207,7 +207,7 @@ public class WareAOImpl implements IWareAO {
         }
 
         // 获取授权单
-        String kind = EOrderKind.Pick_Up.getCode();
+        String kind = EOutOrderKind.Pick_Up.getCode();
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
 
         // 是否完成授权单

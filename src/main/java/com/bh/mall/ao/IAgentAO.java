@@ -53,6 +53,9 @@ public interface IAgentAO {
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition);
 
+    // 列表查询代理结构
+    public List<Agent> queryAgentList(Agent condition);
+
     // 列表查询代理轨迹
     public List<Agent> getAgentLog(Agent condition);
 
@@ -64,8 +67,5 @@ public interface IAgentAO {
 
     // 详细查询
     public Agent getAgent(String userId);
-
-    // 列表查询代理结构OSS
-    public List<Agent> queryAgentList(Agent condition);
 
 }

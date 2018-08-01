@@ -17,7 +17,7 @@ public enum EGeneratePrefix {
                     "规格定价编号"), ProductLog("PL", "产品库存记录"),
 
     Award("AW", "奖励编号"), InnerProduct("IP", "内购产品编号"), Cart("CA",
-            "购物车编号"), InnerOrder("IN", "内购产品订单编号"), Order("OA", "产品订单"),
+            "购物车编号"), InnerOrder("IN", "内购产品订单编号"), Order("OA", "产品订单"),OutOrder("OO", "云仓出货订单",
 
     Charge("CO", "充值订单"), AgentLog("AL", "代理轨迹"), Intro("IT", "介绍奖励"), Ware(
             "WH", "云仓库编号"), WareHourseLog("WHL",
