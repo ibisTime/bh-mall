@@ -138,6 +138,46 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public List<String> addOutOrder(XN627640Req req) {
         List<String> list = new ArrayList<String>();
         for (String code : req.getCartList()) {
+
+            Cart cart = cartBO.getCart(code);
+            Product pData = productBO.getProduct(cart.getProductCode());
+            Specs specs = specsBO.getSpecs(cart.getSpecsCode());
+            if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
+                throw new BizException("xn0000", "产品包含未上架商品,不能下单");
+            }
+
+            Agent applyUser = agentBO.getAgent(req.getApplyUser());
+            AgentPrice apData = agentPriceBO.getPriceByLevel(specs.getCode(),
+                applyUser.getLevel());
+
+            // 检查是否可购买
+            if (EBoolean.NO.getCode().equals(apData.getIsBuy())) {
+                throw new BizException("xn0000", "您的等级无法购买该规格的产品");
+            }
+            // 订单拆单
+            if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
+                for (int i = 0; i < cart.getQuantity(); i++) {
+                    list.add(this.addOrder(applyUser, pData, specs,
+                        cart.getQuantity(), req.getApplyNote(), req.getSigner(),
+                        req.getMobile(), req.getProvince(), req.getCity(),
+                        req.getArea(), req.getAddress()));
+                }
+            } else {
+                list.add(this.addOrder(applyUser, pData, specs,
+                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress()));
+            }
+            // 删除购物车记录
+            cartBO.removeCart(cart);
+        }
+        return list;
+    }
+
+    @Override
+    public List<String> addOutOrderC(XN627640Req req) {
+        List<String> list = new ArrayList<String>();
+        for (String code : req.getCartList()) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
             Specs psData = specsBO.getSpecs(cart.getSpecsCode());
@@ -149,16 +189,17 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 订单拆单
             if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
                 for (int i = 0; i < cart.getQuantity(); i++) {
+                    // outOrderBO.saveOutOrder(data);
                     list.add(this.addOrder(applyUser, pData, psData,
                         cart.getQuantity(), req.getApplyNote(), req.getSigner(),
                         req.getMobile(), req.getProvince(), req.getCity(),
-                        req.getArea(), req.getAddress(), null));
+                        req.getArea(), req.getAddress()));
                 }
             } else {
                 list.add(this.addOrder(applyUser, pData, psData,
                     cart.getQuantity(), req.getApplyNote(), req.getSigner(),
                     req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(), null));
+                    req.getArea(), req.getAddress()));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -254,7 +295,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 String orderCode = this.addOrder(applyUser, pData, specs,
                     specs.getSingleNumber(), req.getApplyNote(),
                     req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress(), kind);
+                    req.getCity(), req.getArea(), req.getAddress());
 
                 list.add(orderCode);
             }
@@ -263,7 +304,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress(), kind);
+                req.getAddress());
 
             list.add(orderCode);
         }
@@ -436,7 +477,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             Product product = productBO.getProduct(OutOrder.getProductCode());
             OutOrder.setProduct(product);
 
-            // TODO 图片名字乱码
             OutOrder.setPic(product.getAdvPic());
         }
         page.setList(list);
@@ -640,7 +680,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     @Transactional
     public void deliverOutOrder(XN627645Req req) {
-        // TODO C端还是代理下单？？？？
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
         Agent toUser = agentBO.getAgent(data.getToUser());
 
@@ -922,7 +961,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             OutOrder condition = new OutOrder();
             condition.setApplyUser(agent.getUserId());
-            condition.setStatus(EOrderStatus.Received.getCode());
             condition.setStatusList(statusList);
 
             List<OutOrder> list = outOrderBO.queryOutOrderList(condition);
@@ -942,12 +980,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     private String addOrder(Agent applyUser, Product pData, Specs specs,
             int quantity, String applyNote, String signer, String mobile,
-            String province, String city, String area, String address,
-            String kind) {
+            String province, String city, String area, String address) {
 
         OutOrder data = new OutOrder();
-        AgentPrice apData = agentPriceBO.getPriceByLevel(specs.getCode(),
-            applyUser.getLevel());
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
 
@@ -959,21 +994,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         data.setToUser(applyUser.getHighUserId());
         data.setQuantity(quantity);
-        data.setPrice(apData.getPrice());
-        Long amount = quantity * apData.getPrice();
-        // 下单人是否是代理
-        if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
-            // 检查是否可购买
-            if (EBoolean.NO.getCode().equals(apData.getIsBuy())) {
-
-                throw new BizException("xn0000", "您的等级无法购买该规格的产品");
-            }
-        }
+        // data.setPrice(apData.getPrice());
+        // Long amount = quantity * apData.getPrice();
 
         data.setPic(pData.getAdvPic());
         data.setApplyUser(applyUser.getUserId());
-
-        data.setAmount(amount);
+        // data.setAmount(amount);
         data.setApplyDatetime(new Date());
         data.setApplyNote(applyNote);
         data.setStatus(EOutOrderStatus.Unpaid.getCode());
@@ -1028,6 +1054,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     }
 
+    @Override
+    public void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
+            Integer quantity) {
+    }
+
     // 删除未支付订单
     public void removeOrderTimer() {
         // 每十二个小时执行一次，删除是个小时前未支付的订单
@@ -1041,8 +1072,4 @@ public class OutOrderAOImpl implements IOutOrderAO {
         }
     }
 
-    @Override
-    public void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
-            Integer quantity) {
-    }
 }

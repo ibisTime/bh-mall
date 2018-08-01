@@ -19,16 +19,14 @@ public interface IOutOrderAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
+    // 代理下单
     public List<String> addOutOrder(XN627640Req req);
 
+    // C端下单
+    public List<String> addOutOrderC(XN627640Req req);
+
+    // 修改订单
     public void editOutOrder(XN627643Req req);
-
-    public Paginable<OutOrder> queryOutOrderPage(int start, int limit,
-            OutOrder condition);
-
-    public List<OutOrder> queryOutOrderList(OutOrder condition);
-
-    public OutOrder getOutOrder(String code);
 
     public List<String> addOutOrderNoCart(XN627641Req req);
 
@@ -52,12 +50,24 @@ public interface IOutOrderAO {
     // 确认收货
     public void receivedOutOrder(String code);
 
-    void paySuccess(String result);
+    // 支付成功
+    public void paySuccess(String result);
 
-    void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
+    // 检查限购
+    public void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
             Integer quantity);
 
     // 订单作废
     public void invalidOutOrder(String code, String updater, String remark);
+
+    // 分页查询订单
+    public Paginable<OutOrder> queryOutOrderPage(int start, int limit,
+            OutOrder condition);
+
+    // 列表查询订单
+    public List<OutOrder> queryOutOrderList(OutOrder condition);
+
+    // 详情查询订单
+    public OutOrder getOutOrder(String code);
 
 }
