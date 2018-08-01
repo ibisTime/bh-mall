@@ -30,12 +30,14 @@ import com.bh.mall.exception.BizException;
 @Component
 public class AccountBOImpl extends PaginableBOImpl<Account>
         implements IAccountBO {
+
     @Autowired
     private IAccountDAO accountDAO;
 
     @Autowired
     private IJourBO jourBO;
 
+    // 分配账号
     @Override
     public String distributeAccount(String userId, String realName,
             EAccountType accountType, List<String> currencyList,
@@ -63,6 +65,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         return accountNumber;
     }
 
+    //
     @Override
     public void changeAmount(String accountNumber, EChannelType channelType,
             String channelOrder, String payGroup, String refNo,
@@ -93,6 +96,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         accountDAO.updateAmount(data);
     }
 
+    //
     @Override
     public void changeAmountNotJour(String accountNumber, Long transAmount,
             String lastOrder) {
@@ -110,6 +114,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         accountDAO.updateAmount(data);
     }
 
+    // 冻结金额
     @Override
     public void frozenAmount(Account dbAccount, Long freezeAmount,
             String withdrawCode) {
@@ -133,6 +138,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         accountDAO.frozenAmount(data);
     }
 
+    // 解冻金额
     @Override
     public void unfrozenAmount(Account dbAccount, Long freezeAmount,
             String withdrawCode) {
@@ -170,6 +176,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         accountDAO.cutFrozenAmount(data);
     }
 
+    //
     @Override
     public void refreshStatus(String accountNumber, EAccountStatus status) {
         if (StringUtils.isNotBlank(accountNumber)) {
@@ -180,6 +187,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         }
     }
 
+    //
     @Override
     public Account getAccount(String accountNumber) {
         Account data = null;
@@ -194,11 +202,13 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         return data;
     }
 
+    // 列表查询
     @Override
     public List<Account> queryAccountList(Account data) {
         return accountDAO.selectList(data);
     }
 
+    //
     @Override
     public Account getAccountByUser(String userId, String currency) {
         Account data = null;

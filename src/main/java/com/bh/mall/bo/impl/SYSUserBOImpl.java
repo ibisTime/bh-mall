@@ -12,7 +12,6 @@ import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
-import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.ISYSUserDAO;
 import com.bh.mall.domain.SYSUser;
@@ -47,29 +46,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void doSaveUser(SYSUser data) {
+    public void doSaveSYSuser(SYSUser data) {
         sysUserDAO.insert(data);
-    }
-
-    // 保存用户
-    @Override
-    public String saveUser(String mobile, String loginPwd, String photo,
-            String loginName, String systemCode, String status) {
-        String userId = null;
-        userId = OrderNoGenerater.generate("U");
-        SYSUser data = new SYSUser();
-        data.setUserId(userId);
-        data.setMobile(mobile);
-        data.setPhoto(photo);
-        data.setLoginName(loginName);
-        data.setLoginName(mobile);
-        data.setLoginPwd(MD5Util.md5(loginPwd));
-        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        data.setStatus(status);
-        data.setCreateDatetime(new Date());
-        data.setSystemCode(systemCode);
-        sysUserDAO.insert(data);
-        return userId;
     }
 
     @Override
@@ -170,6 +148,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         sysUserDAO.updateLoginPwd(sysUser);
     }
 
+    @Override
+    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
+            String newLoginPwd) {
+
+    }
+
     // 重置登录名
     @Override
     public void refreshLoginName(String userId, String loginName) {
@@ -194,20 +178,6 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
                 throw new BizException("li01003", "登录名已经存在");
             }
         }
-    }
-
-    @Override
-    public String getUserId(String systemCode) {
-        String userId = null;
-        SYSUser condition = new SYSUser();
-
-        condition.setSystemCode(systemCode);
-        List<SYSUser> list = sysUserDAO.selectList(condition);
-        if (CollectionUtils.isNotEmpty(list)) {
-            SYSUser data = list.get(0);
-            userId = data.getUserId();
-        }
-        return userId;
     }
 
     //

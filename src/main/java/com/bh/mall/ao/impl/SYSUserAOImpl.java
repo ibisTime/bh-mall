@@ -92,7 +92,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setStatus(EUserStatus.NORMAL.getCode());
         data.setCreateDatetime(new Date());
         data.setSystemCode(ESystemCode.BH.getCode());
-        sysUserBO.doSaveUser(data);
+        sysUserBO.doSaveSYSuser(data);
         return userId;
     }
 
@@ -199,21 +199,21 @@ public class SYSUserAOImpl implements ISYSUserAO {
     }
 
     @Override
-    public void resetLoginPwd(String mobile, String smsCaptcha,
+    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd) {
-
+        sysUserBO.resetAgentLoginPwd(mobile, smsCaptcha, newLoginPwd);
     }
 
     @Override
     public Paginable<SYSUser> queryUserPage(int start, int limit,
             SYSUser condition) {
 
-        // if (condition.getCreateDatetimeStart() != null
-        // && condition.getApplyDatetimeEnd() != null
-        // && condition.getApplyDatetimeStart()
-        // .after(condition.getApplyDatetimeEnd())) {
-        // throw new BizException("xn00000", "开始时间不能大于结束时间");
-        // }
+        if (condition.getCreateDatetimeStart() != null
+                && condition.getCreateDatetimeEnd() != null
+                && condition.getCreateDatetimeStart()
+                    .after(condition.getCreateDatetimeEnd())) {
+            throw new BizException("xn00000", "开始时间不能大于结束时间");
+        }
 
         Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
             condition);
@@ -231,7 +231,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 详细查询
     public SYSUser getSYSUser(String code) {
 
-        SYSUser sysuser = new SYSUser();
-        return sysuser;
+        return sysUserBO.getUser(code);
+
     }
 }

@@ -14,6 +14,7 @@ import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.dto.res.XN627462Res;
 
 /** 
+ * 微信相关
  * @author: haiqingzheng 
  * @since: 2016年12月23日 上午11:23:39 
  * @history:
