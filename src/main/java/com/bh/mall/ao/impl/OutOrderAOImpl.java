@@ -35,8 +35,6 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.PropertiesUtil;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -62,8 +60,8 @@ import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EOrderKind;
 import com.bh.mall.enums.EOrderStatus;
+import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductIsTotal;
@@ -137,8 +135,16 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Transactional
     public List<String> addOutOrder(XN627640Req req) {
         List<String> list = new ArrayList<String>();
-        for (String code : req.getCartList()) {
+        Cart data = cartBO.getCart(req.getCartList().get(0));
+        Agent applyUser = agentBO.getAgent(data.getUserId());
 
+        // 是否为授权单
+        AgentLevel agentLevel = agentLevelBO
+            .getAgentByLevel(applyUser.getLevel());
+        String kind = EOutOrderKind.Normal_Order.getCode();
+
+        Long amount = 0L;
+        for (String code : req.getCartList()) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
             Specs specs = specsBO.getSpecs(cart.getSpecsCode());
@@ -146,31 +152,59 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
             }
 
-            Agent applyUser = agentBO.getAgent(req.getApplyUser());
-            AgentPrice apData = agentPriceBO.getPriceByLevel(specs.getCode(),
+            AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(),
                 applyUser.getLevel());
 
             // 检查是否可购买
-            if (EBoolean.NO.getCode().equals(apData.getIsBuy())) {
+            if (EBoolean.NO.getCode().equals(price.getIsBuy())) {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
+
+            // 判断未开启云仓的代理是否完成授权单
+            if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
+                if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
+                    applyUser.getImpowerDatetime())) {
+                    // 防止多出的订单计入授权单
+                    if (agentLevel.getAmount() > amount) {
+                        kind = EOutOrderKind.Impower_Order.getCode();
+                        // 订单金额
+                        amount = amount + price.getPrice() * cart.getQuantity();
+                    }
+                }
+            }
+
             // 订单拆单
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
-                for (int i = 0; i < cart.getQuantity(); i++) {
-                    list.add(this.addOrder(applyUser, pData, specs,
-                        cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                        req.getMobile(), req.getProvince(), req.getCity(),
-                        req.getArea(), req.getAddress()));
+                int singleNumber = cart.getQuantity() / specs.getSingleNumber();
+                for (int i = 0; i < singleNumber; i++) {
+                    list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                        price.getPrice(), specs.getSingleNumber(),
+                        req.getApplyNote(), req.getSigner(), req.getMobile(),
+                        req.getProvince(), req.getCity(), req.getArea(),
+                        req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
+                        kind));
                 }
+
             } else {
-                list.add(this.addOrder(applyUser, pData, specs,
-                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress()));
+                // 不可拆单
+                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                    price.getPrice(), cart.getQuantity(), req.getApplyNote(),
+                    req.getSigner(), req.getMobile(), req.getProvince(),
+                    req.getCity(), req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(), kind));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
         }
+
+        // 订单金额不能低于授权单金额
+        if (agentLevel.getAmount() > amount) {
+            throw new BizException("xn00000", agentLevel.getName() + "授权单金额为["
+                    + agentLevel.getAmount() / 1000 + "]元");
+        }
+
+        // 检查门槛余额
+        this.checkAmount(applyUser, agentLevel, amount);
         return list;
     }
 
@@ -180,26 +214,31 @@ public class OutOrderAOImpl implements IOutOrderAO {
         for (String code : req.getCartList()) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
-            Specs psData = specsBO.getSpecs(cart.getSpecsCode());
+            Specs specs = specsBO.getSpecs(cart.getSpecsCode());
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
             }
             Agent applyUser = agentBO.getAgent(req.getApplyUser());
-
+            AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(), 6);
             // 订单拆单
-            if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
-                for (int i = 0; i < cart.getQuantity(); i++) {
-                    // outOrderBO.saveOutOrder(data);
-                    list.add(this.addOrder(applyUser, pData, psData,
-                        cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                        req.getMobile(), req.getProvince(), req.getCity(),
-                        req.getArea(), req.getAddress()));
+            if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
+                int singleNumber = cart.getQuantity() / specs.getSingleNumber();
+                for (int i = 0; i < singleNumber; i++) {
+                    list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                        price.getPrice(), specs.getSingleNumber(),
+                        req.getApplyNote(), req.getSigner(), req.getMobile(),
+                        req.getProvince(), req.getCity(), req.getArea(),
+                        req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
+                        EOutOrderKind.Normal_Order.getCode()));
                 }
             } else {
-                list.add(this.addOrder(applyUser, pData, psData,
-                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress()));
+                // 不可拆单
+                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                    price.getPrice(), cart.getQuantity(), req.getApplyNote(),
+                    req.getSigner(), req.getMobile(), req.getProvince(),
+                    req.getCity(), req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(),
+                    EOutOrderKind.Normal_Order.getCode()));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -210,107 +249,66 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     @Transactional
     public List<String> addOutOrderNoCart(XN627641Req req) {
+        List<String> list = new ArrayList<String>();
         Agent applyUser = agentBO.getAgent(req.getApplyUser());
         Specs specs = specsBO.getSpecs(req.getSpecsCode());
         Product pData = productBO.getProduct(specs.getProductCode());
 
-        List<String> list = new ArrayList<String>();
-        // 获取该产品中最小规格的数量
-        int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
-        Integer nowNumber = pData.getRealNumber()
-                - (StringValidater.toInteger(req.getQuantity()) * minNumber);
-
-        // 库存产品数量是否充足
-        if (0 > nowNumber) {
-            throw new BizException("xn0000", "产品库存不足");
-        }
         if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
+        // 该等级对应的规则及价格
+        AgentLevel agentLevel = agentLevelBO
+            .getAgentByLevel(applyUser.getLevel());
+        AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(),
+            applyUser.getLevel());
 
-        // 是否为授权单
-        AgentLevel agent = agentLevelBO.getAgentByLevel(applyUser.getLevel());
-        String kind = EOrderKind.WH_Order.getCode();
-
+        // 订单类型
+        String kind = EOutOrderKind.Normal_Order.getCode();
         // 未开云仓的代理，判断是否为授权单
-        if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
+        Long amount = StringValidater.toInteger(req.getQuantity())
+                * price.getPrice();
+        if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
             if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
                 applyUser.getImpowerDatetime())) {
-                kind = EOrderKind.Impower_Order.getCode();
-
-                // 订单金额
-                AgentPrice apData = agentPriceBO
-                    .getPriceByLevel(specs.getCode(), applyUser.getLevel());
-                Long orderAmount = apData.getPrice()
-                        * StringValidater.toInteger(req.getQuantity());
-                // 订单金额不能低于授权单金额
-                if (agent.getAmount() > orderAmount) {
-                    throw new BizException("xn00000", agent.getName()
-                            + "授权单金额为[" + agent.getAmount() / 1000 + "]元");
+                kind = EOutOrderKind.Impower_Order.getCode();
+                if (agentLevel.getAmount() > amount) {
+                    throw new BizException("xn00000", agentLevel.getName()
+                            + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
                 }
-
-            } else {
-                kind = EOrderKind.Normal_Order.getCode();
             }
         }
 
         // 门槛余额是否高于限制
-        AgentPrice apData = agentPriceBO.getPriceByLevel(specs.getCode(),
-            applyUser.getLevel());
-        Long amount = StringValidater.toInteger(req.getQuantity())
-                * apData.getPrice();
-        Account account = accountBO.getAccountByUser(applyUser.getUserId(),
-            ECurrency.MK_CNY.getCode());
-
-        // 门槛最低余额为零
-        Long restAmount = account.getAmount() - amount;
-        if (0 == agent.getMinSurplus()) {
-            if (restAmount > agent.getMinSurplus()) {
-                throw new BizException("xn0000",
-                    "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
-                            + restAmount / 1000 + "]元");
-            }
-
-        } else if (restAmount >= agent.getMinSurplus()) {
-            throw new BizException("xn0000",
-                "剩余门槛不能大于[" + agent.getMinSurplus() / 1000 + "]元，目前余额还有["
-                        + restAmount / 1000 + "]元");
-        }
+        this.checkAmount(applyUser, agentLevel, amount);
 
         // 检查起购数量
-        int minQuantity = agentPriceBO.checkMinQuantity(apData.getCode(),
-            applyUser.getLevel());
-        if (minQuantity > StringValidater.toInteger(req.getQuantity())) {
-            throw new BizException("xn0000", "您购买的数量不能低于" + minQuantity + "]");
+        if (price.getMinQuantity() > StringValidater
+            .toInteger(req.getQuantity())) {
+            throw new BizException("xn0000",
+                "您购买的数量不能低于" + price.getMinQuantity() + "]");
         }
 
         // 订单拆单
-        if (EBoolean.YES.getCode().equals(specs.getIsSingle())
-                && EBoolean.NO.getCode().equals(agent.getIsWare())) {
-
+        if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
             int singleNumber = StringValidater.toInteger(req.getQuantity())
                     / specs.getSingleNumber();
-
             for (int i = 0; i < singleNumber; i++) {
-                String orderCode = this.addOrder(applyUser, pData, specs,
-                    specs.getSingleNumber(), req.getApplyNote(),
-                    req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress());
-
-                list.add(orderCode);
+                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                    price.getPrice(), specs.getSingleNumber(),
+                    req.getApplyNote(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
             }
         } else {
-            String orderCode = this.addOrder(applyUser, pData, specs,
-                StringValidater.toInteger(req.getQuantity()),
+            // 不可拆单
+            list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                price.getPrice(), StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress());
-
-            list.add(orderCode);
+                req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
         }
-
         return list;
-
     }
 
     @Override
@@ -362,8 +360,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Long rmbAmount = data.getAmount();
         Agent agent = agentBO.getAgent(data.getApplyUser());
         String payGroup = outOrderBO.addPayGroup(data);
-        agentBO.getAgent(data.getToUser());
-        Account account = accountBO.getAccountByUser(data.getToUser(),
+        agentBO.getAgent(data.getToUserId());
+        Account account = accountBO.getAccountByUser(data.getToUserId(),
             ECurrency.YJ_CNY.getCode());
         return weChatAO.getPrepayIdH5(agent.getUserId(),
             account.getAccountNumber(), payGroup, data.getCode(),
@@ -454,7 +452,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
 
             // 订单归属人
-            String toUserName = this.getName(OutOrder.getToUser());
+            String toUserName = this.getName(OutOrder.getToUserId());
             OutOrder.setToUserName(toUserName);
 
             // 收货人
@@ -516,7 +514,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
 
             // 订单归属人
-            String toUserName = this.getName(OutOrder.getToUser());
+            String toUserName = this.getName(OutOrder.getToUserId());
             OutOrder.setToUserName(toUserName);
 
             // 收货人
@@ -550,7 +548,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         OutOrder.setAgent(agent);
 
         // 订单归属人
-        String toUserName = this.getName(OutOrder.getToUser());
+        String toUserName = this.getName(OutOrder.getToUserId());
         OutOrder.setToUserName(toUserName);
 
         // 收货人
@@ -681,7 +679,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Transactional
     public void deliverOutOrder(XN627645Req req) {
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
-        Agent toUser = agentBO.getAgent(data.getToUser());
+        Agent toUser = agentBO.getAgent(data.getToUserId());
 
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
             // C端产品无法云仓发
@@ -698,7 +696,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         "该产品云仓发货不能少于" + price.getMinNumber() + specs.getName());
                 }
 
-                Ware toData = wareBO.getWareByProductSpec(data.getToUser(),
+                Ware toData = wareBO.getWareByProductSpec(data.getToUserId(),
                     data.getSpecsCode());
                 if (null == toData) {
                     throw new BizException("xn00000", "您的云仓中没有该规格的产品");
@@ -815,7 +813,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         }
 
         // 授权单无法取消
-        if (EOrderKind.Impower_Order.getCode().equals(data.getKind())) {
+        if (EOutOrderKind.Impower_Order.getCode().equals(data.getKind())) {
             throw new BizException("xn00000", "授权单无法取消哦！");
         }
 
@@ -835,7 +833,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EOrderStatus.Canceled.getCode());
             if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
-                String toUser = data.getToUser();
+                String toUser = data.getToUserId();
                 if (StringUtils.isBlank(toUser)) {
                     toUser = ESysUser.SYS_USER_BH.getCode();
                 }
@@ -883,12 +881,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     private String checkOrder(Agent applyUser, Specs specs) {
-        String kind = EOrderKind.Normal_Order.getCode();
+        String kind = EOutOrderKind.Normal_Order.getCode();
         // 是否完成授权单
         if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
             if (!outOrderBO.checkImpowerOrder(applyUser.getUserId(),
                 applyUser.getImpowerDatetime())) {
-                kind = EOrderKind.Impower_Order.getCode();
+                kind = EOutOrderKind.Impower_Order.getCode();
                 if (EProductSpecsType.Apply_NO.getCode()
                     .equals(specs.getIsImpowerOrder())) {
                     throw new BizException("xn0000", "该产品规格不予授权单单下单");
@@ -927,7 +925,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
             .getLevel()
                 && EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
-            Ware toWare = wareBO.getWareByProductSpec(OutOrder.getToUser(),
+            Ware toWare = wareBO.getWareByProductSpec(OutOrder.getToUserId(),
                 OutOrder.getSpecsCode());
             // 上级云仓没有该产品
             if (null == toWare) {
@@ -976,36 +974,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
         }
         return true;
-    }
-
-    private String addOrder(Agent applyUser, Product pData, Specs specs,
-            int quantity, String applyNote, String signer, String mobile,
-            String province, String city, String area, String address) {
-
-        OutOrder data = new OutOrder();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
-
-        data.setCode(code);
-        data.setProductCode(pData.getCode());
-        data.setProductName(pData.getName());
-        data.setSpecsCode(specs.getCode());
-        data.setSpecsName(specs.getName());
-
-        data.setToUser(applyUser.getHighUserId());
-        data.setQuantity(quantity);
-        // data.setPrice(apData.getPrice());
-        // Long amount = quantity * apData.getPrice();
-
-        data.setPic(pData.getAdvPic());
-        data.setApplyUser(applyUser.getUserId());
-        // data.setAmount(amount);
-        data.setApplyDatetime(new Date());
-        data.setApplyNote(applyNote);
-        data.setStatus(EOutOrderStatus.Unpaid.getCode());
-
-        outOrderBO.saveOutOrder(data);
-        return code;
     }
 
     private void payOrder(Agent agent, OutOrder data, String wechatOrderNo) {
@@ -1057,6 +1025,27 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     public void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
             Integer quantity) {
+    }
+
+    private void checkAmount(Agent agent, AgentLevel agentLevel, Long amount) {
+
+        // 门槛账户
+        Account account = accountBO.getAccountByUser(agent.getUserId(),
+            ECurrency.MK_CNY.getCode());
+        // 检查门槛余额
+        Long restAmount = account.getAmount() - amount;
+        if (0 == agentLevel.getMinSurplus()) {
+            if (restAmount > agentLevel.getMinSurplus()) {
+                throw new BizException("xn0000",
+                    "剩余门槛不能大于[" + agentLevel.getMinSurplus() / 1000
+                            + "]元，目前余额还有[" + restAmount / 1000 + "]元");
+            }
+
+        } else if (restAmount >= agentLevel.getMinSurplus()) {
+            throw new BizException("xn0000",
+                "剩余门槛不能大于[" + agentLevel.getMinSurplus() / 1000 + "]元，目前余额还有["
+                        + restAmount / 1000 + "]元");
+        }
     }
 
     // 删除未支付订单

@@ -30,7 +30,7 @@ public class XN627665 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         OutOrder condition = new OutOrder();
-        condition.setToUser(req.getToUserId());
+        condition.setToUserId(req.getToUserId());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),

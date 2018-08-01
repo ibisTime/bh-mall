@@ -14,9 +14,12 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOutOrderDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.OutOrder;
-import com.bh.mall.enums.EOrderKind;
+import com.bh.mall.domain.Product;
+import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.EOrderStatus;
+import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -27,8 +30,34 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     IOutOrderDAO outOrderDAO;
 
     @Override
-    public void saveOutOrder(OutOrder data) {
+    public String saveOutOrder(Agent applyUser, Product pData, Specs specs,
+            Long price, Integer quantity, String applyNote, String signer,
+            String mobile, String province, String city, String area,
+            String address, String status, String kind) {
+
+        OutOrder data = new OutOrder();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.OutOrder.getCode());
+        data.setCode(code);
+        data.setProductCode(pData.getCode());
+        data.setProductName(pData.getName());
+
+        data.setSpecsCode(specs.getCode());
+        data.setSpecsName(specs.getName());
+        data.setToUserId(applyUser.getHighUserId());
+        data.setQuantity(quantity);
+        data.setPrice(price);
+
+        data.setPic(pData.getAdvPic());
+        data.setApplyUser(applyUser.getUserId());
+        data.setAmount(price * quantity);
+        data.setApplyDatetime(new Date());
+        data.setApplyNote(applyNote);
+
+        data.setStatus(status);
+        data.setKind(kind);
         outOrderDAO.insert(data);
+        return code;
     }
 
     @Override
@@ -149,7 +178,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
         OutOrder condition = new OutOrder();
         condition.setApplyUser(applyUser);
-        condition.setKind(EOrderKind.Impower_Order.getCode());
+        condition.setKind(EOutOrderKind.Impower_Order.getCode());
         condition.setStatusList(statusList);
         condition.setStartDatetime(impoweDatetime);
 
@@ -170,7 +199,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
         OutOrder condition = new OutOrder();
         condition.setApplyUser(applyUser);
-        condition.setKind(EOrderKind.Upgrade_Order.getCode());
+        condition.setKind(EOutOrderKind.Upgrade_Order.getCode());
         condition.setStatusList(statusList);
         List<OutOrder> list = outOrderDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
@@ -200,7 +229,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         OutOrder condition = new OutOrder();
         condition.setApplyUser(userId);
         List<OutOrder> list = outOrderDAO.selectList(condition);
-        condition.setKind(EOrderKind.Normal_Order.getCode());
+        condition.setKind(EOutOrderKind.Normal_Order.getCode());
         Long amount = 0L;
         for (OutOrder OutOrder : list) {
             amount = amount + OutOrder.getAmount();

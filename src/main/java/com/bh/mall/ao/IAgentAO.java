@@ -45,8 +45,20 @@ public interface IAgentAO {
     public Paginable<Agent> queryAgentPage(int start, int limit,
             Agent condition);
 
+<<<<<<< HEAD
     // 列表查询代理结构
     public List<Agent> queryAgentJgList(Agent condition);
+=======
+    // 分页查询代理结构
+    public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
+            Agent condition);
+
+    // 列表查询代理结构
+    public List<Agent> queryAgentList(Agent condition);
+
+    // 列表查询代理轨迹
+    public List<Agent> getAgentLog(Agent condition);
+>>>>>>> refs/remotes/origin/master
 
     // 公司直接取消授权
     public void abolishSqForm(String userId, String updater, String remark);

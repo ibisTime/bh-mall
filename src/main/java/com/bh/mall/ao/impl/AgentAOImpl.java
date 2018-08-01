@@ -307,8 +307,14 @@ public class AgentAOImpl implements IAgentAO {
 
     // 列表查询代理
     @Override
+<<<<<<< HEAD
     public List<Agent> queryAgentList(Agent condition) {
         return agentBO.queryUserList(condition);
+=======
+    public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
+            Agent condition) {
+        return agentBO.getPaginable(start, limit, condition);
+>>>>>>> refs/remotes/origin/master
     }
 
     // 列表查询代理结构

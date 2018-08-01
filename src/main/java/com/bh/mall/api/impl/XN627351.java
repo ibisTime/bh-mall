@@ -29,7 +29,6 @@ public class XN627351 extends AProcessor {
     public Object doBusiness() throws BizException {
 
         Agent condition = new Agent();
-
         condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
 

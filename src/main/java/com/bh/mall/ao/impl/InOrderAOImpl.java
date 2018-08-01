@@ -202,10 +202,10 @@ public class InOrderAOImpl implements IInOrderAO {
         }
 
         // 检查起购数量
-        int minQuantity = agentPriceBO.checkMinQuantity(agentPrice.getCode(),
-            applyUser.getLevel());
-        if (minQuantity > StringValidater.toInteger(req.getQuantity())) {
-            throw new BizException("xn0000", "您购买的数量不能低于" + minQuantity + "]");
+        if (agentPrice.getMinQuantity() > StringValidater
+            .toInteger(req.getQuantity())) {
+            throw new BizException("xn0000",
+                "您购买的数量不能低于" + agentPrice.getMinQuantity() + "]");
         }
 
         return inOrderBO.saveInOrder(applyUser.getUserId(),

@@ -49,8 +49,11 @@ public class OutOrder extends ABaseDO {
     // 单价
     private Long price;
 
-    // 向谁提货
-    private String toUser;
+    // 订单归属人
+    private String toUserId;
+
+    // 订单归属人名字
+    private String toUserName;
 
     // 总价
     private Long amount;
@@ -169,9 +172,6 @@ public class OutOrder extends ABaseDO {
 
     // 更信人名字
     private String updateName;
-
-    // 订单归属人名字
-    private String toUserName;
 
     // 等级
     private Integer level;
@@ -307,14 +307,6 @@ public class OutOrder extends ABaseDO {
 
     public void setPrice(Long price) {
         this.price = price;
-    }
-
-    public String getToUser() {
-        return toUser;
-    }
-
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
     }
 
     public Long getAmount() {
@@ -675,6 +667,14 @@ public class OutOrder extends ABaseDO {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 
 }
