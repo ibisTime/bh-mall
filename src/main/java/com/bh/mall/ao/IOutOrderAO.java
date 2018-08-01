@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.OutOrder;
-import com.bh.mall.domain.Specs;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
@@ -64,12 +61,9 @@ public interface IOutOrderAO {
     // 确认收货
     public void receivedOutOrder(String code);
 
+    // 支付成功
     void paySuccess(String result);
 
     // 订单作废
     public void invalidOutOrder(String code, String updater, String remark);
-
-    // TODO
-    void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
-            Integer quantity);
 }

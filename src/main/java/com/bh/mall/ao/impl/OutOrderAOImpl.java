@@ -1040,9 +1040,4 @@ public class OutOrderAOImpl implements IOutOrderAO {
             outOrderBO.removeOutOrder(data);
         }
     }
-
-    @Override
-    public void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
-            Integer quantity) {
-    }
 }
