@@ -80,7 +80,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     IChargeBO chargeBO;
 
     @Override
-    public String addChangeOrder(XN627790Req req) {
+    public String addExchangeOrder(XN627790Req req) {
         Agent uData = agentBO.getAgent(req.getApplyUser());
         Ware whData = wareBO.getWareByProductSpec(uData.getUserId(),
             req.getProductSpecsCode());
@@ -153,13 +153,13 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public int editChangeOrder(ExchangeOrder data) {
+    public int editExchangeOrder(ExchangeOrder data) {
         return exchangeOrderBO.refreshChangeOrder(data);
 
     }
 
     @Override
-    public Paginable<ExchangeOrder> queryChangeOrderPage(int start, int limit,
+    public Paginable<ExchangeOrder> queryExchangeOrderPage(int start, int limit,
             ExchangeOrder condition) {
         if (condition.getApplyStartDatetime() != null
                 && condition.getApplyEndDatetime() != null
@@ -185,7 +185,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public List<ExchangeOrder> queryChangeOrderList(ExchangeOrder condition) {
+    public List<ExchangeOrder> queryExchangeOrderList(ExchangeOrder condition) {
         if (condition.getApplyStartDatetime() != null
                 && condition.getApplyEndDatetime() != null
                 && condition.getApplyStartDatetime()
@@ -206,7 +206,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public ExchangeOrder getChangeOrder(String code) {
+    public ExchangeOrder getExchangeOrder(String code) {
         ExchangeOrder data = exchangeOrderBO.getChangeOrder(code);
         String approveName = this.getName(data.getApprover());
         data.setApproveName(approveName);
@@ -216,7 +216,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public void editChangePrice(String code, String changePrice,
+    public void editExchangePrice(String code, String changePrice,
             String approver, String approveNote) {
 
         ExchangeOrder data = exchangeOrderBO.getChangeOrder(code);
@@ -250,7 +250,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public void approveChange(String code, String approver, String approveNote,
+    public void approveExchange(String code, String approver, String approveNote,
             String result) {
         ExchangeOrder data = exchangeOrderBO.getChangeOrder(code);
         if (!EChangeProductStatus.TO_CHANGE.getCode()
@@ -340,7 +340,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public ExchangeOrder getChangeOrderMessage(XN627790Req req) {
+    public ExchangeOrder getExchangeOrderMessage(XN627790Req req) {
         Agent uData = agentBO.getAgent(req.getApplyUser());
         Ware whData = wareBO.getWareByProductSpec(uData.getUserId(),
             req.getProductSpecsCode());

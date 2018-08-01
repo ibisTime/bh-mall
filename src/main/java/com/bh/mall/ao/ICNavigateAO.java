@@ -12,6 +12,7 @@ import com.bh.mall.domain.CNavigate;
  * @history:
  */
 public interface ICNavigateAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增导航

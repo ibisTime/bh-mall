@@ -12,6 +12,7 @@ import com.bh.mall.domain.Account;
  * @history:
  */
 public interface IAccountAO {
+
     String DEFAULT_ORDER_COLUMN = "account_number";
 
     // 个人创建多账户

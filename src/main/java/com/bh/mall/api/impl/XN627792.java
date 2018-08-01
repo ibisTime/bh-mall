@@ -25,7 +25,7 @@ public class XN627792 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        exchangeOrderAO.approveChange(req.getCode(), req.getApprover(),
+        exchangeOrderAO.approveExchange(req.getCode(), req.getApprover(),
             req.getApproveNote(), req.getResult());
         return new BooleanRes(true);
     }

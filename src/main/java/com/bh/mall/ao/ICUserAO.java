@@ -10,6 +10,8 @@ import com.bh.mall.dto.res.XN627304Res;
  */
 public interface ICUserAO {
 
+    String DEFAULT_ORDER_COLUMN = "user_id";
+
     // 登陆
     public String doLogin(String loginName, String loginPwd); // need?
 

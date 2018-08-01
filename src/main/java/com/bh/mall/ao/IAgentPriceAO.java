@@ -15,6 +15,7 @@ import com.bh.mall.domain.AgentPrice;
  */
 @Component
 public interface IAgentPriceAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增产品规格定价

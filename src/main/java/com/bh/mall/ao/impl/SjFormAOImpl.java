@@ -280,7 +280,7 @@ public class SjFormAOImpl implements ISjFormAO {
                     Agent aprrvoeName = agentAO.getAgent(sjFrom.getApprover());
                     if (null != aprrvoeName) {
                         userReferee = agentAO
-                            .getUserName(aprrvoeName.getUserId());
+                            .getRefereeName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             sjFrom.setApprover(userReferee.getRealName());
                         }
@@ -312,7 +312,7 @@ public class SjFormAOImpl implements ISjFormAO {
             if (StringUtils.isNotBlank(data.getApprover())) {
                 Agent aprrvoeName = agentAO.getAgent(data.getApprover());
                 if (null != aprrvoeName) {
-                    userReferee = agentAO.getUserName(aprrvoeName.getUserId());
+                    userReferee = agentAO.getRefereeName(aprrvoeName.getUserId());
                     if (userReferee != null) {
                         data.setApprover(userReferee.getRealName());
                     }
@@ -366,7 +366,7 @@ public class SjFormAOImpl implements ISjFormAO {
                         .getAgent(uplevelApply.getApprover());
                     if (null != aprrvoeName) {
                         userReferee = agentAO
-                            .getUserName(aprrvoeName.getUserId());
+                            .getRefereeName(aprrvoeName.getUserId());
                         if (userReferee != null) {
                             uplevelApply.setApprover(userReferee.getRealName());
                         }
