@@ -2,10 +2,11 @@ package com.bh.mall.bo;
 
 import java.util.List;
 
+import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.CUser;
 import com.bh.mall.enums.EUserStatus;
 
-public interface ICUserBO {
+public interface ICUserBO extends IPaginableBO<CUser> {
 
     //
     public CUser doGetUserByOpenId(String h5OpenId);

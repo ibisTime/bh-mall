@@ -69,7 +69,6 @@ public class SqFormAOImpl implements ISqFormAO {
     @Autowired
     private IAgentLevelBO agentLevelBO;
 
-    /*************** 代理申请，有推荐人 **********************/
     // 申请代理， 有推荐人
     @Override
     @Transactional
@@ -179,7 +178,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
-    /*************** 通过授权申请 **********************/
     @Override
     @Transactional
     public void approveSqForm(String userId, String approver, String result,
@@ -281,7 +279,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
-    /*************** 通过取消审核申请 **********************/
     @Override
     public void cancelSqForm(String userId, String approver, String result,
             String remark) {
@@ -319,7 +316,6 @@ public class SqFormAOImpl implements ISqFormAO {
         sqFormBO.addSqForm(imData);
     }
 
-    /***************   补全信息 **********************/
     // 补全授权所需资料
     @Override
     public void addInfo(XN627362Req req) {
@@ -384,8 +380,6 @@ public class SqFormAOImpl implements ISqFormAO {
         sqFormBO.addInfo(imData);
     }
 
-    /*********************** 查询 *************************/
-
     @Override
     public List<SqForm> querySqFormList(SqForm condition) {
 
@@ -419,8 +413,6 @@ public class SqFormAOImpl implements ISqFormAO {
         return list;
     }
 
-    /************************************************/
-
     @Override
     public SqForm getSqForm(String code) {
         SqForm data = sqFormBO.getSqForm(code);
@@ -451,7 +443,6 @@ public class SqFormAOImpl implements ISqFormAO {
         return data;
     }
 
-    /*********************** 查询是否需要补全金额 *************************/
     @Override
     public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition) {
@@ -506,7 +497,6 @@ public class SqFormAOImpl implements ISqFormAO {
         return page;
     }
 
-    /*************** 分配账号**********************/
     // 分配账号
     private List<String> distributeAccount(String userId, String mobile,
             String kind) {

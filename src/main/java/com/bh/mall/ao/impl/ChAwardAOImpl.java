@@ -16,7 +16,6 @@ import com.bh.mall.domain.ChAward;
 import com.bh.mall.dto.req.XN627862Req;
 import com.bh.mall.exception.BizException;
 
-//CHECK ��鲢��ע�� 
 @Service
 public class ChAwardAOImpl implements IChAwardAO {
 
