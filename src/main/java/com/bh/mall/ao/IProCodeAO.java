@@ -34,8 +34,10 @@ public interface IProCodeAO {
     // 取出一个未使用的箱码
     public ProCode queryProCode();
 
+    // 下载打印
     public List<ProCode> downLoad(int number, int quantity);
 
+    // 校验是否重复
     public boolean checkCode(String proCode, List<ProCode> barList,
             List<MiniCode> stList);
 

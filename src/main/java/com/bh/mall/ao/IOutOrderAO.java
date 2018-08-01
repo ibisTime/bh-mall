@@ -14,22 +14,34 @@ import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
 import com.bh.mall.dto.req.XN627645Req;
 
+/**
+ * 出货订单
+ * @author: LENOVO 
+ * @since: 2018年8月1日 上午9:52:04 
+ * @history:
+ */
 @Component
 public interface IOutOrderAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
+    // 提交订单
     public List<String> addOutOrder(XN627640Req req);
 
+    // 修改收货地址及运费
     public void editOutOrder(XN627643Req req);
 
+    // 分页查询
     public Paginable<OutOrder> queryOutOrderPage(int start, int limit,
             OutOrder condition);
 
+    // 列表查询
     public List<OutOrder> queryOutOrderList(OutOrder condition);
 
+    // 详情查询订单
     public OutOrder getOutOrder(String code);
 
+    // 提交订单（无购物车）
     public List<String> addOutOrderNoCart(XN627641Req req);
 
     // 付款
@@ -54,10 +66,10 @@ public interface IOutOrderAO {
 
     void paySuccess(String result);
 
-    void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
-            Integer quantity);
-
     // 订单作废
     public void invalidOutOrder(String code, String updater, String remark);
 
+    // TODO
+    void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
+            Integer quantity);
 }
