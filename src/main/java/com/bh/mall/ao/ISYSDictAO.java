@@ -20,6 +20,7 @@ import com.bh.mall.domain.SYSDict;
  * @history:
  */
 public interface ISYSDictAO {
+
     static String DEFAULT_ORDER_COLUMN = "id";
 
     // 新增数据字典

@@ -20,6 +20,7 @@ import com.bh.mall.domain.Jour;
  * @history:
  */
 public interface IJourAO {
+
     String DEFAULT_ORDER_COLUMN = "code";
 
     // 分页查询流水记录

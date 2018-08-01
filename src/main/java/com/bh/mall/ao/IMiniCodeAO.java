@@ -15,6 +15,7 @@ import com.bh.mall.domain.MiniCode;
  */
 @Component
 public interface IMiniCodeAO {
+
     static final String DEFAULT_ORDER_COLUMN = "security_code";
 
     // 分页查询

@@ -18,10 +18,10 @@ public interface ISpecsLogAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    // 库存记录
+    // 删除库存记录
     public void dropSpecstLog(String code);
 
-    // 库存记录
+    // 修改库存记录
     public void editSpecsLog(SpecsLog data);
 
     // 分页查询

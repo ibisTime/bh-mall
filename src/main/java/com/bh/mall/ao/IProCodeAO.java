@@ -16,6 +16,7 @@ import com.bh.mall.domain.ProCode;
  */
 @Component
 public interface IProCodeAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增箱码

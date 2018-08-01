@@ -27,7 +27,7 @@ public interface IExchangeOrderAO {
     public int editExchangeOrder(ExchangeOrder data);
 
     // 修改换货价
-    public void editExchangePrice(String code, String changePrice,
+    public void editExchangePrice(String code, String exchangePrice,
             String approver, String string);
 
     // 审核置换单

@@ -17,6 +17,7 @@ import com.bh.mall.dto.req.XN627701Req;
  */
 @Component
 public interface IInnerProductAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增内购产品

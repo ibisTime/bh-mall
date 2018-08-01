@@ -16,6 +16,7 @@ import com.bh.mall.dto.req.XN627241Req;
  */
 @Component
 public interface IJsAwardAO {
+
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 新增介绍奖励

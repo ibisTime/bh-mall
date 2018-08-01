@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,6 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.InOrder;
-import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
@@ -37,7 +34,6 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
@@ -283,59 +279,6 @@ public class SqFormAOImpl implements ISqFormAO {
         imData.setStatus(status);
         sqFormBO.approveSqForm(imData);
 
-    }
-
-    /*************** 取消授权申请 **********************/
-    @Override
-    public void cancelSqForm(String userId) {
-        Agent data = agentBO.getAgent(userId);
-
-        // 是否有下级
-        Agent uCondition = new Agent();
-        uCondition.setHighUserId(data.getUserId());
-        List<Agent> list = agentBO.queryUserList(uCondition);
-        if (CollectionUtils.isNotEmpty(list)) {
-            throw new BizException("xn000", "您还有下级，无法申请退出");
-        }
-
-        // 可提现账户是否余额
-        Account txAccount = accountBO.getAccountByUser(data.getUserId(),
-            ECurrency.YJ_CNY.getCode());
-        if (txAccount.getAmount() > 0) {
-            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
-        }
-
-        // TODO 是否有未完成的订单
-        InOrder oCondition = new InOrder();
-        oCondition.setApplyUser(data.getUserId());
-        long count = inOrderBO.selectCount(oCondition);
-        if (count != 0) {
-            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
-        }
-
-        InnerOrder ioCondition = new InnerOrder();
-        ioCondition.setApplyUser(data.getUserId());
-        ioCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
-        long ioCount = innerOrderBO.selectCount(ioCondition);
-        if (ioCount != 0) {
-            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
-        }
-
-        String status = EUserStatus.TO_COMPANYCANCEL.getCode();
-        if (StringUtils.isNotBlank(data.getHighUserId())) {
-            Agent buser = agentBO.getAgent(data.getHighUserId());
-            if (!EUserKind.Plat.getCode().equals(buser.getKind())) {
-                status = EUserStatus.TO_CANCEL.getCode();
-            }
-        }
-        // insert new impower log
-        SqForm imData = new SqForm();
-        imData.setUserId(userId);
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(EUserStatus.TO_CANCEL.getCode());
-        sqFormBO.cancelSqForm(imData);
     }
 
     /*************** 通过取消审核申请 **********************/
