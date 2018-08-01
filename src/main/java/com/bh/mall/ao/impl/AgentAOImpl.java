@@ -32,7 +32,6 @@ import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
-import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
@@ -41,7 +40,6 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EConfigType;
-import com.bh.mall.enums.ELoginType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserPwd;
@@ -115,34 +113,6 @@ public class AgentAOImpl implements IAgentAO {
             level, highUser);
         XN627303Res result = new XN627303Res(userId, status);
         return result;
-    }
-
-    // 用户名登录
-    @Override
-    public String doLogin(String loginName, String loginPwd, String kind) {
-        Agent condition = new Agent();
-        if (EUserKind.Customer.getCode().equals(kind)
-                || EUserKind.Merchant.getCode().equals(kind)) {
-            condition.setLoginName(loginName);
-            condition.setLoginType(ELoginType.MOBILE.getCode());
-        } else {
-            condition.setLoginName(loginName);
-        }
-        condition.setKind(kind);
-        List<Agent> userList1 = agentBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn805050", "登录名不存在");
-        }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<Agent> userList2 = agentBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn805050", "登录密码错误");
-        }
-        Agent buser = userList2.get(0);
-        if (!EUserStatus.NORMAL.getCode().equals(buser.getStatus())) {
-            throw new BizException("xn805050", "该用户操作存在异常");
-        }
-        return buser.getUserId();
     }
 
     // 微信登录
@@ -278,57 +248,6 @@ public class AgentAOImpl implements IAgentAO {
         return result;
     }
 
-    // 注销 | 激活
-    @Override
-    public void doCloseOpen(String userId, String updater, String remark) {
-        Agent buser = agentBO.getAgent(userId);
-        if (buser == null) {
-            throw new BizException("li01004", "用户不存在");
-        }
-
-        String mobile = buser.getMobile();
-        String smsContent = "";
-        EUserStatus userStatus = null;
-        if (EUserStatus.NORMAL.getCode().equalsIgnoreCase(buser.getStatus())) {
-            smsContent = "您的账号已被管理员封禁";
-            userStatus = EUserStatus.Ren_Locked;
-        } else {
-            smsContent = "您的账号已被管理员解封,请遵守平台相关规则";
-            userStatus = EUserStatus.NORMAL;
-        }
-        agentBO.refreshStatus(userId, userStatus, updater, remark);
-        if (!EUserKind.Plat.getCode().equals(buser.getKind())
-                && PhoneUtil.isMobile(mobile)) {
-            // 发送短信
-            smsOutBO.sendSmsOut(mobile,
-                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091");
-        }
-    }
-
-    // 检查登录密码
-    @Override
-    public void doCheckLoginPwd(String userId, String loginPwd) {
-        Agent condition = new Agent();
-        condition.setUserId(userId);
-        List<Agent> userList1 = agentBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn702002", "用户不存在");
-        }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<Agent> userList2 = agentBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn702002", "登录密码错误");
-        }
-
-    }
-
-    // 重置登录密码
-    @Override
-    public void resetLoginPwd(String userId, String newLoginPwd) {
-        Agent buser = agentBO.getCheckUser(userId);
-        agentBO.resetLoginPwd(buser, newLoginPwd);
-    }
-
     // 修改头像
     @Override
     public void doModifyPhoto(String userId, String photo) {
@@ -378,7 +297,7 @@ public class AgentAOImpl implements IAgentAO {
 
     // 查询下级代理
     @Override
-    public Paginable<Agent> queryLowUser(int start, int limit,
+    public Paginable<Agent> queryLowUserPage(int start, int limit,
             Agent condition) {
         return agentBO.getPaginable(start, limit, condition);
     }
@@ -393,11 +312,6 @@ public class AgentAOImpl implements IAgentAO {
             page.getPageSize());
         page.setList(list);
         return page;
-    }
-
-    @Override
-    public Agent getRefereeName(String userReferee) {
-        return null;
     }
 
     // 下级
