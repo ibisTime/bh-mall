@@ -1,11 +1,3 @@
-/**
- * @Title WeChatAOImpl.java 
- * @Package com.std.account.ao.impl 
- * @Description 
- * @author haiqingzheng  
- * @date 2016年12月23日 上午11:21:03 
- * @version V1.0   
- */
 package com.bh.mall.ao.impl;
 
 import java.io.IOException;
@@ -49,11 +41,6 @@ import com.bh.mall.util.wechat.TokenResponse;
 import com.bh.mall.util.wechat.WXOrderQuery;
 import com.bh.mall.util.wechat.XMLUtil;
 
-/** 
- * @author: haiqingzheng 
- * @since: 2016年12月23日 上午11:21:03 
- * @history:
- */
 @Service
 public class WeChatAOImpl implements IWeChatAO {
 

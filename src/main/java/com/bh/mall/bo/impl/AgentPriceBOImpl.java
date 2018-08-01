@@ -81,11 +81,11 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
     }
 
     @Override
-    public AgentPrice getPriceByLevel(String productSpecsCode, Integer level) {
+    public AgentPrice getPriceByLevel(String specsCode, Integer level) {
         AgentPrice data = null;
-        if (StringUtils.isNotBlank(productSpecsCode)) {
+        if (StringUtils.isNotBlank(specsCode)) {
             AgentPrice condition = new AgentPrice();
-            condition.setSpecsCode(productSpecsCode);
+            condition.setSpecsCode(specsCode);
             condition.setLevel(level);
             data = agentPriceDAO.select(condition);
             if (data == null) {
@@ -96,7 +96,7 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
     }
 
     @Override
-    public List<AgentPrice> getApBySpecsCode(String specsCode) {
+    public List<AgentPrice> getAgentPriceBySpecsCode(String specsCode) {
         List<AgentPrice> list = null;
         if (StringUtils.isNotBlank(specsCode)) {
             AgentPrice condition = new AgentPrice();

@@ -47,8 +47,6 @@ import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
-// TODO 发货人，更新人转义未修改
-
 @Service
 public class InnerOrderAOImpl implements IInnerOrderAO {
 

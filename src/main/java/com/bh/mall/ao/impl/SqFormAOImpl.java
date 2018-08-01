@@ -15,8 +15,6 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IInOrderBO;
-import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
@@ -58,13 +56,7 @@ public class SqFormAOImpl implements ISqFormAO {
     private IAddressBO addressBO;
 
     @Autowired
-    private IInnerOrderBO innerOrderBO;
-
-    @Autowired
     private IAccountBO accountBO;
-
-    @Autowired
-    private IInOrderBO inOrderBO;
 
     @Autowired
     private IAgentLevelBO agentLevelBO;

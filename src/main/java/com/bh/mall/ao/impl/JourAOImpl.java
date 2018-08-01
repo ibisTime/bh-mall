@@ -14,11 +14,6 @@ import com.bh.mall.domain.Jour;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 
-/** 
- * @author: xieyj 
- * @since: 2016年12月23日 下午9:16:58 
- * @history:
- */
 @Service
 public class JourAOImpl implements IJourAO {
 

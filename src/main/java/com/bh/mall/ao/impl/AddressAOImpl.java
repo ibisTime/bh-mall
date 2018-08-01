@@ -21,11 +21,6 @@ import com.bh.mall.domain.Address;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
 
-/** 
- * @author: xieyj 
- * @since: 2015年8月27日 上午10:41:50 
- * @history:
- */
 @Service
 public class AddressAOImpl implements IAddressAO {
     @Autowired
@@ -103,9 +98,6 @@ public class AddressAOImpl implements IAddressAO {
         return addressBO.queryAddressList(condition);
     }
 
-    /** 
-     * @see com.xnjr.mall.ao.IAddressAO#getAddress(java.lang.String)
-     */
     @Override
     public Address getAddress(String code) {
         return addressBO.getAddress(code);

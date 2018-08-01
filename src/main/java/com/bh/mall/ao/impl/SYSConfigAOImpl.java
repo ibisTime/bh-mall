@@ -11,12 +11,6 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.exception.BizException;
 
-/**
- * 系统参数
- * @author: xieyj 
- * @since: 2016年7月23日 下午3:50:20 
- * @history:
- */
 @Service
 public class SYSConfigAOImpl implements ISYSConfigAO {
 

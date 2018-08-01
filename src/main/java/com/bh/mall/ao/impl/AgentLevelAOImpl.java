@@ -20,9 +20,6 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
     @Autowired
     IAgentLevelBO agentLevelBO;
 
-    /**
-     * 627002_修改代理管理
-     */
     @Override
     public void editAgentLevel(XN627002Req req) {
         AgentLevel data = agentLevelBO.getAgentLevel(req.getCode());
@@ -54,9 +51,6 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         agentLevelBO.editAgentLevel(data);
     }
 
-    /**
-     * 627005_分页查询代理管理
-     */
     @Override
     public Paginable<AgentLevel> queryAgentLevelListPage(int start, int limit,
             AgentLevel condition) {
@@ -73,9 +67,6 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         return page;
     }
 
-    /**
-     * 627006_列表查询代理管理
-     */
     @Override
     public List<AgentLevel> queryAgentLevelList(AgentLevel condition) {
         List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
@@ -90,17 +81,11 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         return list;
     }
 
-    /**
-     * 627007_详情查询代理管理
-     */
     @Override
     public AgentLevel getAgentLevel(String code) {
         return agentLevelBO.getAgentLevel(code);
     }
 
-    /**
-     * 627008_无C端等级
-     */
     @Override
     public Object queryAgentLevelCList(AgentLevel condition) {
         List<AgentLevel> list = agentLevelBO.queryAgentList(condition);

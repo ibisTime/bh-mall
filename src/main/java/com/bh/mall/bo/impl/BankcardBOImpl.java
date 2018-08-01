@@ -23,8 +23,8 @@ import com.bh.mall.exception.BizException;
  * @history:
  */
 @Component
-public class BankcardBOImpl extends PaginableBOImpl<Bankcard> implements
-        IBankcardBO {
+public class BankcardBOImpl extends PaginableBOImpl<Bankcard>
+        implements IBankcardBO {
 
     @Autowired
     private IBankCardDAO bankcardDAO;
@@ -88,17 +88,6 @@ public class BankcardBOImpl extends PaginableBOImpl<Bankcard> implements
             if (data == null) {
                 throw new BizException("xn0000", "银行卡不存在");
             }
-        }
-        return data;
-    }
-
-    @Override
-    public Bankcard getBankcardInfo(String code) {
-        Bankcard data = null;
-        if (StringUtils.isNotBlank(code)) {
-            Bankcard condition = new Bankcard();
-            condition.setCode(code);
-            data = bankcardDAO.select(condition);
         }
         return data;
     }
