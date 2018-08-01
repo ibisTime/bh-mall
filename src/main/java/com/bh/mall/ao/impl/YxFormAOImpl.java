@@ -49,6 +49,7 @@ public class YxFormAOImpl implements IYxFormAO {
     @Override
     @Transactional
     public void applyYxForm(XN627250Req req) {
+
         PhoneUtil.checkMobile(req.getMobile());
 
         // check mobile exist
@@ -62,7 +63,7 @@ public class YxFormAOImpl implements IYxFormAO {
         }
 
         // 确认申请id
-        agentBO.getCheckUser(req.getUserId());
+        agentBO.getAgent(req.getUserId());
 
         YxForm data = new YxForm();
         // 获取申请信息

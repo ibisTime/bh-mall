@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
@@ -21,7 +22,6 @@ import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentType;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -31,12 +31,15 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Autowired
     private IAgentDAO agentDAO;
 
+    @Autowired
+    private IAgentLogBO agentLogBO;
+
     /*************** 注册并保存新用户 **********************/
     // 注册
     @Override
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
-            String mobile, String kind, String loginPwd, String nickname,
-            String photo, String status, Integer level, String userReferee) {
+            String mobile, String loginPwd, String nickname, String photo,
+            String status, Integer level, String userReferee) {
         String userId = OrderNoGenerater.generate("U");
         Agent buser = new Agent();
         buser.setUserId(userId);
@@ -46,7 +49,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         buser.setAppOpenId(appOpenId);
         buser.setLoginName(mobile);
         buser.setMobile(mobile);
-        buser.setKind(kind);
+
         buser.setUserReferee(userReferee);
 
         buser.setLoginPwd(MD5Util.md5(loginPwd));
@@ -61,92 +64,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         buser.setLevel(level);
         agentDAO.insert(buser);
         return userId;
-    }
-
-    @Override
-    public String doRegister(String wxId, String level, String realName,
-            String province, String city, String area, String address,
-            String unionId, String h5OpenId, String appOpenId, String mobile,
-            String kind, String loginPwd, String nickname, String photo,
-            String userReferee, String lastAgentLog) {
-        String userId = OrderNoGenerater.generate("U");
-        Agent buser = new Agent();
-        buser.setUserId(userId);
-        buser.setLoginName(mobile);
-        buser.setMobile(mobile);
-        buser.setWxId(wxId);
-        buser.setPhoto(photo);
-        buser.setNickname(nickname);
-        buser.setApplyLevel(StringValidater.toInteger(level));
-        buser.setRealName(realName);
-
-        buser.setStatus(EUserStatus.MIND.getCode());
-        buser.setApplyDatetime(new Date());
-        buser.setUnionId(unionId);
-        buser.setH5OpenId(h5OpenId);
-        buser.setAppOpenId(appOpenId);
-
-        buser.setKind(kind);
-        buser.setLoginPwd(MD5Util.md5(loginPwd));
-        buser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-
-        buser.setNickname(nickname);
-        buser.setPhoto(photo);
-        buser.setUserReferee(userReferee);
-        buser.setProvince(province);
-        buser.setCity(city);
-        buser.setArea(area);
-        buser.setAddress(address);
-
-        buser.setCreateDatetime(new Date());
-        buser.setLastAgentLog(lastAgentLog);
-
-        agentDAO.insert(buser);
-        return userId;
-    }
-
-    @Override
-    public String doRegister(String realName, String level, String wxId,
-            String idBehind, String idFront, String introducer, String fromInfo,
-            String userReferee, String mobile, String province, String city,
-            String area, String address, String loginPwd, String photo,
-            String nickname, String unionId, String h5OpenId, String logCode) {
-        String userId = OrderNoGenerater.generate("U");
-        Agent data = new Agent();
-        data.setUserId(userId);
-        data.setRealName(realName);
-
-        data.setIdBehind(idBehind);
-        data.setIdFront(idFront);
-
-        data.setLoginName(mobile);
-        data.setMobile(mobile);
-        data.setWxId(wxId);
-        data.setPhoto(photo);
-        data.setNickname(nickname);
-
-        data.setStatus(EUserStatus.TO_APPROVE.getCode());
-        data.setApplyDatetime(new Date());
-        data.setUnionId(unionId);
-        data.setH5OpenId(h5OpenId);
-
-        data.setApplyLevel(StringValidater.toInteger(level));
-        data.setKind(EUserKind.Merchant.getCode());
-        data.setLoginPwd(MD5Util.md5(loginPwd));
-        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-
-        data.setUserReferee(userReferee);
-        data.setProvince(province);
-        data.setCity(city);
-        data.setArea(area);
-        data.setAddress(address);
-
-        data.setCreateDatetime(new Date());
-        data.setLastAgentLog(logCode);
-        agentDAO.insert(data);
-
-        return userId;
-
     }
 
     // 保存新用户
@@ -187,20 +104,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data = agentDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "用户不存在");
-            }
-        }
-        return data;
-    }
-
-    @Override
-    public Agent getCheckUser(String userId) {
-        Agent data = null;
-        if (StringUtils.isNotBlank(userId)) {
-            Agent condition = new Agent();
-            condition.setUserId(userId);
-            data = agentDAO.select(condition);
-            if (null == data) {
-                throw new BizException("xn702002", userId + "用户不存在");
             }
         }
         return data;
@@ -297,7 +200,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public Agent getUserByMobile(String introducer) {
+    public Agent getAgentByMobile(String introducer) {
         Agent data = null;
         if (StringUtils.isNotBlank(introducer)) {
             Agent condition = new Agent();
@@ -446,17 +349,21 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     // 更新状态
     @Override
-    public void refreshStatus(String userId, EUserStatus status, String updater,
-            String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setStatus(status.getCode());
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            agentDAO.updateStatus(data);
-        }
+    public void refreshStatus(Agent data, String updater, String remark) {
+
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentLog.getCode());
+
+        data.setUserId(data.getUserId());
+        data.setStatus(EUserStatus.CANCELED.getCode());
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setLastAgentLog(code);
+        data.setRemark(remark);
+        agentDAO.updateStatus(data);
+
+        // insert new agent log
+        agentLogBO.saveAgentLog(data, null);
     }
 
     // 更新登录名
@@ -496,7 +403,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
      * @see com.bh.mall.bo.IAgentBO#refreshAgent(com.bh.mall.domain.Agent)
      */
     @Override
-    public void refreshUser(Agent data) {
+    public void refreshAgent(Agent data) {
         if (data != null) {
             agentDAO.update(data);
         }
@@ -538,12 +445,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         agentDAO.resetBindMobile(buser);
     }
 
-    //
-
     @Override
-    public String refreshHighUser(Agent data) {
+    public void refreshHighUser(Agent data, String highUser, String updater) {
+
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
+
         Agent alData = new Agent();
         alData.setLastAgentLog(code);
         alData.setUserId(data.getUserId());
@@ -551,20 +458,43 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         Date date = new Date();
         alData.setApplyDatetime(date);
         agentDAO.updateHigh(alData);
-        return code;
+
+        // insert new log
+        agentLogBO.saveAgentLog(data, null);
+
     }
 
     @Override
-    public void updateInformation(Agent data) {
-        agentDAO.updateInformation(data);
+    public void refreshReferee(Agent data, String userReferee, String updater) {
+
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentLog.getCode());
+
+        data.setLastAgentLog(code);
+        data.setUserReferee(userReferee);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        agentDAO.updateUserReferee(data);
+
+        // insert new log
+        agentLogBO.saveAgentLog(data, null);
+
     }
 
     @Override
     public void refreshManager(Agent data, String manager, String updater) {
+
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentLog.getCode());
+
+        data.setLastAgentLog(code);
         data.setHighUserId(manager);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         agentDAO.updateManager(data);
+
+        // insert new log
+        agentLogBO.saveAgentLog(data, null);
     }
 
     /*************** 查询 **********************/

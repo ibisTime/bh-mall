@@ -680,7 +680,7 @@ public class InOrderAOImpl implements IInOrderAO {
             Agent highAgent = agentBO.getAgent(agent.getHighUserId());
             return highAgent.getRealName();
         }
-        SYSUser sysUser = sysUserBO.getUser(agent.getHighUserId());
+        SYSUser sysUser = sysUserBO.getSYSuser(agent.getHighUserId());
         return sysUser.getRealName();
     }
 }

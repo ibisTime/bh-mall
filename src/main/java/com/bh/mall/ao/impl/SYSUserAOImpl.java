@@ -118,7 +118,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
-        SYSUser user = sysUserBO.getUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
@@ -149,7 +149,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public void doRoleSYSUser(String userId, String roleCode, String updater,
             String remark) {
-        SYSUser user = sysUserBO.getUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
@@ -163,7 +163,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 重置登录密码
     @Override
     public void resetAdminLoginPwd(String userId, String newLoginPwd) {
-        SYSUser user = sysUserBO.getCheckUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         sysUserBO.resetAdminLoginPwd(user, newLoginPwd);
     }
 
@@ -171,7 +171,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public void doResetMoblie(String userId, String kind, String newMobile,
             String smsCaptcha) {
-        SYSUser user = sysUserBO.getCheckUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
             throw new BizException("xn000000", "新手机与原手机一致");
@@ -231,7 +231,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 详细查询
     public SYSUser getSYSUser(String code) {
 
-        return sysUserBO.getUser(code);
+        return sysUserBO.getSYSuser(code);
 
     }
 }

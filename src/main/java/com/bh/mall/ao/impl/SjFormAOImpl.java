@@ -340,7 +340,7 @@ public class SjFormAOImpl implements ISjFormAO {
                 ECurrency.MK_CNY.getCode());
             Account account = accountBO.getAccountByUser(highUser.getUserId(),
                 ECurrency.MK_CNY.getCode());
-            oldHighUser = agentBO.getCheckUser(user.getUserId());
+            oldHighUser = agentBO.getAgent(user.getUserId());
 
             // 旧代理上级是代理
             if (null == oldHighUser
@@ -377,7 +377,7 @@ public class SjFormAOImpl implements ISjFormAO {
             user.setRemark(remark);
             // String logCode = sjFormBO.refreshHighUser(user);
             // user.setLastAgentLog(logCode);
-            agentBO.refreshHighUser(user);
+            agentBO.refreshHighUser(user, highUserId, approver);
 
             List<Agent> list2 = agentBO.getUsersByUserReferee(user.getUserId());
             for (Agent user2 : list2) {

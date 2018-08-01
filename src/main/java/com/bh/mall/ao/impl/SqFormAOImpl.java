@@ -70,7 +70,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // 校验介绍人
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
-            Agent buser = agentBO.getUserByMobile(req.getIntroducer());
+            Agent buser = agentBO.getAgentByMobile(req.getIntroducer());
             introducer = buser.getUserId();
             if (buser.getLevel() <= StringValidater
                 .toInteger(req.getApplyLevel())) {
@@ -314,7 +314,7 @@ public class SqFormAOImpl implements ISqFormAO {
         Agent data = agentBO.getAgent(req.getUserId());
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
-            Agent user = agentBO.getUserByMobile(req.getIntroducer());
+            Agent user = agentBO.getAgentByMobile(req.getIntroducer());
             if (user.getUserId().equals(req.getUserId())) {
                 throw new BizException("xn0000", "推荐人不能填自己哦！");
             }
