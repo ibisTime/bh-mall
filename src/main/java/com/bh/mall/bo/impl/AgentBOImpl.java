@@ -543,7 +543,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public String refreshHighUser(Agent data) {
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
+            .generate(EGeneratePrefix.Agent.getCode());
         Agent alData = new Agent();
         alData.setLastAgentLog(code);
         alData.setUserId(data.getUserId());

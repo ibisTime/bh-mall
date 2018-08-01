@@ -38,7 +38,4 @@ public interface IAgentPriceBO extends IPaginableBO<AgentPrice> {
     // 根据规格编号
     public List<AgentPrice> getAgentPriceBySpecsCode(String specsCode);
 
-    // 检查机构数量
-    public int checkMinQuantity(String productSpecsCode, Integer level);
-
 }
