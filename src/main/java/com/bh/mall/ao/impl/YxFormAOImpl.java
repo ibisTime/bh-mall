@@ -81,7 +81,6 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setApplyDatetime(new Date());
 
         data.setSource(req.getFromInfo());
-
         // 数据库
         yxFormBO.applyYxForm(data);
         addressBO.saveAddress(data.getUserId(),
