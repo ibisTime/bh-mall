@@ -36,7 +36,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         SjForm alData = new SjForm();
         alData.setCode(code);
         alData.setStatus(EUserStatus.TO_APPROVE.getCode());
-        alData.setPaymentPdf(data.getPaymentPdf());
+        alData.setPaymentPdf(null);
 
         alData.setUserId(data.getUserId());
         alData.setApplyDatetime(data.getApplyDatetime());

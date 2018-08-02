@@ -26,7 +26,7 @@ public class SjForm extends ABaseDO {
     // 申请等级
     private Integer applyLevel;
 
-    // 团队人数
+    // 半门槛推荐人数
     private String reNumber;
 
     // 打款金额
@@ -76,9 +76,6 @@ public class SjForm extends ABaseDO {
     // 关键词
     private String keyWord;
 
-    /*******************************************/
-
-    // 获取编码
     public String getCode() {
         return code;
     }

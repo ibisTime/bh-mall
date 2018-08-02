@@ -73,15 +73,13 @@ public class SjFormAOImpl implements ISjFormAO {
         }
 
         // 查看升级所需
-        AgentLevel upgrade = agentLevelBO
-            .getAgentByLevel(StringValidater.toInteger(highLevel));
         AgentLevel agent = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(highLevel));
 
         // 推荐人数是否满足半门槛
         List<Agent> userReferee = agentBO
             .getUsersByUserReferee(data.getUserId());
-        if (upgrade.getReNumber() >= userReferee.size()) {
+        if (agent.getReNumber() >= userReferee.size()) {
             if (StringValidater.toLong(payAmount) <= agent
                 .getMinChargeAmount()) {
                 throw new BizException("xn00000", "您的直推人数不满足半门槛人数，打款金额不能低于"
@@ -97,22 +95,16 @@ public class SjFormAOImpl implements ISjFormAO {
             if (CollectionUtils.isNotEmpty(list)) {
                 throw new BizException("xn00000", "本等级升级云仓中不允许有余额");
             }
-
         }
+
         String status = EUserStatus.TO_COMPANYUPGRADE.getCode();
         if (StringUtils.isNotBlank(data.getHighUserId())) {
             Agent highUser = agentBO.getAgent(data.getHighUserId());
             if (EUserKind.Merchant.getCode().equals(highUser.getKind())) {
                 status = EUserStatus.TO_UPGRADE.getCode();
             }
-
         }
-
-        data.setApplyLevel(StringValidater.toInteger(highLevel));
-        data.setStatus(status);
-
         // 新增升级申请记录
-
         SjForm upData = new SjForm();
         upData.setUserId(userId);
         upData.setApplyLevel(data.getApplyLevel());
