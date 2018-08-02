@@ -26,7 +26,7 @@ public class Specs extends ABaseDO {
     // 拆单数量
     private Integer singleNumber;
 
-    // 关联拆单规格
+    // 关联规格
     private String refCode;
 
     // 规格名称

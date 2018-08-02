@@ -327,8 +327,7 @@ public class AgentAOImpl implements IAgentAO {
         return agentList;
     }
 
-    // 迭代
-    private List<Agent> getAgentList(List<Agent> list) {
+    private void getAgentList(List<Agent> list) {
         for (Agent agent : list) {
             Agent condition = new Agent();
             condition.setHighUserId(agent.getUserId());
@@ -338,7 +337,6 @@ public class AgentAOImpl implements IAgentAO {
                 getAgentList(agentList);
             }
         }
-        return list;
     }
 
     @Override
