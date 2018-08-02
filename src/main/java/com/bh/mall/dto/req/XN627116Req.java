@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 
-public class XN627280Req {
+public class XN627116Req {
 
     // 用户编号
     @NotBlank

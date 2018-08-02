@@ -11,13 +11,14 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 
+ * 删除介绍奖
  * @author: chenshan 
  * @since: 2018年4月3日 下午7:25:58 
  * @history:
  */
 public class XN627242 extends AProcessor {
-    private IJsAwardAO jsAwardAO = SpringContextHolder.getBean(IJsAwardAO.class);
+    private IJsAwardAO jsAwardAO = SpringContextHolder
+        .getBean(IJsAwardAO.class);
 
     private XN627242Req req = null;
 

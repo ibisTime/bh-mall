@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2018年4月26日 下午5:54:31 
  * @history:
  */
-public class XN627311Req {
+public class XN627117Req {
 
     // 用户编号(必填)
     private String userId;

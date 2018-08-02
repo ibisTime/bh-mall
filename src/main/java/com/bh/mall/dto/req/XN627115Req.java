@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2018年4月26日 下午5:54:31 
  * @history:
  */
-public class XN627309Req {
+public class XN627115Req {
 
     // （必填） 手机号
     private String mobile;
