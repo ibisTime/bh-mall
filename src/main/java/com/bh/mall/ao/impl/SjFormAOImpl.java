@@ -58,17 +58,20 @@ public class SjFormAOImpl implements ISjFormAO {
     @Override
     public void applySjForm(String userId, String highLevel, String payPdf,
             String payAmount) {
-        Agent data = agentBO.getAgent(userId);
+
+        agentBO.getAgent(userId);
+        SjForm data = new SjForm();
+
         if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
                 || EUserStatus.UPGRADED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn000", "您的状态无法申请升级");
         }
 
-        if (data.getLevel() <= StringValidater.toInteger(highLevel)) {
+        if (data.getApplyLevel() <= StringValidater.toInteger(highLevel)) {
             throw new BizException("xn0000", "升级等级要大于当前等级");
         }
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-            .getLevel()) {
+            .getApplyLevel()) {
             throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
         }
 
@@ -89,7 +92,7 @@ public class SjFormAOImpl implements ISjFormAO {
             }
         }
 
-        AgentLevel auData = agentLevelBO.getAgentByLevel(data.getLevel());
+        AgentLevel auData = agentLevelBO.getAgentByLevel(data.getApplyLevel());
         // 余额是否清零
         if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
             // 云仓是否有余额
@@ -100,41 +103,37 @@ public class SjFormAOImpl implements ISjFormAO {
 
         }
         String status = EUserStatus.TO_COMPANYUPGRADE.getCode();
-        if (StringUtils.isNotBlank(data.getHighUserId())) {
-            Agent highUser = agentBO.getAgent(data.getHighUserId());
+        if (StringUtils.isNotBlank(data.getToUserId())) {
+            Agent highUser = agentBO.getAgent(data.getToUserId());
             if (EUserKind.Merchant.getCode().equals(highUser.getKind())) {
                 status = EUserStatus.TO_UPGRADE.getCode();
             }
 
         }
 
+        data.setUserId(userId);
         data.setApplyLevel(StringValidater.toInteger(highLevel));
+        data.setApplyDatetime(new Date());
         data.setStatus(status);
-
-        // 新增升级申请记录
-
-        SjForm upData = new SjForm();
-        upData.setUserId(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(status);
-        upData.setApplyDatetime(new Date());
-        upData.setPayAmount(StringValidater.toLong(payAmount));
-
-        sjFormBO.applySjForm(upData);
+        sjFormBO.applySjForm(data);
 
     }
 
+    // 升级审核通过
     @Override
     @Transactional
     public void approveSjForm(String userId, String approver, String result,
             String remark) {
-        Agent data = agentBO.getAgent(userId);
+
+        agentBO.getAgent(userId);
+        SjForm data = new SjForm();
+
         if (!(EUserStatus.TO_COMPANYUPGRADE.getCode().equals(data.getStatus())
                 || EUserStatus.TO_UPGRADE.getCode().equals(data.getStatus()))) {
             throw new BizException("xn00000", "代理未申请升级");
         }
         String status = EUserStatus.IMPOWERED.getCode();
-        Integer level = data.getLevel();
+        Integer level = data.getApplyLevel();
         if (EBoolean.YES.getCode().equals(result)) {
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
@@ -163,7 +162,7 @@ public class SjFormAOImpl implements ISjFormAO {
                     changeHighUser(data.getUserId(), data.getUserId(), approver,
                         remark);
                     // 推荐人的上级的门槛转给自己
-                    changeAmount(data);
+                    // changeAmount(data); // TODO
                 }
             } else {
                 level = data.getApplyLevel();
@@ -177,12 +176,12 @@ public class SjFormAOImpl implements ISjFormAO {
                 changeHighUser(data.getUserId(), data.getUserId(), approver,
                     remark);
                 // 推荐人的上级的门槛转给自己
-                changeAmount(data);
+                // changeAmount(data); // TODO
 
             }
         }
 
-        data.setLevel(level);
+        data.setApplyLevel(level);
         data.setStatus(status);
         data.setPayAmount(0L);
         data.setApprover(approver);

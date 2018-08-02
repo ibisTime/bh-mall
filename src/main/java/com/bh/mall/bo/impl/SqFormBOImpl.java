@@ -70,14 +70,6 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
             .generate(EGeneratePrefix.AgentLog.getCode());
         SqForm alData = new SqForm();
         alData.setCode(code);
-        alData.setStatus(EUserStatus.TO_APPROVE.getCode());
-
-        alData.setUserId(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
-        alData.setApplyLevel(data.getApplyLevel());
-
-        // alData.setStatus(data.getStatus());
-        alData.setRemark(data.getRemark());
         sqFormDAO.insert(alData);
         return code;
     }
@@ -107,52 +99,58 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     public String cancelSqForm(SqForm data) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
+
         SqForm alData = new SqForm();
         alData.setCode(code);
-        alData.setStatus(EUserStatus.CANCELED.getCode());
-        alData.setUserId(data.getUserId());
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setApplyDatetime(data.getApplyDatetime());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setRemark(data.getRemark());
         sqFormDAO.insert(alData);
+
+        // update agent last log code
+        Agent agent = new Agent();
+        agent.setLastAgentLog(code);
+        agentDAO.updateLog(agent);
+
+        // insert new agent log
+        AgentLog log = new AgentLog();
+        log.setCode(code);
+        log.setApplyUser(data.getUserId());
+        log.setApplyLevel(data.getApplyLevel());
+        log.setStatus(data.getStatus());
+        log.setType(EAgentType.Imporder.getCode()); //  授权
+        log.setApplyDatetime(data.getApplyDatetime());
+        agentLogDAO.insert(log);
         return code;
 
     }
 
-    @Override
-    public String cancelSqForm(SqForm data, String status) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        SqForm alData = new SqForm();
-        alData.setCode(code);
-        alData.setStatus(EUserStatus.CANCELED.getCode());
-        alData.setUserId(data.getUserId());
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setApplyDatetime(data.getApplyDatetime());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setRemark(data.getRemark());
-        sqFormDAO.insert(alData);
-        return code;
-
-    }
-
+    // 补充授权所需信息
     @Override
     public String addInfo(SqForm data) {
+
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
-
-        SqForm buser = new SqForm();
-        buser.setUserId(data.getUserId());
 
         data.setCode(code);
         sqFormDAO.insert(data);
 
+        // update agent last log code
+        Agent agent = new Agent();
+        agent.setLastAgentLog(code);
+        agentDAO.updateLog(agent);
+
+        // insert new agent log
+        AgentLog log = new AgentLog();
+        log.setCode(code);
+        log.setApplyUser(data.getUserId());
+        log.setApplyLevel(data.getApplyLevel());
+        log.setStatus(data.getStatus());
+        log.setType(EAgentType.Imporder.getCode()); //  授权
+        log.setApplyDatetime(data.getApplyDatetime());
+        agentLogDAO.insert(log);
+
         return code;
     }
 
+    // 新增授权单
     @Override
     public String addSqForm(SqForm data) {
         String code = OrderNoGenerater
@@ -167,6 +165,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         return code;
     }
 
+    // 保存授权单
     @Override
     public String saveSqForm(SqForm data, String toUserId) {
         String code = OrderNoGenerater
@@ -184,6 +183,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         return code;
     }
 
+    // 详细查询
     @Override
     public SqForm getSqForm(String code) {
         SqForm data = null;
@@ -198,6 +198,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         return data;
     }
 
+    // 分页查询
     @Override
     public List<SqForm> querySqFormPage(int start, int limit,
             SqForm condition) {
@@ -207,6 +208,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
             page.getPageSize());
     }
 
+    // 列表查询
     @Override
     public List<SqForm> querySqFormList(SqForm condition) {
         return sqFormDAO.selectList(condition);
