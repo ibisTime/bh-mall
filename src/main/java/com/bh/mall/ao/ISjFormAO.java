@@ -20,14 +20,14 @@ public interface ISjFormAO {
 
     // 升级申请
     public void applySjForm(String userId, String highLevel, String payPdf,
-            String teamName);
+            String payAmount, String teamName, String idNo, String inHand);
 
-    // 取消升级申请
-    public void cancelSjForm(String userId, String approver, String result,
+    // 审核升级（front）
+    public void approveSjFormByB(String userId, String approver, String result,
             String remark);
 
-    // 通过审核升级
-    public void approveSjForm(String userId, String approver, String result,
+    // 审核升级(oss)
+    public void approveSjFormByP(String userId, String approver, String result,
             String remark);
 
     // 分页查询

@@ -17,14 +17,16 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627255 extends AProcessor {
-
     private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627255Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.updateInformation(req);
+        agentAO.updateInformation(req.getAddress(), req.getArea(),
+            req.getCity(), req.getMobile(), req.getProvince(),
+            req.getRealName(), req.getTeamName(), req.getUserId(),
+            req.getWxId());
         return new BooleanRes(true);
     }
 

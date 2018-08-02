@@ -84,23 +84,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         return data;
     }
 
-    // 登录判断
     @Override
-    public SYSUser getCheckUser(String userId) {
-        SYSUser data = null;
-        if (StringUtils.isNotBlank(userId)) {
-            SYSUser condition = new SYSUser();
-            condition.setUserId(userId);
-            data = sysUserDAO.select(condition);
-            if (null == data) {
-                throw new BizException("xn702002", userId + "用户不存在");
-            }
-        }
-        return data;
-    }
-
-    @Override
-    public SYSUser getUser(String userId) {
+    public SYSUser getSYSuser(String userId) {
         SYSUser data = null;
         if (StringUtils.isNotBlank(userId)) {
             SYSUser condition = new SYSUser();
@@ -149,7 +134,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
+    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
             String newLoginPwd) {
 
     }

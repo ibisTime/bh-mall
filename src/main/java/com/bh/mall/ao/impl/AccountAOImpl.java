@@ -36,6 +36,7 @@ public class AccountAOImpl implements IAccountAO {
     @Autowired
     IAgentLevelBO agentLevelBO;
 
+    // 个人创建多账户
     @Override
     @Transactional
     public void distributeAccount(String userId, String realName,

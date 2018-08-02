@@ -22,7 +22,7 @@ public interface ISYSUserAO {
     // 用户登录
     public String doLogin(String loginName, String loginPwd);
 
-    // 注销 | 激活代理
+    // 注销 | 激活其他管理员
     public void doCloseOpen(String userId, String updater, String remark);
 
     // 分配角色
@@ -32,8 +32,8 @@ public interface ISYSUserAO {
     // 重置登录密码
     public void resetAdminLoginPwd(String userId, String newLoginPwd);
 
-    // 重置代理密码
-    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
+    // 重置其他管理员密码
+    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
             String newLoginPwd);
 
     // 修改照片

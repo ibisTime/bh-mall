@@ -24,24 +24,20 @@ import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.IYxFormBO;
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
-import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EConfigType;
-import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -59,6 +55,9 @@ public class AgentAOImpl implements IAgentAO {
 
     @Autowired
     ISYSRoleBO sysRoleBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     @Autowired
     ISmsOutBO smsOutBO;
@@ -101,40 +100,34 @@ public class AgentAOImpl implements IAgentAO {
 
     // 微信注册
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
-            String h5OpenId, String nickname, String photo, String userKind,
-            String highUser, String status) {
+            String h5OpenId, String nickname, String photo, String referee,
+            String status) {
         agentBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
         Integer level = 0;
-        if (EUserKind.Customer.getCode().equals(userKind)) {
-            level = 6;
-        }
         String userId = agentBO.doRegister(unionId, h5OpenId, appOpenId, null,
-            userKind, EUserPwd.InitPwd.getCode(), nickname, photo, status,
-            level, highUser);
+            EUserPwd.InitPwd.getCode(), nickname, photo, status, level,
+            referee);
         XN627303Res result = new XN627303Res(userId, status);
         return result;
     }
 
-    // 微信登录
+    // 注册登录
     @Override
-    public XN627303Res doLoginWeChatByAgent(String code, String userKind,
-            String highUserId) {
+    public XN627303Res doLoginWeChatByAgent(String code, String refereeId) {
         String status = EUserStatus.TO_MIND.getCode(); // 待申请意向代理
-        if (StringUtils.isNotBlank(highUserId)) {
+        if (StringUtils.isNotBlank(refereeId)) {
             status = EUserStatus.IMPOWERO_INFO.getCode(); // 待填写授权资料
         }
-        return doLoginWeChatH(code, userKind, highUserId, status);
+        return doLoginWeChatH(code, refereeId, status);
     }
 
     // doLoginWeChatH
     @Transactional
-    private XN627303Res doLoginWeChatH(String code, String userKind,
-            String highUserId, String status) {
-        String companyCode = ESystemCode.BH.getCode();
-        String systemCode = ESystemCode.BH.getCode();
+    private XN627303Res doLoginWeChatH(String code, String refereeId,
+            String status) {
         // Step1：获取密码参数信息
-        Map<String, String> configPwd = sysConfigBO.getConfigsMap(
-            EConfigType.WEIXIN_H5.getCode(), companyCode, systemCode);
+        Map<String, String> configPwd = sysConfigBO
+            .getConfigsMap(EConfigType.WEIXIN_H5.getCode());
 
         String appId = configPwd.get(SysConstant.WX_H5_ACCESS_KEY);
         String appSecret = configPwd.get(SysConstant.WX_H5_SECRET_KEY);
@@ -216,7 +209,7 @@ public class AgentAOImpl implements IAgentAO {
                 String photo = (String) wxRes.get("headimgurl");
 
                 result = doWxLoginReg(unionId, null, h5OpenId, nickname, photo,
-                    userKind, highUserId, status);
+                    refereeId, status);
                 result = new XN627303Res(result.getUserId(), result.getStatus(),
                     subscribe);
             }
@@ -256,9 +249,9 @@ public class AgentAOImpl implements IAgentAO {
 
     // 更换绑定手机号
     @Override
-    public void doResetMoblie(String userId, String kind, String newMobile,
+    public void doResetMoblie(String userId, String newMobile,
             String smsCaptcha) {
-        Agent buser = agentBO.getCheckUser(userId);
+        Agent buser = agentBO.getAgent(userId);
         String oldMobile = buser.getMobile();
         if (newMobile.equals(oldMobile)) {
             throw new BizException("xn000000", "新手机与原手机一致");
@@ -279,96 +272,93 @@ public class AgentAOImpl implements IAgentAO {
 
     }
 
-    // 补全授权信息
+    // 修改管理者
     @Override
-    public void updateInformation(XN627255Req req) {
-        Agent data = agentBO.getAgent(req.getUserId());
-        data.setLevel(StringValidater.toInteger(req.getLevel()));
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-        data.setArea(req.getArea());
-
-        data.setAddress(req.getAddress());
-        data.setWxId(req.getWxId());
-        data.setMobile(req.getMobile());
-        data.setTeamName(req.getTeamName());
-        agentBO.updateInformation(data);
+    public void editManager(String userId, String manager, String updater) {
+        Agent data = agentBO.getAgent(userId);
+        sysUserBO.getSYSuser(manager);
+        agentBO.refreshManager(data, manager, updater);
     }
 
-    // 查询下级代理
+    public void updateInformation(String address, String area, String city,
+            String mobile, String province, String realName, String teamName,
+            String userId, String WxId) {
+
+    }
+
+    // 修改上级
     @Override
-    public Paginable<Agent> queryLowUserPage(int start, int limit,
+    public void editHighUser(String userId, String highUser, String updater) {
+        Agent data = agentBO.getAgent(userId);
+        agentBO.getAgent(highUser);
+        agentBO.refreshHighUser(data, highUser, updater);
+    }
+
+    // 修改推荐人
+    @Override
+    public void editUserReferee(String userId, String userReferee,
+            String updater) {
+        Agent data = agentBO.getAgent(userId);
+        agentBO.getAgent(userReferee);
+        agentBO.refreshReferee(data, userReferee, updater);
+    }
+
+    // 分页查询代理
+    @Override
+    public Paginable<Agent> queryAgentPage(int start, int limit,
             Agent condition) {
         return agentBO.getPaginable(start, limit, condition);
     }
 
-    // 查询下级代理分页
+    // 列表查询代理
     @Override
-    public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
-            Agent condition) {
-        long totalCount = agentBO.getTotalCount(condition);
-        Page<Agent> page = new Page<Agent>(start, limit, totalCount);
-        List<Agent> list = agentBO.selectList(condition, page.getPageNo(),
-            page.getPageSize());
-        page.setList(list);
-        return page;
+    public List<Agent> queryAgentList(Agent condition) {
+        return agentBO.queryUserList(condition);
     }
 
-    // 下级
-    public List<Agent> getAllLowAgent(List<Agent> list) {
-        for (int i = 0; i < list.size(); i++) {
-            Agent agent = list.get(i);
+    public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
+            Agent condition) {
+        return agentBO.getPaginable(start, limit, condition);
+    }
+
+    // 列表查询代理结构
+    @Override
+    public List<Agent> queryAgentJgList(Agent condition) {
+
+        List<Agent> agentList = agentBO.queryUserList(condition);
+        if (CollectionUtils.isNotEmpty(agentList)) {
+            getAgentList(agentList);
+        }
+
+        return agentList;
+    }
+
+    private void getAgentList(List<Agent> list) {
+        for (Agent agent : list) {
             Agent condition = new Agent();
             condition.setHighUserId(agent.getUserId());
             List<Agent> agentList = agentBO.queryUserList(condition);
             if (CollectionUtils.isNotEmpty(agentList)) {
                 agent.setAgentList(agentList);
-                getAllLowAgent(agentList);
+                getAgentList(agentList);
             }
         }
-        return list;
-    }
-
-    @Override
-    public List<Agent> queryAgentList(Agent condition) {
-        return null;
-    }
-
-    @Override
-    public void editHighUser(String userId, String highUser, String updater) {
-    }
-
-    @Override
-    public void editUserReferee(String userId, String userReferee,
-            String updater) {
-    }
-
-    @Override
-    public Paginable<Agent> queryAgentPage(int start, int limit,
-            Agent condition) {
-        return null;
-    }
-
-    @Override
-    public List<Agent> getAgentLog(Agent condition) {
-        return null;
     }
 
     @Override
     public void abolishSqForm(String userId, String updater, String remark) {
+        Agent data = agentBO.getAgent(userId);
+        agentBO.refreshStatus(data, updater, remark);
     }
 
     @Override
     public Agent doGetAgentByMobile(String mobile) {
-        return null;
+        return agentBO.getAgentByMobile(mobile);
     }
 
     @Override
     public Agent getAgent(String userId) {
-        return null;
+        return agentBO.getAgent(userId);
     }
 
-    @Override
-    public void editManager(String userId, String manager, String updater) {
-    }
 }

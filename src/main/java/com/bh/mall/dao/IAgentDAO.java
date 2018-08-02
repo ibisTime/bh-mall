@@ -117,14 +117,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     public void resetBindMobile(Agent user);
 
     /**
-     * 更新信息
-     * @param data 
-     * @create: 2018年7月31日 下午2:13:37 LENOVO
-     * @history:
-     */
-    public void updateInformation(Agent data);
-
-    /**
      * 更新日志
      * @param data 
      * @create: 2018年7月31日 下午2:13:57 LENOVO
@@ -150,6 +142,8 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
      * @history:
      */
     public void updateHigh(Agent data);
+
+    public void updateUserReferee(Agent data);
 
     /**
      * 更新关联管理员

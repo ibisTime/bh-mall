@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +35,6 @@ import com.bh.mall.exception.BizException;
 
 @Service
 public class SYSUserAOImpl implements ISYSUserAO {
-
-    // 平台端登录接口api
-    private static Logger logger = Logger.getLogger(SYSUserAOImpl.class);
 
     @Autowired
     ISYSUserBO sysUserBO;
@@ -76,6 +72,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Autowired
     IAgentLevelBO agentLevelBO;
 
+    // 新增用户
     @Override
     public String addSYSUser(String mobile, String loginPwd, String realName,
             String photo) {
@@ -100,7 +97,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public String doLogin(String loginName, String loginPwd) {
         SYSUser condition = new SYSUser();
-
         condition.setLoginName(loginName);
         List<SYSUser> userList1 = sysUserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
@@ -112,13 +108,13 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn805050", "登录密码错误");
         }
         SYSUser user = userList2.get(0);
-
         return user.getUserId();
     }
 
+    // 注销，激活其他管理员
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
-        SYSUser user = sysUserBO.getUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
@@ -149,7 +145,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public void doRoleSYSUser(String userId, String roleCode, String updater,
             String remark) {
-        SYSUser user = sysUserBO.getUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
@@ -163,15 +159,28 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 重置登录密码
     @Override
     public void resetAdminLoginPwd(String userId, String newLoginPwd) {
-        SYSUser user = sysUserBO.getCheckUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         sysUserBO.resetAdminLoginPwd(user, newLoginPwd);
+    }
+
+    // 重置其他管理员密码
+    @Override
+    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
+            String newLoginPwd) {
+        sysUserBO.resetOtherSYSuserPwd(mobile, smsCaptcha, newLoginPwd);
+    }
+
+    // 修改照片
+    @Override
+    public void doModifyPhoto(String userId, String photo) {
+        sysUserBO.refreshPhoto(userId, photo);
     }
 
     // 更换绑定手机号
     @Override
     public void doResetMoblie(String userId, String kind, String newMobile,
             String smsCaptcha) {
-        SYSUser user = sysUserBO.getCheckUser(userId);
+        SYSUser user = sysUserBO.getSYSuser(userId);
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
             throw new BizException("xn000000", "新手机与原手机一致");
@@ -193,17 +202,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     }
 
-    @Override
-    public void doModifyPhoto(String userId, String photo) {
-        sysUserBO.refreshPhoto(userId, photo);
-    }
-
-    @Override
-    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
-            String newLoginPwd) {
-        sysUserBO.resetAgentLoginPwd(mobile, smsCaptcha, newLoginPwd);
-    }
-
+    // 分页查询
     @Override
     public Paginable<SYSUser> queryUserPage(int start, int limit,
             SYSUser condition) {
@@ -230,8 +229,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     // 详细查询
     public SYSUser getSYSUser(String code) {
-
-        return sysUserBO.getUser(code);
+        return sysUserBO.getSYSuser(code);
 
     }
 }

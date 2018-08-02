@@ -23,8 +23,8 @@ public class XN627310 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.doResetMoblie(req.getUserId(), req.getKind(),
-            req.getNewMobile(), req.getSmsCaptcha());
+        agentAO.doResetMoblie(req.getUserId(), req.getNewMobile(),
+            req.getSmsCaptcha());
         return new BooleanRes(true);
     }
 

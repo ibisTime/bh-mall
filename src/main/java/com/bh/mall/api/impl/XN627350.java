@@ -8,7 +8,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.dto.req.XN627350Req;
+import com.bh.mall.dto.req.XN627125Req;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -25,18 +25,17 @@ public class XN627350 extends AProcessor {
 
     private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
-    private XN627350Req req = null;
+    private XN627125Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
 
         Agent condition = new Agent();
-
         condition.setStatus(EUserStatus.IMPOWERED.getCode());
-
         condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
         condition.setKind(EUserKind.Merchant.getCode());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IAgentAO.DEFAULT_ORDER_COLUMN;
@@ -46,12 +45,12 @@ public class XN627350 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return agentAO.queryLowUserPage(start, limit, condition);
+        return agentAO.queryMyLowAgentPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627350Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627125Req.class);
         ObjValidater.validateReq(req);
     }
 

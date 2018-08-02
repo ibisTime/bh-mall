@@ -2,7 +2,7 @@ package com.bh.mall.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class XN627300Req {
+public class XN627111Req {
     // 登陆名（必填）
     @NotBlank
     private String loginName;

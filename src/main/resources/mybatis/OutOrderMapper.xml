@@ -17,7 +17,8 @@
 		<result column="quantity" property="quantity" />
 		
 		<result column="price" property="price" />
-		<result column="to_user" property="toUser" />
+		<result column="to_user_id" property="toUserId" />
+		<result column="to_user_name" property="toUserName"  />
 		<result column="amount" property="amount" />
 		<result column="yunfei" property="yunfei" />
 		<result column="status" property="status" />
@@ -32,27 +33,27 @@
 		<result column="real_name" property="realName" />
 		<result column="team_name" property="teamName" />
 		<result column="apply_datetime" property="applyDatetime" />
+		
 		<result column="apply_note" property="applyNote" />
 		<result column="signer" property="signer" />
-		
 		<result column="mobile" property="mobile" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
+		
 		<result column="area" property="area" />
 		<result column="address" property="address" />
-		
 		<result column="deliver" property="deliver" />
 		<result column="delive_datetime" property="deliveDatetime" />
 		<result column="logistics_code" property="logisticsCode" />
+		
 		<result column="logistics_company" property="logisticsCompany" />
 		<result column="pdf" property="pdf" />
-		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="update_note" property="updateNote" />
+		
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
-		
 		<result column="approve_note" property="approveNote" />
 		<result column="remark" property="remark" />
 	</resultMap>

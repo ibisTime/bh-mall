@@ -250,8 +250,8 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public void approveExchange(String code, String approver, String approveNote,
-            String result) {
+    public void approveExchange(String code, String approver,
+            String approveNote, String result) {
         ExchangeOrder data = exchangeOrderBO.getChangeOrder(code);
         if (!EChangeProductStatus.TO_CHANGE.getCode()
             .equals(data.getStatus())) {
@@ -297,7 +297,8 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
                 ware.setPrice(pspData.getPrice());
 
                 ware.setQuantity(data.getExcanChangeQuantity());
-                Long amount = data.getExcanChangeQuantity() * pspData.getPrice();
+                Long amount = data.getExcanChangeQuantity()
+                        * pspData.getPrice();
                 ware.setAmount(amount);
                 ware.setLastChangeCode(data.getCode());
                 ware.setStatus(EAccountStatus.NORMAL.getCode());
@@ -457,7 +458,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         // chargeAmount = impower.getMinCharge() - cAmount;
         //
         // // 有过充值，但是钱在审核中
-        // } else if (cAmount.equals(impower.getMinCharge())) {
+        // } else {
         // Charge condition = new Charge();
         // condition.setApplyUser(user.getUserId());
         // condition.setStatus(EChargeStatus.TO_Cancel.getCode());

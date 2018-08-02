@@ -109,13 +109,4 @@ public class AgentPriceBOImpl extends PaginableBOImpl<AgentPrice>
         return list;
     }
 
-    @Override
-    public int checkMinQuantity(String productSpecsCode, Integer level) {
-        // ProductSpecsPrice psp = this.getPriceByLevel(productSpecsCode,
-        // level);
-        // if (quantity > psp.getMinQuantity()) {
-        // return false;
-        // }
-        return 0;
-    }
 }

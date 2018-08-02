@@ -28,7 +28,11 @@ public interface IOutOrderAO {
     // 修改收货地址及运费
     public void editOutOrder(XN627643Req req);
 
+    // 无购物车下单
     public List<String> addOutOrderNoCart(XN627641Req req);
+
+    // 无购物车下单（C端）
+    public List<String> addOutOrderNoCartC(XN627641Req req);
 
     // 付款
     public Object payOutOrder(List<String> codeList, String payType);

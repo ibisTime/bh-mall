@@ -18,13 +18,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627250 extends AProcessor {
 
-    private IYxFormAO userAO = SpringContextHolder.getBean(IYxFormAO.class);
+    private IYxFormAO yxForm = SpringContextHolder.getBean(IYxFormAO.class);
 
     private XN627250Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.applyYxForm(req);
+        yxForm.applyYxForm(req);
         return new BooleanRes(true);
     }
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.res.XN627303Res;
 
 /**
@@ -18,18 +17,19 @@ public interface IAgentAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
     // B端微信注册/登录
-    public XN627303Res doLoginWeChatByAgent(String code, String userKind,
-            String userReferee);
+    public XN627303Res doLoginWeChatByAgent(String code, String userReferee);
 
     // 修改头像
     public void doModifyPhoto(String userId, String photo);
 
-    // 更换手机
-    public void doResetMoblie(String userId, String kind, String newMobile,
-            String smsCaptcha);
+    // 修改资料
+    public void updateInformation(String address, String area, String city,
+            String mobile, String province, String realName, String teamName,
+            String userId, String WxId);
 
-    // 更新信
-    public void updateInformation(XN627255Req req);
+    // 更换手机
+    public void doResetMoblie(String userId, String newMobile,
+            String smsCaptcha);
 
     // 修改上级
     public void editHighUser(String userId, String highUser, String updater);
@@ -41,31 +41,27 @@ public interface IAgentAO {
     // 修改管理员
     public void editManager(String userId, String manager, String updater);
 
-    // 分页我的下级
-    public Paginable<Agent> queryLowUserPage(int start, int limit,
-            Agent condition);
-
-    // 分页查询
+    // 分页查询代理
     public Paginable<Agent> queryAgentPage(int start, int limit,
             Agent condition);
 
-    // 分页查询代理结构
+    // 列表查询代理
+    public List<Agent> queryAgentList(Agent condition);
+
+    // 详细查询
+    public Agent getAgent(String userId);
+
+    // 分页我的下级
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition);
 
-    // 列表查询代理轨迹
-    public List<Agent> getAgentLog(Agent condition);
+    // 列表查询代理结构
+    public List<Agent> queryAgentJgList(Agent condition);
 
     // 公司直接取消授权
     public void abolishSqForm(String userId, String updater, String remark);
 
     // 根据手机号查询代理
     public Agent doGetAgentByMobile(String mobile);
-
-    // 详细查询
-    public Agent getAgent(String userId);
-
-    // 列表查询代理结构OSS
-    public List<Agent> queryAgentList(Agent condition);
 
 }

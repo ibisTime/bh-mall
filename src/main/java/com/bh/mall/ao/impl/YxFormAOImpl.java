@@ -1,7 +1,6 @@
 package com.bh.mall.ao.impl;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
@@ -34,9 +32,6 @@ public class YxFormAOImpl implements IYxFormAO {
     private IYxFormBO yxFormBO;
 
     @Autowired
-    private IAgentAO agentAO;
-
-    @Autowired
     private IAgentBO agentBO;
 
     @Autowired
@@ -45,15 +40,14 @@ public class YxFormAOImpl implements IYxFormAO {
     @Autowired
     private IAgentLevelBO agentLevelBO;
 
+
     // 代理申请 （无推荐人）
     @Override
     @Transactional
     public void applyYxForm(XN627250Req req) {
         PhoneUtil.checkMobile(req.getMobile());
-
         // check mobile exist
         agentBO.isMobileExist(req.getMobile());
-
         // 确认申请等级
         AgentLevel aiData = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(req.getApplyLevel()));
@@ -62,7 +56,7 @@ public class YxFormAOImpl implements IYxFormAO {
         }
 
         // 确认申请id
-        agentBO.getCheckUser(req.getUserId());
+        agentBO.getAgent(req.getUserId());
 
         YxForm data = new YxForm();
         // 获取申请信息
@@ -80,7 +74,6 @@ public class YxFormAOImpl implements IYxFormAO {
         data.setApplyDatetime(new Date());
 
         data.setSource(req.getFromInfo());
-
         // 数据库
         yxFormBO.applyYxForm(data);
         addressBO.saveAddress(data.getUserId(),
@@ -92,9 +85,10 @@ public class YxFormAOImpl implements IYxFormAO {
     // 意向分配
     @Override
     public void allotYxForm(String userId, String toUserId, String approver) {
-
+        // 确认申请id
+        agentBO.getAgent(userId);
         YxForm data = new YxForm();
-        // set status
+        // check status
         String status = EUserStatus.TO_APPROVE.getCode();
 
         if (StringUtils.isNotBlank(toUserId)) {
@@ -104,9 +98,11 @@ public class YxFormAOImpl implements IYxFormAO {
             }
             status = EUserStatus.ALLOTED.getCode(); // 已分配
         } else {
-            status = EUserStatus.ADD_INFO.getCode();
+            status = EUserStatus.ADD_INFO.getCode(); // 更新授权信息
         }
 
+        data.setUserId(userId);
+        data.setToUserId(toUserId);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setStatus(status);
@@ -117,6 +113,8 @@ public class YxFormAOImpl implements IYxFormAO {
     // 忽略意向
     @Override
     public void ignore(String userId, String aprrover) {
+        // 确认申请id
+        agentBO.getAgent(userId);
         YxForm data = new YxForm();
         if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
@@ -124,13 +122,15 @@ public class YxFormAOImpl implements IYxFormAO {
         }
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.TO_MIND.getCode());
+        data.setStatus(EUserStatus.IGNORED.getCode());
         yxFormBO.ignore(data);
     }
 
     // 接受意向
     @Override
     public void acceptYxForm(String userId, String approver, String remark) {
+        // 确认申请id
+        agentBO.getAgent(userId);
         YxForm data = new YxForm();
         if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
@@ -139,19 +139,10 @@ public class YxFormAOImpl implements IYxFormAO {
 
         data.setToUserId(approver);
         data.setApprover(approver);
-        data.setApplyDatetime(new Date());
+        data.setApproveDatetime(new Date());
         data.setRemark(remark);
-
         data.setStatus(EUserStatus.ADD_INFO.getCode()); // 补全授权资料
-        // String logCode = yxFormBO.accepYxForm(data);
-        // insert new agent allot log
-        YxForm imData = new YxForm();
-        imData.setUserId(userId);
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        imData.setStatus(EUserStatus.ADD_INFO.getCode());
-
-        yxFormBO.allotYxForm(imData);
+        yxFormBO.allotYxForm(data);
 
     }
 
@@ -194,22 +185,7 @@ public class YxFormAOImpl implements IYxFormAO {
         } else {
             condition.setToUserId(condition.getUserIdForQuery()); // 意向归属人
         }
-
-        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit, condition);
-
-        Agent agent = null;
-        for (Iterator<YxForm> iterator = page.getList().iterator(); iterator
-            .hasNext();) {
-            YxForm yxForm = iterator.next();
-            agent = agentAO.getAgent(yxForm.getUserId());
-            if (!agent.getLastAgentLog().equals(yxForm.getCode())) {
-                iterator.remove();
-                continue;
-            }
-            yxForm.setUser(agent);
-
-        }
-        return page;
+        return yxFormBO.getPaginable(start, limit, condition);
     }
 
 }

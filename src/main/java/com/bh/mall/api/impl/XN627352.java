@@ -27,7 +27,7 @@ public class XN627352 extends AProcessor {
         Agent condition = new Agent();
         condition.setKeyWord(req.getKeyword());
         condition.setHighUserId(req.getUserId());
-        return agentAO.queryAgentList(condition);
+        return agentAO.queryAgentJgList(condition);
     }
 
     @Override

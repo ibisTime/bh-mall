@@ -3,10 +3,11 @@ package com.bh.mall.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.bh.mall.ao.IAgentAO;
+import com.bh.mall.ao.IAgentLogAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLog;
 import com.bh.mall.dto.req.XN627358Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -20,14 +21,15 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627358 extends AProcessor {
 
-    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
+    private IAgentLogAO agentLogAO = SpringContextHolder
+        .getBean(IAgentLogAO.class);
 
     private XN627358Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Agent condition = new Agent();
-        condition.setUserId(req.getUserId());
+        AgentLog condition = new AgentLog();
+        condition.setApplyUser(req.getUserId());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
@@ -35,7 +37,7 @@ public class XN627358 extends AProcessor {
         }
         condition.setOrder(column, req.getOrderDir());
 
-        return agentAO.getAgentLog(condition);
+        return agentLogAO.queryAgentLogList(condition);
     }
 
     @Override

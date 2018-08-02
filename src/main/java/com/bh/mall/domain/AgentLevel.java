@@ -56,13 +56,13 @@ public class AgentLevel extends ABaseDO {
     // 本等级门槛可有余额
     private Long minSurplus;
 
-    // 本等级升级是否公司审核
+    // 升至本等级是否公司审核
     private String isCompanyApprove;
 
-    // 半门槛推荐人数
+    // 升至本等级半门槛推荐人数
     private Integer reNumber;
 
-    // 本等级升级是否余额清零
+    // 升至本等级是否余额清零
     private String isReset;
 
     // 更新人

@@ -11,14 +11,11 @@ public interface ISqFormBO extends IPaginableBO<SqForm> {
 
     public SqForm getSqForm(String code);
 
-    public List<SqForm> querySqFormPage(int start, int limit,
-            SqForm condition);
+    public List<SqForm> querySqFormPage(int start, int limit, SqForm condition);
 
     public String approveSqForm(SqForm user);
 
     public String cancelSqForm(SqForm data);
-
-    public String cancelSqForm(SqForm data, String status);
 
     public String saveSqForm(SqForm data, String toUserId);
 

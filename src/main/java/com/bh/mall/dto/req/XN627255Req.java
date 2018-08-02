@@ -3,7 +3,7 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 通过
+ * update information
  * @author: nyc 
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
@@ -25,10 +25,6 @@ public class XN627255Req {
     // （必填）电话
     @NotBlank(message = "电话不能为空")
     private String mobile;
-
-    // 等级（必填）
-    @NotBlank(message = "等级不能为空")
-    private String level;
 
     // （必填）团队名称
     @NotBlank(message = "团队名称不能为空")
@@ -120,14 +116,6 @@ public class XN627255Req {
 
     public void setRealName(String realName) {
         this.realName = realName;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
 }

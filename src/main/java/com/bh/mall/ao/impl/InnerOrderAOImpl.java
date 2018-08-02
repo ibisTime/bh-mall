@@ -70,7 +70,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     @Override
     public String addInnerOrder(XN627720Req req) {
-        Agent user = agentBO.getCheckUser(req.getApplyUser());
+        Agent user = agentBO.getAgent(req.getApplyUser());
 
         InnerProduct innerProduct = innerProductBO
             .getInnerProduct(req.getProductCode());
@@ -159,7 +159,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     private Object payWXH5(InnerOrder order) {
         Long rmbAmount = order.getAmount() + order.getYunfei();
-        Agent agent = agentBO.getCheckUser(order.getApplyUser());
+        Agent agent = agentBO.getAgent(order.getApplyUser());
         String payGroup = innerOrderBO.addPayGroup(order,
             EBoolean.YES.getCode());
         return weChatAO.getPrepayIdH5(agent.getUserId(),

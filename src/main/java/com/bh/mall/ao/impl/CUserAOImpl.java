@@ -30,7 +30,6 @@ import com.bh.mall.common.WechatConstant;
 import com.bh.mall.domain.CUser;
 import com.bh.mall.dto.res.XN627304Res;
 import com.bh.mall.enums.EConfigType;
-import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -79,6 +78,7 @@ public class CUserAOImpl implements ICUserAO {
     @Autowired
     IAgentReportBO agentReportBO;
 
+    // 微信注册，登录
     @Override
     public XN627304Res doLoginWeChatByCustomer(String code, String nickname,
             String avatarUrl, String kind) {
@@ -88,11 +88,10 @@ public class CUserAOImpl implements ICUserAO {
     @Transactional
     private XN627304Res doLoginWeChatM(String code, String nickname,
             String photo, String kind) {
-        String companyCode = ESystemCode.BH.getCode();
-        String systemCode = ESystemCode.BH.getCode();
+
         // Step1：获取密码参数信息
-        Map<String, String> configPwd = sysConfigBO.getConfigsMap(
-            EConfigType.WEIXIN_XCX.getCode(), companyCode, systemCode);
+        Map<String, String> configPwd = sysConfigBO
+            .getConfigsMap(EConfigType.WEIXIN_XCX.getCode());
 
         String appId = configPwd.get(SysConstant.WX_XCX_ACCESS_KEY);
         String appSecret = configPwd.get(SysConstant.WX_XCX_SECRET_KEY);
@@ -111,7 +110,6 @@ public class CUserAOImpl implements ICUserAO {
         fromProperties.put("grant_type", "authorization_code");
         fromProperties.put("appid", appId);
         fromProperties.put("secret", appSecret);
-        // fromProperties.put("code", code);// 微信H5
         fromProperties.put("js_code", code);// 微信小程序
         logger.info(
             "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
@@ -136,19 +134,11 @@ public class CUserAOImpl implements ICUserAO {
             // Step4：根据openId，unionId从数据库中查询用户信息
             CUser dbUser = cuserBO.doGetUserByOpenId(openId);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                // result = new XN627302Res(dbUser.getUserId(),
-                // dbUser.getStatus());
+                result = new XN627304Res(dbUser.getUserId(),
+                    dbUser.getStatus());
             } else {
                 result = doWxLoginReg(openId, nickname, photo, kind, null,
                     EUserStatus.NORMAL.getCode());
-                // Step5：判断注册是否传手机号，有则注册，无则反馈
-                // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
-                // result = doWxLoginRegMobile(req, companyCode, systemCode,
-                // unionId, appOpenId, h5OpenId, nickname, photo, gender);
-                // } else {
-                // result = doWxLoginReg(req, companyCode, systemCode, unionId,
-                // appOpenId, h5OpenId, nickname, photo, gender);
-                // }
             }
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
@@ -187,67 +177,13 @@ public class CUserAOImpl implements ICUserAO {
         return result;
     }
 
+    // 修改照片
     @Override
     public void doModifyPhoto(String userId, String photo) {
         cuserBO.refreshPhoto(userId, photo);
     }
 
-    private Map<String, Object> getUserInfo(String code) {
-        String companyCode = ESystemCode.BH.getCode();
-        String systemCode = ESystemCode.BH.getCode();
-        // Step1：获取密码参数信息
-        Map<String, String> configPwd = sysConfigBO.getConfigsMap(
-            EConfigType.WEIXIN_H5.getCode(), companyCode, systemCode);
-
-        String appId = configPwd.get(SysConstant.WX_H5_ACCESS_KEY);
-        String appSecret = configPwd.get(SysConstant.WX_H5_SECRET_KEY);
-
-        if (StringUtils.isBlank(appId)) {
-            throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
-        }
-        if (StringUtils.isBlank(appSecret)) {
-            throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
-        }
-
-        // Step2：通过Authorization Code获取Access Token
-        String accessToken = "";
-        Map<String, Object> res = new HashMap<>();
-        Properties fromProperties = new Properties();
-        fromProperties.put("grant_type", "authorization_code");
-        fromProperties.put("appid", appId);
-        fromProperties.put("secret", appSecret);
-        fromProperties.put("code", code);
-        logger.info(
-            "appId:" + appId + ",appSecret:" + appSecret + ",js_code:" + code);
-        Map<String, Object> wxRes = new HashMap<>();
-        try {
-            String response = PostSimulater
-                .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
-            logger.info(response);
-            res = getMapFromResponse(response);
-            accessToken = (String) res.get("access_token");
-            if (res.get("error") != null) {
-                throw new BizException("XN000000",
-                    "微信登录失败原因：" + res.get("error"));
-            }
-            if (StringUtils.isBlank(accessToken)) {
-                throw new BizException("XN000000", "accessToken不能为空");
-            }
-            // Step3：使用Access Token来获取用户的OpenID
-            String openId = (String) res.get("openid");
-            // 获取unionid
-            Properties queryParas = new Properties();
-            queryParas.put("access_token", accessToken);
-            queryParas.put("openid", openId);
-            queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater
-                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
-        } catch (Exception e) {
-            throw new BizException("xn000000", e.getMessage());
-        }
-        return wxRes;
-    }
-
+    // 分页查询
     @Override
     public Paginable<CUser> queryCuserPage(int start, int limit,
             CUser condition) {
@@ -273,9 +209,7 @@ public class CUserAOImpl implements ICUserAO {
 
     // 详细查询
     public CUser getCuser(String code) {
-
-        CUser cuser = new CUser();
-        return cuser;
+        return cuserBO.getUser(code);
     }
 
 }
