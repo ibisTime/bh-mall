@@ -214,4 +214,4 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         return sqFormDAO.selectList(condition);
     }
 
-}
+}>>>>>>>refs/remotes/origin/master

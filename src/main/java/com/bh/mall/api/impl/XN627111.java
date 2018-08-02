@@ -28,6 +28,7 @@ public class XN627111 extends AProcessor {
             userAO.doLogin(req.getLoginName(), req.getLoginPwd()),
             EUserStatus.ALLOTED.getCode());
     }
+    
 
     @Override
     public void doCheck(String inputparams) throws ParaException {

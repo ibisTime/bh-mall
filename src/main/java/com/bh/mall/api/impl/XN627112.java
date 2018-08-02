@@ -23,6 +23,7 @@ public class XN627112 extends AProcessor {
 
     private XN627112Req req = null;
 
+
     @Override
     public Object doBusiness() throws BizException {
         userAO.doResetMoblie(req.getUserId(), req.getKind(), req.getNewMobile(),

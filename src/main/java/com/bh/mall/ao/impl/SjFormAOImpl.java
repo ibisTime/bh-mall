@@ -68,6 +68,7 @@ public class SjFormAOImpl implements ISjFormAO {
         if (data.getLevel() <= StringValidater.toInteger(newLevel)) {
             throw new BizException("xn0000", "升级等级要大于当前等级");
         }
+        
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
             throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
