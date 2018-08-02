@@ -1,7 +1,6 @@
 package com.bh.mall.ao.impl;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -189,22 +188,7 @@ public class YxFormAOImpl implements IYxFormAO {
         } else {
             condition.setToUserId(condition.getUserIdForQuery()); // 意向归属人
         }
-
-        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit, condition);
-
-        Agent agent = null;
-        for (Iterator<YxForm> iterator = page.getList().iterator(); iterator
-            .hasNext();) {
-            YxForm yxForm = iterator.next();
-            agent = agentAO.getAgent(yxForm.getUserId());
-            if (!agent.getLastAgentLog().equals(yxForm.getCode())) {
-                iterator.remove();
-                continue;
-            }
-            yxForm.setUser(agent);
-
-        }
-        return page;
+        return yxFormBO.getPaginable(start, limit, condition);
     }
 
 }

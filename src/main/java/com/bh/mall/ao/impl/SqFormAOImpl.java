@@ -17,6 +17,7 @@ import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.common.IdCardChecker;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
@@ -97,6 +98,10 @@ public class SqFormAOImpl implements ISqFormAO {
             if (StringUtils.isBlank(req.getIdNo())
                     || StringUtils.isBlank(req.getIdHand())) {
                 throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
+            }
+            IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
+            if (!idCardChecker.validate()) {
+                throw new BizException("xn0000", "请输入正确的身份证号码");
             }
         }
 
@@ -321,6 +326,10 @@ public class SqFormAOImpl implements ISqFormAO {
             if (StringUtils.isBlank(req.getIdNo())
                     || StringUtils.isBlank(req.getIdHand())) {
                 throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
+                IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
+                if (!idCardChecker.validate()) {
+                    throw new BizException("xn0000", "请输入正确的身份证号码");
+                }
             } else {
                 agentBO.getUserByIdNo(req.getIdNo());
             }
