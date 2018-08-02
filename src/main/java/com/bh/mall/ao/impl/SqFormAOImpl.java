@@ -80,10 +80,6 @@ public class SqFormAOImpl implements ISqFormAO {
         }
         // 校验手机号
         agentBO.isMobileExist(req.getMobile());
-        // 校验身份证
-        if (StringUtils.isNotBlank(req.getIdNo())) {
-            agentBO.getUserByIdNo(req.getIdNo());
-        }
 
         XN627303Res result = null;
         // 是否可被意向
@@ -95,14 +91,11 @@ public class SqFormAOImpl implements ISqFormAO {
         }
         // 是否需要实名制
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
-            if (StringUtils.isBlank(req.getIdNo())
-                    || StringUtils.isBlank(req.getIdHand())) {
-                throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
-            }
             IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
             if (!idCardChecker.validate()) {
                 throw new BizException("xn0000", "请输入正确的身份证号码");
             }
+            agentBO.getUserByIdNo(req.getIdNo());
         }
 
         Agent data = agentBO.getAgent(req.getUserId());
@@ -323,16 +316,11 @@ public class SqFormAOImpl implements ISqFormAO {
 
         AgentLevel impower = agentLevelBO.getAgentByLevel(data.getApplyLevel());
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
-            if (StringUtils.isBlank(req.getIdNo())
-                    || StringUtils.isBlank(req.getIdHand())) {
-                throw new BizException("xn0000", "本等级需要实名认证，请完成实名认证");
-                IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
-                if (!idCardChecker.validate()) {
-                    throw new BizException("xn0000", "请输入正确的身份证号码");
-                }
-            } else {
-                agentBO.getUserByIdNo(req.getIdNo());
+            IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
+            if (!idCardChecker.validate()) {
+                throw new BizException("xn0000", "请输入正确的身份证号码");
             }
+            agentBO.getUserByIdNo(req.getIdNo());
         }
 
         // data.setRealName(req.getRealName());
