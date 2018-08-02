@@ -25,7 +25,7 @@ public class XN627309 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        sysUserAO.resetAgentLoginPwd(req.getMobile(), req.getSmsCaptcha(),
+        sysUserAO.resetOtherSYSuserPwd(req.getMobile(), req.getSmsCaptcha(),
             req.getNewLoginPwd());
         return new BooleanRes(true);
     }

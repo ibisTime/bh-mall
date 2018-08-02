@@ -134,7 +134,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void resetAgentLoginPwd(String mobile, String smsCaptcha,
+    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
             String newLoginPwd) {
 
     }
