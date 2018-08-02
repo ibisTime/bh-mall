@@ -49,12 +49,9 @@ public class YxFormAOImpl implements IYxFormAO {
     @Override
     @Transactional
     public void applyYxForm(XN627250Req req) {
-
         PhoneUtil.checkMobile(req.getMobile());
-
         // check mobile exist
         agentBO.isMobileExist(req.getMobile());
-
         // 确认申请等级
         AgentLevel aiData = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(req.getApplyLevel()));
@@ -92,9 +89,10 @@ public class YxFormAOImpl implements IYxFormAO {
     // 意向分配
     @Override
     public void allotYxForm(String userId, String toUserId, String approver) {
-
+        // 确认申请id
+        agentBO.getAgent(userId);
         YxForm data = new YxForm();
-        // set status
+        // check status
         String status = EUserStatus.TO_APPROVE.getCode();
 
         if (StringUtils.isNotBlank(toUserId)) {
@@ -104,9 +102,11 @@ public class YxFormAOImpl implements IYxFormAO {
             }
             status = EUserStatus.ALLOTED.getCode(); // 已分配
         } else {
-            status = EUserStatus.ADD_INFO.getCode();
+            status = EUserStatus.ADD_INFO.getCode(); // 更新授权信息
         }
 
+        data.setUserId(userId);
+        data.setToUserId(toUserId);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setStatus(status);
@@ -117,6 +117,8 @@ public class YxFormAOImpl implements IYxFormAO {
     // 忽略意向
     @Override
     public void ignore(String userId, String aprrover) {
+        // 确认申请id
+        agentBO.getAgent(userId);
         YxForm data = new YxForm();
         if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
@@ -124,13 +126,15 @@ public class YxFormAOImpl implements IYxFormAO {
         }
         data.setApprover(aprrover);
         data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.TO_MIND.getCode());
+        data.setStatus(EUserStatus.IGNORED.getCode());
         yxFormBO.ignore(data);
     }
 
     // 接受意向
     @Override
     public void acceptYxForm(String userId, String approver, String remark) {
+        // 确认申请id
+        agentBO.getAgent(userId);
         YxForm data = new YxForm();
         if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
                 || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
@@ -139,19 +143,10 @@ public class YxFormAOImpl implements IYxFormAO {
 
         data.setToUserId(approver);
         data.setApprover(approver);
-        data.setApplyDatetime(new Date());
+        data.setApproveDatetime(new Date());
         data.setRemark(remark);
-
         data.setStatus(EUserStatus.ADD_INFO.getCode()); // 补全授权资料
-        // String logCode = yxFormBO.accepYxForm(data);
-        // insert new agent allot log
-        YxForm imData = new YxForm();
-        imData.setUserId(userId);
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        imData.setStatus(EUserStatus.ADD_INFO.getCode());
-
-        yxFormBO.allotYxForm(imData);
+        yxFormBO.allotYxForm(data);
 
     }
 

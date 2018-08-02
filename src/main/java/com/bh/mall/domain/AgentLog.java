@@ -20,9 +20,6 @@ public class AgentLog extends ABaseDO {
     // 申请人
     private String applyUser;
 
-    // 申请时间
-    private Date applyDatetime;
-
     // 归属人
     private String toUserId;
 
@@ -56,8 +53,18 @@ public class AgentLog extends ABaseDO {
     // 审核人
     private String approver;
 
+    // 更新人
+
+    private String updater;
+
+    // 申请时间
+    private Date applyDatetime;
+
     // 审核时间
     private Date approveDatetime;
+
+    // 更新时间
+    private Date updateDatetime;
 
     // 备注
     private String remark;
@@ -163,6 +170,14 @@ public class AgentLog extends ABaseDO {
         this.approver = approver;
     }
 
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -185,6 +200,14 @@ public class AgentLog extends ABaseDO {
 
     public void setApproveDatetime(Date approveDatetime) {
         this.approveDatetime = approveDatetime;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
     }
 
     public String getType() {

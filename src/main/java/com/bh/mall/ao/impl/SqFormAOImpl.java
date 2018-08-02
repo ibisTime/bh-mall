@@ -139,7 +139,7 @@ public class SqFormAOImpl implements ISqFormAO {
         sqData.setIdNo(req.getIdNo());
         sqData.setIdHand(req.getIdHand());
 
-        // sqData.setIntroducer(introducer);
+        sqData.setIntroducerMobile(introducer);
         sqData.setStatus(status);
         sqData.setArea(req.getArea());
         // data.setPayPdf(req.getPayPdf());
@@ -147,35 +147,25 @@ public class SqFormAOImpl implements ISqFormAO {
         data.setAddress(req.getAddress());
         data.setSource(req.getFromInfo());
 
-        // String logCode = agentAllotBO.toApply(data, toUser,
-        // EUserStatus.TO_APPROVE.getCode());
-        // data.setLastAgentLog(logCode);
-
         sqFormBO.toApply(sqData);
         addressBO.saveAddress(sqData.getUserId(),
             EAddressType.User_Address.getCode(), req.getMobile(),
             req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
             req.getAddress(), EBoolean.YES.getCode());
         result = new XN627303Res(sqData.getUserId(), EBoolean.NO.getCode());
-
-        // insert new agent allot log
-        SqForm alData = new SqForm();
-        alData.setUserId(req.getUserId());
-        alData.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        alData.setApplyDatetime(new Date());
-        alData.setStatus(EUserStatus.MIND.getCode());
-
-        sqFormBO.addSqForm(alData);
         return result;
 
     }
 
+    // 通过授权
     @Override
     @Transactional
     public void approveSqForm(String userId, String approver, String result,
             String remark) {
-        Agent data = agentBO.getAgent(userId);
-        SqForm log = sqFormBO.getSqForm(data.getLastAgentLog());
+
+        agentBO.getAgent(userId);
+        SqForm data = new SqForm();
+
         if (!(EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
                 || EUserStatus.TO_COMPANYAPPROVE.getCode()
                     .equals(data.getStatus()))) {
@@ -185,17 +175,17 @@ public class SqFormAOImpl implements ISqFormAO {
         String status = EUserStatus.IMPOWERED.getCode();
         String fromUser = ESysUser.SYS_USER_BH.getCode();
 
-        // TODO 上级
-        // Agent highUser = agentBO.getSysUser();
-
+        Agent highUser = agentBO.getAgent(data.getToUserId());
+        // 审核通过
         if (EResult.Result_YES.getCode().equals(result)) {
             // 更新上级
-            /*
-             * if (StringUtils.isNotBlank(log.getToUserId())) { highUser =
-             * agentBO.getUser(log.getToUserId()); if
-             * (!EUserKind.Plat.getCode().equals(highUser.getKind())) { fromUser
-             * = highUser.getUserId(); } }
-             */
+
+            if (StringUtils.isNotBlank(data.getToUserId())) {
+                highUser = agentBO.getAgent(data.getToUserId());
+                if (!EUserKind.Plat.getCode().equals(highUser.getKind())) {
+                    fromUser = highUser.getUserId();
+                }
+            }
             // data.setHighUserId(highUser.getUserId());
 
             AgentLevel impower = agentLevelBO
@@ -212,7 +202,7 @@ public class SqFormAOImpl implements ISqFormAO {
                     && !EUser.ADMIN.getCode().equals(approver)) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
             } else {
-                data.setLevel(data.getApplyLevel());
+                data.setApplyLevel(data.getApplyLevel());
                 // data.setImpowerDatetime(new Date());
 
                 // 根据用户类型获取账户列表
@@ -252,22 +242,13 @@ public class SqFormAOImpl implements ISqFormAO {
 
         Date date = new Date();
         if (EUserStatus.IMPOWERED.getCode().equals(status)) {
-            // data.setImpowerDatetime(date);
+            data.setApproveDatetime(date);
         }
 
         data.setApprover(approver);
         data.setApplyDatetime(date);
         data.setRemark(remark);
-
-        // insert new impower log
-        SqForm imData = new SqForm();
-        imData.setUserId(userId);
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(status);
-        sqFormBO.approveSqForm(imData);
+        sqFormBO.approveSqForm(data);
 
     }
 
