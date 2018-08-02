@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.ExchangeOrder;
 import com.bh.mall.dto.req.XN627790Req;
-import com.bh.mall.dto.res.XN627805Res;
 
 /**
  * 置换单
@@ -36,9 +35,6 @@ public interface IExchangeOrderAO {
 
     // 提交云仓置换申请单
     public ExchangeOrder getExchangeOrderMessage(XN627790Req req);
-
-    // 检查余额红线
-    public XN627805Res checkAmount(String userId);
 
     // 分页查询
     public Paginable<ExchangeOrder> queryExchangeOrderPage(int start, int limit,

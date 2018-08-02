@@ -82,6 +82,9 @@ public class OutOrder extends ABaseDO {
     // 下单人
     private String applyUser;
 
+    // 下单人等级
+    private Integer level;
+
     // 真实姓名
     private String realName;
 
@@ -175,9 +178,6 @@ public class OutOrder extends ABaseDO {
 
     // 更信人名字
     private String updateName;
-
-    // 等级
-    private Integer level;
 
     // 用户
     private Agent agent;

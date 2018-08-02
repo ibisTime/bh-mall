@@ -36,6 +36,7 @@ import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.AmountUtil;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
@@ -183,6 +184,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
 
+            // 检查限购
+            this.checkLimitNumber(applyUser, specs, price, cart.getQuantity());
+
+            // 检查起购数量
+            if (price.getMinQuantity() > cart.getQuantity()) {
+                throw new BizException("xn0000",
+                    "您购买的数量不能低于" + price.getMinQuantity() + "]");
+            }
+
             // 判断未开启云仓的代理是否完成授权单
             if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
                 if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
@@ -201,10 +211,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 int singleNumber = cart.getQuantity() / specs.getSingleNumber();
                 for (int i = 0; i < singleNumber; i++) {
                     list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
-                        applyUser.getRealName(), applyUser.getHighUserId(),
-                        toUserName, applyUser.getTeamName(),
-                        teamLeader.getRealName(), pData, specs,
-                        price.getPrice(), specs.getSingleNumber(),
+                        applyUser.getRealName(), applyUser.getLevel(),
+                        applyUser.getHighUserId(), toUserName,
+                        applyUser.getTeamName(), teamLeader.getRealName(),
+                        pData, specs, price.getPrice(), specs.getSingleNumber(),
                         req.getApplyNote(), req.getSigner(), req.getMobile(),
                         req.getProvince(), req.getCity(), req.getArea(),
                         req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
@@ -214,13 +224,13 @@ public class OutOrderAOImpl implements IOutOrderAO {
             } else {
                 // 不可拆单
                 list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
-                    applyUser.getRealName(), applyUser.getHighUserId(),
-                    toUserName, applyUser.getTeamName(),
-                    teamLeader.getRealName(), pData, specs, price.getPrice(),
-                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(),
-                    EOutOrderStatus.Unpaid.getCode(), kind));
+                    applyUser.getRealName(), applyUser.getLevel(),
+                    applyUser.getHighUserId(), toUserName,
+                    applyUser.getTeamName(), teamLeader.getRealName(), pData,
+                    specs, price.getPrice(), cart.getQuantity(),
+                    req.getApplyNote(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -259,7 +269,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 int singleNumber = cart.getQuantity() / specs.getSingleNumber();
                 for (int i = 0; i < singleNumber; i++) {
                     list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
-                        cUser.getNickname(), agent.getUserId(),
+                        cUser.getNickname(), null, agent.getUserId(),
                         agent.getRealName(), null, null, pData, specs,
                         price.getPrice(), specs.getSingleNumber(),
                         req.getApplyNote(), req.getSigner(), req.getMobile(),
@@ -270,11 +280,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
             } else {
                 // 不可拆单
                 list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
-                    cUser.getNickname(), agent.getUserId(), agent.getRealName(),
-                    null, null, pData, specs, price.getPrice(),
-                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(),
+                    cUser.getNickname(), null, agent.getUserId(),
+                    agent.getRealName(), null, null, pData, specs,
+                    price.getPrice(), cart.getQuantity(), req.getApplyNote(),
+                    req.getSigner(), req.getMobile(), req.getProvince(),
+                    req.getCity(), req.getArea(), req.getAddress(),
                     EOutOrderStatus.Unpaid.getCode(),
                     EOutOrderKind.Normal_Order.getCode()));
             }
@@ -333,6 +343,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 门槛余额是否高于限制
         this.checkAmount(applyUser, agentLevel, amount);
 
+        // 检查限购
+        this.checkLimitNumber(applyUser, specs, price,
+            StringValidater.toInteger(req.getQuantity()));
+
         // 检查起购数量
         if (price.getMinQuantity() > StringValidater
             .toInteger(req.getQuantity())) {
@@ -346,20 +360,21 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     / specs.getSingleNumber();
             for (int i = 0; i < singleNumber; i++) {
                 list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
-                    applyUser.getRealName(), applyUser.getHighUserId(),
-                    toUserName, applyUser.getTeamName(),
-                    teamLeader.getRealName(), pData, specs, price.getPrice(),
-                    specs.getSingleNumber(), req.getApplyNote(),
-                    req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress(),
-                    EOutOrderStatus.Unpaid.getCode(), kind));
+                    applyUser.getRealName(), applyUser.getLevel(),
+                    applyUser.getHighUserId(), toUserName,
+                    applyUser.getTeamName(), teamLeader.getRealName(), pData,
+                    specs, price.getPrice(), specs.getSingleNumber(),
+                    req.getApplyNote(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
             }
         } else {
             // 不可拆单
             list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
-                applyUser.getRealName(), applyUser.getHighUserId(), toUserName,
-                applyUser.getTeamName(), teamLeader.getRealName(), pData, specs,
-                price.getPrice(), StringValidater.toInteger(req.getQuantity()),
+                applyUser.getRealName(), applyUser.getLevel(),
+                applyUser.getHighUserId(), toUserName, applyUser.getTeamName(),
+                teamLeader.getRealName(), pData, specs, price.getPrice(),
+                StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
                 req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
@@ -390,19 +405,19 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     / specs.getSingleNumber();
             for (int i = 0; i < singleNumber; i++) {
                 list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
-                    cUser.getNickname(), agent.getUserId(), agent.getRealName(),
-                    null, null, pData, specs, price.getPrice(),
-                    specs.getSingleNumber(), req.getApplyNote(),
-                    req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress(),
-                    EOutOrderStatus.Unpaid.getCode(),
+                    cUser.getNickname(), null, agent.getUserId(),
+                    agent.getRealName(), null, null, pData, specs,
+                    price.getPrice(), specs.getSingleNumber(),
+                    req.getApplyNote(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
                     EOutOrderKind.Normal_Order.getCode()));
             }
         } else {
             // 不可拆单
             list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
-                cUser.getNickname(), agent.getUserId(), agent.getRealName(),
-                null, null, pData, specs, price.getPrice(),
+                cUser.getNickname(), null, agent.getUserId(),
+                agent.getRealName(), null, null, pData, specs, price.getPrice(),
                 StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
@@ -599,44 +614,44 @@ public class OutOrderAOImpl implements IOutOrderAO {
         condition.setLevelList(levelList);
 
         List<OutOrder> list = outOrderBO.queryOutOrderList(condition);
-        for (OutOrder OutOrder : list) {
+        for (OutOrder outOrder : list) {
             // 下单人
-            Agent agent = agentBO.getAgent(OutOrder.getApplyUser());
-            OutOrder.setAgent(agent);
+            Agent agent = agentBO.getAgent(outOrder.getApplyUser());
+            outOrder.setAgent(agent);
 
             // 团队长,一级代理自己是团队长
             if (1 != agent.getLevel()) {
                 Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
-                OutOrder.setLeaderName(teamLeader.getRealName());
-                OutOrder.setLeaderMobile(teamLeader.getMobile());
+                outOrder.setLeaderName(teamLeader.getRealName());
+                outOrder.setLeaderMobile(teamLeader.getMobile());
             } else {
-                OutOrder.setLeaderName(agent.getRealName());
-                OutOrder.setLeaderMobile(agent.getMobile());
+                outOrder.setLeaderName(agent.getRealName());
+                outOrder.setLeaderMobile(agent.getMobile());
             }
 
             // 订单归属人
-            String toUserName = this.getName(OutOrder.getToUserId());
-            OutOrder.setToUserName(toUserName);
+            String toUserName = this.getName(outOrder.getToUserId());
+            outOrder.setToUserName(toUserName);
 
             // 收货人
-            String signeName = this.getName(OutOrder.getSigner());
-            OutOrder.setSigneName(signeName);
+            String signeName = this.getName(outOrder.getSigner());
+            outOrder.setSigneName(signeName);
 
             // 审核人
-            String approveUser = this.getName(OutOrder.getApprover());
-            OutOrder.setApproveName(approveUser);
+            String approveUser = this.getName(outOrder.getApprover());
+            outOrder.setApproveName(approveUser);
 
             // 发货人
-            String deliveName = this.getName(OutOrder.getDeliver());
-            OutOrder.setDeliveName(deliveName);
+            String deliveName = this.getName(outOrder.getDeliver());
+            outOrder.setDeliveName(deliveName);
 
             // 更新人
-            String updateName = this.getName(OutOrder.getUpdater());
-            OutOrder.setUpdater(updateName);
+            String updateName = this.getName(outOrder.getUpdater());
+            outOrder.setUpdater(updateName);
 
             // 产品信息
-            Product product = productBO.getProduct(OutOrder.getProductCode());
-            OutOrder.setProduct(product);
+            Product product = productBO.getProduct(outOrder.getProductCode());
+            outOrder.setProduct(product);
         }
         return list;
     }
@@ -695,7 +710,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     private void payAward(OutOrder data) {
-
         Product product = productBO.getProduct(data.getProductCode());
         Agent applyUser = agentBO.getAgent(data.getApplyUser());
         Long orderAmount = data.getAmount();
@@ -816,8 +830,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     }
                 }
             }
-        } else {
-            // 自发
         }
 
         data.setDeliver(req.getDeliver());
@@ -1124,8 +1136,37 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     @Override
-    public void checkLimitNumber(Agent agent, Specs psData, AgentPrice pspData,
+    public void checkLimitNumber(Agent agent, Specs specs, AgentPrice price,
             Integer quantity) {
+
+        // 今日已购数量
+        int number = getNumber(agent.getUserId(), DateUtil.getTodayStart(),
+            DateUtil.getTodayEnd()) + quantity;
+        // 日限购
+        if (0 != price.getDailyNumber() && number > price.getDailyNumber()) {
+            throw new BizException("xn00000",
+                "您今日的购买数量不能多于[" + price.getDailyNumber() + "]");
+        }
+
+        // 本周已购数量
+        number = getNumber(agent.getUserId(), DateUtil.getWeeklyStart(),
+            DateUtil.getWeeklyEnd()) + quantity;
+        // 周限购
+        if (0 != price.getWeeklyNumber() && number > price.getWeeklyNumber()) {
+            throw new BizException("xn00000",
+                "您今日的购买数量不能多于[" + price.getWeeklyNumber() + "]");
+        }
+
+        // 本月已购数量
+        number = getNumber(agent.getUserId(), DateUtil.getMonthStart(),
+            DateUtil.getMonthEnd()) + quantity;
+        // 月限购
+        if (0 != price.getMonthlyNumber()
+                && number > price.getMonthlyNumber()) {
+            throw new BizException("xn00000",
+                "您今日的购买数量不能多于[" + price.getMonthlyNumber() + "]");
+        }
+
     }
 
     private void checkAmount(Agent agent, AgentLevel agentLevel, Long amount) {
@@ -1149,16 +1190,17 @@ public class OutOrderAOImpl implements IOutOrderAO {
         }
     }
 
-    // 删除未支付订单
-    public void removeOrderTimer() {
-        // 每十二个小时执行一次，删除是个小时前未支付的订单
-        Date date = new Date();
-        OutOrder condition = new OutOrder();
-        condition.setStatus(EOrderStatus.Unpaid.getCode());
-        condition.setEndDatetime(date);
-        List<OutOrder> list = outOrderBO.queryOutOrderList(condition);
-        for (OutOrder data : list) {
-            outOrderBO.removeOutOrder(data);
+    // 日、周、月已购数量
+    private int getNumber(String agentId, Date startDatetime,
+            Date endDatetime) {
+        int number = 0;
+        List<OutOrder> list = outOrderBO.getProductQuantity(agentId,
+            startDatetime, endDatetime);
+        for (OutOrder outOrder : list) {
+            Specs specs = specsBO.getSpecs(outOrder.getSpecsCode());
+            number = number + specs.getNumber();
         }
+        return number;
     }
+
 }

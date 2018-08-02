@@ -10,12 +10,12 @@ import com.bh.mall.domain.Specs;
 
 public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
-    public String saveOutOrder(String applyUser, String name, String toUserId,
-            String toUserName, String teamName, String teamLeader,
-            Product pData, Specs specs, Long price, Integer quantity,
-            String applyNote, String signer, String mobile, String province,
-            String city, String area, String address, String status,
-            String kind);
+    public String saveOutOrder(String applyUser, String name, Integer level,
+            String toUserId, String toUserName, String teamName,
+            String teamLeader, Product pData, Specs specs, Long price,
+            Integer quantity, String applyNote, String signer, String mobile,
+            String province, String city, String area, String address,
+            String status, String kind);
 
     public void refreshOutOrder(OutOrder data);
 
@@ -71,7 +71,8 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
     // 作废订单
     public void invalidOutOrder(OutOrder data, String updater, String remark);
 
-    // 删除未支付订单
-    public void removeOutOrder(OutOrder data);
+    // 查询订单
+    public List<OutOrder> getProductQuantity(String agentId, Date startDatetime,
+            Date endDatetime);
 
 }
