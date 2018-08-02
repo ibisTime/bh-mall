@@ -17,6 +17,7 @@ import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.common.IdCardChecker;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -56,15 +57,15 @@ public class SjFormAOImpl implements ISjFormAO {
 
     // 升级申请
     @Override
-    public void applySjForm(String userId, String highLevel, String payPdf,
-            String payAmount) {
+    public void applySjForm(String userId, String newLevel, String payPdf,
+            String payAmount, String teamName, String idNo, String inHand) {
         Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
                 || EUserStatus.UPGRADED.getCode().equals(data.getStatus()))) {
             throw new BizException("xn000", "您的状态无法申请升级");
         }
 
-        if (data.getLevel() <= StringValidater.toInteger(highLevel)) {
+        if (data.getLevel() <= StringValidater.toInteger(newLevel)) {
             throw new BizException("xn0000", "升级等级要大于当前等级");
         }
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
@@ -73,37 +74,54 @@ public class SjFormAOImpl implements ISjFormAO {
         }
 
         // 查看升级所需
-        AgentLevel agent = agentLevelBO
-            .getAgentByLevel(StringValidater.toInteger(highLevel));
+        AgentLevel highLevel = agentLevelBO
+            .getAgentByLevel(StringValidater.toInteger(newLevel));
 
         // 推荐人数是否满足半门槛
         List<Agent> userReferee = agentBO
             .getUsersByUserReferee(data.getUserId());
-        if (agent.getReNumber() >= userReferee.size()) {
-            if (StringValidater.toLong(payAmount) <= agent
+        if (highLevel.getReNumber() >= userReferee.size()) {
+            if (StringValidater.toLong(payAmount) <= highLevel
                 .getMinChargeAmount()) {
                 throw new BizException("xn00000", "您的直推人数不满足半门槛人数，打款金额不能低于"
                         + StringValidater.toLong(payAmount) / 1000);
             }
         }
-
-        AgentLevel auData = agentLevelBO.getAgentByLevel(data.getLevel());
         // 余额是否清零
-        if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
+        if (EBoolean.YES.getCode().equals(highLevel.getIsReset())) {
             // 云仓是否有余额
             List<Ware> list = wareBO.getWareByUser(data.getUserId());
             if (CollectionUtils.isNotEmpty(list)) {
-                throw new BizException("xn00000", "本等级升级云仓中不允许有余额");
+                throw new BizException("xn00000", "升至该等级云仓中不允许有余额");
             }
         }
 
-        String status = EUserStatus.TO_COMPANYUPGRADE.getCode();
-        if (StringUtils.isNotBlank(data.getHighUserId())) {
-            Agent highUser = agentBO.getAgent(data.getHighUserId());
-            if (EUserKind.Merchant.getCode().equals(highUser.getKind())) {
-                status = EUserStatus.TO_UPGRADE.getCode();
+        // 新等级是否需要实名
+        if (EBoolean.YES.getCode().equals(highLevel.getIsRealName())) {
+            // 之前未实名
+            if (StringUtils.isBlank(data.getIdNo())
+                    || StringUtils.isBlank(data.getIdHand())) {
+                throw new BizException("xn00000", "升至该等级需完成实名认证");
+            }
+
+            // 校验身份证号
+            IdCardChecker idCardChecker = new IdCardChecker(idNo);
+            if (!idCardChecker.validate()) {
+                throw new BizException("xn00000", "请输入正确的身份证号");
             }
         }
+
+        String status = EUserStatus.TO_UPGRADE.getCode();
+        // 申请等级为董事的代理，直接由平台审核
+        if (EAgentLevel.ONE.getCode().equals(highLevel)) {
+            EUserStatus.TO_COMPANYCANCEL.getCode();
+            // 校验团队名称
+            if (StringUtils.isBlank(teamName)) {
+                throw new BizException("xn00000", "给自己团队起个名字吧");
+            }
+            agentBO.checkTeamName(teamName);
+        }
+
         // 新增升级申请记录
         SjForm upData = new SjForm();
         upData.setUserId(userId);
@@ -118,7 +136,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
     @Override
     @Transactional
-    public void approveSjForm(String userId, String approver, String result,
+    public void approveSjFormByB(String userId, String approver, String result,
             String remark) {
         Agent data = agentBO.getAgent(userId);
         if (!(EUserStatus.TO_COMPANYUPGRADE.getCode().equals(data.getStatus())
@@ -127,14 +145,17 @@ public class SjFormAOImpl implements ISjFormAO {
         }
         String status = EUserStatus.IMPOWERED.getCode();
         Integer level = data.getLevel();
+
+        // 审核通过
         if (EBoolean.YES.getCode().equals(result)) {
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
+
             status = EUserStatus.UPGRADED.getCode();
             AgentLevel auData = agentLevelBO
                 .getAgentByLevel(data.getApplyLevel());
 
-            // 是否推荐的代理 TODO
+            // 是否推荐的代理
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
                 if (!EUser.ADMIN.getCode().equals(approver)) {
                     Agent approveUser = agentBO.getAgent(approver);
