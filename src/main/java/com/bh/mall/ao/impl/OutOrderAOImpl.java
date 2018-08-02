@@ -28,6 +28,7 @@ import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.ISpecsLogBO;
 import com.bh.mall.bo.ITjAwardBO;
@@ -41,12 +42,14 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.AgentPrice;
+import com.bh.mall.domain.CUser;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.ChAward;
 import com.bh.mall.domain.MiniCode;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.ProCode;
 import com.bh.mall.domain.Product;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.TjAward;
 import com.bh.mall.domain.Ware;
@@ -135,12 +138,28 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Autowired
     ICUserBO cUserBO;
 
+    @Autowired
+    ISYSUserBO sysUserBO;
+
     @Override
     @Transactional
     public List<String> addOutOrder(XN627640Req req) {
         List<String> list = new ArrayList<String>();
         Cart data = cartBO.getCart(req.getCartList().get(0));
         Agent applyUser = agentBO.getAgent(data.getUserId());
+
+        // 团队长
+        Agent teamLeader = agentBO.getTeamLeader(applyUser.getTeamName());
+
+        // 获取上级
+        String toUserName = null;
+        if (agentBO.isHighest(applyUser.getUserId())) {
+            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            toUserName = sysUser.getRealName();
+        } else {
+            Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
+            toUserName = highUser.getRealName();
+        }
 
         // 是否为授权单
         AgentLevel agentLevel = agentLevelBO
@@ -181,7 +200,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
                 int singleNumber = cart.getQuantity() / specs.getSingleNumber();
                 for (int i = 0; i < singleNumber; i++) {
-                    list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                    list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
+                        applyUser.getRealName(), applyUser.getHighUserId(),
+                        toUserName, applyUser.getTeamName(),
+                        teamLeader.getRealName(), pData, specs,
                         price.getPrice(), specs.getSingleNumber(),
                         req.getApplyNote(), req.getSigner(), req.getMobile(),
                         req.getProvince(), req.getCity(), req.getArea(),
@@ -191,10 +213,13 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             } else {
                 // 不可拆单
-                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
-                    price.getPrice(), cart.getQuantity(), req.getApplyNote(),
-                    req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress(),
+                list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
+                    applyUser.getRealName(), applyUser.getHighUserId(),
+                    toUserName, applyUser.getTeamName(),
+                    teamLeader.getRealName(), pData, specs, price.getPrice(),
+                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress(),
                     EOutOrderStatus.Unpaid.getCode(), kind));
             }
             // 删除购物车记录
@@ -215,6 +240,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     public List<String> addOutOrderC(XN627640Req req) {
         List<String> list = new ArrayList<String>();
+
+        // 下单人及订单归属人
+        CUser cUser = cUserBO.getUser(req.getApplyUser());
+        Agent agent = agentBO.getAgent(req.getToUser());
+
         for (String code : req.getCartList()) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
@@ -222,13 +252,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
             }
-            Agent applyUser = agentBO.getAgent(req.getApplyUser());
+
             AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(), 6);
             // 订单拆单
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
                 int singleNumber = cart.getQuantity() / specs.getSingleNumber();
                 for (int i = 0; i < singleNumber; i++) {
-                    list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+                    list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
+                        cUser.getNickname(), agent.getUserId(),
+                        agent.getRealName(), null, null, pData, specs,
                         price.getPrice(), specs.getSingleNumber(),
                         req.getApplyNote(), req.getSigner(), req.getMobile(),
                         req.getProvince(), req.getCity(), req.getArea(),
@@ -237,10 +269,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 }
             } else {
                 // 不可拆单
-                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
-                    price.getPrice(), cart.getQuantity(), req.getApplyNote(),
-                    req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress(),
+                list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
+                    cUser.getNickname(), agent.getUserId(), agent.getRealName(),
+                    null, null, pData, specs, price.getPrice(),
+                    cart.getQuantity(), req.getApplyNote(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress(),
                     EOutOrderStatus.Unpaid.getCode(),
                     EOutOrderKind.Normal_Order.getCode()));
             }
@@ -261,6 +295,19 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
+        // 团队长
+        Agent teamLeader = agentBO.getTeamLeader(applyUser.getTeamName());
+
+        // 获取上级
+        String toUserName = null;
+        if (agentBO.isHighest(applyUser.getUserId())) {
+            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            toUserName = sysUser.getRealName();
+        } else {
+            Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
+            toUserName = highUser.getRealName();
+        }
+
         // 该等级对应的规则及价格
         AgentLevel agentLevel = agentLevelBO
             .getAgentByLevel(applyUser.getLevel());
@@ -298,15 +345,20 @@ public class OutOrderAOImpl implements IOutOrderAO {
             int singleNumber = StringValidater.toInteger(req.getQuantity())
                     / specs.getSingleNumber();
             for (int i = 0; i < singleNumber; i++) {
-                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
-                    price.getPrice(), specs.getSingleNumber(),
-                    req.getApplyNote(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+                list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
+                    applyUser.getRealName(), applyUser.getHighUserId(),
+                    toUserName, applyUser.getTeamName(),
+                    teamLeader.getRealName(), pData, specs, price.getPrice(),
+                    specs.getSingleNumber(), req.getApplyNote(),
+                    req.getSigner(), req.getMobile(), req.getProvince(),
+                    req.getCity(), req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(), kind));
             }
         } else {
             // 不可拆单
-            list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
+            list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
+                applyUser.getRealName(), applyUser.getHighUserId(), toUserName,
+                applyUser.getTeamName(), teamLeader.getRealName(), pData, specs,
                 price.getPrice(), StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
@@ -319,7 +371,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Transactional
     public List<String> addOutOrderNoCartC(XN627641Req req) {
         List<String> list = new ArrayList<String>();
-        Agent applyUser = agentBO.getAgent(req.getApplyUser());
+        // 下单人及订单归属人
+        CUser cUser = cUserBO.getUser(req.getApplyUser());
+        Agent agent = agentBO.getAgent(req.getToUser());
+
         Specs specs = specsBO.getSpecs(req.getSpecsCode());
         Product pData = productBO.getProduct(specs.getProductCode());
 
@@ -327,55 +382,32 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn0000", "产品包含未上架商品,不能下单");
         }
         // 该等级对应的规则及价格
-        AgentLevel agentLevel = agentLevelBO
-            .getAgentByLevel(applyUser.getLevel());
-        AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(),
-            applyUser.getLevel());
-
-        // 订单类型
-        String kind = EOutOrderKind.Normal_Order.getCode();
-        // 未开云仓的代理，判断是否为授权单
-        Long amount = StringValidater.toInteger(req.getQuantity())
-                * price.getPrice();
-        if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
-            if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
-                applyUser.getImpowerDatetime())) {
-                kind = EOutOrderKind.Impower_Order.getCode();
-                if (agentLevel.getAmount() > amount) {
-                    throw new BizException("xn00000", agentLevel.getName()
-                            + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
-                }
-            }
-        }
-
-        // 门槛余额是否高于限制
-        this.checkAmount(applyUser, agentLevel, amount);
-
-        // 检查起购数量
-        if (price.getMinQuantity() > StringValidater
-            .toInteger(req.getQuantity())) {
-            throw new BizException("xn0000",
-                "您购买的数量不能低于" + price.getMinQuantity() + "]");
-        }
+        AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(), 6);
 
         // 订单拆单
         if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
             int singleNumber = StringValidater.toInteger(req.getQuantity())
                     / specs.getSingleNumber();
             for (int i = 0; i < singleNumber; i++) {
-                list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
-                    price.getPrice(), specs.getSingleNumber(),
-                    req.getApplyNote(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+                list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
+                    cUser.getNickname(), agent.getUserId(), agent.getRealName(),
+                    null, null, pData, specs, price.getPrice(),
+                    specs.getSingleNumber(), req.getApplyNote(),
+                    req.getSigner(), req.getMobile(), req.getProvince(),
+                    req.getCity(), req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(),
+                    EOutOrderKind.Normal_Order.getCode()));
             }
         } else {
             // 不可拆单
-            list.add(outOrderBO.saveOutOrder(applyUser, pData, specs,
-                price.getPrice(), StringValidater.toInteger(req.getQuantity()),
+            list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
+                cUser.getNickname(), agent.getUserId(), agent.getRealName(),
+                null, null, pData, specs, price.getPrice(),
+                StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+                req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
+                EOutOrderKind.Normal_Order.getCode()));
         }
         return list;
     }
