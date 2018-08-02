@@ -155,7 +155,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
-    // 通过授权
+    // 通过授权 TODO
     @Override
     @Transactional
     public void approveSqForm(String userId, String approver, String result,
@@ -250,10 +250,13 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
+    // 取消授权
     @Override
     public void cancelSqForm(String userId, String approver, String result,
             String remark) {
-        Agent data = agentBO.getAgent(userId);
+        agentBO.getAgent(userId);
+
+        SqForm data = new SqForm();
         if (!(EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())
                 || EUserStatus.TO_COMPANYCANCEL.getCode()
                     .equals(data.getStatus()))) {
@@ -271,26 +274,21 @@ public class SqFormAOImpl implements ISqFormAO {
                 EBizType.AJ_QXSQ.getValue(), -account.getAmount());
 
         }
+
         data.setStatus(status);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setRemark(remark);
-
-        // insert new impower log
-        SqForm imData = new SqForm();
-        imData.setUserId(userId);
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(EUserStatus.CANCELED.getCode());
-        sqFormBO.addSqForm(imData);
+        sqFormBO.cancelSqForm(data);
     }
 
     // 补全授权所需资料
     @Override
     public void addInfo(XN627362Req req) {
-        Agent data = agentBO.getAgent(req.getUserId());
+
+        agentBO.getAgent(req.getUserId());
+        SqForm data = new SqForm();
+
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
             Agent user = agentBO.getAgentByMobile(req.getIntroducer());
@@ -323,33 +321,17 @@ public class SqFormAOImpl implements ISqFormAO {
             agentBO.getUserByIdNo(req.getIdNo());
         }
 
-        // data.setRealName(req.getRealName());
-        // data.setWxId(req.getWxId());
-        // data.setMobile(req.getMobile());
-        // data.setProvince(req.getProvince());
-        // data.setCity(req.getCity());
-        //
-        // data.setArea(req.getArea());
-        // data.setAddress(req.getAddress());
+        data.setUserId(req.getUserId());
+        data.setRealName(data.getRealName());
         data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        data.setTeamName(req.getTeamName());
-
         data.setIdKind(req.getIdKind());
         data.setIdNo(req.getIdNo());
         data.setIdHand(req.getIdHand());
-        data.setIntroducer(req.getIntroducer());
-
-        // insert new impower log
-        SqForm imData = new SqForm();
-        imData.setUserId(req.getUserId());
-        imData.setApplyLevel(data.getApplyLevel());
-        imData.setApplyDatetime(new Date());
-        // imData.setPayAmount(payAmount);
-        // imData.setPaymentPdf(payPdf);
-        imData.setStatus(EUserStatus.TO_COMPANYAPPROVE.getCode());
-        sqFormBO.addInfo(imData);
+        data.setIntroducerMobile(req.getIntroducer());
+        sqFormBO.addInfo(data);
     }
 
+    // 列表查询
     @Override
     public List<SqForm> querySqFormList(SqForm condition) {
 
@@ -383,6 +365,7 @@ public class SqFormAOImpl implements ISqFormAO {
         return list;
     }
 
+    // 详细查询
     @Override
     public SqForm getSqForm(String code) {
         SqForm data = sqFormBO.getSqForm(code);
@@ -390,11 +373,14 @@ public class SqFormAOImpl implements ISqFormAO {
         data.setUser(buser);
         Agent userReferee = null;
         data.setUser(buser);
-        /*
-         * if (StringUtils.isNotBlank(data.getUserReferee())) { userReferee =
-         * agentAO.getAgent(data.getUserReferee()); if (userReferee != null) {
-         * data.setRefereeName(userReferee.getRealName()); } }
-         */
+
+        if (StringUtils.isNotBlank(data.getUserReferee())) {
+            userReferee = agentAO.getAgent(data.getUserReferee());
+            if (userReferee != null) {
+                data.setUserReferee(userReferee.getRealName());
+            }
+        }
+
         // 审核人
         if (EUser.ADMIN.getCode().equals(data.getApprover())) {
             data.setApprover(data.getApprover());
@@ -413,6 +399,7 @@ public class SqFormAOImpl implements ISqFormAO {
         return data;
     }
 
+    // 分页查询
     @Override
     public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition) {
@@ -432,13 +419,13 @@ public class SqFormAOImpl implements ISqFormAO {
             Agent buser = agentAO.getAgent(impowerApply.getUserId());
             impowerApply.setUser(buser);
 
-            /*
-             * if (StringUtils.isNotBlank(impowerApply.getUserReferee())) {
-             * userReferee = agentAO
-             * .getUserName(impowerApply.getUserReferee()); if (userReferee !=
-             * null) { impowerApply.setRefereeName(userReferee.getRealName()); }
-             * }
-             */
+            if (StringUtils.isNotBlank(impowerApply.getUserReferee())) {
+                userReferee = agentAO.getAgent(impowerApply.getUserReferee());
+                if (userReferee != null) {
+                    impowerApply.setUserReferee(userReferee.getRealName());
+                }
+            }
+
             // 补全授权金额
             if (null != buser.getApplyLevel()) {
                 // 代理等级表

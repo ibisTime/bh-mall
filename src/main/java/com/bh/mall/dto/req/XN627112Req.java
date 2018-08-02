@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: Jul 17, 2018 11:56:26 AM 
  * @history:
  */
-public class XN627282Req {
+public class XN627112Req {
 
     // （必填）用户编号
     @NotBlank(message = "用户编号不能为空")

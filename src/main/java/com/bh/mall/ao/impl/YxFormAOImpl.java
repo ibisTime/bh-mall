@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
@@ -31,9 +30,6 @@ public class YxFormAOImpl implements IYxFormAO {
 
     @Autowired
     private IYxFormBO yxFormBO;
-
-    @Autowired
-    private IAgentAO agentAO;
 
     @Autowired
     private IAgentBO agentBO;

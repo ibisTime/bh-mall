@@ -213,17 +213,6 @@ public class SjFormAOImpl implements ISjFormAO {
 
     }
 
-    @Override
-    public void cancelSjForm(String userId, String approver, String result,
-            String remark) {
-        SjForm upData = new SjForm();
-        upData.setUserId(userId);
-        upData.setStatus(EUserStatus.TO_CANCEL.getCode());
-        upData.setApplyDatetime(new Date());
-
-        sjFormBO.addSjForm(upData);
-
-    }
 
     @Override
     public List<SjForm> querySjFormList(SjForm condition) {
@@ -399,6 +388,11 @@ public class SjFormAOImpl implements ISjFormAO {
 
         }
 
+    }
+
+    @Override
+    public void approveSjFormByP(String userId, String approver, String result,
+            String remark) {
     }
 
 }
