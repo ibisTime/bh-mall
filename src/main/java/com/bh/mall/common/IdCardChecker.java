@@ -184,7 +184,7 @@ public class IdCardChecker {
     }
 
     public static void main(String[] args) {
-        IdCardChecker idCardChecker = new IdCardChecker("330326199007015211");
+        IdCardChecker idCardChecker = new IdCardChecker("654001197203261415");
         if (!idCardChecker.validate()) {
             throw new RuntimeException("身份证号码不正确！");
         }

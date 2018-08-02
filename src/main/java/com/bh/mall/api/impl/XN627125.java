@@ -23,8 +23,6 @@ public class XN627125 extends AProcessor {
     public Object doBusiness() throws BizException {
         SYSUser condition = new SYSUser();
 
-        // condition.setKeyWord(req.getKeyword());
-
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ISYSUserAO.DEFAULT_ORDER_COLUMN;

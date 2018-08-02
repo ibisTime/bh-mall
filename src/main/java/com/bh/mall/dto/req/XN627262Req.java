@@ -28,6 +28,12 @@ public class XN627262Req {
     // (选填) 团队名称
     private String teamName;
 
+    // (选填) 身份证号
+    private String idNo;
+
+    // (选填) 手持身份证
+    private String inHand;
+
     public String getUserId() {
         return userId;
     }
@@ -66,6 +72,22 @@ public class XN627262Req {
 
     public void setPadAmount(String padAmount) {
         this.padAmount = padAmount;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public String getInHand() {
+        return inHand;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public void setInHand(String inHand) {
+        this.inHand = inHand;
     }
 
 }

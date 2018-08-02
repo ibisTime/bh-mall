@@ -24,8 +24,6 @@ public class XN627267 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.applySjForm(req.getUserId(), req.getHighLevel(),
-            req.getPayPdf(), req.getPadAmount());
         return new BooleanRes(true);
     }
 

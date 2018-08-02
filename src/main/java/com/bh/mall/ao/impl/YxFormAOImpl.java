@@ -40,6 +40,7 @@ public class YxFormAOImpl implements IYxFormAO {
     @Autowired
     private IAgentLevelBO agentLevelBO;
 
+
     // 代理申请 （无推荐人）
     @Override
     @Transactional

@@ -9,12 +9,11 @@ public interface ISjFormBO extends IPaginableBO<SjForm> {
 
     public SjForm getSjForm(String code);
 
-    public List<SjForm> querySjFormPage(int start, int limit,
-            SjForm condition);
+    public List<SjForm> querySjFormPage(int start, int limit, SjForm condition);
 
     public List<SjForm> querySjFormList(SjForm condition);
 
-    public String applySjForm(SjForm data);
+    public String applySjForm(SjForm upData);
 
     public String approveSjForm(SjForm data);
 
