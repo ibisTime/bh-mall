@@ -3,7 +3,7 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 审核授权
+ * 审核取消
  * @author: nyc 
  * @since: 2018年3月29日 下午6:28:14 
  * @history:

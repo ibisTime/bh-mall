@@ -1,5 +1,6 @@
 package com.bh.mall.api.impl;
 
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -7,6 +8,7 @@ import com.bh.mall.dto.req.XN627255Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
+import com.bh.mall.spring.SpringContextHolder;
 
 /**
  * update information
@@ -15,12 +17,16 @@ import com.bh.mall.exception.ParaException;
  * @history:
  */
 public class XN627255 extends AProcessor {
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627255Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        // agentAO.updateInformation(req);
+        agentAO.updateInformation(req.getAddress(), req.getArea(),
+            req.getCity(), req.getMobile(), req.getProvince(),
+            req.getRealName(), req.getTeamName(), req.getUserId(),
+            req.getWxId());
         return new BooleanRes(true);
     }
 

@@ -22,6 +22,11 @@ public interface IAgentAO {
     // 修改头像
     public void doModifyPhoto(String userId, String photo);
 
+    // 修改资料
+    public void updateInformation(String address, String area, String city,
+            String mobile, String province, String realName, String teamName,
+            String userId, String WxId);
+
     // 更换手机
     public void doResetMoblie(String userId, String newMobile,
             String smsCaptcha);

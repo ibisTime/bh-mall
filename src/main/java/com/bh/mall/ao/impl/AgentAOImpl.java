@@ -280,6 +280,12 @@ public class AgentAOImpl implements IAgentAO {
         agentBO.refreshManager(data, manager, updater);
     }
 
+    public void updateInformation(String address, String area, String city,
+            String mobile, String province, String realName, String teamName,
+            String userId, String WxId) {
+
+    }
+
     // 修改上级
     @Override
     public void editHighUser(String userId, String highUser, String updater) {
