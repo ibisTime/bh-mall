@@ -14,8 +14,6 @@ public class XN627260Req {
     @NotBlank(message = "编号不能为空")
     private String userId;
 
-    // （必填）上级
-    @NotBlank(message = "上级不能为空")
     private String userReferee;
 
     // （选填）更新人

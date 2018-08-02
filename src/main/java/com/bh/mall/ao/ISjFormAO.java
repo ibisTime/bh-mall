@@ -18,11 +18,11 @@ public interface ISjFormAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    // 升级申请
+    // 升级申请/627262
     public void applySjForm(String userId, String highLevel, String payPdf,
             String payAmount, String teamName, String idNo, String inHand);
 
-    // 审核升级（front）
+    // 审核升级（front）/627263
     public void approveSjFormByB(String userId, String approver, String result,
             String remark);
 
@@ -30,11 +30,11 @@ public interface ISjFormAO {
     public void approveSjFormByP(String userId, String approver, String result,
             String remark);
 
-    // 分页查询
+    // 分页查询/627292
     public Paginable<SjForm> querySjFormPage(int start, int limit,
             SjForm condition);
 
-    // 列表查询
+    // 列表查询/627293
     public List<SjForm> querySjFormList(SjForm condition);
 
     // 详细查询
