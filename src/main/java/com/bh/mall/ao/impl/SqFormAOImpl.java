@@ -15,14 +15,18 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentReportBO;
+import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.IdCardChecker;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.JsAward;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
@@ -37,7 +41,6 @@ import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -62,6 +65,12 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Autowired
     private IAgentLevelBO agentLevelBO;
+
+    @Autowired
+    private IJsAwardBO jsAwardBO;
+
+    @Autowired
+    private IAgentReportBO agentReportBO;
 
     // 申请代理， 有推荐人
     @Override
@@ -155,28 +164,94 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
-    // 通过授权 TODO
     @Override
     @Transactional
-    public void approveSqForm(String userId, String approver, String result,
+    public void approveSqFormByB(String userId, String approver, String result,
             String remark) {
 
-        agentBO.getAgent(userId);
+        Agent applyAgent = agentBO.getAgent(userId);
         SqForm data = new SqForm();
 
-        if (!(EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
-                || EUserStatus.TO_COMPANYAPPROVE.getCode()
-                    .equals(data.getStatus()))) {
+        if (!EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn000", "该代理未处于待授权状态");
         }
 
-        String status = EUserStatus.IMPOWERED.getCode();
+        String status = EUserStatus.NO_THROUGH.getCode();
         String fromUser = ESysUser.SYS_USER_BH.getCode();
 
         Agent highUser = agentBO.getAgent(data.getToUserId());
         // 审核通过
         if (EResult.Result_YES.getCode().equals(result)) {
-            // 更新上级
+
+            AgentLevel impower = agentLevelBO
+                .getAgentByLevel(data.getApplyLevel());
+            // 需要公司授权
+            if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
+                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+            } else {
+                data.setApplyLevel(data.getApplyLevel());
+                status = EUserStatus.IMPOWERED.getCode();
+
+                // 根据用户类型获取账户列表
+                List<String> currencyList = distributeAccount(data.getUserId(),
+                    data.getRealName(), EUserKind.Merchant.getCode());
+                // 分配账户
+                accountBO.distributeAccount(data.getUserId(),
+                    data.getRealName(), EAccountType.Business, currencyList,
+                    ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+
+                // 介绍奖
+
+                long amount = 0L;
+                if (StringUtils.isNotBlank(applyAgent.getIntroducer())) {
+                    Agent buser = agentBO.getAgent(applyAgent.getIntroducer());
+                    JsAward iData = jsAwardBO.getJsAwardByLevel(
+                        buser.getLevel(), data.getApplyLevel());
+                    amount = AmountUtil.mul(impower.getMinCharge(),
+                        iData.getPercent() / 100);
+                    accountBO.transAmountCZB(fromUser,
+                        ECurrency.YJ_CNY.getCode(), buser.getUserId(),
+                        ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_JSJL,
+                        "介绍代理[" + data.getRealName() + "]的"
+                                + EBizType.AJ_JSJL.getCode() + "支出",
+                        "介绍代理[" + data.getRealName() + "]的"
+                                + EBizType.AJ_JSJL.getValue() + "收入",
+                        data.getUserId());
+                }
+
+                // 统计
+                agentReportBO.saveAgentReport(data, applyAgent);
+            }
+        }
+
+        Date date = new Date();
+        data.setApprover(approver);
+        data.setApproveDatetime(date);
+        data.setStatus(status);
+        data.setRemark(remark);
+        sqFormBO.approveSqForm(data);
+
+    }
+
+    @Override
+    @Transactional
+    public void approveSqFormByP(String userId, String approver, String result,
+            String remark) {
+
+        Agent applyAgent = agentBO.getAgent(userId);
+        SqForm data = new SqForm();
+
+        if (EUserStatus.TO_COMPANYAPPROVE.getCode().equals(data.getStatus())) {
+            throw new BizException("xn000", "该代理未处于待授权状态");
+        }
+
+        String status = EUserStatus.NO_THROUGH.getCode();
+        String fromUser = ESysUser.SYS_USER_BH.getCode();
+
+        Agent highUser = agentBO.getAgent(data.getToUserId());
+        // 审核通过
+        if (EResult.Result_YES.getCode().equals(result)) {
+            status = EUserStatus.IMPOWERED.getCode();
 
             if (StringUtils.isNotBlank(data.getToUserId())) {
                 highUser = agentBO.getAgent(data.getToUserId());
@@ -195,55 +270,47 @@ public class SqFormAOImpl implements ISqFormAO {
                     throw new BizException("xn0000", "本等级需要实名认证，该代理还未完成实名认证");
                 }
             }
-            // 需要公司授权
-            if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())
-                    && !EUser.ADMIN.getCode().equals(approver)) {
-                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
-            } else {
-                data.setApplyLevel(data.getApplyLevel());
-                // data.setImpowerDatetime(new Date());
 
-                // 根据用户类型获取账户列表
-                List<String> currencyList = distributeAccount(data.getUserId(),
-                    data.getRealName(), EUserKind.Merchant.getCode());
-                // 分配账户
-                accountBO.distributeAccount(data.getUserId(),
-                    data.getRealName(), EAccountType.Business, currencyList,
-                    ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            data.setApplyLevel(data.getApplyLevel());
+            // data.setImpowerDatetime(new Date());
 
-                // 介绍奖
-                /*
-                 * long amount = 0L; if
-                 * (StringUtils.isNotBlank(data.getIntroducer())) { Agent buser
-                 * = agentBO.getUser(data.getIntroducer()); Intro iData =
-                 * introBO.getIntroByLevel(buser.getLevel(),
-                 * data.getApplyLevel()); amount =
-                 * AmountUtil.mul(impower.getMinCharge(), iData.getPercent() /
-                 * 100); accountBO.transAmountCZB(fromUser,
-                 * ECurrency.YJ_CNY.getCode(), buser.getUserId(),
-                 * ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_JSJL, "介绍代理["
-                 * + data.getRealName() + "]的" + EBizType.AJ_JSJL.getCode() +
-                 * "支出", "介绍代理[" + data.getRealName() + "]的" +
-                 * EBizType.AJ_JSJL.getValue() + "收入", data.getUserId()); }
-                 */
+            // 根据用户类型获取账户列表
+            List<String> currencyList = distributeAccount(data.getUserId(),
+                data.getRealName(), EUserKind.Merchant.getCode());
+            // 分配账户
+            accountBO.distributeAccount(data.getUserId(), data.getRealName(),
+                EAccountType.Business, currencyList, ESystemCode.BH.getCode(),
+                ESystemCode.BH.getCode());
 
-                // 统计
-                // reportBO.saveReport(data);
+            // 介绍奖
+
+            long amount = 0L;
+            if (StringUtils.isNotBlank(applyAgent.getIntroducer())) {
+                Agent buser = agentBO.getAgent(applyAgent.getIntroducer());
+                JsAward iData = jsAwardBO.getJsAwardByLevel(buser.getLevel(),
+                    data.getApplyLevel());
+                amount = AmountUtil.mul(impower.getMinCharge(),
+                    iData.getPercent() / 100);
+                accountBO.transAmountCZB(fromUser, ECurrency.YJ_CNY.getCode(),
+                    buser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
+                    EBizType.AJ_JSJL,
+                    "介绍代理[" + data.getRealName() + "]的"
+                            + EBizType.AJ_JSJL.getCode() + "支出",
+                    "介绍代理[" + data.getRealName() + "]的"
+                            + EBizType.AJ_JSJL.getValue() + "收入",
+                    data.getUserId());
             }
 
-            // 未通过，有推荐人
-        } else if (StringUtils.isNotBlank(data.getUserReferee())) {
-            status = EUserStatus.IMPOWERO_INFO.getCode();
-        } else {
-            status = EUserStatus.TO_MIND.getCode();
+            // 统计
+            agentReportBO.saveAgentReport(data, applyAgent);
+
         }
 
         Date date = new Date();
-        if (EUserStatus.IMPOWERED.getCode().equals(status)) {
-            data.setApproveDatetime(date);
-        }
 
+        data.setStatus(status);
         data.setApprover(approver);
+        data.setApproveDatetime(date);
         data.setApplyDatetime(date);
         data.setRemark(remark);
         sqFormBO.approveSqForm(data);
@@ -390,6 +457,10 @@ public class SqFormAOImpl implements ISqFormAO {
             currencyList.add(ECurrency.MK_CNY.getCode());
         }
         return currencyList;
+    }
+
+    @Override
+    public void toQuit() {
     }
 
 }

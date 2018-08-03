@@ -26,8 +26,15 @@ public interface ISqFormAO {
     public XN627303Res applyHaveUserReferee(XN627251Req req);
 
     // 审核授权
-    public void approveSqForm(String userId, String approver, String result,
+    public void approveSqFormByP(String userId, String approver, String result,
             String remark);
+
+    // 审核授权
+    public void approveSqFormByB(String userId, String approver, String result,
+            String remark);
+
+    // 申请退出
+    public void toQuit();
 
     // 审核取消授权
     public void cancelSqForm(String userId, String approver, String result,

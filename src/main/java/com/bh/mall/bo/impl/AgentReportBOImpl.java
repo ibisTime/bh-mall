@@ -11,31 +11,33 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.dao.IAgentReportDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentReport;
+import com.bh.mall.domain.SqForm;
 
 @Component
-public class AgentReportBOImpl extends PaginableBOImpl<AgentReport> implements IAgentReportBO {
+public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
+        implements IAgentReportBO {
 
     @Autowired
     private IAgentReportDAO agentReportDAO;
 
-    public void saveAgentReport(Agent user) {
+    public void saveAgentReport(SqForm sqForm, Agent agent) {
         AgentReport data = new AgentReport();
-        data.setUserId(user.getUserId());
-        data.setRealName(user.getRealName());
-        data.setWxId(user.getWxId());
-        data.setMobile(user.getMobile());
+        data.setUserId(sqForm.getUserId());
+        data.setRealName(sqForm.getRealName());
+        data.setWxId(sqForm.getWxId());
+        data.setMobile(sqForm.getMobile());
 
-        data.setLevel(user.getLevel());
-        data.setUserReferee(user.getUserReferee());
-        data.setIntroducer(user.getIntroducer());
-        data.setHighUserId(user.getHighUserId());
-        data.setManager(user.getManager());
+        data.setLevel(agent.getLevel());
+        data.setUserReferee(sqForm.getUserReferee());
+        data.setIntroducer(agent.getIntroducer());
+        data.setHighUserId(agent.getHighUserId());
+        data.setManager(agent.getManager());
 
-        data.setProvince(user.getProvince());
-        data.setCity(user.getCity());
-        data.setArea(user.getArea());
-        data.setAddress(user.getAddress());
-        data.setImpowerDatetime(user.getImpowerDatetime());
+        data.setProvince(sqForm.getProvince());
+        data.setCity(sqForm.getCity());
+        data.setArea(sqForm.getArea());
+        data.setAddress(sqForm.getAddress());
+        data.setImpowerDatetime(agent.getImpowerDatetime());
 
         agentReportDAO.insert(data);
 
