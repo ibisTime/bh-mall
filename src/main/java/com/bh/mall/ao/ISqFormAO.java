@@ -34,7 +34,7 @@ public interface ISqFormAO {
             String remark);
 
     // 申请退出
-    public void toQuit();
+    public void toQuit(String userId);
 
     // 审核取消授权
     public void cancelSqForm(String userId, String approver, String result,

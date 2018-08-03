@@ -313,7 +313,7 @@ public class AgentAOImpl implements IAgentAO {
     // 列表查询代理
     @Override
     public List<Agent> queryAgentList(Agent condition) {
-        return agentBO.queryUserList(condition);
+        return agentBO.queryAgentList(condition);
     }
 
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
@@ -325,7 +325,7 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public List<Agent> queryAgentJgList(Agent condition) {
 
-        List<Agent> agentList = agentBO.queryUserList(condition);
+        List<Agent> agentList = agentBO.queryAgentList(condition);
         if (CollectionUtils.isNotEmpty(agentList)) {
             getAgentList(agentList);
         }
@@ -337,7 +337,7 @@ public class AgentAOImpl implements IAgentAO {
         for (Agent agent : list) {
             Agent condition = new Agent();
             condition.setHighUserId(agent.getUserId());
-            List<Agent> agentList = agentBO.queryUserList(condition);
+            List<Agent> agentList = agentBO.queryAgentList(condition);
             if (CollectionUtils.isNotEmpty(agentList)) {
                 agent.setAgentList(agentList);
                 getAgentList(agentList);

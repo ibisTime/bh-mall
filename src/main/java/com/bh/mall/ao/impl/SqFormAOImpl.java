@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,9 @@ import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentReportBO;
+import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
+import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
@@ -26,7 +29,9 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.JsAward;
+import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
@@ -38,6 +43,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
@@ -72,6 +78,12 @@ public class SqFormAOImpl implements ISqFormAO {
     @Autowired
     private IAgentReportBO agentReportBO;
 
+    @Autowired
+    private IOutOrderBO outOrderBO;
+
+    @Autowired
+    private IInnerOrderBO innerOrderBO;
+
     // 申请代理， 有推荐人
     @Override
     @Transactional
@@ -100,7 +112,7 @@ public class SqFormAOImpl implements ISqFormAO {
             if (!idCardChecker.validate()) {
                 throw new BizException("xn0000", "请输入正确的身份证号码");
             }
-            agentBO.getUserByIdNo(req.getIdNo());
+            agentBO.getAgentByIdNo(req.getIdNo());
         }
 
         Agent data = agentBO.getAgent(req.getUserId());
@@ -381,7 +393,7 @@ public class SqFormAOImpl implements ISqFormAO {
             if (!idCardChecker.validate()) {
                 throw new BizException("xn0000", "请输入正确的身份证号码");
             }
-            agentBO.getUserByIdNo(req.getIdNo());
+            agentBO.getAgentByIdNo(req.getIdNo());
         }
 
         data.setUserId(req.getUserId());
@@ -460,7 +472,41 @@ public class SqFormAOImpl implements ISqFormAO {
     }
 
     @Override
-    public void toQuit() {
+    public void toQuit(String userId) {
+        Agent agent = agentBO.getAgent(userId);
+
+        // 是否有下级
+        Agent uCondition = new Agent();
+        uCondition.setHighUserId(agent.getUserId());
+        List<Agent> list = agentBO.queryAgentList(uCondition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            throw new BizException("xn000", "您还有下级，无法申请退出");
+        }
+
+        // 可提现账户是否余额
+        Account txAccount = accountBO.getAccountByUser(agent.getUserId(),
+            ECurrency.YJ_CNY.getCode());
+        if (txAccount.getAmount() > 0) {
+            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
+        }
+
+        // 是否有未完成的订单
+        OutOrder oCondition = new OutOrder();
+        oCondition.setApplyUser(agent.getUserId());
+        oCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
+        long count = outOrderBO.selectCount(oCondition);
+        if (count != 0) {
+            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
+        }
+
+        InnerOrder ioCondition = new InnerOrder();
+        ioCondition.setApplyUser(agent.getUserId());
+        ioCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
+        long ioCount = innerOrderBO.selectCount(ioCondition);
+        if (ioCount != 0) {
+            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
+        }
+
     }
 
 }

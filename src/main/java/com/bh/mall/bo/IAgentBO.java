@@ -44,21 +44,21 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     /*************** 获取数据库信息 **********************/
     // 获取数据库user信息
-    public List<Agent> queryUserList(Agent condition);
+    public List<Agent> queryAgentList(Agent condition);
 
     // 根据身份号获取用户信息
-    public Agent getUserByIdNo(String idNo);
+    public Agent getAgentByIdNo(String idNo);
 
     public void checkTeamName(String teamName);
 
     // 判断推荐人是否存在(手机号)
-    public void checkUserReferee(String userReferee, String systemCode);
+    public void checkAgentReferee(String userReferee, String systemCode);
 
-    public List<Agent> queryUserList(String mobile, String kind);
+    public List<Agent> queryAgentList(String mobile, String kind);
 
-    public List<Agent> getUsersByUserReferee(String userReferee);
+    public List<Agent> getAgentByUserReferee(String userReferee);
 
-    public Agent getUserByLoginName(String loginName, String systemCode);
+    public Agent getAgentByLoginName(String loginName, String systemCode);
 
     public void refreshStatus(Agent data, String updater, String remark);
 

@@ -113,12 +113,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
      * @see com.ibis.pz.user.IAgentBO#queryAgentLevelList(com.Agent.pz.domain.AgentDO)
      */
     @Override
-    public List<Agent> queryUserList(Agent data) {
+    public List<Agent> queryAgentList(Agent data) {
         return agentDAO.selectList(data);
     }
 
     @Override
-    public List<Agent> queryUserList(String mobile, String kind) {
+    public List<Agent> queryAgentList(String mobile, String kind) {
         Agent condition = new Agent();
         condition.setMobile(mobile);
         condition.setKind(kind);
@@ -176,7 +176,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     // 检查推荐人
     @Override
-    public void checkUserReferee(String userReferee, String systemCode) {
+    public void checkAgentReferee(String userReferee, String systemCode) {
         if (StringUtils.isNotBlank(userReferee)) {
             // 判断格式
             Agent condition = new Agent();
@@ -189,7 +189,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public List<Agent> getUsersByUserReferee(String userReferee) {
+    public List<Agent> getAgentByUserReferee(String userReferee) {
         List<Agent> userList = new ArrayList<Agent>();
         if (StringUtils.isNotBlank(userReferee)) {
             Agent condition = new Agent();
@@ -217,7 +217,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
      * @see com.ibis.pz.user.IAgentBO#getAgentByMobile(java.lang.String)
      */
     @Override
-    public Agent getUserByLoginName(String loginName, String systemCode) {
+    public Agent getAgentByLoginName(String loginName, String systemCode) {
         Agent data = null;
         if (StringUtils.isNotBlank(loginName)) {
             Agent condition = new Agent();
@@ -324,7 +324,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     // 检查身份证号
     @Override
-    public Agent getUserByIdNo(String idNo) {
+    public Agent getAgentByIdNo(String idNo) {
         Agent data = null;
         if (StringUtils.isNotBlank(idNo)) {
             Agent condition = new Agent();

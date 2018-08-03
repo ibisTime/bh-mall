@@ -78,7 +78,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         // 推荐人数是否满足半门槛
         List<Agent> userReferee = agentBO
-            .getUsersByUserReferee(data.getUserId());
+            .getAgentByUserReferee(data.getUserId());
         if (highLevel.getReNumber() >= userReferee.size()) {
             if (StringValidater.toLong(payAmount) <= highLevel
                 .getMinChargeAmount()) {
