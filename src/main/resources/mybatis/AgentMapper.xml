@@ -197,16 +197,11 @@
 		,t.team_name
 		,t.id_kind
 		,t.id_no
-		,t.id_front
-
-		,t.id_behind
+	
 		,t.id_hand
 		,t.real_name
-		,t.role_code
 		,t.status
 
-		,t.source
-		,t.apply_datetime
 		,t.manager
 		,t.red_amount
 		,t.union_id
@@ -227,10 +222,6 @@
 		,t.last_agent_log
 		,t.impower_datetime
 		,t.remark
-		,t.company_code
-		,t.system_code
-		,t.pay_pdf
-		,t.pay_amount
 		FROM
 		tbh_user t
 		<include refid="where_condition" />
@@ -246,78 +237,6 @@
 		<include refid="where_condition" />
 	</select>
 
-	<select id="select_agent_front" parameterType="agent" resultMap="agent_DB_Result">
-		SELECT
-		t.user_id
-		,from_user_id
-		,t.login_name
-		,t.mobile
-		,t.wx_id
-		,t.photo
-
-		,t.nickname
-		,t.trade_pwd
-
-		,t.kind
-		,t.level
-		,t.apply_level
-		,t.user_referee
-		,t.introducer
-
-		,t.high_user_id
-		,t.team_name
-		,t.id_kind
-		,t.id_no
-		,t.id_front
-
-		,t.id_behind
-		,t.id_hand
-		,t.real_name
-		,t.role_code
-		,t.status
-
-		,t.source
-		,t.apply_datetime
-		,t.manager
-		,t.red_amount
-		,t.union_id
-
-		,t.h5_open_id
-		,t.app_open_id
-		,t.province
-		,t.city
-		,t.area
-
-		,t.address
-		,t.create_datetime
-		,t.updater
-		,t.update_datetime
-		,t.approver
-
-		,t.approve_datetime
-		,t.last_agent_log
-		,t.impower_datetime
-		,t.remark
-		,t.company_code
-		,t.system_code
-		,t.pay_pdf
-		,t.pay_amount
-		FROM
-		tbh_user t
-		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>
-	</select>
-
-
-	<select id="select_count" parameterType="agent" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_user t LEFT JOIN tbh_agency_log l ON
-		t.user_id = l.apply_user
-		<include refid="where_condition" />
-	</select>
 
 	<insert id="insert_agent" parameterType="agent">
 		INSERT INTO
@@ -342,18 +261,12 @@
 
 		,id_kind
 		,id_no
-		,id_front
-		,id_behind
 		,id_hand
 
 		,real_name
-		,role_code
 		,status
-		,source
-		,apply_datetime
 
 		,manager
-		,red_amount
 		,union_id
 		,h5_open_id
 		,app_open_id
@@ -371,8 +284,6 @@
 		,last_agent_log
 
 		,remark
-		,company_code
-		,system_code
 		)
 		VALUES(
 		#{userId}
@@ -395,18 +306,12 @@
 
 		,#{idKind}
 		,#{idNo}
-		,#{idFront}
-		,#{idBehind}
 		,#{idHand}
 
 		,#{realName}
-		,#{roleCode}
 		,#{status}
-		,#{source}
-		,#{applyDatetime}
 
 		,#{manager}
-		,#{redAmount}
 		,#{unionId}
 		,#{h5OpenId}
 		,#{appOpenId}
@@ -424,8 +329,6 @@
 		,#{lastAgentLog}
 
 		,#{remark}
-		,#{companyCode}
-		,#{systemCode}
 		)
 	</insert>
 
@@ -447,33 +350,22 @@
 		login_name = #{loginName}
 		,mobile = #{mobile}
 		,wx_id = #{wxId}
-		,photo =
-		#{photo}
+		,photo = #{photo}
 		,nickname = #{nickname}
 		,login_pwd = #{loginPwd}
 		,login_pwd_strength = #{loginPwdStrength}
 		,kind = #{kind}
-		,level =
-		#{level}
-		,apply_level = #{applyLevel}
+		,level = #{level}
 		,user_referee = #{userReferee}
 		,introducer = #{introducer}
 		,high_user_id = #{highUserId}
-		,team_name =
-		#{teamName}
+		,team_name = #{teamName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
-		,id_front = #{idFront}
-		,id_behind = #{idBehind}
 		,id_hand = #{idHand}
 		,real_name = #{realName}
-		,role_code = #{roleCode}
 		,status = #{status}
-		,source = #{source}
-		,apply_datetime = #{applyDatetime}
 		,manager = #{manager}
-		,red_amount =
-		#{redAmount}
 		,union_id = #{unionId}
 		,h5_open_id = #{h5OpenId}
 		,app_open_id = #{appOpenId}
@@ -481,18 +373,13 @@
 		,city = #{city}
 		,area = #{area}
 		,address = #{address}
-		,create_datetime =
-		#{createDatetime}
+		,create_datetime = #{createDatetime}
 		,updater = #{updater}
-		,update_datetime =
-		#{updateDatetime}
+		,update_datetime = #{updateDatetime}
 		,approver = #{approver}
-		,approve_datetime =
-		#{approveDatetime}
+		,approve_datetime =	#{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
 		,remark = #{remark}
-		,company_code = #{companyCode}
-		,system_code = #{systemCode}
 		WHERE
 		user_id = #{userId}
 	</update>
@@ -546,43 +433,14 @@
 		WHERE user_id = #{userId}
 	</update>
 
-	<update id="allot_gency" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status
-		= #{status}
-		,manager = #{manager}
-		,approver = #{approver}
-		,approve_datetime = #{approveDatetime}
-		,last_agent_log =
-		#{lastAgentLog}
-		WHERE user_id = #{userId}
-	</update>
-
-	<update id="ignore_gency" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		mobile = #{mobile}
-		,id_no = #{idNo}
-		,user_referee = #{userReferee}
-		,high_user_id = #{highUserId}
-		
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,status = #{status}
-		,last_agent_log = #{lastAgentLog}
-		WHERE user_id = #{userId}
-	</update>
 
 
 	<update id="update_information" parameterType="agent">
 		UPDATE tbh_user
 		SET
-		level = #{level}
-		,province = #{province}
+		province = #{province}
 		,city = #{city}
-		,area =
-		#{area}
+		,area = #{area}
 		,address = #{address}
 
 		,mobile = #{mobile}
@@ -592,44 +450,12 @@
 		#{userId}
 	</update>
 
-
-
-	<update id="cancel_impower" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,last_agent_log = #{lastAgentLog}
-		WHERE user_id =
-		#{userId}
-	</update>
-
-	<update id="approve_impower" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,mobile = #{mobile}
-		,id_no = #{idNo}
-		,high_user_id = #{highUserId}
-		,user_referee = #{userReferee}
-		,team_name = #{teamName}
-		,approver = #{approver}
-		,level = #{level}
-		,approve_datetime =
-		#{approveDatetime}
-		,impower_datetime = #{impowerDatetime}
-		,last_agent_log = #{lastAgentLog}
-		,remark = #{remark}
-		WHERE user_id =
-		#{userId}
-	</update>
-
 	<update id="update_highUser" parameterType="agent">
 		UPDATE tbh_user
 		SET
 		high_user_id = #{highUserId}
 		,updater = #{updater}
-		,update_datetime =
-		#{updateDatetime}
+		,update_datetime = #{updateDatetime}
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id =
 		#{userId}
@@ -640,8 +466,7 @@
 		SET
 		user_referee = #{userReferee}
 		,updater = #{updater}
-		,update_datetime
-		= #{updateDatetime}
+		,update_datetime = #{updateDatetime}
 		WHERE user_id = #{userId}
 	</update>
 
@@ -650,144 +475,12 @@
 		SET
 		manager = #{manager}
 		,updater = #{updater}
-		,update_datetime =
-		#{updateDatetime}
+		,update_datetime = #{updateDatetime}
 		WHERE user_id = #{userId}
 	</update>
 
 
-	<update id="upgrade_level" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,apply_level = #{applyLevel}
-		,team_name = #{teamName}
-		,pay_amount = #{payAmount}
-		,pay_pdf = #{payPdf}
-		,last_agent_log =
-		#{lastAgentLog}
-		WHERE user_id = #{userId}
-	</update>
 
-	<update id="approve_upgrade" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,level = #{level}
-		,approver = #{approver}
-		,approve_datetime = #{approveDatetime}
-		,last_agent_log =
-		#{lastAgentLog}
-		,pay_amount = #{payAmount}
-		,remark = #{remark}
-		WHERE
-		user_id = #{userId}
-	</update>
-
-
-	<update id="accept_intention" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,approver = #{approver}
-		,approve_datetime =
-		#{approveDatetime}
-		,last_agent_log = #{lastAgentLog}
-		,remark = #{remark}
-		WHERE user_id = #{userId}
-	</update>
-
-
-	<update id="apply_intent" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,wx_id = #{wxId}
-		,mobile = #{mobile}
-		,real_name =
-		#{realName}
-
-		,apply_level = #{applyLevel}
-		,user_referee = #{userReferee}
-		,introducer =
-		#{introducer}
-		,id_kind = #{idKind}
-		,id_no = #{idNo}
-
-		,id_front = #{idFront}
-		,id_behind = #{idBehind}
-		,id_hand = #{idHand}
-		,province =
-		#{province}
-		,city = #{city}
-		,area = #{area}
-
-		,address = #{address}
-		,apply_level = #{applyLevel}
-		,apply_datetime = #{applyDatetime}
-		WHERE user_id = #{userId}
-	</update>
-
-
-	<update id="to_apply" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status =
-		#{status}
-		,wx_id = #{wxId}
-		,mobile = #{mobile}
-		,team_name = #{teamName}
-		,apply_level = #{applyLevel}
-
-		,high_user_id = #{highUserId}
-		,user_referee = #{userReferee}
-		,introducer =
-		#{introducer}
-		,id_kind = #{idKind}
-		,id_no = #{idNo}
-		,id_front =
-		#{idFront}
-
-		,id_behind = #{idBehind}
-		,id_hand = #{idHand}
-		,real_name = #{realName}
-		,status =
-		#{status}
-		,source = #{source}
-
-		,pay_amount = #{payAmount}
-		,pay_pdf = #{payPdf}
-		,source = #{source}
-		,apply_datetime
-		= #{applyDatetime}
-		,province = #{province}
-		,city = #{city}
-		,area =
-		#{area}
-
-		,address = #{address}
-		,last_agent_log = #{lastAgentLog}
-		,remark = #{remark}
-		WHERE user_id = #{userId}
-	</update>
-
-
-	<update id="add_info" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status =
-		#{status}
-		,apply_level = #{applyLevel}
-		,team_name = #{teamName}
-
-		,introducer = #{introducer}
-		,id_kind = #{idKind}
-		,id_no = #{idNo}
-		,id_hand = #{idHand}
-		,apply_datetime = #{applyDatetime}
-		WHERE user_id =
-		#{userId}
-	</update>
 
 
 	<update id="update_high" parameterType="agent">
@@ -804,41 +497,7 @@
 	</update>
 
 
-	<update id="reapply_agent" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,user_referee = #{userReferee}
-		WHERE user_id =
-		#{userId}
-	</update>
 
-	<update id="update_role" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		role_code = #{roleCode}
-		,updater = #{updater}
-		,update_datetime =
-		#{updateDatetime}
-		,remark = #{remark}
-		WHERE user_id = #{userId}
-	</update>
-
-
-	<update id="approve_canenl" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		status = #{status}
-		,mobile = #{mobile}
-		,id_no = #{idNo}
-		,approver =
-		#{approver}
-		,approve_datetime = #{approveDatetime}
-		,last_agent_log =
-		#{lastAgentLog}
-		,remark = #{remark}
-		WHERE user_id = #{userId}
-	</update>
 
 	<update id="unpdate_teamName" parameterType="agent">
 		UPDATE tbh_user

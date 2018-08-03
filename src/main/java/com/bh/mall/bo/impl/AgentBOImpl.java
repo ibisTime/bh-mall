@@ -426,19 +426,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public void refreshRole(String userId, String roleCode, String updater,
-            String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            agentDAO.updateRole(data);
-        }
-    }
-
-    @Override
     public void resetBindMobile(Agent buser, String newMobile) {
         buser.setMobile(newMobile);
         agentDAO.resetBindMobile(buser);
@@ -532,7 +519,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         }
     }
 
-    // TODO
     @Override
     public Agent getTeamLeader(String teamName) {
         Agent condition = new Agent();

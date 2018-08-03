@@ -84,9 +84,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public void refreshAgent(Agent data);
 
-    public void refreshRole(String userId, String roleCode, String updater,
-            String remark);
-
     public void resetBindMobile(Agent buser, String newMobile);
 
     public void refreshHighUser(Agent data, String highUser, String updater);
