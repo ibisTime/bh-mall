@@ -280,13 +280,16 @@ public class AgentAOImpl implements IAgentAO {
         agentBO.refreshManager(data, manager, updater);
     }
 
+    // 修改信息
+    @Override
     public void editInformation(String userId, String wxId, String mobile,
             String realName, String teamName, String province, String city,
             String area, String address) {
         Agent agent = agentBO.getAgent(userId);
         // 一级代理修改团队名称，下级同步
-        if (agentBO.isHighest(userId)) {
-
+        if (agentBO.isHighest(agent.getUserId())) {
+            agentBO.refreshTeamName(agent, teamName);
+            this.editTeamName(agent.getUserId(), teamName);
         } else {
             // 非一级代理不允许修改团队名称
             throw new BizException("xn00000", "非最高等级代理的团队名称无法修改");
@@ -366,6 +369,16 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public Agent getAgent(String userId) {
         return agentBO.getAgent(userId);
+    }
+
+    // 修改下级团队名称
+    private void editTeamName(String userId, String teamName) {
+        Agent condition = new Agent();
+        condition.setHighUserId(userId);
+        List<Agent> list = agentBO.queryAgentList(condition);
+        for (Agent data : list) {
+            agentBO.refreshTeamName(data, teamName);
+        }
     }
 
 }

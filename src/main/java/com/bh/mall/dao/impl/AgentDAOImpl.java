@@ -138,4 +138,9 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
         super.update(NAMESPACE.concat("update_info"), data);
     }
 
+    @Override
+    public void updateTeamName(Agent data) {
+        super.update(NAMESPACE.concat("update_teamName"), data);
+    }
+
 }

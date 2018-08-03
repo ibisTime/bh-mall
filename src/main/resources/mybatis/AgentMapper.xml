@@ -492,7 +492,7 @@
 		WHERE user_id = #{userId}
 	</update>
 
-	<update id="unpdate_teamName" parameterType="agent">
+	<update id="update_teamName" parameterType="agent">
 		UPDATE tbh_user
 		SET
 		team_name = #{teamName}

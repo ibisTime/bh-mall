@@ -213,40 +213,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return data;
     }
 
-    /** 
-     * @see com.ibis.pz.user.IAgentBO#getAgentByMobile(java.lang.String)
-     */
-    @Override
-    public Agent getAgentByLoginName(String loginName, String systemCode) {
-        Agent data = null;
-        if (StringUtils.isNotBlank(loginName)) {
-            Agent condition = new Agent();
-            condition.setLoginName(loginName);
-            List<Agent> list = agentDAO.selectList(condition);
-            if (list != null && list.size() > 1) {
-                throw new BizException("li01006", "登录名重复");
-            }
-            if (CollectionUtils.isNotEmpty(list)) {
-                data = list.get(0);
-            }
-        }
-        return data;
-    }
-
-    @Override
-    public void isLoginNameExist(String loginName, String kind) {
-        if (StringUtils.isNotBlank(loginName)) {
-            // 判断格式
-            Agent condition = new Agent();
-            condition.setLoginName(loginName);
-            condition.setKind(kind);
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "登录名已经存在");
-            }
-        }
-    }
-
     @Override
     public boolean isUserExist(String userId) {
         Agent condition = new Agent();
@@ -337,16 +303,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return data;
     }
 
-    /*************** 更新信息 **********************/
-
-    // 重置密码
-    @Override
-    public void resetLoginPwd(Agent buser, String loginPwd) {
-        buser.setLoginPwd(MD5Util.md5(loginPwd));
-        buser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        agentDAO.updateLoginPwd(buser);
-    }
-
     // 更新状态
     @Override
     public void refreshStatus(Agent data, String updater, String remark) {
@@ -364,17 +320,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
         // insert new agent log
         agentLogBO.saveAgentLog(data, null);
-    }
-
-    // 更新登录名
-    @Override
-    public void refreshLoginName(String userId, String loginName) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setLoginName(loginName);
-            agentDAO.updateLoginName(data);
-        }
     }
 
     // 更新昵称
@@ -549,6 +494,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setUserReferee(null);
 
         agentDAO.updateInfo(data);
+    }
+
+    @Override
+    public void refreshTeamName(Agent data, String teamName) {
+        data.setTeamName(teamName);
+        agentDAO.updateTeamName(data);
     }
 
 }

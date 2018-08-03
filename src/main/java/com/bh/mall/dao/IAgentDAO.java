@@ -137,4 +137,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
 
     public void updateInfo(Agent data);
 
+    public void updateTeamName(Agent data);
+
 }

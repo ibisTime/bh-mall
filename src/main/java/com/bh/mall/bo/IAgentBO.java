@@ -18,9 +18,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile);
 
-    // 判断登录名是否存在
-    public void isLoginNameExist(String loginName, String kind);
-
     public String getUserId(String mobile, String kind);
 
     // 查询openId
@@ -58,8 +55,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public List<Agent> getAgentByUserReferee(String userReferee);
 
-    public Agent getAgentByLoginName(String loginName, String systemCode);
-
     public void refreshStatus(Agent data, String updater, String remark);
 
     public Agent getAgentByMobile(String introducer);
@@ -70,11 +65,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
             String openId, String nickname, String photo);
 
     public String saveUser(String mobile, String kind);
-
-    // 更新
-    public void resetLoginPwd(Agent buser, String loginPwd);
-
-    public void refreshLoginName(String userId, String loginName);
 
     public void refreshNickname(String userId, String nickname);
 
@@ -107,5 +97,8 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public boolean isHighest(String userId);
 
     public void refreshInfo(Agent applyAgent);
+
+    // 修改团队名称
+    public void refreshTeamName(Agent data, String teamName);
 
 }
