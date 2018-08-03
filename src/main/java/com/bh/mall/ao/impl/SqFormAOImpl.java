@@ -331,15 +331,52 @@ public class SqFormAOImpl implements ISqFormAO {
 
     // 取消授权
     @Override
-    public void cancelSqForm(String userId, String approver, String result,
+    public void cancelSqFormByB(String userId, String approver, String result,
+            String remark) {
+        Agent agent = agentBO.getAgent(userId);
+
+        SqForm data = new SqForm();
+        if (!EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())) {
+            throw new BizException("xn000", "该代理未申请退出状态");
+        }
+
+        String status = EUserStatus.IMPOWERED.getCode();
+        if (EResult.Result_YES.getCode().equals(result)) {
+            status = EUserStatus.CANCELED.getCode();
+            AgentLevel agentLevel = agentLevelBO
+                .getAgentByLevel(agent.getLevel());
+            // 是否需要公司审核
+            if (EBoolean.YES.getCode()
+                .equals(agentLevel.getIsCompanyImpower())) {
+                status = EUserStatus.TO_COMPANYCANCEL.getCode();
+            } else {
+                Account account = accountBO.getAccountByUser(data.getUserId(),
+                    ECurrency.MK_CNY.getCode());
+                // 账户清零
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.NBZ, null, null, data.getUserId(),
+                    EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
+                    -account.getAmount());
+
+            }
+        }
+
+        data.setStatus(status);
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setRemark(remark);
+        sqFormBO.cancelSqForm(data);
+    }
+
+    // 取消授权
+    @Override
+    public void cancelSqFormByP(String userId, String approver, String result,
             String remark) {
         agentBO.getAgent(userId);
 
         SqForm data = new SqForm();
-        if (!(EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())
-                || EUserStatus.TO_COMPANYCANCEL.getCode()
-                    .equals(data.getStatus()))) {
-            throw new BizException("xn000", "该代理未处于申请取消状态");
+        if (!EUserStatus.TO_COMPANYCANCEL.getCode().equals(data.getStatus())) {
+            throw new BizException("xn000", "该代理未申请退出");
         }
 
         String status = EUserStatus.IMPOWERED.getCode();
@@ -351,7 +388,6 @@ public class SqFormAOImpl implements ISqFormAO {
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
                 null, null, data.getUserId(), EBizType.AJ_QXSQ,
                 EBizType.AJ_QXSQ.getValue(), -account.getAmount());
-
         }
 
         data.setStatus(status);

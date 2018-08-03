@@ -1166,11 +1166,22 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn00000",
                 "您今日的购买数量不能多于[" + price.getMonthlyNumber() + "]");
         }
+    }
 
+    // 日、周、月已购数量
+    private int getNumber(String agentId, Date startDatetime,
+            Date endDatetime) {
+        int number = 0;
+        List<OutOrder> list = outOrderBO.getProductQuantity(agentId,
+            startDatetime, endDatetime);
+        for (OutOrder outOrder : list) {
+            Specs specs = specsBO.getSpecs(outOrder.getSpecsCode());
+            number = number + specs.getNumber();
+        }
+        return number;
     }
 
     private void checkAmount(Agent agent, AgentLevel agentLevel, Long amount) {
-
         // 门槛账户
         Account account = accountBO.getAccountByUser(agent.getUserId(),
             ECurrency.MK_CNY.getCode());
@@ -1188,19 +1199,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 "剩余门槛不能大于[" + agentLevel.getMinSurplus() / 1000 + "]元，目前余额还有["
                         + restAmount / 1000 + "]元");
         }
-    }
-
-    // 日、周、月已购数量
-    private int getNumber(String agentId, Date startDatetime,
-            Date endDatetime) {
-        int number = 0;
-        List<OutOrder> list = outOrderBO.getProductQuantity(agentId,
-            startDatetime, endDatetime);
-        for (OutOrder outOrder : list) {
-            Specs specs = specsBO.getSpecs(outOrder.getSpecsCode());
-            number = number + specs.getNumber();
-        }
-        return number;
     }
 
 }

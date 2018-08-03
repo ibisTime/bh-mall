@@ -28,8 +28,9 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     IInOrderDAO inOrderDAO;
 
     @Override
-    public String saveInOrder(String userId, String realName, String teamName,
-            String toUserId, String productCode, String productName,
+    public String saveInOrder(String applyUser, String realName, Integer level,
+            String toUserId, String toUserName, String teamName,
+            String teamLeader, String productCode, String productName,
             String specsCode, String specsName, String pic, Long price,
             Integer quantity, String applyNote) {
         InOrder data = new InOrder();
@@ -37,10 +38,15 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
             .generate(EGeneratePrefix.Order.getCode());
 
         data.setCode(code);
-        data.setApplyUser(userId);
+        data.setApplyUser(applyUser);
         data.setRealName(realName);
+        data.setLevel(level);
         data.setTeamName(teamName);
-        data.setToUser(toUserId);
+        data.setToUserId(toUserId);
+
+        data.setToUserName(toUserName);
+        data.setTeamName(teamName);
+        data.setTeamLeader(teamLeader);
 
         data.setProductCode(productCode);
         data.setProductName(productName);

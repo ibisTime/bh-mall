@@ -40,7 +40,13 @@ public class InOrder extends ABaseDO {
     private Long price;
 
     // 向谁提货
-    private String toUser;
+    private String toUserId;
+
+    // 订单归属人名字
+    private String toUserName;
+
+    // 等级
+    private Integer level;
 
     // 单价
     private Long amount;
@@ -71,6 +77,9 @@ public class InOrder extends ABaseDO {
 
     // 团队名称
     private String teamName;
+
+    // 团队长
+    private String teamLeader;
 
     // 下单备注
     private String applyNote;
@@ -105,12 +114,6 @@ public class InOrder extends ABaseDO {
 
     // 更信人名字
     private String updateName;
-
-    // 订单归属人名字
-    private String toUserName;
-
-    // 等级
-    private Integer level;
 
     // 用户
     private Agent agent;
@@ -226,12 +229,12 @@ public class InOrder extends ABaseDO {
         this.price = price;
     }
 
-    public String getToUser() {
-        return toUser;
+    public String getToUserId() {
+        return toUserId;
     }
 
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
+    public void setToUserId(String toUser) {
+        this.toUserId = toUser;
     }
 
     public Long getAmount() {
@@ -432,6 +435,14 @@ public class InOrder extends ABaseDO {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getTeamLeader() {
+        return teamLeader;
+    }
+
+    public void setTeamLeader(String teamLeader) {
+        this.teamLeader = teamLeader;
     }
 
 }

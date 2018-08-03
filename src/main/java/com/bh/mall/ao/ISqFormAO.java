@@ -36,8 +36,12 @@ public interface ISqFormAO {
     // 申请退出
     public void toQuit(String userId);
 
-    // 审核取消授权
-    public void cancelSqForm(String userId, String approver, String result,
+    // 审核取消授权(代理)
+    public void cancelSqFormByB(String userId, String approver, String result,
+            String remark);
+
+    // 审核取消授权(平台)
+    public void cancelSqFormByP(String userId, String approver, String result,
             String remark);
 
     //  实名认证信息补充
