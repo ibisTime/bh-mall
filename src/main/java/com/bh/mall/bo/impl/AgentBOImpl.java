@@ -431,7 +431,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         if (StringUtils.isNotBlank(userId)) {
             Agent data = new Agent();
             data.setUserId(userId);
-            data.setRoleCode(roleCode);
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);
@@ -456,7 +455,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         alData.setUserId(data.getUserId());
         alData.setStatus(EAgentType.Update.getCode());
         Date date = new Date();
-        alData.setApplyDatetime(date);
         agentDAO.updateHigh(alData);
 
         // insert new log

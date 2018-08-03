@@ -38,7 +38,6 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
 
         alData.setUserReferee(data.getUserReferee());
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
         alData.setApprover(data.getApprover());
         alData.setApproveDatetime(new Date());
         alData.setStatus(data.getStatus());
@@ -96,7 +95,6 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         alData.setCode(code);
         alData.setType(EAgentType.Allot.getCode());
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
 
         alData.setApplyLevel(data.getApplyLevel());
         alData.setTeamName(data.getTeamName());
@@ -118,7 +116,6 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         alData.setCode(code);
         alData.setType(EAgentType.OUT.getCode());
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
         alData.setLevel(data.getLevel());
 
         alData.setToUserId(data.getHighUserId());
@@ -140,7 +137,6 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
 
         alData.setCode(code);
         alData.setApplyUser(user.getUserId());
-        alData.setApplyDatetime(user.getApplyDatetime());
         alData.setType(EAgentType.Imporder.getCode());
         alData.setApplyLevel(user.getApplyLevel());
 
@@ -168,7 +164,6 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
 
         alData.setCode(code);
         alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
         alData.setType(EAgentType.OUT.getCode());
         alData.setLevel(data.getLevel());
         alData.setHighUserId(data.getHighUserId());

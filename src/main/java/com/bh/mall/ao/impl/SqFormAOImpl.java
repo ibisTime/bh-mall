@@ -144,7 +144,6 @@ public class SqFormAOImpl implements ISqFormAO {
         // data.setPayPdf(req.getPayPdf());
 
         data.setAddress(req.getAddress());
-        data.setSource(req.getFromInfo());
 
         sqFormBO.toApply(sqData);
         addressBO.saveAddress(sqData.getUserId(),
