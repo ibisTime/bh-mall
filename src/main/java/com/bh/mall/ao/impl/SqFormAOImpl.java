@@ -358,6 +358,11 @@ public class SqFormAOImpl implements ISqFormAO {
                     EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
                     -account.getAmount());
 
+                // 手机号、团队名称等清零
+                agent.setMobile(null);
+                agent.setIdNo(null);
+                agent.setUserReferee(null);
+                agent.setHighUserId(null);
             }
         }
 
@@ -372,7 +377,7 @@ public class SqFormAOImpl implements ISqFormAO {
     @Override
     public void cancelSqFormByP(String userId, String approver, String result,
             String remark) {
-        agentBO.getAgent(userId);
+        Agent agent = agentBO.getAgent(userId);
 
         SqForm data = new SqForm();
         if (!EUserStatus.TO_COMPANYCANCEL.getCode().equals(data.getStatus())) {
@@ -388,6 +393,13 @@ public class SqFormAOImpl implements ISqFormAO {
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
                 null, null, data.getUserId(), EBizType.AJ_QXSQ,
                 EBizType.AJ_QXSQ.getValue(), -account.getAmount());
+
+            // 清空关系
+            agent.setMobile(null);
+            agent.setIdNo(null);
+            agent.setUserReferee(null);
+            agent.setHighUserId(null);
+
         }
 
         data.setStatus(status);
