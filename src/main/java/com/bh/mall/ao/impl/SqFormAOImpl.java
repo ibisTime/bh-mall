@@ -29,6 +29,7 @@ import com.bh.mall.dto.req.XN627362Req;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAddressType;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -66,30 +67,25 @@ public class SqFormAOImpl implements ISqFormAO {
     @Override
     @Transactional
     public XN627303Res applyHaveUserReferee(XN627251Req req) {
+        XN627303Res result = null;
         PhoneUtil.checkMobile(req.getMobile());
-        String introducer = req.getIntroducer();
-        // 校验介绍人
-        if (StringUtils.isNotBlank(req.getIntroducer())) {
-            PhoneUtil.checkMobile(req.getIntroducer());
-            Agent buser = agentBO.getAgentByMobile(req.getIntroducer());
-            introducer = buser.getUserId();
-            if (buser.getLevel() <= StringValidater
-                .toInteger(req.getApplyLevel())) {
-                throw new BizException("xn0000", "您申请的等级需高于推荐人哦！");
-            }
-        }
-        // 校验手机号
         agentBO.isMobileExist(req.getMobile());
 
-        XN627303Res result = null;
-        // 是否可被意向
+        // 校验介绍人
+        String introducer = req.getIntroducer();
+        if (StringUtils.isNotBlank(req.getIntroducer())) {
+            PhoneUtil.checkMobile(req.getIntroducer());
+            Agent agent = agentBO.getAgentByMobile(req.getIntroducer());
+            introducer = agent.getUserId();
+            if (agent.getLevel() <= StringValidater
+                .toInteger(req.getApplyLevel())) {
+                throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
+            }
+        }
+
+        // 是否需要实名制
         AgentLevel impower = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(req.getApplyLevel()));
-
-        if (EBoolean.NO.getCode().equals(impower.getIsIntent())) {
-            throw new BizException("xn0000", "本等级不可被意向");
-        }
-        // 是否需要实名制
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
             IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
             if (!idCardChecker.validate()) {
@@ -110,23 +106,28 @@ public class SqFormAOImpl implements ISqFormAO {
         }
         if (data.getApplyLevel() == userReferee.getLevel()) {
             toUser = userReferee.getHighUserId();
-
         }
+
         // 是否需要公司审核
-        if (1 == data.getApplyLevel()) {
+        if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
             status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+        }
+
+        // 申请最高等级
+        if (EAgentLevel.ONE.getCode().equals(req.getApplyLevel())) {
             // 防止团队名称重复
             agentBO.checkTeamName(req.getTeamName());
             data.setTeamName(req.getTeamName());
         }
-        if (data.getApplyLevel() > userReferee.getLevel()) {
+
+        // 申请等级不等于推荐人等级
+        if (data.getApplyLevel() != userReferee.getLevel()) {
             data.setUserReferee(null);
             toUser = userReferee.getUserId();
         }
-        System.out.println("toUser:" + toUser);
-        System.out.println("UserReferee:" + data.getUserReferee());
 
         SqForm sqData = new SqForm();
+        sqData.setToUserId(toUser);
         sqData.setRealName(req.getRealName());
         sqData.setWxId(req.getWxId());
         sqData.setMobile(req.getMobile());

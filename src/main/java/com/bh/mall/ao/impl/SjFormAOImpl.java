@@ -257,7 +257,6 @@ public class SjFormAOImpl implements ISjFormAO {
         for (SjForm uplevelApply : page.getList()) {
             Agent agent = agentAO.getAgent(uplevelApply.getUserId());
             uplevelApply.setUser(agent);
-
         }
         return page;
     }
