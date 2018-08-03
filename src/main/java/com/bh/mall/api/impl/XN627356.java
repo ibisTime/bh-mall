@@ -1,7 +1,5 @@
 package com.bh.mall.api.impl;
 
-import java.util.Date;
-
 import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
@@ -35,12 +33,10 @@ public class XN627356 extends AProcessor {
 
         condition.setUserReferee(req.getUserReferee());
         condition.setKind(req.getKind());
-        Date applyDatetimeStart = DateUtil.strToDate(req.getDateStart(),
-            DateUtil.DATA_TIME_PATTERN_1);
-        Date applyDatetimeEnd = DateUtil.strToDate(req.getDateEnd(),
-            DateUtil.DATA_TIME_PATTERN_1);
-        condition.setApplyDatetimeStart(applyDatetimeStart);
-        condition.setApplyDatetimeEnd(applyDatetimeEnd);
+        condition.setCreateDatetimeStart(DateUtil.strToDate(req.getDateStart(),
+            DateUtil.DATA_TIME_PATTERN_1));
+        condition.setCreateDatetimeEnd(
+            DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));
 
         return agentAO.queryAgentList(condition);
     }

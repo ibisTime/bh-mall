@@ -35,9 +35,12 @@ import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
+import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.res.XN627303Res;
+import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EConfigType;
+import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -300,8 +303,23 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public void editHighUser(String userId, String highUser, String updater) {
         Agent data = agentBO.getAgent(userId);
-        agentBO.getAgent(highUser);
+        Agent highAgent = agentBO.getAgent(highUser);
+        if (highAgent.getLevel() >= data.getLevel()) {
+            throw new BizException("xn00000", "上级等级不能低于代理自身等级");
+        }
         agentBO.refreshHighUser(data, highUser, updater);
+
+        // 增肌上级门槛
+        Account account = accountBO.getAccountByUser(data.getUserId(),
+            ECurrency.MK_CNY.getCode());
+
+        if (0 != account.getAmount()) {
+            accountBO.transAmountCZB(data.getUserId(),
+                ECurrency.MK_CNY.getCode(), highAgent.getUserId(),
+                ECurrency.MK_CNY.getCode(), account.getAmount(),
+                EBizType.AJ_XGSJ, EBizType.AJ_XGSJ.getValue(),
+                EBizType.AJ_XGSJ.getValue(), data.getUserId());
+        }
     }
 
     // 修改推荐人

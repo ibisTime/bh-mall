@@ -133,12 +133,6 @@ public class Agent extends ABaseDO {
 
     // ****************DB*******************
 
-    // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
-    private String loginType;
-
-    // 登录名模糊查询
-    private String loginNameForQuery;
-
     // 手机号模糊查询
     private String mobileForQuery;
 
@@ -160,12 +154,6 @@ public class Agent extends ABaseDO {
     // 上级用户
     private Agent highUser;
 
-    // 申请时间起(选填)
-    private Date applyDatetimeStart;
-
-    // 申请时间止(选填)
-    private Date applyDatetimeEnd;
-
     // 注册时间起
     private Date createDatetimeStart;
 
@@ -177,6 +165,9 @@ public class Agent extends ABaseDO {
 
     // 上级
     private Integer highLevel;
+
+    // 推荐人名字
+    private String refreeName;
 
     // 获取ID
     public String getUserId() {
@@ -193,15 +184,6 @@ public class Agent extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    // 获取登录类型
-    public String getLoginType() {
-        return loginType;
-    }
-
-    public void setLoginType(String loginType) {
-        this.loginType = loginType;
     }
 
     // 模糊手段查询
@@ -430,22 +412,6 @@ public class Agent extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getApplyDatetimeStart() {
-        return applyDatetimeStart;
-    }
-
-    public void setApplyDatetimeStart(Date applyDatetimeStart) {
-        this.applyDatetimeStart = applyDatetimeStart;
-    }
-
-    public Date getApplyDatetimeEnd() {
-        return applyDatetimeEnd;
-    }
-
-    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
-        this.applyDatetimeEnd = applyDatetimeEnd;
     }
 
     // 关联管理员
