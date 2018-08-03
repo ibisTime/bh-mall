@@ -30,6 +30,7 @@
 		<result column="pay_code" property="payCode" />
 		
 		<result column="apply_user" property="applyUser" />
+		<result column="level" property="level" />
 		<result column="real_name" property="realName" />
 		<result column="team_name" property="teamName" />
 		<result column="apply_datetime" property="applyDatetime" />
@@ -116,10 +117,10 @@
 			
 			<choose>
 				<when test="level != null and level != '' ">
-					AND u.level = #{level}
+					AND t.level = #{level}
 				</when>
 				<when test="levelList != null and levelList.size() > 0 ">
-					AND u.level IN
+					AND t.level IN
 					<foreach collection="levelList" index="index" item="item" open="(" separator="," close=")" >
 						#{item}
 					</foreach>
@@ -162,6 +163,7 @@
 		,t.pay_code
 		
 		,t.apply_user
+		,t.level
 		,t.real_name
 		,t.team_name
 		,t.apply_datetime
@@ -226,6 +228,7 @@
 		,yunfei
 		,status
 		,apply_user
+		,level
 
 		,real_name
 		,team_name		
@@ -258,6 +261,7 @@
 		,#{yunfei}
 		,#{status}
 		,#{applyUser}
+		,#{level}
 
 		,#{realName}
 		,#{teamName}		

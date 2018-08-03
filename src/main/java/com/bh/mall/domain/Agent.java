@@ -185,12 +185,6 @@ public class Agent extends ABaseDO {
     // 注册时间止
     private Date createDatetimeEnd;
 
-    // 门槛费
-    private Long payAmount;
-
-    // 付款截图
-    private Long payPdf;
-
     // 关键词
     private String keyWord;
 
@@ -651,23 +645,6 @@ public class Agent extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    // 门槛费
-    public Long getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(Long payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public Long getPayPdf() {
-        return payPdf;
-    }
-
-    public void setPayPdf(Long payPdf) {
-        this.payPdf = payPdf;
     }
 
     public Date getCreateDatetimeStart() {

@@ -29,12 +29,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     IOutOrderDAO outOrderDAO;
 
     @Override
-    public String saveOutOrder(String applyUser, String name, String toUserId,
-            String toUserName, String teamName, String teamLeader,
-            Product pData, Specs specs, Long price, Integer quantity,
-            String applyNote, String signer, String mobile, String province,
-            String city, String area, String address, String status,
-            String kind) {
+    public String saveOutOrder(String applyUser, String name, Integer level,
+            String toUserId, String toUserName, String teamName,
+            String teamLeader, Product pData, Specs specs, Long price,
+            Integer quantity, String applyNote, String signer, String mobile,
+            String province, String city, String area, String address,
+            String status, String kind) {
 
         OutOrder data = new OutOrder();
         String code = OrderNoGenerater
@@ -52,14 +52,15 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setPrice(price);
         data.setPic(pData.getAdvPic());
         data.setApplyUser(applyUser);
-        data.setRealName(name);
+        data.setLevel(level);
 
+        data.setRealName(name);
         data.setTeamName(teamName);
         data.setTeamLeader(teamLeader);
         data.setAmount(price * quantity);
         data.setApplyDatetime(new Date());
-        data.setApplyNote(applyNote);
 
+        data.setApplyNote(applyNote);
         data.setStatus(status);
         data.setKind(kind);
         outOrderDAO.insert(data);
@@ -296,7 +297,13 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public void removeOutOrder(OutOrder data) {
+    public List<OutOrder> getProductQuantity(String agentId, Date startDatetime,
+            Date endDatetime) {
+        OutOrder condition = new OutOrder();
+        condition.setApplyUser(agentId);
+        condition.setStartDatetime(startDatetime);
+        condition.setEndDatetime(endDatetime);
+        return outOrderDAO.selectList(condition);
     }
 
 }

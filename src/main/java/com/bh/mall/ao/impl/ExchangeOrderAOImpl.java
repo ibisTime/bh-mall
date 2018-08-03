@@ -32,7 +32,6 @@ import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627790Req;
-import com.bh.mall.dto.res.XN627805Res;
 import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
@@ -379,101 +378,6 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         cpData.setCanExchangeQuantity(canChangeQuantity);
 
         return cpData;
-    }
-
-    @Override
-    public XN627805Res checkAmount(String userId) {
-        // XN627805Res res = new XN627805Res();
-        // Agent user = agentBO.getAgent(userId);
-        // // 门槛所需充值金额
-        // Long chargeAmount = 0L;
-        // String result = ECheckStatus.NORMAL.getCode();
-        // String isWare = EBoolean.YES.getCode();
-        //
-        // // 代理已通过审核
-        // if (null != user.getLevel() && 0 != user.getLevel()) {
-        // AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
-        // AgentLevel impower = agentLevelBO.getAgentByLevel(user.getLevel());
-        //
-        // // 检查云仓红线
-        // Long whAmount = 0L;
-        // List<Ware> list = wareBO.getWareByUser(userId);
-        // for (Ware ware : list) {
-        // if (null != ware.getAmount()) {
-        // whAmount = whAmount + ware.getAmount();
-        // }
-        // }
-        //
-        // // 检查开启云仓代理的红线，
-        // if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
-        //
-        // // 是否完成授权单
-        // if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
-        // user.getUserId(), user.getImpowerDatetime())) {
-        // result = ECheckStatus.NO_Impwoer.getCode();
-        // }
-        //
-        // // 红线设置为零视为无限制
-        // if (0 < agent.getRedAmount()) {
-        // // 订单金额
-        // Long orderAmount = orderBO.getOrderByUser(user.getUserId());
-        // // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
-        // if (orderAmount < agent.getAmount()) {
-        // // result = ECheckStatus.TO_BUY.getCode();
-        // result = ECheckStatus.RED_LOW.getCode();
-        // }
-        // }
-        // // 未开启云仓，只检查是否完成授权单
-        // } else if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
-        // user.getUserId(), user.getImpowerDatetime())) {
-        // // 未完成授权单
-        // result = ECheckStatus.RED_LOW.getCode();
-        // }
-        //
-        // // 检查门槛余额
-        // Account account = accountBO.getAccountNocheck(user.getUserId(),
-        // ECurrency.MK_CNY.getCode());
-        // if (null != account) {
-        // // 如果可剩余余额为零，不考虑等于的情况
-        // if (0 == agent.getMinSurplus() && account.getAmount() > 0) {
-        // result = ECheckStatus.MIN_LOW.getCode();
-        // } else if (0 != agent.getMinSurplus()
-        // && account.getAmount() >= agent.getMinSurplus()) {
-        // result = ECheckStatus.MIN_LOW.getCode();
-        // }
-        //
-        // }
-        //
-        // // 是否有过充值
-        // Long cAmount = 0L;
-        // List<Charge> charge = chargeBO.getChargeByUser(user.getUserId(),
-        // user.getImpowerDatetime());
-        // for (Charge charge2 : charge) {
-        // cAmount = cAmount + charge2.getAmount();
-        // }
-        //
-        // // 没有过充值，前去充值
-        // if (CollectionUtils.isEmpty(charge)) {
-        // result = ECheckStatus.To_Charge.getCode();
-        // chargeAmount = impower.getMinCharge() - cAmount;
-        //
-        // // 有过充值，但是钱在审核中
-        // } else {
-        // Charge condition = new Charge();
-        // condition.setApplyUser(user.getUserId());
-        // condition.setStatus(EChargeStatus.TO_Cancel.getCode());
-        // condition.setApplyDatetimeStart(user.getImpowerDatetime());
-        // charge = chargeBO.queryChargeList(condition);
-        // if (CollectionUtils.isNotEmpty(charge)) {
-        // result = ECheckStatus.Charging.getCode();
-        // }
-        // }
-        // res = new XN627805Res(result, agent.getRedAmount(),
-        // agent.getMinSurplus(), agent.getAmount(), chargeAmount,
-        // user.getLevel(), isWare);
-        // }
-        // return res;
-        return new XN627805Res();
     }
 
 }

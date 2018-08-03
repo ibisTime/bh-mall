@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627815Req;
+import com.bh.mall.dto.res.XN627805Res;
 import com.bh.mall.dto.res.XN627814Res;
 
 /**
@@ -43,7 +44,10 @@ public interface IWareAO {
     public Paginable<Ware> queryWareCFrontPage(int start, int limit,
             Ware condition);
 
-    // 根据客户查询
+    // C端查详情
     public Ware getWareByCustomer(String code);
+
+    // 检查余额红线
+    public XN627805Res checkAmount(String userId);
 
 }

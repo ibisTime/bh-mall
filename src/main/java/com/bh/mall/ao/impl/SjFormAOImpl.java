@@ -29,8 +29,6 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EUser;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -68,7 +66,7 @@ public class SjFormAOImpl implements ISjFormAO {
         if (data.getLevel() <= StringValidater.toInteger(newLevel)) {
             throw new BizException("xn0000", "升级等级要大于当前等级");
         }
-        
+
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
             throw new BizException("xn0000", "您的等级已经为最高等级，无法继续升级");
@@ -139,13 +137,10 @@ public class SjFormAOImpl implements ISjFormAO {
     @Transactional
     public void approveSjFormByB(String userId, String approver, String result,
             String remark) {
+
         Agent data = agentBO.getAgent(userId);
-        if (!(EUserStatus.TO_COMPANYUPGRADE.getCode().equals(data.getStatus())
-                || EUserStatus.TO_UPGRADE.getCode().equals(data.getStatus()))) {
-            throw new BizException("xn00000", "代理未申请升级");
-        }
         String status = EUserStatus.IMPOWERED.getCode();
-        Integer level = data.getLevel();
+        Integer level = data.getApplyLevel();
 
         // 审核通过
         if (EBoolean.YES.getCode().equals(result)) {
@@ -156,49 +151,21 @@ public class SjFormAOImpl implements ISjFormAO {
             AgentLevel auData = agentLevelBO
                 .getAgentByLevel(data.getApplyLevel());
 
-            // 是否推荐的代理
+            // 是否需要公司审核
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
-                if (!EUser.ADMIN.getCode().equals(approver)) {
-                    Agent approveUser = agentBO.getAgent(approver);
-                    if (!EUserKind.Plat.getCode()
-                        .equals(approveUser.getKind())) {
-                        status = EUserStatus.TO_COMPANYUPGRADE.getCode();
-                    }
-
-                } else {
-                    level = data.getApplyLevel();
-                    // 增加账户余额
-                    accountBO.changeAmount(account.getAccountNumber(),
-                        EChannelType.NBZ, null, null, data.getUserId(),
-                        EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
-                        data.getPayAmount());
-
-                    // 推荐人的上级变成自己
-                    changeHighUser(data.getUserId(), data.getUserId(), approver,
-                        remark);
-                    // 推荐人的上级的门槛转给自己
-                    changeAmount(data);
-                }
+                status = EUserStatus.TO_COMPANYUPGRADE.getCode();
             } else {
                 level = data.getApplyLevel();
                 // 增加账户余额
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.NBZ, null, null, data.getUserId(),
-                    EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
-                    data.getPayAmount());
-
-                // 推荐人的上级变成自己
-                changeHighUser(data.getUserId(), data.getUserId(), approver,
-                    remark);
-                // 推荐人的上级的门槛转给自己
-                changeAmount(data);
+                    EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(), 0L);
 
             }
         }
 
         data.setLevel(level);
         data.setStatus(status);
-        data.setPayAmount(0L);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setRemark(remark);
@@ -211,9 +178,43 @@ public class SjFormAOImpl implements ISjFormAO {
         upData.setApplyDatetime(new Date());
 
         sjFormBO.approveSjForm(upData);
-
     }
 
+    @Override
+    public void approveSjFormByP(String userId, String approver, String result,
+            String remark) {
+        Agent data = agentBO.getAgent(userId);
+        String status = EUserStatus.IMPOWERED.getCode();
+        Integer level = data.getApplyLevel();
+
+        // 审核通过
+        if (EBoolean.YES.getCode().equals(result)) {
+            Account account = accountBO.getAccountByUser(data.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            status = EUserStatus.UPGRADED.getCode();
+
+            level = data.getApplyLevel();
+            // 增加账户余额
+            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
+                null, null, data.getUserId(), EBizType.AJ_QKYE,
+                EBizType.AJ_QKYE.getValue(), 0L);
+        }
+
+        data.setLevel(level);
+        data.setStatus(status);
+        data.setApprover(approver);
+        data.setApproveDatetime(new Date());
+        data.setRemark(remark);
+
+        // 新增升级申请记录
+        SjForm upData = new SjForm();
+        upData.setUserId(userId);
+        upData.setApplyLevel(data.getApplyLevel());
+        upData.setStatus(status);
+        upData.setApplyDatetime(new Date());
+
+        sjFormBO.approveSjForm(upData);
+    }
 
     @Override
     public List<SjForm> querySjFormList(SjForm condition) {
@@ -227,23 +228,8 @@ public class SjFormAOImpl implements ISjFormAO {
 
         List<SjForm> list = sjFormBO.querySjFormList(condition);
         for (SjForm sjFrom : list) {
-            Agent userReferee = null;
             Agent agent = agentAO.getAgent(sjFrom.getUserId());
             sjFrom.setUser(agent);
-            // 审核人 TODO
-            if (EUser.ADMIN.getCode().equals(sjFrom.getApprover())) {
-                sjFrom.setApprover(sjFrom.getApprover());
-            } else {
-                if (StringUtils.isNotBlank(sjFrom.getApprover())) {
-                    Agent aprrvoeName = agentAO.getAgent(sjFrom.getApprover());
-                    if (null != aprrvoeName) {
-                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
-                        if (userReferee != null) {
-                            sjFrom.setApprover(userReferee.getRealName());
-                        }
-                    }
-                }
-            }
         }
         return list;
     }
@@ -253,28 +239,6 @@ public class SjFormAOImpl implements ISjFormAO {
         SjForm data = sjFormBO.getSjForm(code);
         Agent agent = agentAO.getAgent(data.getUserId());
         data.setUser(agent);
-        Agent userReferee = null;
-        data.setUser(agent);
-        /*
-         * if (StringUtils.isNotBlank(data.getUserReferee())) { userReferee =
-         * agentAO.getAgent(data.getUserReferee()); if (userReferee != null) {
-         * data.setRefereeName(userReferee.getRealName()); } }
-         */
-        // 审核人 TODO
-        if (EUser.ADMIN.getCode().equals(data.getApprover())) {
-            data.setApprover(data.getApprover());
-        } else {
-            if (StringUtils.isNotBlank(data.getApprover())) {
-                Agent aprrvoeName = agentAO.getAgent(data.getApprover());
-                if (null != aprrvoeName) {
-                    userReferee = agentAO.getAgent(aprrvoeName.getUserId());
-                    if (userReferee != null) {
-                        data.setApprover(userReferee.getRealName());
-                    }
-                }
-            }
-
-        }
         return data;
     }
 
@@ -290,110 +254,12 @@ public class SjFormAOImpl implements ISjFormAO {
         }
 
         Paginable<SjForm> page = sjFormBO.getPaginable(start, limit, condition);
-        List<SjForm> list = page.getList();
-
-        for (SjForm uplevelApply : list) {
-            Agent userReferee = null;
+        for (SjForm uplevelApply : page.getList()) {
             Agent agent = agentAO.getAgent(uplevelApply.getUserId());
             uplevelApply.setUser(agent);
 
-            /*
-             * if (StringUtils.isNotBlank(impowerApply.getUserReferee())) {
-             * userReferee = agentAO
-             * .getUserName(impowerApply.getUserReferee()); if (userReferee !=
-             * null) { impowerApply.setRefereeName(userReferee.getRealName()); }
-             * }
-             */
-            // 补全授权金额
-            if (null != agent.getApplyLevel()) {
-                // 代理等级表
-                AgentLevel agentLevle = agentLevelBO
-                    .getAgentByLevel(agent.getApplyLevel());
-                uplevelApply.setRequireAmount(agentLevle.getAmount());
-            }
-            // 审核人
-            if (EUser.ADMIN.getCode().equals(uplevelApply.getApprover())) {
-                uplevelApply.setApprover(uplevelApply.getApprover());
-            } else {
-                if (StringUtils.isNotBlank(uplevelApply.getApprover())) {
-                    Agent aprrvoeName = agentAO
-                        .getAgent(uplevelApply.getApprover());
-                    if (null != aprrvoeName) {
-                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
-                        if (userReferee != null) {
-                            uplevelApply.setApprover(userReferee.getRealName());
-                        }
-                    }
-                }
-
-            }
         }
-        page.setList(list);
         return page;
-    }
-
-    private void changeAmount(Agent data) {
-        Agent highUser = agentBO.getAgent(data.getUserId());
-        // 推荐人的上级门槛转入新上级
-        List<Agent> list = agentBO.getUsersByUserReferee(data.getUserId());
-        Agent oldHighUser = null;
-        for (Agent user : list) {
-            // 被推荐代理门槛款
-            Account refreeAccount = accountBO.getAccountByUser(user.getUserId(),
-                ECurrency.MK_CNY.getCode());
-            Account account = accountBO.getAccountByUser(highUser.getUserId(),
-                ECurrency.MK_CNY.getCode());
-            oldHighUser = agentBO.getAgent(user.getUserId());
-
-            // 旧代理上级是代理
-            if (null == oldHighUser
-                    || EUserKind.Plat.getCode().equals(oldHighUser.getKind())) {
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, data.getUserId(),
-                    EBizType.AJ_XGSH, EBizType.AJ_XGSH.getValue(),
-                    refreeAccount.getAmount());
-            }
-            if (EUserKind.Merchant.getCode().equals(oldHighUser.getKind())) {
-                String oldHighUserId = oldHighUser.getUserId();
-                accountBO.transAmountCZB(oldHighUserId,
-                    ECurrency.MK_CNY.getCode(), highUser.getUserId(),
-                    ECurrency.MK_CNY.getCode(), refreeAccount.getAmount(),
-                    EBizType.AJ_XGSH, EBizType.AJ_XGSH.getValue(),
-                    EBizType.AJ_XGSH.getValue(), data.getUserId());
-            }
-
-            changeAmount(user);
-
-        }
-    }
-
-    private void changeHighUser(String highUserId, String userId,
-            String approver, String remark) {
-
-        List<Agent> list = agentBO.getUsersByUserReferee(userId);
-        for (Agent user : list) {
-            Date date = new Date();
-            user.setHighUserId(userId);
-            user.setUpdater(approver);
-            user.setUpdateDatetime(date);
-
-            user.setRemark(remark);
-            // String logCode = sjFormBO.refreshHighUser(user);
-            // user.setLastAgentLog(logCode);
-            agentBO.refreshHighUser(user, highUserId, approver);
-
-            List<Agent> list2 = agentBO.getUsersByUserReferee(user.getUserId());
-            for (Agent user2 : list2) {
-                changeHighUser(highUserId, user2.getUserId(), approver, remark);
-            }
-
-        }
-
-    }
-
-    @Override
-    public void approveSjFormByP(String userId, String approver, String result,
-            String remark) {
     }
 
 }
