@@ -100,25 +100,25 @@ public class AgentAOImpl implements IAgentAO {
 
     // 微信注册
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
-            String h5OpenId, String nickname, String photo, String referee,
+            String h5OpenId, String nickname, String photo, String fromUserId,
             String status) {
         agentBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
         Integer level = 0;
         String userId = agentBO.doRegister(unionId, h5OpenId, appOpenId, null,
             EUserPwd.InitPwd.getCode(), nickname, photo, status, level,
-            referee);
+            fromUserId);
         XN627303Res result = new XN627303Res(userId, status);
         return result;
     }
 
     // 注册登录
     @Override
-    public XN627303Res doLoginWeChatByAgent(String code, String refereeId) {
+    public XN627303Res doLoginWeChatByAgent(String code, String fromUserId) {
         String status = EUserStatus.TO_MIND.getCode(); // 待申请意向代理
-        if (StringUtils.isNotBlank(refereeId)) {
+        if (StringUtils.isNotBlank(fromUserId)) {
             status = EUserStatus.IMPOWERO_INFO.getCode(); // 待填写授权资料
         }
-        return doLoginWeChatH(code, refereeId, status);
+        return doLoginWeChatH(code, fromUserId, status);
     }
 
     // doLoginWeChatH
@@ -313,7 +313,7 @@ public class AgentAOImpl implements IAgentAO {
     // 列表查询代理
     @Override
     public List<Agent> queryAgentList(Agent condition) {
-        return agentBO.queryUserList(condition);
+        return agentBO.queryAgentList(condition);
     }
 
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
@@ -325,7 +325,7 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public List<Agent> queryAgentJgList(Agent condition) {
 
-        List<Agent> agentList = agentBO.queryUserList(condition);
+        List<Agent> agentList = agentBO.queryAgentList(condition);
         if (CollectionUtils.isNotEmpty(agentList)) {
             getAgentList(agentList);
         }
@@ -337,7 +337,7 @@ public class AgentAOImpl implements IAgentAO {
         for (Agent agent : list) {
             Agent condition = new Agent();
             condition.setHighUserId(agent.getUserId());
-            List<Agent> agentList = agentBO.queryUserList(condition);
+            List<Agent> agentList = agentBO.queryAgentList(condition);
             if (CollectionUtils.isNotEmpty(agentList)) {
                 agent.setAgentList(agentList);
                 getAgentList(agentList);

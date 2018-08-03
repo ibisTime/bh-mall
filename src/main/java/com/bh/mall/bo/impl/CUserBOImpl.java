@@ -177,7 +177,7 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
     }
 
     /** 
-     * @see com.ibis.pz.user.IUserBO#queryUserList(com.User.pz.domain.UserDO)
+     * @see com.ibis.pz.user.IUserBO#queryAgentList(com.User.pz.domain.UserDO)
      */
     @Override
     public List<CUser> queryUserList(CUser data) {

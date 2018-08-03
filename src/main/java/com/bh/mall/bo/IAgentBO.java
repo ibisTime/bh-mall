@@ -10,7 +10,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 前端用户注册
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String loginPwd, String nickname, String photo,
-            String status, Integer level, String userReferee);
+            String status, Integer level, String fromUserId);
 
     // 微信登录
     public Agent doGetUserByOpenId(String h5OpenId);
@@ -44,21 +44,21 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     /*************** 获取数据库信息 **********************/
     // 获取数据库user信息
-    public List<Agent> queryUserList(Agent condition);
+    public List<Agent> queryAgentList(Agent condition);
 
     // 根据身份号获取用户信息
-    public Agent getUserByIdNo(String idNo);
+    public Agent getAgentByIdNo(String idNo);
 
     public void checkTeamName(String teamName);
 
     // 判断推荐人是否存在(手机号)
-    public void checkUserReferee(String userReferee, String systemCode);
+    public void checkAgentReferee(String userReferee, String systemCode);
 
-    public List<Agent> queryUserList(String mobile, String kind);
+    public List<Agent> queryAgentList(String mobile, String kind);
 
-    public List<Agent> getUsersByUserReferee(String userReferee);
+    public List<Agent> getAgentByUserReferee(String userReferee);
 
-    public Agent getUserByLoginName(String loginName, String systemCode);
+    public Agent getAgentByLoginName(String loginName, String systemCode);
 
     public void refreshStatus(Agent data, String updater, String remark);
 
@@ -83,9 +83,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public void refreshPhoto(String userId, String photo);
 
     public void refreshAgent(Agent data);
-
-    public void refreshRole(String userId, String roleCode, String updater,
-            String remark);
 
     public void resetBindMobile(Agent buser, String newMobile);
 

@@ -137,7 +137,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     IMiniCodeBO miniCodeBO;
 
     @Autowired
-    ICUserBO cUserBO;
+    ICUserBO cuserBO;
 
     @Autowired
     ISYSUserBO sysUserBO;
@@ -252,7 +252,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         List<String> list = new ArrayList<String>();
 
         // 下单人及订单归属人
-        CUser cUser = cUserBO.getUser(req.getApplyUser());
+        CUser cUser = cuserBO.getUser(req.getApplyUser());
         Agent agent = agentBO.getAgent(req.getToUser());
 
         for (String code : req.getCartList()) {
@@ -387,7 +387,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public List<String> addOutOrderNoCartC(XN627641Req req) {
         List<String> list = new ArrayList<String>();
         // 下单人及订单归属人
-        CUser cUser = cUserBO.getUser(req.getApplyUser());
+        CUser cUser = cuserBO.getUser(req.getApplyUser());
         Agent agent = agentBO.getAgent(req.getToUser());
 
         Specs specs = specsBO.getSpecs(req.getSpecsCode());

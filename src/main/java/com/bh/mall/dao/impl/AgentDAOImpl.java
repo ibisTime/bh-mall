@@ -14,31 +14,31 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     // IBaseDAO
     @Override
     public Agent select(Agent condition) {
-        return super.select(NAMESPACE.concat("select_buser"), condition,
+        return super.select(NAMESPACE.concat("select_agent"), condition,
             Agent.class);
     }
 
     @Override
     public long selectTotalCount(Agent condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_buser_count"),
+        return super.selectTotalCount(NAMESPACE.concat("select_agent_count"),
             condition);
     }
 
     @Override
     public List<Agent> selectList(Agent condition) {
-        return super.selectList(NAMESPACE.concat("select_buser"), condition,
+        return super.selectList(NAMESPACE.concat("select_agent"), condition,
             Agent.class);
     }
 
     @Override
     public List<Agent> selectList(Agent condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_buser"), start, count,
+        return super.selectList(NAMESPACE.concat("select_agent"), start, count,
             condition, Agent.class);
     }
 
     @Override
     public int insert(Agent data) {
-        return super.insert(NAMESPACE.concat("insert_buser"), data);
+        return super.insert(NAMESPACE.concat("insert_agent"), data);
     }
 
     @Override
@@ -58,36 +58,28 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
-    @Override
-    public int updateRole(Agent data) {
-        return super.update(NAMESPACE.concat("update_role"), data);
-    }
-
     // public void updateLog(Agent data) {
     // super.update(NAMESPACE.concat("update_log"), data);
     // }
 
-    /** 
-     * @see com.bh.mall.dao.IUserDAO#updateLoginName(com.bh.mall.domain.User)
-     */
     @Override
     public int updateLoginName(Agent data) {
-        return super.update(NAMESPACE.concat("update_buser_loginName"), data);
+        return super.update(NAMESPACE.concat("update_agent_loginName"), data);
     }
 
     @Override
     public int updateNickname(Agent data) {
-        return super.update(NAMESPACE.concat("update_buser_nickname"), data);
+        return super.update(NAMESPACE.concat("update_agent_nickname"), data);
     }
 
     @Override
     public int updatePhoto(Agent data) {
-        return super.update(NAMESPACE.concat("update_buser_photo"), data);
+        return super.update(NAMESPACE.concat("update_agent_photo"), data);
     }
 
     @Override
     public int updateMobileIds(Agent data) {
-        return super.update(NAMESPACE.concat("update_buser_mobileIds"), data);
+        return super.update(NAMESPACE.concat("update_agent_mobileIds"), data);
     }
 
     @Override
@@ -101,7 +93,7 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     }
 
     // public int approveUser(Agent data) {
-    // return super.update(NAMESPACE.concat("approve_buser"), data);
+    // return super.update(NAMESPACE.concat("approve_agent"), data);
     // }
 
     @Override
@@ -122,7 +114,7 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
 
     @Override
     public int update(Agent data) {
-        return super.update(NAMESPACE.concat("update_buser"), data);
+        return super.update(NAMESPACE.concat("update_agent"), data);
     }
 
     @Override
@@ -135,11 +127,6 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     public void updateUserReferee(Agent data) {
         super.update(NAMESPACE.concat("update_referee"), data);
 
-    }
-
-    @Override
-    public int approveUser(Agent data) {
-        return 0;
     }
 
     @Override

@@ -13,13 +13,15 @@ import com.bh.mall.dao.base.ABaseDO;
  * @history:
  */
 
-// TODO 交易密码
 public class Agent extends ABaseDO {
 
     private static final long serialVersionUID = 502999162977851542L;
 
     // 代理用户id
     private String userId;
+
+    // 分享二维码代理
+    private String fromUserId;
 
     // 登陆名
     private String loginName;
@@ -72,29 +74,14 @@ public class Agent extends ABaseDO {
     // 证件号码
     private String idNo;
 
-    // 身份证正面照片
-    private String idFront;
-
-    // 身份证背面照片
-    private String idBehind;
-
     // 手持身份证照片
     private String idHand;
 
     // 真实姓名
     private String realName;
 
-    // 角色编号
-    private String roleCode;
-
     // 状态
     private String status;
-
-    // 来源
-    private String source;
-
-    // 最开始申请时间
-    private Date applyDatetime;
 
     // 关联管理员
     private String manager;
@@ -418,24 +405,6 @@ public class Agent extends ABaseDO {
         this.idNo = idNo;
     }
 
-    // 身份证正面照片
-    public String getIdFront() {
-        return idFront;
-    }
-
-    public void setIdFront(String idFront) {
-        this.idFront = idFront;
-    }
-
-    // 身份证背面照片
-    public String getIdBehind() {
-        return idBehind;
-    }
-
-    public void setIdBehind(String idBehind) {
-        this.idBehind = idBehind;
-    }
-
     // 手持身份证照片
     public String getIdHand() {
         return idHand;
@@ -454,15 +423,6 @@ public class Agent extends ABaseDO {
         this.realName = realName;
     }
 
-    // 角色编码
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
-
     // 状态
     public String getStatus() {
         return status;
@@ -470,24 +430,6 @@ public class Agent extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    // 来源
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    // 最开始申请时间
-    public Date getApplyDatetime() {
-        return applyDatetime;
-    }
-
-    public void setApplyDatetime(Date applyDatetime) {
-        this.applyDatetime = applyDatetime;
     }
 
     public Date getApplyDatetimeStart() {
@@ -685,6 +627,14 @@ public class Agent extends ABaseDO {
 
     public void setHighLevel(Integer highLevel) {
         this.highLevel = highLevel;
+    }
+
+    public String getFromUserId() {
+        return fromUserId;
+    }
+
+    public void setFromUserId(String fromUserId) {
+        this.fromUserId = fromUserId;
     }
 
 }

@@ -28,15 +28,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     public int updateStatus(Agent data);
 
     /**
-     * 更新角色 
-     * @param data
-     * @return 
-     * @create: 2018年7月31日 下午2:07:27 LENOVO
-     * @history:
-     */
-    public int updateRole(Agent data);
-
-    /**
      * 更新用户名 
      * @param data
      * @return 
@@ -98,15 +89,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
      * @history:
      */
     public int updateWxInfo(Agent data);
-
-    /**
-     * 
-     * @param data
-     * @return 
-     * @create: 2018年7月31日 下午2:10:39 LENOVO
-     * @history:
-     */
-    public int approveUser(Agent data);
 
     /**
      * 重置号码

@@ -5,6 +5,7 @@ import java.util.List;
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentReport;
+import com.bh.mall.domain.SqForm;
 
 /**
  * 代理统计
@@ -15,7 +16,7 @@ import com.bh.mall.domain.AgentReport;
 public interface IAgentReportBO extends IPaginableBO<AgentReport> {
 
     // 新增代理统计
-    public void saveAgentReport(Agent data);
+    public void saveAgentReport(SqForm data, Agent agent);
 
     // 删除代理统计
     public int removeAgentReport(String code);

@@ -39,7 +39,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String loginPwd, String nickname, String photo,
-            String status, Integer level, String userReferee) {
+            String status, Integer level, String fromUserId) {
         String userId = OrderNoGenerater.generate("U");
         Agent buser = new Agent();
         buser.setUserId(userId);
@@ -50,7 +50,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         buser.setLoginName(mobile);
         buser.setMobile(mobile);
 
-        buser.setUserReferee(userReferee);
+        buser.setFromUserId(fromUserId);
 
         buser.setLoginPwd(MD5Util.md5(loginPwd));
         buser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
@@ -113,12 +113,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
      * @see com.ibis.pz.user.IAgentBO#queryAgentLevelList(com.Agent.pz.domain.AgentDO)
      */
     @Override
-    public List<Agent> queryUserList(Agent data) {
+    public List<Agent> queryAgentList(Agent data) {
         return agentDAO.selectList(data);
     }
 
     @Override
-    public List<Agent> queryUserList(String mobile, String kind) {
+    public List<Agent> queryAgentList(String mobile, String kind) {
         Agent condition = new Agent();
         condition.setMobile(mobile);
         condition.setKind(kind);
@@ -176,7 +176,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     // 检查推荐人
     @Override
-    public void checkUserReferee(String userReferee, String systemCode) {
+    public void checkAgentReferee(String userReferee, String systemCode) {
         if (StringUtils.isNotBlank(userReferee)) {
             // 判断格式
             Agent condition = new Agent();
@@ -189,7 +189,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public List<Agent> getUsersByUserReferee(String userReferee) {
+    public List<Agent> getAgentByUserReferee(String userReferee) {
         List<Agent> userList = new ArrayList<Agent>();
         if (StringUtils.isNotBlank(userReferee)) {
             Agent condition = new Agent();
@@ -217,7 +217,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
      * @see com.ibis.pz.user.IAgentBO#getAgentByMobile(java.lang.String)
      */
     @Override
-    public Agent getUserByLoginName(String loginName, String systemCode) {
+    public Agent getAgentByLoginName(String loginName, String systemCode) {
         Agent data = null;
         if (StringUtils.isNotBlank(loginName)) {
             Agent condition = new Agent();
@@ -324,7 +324,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     // 检查身份证号
     @Override
-    public Agent getUserByIdNo(String idNo) {
+    public Agent getAgentByIdNo(String idNo) {
         Agent data = null;
         if (StringUtils.isNotBlank(idNo)) {
             Agent condition = new Agent();
@@ -426,20 +426,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public void refreshRole(String userId, String roleCode, String updater,
-            String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setRoleCode(roleCode);
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            agentDAO.updateRole(data);
-        }
-    }
-
-    @Override
     public void resetBindMobile(Agent buser, String newMobile) {
         buser.setMobile(newMobile);
         agentDAO.resetBindMobile(buser);
@@ -455,8 +441,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         alData.setLastAgentLog(code);
         alData.setUserId(data.getUserId());
         alData.setStatus(EAgentType.Update.getCode());
-        Date date = new Date();
-        alData.setApplyDatetime(date);
         agentDAO.updateHigh(alData);
 
         // insert new log
@@ -534,7 +518,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         }
     }
 
-    // TODO
     @Override
     public Agent getTeamLeader(String teamName) {
         Agent condition = new Agent();
