@@ -39,7 +39,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String loginPwd, String nickname, String photo,
-            String status, Integer level, String userReferee) {
+            String status, Integer level, String fromUserId) {
         String userId = OrderNoGenerater.generate("U");
         Agent buser = new Agent();
         buser.setUserId(userId);
@@ -50,7 +50,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         buser.setLoginName(mobile);
         buser.setMobile(mobile);
 
-        buser.setUserReferee(userReferee);
+        buser.setFromUserId(fromUserId);
 
         buser.setLoginPwd(MD5Util.md5(loginPwd));
         buser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
@@ -441,7 +441,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         alData.setLastAgentLog(code);
         alData.setUserId(data.getUserId());
         alData.setStatus(EAgentType.Update.getCode());
-        Date date = new Date();
         agentDAO.updateHigh(alData);
 
         // insert new log

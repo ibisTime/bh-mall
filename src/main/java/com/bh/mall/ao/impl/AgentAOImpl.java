@@ -100,25 +100,25 @@ public class AgentAOImpl implements IAgentAO {
 
     // 微信注册
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
-            String h5OpenId, String nickname, String photo, String referee,
+            String h5OpenId, String nickname, String photo, String fromUserId,
             String status) {
         agentBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
         Integer level = 0;
         String userId = agentBO.doRegister(unionId, h5OpenId, appOpenId, null,
             EUserPwd.InitPwd.getCode(), nickname, photo, status, level,
-            referee);
+            fromUserId);
         XN627303Res result = new XN627303Res(userId, status);
         return result;
     }
 
     // 注册登录
     @Override
-    public XN627303Res doLoginWeChatByAgent(String code, String refereeId) {
+    public XN627303Res doLoginWeChatByAgent(String code, String fromUserId) {
         String status = EUserStatus.TO_MIND.getCode(); // 待申请意向代理
-        if (StringUtils.isNotBlank(refereeId)) {
+        if (StringUtils.isNotBlank(fromUserId)) {
             status = EUserStatus.IMPOWERO_INFO.getCode(); // 待填写授权资料
         }
-        return doLoginWeChatH(code, refereeId, status);
+        return doLoginWeChatH(code, fromUserId, status);
     }
 
     // doLoginWeChatH

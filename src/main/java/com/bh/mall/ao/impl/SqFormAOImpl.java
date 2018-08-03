@@ -291,15 +291,15 @@ public class SqFormAOImpl implements ISqFormAO {
 
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
-            Agent user = agentBO.getAgentByMobile(req.getIntroducer());
-            if (user.getUserId().equals(req.getUserId())) {
+            Agent introducer = agentBO.getAgentByMobile(req.getIntroducer());
+            if (introducer.getUserId().equals(req.getUserId())) {
                 throw new BizException("xn0000", "推荐人不能填自己哦！");
             }
-            if (!EUserKind.Merchant.getCode().equals(user.getKind())) {
+            if (!EUserKind.Merchant.getCode().equals(introducer.getKind())) {
                 throw new BizException("xn0000", "您填写的推荐人不是我们的代理哦！");
             }
 
-            if (user.getLevel() <= StringValidater
+            if (introducer.getLevel() <= StringValidater
                 .toInteger(req.getApplyLevel())) {
                 throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
@@ -308,10 +308,6 @@ public class SqFormAOImpl implements ISqFormAO {
         agentBO.checkTeamName(req.getTeamName());
 
         // 校验身份证
-        if (StringUtils.isNotBlank(req.getIdNo())) {
-            agentBO.getUserByIdNo(req.getIdNo());
-        }
-
         AgentLevel impower = agentLevelBO.getAgentByLevel(data.getApplyLevel());
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
             IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
@@ -344,23 +340,8 @@ public class SqFormAOImpl implements ISqFormAO {
 
         List<SqForm> list = sqFormBO.querySqFormList(condition);
         for (SqForm sqForm : list) {
-            Agent userReferee = null;
             Agent buser = agentAO.getAgent(sqForm.getUserId());
             sqForm.setUser(buser);
-            // 审核人
-            if (EUser.ADMIN.getCode().equals(sqForm.getApprover())) {
-                sqForm.setApprover(sqForm.getApprover());
-            } else {
-                if (StringUtils.isNotBlank(sqForm.getApprover())) {
-                    Agent aprrvoeName = agentAO.getAgent(sqForm.getApprover());
-                    if (null != aprrvoeName) {
-                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
-                        if (userReferee != null) {
-                            sqForm.setApprover(userReferee.getRealName());
-                        }
-                    }
-                }
-            }
         }
         return list;
     }
@@ -371,32 +352,8 @@ public class SqFormAOImpl implements ISqFormAO {
         SqForm data = sqFormBO.getSqForm(code);
         Agent buser = agentAO.getAgent(data.getUserId());
         data.setUser(buser);
-        Agent userReferee = null;
-        data.setUser(buser);
-
-        if (StringUtils.isNotBlank(data.getUserReferee())) {
-            userReferee = agentAO.getAgent(data.getUserReferee());
-            if (userReferee != null) {
-                data.setUserReferee(userReferee.getRealName());
-            }
-        }
-
-        // 审核人
-        if (EUser.ADMIN.getCode().equals(data.getApprover())) {
-            data.setApprover(data.getApprover());
-        } else {
-            if (StringUtils.isNotBlank(data.getApprover())) {
-                Agent aprrvoeName = agentAO.getAgent(data.getApprover());
-                if (null != aprrvoeName) {
-                    userReferee = agentAO.getAgent(aprrvoeName.getUserId());
-                    if (userReferee != null) {
-                        data.setApprover(userReferee.getRealName());
-                    }
-                }
-            }
-
-        }
         return data;
+
     }
 
     // 分页查询
@@ -414,41 +371,9 @@ public class SqFormAOImpl implements ISqFormAO {
         Paginable<SqForm> page = sqFormBO.getPaginable(start, limit, condition);
         List<SqForm> list = page.getList();
 
-        for (SqForm impowerApply : list) {
-            Agent userReferee = null;
-            Agent buser = agentAO.getAgent(impowerApply.getUserId());
-            impowerApply.setUser(buser);
-
-            if (StringUtils.isNotBlank(impowerApply.getUserReferee())) {
-                userReferee = agentAO.getAgent(impowerApply.getUserReferee());
-                if (userReferee != null) {
-                    impowerApply.setUserReferee(userReferee.getRealName());
-                }
-            }
-
-            // 补全授权金额
-            if (null != buser.getApplyLevel()) {
-                // 代理等级表
-                AgentLevel agent = agentLevelBO
-                    .getAgentByLevel(buser.getApplyLevel());
-
-            }
-            // 审核人
-            if (EUser.ADMIN.getCode().equals(impowerApply.getApprover())) {
-                impowerApply.setApprover(impowerApply.getApprover());
-            } else {
-                if (StringUtils.isNotBlank(impowerApply.getApprover())) {
-                    Agent aprrvoeName = agentAO
-                        .getAgent(impowerApply.getApprover());
-                    if (null != aprrvoeName) {
-                        userReferee = agentAO.getAgent(aprrvoeName.getUserId());
-                        if (userReferee != null) {
-                            impowerApply.setApprover(userReferee.getRealName());
-                        }
-                    }
-                }
-
-            }
+        for (SqForm sqForm : list) {
+            Agent agent = agentAO.getAgent(sqForm.getUserId());
+            sqForm.setUser(agent);
         }
         page.setList(list);
         return page;

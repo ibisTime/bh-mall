@@ -17,7 +17,7 @@ public interface IAgentAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
     // B端微信注册/登录
-    public XN627303Res doLoginWeChatByAgent(String code, String userReferee);
+    public XN627303Res doLoginWeChatByAgent(String code, String fromUserId);
 
     // 修改头像
     public void doModifyPhoto(String userId, String photo);

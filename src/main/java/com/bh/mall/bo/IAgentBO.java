@@ -10,7 +10,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 前端用户注册
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String loginPwd, String nickname, String photo,
-            String status, Integer level, String userReferee);
+            String status, Integer level, String fromUserId);
 
     // 微信登录
     public Agent doGetUserByOpenId(String h5OpenId);
