@@ -53,18 +53,11 @@ public class SqForm extends ABaseDO {
     // 证件号码
     private String idNo;
 
-    // 身份证正面照片
-    private String idFront;
-
-    // 身份证背面照片
-    private String idBehind;
-
     // 手持身份证照片
     private String idHand;
 
     // 介绍人电话
-
-    private String introducerMobile;
+    private String introducer;
 
     // 推荐人
     private String userReferee;
@@ -74,6 +67,9 @@ public class SqForm extends ABaseDO {
 
     // 审核人
     private String approver;
+
+    // 审核人名称
+    private String approveName;
 
     // 申请时间
     private Date applyDatetime;
@@ -167,24 +163,6 @@ public class SqForm extends ABaseDO {
 
     public void setIdNo(String idNo) {
         this.idNo = idNo;
-    }
-
-    // 身份证正面照片
-    public String getIdFront() {
-        return idFront;
-    }
-
-    public void setIdFront(String idFront) {
-        this.idFront = idFront;
-    }
-
-    // 身份证背面照片
-    public String getIdBehind() {
-        return idBehind;
-    }
-
-    public void setIdBehind(String idBehind) {
-        this.idBehind = idBehind;
     }
 
     // 手持身份证照片
@@ -300,12 +278,12 @@ public class SqForm extends ABaseDO {
         this.agent = agent;
     }
 
-    public String getIntroducerMobile() {
-        return introducerMobile;
+    public String getIntroducer() {
+        return introducer;
     }
 
-    public void setIntroducerMobile(String introducerMobile) {
-        this.introducerMobile = introducerMobile;
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
     }
 
     public String getUserReferee() {
@@ -362,6 +340,22 @@ public class SqForm extends ABaseDO {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
 }

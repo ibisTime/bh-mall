@@ -38,6 +38,9 @@ public class AgentLog extends ABaseDO {
     // 推荐人
     private String userReferee;
 
+    // 介绍人
+    private String introducer;
+
     // 团队名称
     private String teamName;
 
@@ -53,18 +56,20 @@ public class AgentLog extends ABaseDO {
     // 审核人
     private String approver;
 
-    // 更新人
-
-    private String updater;
-
-    // 申请时间
-    private Date applyDatetime;
+    // 审核人
+    private String approvName;
 
     // 审核时间
     private Date approveDatetime;
 
+    // 更新人
+    private String updater;
+
     // 更新时间
     private Date updateDatetime;
+
+    // 申请时间
+    private Date applyDatetime;
 
     // 备注
     private String remark;
@@ -79,8 +84,14 @@ public class AgentLog extends ABaseDO {
     // 门槛金额
     private Long impowerAmount;
 
-    // 审核人
-    private String approvName;
+    // 推荐人名字
+    private String userRefreeName;
+
+    // 介绍人姓名
+    private String introduceName;
+
+    // 上级用户
+    private String highUserName;
 
     public String getCode() {
         return code;
@@ -256,6 +267,38 @@ public class AgentLog extends ABaseDO {
 
     public void setApprovName(String approvName) {
         this.approvName = approvName;
+    }
+
+    public String getUserRefreeName() {
+        return userRefreeName;
+    }
+
+    public String getIntroduceName() {
+        return introduceName;
+    }
+
+    public String getHighUserName() {
+        return highUserName;
+    }
+
+    public void setUserRefreeName(String userRefreeName) {
+        this.userRefreeName = userRefreeName;
+    }
+
+    public void setIntroduceName(String introduceName) {
+        this.introduceName = introduceName;
+    }
+
+    public void setHighUserName(String highUserName) {
+        this.highUserName = highUserName;
+    }
+
+    public String getIntroducer() {
+        return introducer;
+    }
+
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
     }
 
 }

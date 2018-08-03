@@ -26,6 +26,9 @@ public class SjForm extends ABaseDO {
     // 申请等级
     private Integer applyLevel;
 
+    // 当前等级
+    private Integer level;
+
     // 半门槛推荐人数
     private String reNumber;
 
@@ -35,11 +38,14 @@ public class SjForm extends ABaseDO {
     // 打款截图
     private String payPdf;
 
+    // 申请时间
+    private Date applyDatetime;
+
     // 审核人
     private String approver;
 
-    // 申请时间
-    private Date applyDatetime;
+    // 审核名字
+    private String approveName;
 
     // 审核时间
     private Date approveDatetime;
@@ -245,6 +251,30 @@ public class SjForm extends ABaseDO {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public String getPayPdf() {
+        return payPdf;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public void setPayPdf(String payPdf) {
+        this.payPdf = payPdf;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

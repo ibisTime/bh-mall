@@ -119,6 +119,9 @@ public class Agent extends ABaseDO {
     // 最后审核人
     private String approver;
 
+    // 审核人姓名
+    private String approveName;
+
     // 最后审核时间
     private Date approveDatetime;
 
@@ -152,7 +155,10 @@ public class Agent extends ABaseDO {
     private List<Agent> agentList;
 
     // 上级用户
-    private Agent highUser;
+    private String highUserName;
+
+    // 上级用户
+    private String highUserMobile;
 
     // 注册时间起
     private Date createDatetimeStart;
@@ -167,7 +173,13 @@ public class Agent extends ABaseDO {
     private Integer highLevel;
 
     // 推荐人名字
-    private String refreeName;
+    private String userRefreeName;
+
+    // 推荐人手机号
+    private String userRefreeMobile;
+
+    // 介绍人姓名
+    private String introduceName;
 
     // 获取ID
     public String getUserId() {
@@ -184,16 +196,6 @@ public class Agent extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    // 模糊手段查询
-    // 登录名， 电话，真实姓名， 省，市，区
-    public String getLoginNameForQuery() {
-        return loginNameForQuery;
-    }
-
-    public void setLoginNameForQuery(String loginNameForQuery) {
-        this.loginNameForQuery = loginNameForQuery;
     }
 
     public String getMobileForQuery() {
@@ -352,12 +354,20 @@ public class Agent extends ABaseDO {
         this.highUserId = highUserId;
     }
 
-    public Agent getHighUser() {
-        return highUser;
+    public String getHighUserName() {
+        return highUserName;
     }
 
-    public void setHighUser(Agent highUser) {
-        this.highUser = highUser;
+    public String getHighUserMobile() {
+        return highUserMobile;
+    }
+
+    public void setHighUserName(String highUserName) {
+        this.highUserName = highUserName;
+    }
+
+    public void setHighUserMobile(String highUserMobile) {
+        this.highUserMobile = highUserMobile;
     }
 
     // 团队名称
@@ -601,6 +611,38 @@ public class Agent extends ABaseDO {
 
     public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public String getUserRefreeName() {
+        return userRefreeName;
+    }
+
+    public String getUserRefreeMobile() {
+        return userRefreeMobile;
+    }
+
+    public String getIntroduceName() {
+        return introduceName;
+    }
+
+    public void setUserRefreeName(String userRefreeName) {
+        this.userRefreeName = userRefreeName;
+    }
+
+    public void setUserRefreeMobile(String userRefreeMobile) {
+        this.userRefreeMobile = userRefreeMobile;
+    }
+
+    public void setIntroduceName(String introduceName) {
+        this.introduceName = introduceName;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
     }
 
 }

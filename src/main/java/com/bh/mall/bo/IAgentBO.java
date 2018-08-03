@@ -87,7 +87,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public List<Agent> selectAgentFront(Agent condition, int pageNo,
             int pageSize);
 
-    public Agent getAgentName(String userReferee);
+    public String getAgentName(String userReferee);
 
     public void checkTradePwd(String userId, String tradePwd);
 

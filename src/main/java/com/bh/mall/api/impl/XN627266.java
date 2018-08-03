@@ -27,7 +27,6 @@ public class XN627266 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
-        condition.setLoginNameForQuery(req.getLoginName());
         condition.setMobile(req.getMobile());
         condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
         condition.setLevel(StringValidater.toInteger(req.getLevel()));

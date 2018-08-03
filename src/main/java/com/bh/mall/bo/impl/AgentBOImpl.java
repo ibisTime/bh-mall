@@ -441,10 +441,14 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public Agent getAgentName(String userId) {
+    public String getAgentName(String userId) {
         Agent condition = new Agent();
         condition.setUserId(userId);
-        return agentDAO.select(condition);
+        Agent data = agentDAO.select(condition);
+        if (null == data) {
+            return null;
+        }
+        return data.getRealName();
     }
 
     @Override

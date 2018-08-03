@@ -7,28 +7,28 @@
 		<result column="code" property="code"/>
 		<result column="wx_id" property="wxId"/>
 		<result column="user_id" property="userId" />
-		<result column ="to_user_id" property="toUserId"/>
-		<result column="apply_level" property="applyLevel" />
+		<result column="real_name" property="realName" />
+		<result column="to_user_id" property="toUserId"/>
 		
+		<result column="apply_level" property="applyLevel" />
 		<result column="real_name" property="realName"/>
 		<result column="address" property="address"/>
 		<result column="area" property="area"/>
 		<result column="mobile" property="mobile"/>
+		
 		<result column="city" property="city"/>
 		<result column="province" property="province"/>
-		
-		<result column="id_front" property="idFront"/>
-		<result column="id_behind" property="idBehind"/>
 		<result column="id_hand" property="idHand"/>
 		<result column="id_kind" property="idKind"/>
 		<result column="id_no" property="idNo"/>
 		
-		<result column="introducer_mobile" property="introducerMobile"/>
+		<result column="introducer" property="introducer"/>
 		<result column="user_referee" property="userReferee"/>
-				
 		<result column ="status" property="status"/>
-		<result column ="approver" property="approver"/>
 		<result column ="apply_datetime" property="applyDatetime"/>		
+		<result column ="approver" property="approver"/>
+		
+		<result column="approve_name" property="approveName" />
 		<result column="approve_datetime" property="approveDatetime" />		
 		<result column="remark" property="remark"/>
 	</resultMap>
@@ -38,32 +38,22 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-		
 			
 			<if test="userId != null and userId != '' ">
 				AND t.user_id= #{userId}
+			</if>
+			<if test="toUserId != null and toUserId != '' ">
+				AND t.to_user_id= #{toUserId}
 			</if>
 			
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
-	
-			<choose>
-				<when test="status == '6,8' "> <!-- 待审核授权，申请取消授权 -->
-					AND t.status = '6' OR t.status = '8' 
-				</when>
-				<when test="status != null and status != '' ">
-					AND t.status = #{status}
-				</when>
-				<otherwise>
-					AND 1=1
-				</otherwise>
-			</choose>
-			
 
 			<if test="applyLevel != null and applyLevel != '' ">
 				AND t.apply_level = #{applyLevel}
 			</if>
+			
 			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
 				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
 			</if>
@@ -77,7 +67,9 @@
 			<if test="approveDatetimeEnd != null and approveDatetimeEnd != '' ">
 				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
 			</if>
-			
+			<if test="realName != null and realName != '' ">
+				t.real_name like "%"#{realName}"%"
+			</if>
 			
 		</trim>
 	</sql>
@@ -87,31 +79,30 @@
 		t.code
 		,t.wx_id
 		,t.user_id
-		,t.apply_level
-		
 		,t.real_name
-		,t.address
-		,t.area
 		,t.mobile
-		,t.city
-		,t.province
+		,t.to_user_id
 		
-		,t.id_front
-		,t.id_behind
+		,t.apply_level
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+
 		,t.id_hand
 		,t.id_kind
 		,t.id_no
-		
-		,t.introducer_mobile
+		,t.introducer
 		,t.user_referee
 		
 		,t.status
-		,t.approver		
 		,t.apply_datetime
+		,t.approver		
+		,t.approve_name
 		,t.approve_datetime
 		,t.remark
 		FROM
-		tbh_sq_form t LEFT JOIN tbh_buser u ON t.user_id= u.user_id   
+		tbh_sq_form t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -122,7 +113,7 @@
 
 	<select id="select_sqForm_count" parameterType="sqForm"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_sq_form t LEFT JOIN tbh_buser u ON t.user_id= u.user_id   
+		SELECT count(1) FROM tbh_sq_form t
 		<include refid="where_condition" />
 	</select>
 
@@ -141,13 +132,11 @@
 		,city
 		,province
 		
-		,id_front
-		,id_behind
 		,id_hand
 		,id_kind
 		,id_no
 		
-		,introducer_mobile
+		,introducer
 		,user_referee
 		
 		,status
@@ -175,7 +164,7 @@
 		,#{idKind}
 		,#{idNo}
 		
-		,#{introducerMobile}
+		,#{introducer}
 		,#{userReferee}
 				
 		,#{status}

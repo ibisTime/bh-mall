@@ -159,7 +159,7 @@ public class SqFormAOImpl implements ISqFormAO {
         sqData.setIdNo(req.getIdNo());
         sqData.setIdHand(req.getIdHand());
 
-        sqData.setIntroducerMobile(introducer);
+        sqData.setIntroducer(introducer);
         sqData.setStatus(status);
         sqData.setArea(req.getArea());
         // data.setPayPdf(req.getPayPdf());
@@ -451,7 +451,7 @@ public class SqFormAOImpl implements ISqFormAO {
         data.setIdKind(req.getIdKind());
         data.setIdNo(req.getIdNo());
         data.setIdHand(req.getIdHand());
-        data.setIntroducerMobile(req.getIntroducer());
+        data.setIntroducer(req.getIntroducer());
         sqFormBO.addInfo(data);
     }
 
