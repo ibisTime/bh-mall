@@ -280,10 +280,17 @@ public class AgentAOImpl implements IAgentAO {
         agentBO.refreshManager(data, manager, updater);
     }
 
-    public void updateInformation(String address, String area, String city,
-            String mobile, String province, String realName, String teamName,
-            String userId, String WxId) {
+    public void editInformation(String userId, String wxId, String mobile,
+            String realName, String teamName, String province, String city,
+            String area, String address) {
+        Agent agent = agentBO.getAgent(userId);
+        // 一级代理修改团队名称，下级同步
+        if (agentBO.isHighest(userId)) {
 
+        } else {
+            // 非一级代理不允许修改团队名称
+            throw new BizException("xn00000", "非最高等级代理的团队名称无法修改");
+        }
     }
 
     // 修改上级

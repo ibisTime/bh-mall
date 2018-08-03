@@ -295,7 +295,6 @@ public class SqFormAOImpl implements ISqFormAO {
                 ESystemCode.BH.getCode());
 
             // 介绍奖
-
             long amount = 0L;
             if (StringUtils.isNotBlank(applyAgent.getIntroducer())) {
                 Agent buser = agentBO.getAgent(applyAgent.getIntroducer());
@@ -315,7 +314,9 @@ public class SqFormAOImpl implements ISqFormAO {
 
             // 统计
             agentReportBO.saveAgentReport(data, applyAgent);
-
+        } else {
+            // 审核未通过，清空手机号等信息
+            agentBO.refreshInfo(applyAgent);
         }
 
         Date date = new Date();

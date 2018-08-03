@@ -106,4 +106,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 是否为最高等级代理
     public boolean isHighest(String userId);
 
+    public void refreshInfo(Agent applyAgent);
+
 }

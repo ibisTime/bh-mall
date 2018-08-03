@@ -541,4 +541,14 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return false;
     }
 
+    @Override
+    public void refreshInfo(Agent data) {
+        data.setManager(null);
+        data.setIdNo(null);
+        data.setTeamName(null);
+        data.setUserReferee(null);
+
+        agentDAO.updateInfo(data);
+    }
+
 }

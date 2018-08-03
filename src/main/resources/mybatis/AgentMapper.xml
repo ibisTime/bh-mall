@@ -479,10 +479,6 @@
 		WHERE user_id = #{userId}
 	</update>
 
-
-
-
-
 	<update id="update_high" parameterType="agent">
 		UPDATE tbh_user
 		SET
@@ -495,9 +491,6 @@
 		#{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
-
-
-
 
 	<update id="unpdate_teamName" parameterType="agent">
 		UPDATE tbh_user
@@ -519,6 +512,19 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		,last_agent_log = #{lastAgentLog}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_info" parameterType="agent">
+		UPDATE tbh_user
+		SET
+		mobile = #{mobile}
+		,id_no = #{idNo}
+		,user_referee = #{userReferee}
+		,high_user_id = #{highUserId}
+
+		,team_name = #{teamName}
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
