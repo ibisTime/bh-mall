@@ -150,4 +150,9 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
         super.update(NAMESPACE.concat("reset_info"), data);
     }
 
+    @Override
+    public void resetUserReferee(Agent data) {
+        super.update(NAMESPACE.concat("reset_userReferee"), data);
+    }
+
 }

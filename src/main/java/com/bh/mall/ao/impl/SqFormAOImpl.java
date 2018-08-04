@@ -175,14 +175,16 @@ public class SqFormAOImpl implements ISqFormAO {
             req.getProvince(), req.getCity(), req.getArea(), req.getAddress(),
             status);
 
-        // String logCode = agentLogBO.applySqForm(sqForm);
+        String logCode = agentLogBO.applySqForm(sqForm);
+
+        agentBO.refreshAgent(sqForm, logCode);
     }
 
     // 补全授权所需资料
     @Override
     public void addInfo(XN627362Req req) {
-        Agent data = agentBO.getAgent(req.getUserId());
 
+        Agent data = agentBO.getAgent(req.getUserId());
         // 校验介绍人
         String introducer = req.getIntroducer();
         if (StringUtils.isNotBlank(req.getIntroducer())) {
@@ -226,17 +228,20 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 新增授权单
-        sqFormBO.applySqForm(data.getUserId(), data.getRealName(),
-            data.getMobile(), data.getWxId(), req.getApplyLevel(),
-            yxForm.getToUserId(), req.getTeamName(), introducer, null,
-            req.getIdKind(), req.getIdNo(), req.getIdHand(), data.getProvince(),
-            data.getCity(), data.getArea(), data.getAddress(), status);
+        SqForm sqForm = sqFormBO.applySqForm(data.getUserId(),
+            data.getRealName(), data.getMobile(), data.getWxId(),
+            req.getApplyLevel(), yxForm.getToUserId(), req.getTeamName(),
+            introducer, null, req.getIdKind(), req.getIdNo(), req.getIdHand(),
+            data.getProvince(), data.getCity(), data.getArea(),
+            data.getAddress(), status);
 
+        String logCode = agentLogBO.applySqForm(sqForm);
+        agentBO.refreshAgent(sqForm, logCode);
     }
 
     /**
      * 上级审核新申请代理，
-     * 1、审核通过，发放介绍奖（一次性），分配账户，新增默认地址，并确定关系
+     * 1、审核通过且无需公司审核，发放介绍奖（一次性），分配账户，新增默认地址，并确定关系
      * 
      */
     @Override
@@ -257,9 +262,9 @@ public class SqFormAOImpl implements ISqFormAO {
             // 需要公司授权
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
-
             } else {
                 status = EUserStatus.IMPOWERED.getCode();
+
                 this.approveSqForm(sqForm);
             }
         }
@@ -267,9 +272,12 @@ public class SqFormAOImpl implements ISqFormAO {
         Agent approveAgent = agentAO.getAgent(approver);
         sqFormBO.approveSqForm(sqForm, approver, approveAgent.getRealName(),
             remark, status);
-
     }
 
+    /**
+     * 审核新申请代理，
+     * 1、审核通过，发放介绍奖（一次性），分配账户，新增默认地址，并确定关系
+     */
     @Override
     @Transactional
     public void approveSqFormByP(String userId, String approver, String result,
@@ -285,6 +293,10 @@ public class SqFormAOImpl implements ISqFormAO {
         if (EResult.Result_YES.getCode().equals(result)) {
             status = EUserStatus.IMPOWERED.getCode();
             this.approveSqForm(sqForm);
+        } else {
+            // 未通过，清空手机号等信息，防止重新申请时重复
+            Agent agent = agentBO.getAgent(userId);
+            agentBO.resetInfo(agent);
         }
 
         SYSUser sysUser = sysUserBO.getSYSUser(approver);
@@ -293,7 +305,10 @@ public class SqFormAOImpl implements ISqFormAO {
 
     }
 
-    // 取消授权
+    /**
+     * 审核退出，无需公司审核，清空账户
+     * @see com.bh.mall.ao.ISqFormAO#cancelSqFormByB(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public void cancelSqFormByB(String userId, String approver, String result,
             String remark) {
@@ -326,12 +341,18 @@ public class SqFormAOImpl implements ISqFormAO {
 
                 // 清空手机号等信息，防止重新申请时重复
                 agentBO.resetInfo(agent);
+
+                // 清空推荐关系
+                agentBO.resetUserReferee(agent.getUserId());
             }
         }
         sqFormBO.cancelSqForm(sqForm, status);
     }
 
-    // 取消授权
+    /**
+     * 审核退出，清空账户
+     * @see com.bh.mall.ao.ISqFormAO#cancelSqFormByB(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public void cancelSqFormByP(String userId, String approver, String result,
             String remark) {
@@ -354,6 +375,9 @@ public class SqFormAOImpl implements ISqFormAO {
 
             // 清空手机号等信息，防止重新申请时重复
             agentBO.resetInfo(agent);
+
+            // 清空推荐关系
+            agentBO.resetUserReferee(agent.getUserId());
         }
         sqFormBO.cancelSqForm(data, status);
     }
@@ -451,6 +475,7 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
         }
 
+        // 是够有未完成的内购订单
         InnerOrder ioCondition = new InnerOrder();
         ioCondition.setApplyUser(agent.getUserId());
         ioCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());

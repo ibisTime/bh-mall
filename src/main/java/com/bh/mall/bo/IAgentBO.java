@@ -38,12 +38,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 判断用户编号是否存在
     public boolean isUserExist(String userId);
 
-    // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
-    public void checkLoginPwd(String userId, String loginPwd);
-
-    // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
-    public void checkLoginPwd(String userId, String loginPwd, String alertStr);
-
     // 校验是否已经有人实名认证
     public void checkIdentify(String kind, String idKind, String idNo,
             String realName);
@@ -75,10 +69,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo);
 
-    public String saveUser(String mobile, String kind);
-
-    public void refreshNickname(String userId, String nickname);
-
     public void refreshReferee(Agent data, String userReferee, String updater);
 
     public void refreshPhoto(String userId, String photo);
@@ -94,9 +84,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     /*************** 查询 **********************/
 
     public List<Agent> selectList(Agent condition, int pageNo, int pageSize);
-
-    public List<Agent> selectAgentFront(Agent condition, int pageNo,
-            int pageSize);
 
     public String getAgentName(String userReferee);
 
@@ -119,5 +106,10 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     // 升级成功
     public void sjSuccess(SjForm sjForm);
+
+    public void refreshAgent(SqForm sqForm, String logCode);
+
+    // 清空推荐关系
+    public void resetUserReferee(String userId);
 
 }

@@ -115,6 +115,8 @@ public class SjFormAOImpl implements ISjFormAO {
         }
 
         String status = EUserStatus.TO_UPGRADE.getCode();
+        String toUserId = data.getHighUserId();
+        Agent highAgent = agentBO.getAgent(data.getHighUserId());
         // 申请等级为董事的代理，直接由平台审核
         if (EAgentLevel.ONE.getCode().equals(highLevel)) {
             EUserStatus.TO_COMPANYCANCEL.getCode();
@@ -123,11 +125,17 @@ public class SjFormAOImpl implements ISjFormAO {
                 throw new BizException("xn00000", "给自己团队起个名字吧");
             }
             agentBO.checkTeamName(teamName);
+            SYSUser sysUser = sysUserBO.getSYSUser();
+            toUserId = sysUser.getUserId();
+        } else if (StringValidater.toInteger(newLevel) <= highAgent
+            .getLevel()) {
+            toUserId = this.getHighUser(data.getHighUserId(),
+                StringValidater.toInteger(newLevel));
         }
 
         //
-        sjFormBO.applySjForm(data, newLevel, idKind, idNo, idHand, payPdf,
-            payAmount, status);
+        sjFormBO.applySjForm(data, toUserId, newLevel, idKind, idNo, idHand,
+            payPdf, payAmount, status);
 
     }
 
@@ -235,6 +243,15 @@ public class SjFormAOImpl implements ISjFormAO {
             uplevelApply.setUser(agent);
         }
         return page;
+    }
+
+    private String getHighUser(String highUserId, Integer level) {
+        Agent highAgent = agentBO.getAgent(highUserId);
+        if (level <= highAgent.getLevel()) {
+            highAgent = agentBO.getAgent(highAgent.getHighUserId());
+            getHighUser(highAgent.getHighUserId(), level);
+        }
+        return highAgent.getUserId();
     }
 
 }

@@ -10,7 +10,6 @@ import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.ISYSUserBO;
-import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
@@ -41,10 +40,10 @@ public class YxFormAOImpl implements IYxFormAO {
     @Autowired
     private ISYSUserBO sysUserBO;
 
-    @Autowired
-    private ISqFormBO sqFormBO;
-
-    // 代理申请 （无推荐人）
+    /**
+    * 申请意向代理
+    * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+    */
     @Override
     @Transactional
     public void applyYxForm(XN627250Req req) {
@@ -71,6 +70,10 @@ public class YxFormAOImpl implements IYxFormAO {
 
     }
 
+    /**
+     * 平台分配意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
     public void allotYxFormByP(String userId, String toUserId, String approver,
             String remark) {
@@ -91,6 +94,10 @@ public class YxFormAOImpl implements IYxFormAO {
             sysUser.getUserId(), sysUser.getRealName(), logCode);
     }
 
+    /**
+     * 代理分配意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
     public void allotYxFormByB(String userId, String toUserId, String approver,
             String remark) {
@@ -110,7 +117,10 @@ public class YxFormAOImpl implements IYxFormAO {
             logCode);
     }
 
-    // 忽略意向
+    /**
+     * 平台忽略意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
     public void ignoreYxFormByP(String userId, String approver, String remark) {
         YxForm yxForm = yxFormBO.getYxForm(userId);
@@ -125,7 +135,10 @@ public class YxFormAOImpl implements IYxFormAO {
 
     }
 
-    // 忽略意向
+    /**
+     * 代理忽略意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
     public void ignoreYxFormByB(String userId, String approver, String remark) {
         YxForm yxForm = yxFormBO.getYxForm(userId);
@@ -139,7 +152,10 @@ public class YxFormAOImpl implements IYxFormAO {
             agent.getUserId(), agent.getRealName(), logCode);
     }
 
-    // 接受意向
+    /**
+     * 平台接受意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
     public void acceptYxFormByP(String userId, String approver, String remark) {
 
@@ -155,7 +171,10 @@ public class YxFormAOImpl implements IYxFormAO {
 
     }
 
-    // 接受意向
+    /**
+     * 代理接受意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
     public void acceptYxFormByB(String userId, String approver, String remark) {
         // 确认申请id

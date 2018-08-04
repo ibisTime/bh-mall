@@ -60,20 +60,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return userId;
     }
 
-    // 保存新用户
-    @Override
-    public String saveUser(String mobile, String kind) {
-        String userId = null;
-        if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
-            userId = OrderNoGenerater.generate("U");
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setMobile(mobile);
-            agentDAO.insert(data);
-        }
-        return userId;
-    }
-
     /*************** 获取数据库信息 **********************/
 
     @Override
@@ -214,36 +200,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return false;
     }
 
-    @Override
-    public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
-            Agent condition = new Agent();
-            condition.setUserId(userId);
-            long count = this.getTotalCount(condition);
-            if (count != 1) {
-                throw new BizException("jd00001", "原登录密码错误");
-            }
-        } else {
-            throw new BizException("jd00001", "原登录密码错误");
-        }
-    }
-
-    @Override
-    public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
-            Agent condition = new Agent();
-            condition.setUserId(userId);
-            long count = this.getTotalCount(condition);
-            if (count != 1) {
-                throw new BizException("jd00001", alertStr + "错误");
-            }
-        } else {
-            throw new BizException("jd00001", alertStr + "错误");
-        }
-    }
-
     /** 
      * @see com.bh.mall.bo.IAgentBO#checkIdentify(java.lang.String, java.lang.String, java.lang.String)
      */
@@ -306,17 +262,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setRemark(remark);
         agentDAO.updateStatus(data);
 
-    }
-
-    // 更新昵称
-    @Override
-    public void refreshNickname(String userId, String nickname) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setNickname(nickname);
-            agentDAO.updateNickname(data);
-        }
     }
 
     // 更新头像
@@ -404,12 +349,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     /*************** 查询 **********************/
-
-    // 查询下级代理
-    @Override
-    public List<Agent> selectAgentFront(Agent condition, int start, int limit) {
-        return agentDAO.selectAgentFront(condition, start, limit);
-    }
 
     // 分页查询
     @Override
@@ -548,6 +487,22 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     @Override
     public void sjSuccess(SjForm sjForm) {
+    }
+
+    @Override
+    public void refreshAgent(SqForm sqForm, String logCode) {
+    }
+
+    @Override
+    public void resetUserReferee(String userId) {
+        Agent condition = new Agent();
+        condition.setUserReferee(userId);
+        List<Agent> list = agentDAO.selectList(condition);
+        for (Agent agent : list) {
+            agent.setUserReferee(null);
+            agentDAO.resetUserReferee(agent);
+        }
+
     }
 
 }

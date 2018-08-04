@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Page;
@@ -27,9 +26,6 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
     @Autowired
     private IAgentLogBO agentLogBO;
-
-    @Autowired
-    private IAgentBO agentBO;
 
     // 代理申请
     @Override
@@ -90,6 +86,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String acceptYxForm(YxForm data, String approver, String approveName,
             String remark) {
+        data.setToUserId(approver);
         data.setStatus(EYxFormStatus.ACCEPT.getCode());
         data.setApprover(approver);
         data.setApproveName(approveName);

@@ -140,4 +140,7 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     // 清空手机号等信息
     public void resetInfo(Agent data);
 
+    // 清空推荐关系
+    public void resetUserReferee(Agent agent);
+
 }

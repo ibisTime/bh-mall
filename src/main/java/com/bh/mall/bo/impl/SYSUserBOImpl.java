@@ -99,6 +99,17 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
+    public SYSUser getSYSUser() {
+        SYSUser condition = new SYSUser();
+        List<SYSUser> list = sysUserDAO.selectList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("xn0000", "用户不存在");
+        }
+        return list.get(0);
+
+    }
+
+    @Override
     public boolean isUserExist(String userId, String systemCode) {
         SYSUser condition = new SYSUser();
         condition.setUserId(userId);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.bh.mall.dao.IAgentLogDAO;
 import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.AgentLog;
+import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.SqForm;
 
 @Repository("agentLogDAOImpl")
@@ -48,6 +49,11 @@ public class AgentLogDAOImpl extends AMybatisTemplate implements IAgentLogDAO {
 
     @Override
     public String applySqForm(SqForm data) {
+        return null;
+    }
+
+    @Override
+    public String applySjForm(SjForm sjForm) {
         return null;
     }
 

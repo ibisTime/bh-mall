@@ -26,12 +26,13 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
     // 升级申请
     @Override
-    public String applySjForm(Agent data, String newLevel, String idKind,
-            String idNo, String idHand, String payPdf, String payAmount,
-            String status) {
+    public String applySjForm(Agent data, String toUserId, String newLevel,
+            String idKind, String idNo, String idHand, String payPdf,
+            String payAmount, String status) {
 
         SjForm sjForm = new SjForm();
         sjForm.setUserId(data.getUserId());
+        sjForm.setToUserId(toUserId);
         sjForm.setRealName(data.getRealName());
         sjForm.setTeamName(data.getTeamName());
         sjForm.setLevel(data.getLevel());
