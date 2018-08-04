@@ -168,12 +168,20 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 新增授权单
-        SqForm sqForm = sqFormBO.applySqForm(agent.getUserId(),
-            req.getRealName(), req.getMobile(), req.getWxId(),
-            req.getApplyLevel(), toUserId, req.getTeamName(), introducer,
-            userRefree, req.getIdKind(), req.getIdNo(), req.getIdHand(),
-            req.getProvince(), req.getCity(), req.getArea(), req.getAddress(),
-            status);
+        SqForm sqForm = sqFormBO.getSqForm(agent.getUserId());
+        if (null != sqForm) {
+            sqForm = sqFormBO.applySqForm(agent.getUserId(), req.getRealName(),
+                req.getMobile(), req.getWxId(), req.getApplyLevel(), toUserId,
+                req.getTeamName(), introducer, userRefree, req.getIdKind(),
+                req.getIdNo(), req.getIdHand(), req.getProvince(),
+                req.getCity(), req.getArea(), req.getAddress(), status);
+        } else {
+            sqForm = sqFormBO.refreshSqForm(sqForm, req.getRealName(),
+                req.getMobile(), req.getWxId(), req.getApplyLevel(), toUserId,
+                req.getTeamName(), introducer, userRefree, req.getIdKind(),
+                req.getIdNo(), req.getIdHand(), req.getProvince(),
+                req.getCity(), req.getArea(), req.getAddress(), status);
+        }
 
         String logCode = agentLogBO.applySqForm(sqForm);
 

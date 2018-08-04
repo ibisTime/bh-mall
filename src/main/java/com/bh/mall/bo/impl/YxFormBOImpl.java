@@ -16,7 +16,6 @@ import com.bh.mall.dao.IYxFormDAO;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.enums.EYxFormStatus;
-import com.bh.mall.exception.BizException;
 
 @Component
 public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
@@ -32,8 +31,33 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     public String applyYxForm(String userId, String realName, String wxId,
             String mobile, String applyLevel, String province, String city,
             String area, String address, String fromInfo) {
+
         YxForm data = new YxForm();
         data.setUserId(userId);
+        data.setRealName(realName);
+        data.setWxId(wxId);
+        data.setMobile(mobile);
+
+        data.setApplyLevel(StringValidater.toInteger(applyLevel));
+        data.setProvince(province);
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
+
+        data.setStatus(EUserStatus.MIND.getCode()); // 有意愿
+        data.setApplyDatetime(new Date());
+        data.setSource(fromInfo);
+        yxFormDAO.insert(data);
+
+        // 生成代理轨迹
+        return agentLogBO.applyYxForm(data);
+    }
+
+    @Override
+    public String updateYxForm(YxForm data, String realName, String wxId,
+            String mobile, String applyLevel, String province, String city,
+            String area, String address, String fromInfo) {
+
         data.setRealName(realName);
         data.setWxId(wxId);
         data.setMobile(mobile);
@@ -104,9 +128,6 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         if (StringUtils.isNotBlank(code)) {
             YxForm condition = new YxForm();
             data = yxFormDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "代理授权编号不存在");
-            }
         }
         return data;
     }

@@ -59,10 +59,22 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 确认申请id
         Agent data = agentBO.getAgent(req.getUserId());
-        String logCode = yxFormBO.applyYxForm(data.getUserId(),
-            req.getRealName(), req.getWxId(), req.getMobile(),
-            req.getApplyLevel(), req.getProvince(), req.getCity(),
-            req.getArea(), req.getAddress(), req.getFromInfo());
+
+        // 之前有意向单更新，没有新增
+        YxForm yxForm = yxFormBO.getYxForm(req.getUserId());
+        String logCode = null;
+        if (null == yxForm) {
+            logCode = yxFormBO.applyYxForm(data.getUserId(), req.getRealName(),
+                req.getWxId(), req.getMobile(), req.getApplyLevel(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress(), req.getFromInfo());
+        } else {
+            logCode = yxFormBO.updateYxForm(yxForm, req.getRealName(),
+                req.getWxId(), req.getMobile(), req.getApplyLevel(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress(), req.getFromInfo());
+        }
+
         // 更新最后一条日志
         agentBO.applyAgent(data, req.getRealName(), req.getWxId(),
             req.getMobile(), req.getProvince(), req.getCity(), req.getArea(),

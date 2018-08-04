@@ -19,6 +19,11 @@ public interface IYxFormBO extends IPaginableBO<YxForm> {
             String mobile, String applyLevel, String province, String city,
             String area, String address, String fromInfo);
 
+    // 更新
+    public String updateYxForm(YxForm yxForm, String realName, String wxId,
+            String mobile, String applyLevel, String province, String city,
+            String area, String address, String fromInfo);
+
     // 意向分配
     public String allotYxForm(YxForm data, String toUserId, String approver,
             String approveName, String remark);

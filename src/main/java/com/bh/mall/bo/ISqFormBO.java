@@ -14,6 +14,12 @@ public interface ISqFormBO extends IPaginableBO<SqForm> {
             String idHand, String province, String citt, String area,
             String address, String status);
 
+    public SqForm refreshSqForm(SqForm data, String realName, String mobile,
+            String wxId, String applyLevel, String toUserId, String teamName,
+            String introducer, String userRefree, String idKind, String idNo,
+            String idHand, String province, String city, String area,
+            String address, String status);
+
     // 审核授权单
     public String approveSqForm(SqForm sqForm, String approver,
             String approveName, String remark, String status);

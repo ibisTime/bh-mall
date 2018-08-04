@@ -51,6 +51,29 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     }
 
     @Override
+    public String refreshSjForm(SjForm sjForm, Agent data, String toUserId,
+            String newLevel, String idKind, String idNo, String idHand,
+            String payPdf, String payAmount, String status) {
+
+        sjForm.setToUserId(toUserId);
+        sjForm.setRealName(data.getRealName());
+        sjForm.setTeamName(data.getTeamName());
+        sjForm.setLevel(data.getLevel());
+
+        sjForm.setApplyLevel(StringValidater.toInteger(newLevel));
+        sjForm.setIdKind(idKind);
+        sjForm.setIdNo(idNo);
+        sjForm.setIdHand(idHand);
+
+        sjForm.setPayPdf(payPdf);
+        sjForm.setPayAmount(StringValidater.toLong(payAmount));
+        Date date = new Date();
+        sjForm.setApplyDatetime(date);
+
+        return agentLogBO.applySjForm(sjForm, data);
+    }
+
+    @Override
     public void approveSjForm(SjForm sjForm, Agent agent, String approver,
             String approveName, String remark, String status) {
         sjForm.setApprover(approver);

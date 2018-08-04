@@ -133,9 +133,14 @@ public class SjFormAOImpl implements ISjFormAO {
                 StringValidater.toInteger(newLevel));
         }
 
-        //
-        sjFormBO.applySjForm(data, toUserId, newLevel, idKind, idNo, idHand,
-            payPdf, payAmount, status);
+        SjForm sjForm = sjFormBO.getSjForm(data.getUserId());
+        if (null == sjForm) {
+            sjFormBO.applySjForm(data, toUserId, newLevel, idKind, idNo, idHand,
+                payPdf, payAmount, status);
+        } else {
+            sjFormBO.refreshSjForm(sjForm, data, toUserId, newLevel, idKind,
+                idNo, idHand, payPdf, payAmount, status);
+        }
 
     }
 

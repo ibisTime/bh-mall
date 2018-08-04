@@ -57,6 +57,38 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         return data;
     }
 
+    @Override
+    public SqForm refreshSqForm(SqForm data, String realName, String mobile,
+            String wxId, String applyLevel, String toUserId, String teamName,
+            String introducer, String userRefree, String idKind, String idNo,
+            String idHand, String province, String city, String area,
+            String address, String status) {
+
+        data.setRealName(realName);
+        data.setMobile(mobile);
+        data.setWxId(wxId);
+
+        data.setApplyLevel(StringValidater.toInteger(applyLevel));
+        data.setToUserId(toUserId);
+        data.setTeamName(teamName);
+        data.setIdKind(idKind);
+        data.setIdNo(idNo);
+
+        data.setIdHand(idHand);
+        data.setIntroducer(introducer);
+        data.setReferrer(userRefree);
+        data.setProvince(province);
+        data.setCity(city);
+
+        data.setArea(area);
+        data.setAddress(address);
+        data.setStatus(status);
+        Date date = new Date();
+        data.setApplyDatetime(date);
+        sqFormDAO.insert(data);
+        return data;
+    }
+
     // 详细查询
     @Override
     public SqForm getSqForm(String userId) {
