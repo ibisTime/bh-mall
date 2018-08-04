@@ -92,6 +92,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         data.setApproveName(approveName);
         Date date = new Date();
         data.setApproveDatetime(date);
+        data.setImpowerDatetime(date);
         data.setRemark(remark);
 
         data.setStatus(status);

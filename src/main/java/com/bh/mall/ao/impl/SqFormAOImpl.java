@@ -528,6 +528,9 @@ public class SqFormAOImpl implements ISqFormAO {
                         + EBizType.AJ_JSJL.getValue() + "收入",
                 sqForm.getUserId());
         }
+        Agent agent = agentBO.getAgent(sqForm.getUserId());
+        agentReportBO.saveAgentReport(sqForm, agent);
+        agentBO.sqSuccess(sqForm);
     }
 
 }

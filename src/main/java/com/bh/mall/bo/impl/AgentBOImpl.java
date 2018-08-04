@@ -486,7 +486,45 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
+    public void sqSuccess(SqForm sqForm) {
+        Agent agent = getAgent(sqForm.getUserId());
+        agent.setRealName(sqForm.getRealName());
+        agent.setLevel(sqForm.getApplyLevel());
+        agent.setUserReferee(sqForm.getReferrer());
+        agent.setIntroducer(sqForm.getIntroducer());
+
+        agent.setIdKind(sqForm.getIdKind());
+        agent.setIdNo(sqForm.getIdNo());
+        agent.setIdHand(sqForm.getIdHand());
+        agent.setTeamName(sqForm.getTeamName());
+        agent.setHighUserId(sqForm.getToUserId());
+
+        agent.setStatus(sqForm.getStatus());
+        agent.setProvince(sqForm.getProvince());
+        agent.setCity(sqForm.getCity());
+        agent.setArea(sqForm.getArea());
+        agent.setAddress(sqForm.getAddress());
+
+        agent.setApprover(sqForm.getApprover());
+        agent.setApproveName(sqForm.getApproveName());
+        agent.setRemark(sqForm.getRemark());
+        agent.setImpowerDatetime(sqForm.getImpowerDatetime());
+        agentDAO.sqSuccess(agent);
+    }
+
+    @Override
     public void sjSuccess(SjForm sjForm) {
+        Agent agent = getAgent(sjForm.getUserId());
+        agent.setIdKind(sjForm.getIdKind());
+        agent.setIdNo(sjForm.getIdNo());
+        agent.setIdHand(sjForm.getIdHand());
+        agent.setTeamName(sjForm.getTeamName());
+
+        agent.setLevel(sjForm.getApplyLevel());
+        agent.setApprover(sjForm.getApprover());
+        agent.setApproveName(sjForm.getApproveName());
+        agent.setRemark(sjForm.getRemark());
+        agentDAO.sjSuccess(agent);
     }
 
     @Override

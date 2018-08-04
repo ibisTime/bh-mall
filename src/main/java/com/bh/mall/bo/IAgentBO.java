@@ -104,6 +104,9 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 清空信息
     public void resetInfo(Agent agent);
 
+    // 授权成功
+    public void sqSuccess(SqForm sqForm);
+
     // 升级成功
     public void sjSuccess(SjForm sjForm);
 

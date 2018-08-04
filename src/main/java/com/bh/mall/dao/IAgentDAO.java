@@ -28,24 +28,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     public int updateStatus(Agent data);
 
     /**
-     * 更新用户名 
-     * @param data
-     * @return 
-     * @create: 2018年7月31日 下午2:07:43 LENOVO
-     * @history:
-     */
-    public int updateLoginName(Agent data);
-
-    /**
-     * 更新昵称 
-     * @param data
-     * @return 
-     * @create: 2018年7月31日 下午2:07:53 LENOVO
-     * @history:
-     */
-    public int updateNickname(Agent data);
-
-    /**
      * 更新头像 
      * @param data
      * @return 
@@ -142,5 +124,11 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
 
     // 清空推荐关系
     public void resetUserReferee(Agent agent);
+
+    // 授权成功
+    public void sqSuccess(Agent agent);
+
+    // 升级成功
+    public void sjSuccess(Agent agent);
 
 }
