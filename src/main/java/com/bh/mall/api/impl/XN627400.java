@@ -27,7 +27,6 @@ public class XN627400 extends AProcessor {
     public Object doBusiness() throws BizException {
         Address data = new Address();
         data.setUserId(req.getUserId());
-        data.setType(req.getType());
         data.setReceiver(req.getReceiver());
         data.setMobile(req.getMobile());
         data.setProvince(req.getProvince());

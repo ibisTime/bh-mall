@@ -1,7 +1,6 @@
 package com.bh.mall.ao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -16,11 +15,14 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.IOutOrderBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISqFormBO;
+import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.IdCardChecker;
@@ -32,19 +34,21 @@ import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.JsAward;
 import com.bh.mall.domain.OutOrder;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SqForm;
+import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
-import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAccountType;
-import com.bh.mall.enums.EAddressType;
 import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EResult;
+import com.bh.mall.enums.ESqFormStatus;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EUserKind;
@@ -84,27 +88,46 @@ public class SqFormAOImpl implements ISqFormAO {
     @Autowired
     private IInnerOrderBO innerOrderBO;
 
-    // 申请代理， 有推荐人
+    @Autowired
+    private IYxFormBO yxFormBO;
+
+    @Autowired
+    private IAgentLogBO agentLogBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
+    /**
+     * 有头的代理申请授权
+     * 1、校验介绍人、身份证、团队名称
+     * 2、根据申请等级判断两个代理的关系
+     * @see com.bh.mall.ao.ISqFormAO#applyHaveUserReferee(com.bh.mall.dto.req.XN627251Req)
+     */
     @Override
     @Transactional
-    public XN627303Res applyHaveUserReferee(XN627251Req req) {
-        XN627303Res result = null;
+    public void applyHaveUserReferee(XN627251Req req) {
         PhoneUtil.checkMobile(req.getMobile());
         agentBO.isMobileExist(req.getMobile());
 
-        // 校验介绍人
+        // 是够有介绍人并校验
         String introducer = req.getIntroducer();
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
             Agent agent = agentBO.getAgentByMobile(req.getIntroducer());
             introducer = agent.getUserId();
+            if (!EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+                throw new BizException("xn0000", "该介绍人还未授权哦！");
+            }
+            if (agent.getUserId().equals(req.getUserId())) {
+                throw new BizException("xn0000", "介绍人不能填自己哦！");
+            }
             if (agent.getLevel() <= StringValidater
                 .toInteger(req.getApplyLevel())) {
                 throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
         }
 
-        // 是否需要实名制
+        // 是否需要实名制并校验
         AgentLevel impower = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
@@ -115,133 +138,135 @@ public class SqFormAOImpl implements ISqFormAO {
             agentBO.getAgentByIdNo(req.getIdNo());
         }
 
-        Agent data = agentBO.getAgent(req.getUserId());
-        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        String status = EUserStatus.TO_APPROVE.getCode(); // 待审核授权
-        String toUser = data.getUserReferee();
-
-        Agent userReferee = agentBO.getAgent(data.getUserReferee());
-        data.setTeamName(userReferee.getTeamName());
-        if (data.getApplyLevel() < userReferee.getLevel()) {
+        // 分享二维码的代理
+        Agent agent = agentBO.getAgent(req.getUserId());
+        Agent fromAgent = agentBO.getAgent(agent.getFromUserId());
+        if (StringValidater.toInteger(req.getApplyLevel()) < fromAgent
+            .getLevel()) {
             throw new BizException("xn0000", "申请等级不能高于推荐代理的等级");
         }
-        if (data.getApplyLevel() == userReferee.getLevel()) {
-            toUser = userReferee.getHighUserId();
-        }
 
-        // 是否需要公司审核
-        if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
-            status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+        // 等级与所扫码代理等级相同，分享二维码视为代理推荐人
+        String userRefree = null;
+        String toUserId = null;
+        if (StringValidater.toInteger(req.getApplyLevel()) == fromAgent
+            .getLevel()) {
+            userRefree = fromAgent.getUserId();
+            toUserId = fromAgent.getHighUserId();
+        } else {
+            toUserId = fromAgent.getUserId();
         }
 
         // 申请最高等级
+        String status = agent.getStatus();
         if (EAgentLevel.ONE.getCode().equals(req.getApplyLevel())) {
-            // 防止团队名称重复
+            // 校验团队名称
+            agentBO.checkTeamName(req.getTeamName());
+            agent.setTeamName(req.getTeamName());
+            // 直接由公司审核
+            status = ESqFormStatus.COMPANY_APPROVE.getCode();
+        }
+
+        // 新增授权单
+        SqForm sqForm = sqFormBO.applySqForm(agent.getUserId(),
+            req.getRealName(), req.getMobile(), req.getWxId(),
+            req.getApplyLevel(), toUserId, req.getTeamName(), introducer,
+            userRefree, req.getIdKind(), req.getIdNo(), req.getIdHand(),
+            req.getProvince(), req.getCity(), req.getArea(), req.getAddress(),
+            status);
+
+        // String logCode = agentLogBO.applySqForm(sqForm);
+    }
+
+    // 补全授权所需资料
+    @Override
+    public void addInfo(XN627362Req req) {
+        Agent data = agentBO.getAgent(req.getUserId());
+
+        // 校验介绍人
+        String introducer = req.getIntroducer();
+        if (StringUtils.isNotBlank(req.getIntroducer())) {
+            PhoneUtil.checkMobile(req.getIntroducer());
+            Agent agent = agentBO.getAgentByMobile(req.getIntroducer());
+            introducer = agent.getUserId();
+
+            if (!EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+                throw new BizException("xn0000", "该介绍人还未授权哦！");
+            }
+            if (agent.getUserId().equals(req.getUserId())) {
+                throw new BizException("xn0000", "介绍人不能填自己哦！");
+            }
+            if (agent.getLevel() <= StringValidater
+                .toInteger(req.getApplyLevel())) {
+                throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
+            }
+        }
+
+        // 申请最高等级
+        String status = data.getStatus();
+        if (EAgentLevel.ONE.getCode().equals(req.getApplyLevel())) {
+            // 校验团队名称
             agentBO.checkTeamName(req.getTeamName());
             data.setTeamName(req.getTeamName());
+            // 直接由公司审核
+            status = ESqFormStatus.COMPANY_APPROVE.getCode();
         }
 
-        // 申请等级不等于推荐人等级
-        if (data.getApplyLevel() != userReferee.getLevel()) {
-            data.setUserReferee(null);
-            toUser = userReferee.getUserId();
+        // 意向单
+        YxForm yxForm = yxFormBO.getYxForm(data.getUserId());
+        AgentLevel agentLevel = agentLevelBO
+            .getAgentByLevel(yxForm.getApplyLevel());
+        // 校验身份证
+        if (EBoolean.YES.getCode().equals(agentLevel.getIsRealName())) {
+            IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
+            if (!idCardChecker.validate()) {
+                throw new BizException("xn0000", "请输入正确的身份证号码");
+            }
+            agentBO.getAgentByIdNo(req.getIdNo());
         }
 
-        SqForm sqData = new SqForm();
-        sqData.setToUserId(toUser);
-        sqData.setRealName(req.getRealName());
-        sqData.setWxId(req.getWxId());
-        sqData.setMobile(req.getMobile());
-        sqData.setProvince(req.getProvince());
-        sqData.setCity(req.getCity());
-
-        sqData.setIdKind(req.getIdKind());
-        sqData.setIdNo(req.getIdNo());
-        sqData.setIdHand(req.getIdHand());
-
-        sqData.setIntroducer(introducer);
-        sqData.setStatus(status);
-        sqData.setArea(req.getArea());
-        // data.setPayPdf(req.getPayPdf());
-
-        data.setAddress(req.getAddress());
-
-        sqFormBO.toApply(sqData);
-        addressBO.saveAddress(sqData.getUserId(),
-            EAddressType.User_Address.getCode(), req.getMobile(),
-            req.getRealName(), req.getProvince(), req.getCity(), req.getArea(),
-            req.getAddress(), EBoolean.YES.getCode());
-        result = new XN627303Res(sqData.getUserId(), EBoolean.NO.getCode());
-        return result;
+        // 新增授权单
+        sqFormBO.applySqForm(data.getUserId(), data.getRealName(),
+            data.getMobile(), data.getWxId(), req.getApplyLevel(),
+            yxForm.getToUserId(), req.getTeamName(), introducer, null,
+            req.getIdKind(), req.getIdNo(), req.getIdHand(), data.getProvince(),
+            data.getCity(), data.getArea(), data.getAddress(), status);
 
     }
 
+    /**
+     * 上级审核新申请代理，
+     * 1、审核通过，发放介绍奖（一次性），分配账户，新增默认地址，并确定关系
+     * 
+     */
     @Override
     @Transactional
     public void approveSqFormByB(String userId, String approver, String result,
             String remark) {
 
-        Agent applyAgent = agentBO.getAgent(userId);
-        SqForm data = new SqForm();
-
-        if (!EUserStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
+        SqForm sqForm = sqFormBO.getSqForm(userId);
+        if (!ESqFormStatus.TO_APPROVE.getCode().equals(sqForm.getStatus())) {
             throw new BizException("xn000", "该代理未处于待授权状态");
         }
 
-        String status = EUserStatus.NO_THROUGH.getCode();
-        String fromUser = ESysUser.SYS_USER_BH.getCode();
-
-        Agent highUser = agentBO.getAgent(data.getToUserId());
         // 审核通过
+        String status = EUserStatus.NO_THROUGH.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-
             AgentLevel impower = agentLevelBO
-                .getAgentByLevel(data.getApplyLevel());
+                .getAgentByLevel(sqForm.getApplyLevel());
             // 需要公司授权
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
                 status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+
             } else {
-                data.setApplyLevel(data.getApplyLevel());
                 status = EUserStatus.IMPOWERED.getCode();
-
-                // 根据用户类型获取账户列表
-                List<String> currencyList = distributeAccount(data.getUserId(),
-                    data.getRealName(), EUserKind.Merchant.getCode());
-                // 分配账户
-                accountBO.distributeAccount(data.getUserId(),
-                    data.getRealName(), EAccountType.Business, currencyList,
-                    ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-
-                // 介绍奖
-
-                long amount = 0L;
-                if (StringUtils.isNotBlank(applyAgent.getIntroducer())) {
-                    Agent buser = agentBO.getAgent(applyAgent.getIntroducer());
-                    JsAward iData = jsAwardBO.getJsAwardByLevel(
-                        buser.getLevel(), data.getApplyLevel());
-                    amount = AmountUtil.mul(impower.getMinCharge(),
-                        iData.getPercent() / 100);
-                    accountBO.transAmountCZB(fromUser,
-                        ECurrency.YJ_CNY.getCode(), buser.getUserId(),
-                        ECurrency.YJ_CNY.getCode(), amount, EBizType.AJ_JSJL,
-                        "介绍代理[" + data.getRealName() + "]的"
-                                + EBizType.AJ_JSJL.getCode() + "支出",
-                        "介绍代理[" + data.getRealName() + "]的"
-                                + EBizType.AJ_JSJL.getValue() + "收入",
-                        data.getUserId());
-                }
-
-                // 统计
-                agentReportBO.saveAgentReport(data, applyAgent);
+                this.approveSqForm(sqForm);
             }
         }
 
-        Date date = new Date();
-        data.setApprover(approver);
-        data.setApproveDatetime(date);
-        data.setStatus(status);
-        data.setRemark(remark);
-        sqFormBO.approveSqForm(data);
+        Agent approveAgent = agentAO.getAgent(approver);
+        sqFormBO.approveSqForm(sqForm, approver, approveAgent.getRealName(),
+            remark, status);
 
     }
 
@@ -250,83 +275,21 @@ public class SqFormAOImpl implements ISqFormAO {
     public void approveSqFormByP(String userId, String approver, String result,
             String remark) {
 
-        Agent applyAgent = agentBO.getAgent(userId);
-        SqForm data = new SqForm();
-
-        if (EUserStatus.TO_COMPANYAPPROVE.getCode().equals(data.getStatus())) {
+        SqForm sqForm = sqFormBO.getSqForm(userId);
+        if (!ESqFormStatus.TO_APPROVE.getCode().equals(sqForm.getStatus())) {
             throw new BizException("xn000", "该代理未处于待授权状态");
         }
 
-        String status = EUserStatus.NO_THROUGH.getCode();
-        String fromUser = ESysUser.SYS_USER_BH.getCode();
-
-        Agent highUser = agentBO.getAgent(data.getToUserId());
         // 审核通过
+        String status = EUserStatus.NO_THROUGH.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             status = EUserStatus.IMPOWERED.getCode();
-
-            if (StringUtils.isNotBlank(data.getToUserId())) {
-                highUser = agentBO.getAgent(data.getToUserId());
-                if (!EUserKind.Plat.getCode().equals(highUser.getKind())) {
-                    fromUser = highUser.getUserId();
-                }
-            }
-            // data.setHighUserId(highUser.getUserId());
-
-            AgentLevel impower = agentLevelBO
-                .getAgentByLevel(data.getApplyLevel());
-
-            if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
-                if (StringUtils.isBlank(data.getIdNo())
-                        || StringUtils.isBlank(data.getIdHand())) {
-                    throw new BizException("xn0000", "本等级需要实名认证，该代理还未完成实名认证");
-                }
-            }
-
-            data.setApplyLevel(data.getApplyLevel());
-            // data.setImpowerDatetime(new Date());
-
-            // 根据用户类型获取账户列表
-            List<String> currencyList = distributeAccount(data.getUserId(),
-                data.getRealName(), EUserKind.Merchant.getCode());
-            // 分配账户
-            accountBO.distributeAccount(data.getUserId(), data.getRealName(),
-                EAccountType.Business, currencyList, ESystemCode.BH.getCode(),
-                ESystemCode.BH.getCode());
-
-            // 介绍奖
-            long amount = 0L;
-            if (StringUtils.isNotBlank(applyAgent.getIntroducer())) {
-                Agent buser = agentBO.getAgent(applyAgent.getIntroducer());
-                JsAward iData = jsAwardBO.getJsAwardByLevel(buser.getLevel(),
-                    data.getApplyLevel());
-                amount = AmountUtil.mul(impower.getMinCharge(),
-                    iData.getPercent() / 100);
-                accountBO.transAmountCZB(fromUser, ECurrency.YJ_CNY.getCode(),
-                    buser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
-                    EBizType.AJ_JSJL,
-                    "介绍代理[" + data.getRealName() + "]的"
-                            + EBizType.AJ_JSJL.getCode() + "支出",
-                    "介绍代理[" + data.getRealName() + "]的"
-                            + EBizType.AJ_JSJL.getValue() + "收入",
-                    data.getUserId());
-            }
-
-            // 统计
-            agentReportBO.saveAgentReport(data, applyAgent);
-        } else {
-            // 审核未通过，清空手机号等信息
-            agentBO.refreshInfo(applyAgent);
+            this.approveSqForm(sqForm);
         }
 
-        Date date = new Date();
-
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(date);
-        data.setApplyDatetime(date);
-        data.setRemark(remark);
-        sqFormBO.approveSqForm(data);
+        SYSUser sysUser = sysUserBO.getSYSUser(approver);
+        sqFormBO.approveSqForm(sqForm, approver, sysUser.getRealName(), remark,
+            status);
 
     }
 
@@ -334,6 +297,8 @@ public class SqFormAOImpl implements ISqFormAO {
     @Override
     public void cancelSqFormByB(String userId, String approver, String result,
             String remark) {
+        SqForm sqForm = sqFormBO.getSqForm(userId);
+
         Agent agent = agentBO.getAgent(userId);
 
         SqForm data = new SqForm();
@@ -359,19 +324,11 @@ public class SqFormAOImpl implements ISqFormAO {
                     EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
                     -account.getAmount());
 
-                // 手机号、团队名称等清零
-                agent.setMobile(null);
-                agent.setIdNo(null);
-                agent.setUserReferee(null);
-                agent.setHighUserId(null);
+                // 清空手机号等信息，防止重新申请时重复
+                agentBO.resetInfo(agent);
             }
         }
-
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-        sqFormBO.cancelSqForm(data);
+        sqFormBO.cancelSqForm(sqForm, status);
     }
 
     // 取消授权
@@ -395,64 +352,10 @@ public class SqFormAOImpl implements ISqFormAO {
                 null, null, data.getUserId(), EBizType.AJ_QXSQ,
                 EBizType.AJ_QXSQ.getValue(), -account.getAmount());
 
-            // 清空关系
-            agent.setMobile(null);
-            agent.setIdNo(null);
-            agent.setUserReferee(null);
-            agent.setHighUserId(null);
-
+            // 清空手机号等信息，防止重新申请时重复
+            agentBO.resetInfo(agent);
         }
-
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-        sqFormBO.cancelSqForm(data);
-    }
-
-    // 补全授权所需资料
-    @Override
-    public void addInfo(XN627362Req req) {
-
-        agentBO.getAgent(req.getUserId());
-        SqForm data = new SqForm();
-
-        if (StringUtils.isNotBlank(req.getIntroducer())) {
-            PhoneUtil.checkMobile(req.getIntroducer());
-            Agent introducer = agentBO.getAgentByMobile(req.getIntroducer());
-            if (introducer.getUserId().equals(req.getUserId())) {
-                throw new BizException("xn0000", "推荐人不能填自己哦！");
-            }
-            if (!EUserKind.Merchant.getCode().equals(introducer.getKind())) {
-                throw new BizException("xn0000", "您填写的推荐人不是我们的代理哦！");
-            }
-
-            if (introducer.getLevel() <= StringValidater
-                .toInteger(req.getApplyLevel())) {
-                throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
-            }
-        }
-
-        agentBO.checkTeamName(req.getTeamName());
-
-        // 校验身份证
-        AgentLevel impower = agentLevelBO.getAgentByLevel(data.getApplyLevel());
-        if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
-            IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
-            if (!idCardChecker.validate()) {
-                throw new BizException("xn0000", "请输入正确的身份证号码");
-            }
-            agentBO.getAgentByIdNo(req.getIdNo());
-        }
-
-        data.setUserId(req.getUserId());
-        data.setRealName(data.getRealName());
-        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        data.setIdKind(req.getIdKind());
-        data.setIdNo(req.getIdNo());
-        data.setIdHand(req.getIdHand());
-        data.setIntroducer(req.getIntroducer());
-        sqFormBO.addInfo(data);
+        sqFormBO.cancelSqForm(data, status);
     }
 
     // 列表查询
@@ -555,7 +458,51 @@ public class SqFormAOImpl implements ISqFormAO {
         if (ioCount != 0) {
             throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
         }
+    }
 
+    private void approveSqForm(SqForm sqForm) {
+        AgentLevel agentLevel = agentLevelBO
+            .getAgentByLevel(sqForm.getApplyLevel());
+        // 根据用户类型获取账户列表
+        List<String> currencyList = distributeAccount(sqForm.getUserId(),
+            sqForm.getRealName(), EUserKind.Merchant.getCode());
+
+        // 分配账户
+        accountBO.distributeAccount(sqForm.getUserId(), sqForm.getRealName(),
+            EAccountType.Business, currencyList, ESystemCode.BH.getCode(),
+            ESystemCode.BH.getCode());
+
+        // 新增地址
+        addressBO.saveAddress(sqForm.getUserId(), sqForm.getMobile(),
+            sqForm.getRealName(), sqForm.getProvince(), sqForm.getCity(),
+            sqForm.getArea(), sqForm.getAddress(), EBoolean.YES.getCode());
+
+        // 介绍奖
+        if (StringUtils.isNotBlank(sqForm.getIntroducer())) {
+
+            // 获取介绍奖
+            Agent buser = agentBO.getAgent(sqForm.getIntroducer());
+            JsAward iData = jsAwardBO.getJsAwardByLevel(buser.getLevel(),
+                sqForm.getApplyLevel());
+            Long amount = AmountUtil.mul(agentLevel.getMinCharge(),
+                iData.getPercent() / 100);
+
+            // 申请等级为最高等级，奖励由公司发，其余由该代理上级发介绍人
+            String fromUser = ESysUser.SYS_USER_BH.getCode();
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != sqForm
+                .getApplyLevel()) {
+                Agent fromAgent = agentBO.getAgent(sqForm.getToUserId());
+                fromUser = fromAgent.getUserId();
+            }
+            accountBO.transAmountCZB(fromUser, ECurrency.YJ_CNY.getCode(),
+                buser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
+                EBizType.AJ_JSJL,
+                "介绍代理[" + sqForm.getRealName() + "]的"
+                        + EBizType.AJ_JSJL.getCode() + "支出",
+                "介绍代理[" + sqForm.getRealName() + "]的"
+                        + EBizType.AJ_JSJL.getValue() + "收入",
+                sqForm.getUserId());
+        }
     }
 
 }

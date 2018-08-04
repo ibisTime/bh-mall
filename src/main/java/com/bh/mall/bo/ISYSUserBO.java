@@ -46,7 +46,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 判断登录名是否存在
     public void isLoginNameExist(String loginName, String systemCode);
 
-    public SYSUser getSYSuser(String userId);
+    public SYSUser getSYSUser(String userId);
 
     //
     public void refreshLoginName(String userId, String loginName);

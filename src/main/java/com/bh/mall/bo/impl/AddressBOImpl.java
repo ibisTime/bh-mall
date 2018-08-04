@@ -119,13 +119,12 @@ public class AddressBOImpl extends PaginableBOImpl<Address>
     }
 
     @Override
-    public void saveAddress(String userId, String type, String mobile,
-            String realName, String province, String city, String area,
-            String address, String isDefault) {
+    public void saveAddress(String userId, String mobile, String realName,
+            String province, String city, String area, String address,
+            String isDefault) {
         String code = OrderNoGenerater.generate(EGeneratePrefix.AD.getCode());
         Address data = new Address();
         data.setCode(code);
-        data.setType(type);
         data.setMobile(mobile);
         data.setUserId(userId);
         data.setReceiver(realName);

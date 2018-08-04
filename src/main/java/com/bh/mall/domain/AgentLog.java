@@ -20,11 +20,17 @@ public class AgentLog extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 申请人姓名
+    private String realName;
+
+    // 微信号
+    private String wxId;
+
+    // 手机号
+    private String mobile;
+
     // 归属人
     private String toUserId;
-
-    // 类型
-    private String type;
 
     // 当前等级
     private Integer level;
@@ -36,7 +42,7 @@ public class AgentLog extends ABaseDO {
     private String highUserId;
 
     // 推荐人
-    private String userReferee;
+    private String referrer;
 
     // 介绍人
     private String introducer;
@@ -45,13 +51,25 @@ public class AgentLog extends ABaseDO {
     private String teamName;
 
     // 打款截图
-    private String paymentPdf;
+    private String payPdf;
 
     // 保证金截图
     private String marginPdf;
 
     // 状态
     private String status;
+
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 具体地址
+    private String address;
 
     // 审核人
     private String approver;
@@ -85,7 +103,7 @@ public class AgentLog extends ABaseDO {
     private Long impowerAmount;
 
     // 推荐人名字
-    private String userRefreeName;
+    private String userReferrerName;
 
     // 介绍人姓名
     private String introduceName;
@@ -133,12 +151,12 @@ public class AgentLog extends ABaseDO {
         this.highUserId = highUserId;
     }
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getReferrer() {
+        return referrer;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setReferrer(String userReferee) {
+        this.referrer = userReferee;
     }
 
     public String getTeamName() {
@@ -149,12 +167,12 @@ public class AgentLog extends ABaseDO {
         this.teamName = teamName;
     }
 
-    public String getPaymentPdf() {
-        return paymentPdf;
+    public String getPayPdf() {
+        return payPdf;
     }
 
-    public void setPaymentPdf(String paymentPdf) {
-        this.paymentPdf = paymentPdf;
+    public void setPayPdf(String payPdf) {
+        this.payPdf = payPdf;
     }
 
     public String getMarginPdf() {
@@ -221,14 +239,6 @@ public class AgentLog extends ABaseDO {
         this.updateDatetime = updateDatetime;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getToUserId() {
         return toUserId;
     }
@@ -270,7 +280,7 @@ public class AgentLog extends ABaseDO {
     }
 
     public String getUserRefreeName() {
-        return userRefreeName;
+        return userReferrerName;
     }
 
     public String getIntroduceName() {
@@ -281,8 +291,8 @@ public class AgentLog extends ABaseDO {
         return highUserName;
     }
 
-    public void setUserRefreeName(String userRefreeName) {
-        this.userRefreeName = userRefreeName;
+    public void setReferrerName(String userRefreeName) {
+        this.userReferrerName = userRefreeName;
     }
 
     public void setIntroduceName(String introduceName) {
@@ -299,6 +309,62 @@ public class AgentLog extends ABaseDO {
 
     public void setIntroducer(String introducer) {
         this.introducer = introducer;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getWxId() {
+        return wxId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }

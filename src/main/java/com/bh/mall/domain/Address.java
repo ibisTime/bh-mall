@@ -15,9 +15,6 @@ public class Address extends ABaseDO {
     // 收件编号
     private String code;
 
-    // 类型(1.用户地址，2.售后地址)
-    private String type;
-
     // 用户编号
     private String userId;
 
@@ -88,14 +85,6 @@ public class Address extends ABaseDO {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getReceiver() {

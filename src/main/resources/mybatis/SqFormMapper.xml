@@ -4,41 +4,35 @@
 
 <mapper namespace="com.bh.mall.dao.ISqFormDAO">
 	<resultMap id="sqForm_DB_Result" type="sqForm">
-		<result column="code" property="code"/>
-		<result column="wx_id" property="wxId"/>
 		<result column="user_id" property="userId" />
 		<result column="real_name" property="realName" />
-		<result column="to_user_id" property="toUserId"/>
-		
-		<result column="apply_level" property="applyLevel" />
-		<result column="real_name" property="realName"/>
-		<result column="address" property="address"/>
-		<result column="area" property="area"/>
+		<result column="wx_id" property="wxId"/>
 		<result column="mobile" property="mobile"/>
+		<result column="apply_level" property="applyLevel" />
 		
-		<result column="city" property="city"/>
-		<result column="province" property="province"/>
-		<result column="id_hand" property="idHand"/>
+		<result column="to_user_id" property="toUserId"/>
+		<result column="introducer" property="introducer"/>
+		<result column="user_referee" property="userReferee"/>
 		<result column="id_kind" property="idKind"/>
 		<result column="id_no" property="idNo"/>
 		
-		<result column="introducer" property="introducer"/>
-		<result column="user_referee" property="userReferee"/>
+		<result column="id_hand" property="idHand"/>
+		<result column="province" property="province"/>
+		<result column="city" property="city"/>
+		<result column="area" property="area"/>
+		<result column="address" property="address"/>
+	
 		<result column ="status" property="status"/>
 		<result column ="apply_datetime" property="applyDatetime"/>		
 		<result column ="approver" property="approver"/>
-		
 		<result column="approve_name" property="approveName" />
 		<result column="approve_datetime" property="approveDatetime" />		
+		
 		<result column="remark" property="remark"/>
 	</resultMap>
 	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
-			</if>
-			
 			<if test="userId != null and userId != '' ">
 				AND t.user_id= #{userId}
 			</if>
@@ -76,30 +70,30 @@
 	
 	<select id="select_sqForm" parameterType="sqForm" resultMap="sqForm_DB_Result">
 		SELECT
-		t.code
-		,t.wx_id
-		,t.user_id
+		t.user_id
 		,t.real_name
+		,t.wx_id
 		,t.mobile
-		,t.to_user_id
-		
 		,t.apply_level
+		
+		,t.to_user_id
+		,t.introducer
+		,t.user_referee
+		,t.id_kind
+		,t.id_no
+		
+		,t.id_hand
 		,t.province
 		,t.city
 		,t.area
 		,t.address
-
-		,t.id_hand
-		,t.id_kind
-		,t.id_no
-		,t.introducer
-		,t.user_referee
 		
 		,t.status
 		,t.apply_datetime
 		,t.approver		
 		,t.approve_name
 		,t.approve_datetime
+		
 		,t.remark
 		FROM
 		tbh_sq_form t 
@@ -120,62 +114,46 @@
 	<insert id="insert_sqForm" parameterType="sqForm">
 		INSERT INTO
 		tbh_sq_form(
-		t.code
-		,wx_id
-		,user_id
-		,apply_level
-		
+		user_id
 		,real_name
-		,address
-		,area
 		,mobile
-		,city
-		,province
-		
-		,id_hand
-		,id_kind
-		,id_no
+		,wx_id
+		,apply_level
 		
 		,introducer
 		,user_referee
+		,id_kind
+		,id_no
+		,id_hand
 		
+		,province
+		,city
+		,area
+		,address
 		,status
-		,approver		
-		,apply_datetime
-		,approve_datetime
-		,remark
+		
 		)
 		VALUES(
-		#{code}
-		,#{wxId}
-        ,#{userId}
-		,#{applyLevel}
-		
-		,#{ealName}
-		,#{address}
-		,#{area}
+        #{userId}
+		,#{realName}
 		,#{mobile}
-		,#{city}
-		,#{province}
-		
-		,#{idFront}
-		,#{idBehind}
-		,#{idHand}
-		,#{idKind}
-		,#{idNo}
+		,#{wxId}
+		,#{applyLevel}
 		
 		,#{introducer}
 		,#{userReferee}
-				
+		,#{idKind}
+		,#{idNo}
+		,#{idHand}
+		
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{address}
 		,#{status}
-		,#{approver}
-		,#{applyDatetime}
-		,#{approveDatetime}
-		,#{remark}
 		)
 	</insert>
 
-	<!-- update payment / status -->
 	<update id="update_sqForm" parameterType="sqForm">
 		UPDATE tbh_sq_form
 		SET

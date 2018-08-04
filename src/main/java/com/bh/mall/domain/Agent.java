@@ -23,9 +23,6 @@ public class Agent extends ABaseDO {
     // 分享二维码代理
     private String fromUserId;
 
-    // 登陆名
-    private String loginName;
-
     // 手机号
     private String mobile;
 
@@ -38,12 +35,6 @@ public class Agent extends ABaseDO {
     // 昵称
     private String nickname;
 
-    // 登陆密码
-    private String loginPwd;
-
-    // 登陆密码强度
-    private String loginPwdStrength;
-
     // 交易密码
     private String tradePwd;
 
@@ -52,9 +43,6 @@ public class Agent extends ABaseDO {
 
     // 目前用户等级
     private Integer level;
-
-    // 需升等级
-    private Integer applyLevel;
 
     // 推荐人
     private String userReferee;
@@ -238,15 +226,6 @@ public class Agent extends ABaseDO {
         this.areaForQuery = areaForQuery;
     }
 
-    // 获取登陆名
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
     // 获取手机号
     public String getMobile() {
         return mobile;
@@ -283,24 +262,6 @@ public class Agent extends ABaseDO {
         this.nickname = nickname;
     }
 
-    // 获取登陆密码
-    public String getLoginPwd() {
-        return loginPwd;
-    }
-
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
-    }
-
-    // 登陆密码强度
-    public String getLoginPwdStrength() {
-        return loginPwdStrength;
-    }
-
-    public void setLoginPwdStrength(String loginPwdStrength) {
-        this.loginPwdStrength = loginPwdStrength;
-    }
-
     // 获取身份标识
     public String getKind() {
         return kind;
@@ -317,15 +278,6 @@ public class Agent extends ABaseDO {
 
     public void setLevel(Integer level) {
         this.level = level;
-    }
-
-    // 获取需升等级
-    public Integer getApplyLevel() {
-        return applyLevel;
-    }
-
-    public void setApplyLevel(Integer applyLevel) {
-        this.applyLevel = applyLevel;
     }
 
     // 获取推荐人 & 介绍人

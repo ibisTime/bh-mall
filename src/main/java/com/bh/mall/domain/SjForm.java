@@ -14,23 +14,32 @@ public class SjForm extends ABaseDO {
 
     private static final long serialVersionUID = 4666159752651876262L;
 
-    // 编码
-    private String code;
-
     // 申请人
     private String userId;
+
+    // 申请人姓名
+    private String realName;
+
+    // 证件类型
+    private String idKind;
+
+    // 证件号码
+    private String idNo;
+
+    // 手持证件
+    private String idHand;
+
+    // 当前团队名称
+    private String teamName;
 
     // 新上级
     private String toUserId;
 
-    // 申请等级
-    private Integer applyLevel;
-
     // 当前等级
     private Integer level;
 
-    // 半门槛推荐人数
-    private String reNumber;
+    // 申请等级
+    private Integer applyLevel;
 
     // 打款金额
     private Long payAmount;
@@ -82,14 +91,6 @@ public class SjForm extends ABaseDO {
     // 关键词
     private String keyWord;
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getToUserId() {
         return toUserId;
     }
@@ -122,15 +123,6 @@ public class SjForm extends ABaseDO {
 
     public void setApplyDatetime(Date applyDatetime) {
         this.applyDatetime = applyDatetime;
-    }
-
-    // 获取申请等级
-    public String getReNumber() {
-        return reNumber;
-    }
-
-    public void setReNumber(String reNumber) {
-        this.reNumber = reNumber;
     }
 
     // 获取付款金额
@@ -275,6 +267,46 @@ public class SjForm extends ABaseDO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public String getIdHand() {
+        return idHand;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public void setIdHand(String idHand) {
+        this.idHand = idHand;
     }
 
 }

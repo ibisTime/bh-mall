@@ -58,10 +58,6 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
-    // public void updateLog(Agent data) {
-    // super.update(NAMESPACE.concat("update_log"), data);
-    // }
-
     @Override
     public int updateLoginName(Agent data) {
         return super.update(NAMESPACE.concat("update_agent_loginName"), data);
@@ -130,10 +126,6 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     }
 
     @Override
-    public void updateLog(Agent data) {
-    }
-
-    @Override
     public void updateInfo(Agent data) {
         super.update(NAMESPACE.concat("update_info"), data);
     }
@@ -141,6 +133,21 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     @Override
     public void updateTeamName(Agent data) {
         super.update(NAMESPACE.concat("update_teamName"), data);
+    }
+
+    @Override
+    public void applyAgent(Agent data) {
+        super.update(NAMESPACE.concat("apply_agent"), data);
+    }
+
+    @Override
+    public void updateLastLog(Agent data) {
+        super.update(NAMESPACE.concat("update_lastLog"), data);
+    }
+
+    @Override
+    public void resetInfo(Agent data) {
+        super.update(NAMESPACE.concat("reset_info"), data);
     }
 
 }

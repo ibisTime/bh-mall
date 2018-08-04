@@ -15,19 +15,21 @@ import com.bh.mall.domain.YxForm;
 public interface IYxFormBO extends IPaginableBO<YxForm> {
 
     // 代理申请
-    public String applyYxForm(YxForm data);
+    public String applyYxForm(String userId, String realName, String wxId,
+            String mobile, String applyLevel, String province, String city,
+            String area, String address, String fromInfo);
 
     // 意向分配
-    public String allotYxForm(YxForm data);
+    public String allotYxForm(YxForm data, String toUserId, String approver,
+            String approveName, String remark);
 
     // 接受意向分配
-    public String accepYxForm(YxForm data);
+    public String acceptYxForm(YxForm yxForm, String approver,
+            String approveName, String remark);
 
     // 忽略意向分配
-    public String ignore(YxForm data);
-
-    // 保存意向分配
-    public String saveYxForm(YxForm data, String toUserId);
+    public String ignoreYxForm(YxForm data, String userId, String realName,
+            String remark);
 
     // 通过等级查询
     public YxForm getYxFormByLevel(Integer integer);

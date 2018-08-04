@@ -99,14 +99,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     public void resetBindMobile(Agent user);
 
     /**
-     * 更新日志
-     * @param data 
-     * @create: 2018年7月31日 下午2:13:57 LENOVO
-     * @history:
-     */
-    public void updateLog(Agent data);
-
-    /**
      * 查询下级代理 
      * @param condition
      * @param start
@@ -138,5 +130,14 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     public void updateInfo(Agent data);
 
     public void updateTeamName(Agent data);
+
+    // 申请意向代理
+    public void applyAgent(Agent data);
+
+    // 更新最后一条代理轨迹
+    public void updateLastLog(Agent data);
+
+    // 清空手机号等信息
+    public void resetInfo(Agent data);
 
 }

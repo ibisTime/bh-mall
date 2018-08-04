@@ -12,7 +12,6 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChargeBO;
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -22,7 +21,6 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
-import com.bh.mall.enums.EUser;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -160,26 +158,7 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Paginable<Charge> queryFrontChargePage(int start, int limit,
             Charge condition) {
-
-        long count = chargeBO.getFrontTotalCount(condition);
-        Page<Charge> page = new Page<Charge>(start, limit, count);
-        List<Charge> list = chargeBO.queryFrontChargePage(page.getStart(),
-            page.getPageSize(), condition);
-
-        for (Charge charge : list) {
-            if (!EUser.ADMIN.getCode().equals(charge.getApplyUser())
-                    && charge.getApplyUser() != null) {
-                Agent agent = agentBO.getAgent(charge.getApplyUser());
-                charge.setAgent(agent);
-            }
-            if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
-                    && charge.getPayUser() != null) {
-                Agent payUser = agentBO.getAgent(charge.getPayUser());
-                charge.setPayUser(payUser.getLoginName());
-            }
-        }
-        page.setList(list);
-        return page;
+        return chargeBO.getPaginable(start, limit, condition);
     }
 
 }

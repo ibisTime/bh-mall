@@ -3,42 +3,36 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bh.mall.dao.IYxFormDAO">
 	<resultMap  id="yxForm_DB_Result" type="yxForm" >
-		<result column="code" property="code"/>
-		<result column="wx_id" property="wxId"/>
 		<result column="user_id" property="userId" />
-		<result column ="to_user_id" property="toUserId"/>
-		<result column="apply_level" property="applyLevel" />
 		<result column="real_name" property="realName"/>
 		<result column="mobile" property="mobile"/>
-		<result column="address" property="address"/>
-		<result column="area" property="area"/>
-		<result column="city" property="city"/>
+		<result column="wx_id" property="wxId"/>
+		<result column="apply_level" property="applyLevel" />
+		
+		<result column ="to_user_id" property="toUserId"/>
 		<result column="province" property="province"/>
+		<result column="city" property="city"/>
+		<result column="area" property="area"/>
+		<result column="address" property="address"/>
+		
 		<result column="from_info" property="fromInfo"/>
 		<result column ="status" property="status"/>
 		<result column ="approver" property="approver"/>
+		<result column ="approve_name" property="approveName"/>
 		<result column ="apply_datetime" property="applyDatetime"/>		
+		
 		<result column="approve_datetime" property="approveDatetime" />		
 		<result column="remark" property="remark"/>
 	</resultMap>
 	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != ''">
-				AND t.code=#{code}
-			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			
-			<choose>				
-				<when test="status == '3,4,5' "> <!--  有意愿，已忽略，已分配 -->
-					AND t.status = '3' OR t.status = '4' OR t.status = '5' 
-				</when> 
-				<otherwise>
-					AND 1=1
-				</otherwise>
-			</choose>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 			
 			<if test="toUserId != null and toUserId != '' ">
 				AND t.to_user_id = #{toUserId}
@@ -66,24 +60,25 @@
 	
 	<select id="select_yxForm" parameterType="yxForm" resultMap="yxForm_DB_Result">
 		SELECT 
-		t.code 
-		,t.wx_id
 		,t.user_id
-		,t.to_user_id
-		,t.apply_level
 		,t.real_name
 		,t.mobile
-		,t.address
-		,t.area
-		,t.city
+		,t.wx_id
+		,t.apply_level
+		
+		,t.to_user_id
 		,t.province
+		,t.city
+		,t.area
+		,t.address
+
 		,t.from_info
-		,t.status
 		,t.approver
+		,t.approve_name
 		,t.apply_datetime		
 		,t.approve_datetime
 		,t.remark
-		FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.user_id = u.user_id 
+		FROM tbh_yx_form t 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY">
 			<if test="order != null and order != '' ">
@@ -93,46 +88,51 @@
 	</select>
 	
 	<select id="select_yxForm_count" parameterType="yxForm" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_yx_form t LEFT JOIN tbh_buser u ON t.user_id = u.user_id 
+		SELECT count(1) FROM tbh_yx_form t 
 		<include refid="where_condition"/>
 	</select>
 	
 	<insert id="insert_yxForm" parameterType="yxForm">
 		INSERT INTO
 		tbh_yx_form(
-		code
-		,wx_id
 		,user_id
-		,to_user_id				
-		,apply_level	
 		,real_name	
 		,mobile
-		,address
-		,area
-		,city
+		,wx_id
+
+		,to_user_id				
+		,apply_level	
 		,province
+		,city
+		,area
+		,address
+
 		,from_info
 		,status
 		,approver
+		,approve_name
 		,apply_datetime		
+		
 		,approve_datetime
 		,remark
 		)
 		VALUES(
-		#{code}
+		#{userId}
 		,#{wxId}
-		,#{userId}
-		,#{toUserId}
-		,#{applyLevel}	
 		,#{realName}
 		,#{mobile}
-		,#{address}
-		,#{area}
-		,#{city}
+		,#{toUserId}
+
+		,#{applyLevel}	
 		,#{province}
+		,#{city}
+		,#{area}
+		,#{address}
 		,#{fromInfo}
+		
 		,#{status}
 		,#{approver}
+		,#{approveName}
 		,#{applyDatetime}
 		,#{approveDatetime}
 		,#{remark}
@@ -141,27 +141,17 @@
 	
 	
 	
-	<update id="update_yxForm" parameterType="yxForm">
+	<update id="allot_yxForm" parameterType="yxForm">
 		UPDATE tbh_yx_form
 		SET
-		wx_id=#{wxId}
-		,user_id = #{userId}
-		,to_user_id=#{toUserId}		
-		,apply_level = #{applyLevel}
-		,real_name = #{realName}
-		,address = #{address}
-		,area = #{area}
-		,city = #{city}
-		,province = #{province}
-		,from_info = #{fromInfo}
-		,status=#{status}	
-		,approver=#{approver}
-		,apply_datetime=#{applyDatetime}
+		to_user_id = #{toUserId}		
+		,status = #{status}	
+		,approver = #{approver}
+		,approve_name = #{approveName}
 		,remark=#{remark}
 		WHERE code=#{code}
 	</update>
 	
-<!-- 意向分配已完成 -->
 
 
 

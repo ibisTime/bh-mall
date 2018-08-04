@@ -85,7 +85,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public SYSUser getSYSuser(String userId) {
+    public SYSUser getSYSUser(String userId) {
         SYSUser data = null;
         if (StringUtils.isNotBlank(userId)) {
             SYSUser condition = new SYSUser();

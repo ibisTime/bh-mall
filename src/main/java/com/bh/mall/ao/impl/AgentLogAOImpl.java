@@ -51,16 +51,16 @@ public class AgentLogAOImpl implements IAgentLogAO {
 
         for (AgentLog data : page.getList()) {
             // 推荐人转义
-            if (StringUtils.isNotBlank(data.getUserReferee())) {
-                Agent userRefree = agentBO.getAgent(data.getUserReferee());
-                data.setUserRefreeName(userRefree.getRealName());
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
+                data.setReferrerName(userRefree.getRealName());
             }
             // 介绍人转义
             data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSuser(data.getHighUserId());
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
@@ -77,16 +77,16 @@ public class AgentLogAOImpl implements IAgentLogAO {
         List<AgentLog> list = agentLogBO.queryAgentLogList(condition);
         for (AgentLog data : list) {
             // 推荐人转义
-            if (StringUtils.isNotBlank(data.getUserReferee())) {
-                Agent userRefree = agentBO.getAgent(data.getUserReferee());
-                data.setUserRefreeName(userRefree.getRealName());
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
+                data.setReferrerName(userRefree.getRealName());
             }
             // 介绍人转义
             data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSuser(data.getHighUserId());
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
@@ -100,16 +100,16 @@ public class AgentLogAOImpl implements IAgentLogAO {
     public AgentLog getAgentLog(String code) {
         AgentLog data = agentLogBO.getAgentLog(code);
         // 推荐人转义
-        if (StringUtils.isNotBlank(data.getUserReferee())) {
-            Agent userRefree = agentBO.getAgent(data.getUserReferee());
-            data.setUserRefreeName(userRefree.getRealName());
+        if (StringUtils.isNotBlank(data.getReferrer())) {
+            Agent userRefree = agentBO.getAgent(data.getReferrer());
+            data.setReferrerName(userRefree.getRealName());
         }
         // 介绍人转义
         data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
         // 上级转义
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
-            SYSUser sysUser = sysUserBO.getSYSuser(data.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
             data.setHighUserName(sysUser.getRealName());
         } else {
             Agent highAgent = agentBO.getAgent(data.getHighUserId());

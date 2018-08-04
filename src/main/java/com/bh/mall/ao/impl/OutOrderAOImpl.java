@@ -76,7 +76,6 @@ import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -155,7 +154,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 获取上级
         String toUserName = null;
         if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
             Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
@@ -311,7 +310,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 获取上级
         String toUserName = null;
         if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
             Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
@@ -567,26 +566,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 OutOrder.setLeaderMobile(agent.getMobile());
             }
 
-            // 订单归属人
-            String toUserName = this.getName(OutOrder.getToUserId());
-            OutOrder.setToUserName(toUserName);
-
-            // 收货人
-            String signeName = this.getName(OutOrder.getSigner());
-            OutOrder.setSigneName(signeName);
-
-            // 审核人
-            String approveUser = this.getName(OutOrder.getApprover());
-            OutOrder.setApproveName(approveUser);
-
-            // 发货人
-            String deliveName = this.getName(OutOrder.getDeliver());
-            OutOrder.setDeliveName(deliveName);
-
-            // 更新人
-            String updateName = this.getName(OutOrder.getUpdater());
-            OutOrder.setUpdater(updateName);
-
             // 产品信息
             Product product = productBO.getProduct(OutOrder.getProductCode());
             OutOrder.setProduct(product);
@@ -629,26 +608,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 outOrder.setLeaderMobile(agent.getMobile());
             }
 
-            // 订单归属人
-            String toUserName = this.getName(outOrder.getToUserId());
-            outOrder.setToUserName(toUserName);
-
-            // 收货人
-            String signeName = this.getName(outOrder.getSigner());
-            outOrder.setSigneName(signeName);
-
-            // 审核人
-            String approveUser = this.getName(outOrder.getApprover());
-            outOrder.setApproveName(approveUser);
-
-            // 发货人
-            String deliveName = this.getName(outOrder.getDeliver());
-            outOrder.setDeliveName(deliveName);
-
-            // 更新人
-            String updateName = this.getName(outOrder.getUpdater());
-            outOrder.setUpdater(updateName);
-
             // 产品信息
             Product product = productBO.getProduct(outOrder.getProductCode());
             outOrder.setProduct(product);
@@ -662,26 +621,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 下单人
         Agent agent = agentBO.getAgent(OutOrder.getApplyUser());
         OutOrder.setAgent(agent);
-
-        // 订单归属人
-        String toUserName = this.getName(OutOrder.getToUserId());
-        OutOrder.setToUserName(toUserName);
-
-        // 收货人
-        String signeName = this.getName(OutOrder.getSigner());
-        OutOrder.setSigneName(signeName);
-
-        // 审核人
-        String approveUser = this.getName(OutOrder.getApprover());
-        OutOrder.setApproveName(approveUser);
-
-        // 发货人
-        String deliveName = this.getName(OutOrder.getDeliver());
-        OutOrder.setDeliveName(deliveName);
-
-        // 更新人
-        String updateName = this.getName(OutOrder.getUpdater());
-        OutOrder.setUpdater(updateName);
 
         // 产品信息
         Product product = productBO.getProduct(OutOrder.getProductCode());
@@ -972,25 +911,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
         outOrderBO.receivedOutOrder(data);
-    }
-
-    private String getName(String agent) {
-        if (StringUtils.isBlank(agent)) {
-            return null;
-        }
-        if (EUser.ADMIN.getCode().equals(agent)) {
-            return agent;
-        }
-        String name = agent;
-        Agent data = agentBO.getAgent(agent);
-        if (data != null) {
-            name = data.getRealName();
-            if (EUserKind.Plat.getCode().equals(data.getKind())
-                    && StringUtils.isBlank(data.getRealName())) {
-                name = data.getLoginName();
-            }
-        }
-        return name;
     }
 
     private String checkOrder(Agent applyUser, Specs specs) {

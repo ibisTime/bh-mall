@@ -7,23 +7,24 @@ import com.bh.mall.domain.SqForm;
 
 public interface ISqFormBO extends IPaginableBO<SqForm> {
 
+    // 申请授权单
+    public SqForm applySqForm(String userId, String realName, String mobile,
+            String wxId, String applyLevel, String toUserId, String teamName,
+            String introducer, String userRefree, String idKind, String idNo,
+            String idHand, String province, String citt, String area,
+            String address, String status);
+
+    // 审核授权单
+    public String approveSqForm(SqForm sqForm, String approver,
+            String approveName, String remark, String status);
+
+    public List<SqForm> querySqFormPage(int start, int limit, SqForm condition);
+
     public List<SqForm> querySqFormList(SqForm condition);
 
     public SqForm getSqForm(String code);
 
-    public List<SqForm> querySqFormPage(int start, int limit, SqForm condition);
+    // 申请退出
+    public String cancelSqForm(SqForm sqForm, String status);
 
-    public String approveSqForm(SqForm user);
-
-    public String cancelSqForm(SqForm data);
-
-    public String saveSqForm(SqForm data, String toUserId);
-
-    public String applySqForm(SqForm data);
-
-    public String addSqForm(SqForm data);
-
-    public String toApply(SqForm data);
-
-    public String addInfo(SqForm data);
 }

@@ -282,7 +282,7 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public void editManager(String userId, String manager, String updater) {
         Agent data = agentBO.getAgent(userId);
-        sysUserBO.getSYSuser(manager);
+        sysUserBO.getSYSUser(manager);
         agentBO.refreshManager(data, manager, updater);
     }
 
@@ -352,7 +352,7 @@ public class AgentAOImpl implements IAgentAO {
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSuser(data.getHighUserId());
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
@@ -379,7 +379,7 @@ public class AgentAOImpl implements IAgentAO {
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSuser(data.getHighUserId());
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
@@ -406,7 +406,7 @@ public class AgentAOImpl implements IAgentAO {
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSuser(data.getHighUserId());
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
@@ -467,7 +467,7 @@ public class AgentAOImpl implements IAgentAO {
         // 上级转义
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
-            SYSUser sysUser = sysUserBO.getSYSuser(data.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
             data.setHighUserName(sysUser.getRealName());
         } else {
             Agent highAgent = agentBO.getAgent(data.getHighUserId());

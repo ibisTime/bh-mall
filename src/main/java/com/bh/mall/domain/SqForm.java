@@ -14,38 +14,26 @@ public class SqForm extends ABaseDO {
 
     private static final long serialVersionUID = -3497398052556679737L;
 
-    // 编码
-    private String code;
-
-    // 微信号
-    private String wxId;
-
     // 申请人
     private String userId;
-
-    // 分配上级
-    private String toUserId;
-
-    // 申请等级
-    private Integer applyLevel;
 
     // 真实姓名
     private String realName;
 
-    // 具体地址
-    private String address;
-
-    // 省
-    private String province;
-
-    // 市
-    private String city;
-
-    // 区(县)
-    private String area;
+    // 微信号
+    private String wxId;
 
     // 电话
     private String mobile;
+
+    // 申请等级
+    private Integer applyLevel;
+
+    // 分配上级
+    private String toUserId;
+
+    // 团队 名称
+    private String teamName;
 
     // 证件类型
     private String idKind;
@@ -56,23 +44,35 @@ public class SqForm extends ABaseDO {
     // 手持身份证照片
     private String idHand;
 
-    // 介绍人电话
+    // 介绍人
     private String introducer;
 
     // 推荐人
-    private String userReferee;
+    private String referrer;
+
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 具体地址
+    private String address;
 
     // 状态
     private String status;
+
+    // 申请时间
+    private Date applyDatetime;
 
     // 审核人
     private String approver;
 
     // 审核人名称
     private String approveName;
-
-    // 申请时间
-    private Date applyDatetime;
 
     // 审核时间
     private Date approveDatetime;
@@ -110,15 +110,6 @@ public class SqForm extends ABaseDO {
 
     public void setWxId(String wxId) {
         this.wxId = wxId;
-    }
-
-    // 获取编码
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     // 获取ID
@@ -286,12 +277,12 @@ public class SqForm extends ABaseDO {
         this.introducer = introducer;
     }
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getReferrer() {
+        return referrer;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setReferrer(String referrer) {
+        this.referrer = referrer;
     }
 
     public Date getApplyDatetimeStart() {
@@ -356,6 +347,14 @@ public class SqForm extends ABaseDO {
 
     public void setAgent(Agent agent) {
         this.agent = agent;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }

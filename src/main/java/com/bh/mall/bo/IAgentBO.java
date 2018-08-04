@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.SjForm;
+import com.bh.mall.domain.SqForm;
 
 public interface IAgentBO extends IPaginableBO<Agent> {
 
@@ -11,6 +13,15 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String loginPwd, String nickname, String photo,
             String status, Integer level, String fromUserId);
+
+    // 申请意向代理
+    public void applyAgent(Agent agent, String realName, String wxId,
+            String mobile, String province, String city, String area,
+            String address, String logCode);
+
+    // 更新最后一条代理日志
+    public void refreshLastLog(Agent agent, String status, String approver,
+            String approveName, String logCode);
 
     // 微信登录
     public Agent doGetUserByOpenId(String h5OpenId);
@@ -100,5 +111,13 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     // 修改团队名称
     public void refreshTeamName(Agent data, String teamName);
+
+    public void refreshAgent(SqForm sqForm);
+
+    // 清空信息
+    public void resetInfo(Agent agent);
+
+    // 升级成功
+    public void sjSuccess(SjForm sjForm);
 
 }

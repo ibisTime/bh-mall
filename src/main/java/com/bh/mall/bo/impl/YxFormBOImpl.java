@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,19 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.dao.IAgentDAO;
-import com.bh.mall.dao.IAgentLogDAO;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IYxFormDAO;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.YxForm;
-import com.bh.mall.enums.EAgentType;
 import com.bh.mall.enums.EUserStatus;
+import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -29,148 +26,78 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     private IYxFormDAO yxFormDAO;
 
     @Autowired
-    private IAgentLogDAO agentLogDAO;
-
-    @Autowired
-    private IAgentDAO agentDAO;
+    private IAgentLogBO agentLogBO;
 
     @Autowired
     private IAgentBO agentBO;
 
     // 代理申请
     @Override
-    public String applyYxForm(YxForm data) {
+    public String applyYxForm(String userId, String realName, String wxId,
+            String mobile, String applyLevel, String province, String city,
+            String area, String address, String fromInfo) {
+        YxForm data = new YxForm();
+        data.setUserId(userId);
+        data.setRealName(realName);
+        data.setWxId(wxId);
+        data.setMobile(mobile);
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
+        data.setApplyLevel(StringValidater.toInteger(applyLevel));
+        data.setProvince(province);
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
 
-        YxForm alData = new YxForm();
-        alData.setCode(code);
-        yxFormDAO.insert(alData);
+        data.setStatus(EUserStatus.MIND.getCode()); // 有意愿
+        data.setApplyDatetime(new Date());
+        data.setSource(fromInfo);
+        yxFormDAO.insert(data);
 
-        // update agent last log code
-        Agent agent = agentBO.getAgent(data.getUserId());
-        agent.setLastAgentLog(code);
-        agentDAO.updateLog(agent);
-
-        // insert new agent log
-        AgentLog log = new AgentLog();
-        log.setCode(code);
-        log.setApplyUser(data.getUserId());
-        log.setApplyLevel(data.getApplyLevel());
-        log.setStatus(EUserStatus.MIND.getCode());
-        log.setType(EAgentType.Allot.getCode()); // 意向分配
-        log.setApplyDatetime(data.getApplyDatetime());
-        agentLogDAO.insert(log);
-
-        return code;
+        // 生成代理轨迹
+        return agentLogBO.applyYxForm(data);
     }
 
     // 意向分配
     @Override
-    public String allotYxForm(YxForm data) {
+    public String allotYxForm(YxForm data, String toUserId, String approver,
+            String approveName, String remark) {
+        data.setToUserId(toUserId);
+        data.setStatus(EYxFormStatus.ALLOTED.getCode());
+        data.setApprover(approver);
+        data.setApproveName(approveName);
+        data.setApproveDatetime(new Date());
+        data.setRemark(remark);
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
+        yxFormDAO.allotYxForm(data);
 
-        YxForm alData = new YxForm();
-        alData.setCode(code);
-        alData.setApplyLevel(data.getApplyLevel());
-        yxFormDAO.insert(alData);
-
-        // update agent last log code
-        Agent agent = agentBO.getAgent(data.getUserId());
-        agent.setLastAgentLog(code);
-        agentDAO.updateLog(agent);
-
-        // insert new agent log
-        AgentLog log = new AgentLog();
-        log.setCode(code);
-        log.setApplyUser(data.getUserId());
-        log.setApplyLevel(data.getApplyLevel());
-        log.setStatus(EUserStatus.MIND.getCode());
-        log.setType(EAgentType.Allot.getCode()); // 意向分配
-        log.setApplyDatetime(data.getApplyDatetime());
-        agentLogDAO.insert(log);
-
-        return code;
+        // 生成代理轨迹
+        return agentLogBO.applyYxForm(data);
     }
 
     // 忽略意向分配
     @Override
-    public String ignore(YxForm data) {
-
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        YxForm alData = new YxForm();
-        alData.setCode(code);
-        yxFormDAO.insert(alData);
-
-        // update agent last log code
-        Agent agent = agentBO.getAgent(data.getUserId());
-        agent.setLastAgentLog(code);
-        agentDAO.updateLog(agent);
-
-        // insert new agent log
-        AgentLog log = new AgentLog();
-        log.setCode(code);
-        log.setApplyUser(data.getUserId());
-        log.setStatus(EUserStatus.IGNORED.getCode());
-        log.setType(EAgentType.Allot.getCode()); // 意向分配
-        log.setApprover(data.getApprover());
-        log.setApproveDatetime(data.getApproveDatetime());
-        agentLogDAO.insert(log);
-        return code;
-
+    public String ignoreYxForm(YxForm data, String approver, String approveName,
+            String remark) {
+        data.setStatus(EYxFormStatus.IGNORED.getCode());
+        data.setApprover(approver);
+        data.setApproveName(approveName);
+        data.setRemark(remark);
+        yxFormDAO.insert(data);
+        // 生成代理轨迹
+        return agentLogBO.applyYxForm(data);
     }
 
-    // 接受意向分配
     @Override
-    public String accepYxForm(YxForm data) {
+    public String acceptYxForm(YxForm data, String approver, String approveName,
+            String remark) {
+        data.setStatus(EYxFormStatus.ACCEPT.getCode());
+        data.setApprover(approver);
+        data.setApproveName(approveName);
+        data.setRemark(remark);
+        yxFormDAO.insert(data);
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        YxForm alData = new YxForm();
-        alData.setCode(code);
-        alData.setApplyLevel(data.getApplyLevel());
-        yxFormDAO.insert(alData);
-
-        // update agent last log code
-        Agent agent = agentBO.getAgent(data.getUserId());
-        agent.setLastAgentLog(code);
-        agentDAO.updateLog(agent);
-
-        // insert new agent log
-        AgentLog log = new AgentLog();
-        log.setCode(code);
-        log.setApplyUser(data.getUserId());
-        log.setApplyLevel(data.getApplyLevel());
-        log.setStatus(EUserStatus.ADD_INFO.getCode());
-        log.setType(EAgentType.Allot.getCode()); // 意向分配
-        log.setApprover(data.getApprover());
-        log.setApproveDatetime(data.getApproveDatetime());
-        agentLogDAO.insert(log);
-        return code;
-    }
-
-    // 保存意向分配表
-    @Override
-    public String saveYxForm(YxForm data, String toUserId) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        YxForm alData = new YxForm();
-        alData.setCode(code);
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setToUserId(toUserId);
-        alData.setStatus(EAgentType.Allot.getCode());
-        alData.setUserId(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
-        alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setStatus(data.getStatus());
-        yxFormDAO.insert(alData);
-        return code;
+        // 生成代理轨迹
+        return agentLogBO.applyYxForm(data);
     }
 
     // 详细查询
@@ -179,7 +106,6 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         YxForm data = null;
         if (StringUtils.isNotBlank(code)) {
             YxForm condition = new YxForm();
-            condition.setCode(code);
             data = yxFormDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "代理授权编号不存在");

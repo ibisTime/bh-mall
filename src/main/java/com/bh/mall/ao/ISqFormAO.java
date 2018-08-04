@@ -8,7 +8,6 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627251Req;
 import com.bh.mall.dto.req.XN627362Req;
-import com.bh.mall.dto.res.XN627303Res;
 
 /**
  * 授权单
@@ -22,7 +21,10 @@ public interface ISqFormAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 代理申请，包含推荐人
-    public XN627303Res applyHaveUserReferee(XN627251Req req);
+    public void applyHaveUserReferee(XN627251Req req);
+
+    //  授权所需信息补充
+    public void addInfo(XN627362Req req);
 
     // 审核授权
     public void approveSqFormByP(String userId, String approver, String result,
@@ -43,10 +45,7 @@ public interface ISqFormAO {
     public void cancelSqFormByP(String userId, String approver, String result,
             String remark);
 
-    //  实名认证信息补充
-    public void addInfo(XN627362Req req);
-
-    // 查询授权申请
+    // 分页查询
     public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition);
 

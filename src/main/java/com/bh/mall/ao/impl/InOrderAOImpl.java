@@ -131,7 +131,7 @@ public class InOrderAOImpl implements IInOrderAO {
         // 获取订单归属人
         String toUserName = null;
         if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
             Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
@@ -184,7 +184,7 @@ public class InOrderAOImpl implements IInOrderAO {
         // 获取订单归属人
         String toUserName = null;
         if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
             Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
