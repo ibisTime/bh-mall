@@ -43,10 +43,9 @@ public class InnerSpecsAOImpl implements IInnerSpecsAO {
     @Override
     @Transactional
     public boolean dropInnerSpecs(String code) {
-        /*
-         * if (!innerSpecsBO.isInnerSpecsExist(code)) { throw new
-         * BizException("lh4000", "内购产品规格编号不存在！"); }
-         */
+        if (!innerSpecsBO.isInnerSpecsExist(code)) {
+            throw new BizException("lh4000", "内购产品规格编号不存在！");
+        }
         innerSpecsBO.removeInnerSpecs(code);
         return true;
 
