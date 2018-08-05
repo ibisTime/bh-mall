@@ -31,7 +31,7 @@ public class AgentPrice extends ABaseDO {
     private Integer minNumber;
 
     // 起购数量
-    private Integer minQuantity;
+    private Integer startNumber;
 
     // 本等级是否可购买
     private String isBuy;
@@ -126,12 +126,12 @@ public class AgentPrice extends ABaseDO {
         this.monthlyNumber = monthlyNumber;
     }
 
-    public Integer getMinQuantity() {
-        return minQuantity;
+    public Integer getStartNumber() {
+        return startNumber;
     }
 
-    public void setMinQuantity(Integer minQuantity) {
-        this.minQuantity = minQuantity;
+    public void setStartNumber(Integer startNumber) {
+        this.startNumber = startNumber;
     }
 
 }

@@ -234,10 +234,10 @@ public class InOrderAOImpl implements IInOrderAO {
         }
 
         // 检查起购数量
-        if (agentPrice.getMinQuantity() > StringValidater
+        if (agentPrice.getStartNumber() > StringValidater
             .toInteger(req.getQuantity())) {
             throw new BizException("xn0000",
-                "您购买的数量不能低于" + agentPrice.getMinQuantity() + "]");
+                "您购买的数量不能低于" + agentPrice.getStartNumber() + "]");
         }
 
         return inOrderBO.saveInOrder(applyUser.getUserId(),
@@ -483,10 +483,10 @@ public class InOrderAOImpl implements IInOrderAO {
         // **********推荐奖**********
         // 是否有推荐人
         if (this.checkAward(applyUser)) {
-            if (StringUtils.isNotBlank(applyUser.getUserReferee())) {
+            if (StringUtils.isNotBlank(applyUser.getReferrer())) {
                 // 直接推荐人
                 Agent firstReferee = agentBO
-                    .getAgent(applyUser.getUserReferee());
+                    .getAgent(applyUser.getReferrer());
                 TjAward tjAward = tjAwardBO.getAwardByLevel(
                     applyUser.getLevel(), data.getProductCode());
 
@@ -502,9 +502,9 @@ public class InOrderAOImpl implements IInOrderAO {
                         EBizType.AJ_TJJL.getValue(), data.getCode());
 
                     // 间接推荐奖
-                    if (StringUtils.isNotBlank(firstReferee.getUserReferee())) {
+                    if (StringUtils.isNotBlank(firstReferee.getReferrer())) {
                         Agent secondReferee = agentBO
-                            .getAgent(firstReferee.getUserReferee());
+                            .getAgent(firstReferee.getReferrer());
                         amount = AmountUtil.mul(orderAmount,
                             tjAward.getValue2() / 100);
                         accountBO.transAmountCZB(fromUserId,
@@ -516,9 +516,9 @@ public class InOrderAOImpl implements IInOrderAO {
 
                         // 次推荐奖
                         if (StringUtils
-                            .isNotBlank(secondReferee.getUserReferee())) {
+                            .isNotBlank(secondReferee.getReferrer())) {
                             Agent thirdReferee = agentBO
-                                .getAgent(secondReferee.getUserReferee());
+                                .getAgent(secondReferee.getReferrer());
                             amount = AmountUtil.mul(orderAmount,
                                 tjAward.getValue3() / 100);
                             accountBO.transAmountCZB(fromUserId,
@@ -586,7 +586,7 @@ public class InOrderAOImpl implements IInOrderAO {
     private boolean checkAward(Agent agent) {
         // 介绍人与推荐人同时存在
         if (StringUtils.isNotBlank(agent.getIntroducer())
-                && StringUtils.isNotBlank(agent.getUserReferee())) {
+                && StringUtils.isNotBlank(agent.getReferrer())) {
             // 下单金额是否超过授权金额
             InOrder condition = new InOrder();
             condition.setApplyUser(agent.getUserId());

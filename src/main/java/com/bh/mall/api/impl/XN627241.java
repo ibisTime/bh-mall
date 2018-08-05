@@ -11,19 +11,20 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 修改介绍奖
- * @author: nyc 
- * @since: 2018年6月28日 下午11:02:57 
+ * 删除介绍奖
+ * @author: chenshan 
+ * @since: 2018年4月3日 下午7:25:58 
  * @history:
  */
 public class XN627241 extends AProcessor {
-    private IJsAwardAO jsAwardAO = SpringContextHolder.getBean(IJsAwardAO.class);
+    private IJsAwardAO jsAwardAO = SpringContextHolder
+        .getBean(IJsAwardAO.class);
 
     private XN627241Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        jsAwardAO.editJsAward(req);
+        jsAwardAO.dropJsAward(req.getCode());
         return new BooleanRes(true);
     }
 

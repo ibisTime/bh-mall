@@ -31,7 +31,6 @@ import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
 import com.bh.mall.dto.req.XN627545Req;
 import com.bh.mall.dto.req.XN627546Req;
-import com.bh.mall.enums.EAwardType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductNumberType;
@@ -155,12 +154,10 @@ public class ProductAOImpl implements IProductAO {
         List<Specs> psList = specsBO.querySpecsList(psCondition);
         // 推荐奖励
         TjAward aCondition = new TjAward();
-        aCondition.setType(EAwardType.DirectAward.getCode());
         aCondition.setProductCode(data.getCode());
         List<TjAward> directAwardList = tjAwardBO.queryTjAwardList(aCondition);
 
         // 出货奖励
-        aCondition.setType(EAwardType.SendAward.getCode());
         List<TjAward> sendAwardList = tjAwardBO.queryTjAwardList(aCondition);
         data.setDirectAwardList(directAwardList);
         data.setSendAwardList(sendAwardList);
@@ -312,13 +309,11 @@ public class ProductAOImpl implements IProductAO {
             List<Specs> psList = specsBO.querySpecsList(psCondition);
             // 推荐奖励
             TjAward aCondition = new TjAward();
-            aCondition.setType(EAwardType.DirectAward.getCode());
             aCondition.setProductCode(product.getCode());
             List<TjAward> directAwardList = tjAwardBO
                 .queryTjAwardList(aCondition);
 
             // 出货奖励
-            aCondition.setType(EAwardType.SendAward.getCode());
             List<TjAward> sendAwardList = tjAwardBO
                 .queryTjAwardList(aCondition);
             product.setDirectAwardList(directAwardList);

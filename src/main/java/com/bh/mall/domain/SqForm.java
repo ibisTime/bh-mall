@@ -26,15 +26,6 @@ public class SqForm extends ABaseDO {
     // 电话
     private String mobile;
 
-    // 申请等级
-    private Integer applyLevel;
-
-    // 分配上级
-    private String toUserId;
-
-    // 团队 名称
-    private String teamName;
-
     // 证件类型
     private String idKind;
 
@@ -43,6 +34,15 @@ public class SqForm extends ABaseDO {
 
     // 手持身份证照片
     private String idHand;
+
+    // 申请等级
+    private Integer applyLevel;
+
+    // 分配上级
+    private String toUserId;
+
+    // 团队 名称
+    private String teamName;
 
     // 介绍人
     private String introducer;

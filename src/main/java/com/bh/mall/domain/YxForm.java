@@ -53,14 +53,14 @@ public class YxForm extends ABaseDO {
     // 状态
     private String status;
 
+    // 申请时间
+    private Date applyDatetime;
+
     // 最后审核人
     private String approver;
 
     // 最后审核人名称
     private String approveName;
-
-    // 申请时间
-    private Date applyDatetime;
 
     // 审核时间
     private Date approveDatetime;

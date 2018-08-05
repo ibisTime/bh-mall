@@ -187,9 +187,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
             this.checkLimitNumber(applyUser, specs, price, cart.getQuantity());
 
             // 检查起购数量
-            if (price.getMinQuantity() > cart.getQuantity()) {
+            if (price.getStartNumber() > cart.getQuantity()) {
                 throw new BizException("xn0000",
-                    "您购买的数量不能低于" + price.getMinQuantity() + "]");
+                    "您购买的数量不能低于" + price.getStartNumber() + "]");
             }
 
             // 判断未开启云仓的代理是否完成授权单
@@ -347,10 +347,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
             StringValidater.toInteger(req.getQuantity()));
 
         // 检查起购数量
-        if (price.getMinQuantity() > StringValidater
+        if (price.getStartNumber() > StringValidater
             .toInteger(req.getQuantity())) {
             throw new BizException("xn0000",
-                "您购买的数量不能低于" + price.getMinQuantity() + "]");
+                "您购买的数量不能低于" + price.getStartNumber() + "]");
         }
 
         // 订单拆单
@@ -678,10 +678,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // **********推荐奖**********
         // 是否有推荐人
         if (this.checkAward(applyUser)) {
-            if (StringUtils.isNotBlank(applyUser.getUserReferee())) {
+            if (StringUtils.isNotBlank(applyUser.getReferrer())) {
                 // 直接推荐人
                 Agent firstReferee = agentBO
-                    .getAgent(applyUser.getUserReferee());
+                    .getAgent(applyUser.getReferrer());
                 TjAward tjAward = tjAwardBO.getAwardByLevel(
                     applyUser.getLevel(), data.getProductCode());
 
@@ -697,9 +697,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         EBizType.AJ_TJJL.getValue(), data.getCode());
 
                     // 间接推荐奖
-                    if (StringUtils.isNotBlank(firstReferee.getUserReferee())) {
+                    if (StringUtils.isNotBlank(firstReferee.getReferrer())) {
                         Agent secondReferee = agentBO
-                            .getAgent(firstReferee.getUserReferee());
+                            .getAgent(firstReferee.getReferrer());
                         amount = AmountUtil.mul(orderAmount,
                             tjAward.getValue2() / 100);
                         accountBO.transAmountCZB(fromUserId,
@@ -711,9 +711,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                         // 次推荐奖
                         if (StringUtils
-                            .isNotBlank(secondReferee.getUserReferee())) {
+                            .isNotBlank(secondReferee.getReferrer())) {
                             Agent thirdReferee = agentBO
-                                .getAgent(secondReferee.getUserReferee());
+                                .getAgent(secondReferee.getReferrer());
                             amount = AmountUtil.mul(orderAmount,
                                 tjAward.getValue3() / 100);
                             accountBO.transAmountCZB(fromUserId,
@@ -982,7 +982,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     private boolean checkAward(Agent agent) {
         // 介绍人与推荐人同时存在
         if (StringUtils.isNotBlank(agent.getIntroducer())
-                && StringUtils.isNotBlank(agent.getUserReferee())) {
+                && StringUtils.isNotBlank(agent.getReferrer())) {
             // 下单金额是否超过授权金额
             List<String> statusList = new ArrayList<String>();
             statusList.add(EOrderStatus.Paid.getCode());

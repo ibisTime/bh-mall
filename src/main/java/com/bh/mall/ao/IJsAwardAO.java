@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.JsAward;
-import com.bh.mall.dto.req.XN627241Req;
+import com.bh.mall.dto.req.XN627242Req;
 
 /**
  * 介绍奖
@@ -27,7 +27,7 @@ public interface IJsAwardAO {
     public void dropJsAward(String code);
 
     // 奖修改介绍奖励
-    public void editJsAward(XN627241Req req);
+    public void editJsAward(XN627242Req req);
 
     // 分页查询介绍奖励
     public Paginable<JsAward> queryJsAwardPage(int start, int limit,

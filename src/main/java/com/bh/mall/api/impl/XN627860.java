@@ -6,6 +6,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN627860Req;
+import com.bh.mall.dto.res.PKCodeRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -27,8 +28,8 @@ public class XN627860 extends AProcessor {
     public Object doBusiness() throws BizException {
         Long startAmount = StringValidater.toLong(req.getStartAmount());
         Long endAmount = StringValidater.toLong(req.getEndAmount());
-        return chAwardAO.addChAward(req.getLevel(), startAmount,
-            endAmount, req.getPercent(), req.getUpdater(), req.getRemark());
+        return new PKCodeRes(chAwardAO.addChAward(req.getLevel(), startAmount,
+            endAmount, req.getPercent(), req.getUpdater(), req.getRemark()));
     }
 
     @Override

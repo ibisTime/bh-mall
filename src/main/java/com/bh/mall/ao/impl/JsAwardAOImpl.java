@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +8,9 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IJsAwardAO;
 import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.JsAward;
-import com.bh.mall.dto.req.XN627241Req;
+import com.bh.mall.dto.req.XN627242Req;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -29,32 +26,20 @@ public class JsAwardAOImpl implements IJsAwardAO {
             .toInteger(level)) {
             throw new BizException("xn00000", "可介绍的等级不能低于本等级");
         }
+        jsAwardBO.isJsAwardExist(level, introLevel);
 
-        JsAward data = new JsAward();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Intro.getCode());
-        data.setCode(code);
-        data.setLevel(StringValidater.toInteger(level));
-        data.setIntroLevel(StringValidater.toInteger(introLevel));
+        return jsAwardBO.saveJsAward(StringValidater.toInteger(level),
+            StringValidater.toInteger(introLevel),
+            StringValidater.toDouble(percent), updater, remark);
 
-        data.setPercent(StringValidater.toDouble(percent));
-        data.setUpdater(updater);
-        Date date = new Date();
-        data.setUpdateDatetime(date);
-        data.setRemark(remark);
-        jsAwardBO.saveJsAward(data);
-
-        return code;
     }
 
     @Override
-    public void editJsAward(XN627241Req req) {
+    public void editJsAward(XN627242Req req) {
         JsAward data = jsAwardBO.getJsAward(req.getCode());
-        data.setPercent(StringValidater.toDouble(req.getPercent()));
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(new Date());
-        data.setRemark(req.getRemark());
-        jsAwardBO.refreshJsAward(data);
+
+        jsAwardBO.refreshJsAward(data, req.getPercent(), req.getUpdater(),
+            req.getRemark());
     }
 
     @Override

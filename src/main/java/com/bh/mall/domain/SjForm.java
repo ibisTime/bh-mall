@@ -32,14 +32,14 @@ public class SjForm extends ABaseDO {
     // 当前团队名称
     private String teamName;
 
-    // 新上级
-    private String toUserId;
-
     // 当前等级
     private Integer level;
 
     // 申请等级
     private Integer applyLevel;
+
+    // 新上级
+    private String toUserId;
 
     // 打款金额
     private Long payAmount;

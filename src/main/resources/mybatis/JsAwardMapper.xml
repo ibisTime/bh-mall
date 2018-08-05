@@ -74,9 +74,7 @@
 	<update id="update_jsAward" parameterType="jsAward">
 		UPDATE tbh_js_award
 		SET
-		level = #{level}
-		,intro_level = #{introLevel}
-		,percent = #{percent}
+		percent = #{percent}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

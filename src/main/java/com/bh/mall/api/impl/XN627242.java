@@ -11,9 +11,9 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 删除介绍奖
- * @author: chenshan 
- * @since: 2018年4月3日 下午7:25:58 
+ * 修改介绍奖
+ * @author: nyc 
+ * @since: 2018年6月28日 下午11:02:57 
  * @history:
  */
 public class XN627242 extends AProcessor {
@@ -24,7 +24,7 @@ public class XN627242 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        jsAwardAO.dropJsAward(req.getCode());
+        jsAwardAO.editJsAward(req);
         return new BooleanRes(true);
     }
 

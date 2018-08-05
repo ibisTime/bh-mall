@@ -1,4 +1,3 @@
-
 package com.bh.mall.domain;
 
 import java.util.Date;
@@ -45,7 +44,7 @@ public class Agent extends ABaseDO {
     private Integer level;
 
     // 推荐人
-    private String userReferee;
+    private String referrer;
 
     // 介绍人
     private String introducer;
@@ -281,12 +280,12 @@ public class Agent extends ABaseDO {
     }
 
     // 获取推荐人 & 介绍人
-    public String getUserReferee() {
-        return userReferee;
+    public String getReferrer() {
+        return referrer;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setReferrer(String referrer) {
+        this.referrer = referrer;
     }
 
     public String getIntroducer() {

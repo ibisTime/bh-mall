@@ -39,14 +39,14 @@ public interface IYxFormAO {
     // 接受意向
     public void acceptYxFormByB(String userId, String approver, String remark);
 
+    // 分页查询意
+    public Paginable<YxForm> queryYxFormPage(int start, int limit,
+            YxForm condition);
+
     // 列表查询
     public List<YxForm> queryYxFormList(YxForm condition);
 
     // 详细查询
     public YxForm getYxForm(String code);
-
-    // 分页查询意
-    public Paginable<YxForm> queryYxFormPage(int start, int limit,
-            YxForm condition);
 
 }

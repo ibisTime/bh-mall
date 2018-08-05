@@ -34,7 +34,6 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
                 .generate(EGeneratePrefix.Award.getCode());
             data.setCode(aCode);
             data.setProductCode(code);
-            data.setType(req.getType());
             data.setLevel(StringValidater.toInteger(req.getLevel()));
             data.setValue1(StringValidater.toDouble(req.getValue1()));
             data.setValue2(StringValidater.toDouble(req.getValue2()));
@@ -103,7 +102,6 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
             TjAward condition = new TjAward();
             condition.setLevel(level);
             condition.setProductCode(productCode);
-            condition.setType(type);
             data = tjAwardDAO.select(condition);
             if (null == data) {
                 throw new BizException("xn00000", "该产品奖励不存在");
@@ -116,7 +114,6 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     public List<TjAward> queryTjAwardList(String type, String productCode,
             Integer level) {
         TjAward condition = new TjAward();
-        condition.setType(type);
         condition.setProductCode(productCode);
         condition.setLevel(level);
         return tjAwardDAO.selectList(condition);

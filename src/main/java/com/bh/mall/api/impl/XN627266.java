@@ -30,7 +30,7 @@ public class XN627266 extends AProcessor {
         condition.setMobile(req.getMobile());
         condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
-        condition.setUserReferee(req.getUserReferee());
+        condition.setReferrer(req.getUserReferee());
 
         condition.setRealName(req.getRealName());
         condition.setStatus(req.getStatus());

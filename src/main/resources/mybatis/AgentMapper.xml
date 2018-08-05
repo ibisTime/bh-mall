@@ -5,62 +5,47 @@
 	<resultMap id="agent_DB_Result" type="agent">
 		<result column="user_id" property="userId" />
 		<result column="from_user_id" property="fromUserId" />
-		<result column="login_name" property="loginName" />
 		<result column="mobile" property="mobile" />
 		<result column="wx_id" property="wxId" />
 		<result column="photo" property="photo" />
 
 		<result column="nickname" property="nickname" />
-		<result column="login_pwd" property="loginPwd" />
-		<result column="login_pwd_strength" property="loginPwdStrength" />
 		<result column="trade_pwd" property="tradePwd" />
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
-
-		<result column="kind" property="kind" />
 		<result column="level" property="level" />
-		<result column="apply_level" property="applyLevel" />
-		<result column="user_referee" property="userReferee" />
+		
+		<result column="referrer" property="referrer" />
 		<result column="introducer" property="introducer" />
-
 		<result column="high_user_id" property="highUserId" />
 		<result column="team_name" property="teamName" />
 		<result column="id_kind" property="idKind" />
+		
 		<result column="id_no" property="idNo" />
 		<result column="id_front" property="idFront" />
-
 		<result column="id_behind" property="idBehind" />
 		<result column="id_hand" property="idHand" />
 		<result column="real_name" property="realName" />
-		<result column="role_code" property="roleCode" />
+		
 		<result column="status" property="status" />
-
-		<result column="source" property="source" />
-		<result column="apply_datetime" property="applyDatetime" />
 		<result column="manager" property="manager" />
-		<result column="red_amount" property="redAmount" />
 		<result column="union_id" property="unionId" />
-
 		<result column="h5_open_id" property="h5OpenId" />
 		<result column="app_open_id" property="appOpenId" />
+		
 		<result column="province" property="province" />
 		<result column="city" property="city" />
 		<result column="area" property="area" />
-
 		<result column="address" property="address" />
 		<result column="create_datetime" property="createDatetime" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="approver" property="approver" />
-
 		<result column="approve_datetime" property="approveDatetime" />
-		<result column="last_agent_log" property="lastAgentLog" />
-		<result column="remark" property="remark" />
 		<result column="impower_datetime" property="impowerDatetime" />
-		<result column="company_code" property="companyCode" />
-		<result column="system_code" property="systemCode" />
-
-		<result column="pay_amount" property="payAmount" />
-		<result column="pay_pdf" property="payPdf" />
+		
+		<result column="remark" property="remark" />
+		<result column="last_agent_log" property="lastAgentLog" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -74,9 +59,6 @@
 			<if test="highUserId != null and highUserId != '' ">
 				AND t.high_user_id = #{highUserId}
 			</if>
-			<if test="loginName != null and loginName != '' ">
-				AND t.login_name = #{loginName}
-			</if>
 			<if test="nickname != null and nickname != '' ">
 				AND t.nickname like "%"#{nickname}"%"
 			</if>
@@ -89,8 +71,8 @@
 				<![CDATA[AND t.level < #{highLevel}]]>
 			</if>
 
-			<if test="userReferee != null and userReferee != '' ">
-				AND t.user_referee = #{userReferee}
+			<if test="referrer != null and referrer != '' ">
+				AND t.referrer = #{referrer}
 			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
@@ -121,9 +103,6 @@
 
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
-			</if>
-			<if test="loginPwd != null and loginPwd != '' ">
-				AND t.login_pwd = #{loginPwd}
 			</if>
 			<if test="unionId != null and unionId != '' ">
 				AND t.union_id = #{unionId}
@@ -168,9 +147,9 @@
 			</if>
 
 			<if test="keyWord !=null and keyWord != '' ">
-				AND t.real_name like "%"#{keyWord}"%" or t.nickname like
+				AND (t.real_name like "%"#{keyWord}"%" or t.nickname like
 				"%"#{keyWord}"%" or t.wx_id like "%"#{keyWord}"%"
-				or t.mobile like "%"#{keyWord}"%"
+				or t.mobile like "%"#{keyWord}"%")
 			</if>
 		</trim>
 	</sql>
@@ -179,7 +158,6 @@
 		SELECT
 		t.user_id
 		,t.from_user_id
-		,t.login_name
 		,t.mobile
 		,t.wx_id
 		,t.photo
@@ -187,10 +165,8 @@
 		,t.nickname
 		,t.trade_pwd
 
-		,t.kind
 		,t.level
-		,t.apply_level
-		,t.user_referee
+		,t.referrer
 		,t.introducer
 
 		,t.high_user_id
@@ -203,7 +179,6 @@
 		,t.status
 
 		,t.manager
-		,t.red_amount
 		,t.union_id
 
 		,t.h5_open_id
@@ -242,19 +217,15 @@
 		INSERT INTO
 		tbh_user(
 		user_id
-		,login_name
 		,mobile
 		,wx_id
 		,photo
 
 		,nickname
-		,login_pwd
-		,login_pwd_strength
 		,kind
 		,level
 
-		,apply_level
-		,user_referee
+		,referrer
 		,introducer
 		,high_user_id
 		,team_name
@@ -287,19 +258,14 @@
 		)
 		VALUES(
 		#{userId}
-		,#{loginName}
 		,#{mobile}
 		,#{wxId}
 		,#{photo}
 
 		,#{nickname}
-		,#{loginPwd}
-		,#{loginPwdStrength}
-		,#{kind}
 		,#{level}
 
-		,#{applyLevel}
-		,#{userReferee}
+		,#{referrer}
 		,#{introducer}
 		,#{highUserId}
 		,#{teamName}
@@ -310,7 +276,6 @@
 
 		,#{realName}
 		,#{status}
-
 		,#{manager}
 		,#{unionId}
 		,#{h5OpenId}
@@ -347,16 +312,12 @@
 	<update id="update_agent" parameterType="agent">
 		UPDATE tbh_user
 		SET
-		login_name = #{loginName}
-		,mobile = #{mobile}
+		mobile = #{mobile}
 		,wx_id = #{wxId}
 		,photo = #{photo}
 		,nickname = #{nickname}
-		,login_pwd = #{loginPwd}
-		,login_pwd_strength = #{loginPwdStrength}
-		,kind = #{kind}
 		,level = #{level}
-		,user_referee = #{userReferee}
+		,referrer = #{referrer}
 		,introducer = #{introducer}
 		,high_user_id = #{highUserId}
 		,team_name = #{teamName}
@@ -384,14 +345,6 @@
 		user_id = #{userId}
 	</update>
 
-	<update id="update_login_pwd" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		login_pwd = #{loginPwd}
-		,login_pwd_strength = #{loginPwdStrength}
-		WHERE
-		user_id = #{userId}
-	</update>
 
 	<update id="update_trade_pwd" parameterType="agent">
 		UPDATE tbh_user
@@ -402,21 +355,6 @@
 		user_id = #{userId}
 	</update>
 
-	<update id="update_agent_loginName" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		login_name = #{loginName}
-		WHERE
-		user_id = #{userId}
-	</update>
-
-	<update id="update_agent_nickname" parameterType="agent">
-		UPDATE tbh_user
-		SET
-		nickname = #{nickname}
-		WHERE
-		user_id = #{userId}
-	</update>
 
 	<update id="update_agent_photo" parameterType="agent">
 		UPDATE tbh_user
@@ -429,7 +367,6 @@
 		UPDATE tbh_user
 		SET
 		mobile = #{mobile}
-		,login_name = #{loginName}
 		WHERE user_id = #{userId}
 	</update>
 
@@ -464,7 +401,7 @@
 	<update id="update_userReferee" parameterType="agent">
 		UPDATE tbh_user
 		SET
-		user_referee = #{userReferee}
+		referrer = #{referrer}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		WHERE user_id = #{userId}
@@ -483,7 +420,7 @@
 		UPDATE tbh_user
 		SET
 		high_user_id = #{highUserId}
-		,user_referee = #{userReferee}
+		,referrer = #{referrer}
 		,updater =
 		#{updater}
 		,update_datetime = #{updateDatetime}
@@ -505,7 +442,7 @@
 		status = #{status}
 		,mobile = #{mobile}
 		,id_no = #{idNo}
-		,user_referee = #{userReferee}
+		,referrer = #{referrer}
 		,high_user_id = #{highUserId}
 
 		,team_name = #{teamName}
@@ -521,7 +458,7 @@
 		SET
 		mobile = #{mobile}
 		,id_no = #{idNo}
-		,user_referee = #{userReferee}
+		,referrer = #{referrer}
 		,high_user_id = #{highUserId}
 
 		,team_name = #{teamName}

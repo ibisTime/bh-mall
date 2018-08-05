@@ -28,7 +28,6 @@ public class XN627590 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         TjAward condition = new TjAward();
-        condition.setType(req.getType());
         condition.setProductCode(req.getProductCode());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         String column = req.getOrderColumn();

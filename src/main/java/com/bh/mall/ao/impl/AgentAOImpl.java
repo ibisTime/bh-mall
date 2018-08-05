@@ -342,8 +342,8 @@ public class AgentAOImpl implements IAgentAO {
 
         for (Agent data : page.getList()) {
             // 推荐人转义
-            if (StringUtils.isNotBlank(data.getUserReferee())) {
-                Agent userRefree = agentBO.getAgent(data.getUserReferee());
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
                 data.setUserRefreeName(userRefree.getRealName());
                 data.setUserRefreeMobile(userRefree.getMobile());
             }
@@ -369,8 +369,8 @@ public class AgentAOImpl implements IAgentAO {
         List<Agent> list = agentBO.queryAgentList(condition);
         for (Agent data : list) {
             // 推荐人转义
-            if (StringUtils.isNotBlank(data.getUserReferee())) {
-                Agent userRefree = agentBO.getAgent(data.getUserReferee());
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
                 data.setUserRefreeName(userRefree.getRealName());
                 data.setUserRefreeMobile(userRefree.getMobile());
             }
@@ -396,8 +396,8 @@ public class AgentAOImpl implements IAgentAO {
 
         for (Agent data : page.getList()) {
             // 推荐人转义
-            if (StringUtils.isNotBlank(data.getUserReferee())) {
-                Agent userRefree = agentBO.getAgent(data.getUserReferee());
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
                 data.setUserRefreeName(userRefree.getRealName());
                 data.setUserRefreeMobile(userRefree.getMobile());
             }
@@ -457,8 +457,8 @@ public class AgentAOImpl implements IAgentAO {
         Agent data = agentBO.getAgent(userId);
 
         // 推荐人转义
-        if (StringUtils.isNotBlank(data.getUserReferee())) {
-            Agent userRefree = agentBO.getAgent(data.getUserReferee());
+        if (StringUtils.isNotBlank(data.getReferrer())) {
+            Agent userRefree = agentBO.getAgent(data.getReferrer());
             data.setUserRefreeName(userRefree.getRealName());
             data.setUserRefreeMobile(userRefree.getMobile());
         }

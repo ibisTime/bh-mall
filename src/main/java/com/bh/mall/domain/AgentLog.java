@@ -53,12 +53,6 @@ public class AgentLog extends ABaseDO {
     // 打款截图
     private String payPdf;
 
-    // 保证金截图
-    private String marginPdf;
-
-    // 状态
-    private String status;
-
     // 省
     private String province;
 
@@ -71,6 +65,9 @@ public class AgentLog extends ABaseDO {
     // 具体地址
     private String address;
 
+    // 状态
+    private String status;
+
     // 审核人
     private String approver;
 
@@ -79,6 +76,9 @@ public class AgentLog extends ABaseDO {
 
     // 审核时间
     private Date approveDatetime;
+
+    // 审核备注
+    private String approveNote;
 
     // 更新人
     private String updater;
@@ -175,12 +175,20 @@ public class AgentLog extends ABaseDO {
         this.payPdf = payPdf;
     }
 
-    public String getMarginPdf() {
-        return marginPdf;
+    public String getApproveNote() {
+        return approveNote;
     }
 
-    public void setMarginPdf(String marginPdf) {
-        this.marginPdf = marginPdf;
+    public String getUserReferrerName() {
+        return userReferrerName;
+    }
+
+    public void setApproveNote(String approveNote) {
+        this.approveNote = approveNote;
+    }
+
+    public void setUserReferrerName(String userReferrerName) {
+        this.userReferrerName = userReferrerName;
     }
 
     public String getStatus() {
