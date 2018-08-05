@@ -76,7 +76,6 @@ import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUser;
 import com.bh.mall.enums.EUserKind;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -155,7 +154,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 获取上级
         String toUserName = null;
         if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
             Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
@@ -188,9 +187,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
             this.checkLimitNumber(applyUser, specs, price, cart.getQuantity());
 
             // 检查起购数量
-            if (price.getMinQuantity() > cart.getQuantity()) {
+            if (price.getStartNumber() > cart.getQuantity()) {
                 throw new BizException("xn0000",
-                    "您购买的数量不能低于" + price.getMinQuantity() + "]");
+                    "您购买的数量不能低于" + price.getStartNumber() + "]");
             }
 
             // 判断未开启云仓的代理是否完成授权单
@@ -311,7 +310,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 获取上级
         String toUserName = null;
         if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSuser(applyUser.getHighUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
             Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
@@ -348,10 +347,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
             StringValidater.toInteger(req.getQuantity()));
 
         // 检查起购数量
-        if (price.getMinQuantity() > StringValidater
+        if (price.getStartNumber() > StringValidater
             .toInteger(req.getQuantity())) {
             throw new BizException("xn0000",
-                "您购买的数量不能低于" + price.getMinQuantity() + "]");
+                "您购买的数量不能低于" + price.getStartNumber() + "]");
         }
 
         // 订单拆单
@@ -567,26 +566,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 OutOrder.setLeaderMobile(agent.getMobile());
             }
 
-            // 订单归属人
-            String toUserName = this.getName(OutOrder.getToUserId());
-            OutOrder.setToUserName(toUserName);
-
-            // 收货人
-            String signeName = this.getName(OutOrder.getSigner());
-            OutOrder.setSigneName(signeName);
-
-            // 审核人
-            String approveUser = this.getName(OutOrder.getApprover());
-            OutOrder.setApproveName(approveUser);
-
-            // 发货人
-            String deliveName = this.getName(OutOrder.getDeliver());
-            OutOrder.setDeliveName(deliveName);
-
-            // 更新人
-            String updateName = this.getName(OutOrder.getUpdater());
-            OutOrder.setUpdater(updateName);
-
             // 产品信息
             Product product = productBO.getProduct(OutOrder.getProductCode());
             OutOrder.setProduct(product);
@@ -629,26 +608,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 outOrder.setLeaderMobile(agent.getMobile());
             }
 
-            // 订单归属人
-            String toUserName = this.getName(outOrder.getToUserId());
-            outOrder.setToUserName(toUserName);
-
-            // 收货人
-            String signeName = this.getName(outOrder.getSigner());
-            outOrder.setSigneName(signeName);
-
-            // 审核人
-            String approveUser = this.getName(outOrder.getApprover());
-            outOrder.setApproveName(approveUser);
-
-            // 发货人
-            String deliveName = this.getName(outOrder.getDeliver());
-            outOrder.setDeliveName(deliveName);
-
-            // 更新人
-            String updateName = this.getName(outOrder.getUpdater());
-            outOrder.setUpdater(updateName);
-
             // 产品信息
             Product product = productBO.getProduct(outOrder.getProductCode());
             outOrder.setProduct(product);
@@ -662,26 +621,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 下单人
         Agent agent = agentBO.getAgent(OutOrder.getApplyUser());
         OutOrder.setAgent(agent);
-
-        // 订单归属人
-        String toUserName = this.getName(OutOrder.getToUserId());
-        OutOrder.setToUserName(toUserName);
-
-        // 收货人
-        String signeName = this.getName(OutOrder.getSigner());
-        OutOrder.setSigneName(signeName);
-
-        // 审核人
-        String approveUser = this.getName(OutOrder.getApprover());
-        OutOrder.setApproveName(approveUser);
-
-        // 发货人
-        String deliveName = this.getName(OutOrder.getDeliver());
-        OutOrder.setDeliveName(deliveName);
-
-        // 更新人
-        String updateName = this.getName(OutOrder.getUpdater());
-        OutOrder.setUpdater(updateName);
 
         // 产品信息
         Product product = productBO.getProduct(OutOrder.getProductCode());
@@ -739,10 +678,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // **********推荐奖**********
         // 是否有推荐人
         if (this.checkAward(applyUser)) {
-            if (StringUtils.isNotBlank(applyUser.getUserReferee())) {
+            if (StringUtils.isNotBlank(applyUser.getReferrer())) {
                 // 直接推荐人
                 Agent firstReferee = agentBO
-                    .getAgent(applyUser.getUserReferee());
+                    .getAgent(applyUser.getReferrer());
                 TjAward tjAward = tjAwardBO.getAwardByLevel(
                     applyUser.getLevel(), data.getProductCode());
 
@@ -758,9 +697,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         EBizType.AJ_TJJL.getValue(), data.getCode());
 
                     // 间接推荐奖
-                    if (StringUtils.isNotBlank(firstReferee.getUserReferee())) {
+                    if (StringUtils.isNotBlank(firstReferee.getReferrer())) {
                         Agent secondReferee = agentBO
-                            .getAgent(firstReferee.getUserReferee());
+                            .getAgent(firstReferee.getReferrer());
                         amount = AmountUtil.mul(orderAmount,
                             tjAward.getValue2() / 100);
                         accountBO.transAmountCZB(fromUserId,
@@ -772,9 +711,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                         // 次推荐奖
                         if (StringUtils
-                            .isNotBlank(secondReferee.getUserReferee())) {
+                            .isNotBlank(secondReferee.getReferrer())) {
                             Agent thirdReferee = agentBO
-                                .getAgent(secondReferee.getUserReferee());
+                                .getAgent(secondReferee.getReferrer());
                             amount = AmountUtil.mul(orderAmount,
                                 tjAward.getValue3() / 100);
                             accountBO.transAmountCZB(fromUserId,
@@ -974,25 +913,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
         outOrderBO.receivedOutOrder(data);
     }
 
-    private String getName(String agent) {
-        if (StringUtils.isBlank(agent)) {
-            return null;
-        }
-        if (EUser.ADMIN.getCode().equals(agent)) {
-            return agent;
-        }
-        String name = agent;
-        Agent data = agentBO.getAgent(agent);
-        if (data != null) {
-            name = data.getRealName();
-            if (EUserKind.Plat.getCode().equals(data.getKind())
-                    && StringUtils.isBlank(data.getRealName())) {
-                name = data.getLoginName();
-            }
-        }
-        return name;
-    }
-
     private String checkOrder(Agent applyUser, Specs specs) {
         String kind = EOutOrderKind.Normal_Order.getCode();
         // 是否完成授权单
@@ -1062,7 +982,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     private boolean checkAward(Agent agent) {
         // 介绍人与推荐人同时存在
         if (StringUtils.isNotBlank(agent.getIntroducer())
-                && StringUtils.isNotBlank(agent.getUserReferee())) {
+                && StringUtils.isNotBlank(agent.getReferrer())) {
             // 下单金额是否超过授权金额
             List<String> statusList = new ArrayList<String>();
             statusList.add(EOrderStatus.Paid.getCode());
@@ -1166,11 +1086,22 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn00000",
                 "您今日的购买数量不能多于[" + price.getMonthlyNumber() + "]");
         }
+    }
 
+    // 日、周、月已购数量
+    private int getNumber(String agentId, Date startDatetime,
+            Date endDatetime) {
+        int number = 0;
+        List<OutOrder> list = outOrderBO.getProductQuantity(agentId,
+            startDatetime, endDatetime);
+        for (OutOrder outOrder : list) {
+            Specs specs = specsBO.getSpecs(outOrder.getSpecsCode());
+            number = number + specs.getNumber();
+        }
+        return number;
     }
 
     private void checkAmount(Agent agent, AgentLevel agentLevel, Long amount) {
-
         // 门槛账户
         Account account = accountBO.getAccountByUser(agent.getUserId(),
             ECurrency.MK_CNY.getCode());
@@ -1188,19 +1119,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 "剩余门槛不能大于[" + agentLevel.getMinSurplus() / 1000 + "]元，目前余额还有["
                         + restAmount / 1000 + "]元");
         }
-    }
-
-    // 日、周、月已购数量
-    private int getNumber(String agentId, Date startDatetime,
-            Date endDatetime) {
-        int number = 0;
-        List<OutOrder> list = outOrderBO.getProductQuantity(agentId,
-            startDatetime, endDatetime);
-        for (OutOrder outOrder : list) {
-            Specs specs = specsBO.getSpecs(outOrder.getSpecsCode());
-            number = number + specs.getNumber();
-        }
-        return number;
     }
 
 }

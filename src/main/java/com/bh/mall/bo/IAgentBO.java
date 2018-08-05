@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.SjForm;
+import com.bh.mall.domain.SqForm;
 
 public interface IAgentBO extends IPaginableBO<Agent> {
 
@@ -12,14 +14,20 @@ public interface IAgentBO extends IPaginableBO<Agent> {
             String mobile, String loginPwd, String nickname, String photo,
             String status, Integer level, String fromUserId);
 
+    // 申请意向代理
+    public void applyAgent(Agent agent, String realName, String wxId,
+            String mobile, String province, String city, String area,
+            String address, String logCode);
+
+    // 更新最后一条代理日志
+    public void refreshLastLog(Agent agent, String status, String approver,
+            String approveName, String logCode);
+
     // 微信登录
     public Agent doGetUserByOpenId(String h5OpenId);
 
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile);
-
-    // 判断登录名是否存在
-    public void isLoginNameExist(String loginName, String kind);
 
     public String getUserId(String mobile, String kind);
 
@@ -29,12 +37,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     // 判断用户编号是否存在
     public boolean isUserExist(String userId);
-
-    // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
-    public void checkLoginPwd(String userId, String loginPwd);
-
-    // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
-    public void checkLoginPwd(String userId, String loginPwd, String alertStr);
 
     // 校验是否已经有人实名认证
     public void checkIdentify(String kind, String idKind, String idNo,
@@ -58,8 +60,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public List<Agent> getAgentByUserReferee(String userReferee);
 
-    public Agent getAgentByLoginName(String loginName, String systemCode);
-
     public void refreshStatus(Agent data, String updater, String remark);
 
     public Agent getAgentByMobile(String introducer);
@@ -68,15 +68,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 保存， 更新
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo);
-
-    public String saveUser(String mobile, String kind);
-
-    // 更新
-    public void resetLoginPwd(Agent buser, String loginPwd);
-
-    public void refreshLoginName(String userId, String loginName);
-
-    public void refreshNickname(String userId, String nickname);
 
     public void refreshReferee(Agent data, String userReferee, String updater);
 
@@ -94,10 +85,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public List<Agent> selectList(Agent condition, int pageNo, int pageSize);
 
-    public List<Agent> selectAgentFront(Agent condition, int pageNo,
-            int pageSize);
-
-    public Agent getAgentName(String userReferee);
+    public String getAgentName(String userReferee);
 
     public void checkTradePwd(String userId, String tradePwd);
 
@@ -105,5 +93,26 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     // 是否为最高等级代理
     public boolean isHighest(String userId);
+
+    public void refreshInfo(Agent applyAgent);
+
+    // 修改团队名称
+    public void refreshTeamName(Agent data, String teamName);
+
+    public void refreshAgent(SqForm sqForm);
+
+    // 清空信息
+    public void resetInfo(Agent agent);
+
+    // 授权成功
+    public void sqSuccess(SqForm sqForm);
+
+    // 升级成功
+    public void sjSuccess(SjForm sjForm);
+
+    public void refreshAgent(SqForm sqForm, String logCode);
+
+    // 清空推荐关系
+    public void resetUserReferee(String userId);
 
 }

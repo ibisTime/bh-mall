@@ -51,7 +51,7 @@
 				AND t.product_specs_code = #{productSpecsCode}
 			</if>
 			<if test="keyword != null and keyword != '' ">
-				AND t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%"
+				AND (t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%")
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -74,8 +74,8 @@
 		,t.product_code
 		
 		,t.product_name
-		,t.product_specs_code
-		,t.product_specs_name
+		,t.specs_code
+		,t.specs_name
 		,t.tran_number
 		,t.before_number
 		
@@ -122,8 +122,8 @@
 		,product_code
 		
 		,product_name
-		,product_specs_code
-		,product_specs_name
+		,specs_code
+		,specs_name
 		,tran_number
 		,before_number
 		
@@ -154,8 +154,8 @@
 		,#{productCode}
 		
 		,#{productName}
-		,#{productSpecsCode}
-		,#{productSpecsName}
+		,#{specsCode}
+		,#{specsName}
 		,#{tranNumber}
 		,#{beforeNumber}
 		
@@ -187,8 +187,8 @@
 		,type = #{type}
 		,product_code = #{productCode}
 		,product_name = #{productName}
-		,product_specs_code = #{productSpecsCode}
-		,product_specs_name = #{productSpecsName}
+		,specs_code = #{specsCode}
+		,specs_name = #{specsName}
 		,price = #{price}
 		,amount = #{amount}
 		,change_number = #{changeNumber}

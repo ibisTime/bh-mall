@@ -1,28 +1,28 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IYxFormAO;
-import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627250Req;
-import com.bh.mall.enums.EAddressType;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.ESqFormStatus;
 import com.bh.mall.enums.EUserStatus;
+import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -35,13 +35,15 @@ public class YxFormAOImpl implements IYxFormAO {
     private IAgentBO agentBO;
 
     @Autowired
-    private IAddressBO addressBO;
-
-    @Autowired
     private IAgentLevelBO agentLevelBO;
 
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
-    // 代理申请 （无推荐人）
+    /**
+    * 申请意向代理
+    * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+    */
     @Override
     @Transactional
     public void applyYxForm(XN627250Req req) {
@@ -56,89 +58,147 @@ public class YxFormAOImpl implements IYxFormAO {
         }
 
         // 确认申请id
-        agentBO.getAgent(req.getUserId());
+        Agent data = agentBO.getAgent(req.getUserId());
 
-        YxForm data = new YxForm();
-        // 获取申请信息
-        data.setRealName(req.getRealName());
-        data.setUserId(req.getUserId());
-        data.setWxId(req.getWxId());
-        data.setMobile(req.getMobile());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-
-        data.setArea(req.getArea());
-        data.setAddress(req.getAddress());
-        data.setStatus(EUserStatus.MIND.getCode()); // 有意愿
-        data.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
-        data.setApplyDatetime(new Date());
-
-        data.setSource(req.getFromInfo());
-        // 数据库
-        yxFormBO.applyYxForm(data);
-    }
-
-    // 意向分配
-    @Override
-    public void allotYxForm(String userId, String toUserId, String approver) {
-        // 确认申请id
-        agentBO.getAgent(userId);
-        YxForm data = new YxForm();
-        // check status
-        String status = EUserStatus.TO_APPROVE.getCode();
-
-        if (StringUtils.isNotBlank(toUserId)) {
-            Agent toUser = agentBO.getAgent(toUserId);
-            if (data.getApplyLevel() <= toUser.getLevel()) {
-                throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
-            }
-            status = EUserStatus.ALLOTED.getCode(); // 已分配
+        // 之前有意向单更新，没有新增
+        YxForm yxForm = yxFormBO.getYxForm(req.getUserId());
+        String logCode = null;
+        if (null == yxForm) {
+            logCode = yxFormBO.applyYxForm(data.getUserId(), req.getRealName(),
+                req.getWxId(), req.getMobile(), req.getApplyLevel(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress(), req.getFromInfo());
         } else {
-            status = EUserStatus.ADD_INFO.getCode(); // 更新授权信息
+            logCode = yxFormBO.updateYxForm(yxForm, req.getRealName(),
+                req.getWxId(), req.getMobile(), req.getApplyLevel(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress(), req.getFromInfo());
         }
 
-        data.setUserId(userId);
-        data.setToUserId(toUserId);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setStatus(status);
-        yxFormBO.allotYxForm(data);
+        // 更新最后一条日志
+        agentBO.applyAgent(data, req.getRealName(), req.getWxId(),
+            req.getMobile(), req.getProvince(), req.getCity(), req.getArea(),
+            req.getAddress(), logCode);
 
     }
 
-    // 忽略意向
+    /**
+     * 平台分配意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
-    public void ignore(String userId, String aprrover) {
+    public void allotYxFormByP(String userId, String toUserId, String approver,
+            String remark) {
         // 确认申请id
-        agentBO.getAgent(userId);
-        YxForm data = new YxForm();
-        if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
-                || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
-            throw new BizException("xn0000", "该代理不是有意向代理");
+        YxForm data = yxFormBO.getYxForm(userId);
+        Agent toUser = agentBO.getAgent(toUserId);
+        if (data.getApplyLevel() <= toUser.getLevel()) {
+            throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
         }
-        data.setApprover(aprrover);
-        data.setApproveDatetime(new Date());
-        data.setStatus(EUserStatus.IGNORED.getCode());
-        yxFormBO.ignore(data);
+        SYSUser sysUser = sysUserBO.getSYSUser(approver);
+
+        String logCode = yxFormBO.allotYxForm(data, toUserId, approver,
+            sysUser.getRealName(), remark);
+
+        // 更新最后一条轨迹
+        Agent agent = agentBO.getAgent(userId);
+        agentBO.refreshLastLog(agent, EYxFormStatus.IGNORED.getCode(),
+            sysUser.getUserId(), sysUser.getRealName(), logCode);
     }
 
-    // 接受意向
+    /**
+     * 代理分配意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
     @Override
-    public void acceptYxForm(String userId, String approver, String remark) {
-        // 确认申请id
-        agentBO.getAgent(userId);
-        YxForm data = new YxForm();
-        if (!(EUserStatus.MIND.getCode().equals(data.getStatus())
-                || EUserStatus.ALLOTED.getCode().equals(data.getStatus()))) {
-            throw new BizException("xn0000", "该代理不是有意向代理");
+    public void allotYxFormByB(String userId, String toUserId, String approver,
+            String remark) {
+        YxForm data = yxFormBO.getYxForm(userId);
+
+        Agent toUser = agentBO.getAgent(toUserId);
+        if (data.getApplyLevel() <= toUser.getLevel()) {
+            throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
         }
 
-        data.setToUserId(approver);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-        data.setStatus(EUserStatus.ADD_INFO.getCode()); // 补全授权资料
-        yxFormBO.allotYxForm(data);
+        Agent agent = agentBO.getAgent(approver);
+        String logCode = yxFormBO.allotYxForm(data, toUserId, approver,
+            agent.getRealName(), remark);
+
+        // 更新最后一条轨迹
+        agentBO.refreshLastLog(agent, null, approver, agent.getRealName(),
+            logCode);
+    }
+
+    /**
+     * 平台忽略意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
+    @Override
+    public void ignoreYxFormByP(String userId, String approver, String remark) {
+        YxForm yxForm = yxFormBO.getYxForm(userId);
+        SYSUser sysUser = sysUserBO.getSYSUser(approver);
+        String logCode = yxFormBO.ignoreYxForm(yxForm, sysUser.getUserId(),
+            sysUser.getRealName(), remark);
+
+        // 更新最后一条轨迹
+        Agent agent = agentBO.getAgent(userId);
+        agentBO.refreshLastLog(agent, EYxFormStatus.IGNORED.getCode(),
+            sysUser.getUserId(), sysUser.getRealName(), logCode);
+
+    }
+
+    /**
+     * 代理忽略意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
+    @Override
+    public void ignoreYxFormByB(String userId, String approver, String remark) {
+        YxForm yxForm = yxFormBO.getYxForm(userId);
+        Agent data = agentBO.getAgent(approver);
+        String logCode = yxFormBO.ignoreYxForm(yxForm, data.getUserId(),
+            data.getRealName(), remark);
+
+        // 更新最后一条轨迹
+        Agent agent = agentBO.getAgent(userId);
+        agentBO.refreshLastLog(agent, EYxFormStatus.IGNORED.getCode(),
+            agent.getUserId(), agent.getRealName(), logCode);
+    }
+
+    /**
+     * 平台接受意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
+    @Override
+    public void acceptYxFormByP(String userId, String approver, String remark) {
+
+        YxForm yxForm = yxFormBO.getYxForm(userId);
+        SYSUser sysUser = sysUserBO.getSYSUser(approver);
+        String logCode = yxFormBO.acceptYxForm(yxForm, sysUser.getUserId(),
+            sysUser.getRealName(), remark);
+
+        // 更新最后一条轨迹
+        Agent agent = agentBO.getAgent(userId);
+        agentBO.refreshLastLog(agent, ESqFormStatus.BC_ZL.getCode(),
+            agent.getUserId(), agent.getRealName(), logCode);
+
+    }
+
+    /**
+     * 代理接受意向代理
+     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     */
+    @Override
+    public void acceptYxFormByB(String userId, String approver, String remark) {
+        // 确认申请id
+        YxForm yxForm = yxFormBO.getYxForm(userId);
+        Agent data = agentBO.getAgent(approver);
+        String logCode = yxFormBO.acceptYxForm(yxForm, data.getUserId(),
+            data.getRealName(), remark);
+
+        // 更新最后一条轨迹
+        Agent agent = agentBO.getAgent(userId);
+        agentBO.refreshLastLog(agent, ESqFormStatus.BC_ZL.getCode(),
+            agent.getUserId(), agent.getRealName(), logCode);
 
     }
 

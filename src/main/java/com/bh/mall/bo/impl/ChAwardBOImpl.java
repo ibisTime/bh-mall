@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IChAwardDAO;
 import com.bh.mall.domain.ChAward;
 import com.bh.mall.exception.BizException;
@@ -19,8 +23,24 @@ public class ChAwardBOImpl extends PaginableBOImpl<ChAward>
     @Autowired
     private IChAwardDAO chAwardDAO;
 
-    public void saveChAward(ChAward data) {
+    public String saveChAward(String level, Long startAmount, Long endAmount,
+            String percent, String updater, String remark) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AwardInterval.getCode());
+        ChAward data = new ChAward();
+        data.setCode(code);
+        data.setLevel(StringValidater.toInteger(level));
+        data.setStartAmount(startAmount);
+
+        data.setEndAmount(endAmount);
+        data.setPercent(StringValidater.toDouble(percent));
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+
+        data.setRemark(remark);
         chAwardDAO.insert(data);
+        return code;
     }
 
     @Override
@@ -29,7 +49,16 @@ public class ChAwardBOImpl extends PaginableBOImpl<ChAward>
     }
 
     @Override
-    public void refreshChAward(ChAward data) {
+    public void refreshChAward(ChAward data, Long startAmount, Long endAmount,
+            String percent, String updater, String remark) {
+        data.setStartAmount(startAmount);
+        data.setEndAmount(endAmount);
+        data.setPercent(StringValidater.toDouble(percent));
+
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
         chAwardDAO.update(data);
     }
 
@@ -59,4 +88,17 @@ public class ChAwardBOImpl extends PaginableBOImpl<ChAward>
         condition.setAmount(amount);
         return chAwardDAO.select(condition);
     }
+
+    @Override
+    public boolean isChAwardExist(Integer level, Long startAmount) {
+        ChAward condition = new ChAward();
+        condition.setLevel(level);
+        condition.setAmount(startAmount);
+        ChAward data = chAwardDAO.select(condition);
+        if (data == null) {
+            return false;
+        }
+        return true;
+    }
+
 }

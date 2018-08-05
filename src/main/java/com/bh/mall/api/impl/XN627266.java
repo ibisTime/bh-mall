@@ -27,11 +27,10 @@ public class XN627266 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
-        condition.setLoginNameForQuery(req.getLoginName());
         condition.setMobile(req.getMobile());
         condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
-        condition.setUserReferee(req.getUserReferee());
+        condition.setReferrer(req.getUserReferee());
 
         condition.setRealName(req.getRealName());
         condition.setStatus(req.getStatus());
@@ -40,15 +39,11 @@ public class XN627266 extends AProcessor {
         condition.setH5OpenId(req.getH5OpenId());
         condition.setAppOpenId(req.getAppOpenId());
 
-        condition.setApplyDatetimeStart(
-            DateUtil.getFrontDate(req.getApplyStartDatetime(), false));
-        condition.setApplyDatetimeEnd(
-            DateUtil.getFrontDate(req.getApplyEndDatetime(), true));
+        condition.setCreateDatetimeStart(DateUtil.strToDate(
+            req.getApplyStartDatetime(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setCreateDatetimeEnd(DateUtil.strToDate(
+            req.getApplyEndDatetime(), DateUtil.DATA_TIME_PATTERN_1));
 
-        condition.setCreateDatetimeStart(
-            DateUtil.getFrontDate(req.getCreateDatetimeStart(), false));
-        condition.setCreateDatetimeEnd(
-            DateUtil.getFrontDate(req.getCreateDatetimeEnd(), true));
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IAgentAO.DEFAULT_ORDER_COLUMN;

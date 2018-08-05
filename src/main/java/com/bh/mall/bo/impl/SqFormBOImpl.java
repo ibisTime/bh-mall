@@ -1,25 +1,19 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.dao.IAgentDAO;
-import com.bh.mall.dao.IAgentLogDAO;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.ISqFormDAO;
-import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.SqForm;
-import com.bh.mall.enums.EAgentType;
-import com.bh.mall.enums.EUserStatus;
-import com.bh.mall.exception.BizException;
 
 @Component
 public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
@@ -28,172 +22,81 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     private ISqFormDAO sqFormDAO;
 
     @Autowired
-    private IAgentLogDAO agentLogDAO;
+    private IAgentLogBO agentLogBO;
 
-    @Autowired
-    private IAgentDAO agentDAO;
+    public SqForm applySqForm(String userId, String realName, String mobile,
+            String wxId, String applyLevel, String toUserId, String teamName,
+            String introducer, String userRefree, String idKind, String idNo,
+            String idHand, String province, String city, String area,
+            String address, String status) {
 
-    // 代理申请 （有推荐人）
-    @Override
-    public String toApply(SqForm data) {
+        SqForm data = new SqForm();
+        data.setUserId(userId);
+        data.setRealName(realName);
+        data.setMobile(mobile);
+        data.setWxId(wxId);
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
+        data.setApplyLevel(StringValidater.toInteger(applyLevel));
+        data.setToUserId(toUserId);
+        data.setTeamName(teamName);
+        data.setIdKind(idKind);
+        data.setIdNo(idNo);
 
-        SqForm alData = new SqForm();
-        alData.setCode(code);
-        sqFormDAO.insert(alData);
+        data.setIdHand(idHand);
+        data.setIntroducer(introducer);
+        data.setReferrer(userRefree);
+        data.setProvince(province);
+        data.setCity(city);
 
-        // update agent last log code
-        Agent agent = new Agent();
-        agent.setLastAgentLog(code);
-        agentDAO.updateLog(agent);
-
-        // insert new agent log
-        AgentLog log = new AgentLog();
-        log.setCode(code);
-        log.setApplyUser(data.getUserId());
-        log.setRefereeName(data.getUserReferee());
-        log.setApplyLevel(data.getApplyLevel());
-        log.setStatus(data.getStatus());
-        log.setType(EAgentType.Imporder.getCode()); //  授权
-        log.setApplyDatetime(data.getApplyDatetime());
-        agentLogDAO.insert(log);
-        return code;
-    }
-
-    // 新增授权申请
-    @Override
-    public String applySqForm(SqForm data) {
-
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        SqForm alData = new SqForm();
-        alData.setCode(code);
-        sqFormDAO.insert(alData);
-        return code;
-    }
-
-    // 通过该授权申请
-    @Override
-    public String approveSqForm(SqForm user) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        SqForm alData = new SqForm();
-
-        alData.setCode(code);
-        alData.setUserId(user.getUserId());
-        alData.setApplyDatetime(user.getApplyDatetime());
-        alData.setStatus(EUserStatus.TO_APPROVE.getCode());
-        alData.setApplyLevel(user.getApplyLevel());
-        alData.setApprover(user.getApprover());
-        alData.setApplyLevel(user.getApplyLevel());
-        alData.setApproveDatetime(user.getApproveDatetime());
-        alData.setRemark(user.getRemark());
-        sqFormDAO.insert(alData);
-        return code;
-    }
-
-    // 代理取消申请
-    @Override
-    public String cancelSqForm(SqForm data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        SqForm alData = new SqForm();
-        alData.setCode(code);
-        sqFormDAO.insert(alData);
-
-        // update agent last log code
-        Agent agent = new Agent();
-        agent.setLastAgentLog(code);
-        agentDAO.updateLog(agent);
-
-        // insert new agent log
-        AgentLog log = new AgentLog();
-        log.setCode(code);
-        log.setApplyUser(data.getUserId());
-        log.setApplyLevel(data.getApplyLevel());
-        log.setStatus(data.getStatus());
-        log.setType(EAgentType.Imporder.getCode()); //  授权
-        log.setApplyDatetime(data.getApplyDatetime());
-        agentLogDAO.insert(log);
-        return code;
-
-    }
-
-    // 补充授权所需信息
-    @Override
-    public String addInfo(SqForm data) {
-
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        data.setCode(code);
+        data.setArea(area);
+        data.setAddress(address);
+        data.setStatus(status);
+        Date date = new Date();
+        data.setApplyDatetime(date);
         sqFormDAO.insert(data);
-
-        // update agent last log code
-        Agent agent = new Agent();
-        agent.setLastAgentLog(code);
-        agentDAO.updateLog(agent);
-
-        // insert new agent log
-        AgentLog log = new AgentLog();
-        log.setCode(code);
-        log.setApplyUser(data.getUserId());
-        log.setApplyLevel(data.getApplyLevel());
-        log.setStatus(data.getStatus());
-        log.setType(EAgentType.Imporder.getCode()); //  授权
-        log.setApplyDatetime(data.getApplyDatetime());
-        agentLogDAO.insert(log);
-
-        return code;
+        return data;
     }
 
-    // 新增授权单
     @Override
-    public String addSqForm(SqForm data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
+    public SqForm refreshSqForm(SqForm data, String realName, String mobile,
+            String wxId, String applyLevel, String toUserId, String teamName,
+            String introducer, String userRefree, String idKind, String idNo,
+            String idHand, String province, String city, String area,
+            String address, String status) {
 
-        SqForm buser = new SqForm();
-        buser.setUserId(data.getUserId());
+        data.setRealName(realName);
+        data.setMobile(mobile);
+        data.setWxId(wxId);
 
-        data.setCode(code);
+        data.setApplyLevel(StringValidater.toInteger(applyLevel));
+        data.setToUserId(toUserId);
+        data.setTeamName(teamName);
+        data.setIdKind(idKind);
+        data.setIdNo(idNo);
+
+        data.setIdHand(idHand);
+        data.setIntroducer(introducer);
+        data.setReferrer(userRefree);
+        data.setProvince(province);
+        data.setCity(city);
+
+        data.setArea(area);
+        data.setAddress(address);
+        data.setStatus(status);
+        Date date = new Date();
+        data.setApplyDatetime(date);
         sqFormDAO.insert(data);
-
-        return code;
-    }
-
-    // 保存授权单
-    @Override
-    public String saveSqForm(SqForm data, String toUserId) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        SqForm alData = new SqForm();
-        alData.setCode(code);
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setUserId(data.getUserId());
-        alData.setApplyDatetime(data.getApplyDatetime());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(data.getApproveDatetime());
-        alData.setStatus(data.getStatus());
-        sqFormDAO.insert(alData);
-
-        return code;
+        return data;
     }
 
     // 详细查询
     @Override
-    public SqForm getSqForm(String code) {
+    public SqForm getSqForm(String userId) {
         SqForm data = null;
-        if (StringUtils.isNotBlank(code)) {
+        if (StringUtils.isNotBlank(userId)) {
             SqForm condition = new SqForm();
-            condition.setCode(code);
+            condition.setUserId(userId);
             data = sqFormDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "代理记录不存在");
-            }
         }
         return data;
     }
@@ -212,6 +115,30 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
     @Override
     public List<SqForm> querySqFormList(SqForm condition) {
         return sqFormDAO.selectList(condition);
+    }
+
+    @Override
+    public String approveSqForm(SqForm data, String approver,
+            String approveName, String remark, String status) {
+        data.setApprover(approver);
+        data.setApproveName(approveName);
+        Date date = new Date();
+        data.setApproveDatetime(date);
+        data.setImpowerDatetime(date);
+        data.setRemark(remark);
+
+        data.setStatus(status);
+        return agentLogBO.applySqForm(data);
+    }
+
+    @Override
+    public String cancelSqForm(SqForm data, String status) {
+        data.setStatus(status);
+        Date date = new Date();
+        data.setApplyDatetime(date);
+        sqFormDAO.cancelSqForm(data);
+
+        return agentLogBO.applySqForm(data);
     }
 
 }

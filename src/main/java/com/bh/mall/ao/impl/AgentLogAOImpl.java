@@ -11,11 +11,13 @@ import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentLogBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.AgentLog;
-import com.bh.mall.enums.EUser;
+import com.bh.mall.domain.SYSUser;
+import com.bh.mall.enums.EAgentLevel;
 
 @Service
 public class AgentLogAOImpl implements IAgentLogAO {
@@ -32,6 +34,9 @@ public class AgentLogAOImpl implements IAgentLogAO {
     @Autowired
     IAddressBO addressBO;
 
+    @Autowired
+    ISYSUserBO sysUserBO;
+
     @Override
     public String addAgentLog(AgentLog data) {
         return null;
@@ -43,43 +48,26 @@ public class AgentLogAOImpl implements IAgentLogAO {
 
         Paginable<AgentLog> page = agentLogBO.getPaginable(start, limit,
             condition);
-        List<AgentLog> list = page.getList();
 
-        for (AgentLog agentLog : list) {
-            Agent userReferee = null;
-            Agent agent = agentBO.getAgent(agentLog.getApplyUser());
-            agentLog.setAgent(agent);
-            if (StringUtils.isNotBlank(agentLog.getUserReferee())) {
-                userReferee = agentBO.getAgentName(agentLog.getUserReferee());
-                if (userReferee != null) {
-                    agentLog.setRefereeName(userReferee.getRealName());
-                }
+        for (AgentLog data : page.getList()) {
+            // 推荐人转义
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
+                data.setReferrerName(userRefree.getRealName());
             }
-            // 补全授权金额
-            if (null != agent.getApplyLevel()) {
-                AgentLevel agentLevel = agentLevelBO
-                    .getAgentByLevel(agent.getApplyLevel());
-                agentLog.setImpowerAmount(agentLevel.getAmount());
-            }
-            // 审核人
-            if (EUser.ADMIN.getCode().equals(agentLog.getApprover())) {
-                agentLog.setApprovName(agentLog.getApprover());
+            // 介绍人转义
+            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            // 上级转义
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
+                data.setHighUserName(sysUser.getRealName());
             } else {
-                if (StringUtils.isNotBlank(agentLog.getApprover())) {
-                    Agent aprrvoeName = agentBO
-                        .getAgent(agentLog.getApprover());
-                    if (null != aprrvoeName) {
-                        userReferee = agentBO
-                            .getAgentName(aprrvoeName.getUserId());
-                        if (userReferee != null) {
-                            agentLog.setApprovName(userReferee.getRealName());
-                        }
-                    }
-                }
-
+                Agent highAgent = agentBO.getAgent(data.getHighUserId());
+                data.setHighUserName(highAgent.getRealName());
             }
+
         }
-        page.setList(list);
         return page;
 
     }
@@ -87,16 +75,22 @@ public class AgentLogAOImpl implements IAgentLogAO {
     @Override
     public List<AgentLog> queryAgentLogList(AgentLog condition) {
         List<AgentLog> list = agentLogBO.queryAgentLogList(condition);
-        for (AgentLog agentLog : list) {
-            Agent userReferee = null;
-            Agent user = agentBO.getAgent(agentLog.getApplyUser());
-            agentLog.setAgent(user);
-            if (StringUtils.isNotBlank(agentLog.getUserReferee())) {
-                userReferee = agentBO.getAgent(agentLog.getUserReferee());
-                if (userReferee != null) {
-                    agentLog.setRefereeName(userReferee.getRealName());
-                }
-                // TODO 审核人(代理/平台)
+        for (AgentLog data : list) {
+            // 推荐人转义
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
+                data.setReferrerName(userRefree.getRealName());
+            }
+            // 介绍人转义
+            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            // 上级转义
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
+                data.setHighUserName(sysUser.getRealName());
+            } else {
+                Agent highAgent = agentBO.getAgent(data.getHighUserId());
+                data.setHighUserName(highAgent.getRealName());
             }
         }
         return list;
@@ -105,15 +99,21 @@ public class AgentLogAOImpl implements IAgentLogAO {
     @Override
     public AgentLog getAgentLog(String code) {
         AgentLog data = agentLogBO.getAgentLog(code);
-        Agent user = agentBO.getAgent(data.getApplyUser());
-        data.setAgent(user);
-        Agent userReferee = null;
-        data.setAgent(user);
-        if (StringUtils.isNotBlank(data.getUserReferee())) {
-            userReferee = agentBO.getAgent(data.getUserReferee());
-            if (userReferee != null) {
-                data.setRefereeName(userReferee.getRealName());
-            }
+        // 推荐人转义
+        if (StringUtils.isNotBlank(data.getReferrer())) {
+            Agent userRefree = agentBO.getAgent(data.getReferrer());
+            data.setReferrerName(userRefree.getRealName());
+        }
+        // 介绍人转义
+        data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+        // 上级转义
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getLevel()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
+            data.setHighUserName(sysUser.getRealName());
+        } else {
+            Agent highAgent = agentBO.getAgent(data.getHighUserId());
+            data.setHighUserName(highAgent.getRealName());
         }
         return data;
     }

@@ -20,11 +20,17 @@ public class AgentLog extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 申请人姓名
+    private String realName;
+
+    // 微信号
+    private String wxId;
+
+    // 手机号
+    private String mobile;
+
     // 归属人
     private String toUserId;
-
-    // 类型
-    private String type;
 
     // 当前等级
     private Integer level;
@@ -36,16 +42,28 @@ public class AgentLog extends ABaseDO {
     private String highUserId;
 
     // 推荐人
-    private String userReferee;
+    private String referrer;
+
+    // 介绍人
+    private String introducer;
 
     // 团队名称
     private String teamName;
 
     // 打款截图
-    private String paymentPdf;
+    private String payPdf;
 
-    // 保证金截图
-    private String marginPdf;
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区(县)
+    private String area;
+
+    // 具体地址
+    private String address;
 
     // 状态
     private String status;
@@ -53,18 +71,23 @@ public class AgentLog extends ABaseDO {
     // 审核人
     private String approver;
 
-    // 更新人
-
-    private String updater;
-
-    // 申请时间
-    private Date applyDatetime;
+    // 审核人
+    private String approvName;
 
     // 审核时间
     private Date approveDatetime;
 
+    // 审核备注
+    private String approveNote;
+
+    // 更新人
+    private String updater;
+
     // 更新时间
     private Date updateDatetime;
+
+    // 申请时间
+    private Date applyDatetime;
 
     // 备注
     private String remark;
@@ -79,8 +102,14 @@ public class AgentLog extends ABaseDO {
     // 门槛金额
     private Long impowerAmount;
 
-    // 审核人
-    private String approvName;
+    // 推荐人名字
+    private String userReferrerName;
+
+    // 介绍人姓名
+    private String introduceName;
+
+    // 上级用户
+    private String highUserName;
 
     public String getCode() {
         return code;
@@ -122,12 +151,12 @@ public class AgentLog extends ABaseDO {
         this.highUserId = highUserId;
     }
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getReferrer() {
+        return referrer;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setReferrer(String userReferee) {
+        this.referrer = userReferee;
     }
 
     public String getTeamName() {
@@ -138,20 +167,28 @@ public class AgentLog extends ABaseDO {
         this.teamName = teamName;
     }
 
-    public String getPaymentPdf() {
-        return paymentPdf;
+    public String getPayPdf() {
+        return payPdf;
     }
 
-    public void setPaymentPdf(String paymentPdf) {
-        this.paymentPdf = paymentPdf;
+    public void setPayPdf(String payPdf) {
+        this.payPdf = payPdf;
     }
 
-    public String getMarginPdf() {
-        return marginPdf;
+    public String getApproveNote() {
+        return approveNote;
     }
 
-    public void setMarginPdf(String marginPdf) {
-        this.marginPdf = marginPdf;
+    public String getUserReferrerName() {
+        return userReferrerName;
+    }
+
+    public void setApproveNote(String approveNote) {
+        this.approveNote = approveNote;
+    }
+
+    public void setUserReferrerName(String userReferrerName) {
+        this.userReferrerName = userReferrerName;
     }
 
     public String getStatus() {
@@ -210,14 +247,6 @@ public class AgentLog extends ABaseDO {
         this.updateDatetime = updateDatetime;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getToUserId() {
         return toUserId;
     }
@@ -256,6 +285,94 @@ public class AgentLog extends ABaseDO {
 
     public void setApprovName(String approvName) {
         this.approvName = approvName;
+    }
+
+    public String getUserRefreeName() {
+        return userReferrerName;
+    }
+
+    public String getIntroduceName() {
+        return introduceName;
+    }
+
+    public String getHighUserName() {
+        return highUserName;
+    }
+
+    public void setReferrerName(String userRefreeName) {
+        this.userReferrerName = userRefreeName;
+    }
+
+    public void setIntroduceName(String introduceName) {
+        this.introduceName = introduceName;
+    }
+
+    public void setHighUserName(String highUserName) {
+        this.highUserName = highUserName;
+    }
+
+    public String getIntroducer() {
+        return introducer;
+    }
+
+    public void setIntroducer(String introducer) {
+        this.introducer = introducer;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getWxId() {
+        return wxId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setWxId(String wxId) {
+        this.wxId = wxId;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }

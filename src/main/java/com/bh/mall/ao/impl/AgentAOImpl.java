@@ -35,9 +35,15 @@ import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.common.WechatConstant;
+import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.res.XN627303Res;
+import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EConfigType;
+import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -276,22 +282,47 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public void editManager(String userId, String manager, String updater) {
         Agent data = agentBO.getAgent(userId);
-        sysUserBO.getSYSuser(manager);
+        sysUserBO.getSYSUser(manager);
         agentBO.refreshManager(data, manager, updater);
     }
 
-    public void updateInformation(String address, String area, String city,
-            String mobile, String province, String realName, String teamName,
-            String userId, String WxId) {
-
+    // 修改信息
+    @Override
+    public void editInformation(String userId, String wxId, String mobile,
+            String realName, String teamName, String province, String city,
+            String area, String address) {
+        Agent agent = agentBO.getAgent(userId);
+        // 一级代理修改团队名称，下级同步
+        if (agentBO.isHighest(agent.getUserId())) {
+            agentBO.refreshTeamName(agent, teamName);
+            this.editTeamName(agent.getUserId(), teamName);
+        } else {
+            // 非一级代理不允许修改团队名称
+            throw new BizException("xn00000", "非最高等级代理的团队名称无法修改");
+        }
     }
 
     // 修改上级
     @Override
     public void editHighUser(String userId, String highUser, String updater) {
         Agent data = agentBO.getAgent(userId);
-        agentBO.getAgent(highUser);
+        Agent highAgent = agentBO.getAgent(highUser);
+        if (highAgent.getLevel() >= data.getLevel()) {
+            throw new BizException("xn00000", "上级等级不能低于代理自身等级");
+        }
         agentBO.refreshHighUser(data, highUser, updater);
+
+        // 增肌上级门槛
+        Account account = accountBO.getAccountByUser(data.getUserId(),
+            ECurrency.MK_CNY.getCode());
+
+        if (0 != account.getAmount()) {
+            accountBO.transAmountCZB(data.getUserId(),
+                ECurrency.MK_CNY.getCode(), highAgent.getUserId(),
+                ECurrency.MK_CNY.getCode(), account.getAmount(),
+                EBizType.AJ_XGSJ, EBizType.AJ_XGSJ.getValue(),
+                EBizType.AJ_XGSJ.getValue(), data.getUserId());
+        }
     }
 
     // 修改推荐人
@@ -307,18 +338,83 @@ public class AgentAOImpl implements IAgentAO {
     @Override
     public Paginable<Agent> queryAgentPage(int start, int limit,
             Agent condition) {
-        return agentBO.getPaginable(start, limit, condition);
+        Paginable<Agent> page = agentBO.getPaginable(start, limit, condition);
+
+        for (Agent data : page.getList()) {
+            // 推荐人转义
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
+                data.setUserRefreeName(userRefree.getRealName());
+                data.setUserRefreeMobile(userRefree.getMobile());
+            }
+            // 介绍人转义
+            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            // 上级转义
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
+                data.setHighUserName(sysUser.getRealName());
+            } else {
+                Agent highAgent = agentBO.getAgent(data.getHighUserId());
+                data.setHighUserName(highAgent.getRealName());
+                data.setHighUserMobile(highAgent.getMobile());
+            }
+        }
+        return page;
     }
 
     // 列表查询代理
     @Override
     public List<Agent> queryAgentList(Agent condition) {
-        return agentBO.queryAgentList(condition);
+        List<Agent> list = agentBO.queryAgentList(condition);
+        for (Agent data : list) {
+            // 推荐人转义
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
+                data.setUserRefreeName(userRefree.getRealName());
+                data.setUserRefreeMobile(userRefree.getMobile());
+            }
+            // 介绍人转义
+            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            // 上级转义
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
+                data.setHighUserName(sysUser.getRealName());
+            } else {
+                Agent highAgent = agentBO.getAgent(data.getHighUserId());
+                data.setHighUserName(highAgent.getRealName());
+                data.setHighUserMobile(highAgent.getMobile());
+            }
+        }
+        return list;
     }
 
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition) {
-        return agentBO.getPaginable(start, limit, condition);
+        Paginable<Agent> page = agentBO.getPaginable(start, limit, condition);
+
+        for (Agent data : page.getList()) {
+            // 推荐人转义
+            if (StringUtils.isNotBlank(data.getReferrer())) {
+                Agent userRefree = agentBO.getAgent(data.getReferrer());
+                data.setUserRefreeName(userRefree.getRealName());
+                data.setUserRefreeMobile(userRefree.getMobile());
+            }
+            // 介绍人转义
+            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            // 上级转义
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
+                data.setHighUserName(sysUser.getRealName());
+            } else {
+                Agent highAgent = agentBO.getAgent(data.getHighUserId());
+                data.setHighUserName(highAgent.getRealName());
+                data.setHighUserMobile(highAgent.getMobile());
+            }
+        }
+        return page;
     }
 
     // 列表查询代理结构
@@ -358,7 +454,38 @@ public class AgentAOImpl implements IAgentAO {
 
     @Override
     public Agent getAgent(String userId) {
-        return agentBO.getAgent(userId);
+        Agent data = agentBO.getAgent(userId);
+
+        // 推荐人转义
+        if (StringUtils.isNotBlank(data.getReferrer())) {
+            Agent userRefree = agentBO.getAgent(data.getReferrer());
+            data.setUserRefreeName(userRefree.getRealName());
+            data.setUserRefreeMobile(userRefree.getMobile());
+        }
+        // 介绍人转义
+        data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+        // 上级转义
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getLevel()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
+            data.setHighUserName(sysUser.getRealName());
+        } else {
+            Agent highAgent = agentBO.getAgent(data.getHighUserId());
+            data.setHighUserName(highAgent.getRealName());
+            data.setHighUserMobile(highAgent.getMobile());
+        }
+
+        return data;
+    }
+
+    // 修改下级团队名称
+    private void editTeamName(String userId, String teamName) {
+        Agent condition = new Agent();
+        condition.setHighUserId(userId);
+        List<Agent> list = agentBO.queryAgentList(condition);
+        for (Agent data : list) {
+            agentBO.refreshTeamName(data, teamName);
+        }
     }
 
 }

@@ -15,9 +15,6 @@ public class TjAward extends ABaseDO {
     // 编号
     private String code;
 
-    // 类型
-    private String type;
-
     // 产品编号
     private String productCode;
 
@@ -44,14 +41,6 @@ public class TjAward extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getProductCode() {

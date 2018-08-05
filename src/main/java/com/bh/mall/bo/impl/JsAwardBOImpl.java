@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,12 +12,14 @@ import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IJsAwardDAO;
 import com.bh.mall.domain.JsAward;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class JsAwardBOImpl extends PaginableBOImpl<JsAward> implements IJsAwardBO {
+public class JsAwardBOImpl extends PaginableBOImpl<JsAward>
+        implements IJsAwardBO {
 
     @Autowired
     private IJsAwardDAO jsAwardDAO;
@@ -25,23 +28,37 @@ public class JsAwardBOImpl extends PaginableBOImpl<JsAward> implements IJsAwardB
     IAgentLevelBO agentLevelBO;
 
     @Override
-    public boolean isJsAwardExist(String code) {
-        JsAward condition = new JsAward();
-        condition.setCode(code);
-        if (jsAwardDAO.selectTotalCount(condition) > 0) {
-            return true;
+    public void isJsAwardExist(String level, String introLevel) {
+        JsAward data = null;
+        if (StringUtils.isNotBlank(level)
+                && StringUtils.isNotBlank(introLevel)) {
+            JsAward condition = new JsAward();
+            condition.setLevel(StringValidater.toInteger(level));
+            condition.setIntroLevel(StringValidater.toInteger(introLevel));
+            data = jsAwardDAO.select(condition);
+            if (null != data) {
+                throw new BizException("xn00000", "该介绍奖已经存在了");
+            }
         }
-        return false;
     }
 
     @Override
-    public String saveJsAward(JsAward data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.Intro.getCode());
-            data.setCode(code);
-            jsAwardDAO.insert(data);
-        }
+    public String saveJsAward(Integer level, Integer introLevel, Double percent,
+            String updater, String remark) {
+        JsAward data = new JsAward();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Intro.getCode());
+        data.setCode(code);
+        data.setLevel(level);
+        data.setIntroLevel(introLevel);
+
+        data.setPercent(percent);
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+
+        jsAwardDAO.insert(data);
         return code;
     }
 
@@ -51,7 +68,12 @@ public class JsAwardBOImpl extends PaginableBOImpl<JsAward> implements IJsAwardB
     }
 
     @Override
-    public void refreshJsAward(JsAward data) {
+    public void refreshJsAward(JsAward data, String percent, String updater,
+            String remark) {
+        data.setPercent(StringValidater.toDouble(percent));
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
         jsAwardDAO.update(data);
     }
 

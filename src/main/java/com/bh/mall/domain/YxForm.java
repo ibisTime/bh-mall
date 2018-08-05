@@ -17,14 +17,11 @@ public class YxForm extends ABaseDO {
 
     private static final long serialVersionUID = 5337739036346581691L;
 
-    // 编号
-    private String code;
+    // 申请人
+    private String userId;
 
     // 微信号
     private String wxId;
-
-    // 申请人
-    private String userId;
 
     // 意向归属人名字
     private String toUserId;
@@ -38,17 +35,17 @@ public class YxForm extends ABaseDO {
     // 手机号
     private String mobile;
 
-    // 具体地址
-    private String address;
-
-    // 区(县)
-    private String area;
+    // 省
+    private String province;
 
     // 市
     private String city;
 
-    // 省
-    private String province;
+    // 区(县)
+    private String area;
+
+    // 具体地址
+    private String address;
 
     // 来源
     private String fromInfo;
@@ -56,11 +53,14 @@ public class YxForm extends ABaseDO {
     // 状态
     private String status;
 
+    // 申请时间
+    private Date applyDatetime;
+
     // 最后审核人
     private String approver;
 
-    // 申请时间
-    private Date applyDatetime;
+    // 最后审核人名称
+    private String approveName;
 
     // 审核时间
     private Date approveDatetime;
@@ -96,15 +96,6 @@ public class YxForm extends ABaseDO {
 
     // 查询关键词
     private String keyWord;
-
-    // 获取编号
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     // 获取微信号
     public String getWxId() {
@@ -316,4 +307,21 @@ public class YxForm extends ABaseDO {
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
     }
+
+    public String getFromInfo() {
+        return fromInfo;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public void setFromInfo(String fromInfo) {
+        this.fromInfo = fromInfo;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
+    }
+
 }

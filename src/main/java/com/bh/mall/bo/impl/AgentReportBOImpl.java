@@ -28,7 +28,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         data.setMobile(sqForm.getMobile());
 
         data.setLevel(agent.getLevel());
-        data.setUserReferee(sqForm.getUserReferee());
+        data.setUserReferee(sqForm.getReferrer());
         data.setIntroducer(agent.getIntroducer());
         data.setHighUserId(agent.getHighUserId());
         data.setManager(agent.getManager());

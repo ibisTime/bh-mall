@@ -12,18 +12,17 @@ import com.bh.mall.domain.YxForm;
 public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
 
     @Override
+    public void applyYxForm(YxForm data) {
+        super.update(NAMESPACE.concat("apply_yxForm"), data);
+    }
+
+    @Override
     public void allotYxForm(YxForm data) {
-        super.update(NAMESPACE.concat("insert_yxForm"), data);
+        super.update(NAMESPACE.concat("allot_yxForm"), data);
     }
 
     @Override
     public void ignore(YxForm data) {
-        super.update(NAMESPACE.concat("insert_yxForm"), data);
-
-    }
-
-    @Override
-    public void applyYxForm(YxForm data) {
         super.update(NAMESPACE.concat("insert_yxForm"), data);
 
     }

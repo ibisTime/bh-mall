@@ -28,11 +28,14 @@ public class XN627262Req {
     // (选填) 团队名称
     private String teamName;
 
+    // （选填）证件类型
+    private String idKind;
+
     // (选填) 身份证号
     private String idNo;
 
     // (选填) 手持身份证
-    private String inHand;
+    private String idHand;
 
     public String getUserId() {
         return userId;
@@ -78,16 +81,24 @@ public class XN627262Req {
         return idNo;
     }
 
-    public String getInHand() {
-        return inHand;
-    }
-
     public void setIdNo(String idNo) {
         this.idNo = idNo;
     }
 
-    public void setInHand(String inHand) {
-        this.inHand = inHand;
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public String getIdHand() {
+        return idHand;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public void setIdHand(String idHand) {
+        this.idHand = idHand;
     }
 
 }

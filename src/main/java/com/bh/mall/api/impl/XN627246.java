@@ -19,7 +19,8 @@ import com.bh.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN627246 extends AProcessor {
-    private IJsAwardAO jsAwardAO = SpringContextHolder.getBean(IJsAwardAO.class);
+    private IJsAwardAO jsAwardAO = SpringContextHolder
+        .getBean(IJsAwardAO.class);
 
     private XN627246Req req = null;
 
@@ -30,7 +31,7 @@ public class XN627246 extends AProcessor {
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setUpdater(req.getUpdater());
         String orderColumn = req.getOrderColumn();
-        if (StringUtils.isNotBlank(orderColumn)) {
+        if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJsAwardAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());

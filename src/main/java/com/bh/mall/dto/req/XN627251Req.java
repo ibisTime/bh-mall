@@ -30,10 +30,6 @@ public class XN627251Req {
     @NotBlank(message = "团队名称不能为空")
     private String teamName;
 
-    // （必填）来源
-    @NotBlank(message = "来源不能为空")
-    private String fromInfo;
-
     // （必填） 电话
     @NotBlank(message = "电话不能为空")
     private String mobile;
@@ -54,12 +50,6 @@ public class XN627251Req {
     @NotBlank(message = "详细地址不能为空")
     private String address;
 
-    // （选填）打款截图
-    private String payAmount;
-
-    // （选填）打款截图
-    private String payPdf;
-
     // （选填）身份证类型
     private String idKind;
 
@@ -78,14 +68,6 @@ public class XN627251Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getPayPdf() {
-        return payPdf;
-    }
-
-    public void setPayPdf(String payPdf) {
-        this.payPdf = payPdf;
     }
 
     public String getIdKind() {
@@ -144,14 +126,6 @@ public class XN627251Req {
         this.introducer = introducer;
     }
 
-    public String getFromInfo() {
-        return fromInfo;
-    }
-
-    public void setFromInfo(String fromInfo) {
-        this.fromInfo = fromInfo;
-    }
-
     public String getMobile() {
         return mobile;
     }
@@ -190,14 +164,6 @@ public class XN627251Req {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
     }
 
     public String getTeamName() {

@@ -3,7 +3,6 @@ package com.bh.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,6 @@ import com.bh.mall.enums.EChangeProductStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -173,8 +171,6 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             page.getStart(), page.getPageSize(), condition);
 
         for (ExchangeOrder ecchangeProduct : list) {
-            String approveName = this.getName(ecchangeProduct.getApprover());
-            ecchangeProduct.setApproveName(approveName);
             // 补充下单代理的信息
             Agent agent = agentBO.getAgent(ecchangeProduct.getApplyUser());
             ecchangeProduct.setAgent(agent);
@@ -195,8 +191,6 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             .queryChangeOrderList(condition);
 
         for (ExchangeOrder changeProduct : list) {
-            String approveName = this.getName(changeProduct.getApprover());
-            changeProduct.setApproveName(approveName);
             Agent agent = agentBO.getAgent(changeProduct.getApplyUser());
             changeProduct.setAgent(agent);
         }
@@ -207,8 +201,6 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     @Override
     public ExchangeOrder getExchangeOrder(String code) {
         ExchangeOrder data = exchangeOrderBO.getChangeOrder(code);
-        String approveName = this.getName(data.getApprover());
-        data.setApproveName(approveName);
         Agent agent = agentBO.getAgent(data.getApplyUser());
         data.setAgent(agent);
         return data;
@@ -320,23 +312,6 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         data.setApproveNote(approveNote);
         data.setStatus(status);
         exchangeOrderBO.approveChange(data);
-    }
-
-    private String getName(String agentCode) {
-
-        if (StringUtils.isBlank(agentCode)) {
-            return null;
-        }
-        String name = null;
-        Agent data = agentBO.getAgent(agentCode);
-        if (data != null) {
-            name = data.getRealName();
-            if (EUserKind.Plat.getCode().equals(data.getKind())
-                    && StringUtils.isBlank(data.getRealName())) {
-                name = data.getLoginName();
-            }
-        }
-        return name;
     }
 
     @Override

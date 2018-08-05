@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -14,6 +13,7 @@ import com.bh.mall.ao.ISjFormAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
@@ -22,6 +22,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EAgentLevel;
@@ -51,15 +52,18 @@ public class SjFormAOImpl implements ISjFormAO {
     private IAccountBO accountBO;
 
     @Autowired
-    IWareBO wareBO;
+    private IWareBO wareBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     // 升级申请
     @Override
     public void applySjForm(String userId, String newLevel, String payPdf,
-            String payAmount, String teamName, String idNo, String inHand) {
+            String payAmount, String teamName, String idKind, String idNo,
+            String idHand) {
         Agent data = agentBO.getAgent(userId);
-        if (!(EUserStatus.IMPOWERED.getCode().equals(data.getStatus())
-                || EUserStatus.UPGRADED.getCode().equals(data.getStatus()))) {
+        if (!EUserStatus.IMPOWERED.getCode().equals(data.getStatus())) {
             throw new BizException("xn000", "您的状态无法申请升级");
         }
 
@@ -111,6 +115,8 @@ public class SjFormAOImpl implements ISjFormAO {
         }
 
         String status = EUserStatus.TO_UPGRADE.getCode();
+        String toUserId = data.getHighUserId();
+        Agent highAgent = agentBO.getAgent(data.getHighUserId());
         // 申请等级为董事的代理，直接由平台审核
         if (EAgentLevel.ONE.getCode().equals(highLevel)) {
             EUserStatus.TO_COMPANYCANCEL.getCode();
@@ -119,17 +125,22 @@ public class SjFormAOImpl implements ISjFormAO {
                 throw new BizException("xn00000", "给自己团队起个名字吧");
             }
             agentBO.checkTeamName(teamName);
+            SYSUser sysUser = sysUserBO.getSYSUser();
+            toUserId = sysUser.getUserId();
+        } else if (StringValidater.toInteger(newLevel) <= highAgent
+            .getLevel()) {
+            toUserId = this.getHighUser(data.getHighUserId(),
+                StringValidater.toInteger(newLevel));
         }
 
-        // 新增升级申请记录
-        SjForm upData = new SjForm();
-        upData.setUserId(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(status);
-        upData.setApplyDatetime(new Date());
-        upData.setPayAmount(StringValidater.toLong(payAmount));
-
-        sjFormBO.applySjForm(upData);
+        SjForm sjForm = sjFormBO.getSjForm(data.getUserId());
+        if (null == sjForm) {
+            sjFormBO.applySjForm(data, toUserId, newLevel, idKind, idNo, idHand,
+                payPdf, payAmount, status);
+        } else {
+            sjFormBO.refreshSjForm(sjForm, data, toUserId, newLevel, idKind,
+                idNo, idHand, payPdf, payAmount, status);
+        }
 
     }
 
@@ -138,82 +149,60 @@ public class SjFormAOImpl implements ISjFormAO {
     public void approveSjFormByB(String userId, String approver, String result,
             String remark) {
 
-        Agent data = agentBO.getAgent(userId);
-        String status = EUserStatus.IMPOWERED.getCode();
-        Integer level = data.getApplyLevel();
-
+        SjForm sjForm = sjFormBO.getSjForm(userId);
+        AgentLevel auData = agentLevelBO
+            .getAgentByLevel(sjForm.getApplyLevel());
         // 审核通过
+        String status = EUserStatus.IMPOWERED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
-            Account account = accountBO.getAccountByUser(data.getUserId(),
+            Account account = accountBO.getAccountByUser(sjForm.getUserId(),
                 ECurrency.MK_CNY.getCode());
-
-            status = EUserStatus.UPGRADED.getCode();
-            AgentLevel auData = agentLevelBO
-                .getAgentByLevel(data.getApplyLevel());
 
             // 是否需要公司审核
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
                 status = EUserStatus.TO_COMPANYUPGRADE.getCode();
             } else {
-                level = data.getApplyLevel();
+                status = EUserStatus.UPGRADED.getCode();
                 // 增加账户余额
                 accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, data.getUserId(),
-                    EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(), 0L);
+                    EChannelType.NBZ, null, null, sjForm.getUserId(),
+                    EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
+                    sjForm.getPayAmount());
 
+                // 修改代理信息
+                agentBO.sjSuccess(sjForm);
             }
         }
 
-        data.setLevel(level);
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-
-        // 新增升级申请记录
-        SjForm upData = new SjForm();
-        upData.setUserId(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(status);
-        upData.setApplyDatetime(new Date());
-
-        sjFormBO.approveSjForm(upData);
+        Agent agent = agentBO.getAgent(userId);
+        Agent approveAgent = agentBO.getAgent(approver);
+        sjFormBO.approveSjForm(sjForm, agent, approveAgent.getUserId(),
+            approveAgent.getRealName(), remark, status);
     }
 
     @Override
     public void approveSjFormByP(String userId, String approver, String result,
             String remark) {
-        Agent data = agentBO.getAgent(userId);
-        String status = EUserStatus.IMPOWERED.getCode();
-        Integer level = data.getApplyLevel();
 
+        SjForm sjForm = sjFormBO.getSjForm(userId);
         // 审核通过
+        String status = EUserStatus.IMPOWERED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
-            Account account = accountBO.getAccountByUser(data.getUserId(),
+            Account account = accountBO.getAccountByUser(sjForm.getUserId(),
                 ECurrency.MK_CNY.getCode());
             status = EUserStatus.UPGRADED.getCode();
-
-            level = data.getApplyLevel();
             // 增加账户余额
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, null, data.getUserId(), EBizType.AJ_QKYE,
-                EBizType.AJ_QKYE.getValue(), 0L);
+                null, null, sjForm.getUserId(), EBizType.AJ_QKYE,
+                EBizType.AJ_QKYE.getValue(), sjForm.getPayAmount());
+            // 修改代理信息
+            agentBO.sjSuccess(sjForm);
         }
 
-        data.setLevel(level);
-        data.setStatus(status);
-        data.setApprover(approver);
-        data.setApproveDatetime(new Date());
-        data.setRemark(remark);
-
-        // 新增升级申请记录
-        SjForm upData = new SjForm();
-        upData.setUserId(userId);
-        upData.setApplyLevel(data.getApplyLevel());
-        upData.setStatus(status);
-        upData.setApplyDatetime(new Date());
-
-        sjFormBO.approveSjForm(upData);
+        Agent agent = agentBO.getAgent(userId);
+        SYSUser sysUser = sysUserBO.getSYSUser(approver);
+        sjFormBO.approveSjForm(sjForm, agent, sysUser.getUserId(),
+            sysUser.getRealName(), remark, status);
     }
 
     @Override
@@ -259,6 +248,15 @@ public class SjFormAOImpl implements ISjFormAO {
             uplevelApply.setUser(agent);
         }
         return page;
+    }
+
+    private String getHighUser(String highUserId, Integer level) {
+        Agent highAgent = agentBO.getAgent(highUserId);
+        if (level <= highAgent.getLevel()) {
+            highAgent = agentBO.getAgent(highAgent.getHighUserId());
+            getHighUser(highAgent.getHighUserId(), level);
+        }
+        return highAgent.getUserId();
     }
 
 }

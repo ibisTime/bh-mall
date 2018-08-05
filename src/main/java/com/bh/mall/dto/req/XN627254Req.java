@@ -17,6 +17,9 @@ public class XN627254Req {
     @NotBlank(message = "审核人不能为空")
     private String approver;
 
+    // （选填）备注
+    private String remark;
+
     public String getUserId() {
         return userId;
     }
@@ -31,6 +34,14 @@ public class XN627254Req {
 
     public void setApprover(String approver) {
         this.approver = approver;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

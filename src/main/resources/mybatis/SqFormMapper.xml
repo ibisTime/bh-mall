@@ -4,66 +4,50 @@
 
 <mapper namespace="com.bh.mall.dao.ISqFormDAO">
 	<resultMap id="sqForm_DB_Result" type="sqForm">
-		<result column="code" property="code"/>
-		<result column="wx_id" property="wxId"/>
 		<result column="user_id" property="userId" />
-		<result column ="to_user_id" property="toUserId"/>
+		<result column="real_name" property="realName" />
+		<result column="wx_id" property="wxId"/>
+		<result column="mobile" property="mobile"/>
 		<result column="apply_level" property="applyLevel" />
 		
-		<result column="real_name" property="realName"/>
-		<result column="address" property="address"/>
-		<result column="area" property="area"/>
-		<result column="mobile" property="mobile"/>
-		<result column="city" property="city"/>
-		<result column="province" property="province"/>
-		
-		<result column="id_front" property="idFront"/>
-		<result column="id_behind" property="idBehind"/>
-		<result column="id_hand" property="idHand"/>
+		<result column="to_user_id" property="toUserId"/>
+		<result column="introducer" property="introducer"/>
+		<result column="user_referee" property="userReferee"/>
 		<result column="id_kind" property="idKind"/>
 		<result column="id_no" property="idNo"/>
 		
-		<result column="introducer_mobile" property="introducerMobile"/>
-		<result column="user_referee" property="userReferee"/>
-				
+		<result column="id_hand" property="idHand"/>
+		<result column="province" property="province"/>
+		<result column="city" property="city"/>
+		<result column="area" property="area"/>
+		<result column="address" property="address"/>
+	
 		<result column ="status" property="status"/>
-		<result column ="approver" property="approver"/>
 		<result column ="apply_datetime" property="applyDatetime"/>		
+		<result column ="approver" property="approver"/>
+		<result column="approve_name" property="approveName" />
 		<result column="approve_datetime" property="approveDatetime" />		
+		
 		<result column="remark" property="remark"/>
 	</resultMap>
 	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
-			</if>
-		
-			
 			<if test="userId != null and userId != '' ">
 				AND t.user_id= #{userId}
+			</if>
+			<if test="toUserId != null and toUserId != '' ">
+				AND t.to_user_id= #{toUserId}
 			</if>
 			
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
-	
-			<choose>
-				<when test="status == '6,8' "> <!-- 待审核授权，申请取消授权 -->
-					AND t.status = '6' OR t.status = '8' 
-				</when>
-				<when test="status != null and status != '' ">
-					AND t.status = #{status}
-				</when>
-				<otherwise>
-					AND 1=1
-				</otherwise>
-			</choose>
-			
 
 			<if test="applyLevel != null and applyLevel != '' ">
 				AND t.apply_level = #{applyLevel}
 			</if>
+			
 			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
 				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
 			</if>
@@ -77,41 +61,42 @@
 			<if test="approveDatetimeEnd != null and approveDatetimeEnd != '' ">
 				<![CDATA[AND t.approve_datetime <= #{approveDatetimeEnd}]]>
 			</if>
-			
+			<if test="realName != null and realName != '' ">
+				t.real_name like "%"#{realName}"%"
+			</if>
 			
 		</trim>
 	</sql>
 	
 	<select id="select_sqForm" parameterType="sqForm" resultMap="sqForm_DB_Result">
 		SELECT
-		t.code
+		t.user_id
+		,t.real_name
 		,t.wx_id
-		,t.user_id
+		,t.mobile
 		,t.apply_level
 		
-		,t.real_name
-		,t.address
-		,t.area
-		,t.mobile
-		,t.city
-		,t.province
-		
-		,t.id_front
-		,t.id_behind
-		,t.id_hand
+		,t.to_user_id
+		,t.introducer
+		,t.user_referee
 		,t.id_kind
 		,t.id_no
 		
-		,t.introducer_mobile
-		,t.user_referee
+		,t.id_hand
+		,t.province
+		,t.city
+		,t.area
+		,t.address
 		
 		,t.status
-		,t.approver		
 		,t.apply_datetime
+		,t.approver		
+		,t.approve_name
 		,t.approve_datetime
+		
 		,t.remark
 		FROM
-		tbh_sq_form t LEFT JOIN tbh_buser u ON t.user_id= u.user_id   
+		tbh_sq_form t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -122,71 +107,53 @@
 
 	<select id="select_sqForm_count" parameterType="sqForm"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_sq_form t LEFT JOIN tbh_buser u ON t.user_id= u.user_id   
+		SELECT count(1) FROM tbh_sq_form t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_sqForm" parameterType="sqForm">
 		INSERT INTO
 		tbh_sq_form(
-		t.code
+		user_id
+		,real_name
+		,mobile
 		,wx_id
-		,user_id
 		,apply_level
 		
-		,real_name
-		,address
-		,area
-		,mobile
-		,city
-		,province
-		
-		,id_front
-		,id_behind
-		,id_hand
+		,introducer
+		,user_referee
 		,id_kind
 		,id_no
+		,id_hand
 		
-		,introducer_mobile
-		,user_referee
-		
+		,province
+		,city
+		,area
+		,address
 		,status
-		,approver		
-		,apply_datetime
-		,approve_datetime
-		,remark
+		
 		)
 		VALUES(
-		#{code}
+        #{userId}
+		,#{realName}
+		,#{mobile}
 		,#{wxId}
-        ,#{userId}
 		,#{applyLevel}
 		
-		,#{ealName}
-		,#{address}
-		,#{area}
-		,#{mobile}
-		,#{city}
-		,#{province}
-		
-		,#{idFront}
-		,#{idBehind}
-		,#{idHand}
+		,#{introducer}
+		,#{userReferee}
 		,#{idKind}
 		,#{idNo}
+		,#{idHand}
 		
-		,#{introducerMobile}
-		,#{userReferee}
-				
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{address}
 		,#{status}
-		,#{approver}
-		,#{applyDatetime}
-		,#{approveDatetime}
-		,#{remark}
 		)
 	</insert>
 
-	<!-- update payment / status -->
 	<update id="update_sqForm" parameterType="sqForm">
 		UPDATE tbh_sq_form
 		SET

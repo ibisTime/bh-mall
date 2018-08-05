@@ -1,4 +1,3 @@
-
 package com.bh.mall.domain;
 
 import java.util.Date;
@@ -23,9 +22,6 @@ public class Agent extends ABaseDO {
     // 分享二维码代理
     private String fromUserId;
 
-    // 登陆名
-    private String loginName;
-
     // 手机号
     private String mobile;
 
@@ -38,12 +34,6 @@ public class Agent extends ABaseDO {
     // 昵称
     private String nickname;
 
-    // 登陆密码
-    private String loginPwd;
-
-    // 登陆密码强度
-    private String loginPwdStrength;
-
     // 交易密码
     private String tradePwd;
 
@@ -53,11 +43,8 @@ public class Agent extends ABaseDO {
     // 目前用户等级
     private Integer level;
 
-    // 需升等级
-    private Integer applyLevel;
-
     // 推荐人
-    private String userReferee;
+    private String referrer;
 
     // 介绍人
     private String introducer;
@@ -119,6 +106,9 @@ public class Agent extends ABaseDO {
     // 最后审核人
     private String approver;
 
+    // 审核人姓名
+    private String approveName;
+
     // 最后审核时间
     private Date approveDatetime;
 
@@ -132,12 +122,6 @@ public class Agent extends ABaseDO {
     private String remark;
 
     // ****************DB*******************
-
-    // 手机号和登录名都可登录(1 手机号 2 登录名，3 手机号和登录名)
-    private String loginType;
-
-    // 登录名模糊查询
-    private String loginNameForQuery;
 
     // 手机号模糊查询
     private String mobileForQuery;
@@ -158,13 +142,10 @@ public class Agent extends ABaseDO {
     private List<Agent> agentList;
 
     // 上级用户
-    private Agent highUser;
+    private String highUserName;
 
-    // 申请时间起(选填)
-    private Date applyDatetimeStart;
-
-    // 申请时间止(选填)
-    private Date applyDatetimeEnd;
+    // 上级用户
+    private String highUserMobile;
 
     // 注册时间起
     private Date createDatetimeStart;
@@ -177,6 +158,15 @@ public class Agent extends ABaseDO {
 
     // 上级
     private Integer highLevel;
+
+    // 推荐人名字
+    private String userRefreeName;
+
+    // 推荐人手机号
+    private String userRefreeMobile;
+
+    // 介绍人姓名
+    private String introduceName;
 
     // 获取ID
     public String getUserId() {
@@ -193,25 +183,6 @@ public class Agent extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    // 获取登录类型
-    public String getLoginType() {
-        return loginType;
-    }
-
-    public void setLoginType(String loginType) {
-        this.loginType = loginType;
-    }
-
-    // 模糊手段查询
-    // 登录名， 电话，真实姓名， 省，市，区
-    public String getLoginNameForQuery() {
-        return loginNameForQuery;
-    }
-
-    public void setLoginNameForQuery(String loginNameForQuery) {
-        this.loginNameForQuery = loginNameForQuery;
     }
 
     public String getMobileForQuery() {
@@ -254,15 +225,6 @@ public class Agent extends ABaseDO {
         this.areaForQuery = areaForQuery;
     }
 
-    // 获取登陆名
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
     // 获取手机号
     public String getMobile() {
         return mobile;
@@ -299,24 +261,6 @@ public class Agent extends ABaseDO {
         this.nickname = nickname;
     }
 
-    // 获取登陆密码
-    public String getLoginPwd() {
-        return loginPwd;
-    }
-
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
-    }
-
-    // 登陆密码强度
-    public String getLoginPwdStrength() {
-        return loginPwdStrength;
-    }
-
-    public void setLoginPwdStrength(String loginPwdStrength) {
-        this.loginPwdStrength = loginPwdStrength;
-    }
-
     // 获取身份标识
     public String getKind() {
         return kind;
@@ -335,22 +279,13 @@ public class Agent extends ABaseDO {
         this.level = level;
     }
 
-    // 获取需升等级
-    public Integer getApplyLevel() {
-        return applyLevel;
-    }
-
-    public void setApplyLevel(Integer applyLevel) {
-        this.applyLevel = applyLevel;
-    }
-
     // 获取推荐人 & 介绍人
-    public String getUserReferee() {
-        return userReferee;
+    public String getReferrer() {
+        return referrer;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setReferrer(String referrer) {
+        this.referrer = referrer;
     }
 
     public String getIntroducer() {
@@ -370,12 +305,20 @@ public class Agent extends ABaseDO {
         this.highUserId = highUserId;
     }
 
-    public Agent getHighUser() {
-        return highUser;
+    public String getHighUserName() {
+        return highUserName;
     }
 
-    public void setHighUser(Agent highUser) {
-        this.highUser = highUser;
+    public String getHighUserMobile() {
+        return highUserMobile;
+    }
+
+    public void setHighUserName(String highUserName) {
+        this.highUserName = highUserName;
+    }
+
+    public void setHighUserMobile(String highUserMobile) {
+        this.highUserMobile = highUserMobile;
     }
 
     // 团队名称
@@ -430,22 +373,6 @@ public class Agent extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getApplyDatetimeStart() {
-        return applyDatetimeStart;
-    }
-
-    public void setApplyDatetimeStart(Date applyDatetimeStart) {
-        this.applyDatetimeStart = applyDatetimeStart;
-    }
-
-    public Date getApplyDatetimeEnd() {
-        return applyDatetimeEnd;
-    }
-
-    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
-        this.applyDatetimeEnd = applyDatetimeEnd;
     }
 
     // 关联管理员
@@ -635,6 +562,38 @@ public class Agent extends ABaseDO {
 
     public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public String getUserRefreeName() {
+        return userRefreeName;
+    }
+
+    public String getUserRefreeMobile() {
+        return userRefreeMobile;
+    }
+
+    public String getIntroduceName() {
+        return introduceName;
+    }
+
+    public void setUserRefreeName(String userRefreeName) {
+        this.userRefreeName = userRefreeName;
+    }
+
+    public void setUserRefreeMobile(String userRefreeMobile) {
+        this.userRefreeMobile = userRefreeMobile;
+    }
+
+    public void setIntroduceName(String introduceName) {
+        this.introduceName = introduceName;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
     }
 
 }

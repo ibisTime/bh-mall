@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IChAwardAO;
 import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.ChAward;
 import com.bh.mall.dto.req.XN627862Req;
@@ -25,46 +22,40 @@ public class ChAwardAOImpl implements IChAwardAO {
     @Override
     public String addChAward(String level, Long startAmount, Long endAmount,
             String percent, String updater, String remark) {
-        if (endAmount < startAmount) {
+        if (endAmount <= startAmount) {
             throw new BizException("xn00000", "起始金额不能大于截止金额");
         }
+        // 校验是否存在
+        if (chAwardBO.isChAwardExist(StringValidater.toInteger(level),
+            startAmount)
+                || chAwardBO.isChAwardExist(StringValidater.toInteger(level),
+                    endAmount)) {
+            throw new BizException("xn00000", "该区间的出货奖已存在了");
+        }
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AwardInterval.getCode());
-        ChAward data = new ChAward();
-        data.setCode(code);
-        data.setLevel(StringValidater.toInteger(level));
-        data.setStartAmount(startAmount);
+        return chAwardBO.saveChAward(level, startAmount, endAmount, percent,
+            updater, remark);
 
-        data.setEndAmount(endAmount);
-        data.setPercent(StringValidater.toDouble(percent));
-        data.setUpdater(updater);
-        Date date = new Date();
-        data.setUpdateDatetime(date);
-
-        data.setRemark(remark);
-        chAwardBO.saveChAward(data);
-        return code;
     }
 
     @Override
     public void editChAward(XN627862Req req) {
         Long startAmount = StringValidater.toLong(req.getStartAmount());
         Long endAmount = StringValidater.toLong(req.getEndAmount());
-        if (endAmount < startAmount) {
+        if (endAmount <= startAmount) {
             throw new BizException("xn00000", "起始金额不能大于截止金额");
         }
-
         ChAward data = chAwardBO.getChAward(req.getCode());
-        data.setStartAmount(startAmount);
-        data.setEndAmount(endAmount);
-        data.setPercent(StringValidater.toDouble(req.getPercent()));
+        // 判断起始金额是否被改变
+        if (StringValidater.toLong(req.getStartAmount()) == data
+            .getStartAmount()) {
+            if (chAwardBO.isChAwardExist(data.getLevel(), startAmount)) {
+                throw new BizException("xn00000", "该区间的出货奖已存在了");
+            }
+        }
 
-        data.setUpdater(req.getUpdater());
-        Date date = new Date();
-        data.setUpdateDatetime(date);
-        data.setRemark(req.getRemark());
-        chAwardBO.refreshChAward(data);
+        chAwardBO.refreshChAward(data, startAmount, endAmount, req.getPercent(),
+            req.getUpdater(), req.getRemark());
     }
 
     @Override

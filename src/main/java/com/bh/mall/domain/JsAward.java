@@ -56,8 +56,8 @@ public class JsAward extends ABaseDO {
         return introLevel;
     }
 
-    public void setIntroLevel(Integer introLevel) {
-        this.introLevel = introLevel;
+    public void setIntroLevel(Integer jsLevel) {
+        this.introLevel = jsLevel;
     }
 
     public void setUpdater(String updater) {

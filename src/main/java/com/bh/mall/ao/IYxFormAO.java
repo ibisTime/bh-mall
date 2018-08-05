@@ -19,23 +19,34 @@ public interface IYxFormAO {
     // 代理申请
     public void applyYxForm(XN627250Req req);
 
-    // 意向分配
-    public void allotYxForm(String userId, String toUserId, String approver);
+    // 平台分配分配
+    public void allotYxFormByP(String userId, String toUserId, String approver,
+            String remark);
 
-    // 接受意向
-    public void acceptYxForm(String userId, String approver, String remark);
+    // 代理分配分配
+    public void allotYxFormByB(String userId, String toUserId, String approver,
+            String remark);
 
     // 忽略意向
-    public void ignore(String userId, String aprrover);
+    public void ignoreYxFormByP(String userId, String aprrover, String remark);
+
+    // 忽略意向
+    public void ignoreYxFormByB(String userId, String aprrover, String remark);
+
+    // 接受意向
+    public void acceptYxFormByP(String userId, String approver, String remark);
+
+    // 接受意向
+    public void acceptYxFormByB(String userId, String approver, String remark);
+
+    // 分页查询意
+    public Paginable<YxForm> queryYxFormPage(int start, int limit,
+            YxForm condition);
 
     // 列表查询
     public List<YxForm> queryYxFormList(YxForm condition);
 
     // 详细查询
     public YxForm getYxForm(String code);
-
-    // 分页查询意
-    public Paginable<YxForm> queryYxFormPage(int start, int limit,
-            YxForm condition);
 
 }

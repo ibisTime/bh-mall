@@ -28,24 +28,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     public int updateStatus(Agent data);
 
     /**
-     * 更新用户名 
-     * @param data
-     * @return 
-     * @create: 2018年7月31日 下午2:07:43 LENOVO
-     * @history:
-     */
-    public int updateLoginName(Agent data);
-
-    /**
-     * 更新昵称 
-     * @param data
-     * @return 
-     * @create: 2018年7月31日 下午2:07:53 LENOVO
-     * @history:
-     */
-    public int updateNickname(Agent data);
-
-    /**
      * 更新头像 
      * @param data
      * @return 
@@ -99,14 +81,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     public void resetBindMobile(Agent user);
 
     /**
-     * 更新日志
-     * @param data 
-     * @create: 2018年7月31日 下午2:13:57 LENOVO
-     * @history:
-     */
-    public void updateLog(Agent data);
-
-    /**
      * 查询下级代理 
      * @param condition
      * @param start
@@ -134,5 +108,27 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
      * @history:
      */
     public void updateManager(Agent data);
+
+    public void updateInfo(Agent data);
+
+    public void updateTeamName(Agent data);
+
+    // 申请意向代理
+    public void applyAgent(Agent data);
+
+    // 更新最后一条代理轨迹
+    public void updateLastLog(Agent data);
+
+    // 清空手机号等信息
+    public void resetInfo(Agent data);
+
+    // 清空推荐关系
+    public void resetUserReferee(Agent agent);
+
+    // 授权成功
+    public void sqSuccess(Agent agent);
+
+    // 升级成功
+    public void sjSuccess(Agent agent);
 
 }

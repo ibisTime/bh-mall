@@ -38,7 +38,7 @@ public interface IAddressBO extends IPaginableBO<Address> {
     public boolean isHaveAddress(String userId);
 
     // 保存地址
-    void saveAddress(String userId, String type, String mobile, String realName,
+    void saveAddress(String userId, String mobile, String realName,
             String province, String city, String area, String address,
             String isDefault);
 

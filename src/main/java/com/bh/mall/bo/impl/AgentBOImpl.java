@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentBO;
-import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
-import com.bh.mall.common.PwdUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IAgentDAO;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.SjForm;
+import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentType;
 import com.bh.mall.enums.EUserStatus;
@@ -30,9 +30,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     @Autowired
     private IAgentDAO agentDAO;
-
-    @Autowired
-    private IAgentLogBO agentLogBO;
 
     /*************** 注册并保存新用户 **********************/
     // 注册
@@ -47,13 +44,10 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         buser.setH5OpenId(h5OpenId);
 
         buser.setAppOpenId(appOpenId);
-        buser.setLoginName(mobile);
         buser.setMobile(mobile);
 
         buser.setFromUserId(fromUserId);
 
-        buser.setLoginPwd(MD5Util.md5(loginPwd));
-        buser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         buser.setNickname(nickname);
         buser.setPhoto(photo);
         buser.setStatus(status);
@@ -63,21 +57,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
         buser.setLevel(level);
         agentDAO.insert(buser);
-        return userId;
-    }
-
-    // 保存新用户
-    @Override
-    public String saveUser(String mobile, String kind) {
-        String userId = null;
-        if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
-            userId = OrderNoGenerater.generate("U");
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setMobile(mobile);
-            data.setKind(kind);
-            agentDAO.insert(data);
-        }
         return userId;
     }
 
@@ -121,7 +100,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public List<Agent> queryAgentList(String mobile, String kind) {
         Agent condition = new Agent();
         condition.setMobile(mobile);
-        condition.setKind(kind);
         return agentDAO.selectList(condition);
     }
 
@@ -164,7 +142,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
             Agent condition = new Agent();
             condition.setMobile(mobile);
-            condition.setKind(kind);
             List<Agent> list = agentDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(list)) {
                 Agent data = list.get(0);
@@ -193,7 +170,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         List<Agent> userList = new ArrayList<Agent>();
         if (StringUtils.isNotBlank(userReferee)) {
             Agent condition = new Agent();
-            condition.setUserReferee(userReferee);
+            condition.setReferrer(userReferee);
             userList = agentDAO.selectList(condition);
         }
         return userList;
@@ -213,40 +190,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return data;
     }
 
-    /** 
-     * @see com.ibis.pz.user.IAgentBO#getAgentByMobile(java.lang.String)
-     */
-    @Override
-    public Agent getAgentByLoginName(String loginName, String systemCode) {
-        Agent data = null;
-        if (StringUtils.isNotBlank(loginName)) {
-            Agent condition = new Agent();
-            condition.setLoginName(loginName);
-            List<Agent> list = agentDAO.selectList(condition);
-            if (list != null && list.size() > 1) {
-                throw new BizException("li01006", "登录名重复");
-            }
-            if (CollectionUtils.isNotEmpty(list)) {
-                data = list.get(0);
-            }
-        }
-        return data;
-    }
-
-    @Override
-    public void isLoginNameExist(String loginName, String kind) {
-        if (StringUtils.isNotBlank(loginName)) {
-            // 判断格式
-            Agent condition = new Agent();
-            condition.setLoginName(loginName);
-            condition.setKind(kind);
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "登录名已经存在");
-            }
-        }
-    }
-
     @Override
     public boolean isUserExist(String userId) {
         Agent condition = new Agent();
@@ -257,38 +200,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return false;
     }
 
-    @Override
-    public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
-            Agent condition = new Agent();
-            condition.setUserId(userId);
-            condition.setLoginPwd(MD5Util.md5(loginPwd));
-            long count = this.getTotalCount(condition);
-            if (count != 1) {
-                throw new BizException("jd00001", "原登录密码错误");
-            }
-        } else {
-            throw new BizException("jd00001", "原登录密码错误");
-        }
-    }
-
-    @Override
-    public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
-            Agent condition = new Agent();
-            condition.setUserId(userId);
-            condition.setLoginPwd(MD5Util.md5(loginPwd));
-            long count = this.getTotalCount(condition);
-            if (count != 1) {
-                throw new BizException("jd00001", alertStr + "错误");
-            }
-        } else {
-            throw new BizException("jd00001", alertStr + "错误");
-        }
-    }
-
     /** 
      * @see com.bh.mall.bo.IAgentBO#checkIdentify(java.lang.String, java.lang.String, java.lang.String)
      */
@@ -296,7 +207,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void checkIdentify(String kind, String idKind, String idNo,
             String realName) {
         Agent condition = new Agent();
-        condition.setKind(kind);
         condition.setIdKind(idKind);
         condition.setIdNo(idNo);
         condition.setRealName(realName);
@@ -337,16 +247,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return data;
     }
 
-    /*************** 更新信息 **********************/
-
-    // 重置密码
-    @Override
-    public void resetLoginPwd(Agent buser, String loginPwd) {
-        buser.setLoginPwd(MD5Util.md5(loginPwd));
-        buser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        agentDAO.updateLoginPwd(buser);
-    }
-
     // 更新状态
     @Override
     public void refreshStatus(Agent data, String updater, String remark) {
@@ -362,30 +262,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setRemark(remark);
         agentDAO.updateStatus(data);
 
-        // insert new agent log
-        agentLogBO.saveAgentLog(data, null);
-    }
-
-    // 更新登录名
-    @Override
-    public void refreshLoginName(String userId, String loginName) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setLoginName(loginName);
-            agentDAO.updateLoginName(data);
-        }
-    }
-
-    // 更新昵称
-    @Override
-    public void refreshNickname(String userId, String nickname) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setNickname(nickname);
-            agentDAO.updateNickname(data);
-        }
     }
 
     // 更新头像
@@ -443,9 +319,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         alData.setStatus(EAgentType.Update.getCode());
         agentDAO.updateHigh(alData);
 
-        // insert new log
-        agentLogBO.saveAgentLog(data, null);
-
     }
 
     @Override
@@ -455,13 +328,9 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             .generate(EGeneratePrefix.AgentLog.getCode());
 
         data.setLastAgentLog(code);
-        data.setUserReferee(userReferee);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         agentDAO.updateUserReferee(data);
-
-        // insert new log
-        agentLogBO.saveAgentLog(data, null);
 
     }
 
@@ -477,17 +346,9 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setUpdateDatetime(new Date());
         agentDAO.updateManager(data);
 
-        // insert new log
-        agentLogBO.saveAgentLog(data, null);
     }
 
     /*************** 查询 **********************/
-
-    // 查询下级代理
-    @Override
-    public List<Agent> selectAgentFront(Agent condition, int start, int limit) {
-        return agentDAO.selectAgentFront(condition, start, limit);
-    }
 
     // 分页查询
     @Override
@@ -496,10 +357,14 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public Agent getAgentName(String userId) {
+    public String getAgentName(String userId) {
         Agent condition = new Agent();
         condition.setUserId(userId);
-        return agentDAO.select(condition);
+        Agent data = agentDAO.select(condition);
+        if (null == data) {
+            return null;
+        }
+        return data.getRealName();
     }
 
     @Override
@@ -539,6 +404,143 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void refreshInfo(Agent data) {
+        data.setManager(null);
+        data.setIdNo(null);
+        data.setTeamName(null);
+        data.setReferrer(null);
+
+        agentDAO.updateInfo(data);
+    }
+
+    @Override
+    public void refreshTeamName(Agent data, String teamName) {
+        data.setTeamName(teamName);
+        agentDAO.updateTeamName(data);
+    }
+
+    @Override
+    public void applyAgent(Agent data, String realName, String wxId,
+            String mobile, String province, String city, String area,
+            String address, String logCode) {
+
+        data.setRealName(realName);
+        data.setWxId(wxId);
+        data.setMobile(mobile);
+        data.setProvince(province);
+        data.setCity(city);
+
+        data.setArea(area);
+        data.setAddress(address);
+        data.setLastAgentLog(logCode);
+        agentDAO.applyAgent(data);
+
+    }
+
+    @Override
+    public void refreshLastLog(Agent data, String status, String approver,
+            String approveName, String logCode) {
+        if (StringUtils.isNotEmpty(status)) {
+            data.setStatus(status);
+        }
+        data.setApproveDatetime(new Date());
+        data.setApprover(approver);
+        data.setApproveName(approveName);
+        data.setLastAgentLog(logCode);
+
+        agentDAO.updateLastLog(data);
+    }
+
+    @Override
+    public void refreshAgent(SqForm sqForm) {
+        Agent data = this.getAgent(sqForm.getUserId());
+        data.setRealName(sqForm.getRealName());
+        data.setWxId(sqForm.getWxId());
+        data.setReferrer(sqForm.getReferrer());
+        data.setIntroducer(sqForm.getIntroducer());
+
+        data.setTeamName(sqForm.getTeamName());
+        data.setIdKind(sqForm.getIdKind());
+        data.setIdNo(sqForm.getIdNo());
+        data.setIdHand(sqForm.getIdHand());
+        data.setProvince(sqForm.getProvince());
+
+        data.setCity(sqForm.getCity());
+        data.setArea(sqForm.getArea());
+        data.setAddress(sqForm.getAddress());
+        agentDAO.update(data);
+    }
+
+    @Override
+    public void resetInfo(Agent data) {
+        data.setMobile(null);
+        data.setIdNo(null);
+        data.setReferrer(null);
+        data.setHighUserId(null);
+        data.setTeamName(null);
+
+        agentDAO.resetInfo(data);
+    }
+
+    @Override
+    public void sqSuccess(SqForm sqForm) {
+        Agent agent = getAgent(sqForm.getUserId());
+        agent.setRealName(sqForm.getRealName());
+        agent.setLevel(sqForm.getApplyLevel());
+        agent.setReferrer(sqForm.getReferrer());
+        agent.setIntroducer(sqForm.getIntroducer());
+
+        agent.setIdKind(sqForm.getIdKind());
+        agent.setIdNo(sqForm.getIdNo());
+        agent.setIdHand(sqForm.getIdHand());
+        agent.setTeamName(sqForm.getTeamName());
+        agent.setHighUserId(sqForm.getToUserId());
+
+        agent.setStatus(sqForm.getStatus());
+        agent.setProvince(sqForm.getProvince());
+        agent.setCity(sqForm.getCity());
+        agent.setArea(sqForm.getArea());
+        agent.setAddress(sqForm.getAddress());
+
+        agent.setApprover(sqForm.getApprover());
+        agent.setApproveName(sqForm.getApproveName());
+        agent.setRemark(sqForm.getRemark());
+        agent.setImpowerDatetime(sqForm.getImpowerDatetime());
+        agentDAO.sqSuccess(agent);
+    }
+
+    @Override
+    public void sjSuccess(SjForm sjForm) {
+        Agent agent = getAgent(sjForm.getUserId());
+        agent.setIdKind(sjForm.getIdKind());
+        agent.setIdNo(sjForm.getIdNo());
+        agent.setIdHand(sjForm.getIdHand());
+        agent.setTeamName(sjForm.getTeamName());
+
+        agent.setLevel(sjForm.getApplyLevel());
+        agent.setApprover(sjForm.getApprover());
+        agent.setApproveName(sjForm.getApproveName());
+        agent.setRemark(sjForm.getRemark());
+        agentDAO.sjSuccess(agent);
+    }
+
+    @Override
+    public void refreshAgent(SqForm sqForm, String logCode) {
+    }
+
+    @Override
+    public void resetUserReferee(String userId) {
+        Agent condition = new Agent();
+        condition.setReferrer(userId);
+        List<Agent> list = agentDAO.selectList(condition);
+        for (Agent agent : list) {
+            agent.setReferrer(null);
+            agentDAO.resetUserReferee(agent);
+        }
+
     }
 
 }

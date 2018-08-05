@@ -71,7 +71,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
 
                     agentPrice.setMinNumber(
                         StringValidater.toInteger(specsPrice.getMinNumber()));
-                    agentPrice.setMinQuantity(
+                    agentPrice.setStartNumber(
                         StringValidater.toInteger(specsPrice.getMinQuantity()));
                     agentPrice.setPrice(
                         StringValidater.toLong(specsPrice.getPrice()));
@@ -160,7 +160,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
                 .setPrice(StringValidater.toLong(specsPrice.getPrice()));
             agentPrice.setMinNumber(
                 StringValidater.toInteger(specsPrice.getMinNumber()));
-            agentPrice.setMinQuantity(
+            agentPrice.setStartNumber(
                 StringValidater.toInteger(specsPrice.getMinQuantity()));
 
             agentPrice.setChangePrice(
@@ -214,7 +214,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
 
             pspData.setMinNumber(
                 StringValidater.toInteger(specsPrice.getMinNumber()));
-            pspData.setMinQuantity(
+            pspData.setStartNumber(
                 StringValidater.toInteger(specsPrice.getMinQuantity()));
 
             pspData.setDailyNumber(

@@ -11,8 +11,9 @@ import com.bh.mall.domain.Specs;
 
 public interface IInOrderBO extends IPaginableBO<InOrder> {
 
-    public String saveInOrder(String userId, String realName, String teamName,
-            String toUserId, String productCode, String productName,
+    public String saveInOrder(String applyUser, String name, Integer level,
+            String toUserId, String toUserName, String teamName,
+            String teamLeader, String productCode, String productName,
             String specsCode, String specsName, String pic, Long price,
             Integer quantity, String applyNote);
 

@@ -7,13 +7,15 @@ import com.bh.mall.domain.JsAward;
 
 public interface IJsAwardBO extends IPaginableBO<JsAward> {
 
-    public boolean isJsAwardExist(String code);
+    public void isJsAwardExist(String level, String introLevel);
 
-    public String saveJsAward(JsAward data);
+    public String saveJsAward(Integer level, Integer introLevel, Double percent,
+            String updater, String remark);
 
     public void removeJsAward(JsAward data);
 
-    public void refreshJsAward(JsAward data);
+    public void refreshJsAward(JsAward data, String percent, String updater,
+            String remark);
 
     public List<JsAward> queryJsAwardList(JsAward condition);
 

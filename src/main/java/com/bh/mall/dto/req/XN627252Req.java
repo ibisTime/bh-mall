@@ -20,9 +20,12 @@ public class XN627252Req {
     // （必填）分配给谁
     private String toUserId;
 
-    // （必填）更新人
-    @NotBlank(message = "更新人不能为空")
+    // （必填）审核人
+    @NotBlank(message = "审核人不能为空")
     private String approver;
+
+    // （必填）备注
+    private String remark;
 
     public String getUserId() {
         return userId;
@@ -54,6 +57,14 @@ public class XN627252Req {
 
     public void setApprover(String approver) {
         this.approver = approver;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

@@ -23,9 +23,9 @@ public interface IAgentAO {
     public void doModifyPhoto(String userId, String photo);
 
     // 修改资料
-    public void updateInformation(String address, String area, String city,
-            String mobile, String province, String realName, String teamName,
-            String userId, String WxId);
+    public void editInformation(String userId, String wxId, String mobile,
+            String realName, String teamName, String province, String city,
+            String area, String address);
 
     // 更换手机
     public void doResetMoblie(String userId, String newMobile,

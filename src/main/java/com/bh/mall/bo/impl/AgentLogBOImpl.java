@@ -1,6 +1,5 @@
 package com.bh.mall.bo.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,14 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentLogBO;
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IAgentLogDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLog;
-import com.bh.mall.enums.EAgentType;
+import com.bh.mall.domain.SjForm;
+import com.bh.mall.domain.SqForm;
+import com.bh.mall.domain.YxForm;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -26,23 +26,97 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
     private IAgentLogDAO agentLogDAO;
 
     @Override
-    public String saveAgentLog(Agent data, String toUserId) {
+    public String applyYxForm(YxForm yxForm) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setToUserId(toUserId);
-        alData.setType(EAgentType.Allot.getCode());
-        alData.setTeamName(data.getTeamName());
+        AgentLog data = new AgentLog();
 
-        alData.setUserReferee(data.getUserReferee());
-        alData.setApplyUser(data.getUserId());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(new Date());
-        alData.setStatus(data.getStatus());
-        agentLogDAO.insert(alData);
+        data.setCode(code);
+        data.setApplyUser(yxForm.getUserId());
+        data.setRealName(yxForm.getRealName());
+        data.setWxId(yxForm.getWxId());
+        data.setMobile(yxForm.getMobile());
 
+        data.setApplyLevel(data.getApplyLevel());
+        data.setToUserId(yxForm.getToUserId());
+        data.setApplyDatetime(yxForm.getApplyDatetime());
+        data.setProvince(yxForm.getProvince());
+        data.setCity(yxForm.getCity());
+
+        data.setArea(yxForm.getAddress());
+        data.setAddress(yxForm.getAddress());
+        data.setStatus(data.getStatus());
+        agentLogDAO.insert(data);
+
+        return code;
+    }
+
+    @Override
+    public String applySqForm(SqForm sqForm) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentLog.getCode());
+        AgentLog data = new AgentLog();
+
+        data.setCode(code);
+        data.setApplyUser(sqForm.getUserId());
+        data.setRealName(sqForm.getRealName());
+        data.setWxId(sqForm.getWxId());
+        data.setMobile(sqForm.getMobile());
+
+        data.setApplyLevel(data.getApplyLevel());
+        data.setToUserId(sqForm.getToUserId());
+        data.setTeamName(sqForm.getTeamName());
+        data.setIntroducer(sqForm.getIntroducer());
+        data.setReferrerName(sqForm.getReferrer());
+
+        data.setApplyDatetime(sqForm.getApplyDatetime());
+        data.setProvince(sqForm.getProvince());
+        data.setCity(sqForm.getCity());
+        data.setArea(sqForm.getAddress());
+        data.setAddress(sqForm.getAddress());
+
+        data.setStatus(sqForm.getStatus());
+        data.setApplyDatetime(sqForm.getApplyDatetime());
+        data.setApprover(sqForm.getApprover());
+        data.setApprovName(sqForm.getApproveName());
+        data.setApproveDatetime(sqForm.getApproveDatetime());
+        data.setRemark(sqForm.getRemark());
+
+        agentLogDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String applySjForm(SjForm sjForm, Agent agent) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentLog.getCode());
+        AgentLog data = new AgentLog();
+
+        data.setCode(code);
+        data.setApplyUser(sjForm.getUserId());
+        data.setRealName(sjForm.getRealName());
+        data.setWxId(agent.getWxId());
+        data.setMobile(agent.getMobile());
+
+        data.setApplyLevel(data.getApplyLevel());
+        data.setToUserId(sjForm.getToUserId());
+        data.setTeamName(sjForm.getTeamName());
+        data.setIntroducer(agent.getIntroducer());
+
+        data.setApplyDatetime(sjForm.getApplyDatetime());
+        data.setProvince(agent.getProvince());
+        data.setCity(agent.getCity());
+        data.setArea(agent.getAddress());
+        data.setAddress(agent.getAddress());
+
+        data.setStatus(sjForm.getStatus());
+        data.setApplyDatetime(sjForm.getApplyDatetime());
+        data.setApprover(sjForm.getApprover());
+        data.setApprovName(sjForm.getApproveName());
+        data.setApproveDatetime(sjForm.getApproveDatetime());
+        data.setRemark(sjForm.getRemark());
+
+        agentLogDAO.insert(data);
         return code;
     }
 
@@ -63,213 +137,6 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
             }
         }
         return data;
-    }
-
-    @Override
-    public String acceptIntention(AgentLog log, String status) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setType(EAgentType.Imporder.getCode());
-        alData.setApplyUser(log.getApplyUser());
-        alData.setApplyDatetime(new Date());
-        alData.setToUserId(log.getToUserId());
-
-        alData.setApplyLevel(log.getApplyLevel());
-        alData.setTeamName(log.getTeamName());
-        alData.setUserReferee(log.getUserReferee());
-        alData.setApprover(log.getApprover());
-        alData.setApproveDatetime(new Date());
-
-        alData.setStatus(log.getStatus());
-        agentLogDAO.insert(alData);
-        return code;
-    }
-
-    @Override
-    public String ignore(Agent data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setType(EAgentType.Allot.getCode());
-        alData.setApplyUser(data.getUserId());
-
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setTeamName(data.getTeamName());
-        alData.setUserReferee(data.getUserReferee());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(new Date());
-
-        alData.setStatus(data.getStatus());
-        agentLogDAO.insert(alData);
-        return code;
-
-    }
-
-    @Override
-    public String cancelImpower(Agent data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setType(EAgentType.OUT.getCode());
-        alData.setApplyUser(data.getUserId());
-        alData.setLevel(data.getLevel());
-
-        alData.setToUserId(data.getHighUserId());
-        alData.setHighUserId(data.getHighUserId());
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setTeamName(data.getTeamName());
-        alData.setUserReferee(data.getUserReferee());
-        alData.setStatus(data.getStatus());
-        agentLogDAO.insert(alData);
-        return code;
-
-    }
-
-    @Override
-    public String approveImpower(AgentLog log, Agent user) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-
-        alData.setCode(code);
-        alData.setApplyUser(user.getUserId());
-        alData.setType(EAgentType.Imporder.getCode());
-        alData.setApplyLevel(user.getApplyLevel());
-
-        alData.setToUserId(log.getToUserId());
-        alData.setTeamName(user.getTeamName());
-        alData.setUserReferee(user.getUserReferee());
-        alData.setApprover(user.getApprover());
-
-        alData.setApplyLevel(user.getApplyLevel());
-        alData.setLevel(user.getLevel());
-        alData.setHighUserId(user.getHighUserId());
-        alData.setApproveDatetime(new Date());
-        alData.setStatus(user.getStatus());
-
-        alData.setRemark(log.getRemark());
-        agentLogDAO.insert(alData);
-        return code;
-    }
-
-    @Override
-    public String approveCanenl(Agent data, String status) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-
-        alData.setCode(code);
-        alData.setApplyUser(data.getUserId());
-        alData.setType(EAgentType.OUT.getCode());
-        alData.setLevel(data.getLevel());
-        alData.setHighUserId(data.getHighUserId());
-
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setTeamName(data.getTeamName());
-        alData.setUserReferee(data.getUserReferee());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(new Date());
-        alData.setStatus(status);
-        alData.setRemark(data.getRemark());
-
-        agentLogDAO.insert(alData);
-        return code;
-    }
-
-    @Override
-    public String upgradeLevel(Agent data, String payPdf, String toUserId) {
-        AgentLog agentLog = this.getAgentLog(data.getLastAgentLog());
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setType(EAgentType.Upgrade.getCode());
-
-        alData.setToUserId(toUserId);
-        alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(agentLog.getApplyDatetime());
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setLevel(data.getLevel());
-        alData.setHighUserId(data.getHighUserId());
-
-        alData.setTeamName(data.getTeamName());
-        alData.setStatus(data.getStatus());
-        alData.setRemark(data.getRemark());
-        agentLogDAO.insert(alData);
-        return code;
-    }
-
-    @Override
-    public String approveUpgrade(Agent data, String status) {
-        AgentLog agentLog = this.getAgentLog(data.getLastAgentLog());
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setType(EAgentType.Upgrade.getCode());
-        alData.setApplyUser(data.getUserId());
-        alData.setApplyDatetime(agentLog.getApplyDatetime());
-
-        alData.setLevel(data.getLevel());
-        alData.setHighUserId(data.getHighUserId());
-        alData.setApprover(data.getApprover());
-        alData.setApproveDatetime(new Date());
-        alData.setStatus(status);
-        alData.setRemark(data.getRemark());
-        agentLogDAO.insert(alData);
-        return code;
-    }
-
-    @Override
-    public List<AgentLog> queryAgentLogPage(int start, int limit,
-            AgentLog condition) {
-        long totalCount = agentLogDAO.selectTotalCount(condition);
-        Page<AgentLog> page = new Page<AgentLog>(start, limit, totalCount);
-        return agentLogDAO.selectList(condition, page.getPageNO(),
-            page.getPageSize());
-    }
-
-    @Override
-    public String toApply(Agent data, String toUser, String status) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setApplyLevel(data.getApplyLevel());
-        alData.setToUserId(toUser);
-
-        alData.setType(EAgentType.Imporder.getCode());
-        alData.setTeamName(data.getTeamName());
-        alData.setUserReferee(data.getUserReferee());
-        alData.setApplyUser(data.getUserId());
-        Date date = new Date();
-        alData.setApplyDatetime(date);
-
-        alData.setStatus(status);
-        agentLogDAO.insert(alData);
-        return code;
-    }
-
-    @Override
-    public String refreshHighUser(Agent data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-        AgentLog alData = new AgentLog();
-        alData.setCode(code);
-        alData.setTeamName(data.getTeamName());
-        alData.setUserReferee(data.getUserReferee());
-        alData.setApplyUser(data.getUserId());
-
-        alData.setType(EAgentType.Update.getCode());
-        Date date = new Date();
-        alData.setApplyDatetime(date);
-        alData.setStatus(data.getStatus());
-        agentLogDAO.insert(alData);
-        return code;
     }
 
 }
