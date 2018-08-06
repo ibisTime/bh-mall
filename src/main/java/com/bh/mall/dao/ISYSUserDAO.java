@@ -11,6 +11,7 @@ public interface ISYSUserDAO extends IBaseDAO<SYSUser> {
     public int updateLoginPwd(SYSUser data);
 
     // 更新状态
+    public void updateStatus(SYSUser data);
 
     // 更新角色
     public int updateRole(SYSUser data);
@@ -29,7 +30,5 @@ public interface ISYSUserDAO extends IBaseDAO<SYSUser> {
 
     // 更新头像
     public int updatePhoto(SYSUser data);
-
-    public void updateStatus(SYSUser data);
 
 }

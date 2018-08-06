@@ -37,6 +37,9 @@ public class Agent extends ABaseDO {
     // 交易密码
     private String tradePwd;
 
+    // 交易密码强度
+    private String tradePwdStrength;
+
     // 目前用户等级
     private Integer level;
 
@@ -534,6 +537,14 @@ public class Agent extends ABaseDO {
 
     public void setTradePwd(String tradePwd) {
         this.tradePwd = tradePwd;
+    }
+
+    public String getTradePwdStrength() {
+        return tradePwdStrength;
+    }
+
+    public void setTradePwdStrength(String tradePwdStrength) {
+        this.tradePwd = tradePwdStrength;
     }
 
     public Integer getHighLevel() {

@@ -32,6 +32,7 @@ public class XN627356 extends AProcessor {
         condition.setStatus(req.getStatus());
 
         condition.setReferrer(req.getUserReferee());
+
         condition.setCreateDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setCreateDatetimeEnd(
