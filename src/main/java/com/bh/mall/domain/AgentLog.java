@@ -17,9 +17,6 @@ public class AgentLog extends ABaseDO {
     // 编号
     private String code;
 
-    // 类型
-    private String type;
-
     // 申请人
     private String applyUser;
 
@@ -52,6 +49,9 @@ public class AgentLog extends ABaseDO {
 
     // 团队名称
     private String teamName;
+
+    // 打款金额
+    private Long payAmount;
 
     // 打款截图
     private String payPdf;
@@ -376,6 +376,14 @@ public class AgentLog extends ABaseDO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Long getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
     }
 
 }

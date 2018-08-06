@@ -109,13 +109,15 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setArea(agent.getAddress());
         data.setAddress(agent.getAddress());
 
+        data.setPayAmount(sjForm.getPayAmount());
+        data.setPayPdf(sjForm.getPayPdf());
         data.setStatus(sjForm.getStatus());
         data.setApplyDatetime(sjForm.getApplyDatetime());
         data.setApprover(sjForm.getApprover());
+
         data.setApprovName(sjForm.getApproveName());
         data.setApproveDatetime(sjForm.getApproveDatetime());
         data.setRemark(sjForm.getRemark());
-
         agentLogDAO.insert(data);
         return code;
     }
