@@ -5,12 +5,14 @@ import com.bh.mall.domain.SqForm;
 
 public interface ISqFormDAO extends IBaseDAO<SqForm> {
 
-    String NAMESPACE = ISYSConfigDAO.class.getName().concat(".");
+    String NAMESPACE = ISqFormDAO.class.getName().concat(".");
 
     void cancelSqForm(SqForm data);
 
     void approveSqForm(SqForm data);
 
     void addInfo(SqForm data);
+
+    void applySqForm(SqForm data);
 
 }

@@ -307,9 +307,6 @@ public class AgentAOImpl implements IAgentAO {
     public void editHighUser(String userId, String highUser, String updater) {
         Agent data = agentBO.getAgent(userId);
         Agent highAgent = agentBO.getAgent(highUser);
-        if (highAgent.getLevel() >= data.getLevel()) {
-            throw new BizException("xn00000", "上级等级不能低于代理自身等级");
-        }
         agentBO.refreshHighUser(data, highUser, updater);
 
         // 增肌上级门槛

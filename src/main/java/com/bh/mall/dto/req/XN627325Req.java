@@ -6,18 +6,12 @@ package com.bh.mall.dto.req;
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
-public class XN627355Req extends APageReq {
+public class XN627325Req extends APageReq {
 
     private static final long serialVersionUID = 2531978925998093639L;
 
     // （选填）用户名
-    private String loginName;
-
-    // （选填）用户名
     private String realName;
-
-    // （选填）角色
-    private String roleCode;
 
     // （选填） 申请结束时间
     private String applyEndDatetime;
@@ -134,22 +128,6 @@ public class XN627355Req extends APageReq {
 
     public void setWxId(String wxId) {
         this.wxId = wxId;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
     }
 
     public String getCreateDatetimeStart() {

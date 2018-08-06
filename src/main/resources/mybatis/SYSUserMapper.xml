@@ -46,10 +46,46 @@
 		</trim>
 	</sql>
 	
+	
+		
+	<select id="select_sysuser" parameterType="sysuser" resultMap="sysuser_DB_Result">
+		SELECT
+		t.user_id
+		,t.role_code
+		,t.real_name
+		,t.photo
+		,t.mobile
+		,t.login_name		
+		,t.login_pwd
+		,t.login_pwd_strength
+		,t.create_datetime
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.system_code
+		
+		FROM
+		tsys_user t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_sysuser_count" parameterType="sysuser" resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_user t 
+		<include refid="where_condition"/>
+	</select>
+	
+	
 	<insert id="insert_sysuser" parameterType="sysuser">		
 		INSERT INTO
 		tsys_user(
 		user_id
+	
 		,real_name
 		,photo
 		,mobile
@@ -79,38 +115,7 @@
 		,#{systemCode}
 		)
 	</insert>
-	
-	<select id="select_sysuser" parameterType="sysuser" resultMap="sysuser_DB_Result">
-		SELECT
-		t.user_id
-		,t.real_name
-		,t.photo
-		,t.mobile
-		,t.login_name		
-		,t.login_pwd
-		,t.login_pwd_strength
-		,t.create_datetime
-		,t.status
-		,t.updater
-		,t.update_datetime
-		,t.remark
-		,t.system_code
-		
-		FROM
-		tsys_user t
-		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>
-	</select>
-	
-	<select id="select_sysuser_count" parameterType="sysuser" resultType="java.lang.Long">
-		SELECT count(1) FROM tsys_user t 
-		<include refid="where_condition"/>
-	</select>
-	
+
 	<update id="update_sysuser" parameterType="sysuser">
 		UPDATE tsys_user
 		SET

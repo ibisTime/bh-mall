@@ -8,7 +8,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentLog;
-import com.bh.mall.dto.req.XN627358Req;
+import com.bh.mall.dto.req.XN627328Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -19,12 +19,12 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN627358 extends AProcessor {
+public class XN627328 extends AProcessor {
 
     private IAgentLogAO agentLogAO = SpringContextHolder
         .getBean(IAgentLogAO.class);
 
-    private XN627358Req req = null;
+    private XN627328Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -42,7 +42,7 @@ public class XN627358 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627358Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627328Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getStart(),
             req.getLimit());
     }

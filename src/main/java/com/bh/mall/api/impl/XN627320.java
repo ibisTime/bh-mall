@@ -8,7 +8,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.dto.req.XN627125Req;
+import com.bh.mall.dto.req.XN627320Req;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -20,18 +20,18 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN627350 extends AProcessor {
+public class XN627320 extends AProcessor {
 
     private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
-    private XN627125Req req = null;
+    private XN627320Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
 
         Agent condition = new Agent();
         condition.setStatus(EUserStatus.IMPOWERED.getCode());
-        // condition.setHighUserId(req.getUserId());
+        condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
 
         String column = req.getOrderColumn();
@@ -48,7 +48,7 @@ public class XN627350 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627125Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627320Req.class);
         ObjValidater.validateReq(req);
     }
 

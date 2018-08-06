@@ -8,7 +8,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SYSUser;
-import com.bh.mall.dto.req.XN627125Req;
+import com.bh.mall.dto.req.XN627320Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -17,7 +17,7 @@ public class XN627125 extends AProcessor {
 
     private ISYSUserAO userAO = SpringContextHolder.getBean(ISYSUserAO.class);
 
-    private XN627125Req req = null;
+    private XN627320Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -37,7 +37,7 @@ public class XN627125 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627125Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627320Req.class);
         ObjValidater.validateReq(req);
     }
 

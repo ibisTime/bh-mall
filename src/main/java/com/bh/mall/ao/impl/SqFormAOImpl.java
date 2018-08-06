@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
@@ -63,9 +62,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Autowired
     private IAgentBO agentBO;
-
-    @Autowired
-    private IAgentAO agentAO;
 
     @Autowired
     private IAddressBO addressBO;
@@ -169,7 +165,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
         // 新增授权单
         SqForm sqForm = sqFormBO.getSqForm(agent.getUserId());
-        if (null != sqForm) {
+        if (null == sqForm) {
             sqForm = sqFormBO.applySqForm(agent.getUserId(), req.getRealName(),
                 req.getMobile(), req.getWxId(), req.getApplyLevel(), toUserId,
                 req.getTeamName(), introducer, userRefree, req.getIdKind(),
@@ -213,7 +209,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 申请最高等级
-        String status = data.getStatus();
+        String status = ESqFormStatus.TO_APPROVE.getCode();
         if (EAgentLevel.ONE.getCode().equals(req.getApplyLevel())) {
             // 校验团队名称
             agentBO.checkTeamName(req.getTeamName());
@@ -263,7 +259,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 审核通过
-        String status = EUserStatus.NO_THROUGH.getCode();
+        String status = ESqFormStatus.NO_THROUGH.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             AgentLevel impower = agentLevelBO
                 .getAgentByLevel(sqForm.getApplyLevel());
@@ -277,9 +273,13 @@ public class SqFormAOImpl implements ISqFormAO {
             }
         }
 
-        Agent approveAgent = agentAO.getAgent(approver);
-        sqFormBO.approveSqForm(sqForm, approver, approveAgent.getRealName(),
-            remark, status);
+        Agent approveAgent = agentBO.getAgent(approver);
+        String logCode = sqFormBO.approveSqForm(sqForm, approver,
+            approveAgent.getRealName(), remark, status);
+        // 记录日志
+        Agent agent = agentBO.getAgent(sqForm.getUserId());
+        agentBO.refreshLastLog(agent, status, approver,
+            approveAgent.getRealName(), logCode);
     }
 
     /**
@@ -403,7 +403,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
         List<SqForm> list = sqFormBO.querySqFormList(condition);
         for (SqForm sqForm : list) {
-            Agent buser = agentAO.getAgent(sqForm.getUserId());
+            Agent buser = agentBO.getAgent(sqForm.getUserId());
             sqForm.setUser(buser);
         }
         return list;
@@ -413,7 +413,7 @@ public class SqFormAOImpl implements ISqFormAO {
     @Override
     public SqForm getSqForm(String code) {
         SqForm data = sqFormBO.getSqForm(code);
-        Agent buser = agentAO.getAgent(data.getUserId());
+        Agent buser = agentBO.getAgent(data.getUserId());
         data.setUser(buser);
         return data;
 
@@ -435,7 +435,7 @@ public class SqFormAOImpl implements ISqFormAO {
         List<SqForm> list = page.getList();
 
         for (SqForm sqForm : list) {
-            Agent agent = agentAO.getAgent(sqForm.getUserId());
+            Agent agent = agentBO.getAgent(sqForm.getUserId());
             sqForm.setUser(agent);
         }
         page.setList(list);

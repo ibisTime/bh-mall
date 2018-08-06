@@ -114,6 +114,15 @@ public class AgentLog extends ABaseDO {
     // 上级用户
     private String highUserName;
 
+    // 关键字（用户名称、团队名称、手机号模糊查询）
+    private String keyword;
+
+    // 审核开始时间
+    private Date approveDatetimeStrat;
+
+    // 审核结束时间
+    private Date approveDatetimeEnd;
+
     public String getCode() {
         return code;
     }
@@ -384,6 +393,30 @@ public class AgentLog extends ABaseDO {
 
     public void setPayAmount(Long payAmount) {
         this.payAmount = payAmount;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public Date getApproveDatetimeStrat() {
+        return approveDatetimeStrat;
+    }
+
+    public Date getApproveDatetimeEnd() {
+        return approveDatetimeEnd;
+    }
+
+    public void setApproveDatetimeStrat(Date approveDatetimeStrat) {
+        this.approveDatetimeStrat = approveDatetimeStrat;
+    }
+
+    public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
+        this.approveDatetimeEnd = approveDatetimeEnd;
     }
 
 }

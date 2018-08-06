@@ -53,7 +53,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         data.setStatus(status);
         Date date = new Date();
         data.setApplyDatetime(date);
-        sqFormDAO.insert(data);
+        sqFormDAO.applySqForm(data);
         return data;
     }
 
@@ -128,6 +128,8 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         data.setRemark(remark);
 
         data.setStatus(status);
+        sqFormDAO.approveSqForm(data);
+
         return agentLogBO.applySqForm(data);
     }
 

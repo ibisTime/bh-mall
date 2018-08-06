@@ -3,20 +3,18 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 修改上架
+ * 修改推荐人
  * @author: nyc 
- * @since: 2018年3月29日 下午6:28:14 
+ * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN627259Req {
+public class XN627313Req {
 
     // （必填）编号
     @NotBlank(message = "编号不能为空")
     private String userId;
 
-    // （必填）上级
-    @NotBlank(message = "上级不能为空")
-    private String highUser;
+    private String userReferee;
 
     // （选填）更新人
     @NotBlank(message = "更新人不能为空")
@@ -30,12 +28,12 @@ public class XN627259Req {
         this.userId = userId;
     }
 
-    public String getHighUser() {
-        return highUser;
+    public String getUserReferee() {
+        return userReferee;
     }
 
-    public void setHighUser(String highUser) {
-        this.highUser = highUser;
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 
     public String getUpdater() {

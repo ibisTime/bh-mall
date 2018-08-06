@@ -481,5 +481,19 @@
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
+	
+	<update id="add_info" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		team_name = #{teamName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		,id_hand = #{idHand}
+		,approver = #{approver}
+		,approve_name = #{approveName}
+		,approve_datetime =	#{approveDatetime}
+		,last_agent_log = #{lastAgentLog}
+		WHERE user_id = #{userId}
+	</update>
 
 </mapper>

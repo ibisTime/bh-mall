@@ -529,6 +529,14 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     @Override
     public void refreshAgent(SqForm sqForm, String logCode) {
+        Agent data = getAgent(sqForm.getUserId());
+        data.setIdKind(sqForm.getIdKind());
+        data.setIdNo(sqForm.getIdNo());
+        data.setIdHand(sqForm.getIdHand());
+        data.setTeamName(sqForm.getTeamName());
+
+        data.setIntroducer(sqForm.getIntroducer());
+        agentDAO.addInfo(data);
     }
 
     @Override

@@ -17,7 +17,7 @@
 		<result column="to_user_id" property="toUserId"/>
 		<result column="team_name" property="teamName" />
 		<result column="introducer" property="introducer"/>
-		<result column="user_referee" property="userReferee"/>
+		<result column="referrer" property="referrer"/>
 		
 		<result column="province" property="province"/>
 		<result column="city" property="city"/>
@@ -83,7 +83,7 @@
 		,t.apply_level	
 		,t.to_user_id
 		,t.introducer
-		,t.user_referee
+		,t.referrer
 		
 		,t.province
 		,t.city
@@ -126,7 +126,7 @@
 		
 		,apply_level		
 		,introducer
-		,user_referee
+		,referrer
 		
 		
 		,province
@@ -147,7 +147,7 @@
 		
 		,#{applyLevel}		
 		,#{introducer}
-		,#{userReferee}
+		,#{referrer}
 		
 		
 		,#{province}
@@ -159,6 +159,20 @@
 	</insert>
 
 	<update id="update_sqForm" parameterType="sqForm">
+		UPDATE tbh_sq_form
+		SET		
+		apply_level = #{applyLevel}
+		,to_user_id = #{toUserId}
+        ,apply_datetime = #{applyDatetime}
+		,status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,impower_datetime = #{impowerDatetime}
+		WHERE user_id= #{userId}
+	</update>
+	
+	
+	<update id="approve_sqForm" parameterType="sqForm">
 		UPDATE tbh_sq_form
 		SET		
 		apply_level = #{applyLevel}

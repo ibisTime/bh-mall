@@ -8,7 +8,7 @@ import java.util.List;
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
-public class XN627356Req {
+public class XN627326Req {
 
     // （选填）搜索关键字;（姓名、微信号等）
     private String keyword;

@@ -131,4 +131,7 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     // 升级成功
     public void sjSuccess(Agent agent);
 
+    // 添加授权资料
+    public void addInfo(Agent data);
+
 }

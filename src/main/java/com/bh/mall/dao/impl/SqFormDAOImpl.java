@@ -63,4 +63,9 @@ public class SqFormDAOImpl extends AMybatisTemplate implements ISqFormDAO {
             condition, SqForm.class);
     }
 
+    @Override
+    public void applySqForm(SqForm data) {
+        super.insert(NAMESPACE.concat("insert_sqForm"), data);
+    }
+
 }

@@ -46,8 +46,6 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
         return 0;
     }
 
-    // IAgentDAO
-
     @Override
     public int updateLoginPwd(Agent data) {
         return super.update(NAMESPACE.concat("update_login_pwd"), data);
@@ -77,10 +75,6 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     public void resetBindMobile(Agent buser) {
         super.update(NAMESPACE.concat("update_mobile"), buser);
     }
-
-    // public int approveUser(Agent data) {
-    // return super.update(NAMESPACE.concat("approve_agent"), data);
-    // }
 
     @Override
     public void updateHigh(Agent data) {
@@ -153,6 +147,11 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     @Override
     public void sjSuccess(Agent data) {
         super.update(NAMESPACE.concat("sj_success"), data);
+    }
+
+    @Override
+    public void addInfo(Agent data) {
+        super.update(NAMESPACE.concat("add_info"), data);
     }
 
 }
