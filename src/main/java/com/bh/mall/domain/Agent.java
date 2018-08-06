@@ -37,9 +37,12 @@ public class Agent extends ABaseDO {
     // 交易密码
     private String tradePwd;
 
+<<<<<<< HEAD
     // 交易密码强度
     private String tradePwdStrength;
 
+=======
+>>>>>>> refs/remotes/origin/master
     // 目前用户等级
     private Integer level;
 

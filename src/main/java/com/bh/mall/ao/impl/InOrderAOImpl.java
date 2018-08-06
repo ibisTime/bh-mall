@@ -344,16 +344,14 @@ public class InOrderAOImpl implements IInOrderAO {
 
                 String status = EOrderStatus.Paid.getCode();
                 // 代理进货且是购买云仓
-                if (EUserKind.Merchant.getCode().equals(agent.getKind())) {
-                    AgentLevel agentLevel = agentLevelBO
-                        .getAgentByLevel(agent.getLevel());
-                    if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
-                        status = EOrderStatus.Received.getCode();
-                        // 购买云仓
-                        wareBO.buyWare(data, agent);
-                        // 出货以及推荐奖励
-                        this.payAward(data);
-                    }
+                AgentLevel agentLevel = agentLevelBO
+                    .getAgentByLevel(agent.getLevel());
+                if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
+                    status = EOrderStatus.Received.getCode();
+                    // 购买云仓
+                    wareBO.buyWare(data, agent);
+                    // 出货以及推荐奖励
+                    this.payAward(data);
                 }
 
                 data.setPayDatetime(new Date());
@@ -368,7 +366,9 @@ public class InOrderAOImpl implements IInOrderAO {
                 data.setPayDatetime(new Date());
                 inOrderBO.payNo(data);
             }
-        } catch (JDOMException | IOException e) {
+        } catch (JDOMException |
+
+                IOException e) {
             throw new BizException("xn000000", "回调结果XML解析失败");
         }
     }
@@ -485,8 +485,7 @@ public class InOrderAOImpl implements IInOrderAO {
         if (this.checkAward(applyUser)) {
             if (StringUtils.isNotBlank(applyUser.getReferrer())) {
                 // 直接推荐人
-                Agent firstReferee = agentBO
-                    .getAgent(applyUser.getReferrer());
+                Agent firstReferee = agentBO.getAgent(applyUser.getReferrer());
                 TjAward tjAward = tjAwardBO.getAwardByLevel(
                     applyUser.getLevel(), data.getProductCode());
 
