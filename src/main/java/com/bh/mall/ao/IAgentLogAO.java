@@ -18,7 +18,7 @@ public interface IAgentLogAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    // 新增代理轨迹
+    // 新增代理轨迹 TODO
     public String addAgentLog(AgentLog data);
 
     // 分页查询代理轨迹
@@ -28,7 +28,7 @@ public interface IAgentLogAO {
     // 列表查询代理轨迹
     public List<AgentLog> queryAgentLogList(AgentLog condition);
 
-    // 根据编号查询代理轨迹
+    // 根据编号查询代理轨迹 TODO
     public AgentLog getAgentLog(String code);
 
 }

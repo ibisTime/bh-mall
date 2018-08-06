@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IYxFormAO;
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -10,7 +10,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 详情查询意向单
+ * 详情查询
  * 
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
@@ -18,13 +18,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627327 extends AProcessor {
 
-    private IYxFormAO yxFormAO = SpringContextHolder.getBean(IYxFormAO.class);
+    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
     private XN627327Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return yxFormAO.getYxForm(req.getCode());
+        return agentAO.getAgent(req.getCode());
     }
 
     @Override

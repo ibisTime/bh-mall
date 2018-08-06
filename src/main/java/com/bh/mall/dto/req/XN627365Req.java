@@ -1,6 +1,6 @@
 package com.bh.mall.dto.req;
 
-public class XN627289Req extends APageReq {
+public class XN627365Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */

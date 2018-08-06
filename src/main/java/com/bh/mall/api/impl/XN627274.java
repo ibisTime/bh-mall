@@ -5,7 +5,7 @@ import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN6272561Req;
+import com.bh.mall.dto.req.XN627274Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -17,22 +17,21 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN6272561 extends AProcessor {
+public class XN627274 extends AProcessor {
 
     private ISqFormAO sqFormAO = SpringContextHolder.getBean(ISqFormAO.class);
 
-    private XN6272561Req req = null;
+    private XN627274Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        sqFormAO.cancelSqFormByP(req.getUserId(), req.getApprover(),
-            req.getResult(), req.getRemark());
+        sqFormAO.toQuit(req.getUserId());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN6272561Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627274Req.class);
         ObjValidater.validateReq(req);
     }
 
