@@ -17,6 +17,9 @@ public class AgentLog extends ABaseDO {
     // 编号
     private String code;
 
+    // 类型
+    private String type;
+
     // 申请人
     private String applyUser;
 

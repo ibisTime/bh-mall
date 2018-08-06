@@ -141,6 +141,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Autowired
     ISYSUserBO sysUserBO;
 
+    // TODO 判别下单人信息
     @Override
     @Transactional
     public List<String> addOutOrder(XN627640Req req) {
@@ -436,13 +437,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
             Agent uData = agentBO.getAgent(data.getApplyUser());
-            if (EUserKind.Customer.getCode().equals(uData.getKind())) {
-                data.setPayType(EChannelType.WeChat_XCX.getCode());
-                Object payResult = this.payWXH5(data,
-                    PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
-                result = payResult;
+            data.setPayType(EChannelType.WeChat_XCX.getCode());
+            Object payResult = this.payWXH5(data,
+                PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
+            result = payResult;
 
-            } else if (EPayType.RMB_YE.getCode().equals(payType)) {
+            if (EPayType.RMB_YE.getCode().equals(payType)) {
                 // 账户扣钱
                 String payGroup = outOrderBO.addPayGroup(data);
                 Account mkAccount = accountBO.getAccountByUser(
@@ -462,9 +462,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                 result = new BooleanRes(true);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-                Object payResult = this.payWXH5(data,
+                Object payResult1 = this.payWXH5(data,
                     PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
-                result = payResult;
+                result = payResult1;
             }
         }
         return result;
@@ -680,8 +680,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (this.checkAward(applyUser)) {
             if (StringUtils.isNotBlank(applyUser.getReferrer())) {
                 // 直接推荐人
-                Agent firstReferee = agentBO
-                    .getAgent(applyUser.getReferrer());
+                Agent firstReferee = agentBO.getAgent(applyUser.getReferrer());
                 TjAward tjAward = tjAwardBO.getAwardByLevel(
                     applyUser.getLevel(), data.getProductCode());
 
@@ -740,34 +739,30 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (EUserKind.Customer.getCode().equals(data.getKind())) {
                 throw new BizException("xn00000", "非代理的订单无法从云仓发货哦！");
             }
-            if (EUserKind.Merchant.getCode().equals(toUser.getKind())) {
 
-                AgentPrice price = agentPriceBO
-                    .getPriceByLevel(data.getSpecsCode(), toUser.getLevel());
-                Specs specs = specsBO.getSpecs(price.getSpecsCode());
-                if (price.getMinNumber() > data.getQuantity()) {
-                    throw new BizException("xn00000",
-                        "该产品云仓发货不能少于" + price.getMinNumber() + specs.getName());
-                }
+            AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
+                toUser.getLevel());
+            Specs specs = specsBO.getSpecs(price.getSpecsCode());
+            if (price.getMinNumber() > data.getQuantity()) {
+                throw new BizException("xn00000",
+                    "该产品云仓发货不能少于" + price.getMinNumber() + specs.getName());
+            }
 
-                Ware toData = wareBO.getWareByProductSpec(data.getToUserId(),
-                    data.getSpecsCode());
-                if (null == toData) {
-                    throw new BizException("xn00000", "您的云仓中没有该规格的产品");
-                }
+            Ware toData = wareBO.getWareByProductSpec(data.getToUserId(),
+                data.getSpecsCode());
+            if (null == toData) {
+                throw new BizException("xn00000", "您的云仓中没有该规格的产品");
+            }
 
-                // 下单人为代理
-                Agent applyUser = agentBO.getAgent(data.getApplyUser());
-                if (EUserKind.Merchant.getCode().equals(applyUser.getKind())) {
-                    AgentLevel agent = agentLevelBO
-                        .getAgentByLevel(applyUser.getLevel());
+            // 下单人为代理
+            Agent applyUser = agentBO.getAgent(data.getApplyUser());
+            AgentLevel agent = agentLevelBO
+                .getAgentByLevel(applyUser.getLevel());
 
-                    // 没有开启云仓的发放奖励
-                    if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
-                        // 出货以及推荐奖励
-                        this.payAward(data);
-                    }
-                }
+            // 没有开启云仓的发放奖励
+            if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
+                // 出货以及推荐奖励
+                this.payAward(data);
             }
         }
 
@@ -782,7 +777,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         // 是否有填写箱码或盒码
         if (StringUtils.isEmpty(req.getProCode())
-                && CollectionUtils.isEmpty(req.getTraceCodeList())) {
+                && CollectionUtils.isEmpty(req.getTraceCodeList()))
+
+        {
             throw new BizException("xn000000", "请输入一个箱码或盒码！");
         }
 

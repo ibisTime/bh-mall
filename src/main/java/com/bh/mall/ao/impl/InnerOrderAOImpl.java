@@ -43,7 +43,6 @@ import com.bh.mall.enums.EProductYunFei;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
@@ -352,10 +351,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         Agent data = agentBO.getAgent(user);
         if (data != null) {
             name = data.getRealName();
-            if (EUserKind.Plat.getCode().equals(data.getKind())
-                    && StringUtils.isBlank(data.getRealName())) {
-                name = data.getNickname();
-            }
         }
         return name;
     }
