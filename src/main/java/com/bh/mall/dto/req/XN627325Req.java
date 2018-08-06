@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
-public class XN627355Req extends APageReq {
+public class XN627325Req extends APageReq {
 
     private static final long serialVersionUID = 2531978925998093639L;
 

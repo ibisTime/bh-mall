@@ -1,38 +1,35 @@
-
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAgentAO;
+import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627261Req;
-import com.bh.mall.dto.res.BooleanRes;
+import com.bh.mall.dto.req.XN627327Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 修改管理员
+ * 详情查询意向单
+ * 
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN627261 extends AProcessor {
+public class XN627327 extends AProcessor {
 
-    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
+    private IYxFormAO yxFormAO = SpringContextHolder.getBean(IYxFormAO.class);
 
-    private XN627261Req req = null;
+    private XN627327Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.editManager(req.getUserId(), req.getManager(),
-            req.getUpdater());
-        return new BooleanRes(true);
+        return yxFormAO.getYxForm(req.getCode());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627261Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627327Req.class);
         ObjValidater.validateReq(req);
     }
 

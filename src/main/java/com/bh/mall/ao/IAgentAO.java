@@ -58,7 +58,7 @@ public interface IAgentAO {
     // 列表查询代理结构
     public List<Agent> queryAgentJgList(Agent condition);
 
-    // 公司直接取消授权
+    // 公司直接取消授权 TODO
     public void abolishSqForm(String userId, String updater, String remark);
 
     // 根据手机号查询代理

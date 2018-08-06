@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
-public class XN627351Req extends APageReq {
+public class XN627321Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
