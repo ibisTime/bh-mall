@@ -76,7 +76,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public String addSYSUser(String mobile, String loginPwd, String realName,
             String photo) {
-        sysUserBO.isMobileExist(mobile, ESystemCode.BH.getCode());
+        sysUserBO.isMobileExist(mobile);
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
@@ -156,18 +156,36 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.refreshRole(userId, roleCode, updater, remark);
     }
 
-    // 重置登录密码
+    // 重置其他管理员密码
     @Override
     public void resetAdminLoginPwd(String userId, String newLoginPwd) {
         SYSUser user = sysUserBO.getSYSUser(userId);
         sysUserBO.resetAdminLoginPwd(user, newLoginPwd);
     }
 
-    // 重置其他管理员密码
+    // 重置登录密码
     @Override
-    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
+    public void resetSelfPwd(String mobile, String smsCaptcha,
             String newLoginPwd) {
-        sysUserBO.resetOtherSYSuserPwd(mobile, smsCaptcha, newLoginPwd);
+        // 判断手机号是否存在
+
+        SYSUser user = sysUserBO.getUserByMobile(mobile);
+        String oldPwd = user.getLoginPwd();
+        if (newLoginPwd.equals(oldPwd)) {
+            throw new BizException("xn000000", "新密码与原密码一致");
+        }
+
+        // 新密码验证
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "627090",
+            user.getSystemCode());
+        sysUserBO.resetSelfPwd(user, newLoginPwd);
+        // 发送短信
+        smsOutBO.sendSmsOut(mobile,
+            "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您于"
+                    + DateUtil.dateToStr(new Date(),
+                        DateUtil.DATA_TIME_PATTERN_1)
+                    + "已更改登录密码" + "，请妥善保管您的账户相关信息。",
+            "631072");
     }
 
     // 修改照片
@@ -186,9 +204,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn000000", "新手机与原手机一致");
         }
         // 判断手机号是否存在
-        sysUserBO.isMobileExist(newMobile, user.getSystemCode());
+        sysUserBO.isMobileExist(newMobile);
         // 新手机号验证
-        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627282",
+        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627090",
             user.getSystemCode());
         sysUserBO.resetBindMobile(user, newMobile);
         // 发送短信

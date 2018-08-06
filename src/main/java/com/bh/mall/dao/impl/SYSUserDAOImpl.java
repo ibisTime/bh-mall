@@ -67,7 +67,7 @@ public class SYSUserDAOImpl extends AMybatisTemplate implements ISYSUserDAO {
 
     @Override
     public int updatePhoto(SYSUser data) {
-        return super.update(NAMESPACE.concat("update_sysuser_photo"), data);
+        return super.update(NAMESPACE.concat("update" + "_photo"), data);
     }
 
     @Override

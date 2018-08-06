@@ -31,7 +31,7 @@ public class XN627350 extends AProcessor {
 
         Agent condition = new Agent();
         condition.setStatus(EUserStatus.IMPOWERED.getCode());
-        condition.setHighUserId(req.getUserId());
+        // condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
 
         String column = req.getOrderColumn();

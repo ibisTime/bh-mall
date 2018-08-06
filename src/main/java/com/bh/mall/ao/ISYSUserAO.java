@@ -29,11 +29,11 @@ public interface ISYSUserAO {
     public void doRoleSYSUser(String userId, String roleCode, String updater,
             String remark);
 
-    // 重置登录密码
+    // 重置其他管理员密码
     public void resetAdminLoginPwd(String userId, String newLoginPwd);
 
-    // 重置其他管理员密码
-    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
+    // 重置密码
+    public void resetSelfPwd(String mobile, String smsCaptcha,
             String newLoginPwd);
 
     // 修改照片
