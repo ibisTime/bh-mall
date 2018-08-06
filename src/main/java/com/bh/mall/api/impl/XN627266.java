@@ -14,7 +14,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 分页查询意向代理
+ * 列表查询意向代理
  * @author: nyc 
  * @since: 2018年8月5日 下午10:07:46 
  * @history:
@@ -32,7 +32,7 @@ public class XN627266 extends AProcessor {
         condition.setApprover(req.getApprover());
         condition.setKeyWord(req.getKeyword());
         condition.setToUserId(req.getToUserId());
-        condition.setStatus(req.getStart());
+        condition.setStatus(req.getStatus());
 
         condition.setApplyDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));

@@ -75,7 +75,7 @@ public class AgentLog extends ABaseDO {
     private String approver;
 
     // 审核人
-    private String approvName;
+    private String approveName;
 
     // 审核时间
     private Date approveDatetime;
@@ -274,8 +274,8 @@ public class AgentLog extends ABaseDO {
         return impowerAmount;
     }
 
-    public String getApprovName() {
-        return approvName;
+    public String getApproveName() {
+        return approveName;
     }
 
     public void setRefereeName(String refereeName) {
@@ -286,8 +286,8 @@ public class AgentLog extends ABaseDO {
         this.impowerAmount = impowerAmount;
     }
 
-    public void setApprovName(String approvName) {
-        this.approvName = approvName;
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
     }
 
     public String getUserRefreeName() {

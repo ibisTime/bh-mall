@@ -34,7 +34,7 @@ public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
 
     @Override
     public void acceptYxForm(YxForm data) {
-        super.update(NAMESPACE.concat("insert_yxForm"), data);
+        super.update(NAMESPACE.concat("accept_yxForm"), data);
     }
 
     @Override

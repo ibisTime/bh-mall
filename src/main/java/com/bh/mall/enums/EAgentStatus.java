@@ -6,7 +6,8 @@ import java.util.Map;
 public enum EAgentStatus {
 
     MIND("0", "有意愿"), TO_APPROVE("1", "待审核授权"), IMPOWERO_INFO("2",
-            "待填写授权资料"), IMPOWERED("3", "已授权"), NO_THROUGH("4", "未授权");
+            "待填写授权资料"), ADD_INFO("3",
+                    "补充授权资料"), IMPOWERED("4", "已授权"), NO_THROUGH("5", "未授权");
 
     EAgentStatus(String code, String value) {
         this.code = code;

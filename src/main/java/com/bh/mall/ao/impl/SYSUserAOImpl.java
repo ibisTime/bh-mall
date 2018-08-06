@@ -204,7 +204,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     // 分页查询
     @Override
-    public Paginable<SYSUser> queryUserPage(int start, int limit,
+    public Paginable<SYSUser> querySYSUserPage(int start, int limit,
             SYSUser condition) {
 
         if (condition.getCreateDatetimeStart() != null

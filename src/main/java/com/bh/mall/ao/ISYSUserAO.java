@@ -44,13 +44,13 @@ public interface ISYSUserAO {
             String smsCaptcha);
 
     // 分页查询
-    public Paginable<SYSUser> queryUserPage(int start, int limit,
+    public Paginable<SYSUser> querySYSUserPage(int start, int limit,
             SYSUser condition);
 
     // 列表查询
     public List<SYSUser> querySYSUserList(SYSUser condition);
 
     // 详细查询
-    public SYSUser getSYSUser(String code);
+    public SYSUser getSYSUser(String userId);
 
 }

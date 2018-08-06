@@ -10,7 +10,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 分页查询意向代理
+ * 详情查询意向代理
  * @author: nyc 
  * @since: 2018年8月5日 下午10:07:46 
  * @history:

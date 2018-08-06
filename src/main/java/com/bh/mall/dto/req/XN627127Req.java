@@ -1,6 +1,6 @@
 package com.bh.mall.dto.req;
 
-public class XN627230Req {
+public class XN627127Req {
     // userId（必填）
     private String userId;
 

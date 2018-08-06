@@ -33,7 +33,7 @@ public class XN627265 extends AProcessor {
         condition.setApprover(req.getApprover());
         condition.setKeyWord(req.getKeyword());
         condition.setToUserId(req.getToUserId());
-        condition.setStatus(req.getStart());
+        condition.setStatus(req.getStatus());
 
         condition.setApplyDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
