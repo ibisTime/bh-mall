@@ -5,7 +5,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.dto.req.XN627352Req;
+import com.bh.mall.dto.req.XN627321Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -16,11 +16,11 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN627352 extends AProcessor {
+public class XN627321 extends AProcessor {
 
     private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
 
-    private XN627352Req req = null;
+    private XN627321Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -32,7 +32,7 @@ public class XN627352 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627352Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627321Req.class);
         ObjValidater.validateReq(req);
     }
 
