@@ -161,7 +161,7 @@
 		#{code}
 		,#{applyUser}
 		,#{realName}
-		,#{wx_id}
+		,#{wxId}
 		,#{mobile}
 		
 		,#{toUserId}
@@ -183,7 +183,7 @@
 		,#{approver}
 		
 		,#{approveName}
-		,#{approve_datetime}
+		,#{approveDatetime}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}

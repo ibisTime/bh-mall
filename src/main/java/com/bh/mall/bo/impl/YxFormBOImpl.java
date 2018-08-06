@@ -115,7 +115,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setRemark(remark);
-        yxFormDAO.insert(data);
+        yxFormDAO.acceptYxForm(data);
 
         // 生成代理轨迹
         return agentLogBO.applyYxForm(data);

@@ -14,7 +14,7 @@ import com.bh.mall.dto.req.XN627250Req;
  */
 public interface IYxFormAO {
 
-    String DEFAULT_ORDER_COLUMN = "code";
+    String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 代理申请
     public void applyYxForm(XN627250Req req);

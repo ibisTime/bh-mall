@@ -141,7 +141,7 @@
 	
 	
 	
-	<update id="allot_yxForm" parameterType="yxForm">
+	<update id="accept_yxForm" parameterType="yxForm">
 		UPDATE tbh_yx_form
 		SET
 		to_user_id = #{toUserId}		
@@ -149,7 +149,7 @@
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,remark=#{remark}
-		WHERE code=#{code}
+		WHERE user_id=#{userId}
 	</update>
 	
 
