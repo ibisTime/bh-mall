@@ -4,12 +4,12 @@
 <mapper namespace="com.bh.mall.dao.IYxFormDAO">
 	<resultMap  id="yxForm_DB_Result" type="yxForm" >
 		<result column="user_id" property="userId" />
+		<result column="wx_id" property="wxId"/>
+		<result column ="to_user_id" property="toUserId"/>
+		<result column="apply_level" property="applyLevel" />
 		<result column="real_name" property="realName"/>
 		<result column="mobile" property="mobile"/>
-		<result column="wx_id" property="wxId"/>
-		<result column="apply_level" property="applyLevel" />
 		
-		<result column ="to_user_id" property="toUserId"/>
 		<result column="province" property="province"/>
 		<result column="city" property="city"/>
 		<result column="area" property="area"/>
@@ -17,9 +17,10 @@
 		
 		<result column="from_info" property="fromInfo"/>
 		<result column ="status" property="status"/>
+				<result column ="apply_datetime" property="applyDatetime"/>	
 		<result column ="approver" property="approver"/>
 		<result column ="approve_name" property="approveName"/>
-		<result column ="apply_datetime" property="applyDatetime"/>		
+	
 		
 		<result column="approve_datetime" property="approveDatetime" />		
 		<result column="remark" property="remark"/>
@@ -61,21 +62,24 @@
 	<select id="select_yxForm" parameterType="yxForm" resultMap="yxForm_DB_Result">
 		SELECT 
 		t.user_id
-		,t.real_name
-		,t.mobile
 		,t.wx_id
-		,t.apply_level
-		
 		,t.to_user_id
+		,t.apply_level
+		,t.real_name
+		,t.mobile		
+	
 		,t.province
 		,t.city
 		,t.area
 		,t.address
+		
 
 		,t.from_info
+		,t.status
+		,t.apply_datetime	
 		,t.approver
 		,t.approve_name
-		,t.apply_datetime		
+			
 		,t.approve_datetime
 		,t.remark
 		FROM tbh_yx_form t 
@@ -96,12 +100,12 @@
 		INSERT INTO
 		tbh_yx_form(
 		user_id
+		,wx_id
+		,to_user_id	
+		,apply_level
 		,real_name	
 		,mobile
-		,wx_id
-
-		,to_user_id				
-		,apply_level	
+		
 		,province
 		,city
 		,area
@@ -109,9 +113,10 @@
 
 		,from_info
 		,status
+		,apply_datetime	
 		,approver
 		,approve_name
-		,apply_datetime		
+			
 		
 		,approve_datetime
 		,remark
@@ -119,11 +124,11 @@
 		VALUES(
 		#{userId}
 		,#{wxId}
+		,#{toUserId}
+		,#{applyLevel}	
 		,#{realName}
 		,#{mobile}
-		,#{toUserId}
-
-		,#{applyLevel}	
+		
 		,#{province}
 		,#{city}
 		,#{area}
@@ -131,9 +136,10 @@
 		,#{fromInfo}
 		
 		,#{status}
+		,#{applyDatetime}
 		,#{approver}
 		,#{approveName}
-		,#{applyDatetime}
+	
 		,#{approveDatetime}
 		,#{remark}
 		)

@@ -4,32 +4,34 @@ import com.bh.mall.ao.ISYSUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627110Req;
-import com.bh.mall.dto.res.XN627312Res;
+import com.bh.mall.dto.req.XN627119Req;
+import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 新增用户
- * @author: nyc 
- * @since: 2018年4月26日 下午6:14:01 
+ * 修改照片
+ * @author: clockorange 
+ * @since: Aug 6, 2018 2:26:53 PM 
  * @history:
  */
-public class XN627312 extends AProcessor {
-    private ISYSUserAO userAO = SpringContextHolder.getBean(ISYSUserAO.class);
 
-    private XN627110Req req = null;
+public class XN627119 extends AProcessor {
+    private ISYSUserAO sysUserAO = SpringContextHolder
+        .getBean(ISYSUserAO.class);
+
+    private XN627119Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN627312Res(userAO.addSYSUser(req.getMobile(),
-            req.getLoginPwd(), req.getRealName(), req.getPhoto()));
+        sysUserAO.doModifyPhoto(req.getUserId(), req.getPhoto());
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627110Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627119Req.class);
         ObjValidater.validateReq(req);
     }
 

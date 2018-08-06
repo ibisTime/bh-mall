@@ -51,14 +51,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void isMobileExist(String mobile, String systemCode) {
+    public void isMobileExist(String mobile) {
         if (StringUtils.isNotBlank(mobile)) {
             // 判断格式
             PhoneUtil.checkMobile(mobile);
             SYSUser condition = new SYSUser();
             condition.setMobile(mobile);
-
-            condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");
@@ -82,6 +80,21 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             }
         }
         return data;
+    }
+
+    @Override
+    public SYSUser getUserByMobile(String mobile) {
+        SYSUser data = null;
+        if (StringUtils.isNotBlank(mobile)) {
+            SYSUser condition = new SYSUser();
+            condition.setMobile(mobile);
+            data = sysUserDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "用户不存在");
+            }
+        }
+        return data;
+
     }
 
     @Override
@@ -145,8 +158,9 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
-            String newLoginPwd) {
+    public void resetSelfPwd(SYSUser sysUser, String newLoginPwd) {
+        sysUser.setLoginPwd(MD5Util.md5(newLoginPwd));
+        sysUserDAO.updateLoginPwd(sysUser);
 
     }
 
@@ -180,6 +194,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     @Override
     public void resetBindMobile(SYSUser user, String newMobile) {
         user.setMobile(newMobile);
+        user.setLoginName(newMobile);
         sysUserDAO.resetBindMobile(user);
     }
 

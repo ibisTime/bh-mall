@@ -32,6 +32,9 @@ public class SjForm extends ABaseDO {
     // 当前团队名称
     private String teamName;
 
+    // 半门槛人数
+    private Integer reNumber;
+
     // 当前等级
     private Integer level;
 
@@ -283,6 +286,14 @@ public class SjForm extends ABaseDO {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public Integer getReNumber() {
+        return reNumber;
+    }
+
+    public void setReNumber(Integer reNumber) {
+        this.reNumber = reNumber;
     }
 
     public String getIdKind() {

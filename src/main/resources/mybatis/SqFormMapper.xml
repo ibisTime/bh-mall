@@ -8,15 +8,17 @@
 		<result column="real_name" property="realName" />
 		<result column="wx_id" property="wxId"/>
 		<result column="mobile" property="mobile"/>
-		<result column="apply_level" property="applyLevel" />
 		
+		<result column="id_kind" property="idKind"/>
+		<result column="id_no" property="idNo"/>	
+		<result column="id_hand" property="idHand"/>
+		
+		<result column="apply_level" property="applyLevel" />		
 		<result column="to_user_id" property="toUserId"/>
+		<result column="team_name" property="teamName" />
 		<result column="introducer" property="introducer"/>
 		<result column="user_referee" property="userReferee"/>
-		<result column="id_kind" property="idKind"/>
-		<result column="id_no" property="idNo"/>
 		
-		<result column="id_hand" property="idHand"/>
 		<result column="province" property="province"/>
 		<result column="city" property="city"/>
 		<result column="area" property="area"/>
@@ -26,8 +28,8 @@
 		<result column ="apply_datetime" property="applyDatetime"/>		
 		<result column ="approver" property="approver"/>
 		<result column="approve_name" property="approveName" />
-		<result column="approve_datetime" property="approveDatetime" />		
-		
+		<result column="approve_datetime" property="approveDatetime" />	
+		<result column="impower_datetime" property="impowerDatetime" />			
 		<result column="remark" property="remark"/>
 	</resultMap>
 	
@@ -74,15 +76,15 @@
 		,t.real_name
 		,t.wx_id
 		,t.mobile
-		,t.apply_level
+		,t.id_kind
+		,t.id_no		
+		,t.id_hand
 		
+		,t.apply_level	
 		,t.to_user_id
 		,t.introducer
 		,t.user_referee
-		,t.id_kind
-		,t.id_no
 		
-		,t.id_hand
 		,t.province
 		,t.city
 		,t.area
@@ -93,7 +95,7 @@
 		,t.approver		
 		,t.approve_name
 		,t.approve_datetime
-		
+		,t.impower_datetime
 		,t.remark
 		FROM
 		tbh_sq_form t 
@@ -116,15 +118,16 @@
 		tbh_sq_form(
 		user_id
 		,real_name
-		,mobile
 		,wx_id
-		,apply_level
-		
-		,introducer
-		,user_referee
+		,mobile
 		,id_kind
 		,id_no
 		,id_hand
+		
+		,apply_level		
+		,introducer
+		,user_referee
+		
 		
 		,province
 		,city
@@ -136,15 +139,16 @@
 		VALUES(
         #{userId}
 		,#{realName}
-		,#{mobile}
 		,#{wxId}
-		,#{applyLevel}
-		
-		,#{introducer}
-		,#{userReferee}
+		,#{mobile}
 		,#{idKind}
 		,#{idNo}
 		,#{idHand}
+		
+		,#{applyLevel}		
+		,#{introducer}
+		,#{userReferee}
+		
 		
 		,#{province}
 		,#{city}
@@ -156,14 +160,15 @@
 
 	<update id="update_sqForm" parameterType="sqForm">
 		UPDATE tbh_sq_form
-		SET
-		user_id= #{userId}
-		,apply_level = #{applyLevel}
+		SET		
+		apply_level = #{applyLevel}
+		,to_user_id = #{toUserId}
         ,apply_datetime = #{applyDatetime}
 		,status = #{status}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
-		WHERE code = #{code}
+		,impower_datetime = #{impowerDatetime}
+		WHERE user_id= #{userId}
 	</update>
 	
 	

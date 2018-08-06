@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 我的下级
  * @author: nyc 
@@ -14,20 +12,31 @@ public class XN627125Req extends APageReq {
      */
     private static final long serialVersionUID = 9092885295612580388L;
 
-    // （必填） 编号
-    @NotBlank(message = "代理编号不能为空")
-    private String userId;
+    // （选填）用户名
+    private String realName;
 
+    // （选填）角色
+    private String roleCode;
+    
     // （选填）备注
     private String keyword;
 
-    public String getUserId() {
-        return userId;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getRoleCode() {
+        return roleCode;
     }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+   
 
     public String getKeyword() {
         return keyword;

@@ -23,14 +23,13 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public void resetAdminLoginPwd(SYSUser user, String loginPwd);
 
     // 重置代理密码
-    public void resetOtherSYSuserPwd(String mobile, String smsCaptcha,
-            String newLoginPwd);
+    public void resetSelfPwd(SYSUser user, String newLoginPwd);
 
     // 修改照片
     public void refreshPhoto(String userId, String photo);
 
     // 判断手机号是否存在
-    public void isMobileExist(String mobile, String systemCode);
+    public void isMobileExist(String mobile);
 
     // 修改绑定手机号
     public void resetBindMobile(SYSUser user, String newMobile);
@@ -40,6 +39,9 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
     // 登录判断
     public SYSUser getUserByLoginName(String loginName, String systemCode);
+
+    // 登录判断
+    public SYSUser getUserByMobile(String mobile);
 
     public void checkLoginPwd(String userId, String loginPwd);
 
