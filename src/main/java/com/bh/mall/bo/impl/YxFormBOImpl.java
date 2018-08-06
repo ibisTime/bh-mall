@@ -71,7 +71,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setStatus(EUserStatus.MIND.getCode()); // 有意愿
         data.setApplyDatetime(new Date());
         data.setSource(fromInfo);
-        yxFormDAO.insert(data);
+        yxFormDAO.update(data);
 
         // 生成代理轨迹
         return agentLogBO.applyYxForm(data);
@@ -102,7 +102,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setRemark(remark);
-        yxFormDAO.insert(data);
+        yxFormDAO.updateStatus(data);
         // 生成代理轨迹
         return agentLogBO.applyYxForm(data);
     }
@@ -115,7 +115,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setRemark(remark);
-        yxFormDAO.acceptYxForm(data);
+        yxFormDAO.updateStatus(data);
 
         // 生成代理轨迹
         return agentLogBO.applyYxForm(data);

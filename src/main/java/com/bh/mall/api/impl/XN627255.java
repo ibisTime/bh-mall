@@ -11,7 +11,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 忽略意向
+ * 忽略意向(oss)
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:

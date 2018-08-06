@@ -12,32 +12,6 @@ import com.bh.mall.domain.YxForm;
 public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
 
     @Override
-    public void applyYxForm(YxForm data) {
-        super.update(NAMESPACE.concat("apply_yxForm"), data);
-    }
-
-    @Override
-    public void allotYxForm(YxForm data) {
-        super.update(NAMESPACE.concat("allot_yxForm"), data);
-    }
-
-    @Override
-    public void ignore(YxForm data) {
-        super.update(NAMESPACE.concat("insert_yxForm"), data);
-
-    }
-
-    @Override
-    public void toApply(YxForm data) {
-        super.update(NAMESPACE.concat("insert_yxForm"), data);
-    }
-
-    @Override
-    public void acceptYxForm(YxForm data) {
-        super.update(NAMESPACE.concat("accept_yxForm"), data);
-    }
-
-    @Override
     public int insert(YxForm data) {
         return super.insert(NAMESPACE.concat("insert_yxForm"), data);
     }
@@ -69,6 +43,20 @@ public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
     public List<YxForm> selectList(YxForm condition) {
         return super.selectList(NAMESPACE.concat("select_yxForm"), condition,
             YxForm.class);
+    }
+
+    @Override
+    public void updateStatus(YxForm data) {
+    }
+
+    @Override
+    public void allotYxForm(YxForm data) {
+        super.update(NAMESPACE.concat("allot_yxForm"), data);
+    }
+
+    @Override
+    public void update(YxForm data) {
+        super.update(NAMESPACE.concat("update_yxForm"), data);
     }
 
 }
