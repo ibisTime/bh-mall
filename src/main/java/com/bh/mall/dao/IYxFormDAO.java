@@ -9,12 +9,8 @@ public interface IYxFormDAO extends IBaseDAO<YxForm> {
 
     public void allotYxForm(YxForm data);
 
-    public void ignore(YxForm data);
+    public void update(YxForm data);
 
-    public void applyYxForm(YxForm data);
-
-    public void toApply(YxForm data);
-
-    public void acceptYxForm(YxForm data);
+    public void updateStatus(YxForm data);
 
 }
