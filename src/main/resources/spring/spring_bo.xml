@@ -161,6 +161,9 @@
 	<bean id="cuserBO" class="com.bh.mall.bo.impl.CUserBOImpl">
 		<property name="paginableDAO" ref="cuserDAOImpl"/>
 	</bean>
-		
+	
+	<bean id="innerSpecsBO" class="com.bh.mall.bo.impl.InnerSpecsBOImpl">
+		<property name="paginableDAO" ref="innerSpecsDAOImpl"/>
+	</bean>
 	
 </beans>

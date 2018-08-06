@@ -53,5 +53,7 @@
 		<typeAlias alias="yxForm" type="com.bh.mall.domain.YxForm"/>
 		<typeAlias alias="sqForm" type="com.bh.mall.domain.SqForm"/>
 		<typeAlias alias="sjForm" type="com.bh.mall.domain.SjForm"/>
+		
+		<typeAlias alias="innerSpecs" type="com.bh.mall.domain.InnerSpecs"/>
 	</typeAliases>
 </configuration>	
