@@ -26,33 +26,33 @@ public interface ISqFormAO {
     //  授权所需信息补充
     public void addInfo(XN627271Req req);
 
-    // 审核授权
+    // 审核授权 627272
     public void approveSqFormByP(String userId, String approver, String result,
             String remark);
 
-    // 审核授权
+    // 审核授权 627273
     public void approveSqFormByB(String userId, String approver, String result,
             String remark);
 
-    // 申请退出
+    // 申请退出 627274
     public void toQuit(String userId);
 
-    // 审核取消授权(代理)
+    // 审核取消授权(代理) 627276
     public void cancelSqFormByB(String userId, String approver, String result,
             String remark);
 
-    // 审核取消授权(平台)
+    // 审核取消授权(平台) 627275
     public void cancelSqFormByP(String userId, String approver, String result,
             String remark);
 
-    // 分页查询
+    // 分页查询 627285
     public Paginable<SqForm> querySqFormPage(int start, int limit,
             SqForm condition);
 
-    // 列表查询
+    // 列表查询 627286
     public List<SqForm> querySqFormList(SqForm condition);
 
-    // 详细查询
+    // 详细查询 627287
     public SqForm getSqForm(String code);
 
 }

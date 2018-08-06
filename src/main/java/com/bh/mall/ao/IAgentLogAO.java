@@ -18,17 +18,17 @@ public interface IAgentLogAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    // 新增代理轨迹 TODO
+    // 新增代理轨迹
     public String addAgentLog(AgentLog data);
 
-    // 分页查询代理轨迹
+    // 分页查询代理轨迹 627365
     public Paginable<AgentLog> queryAgentLogPage(int start, int limit,
             AgentLog condition);
 
-    // 列表查询代理轨迹
+    // 列表查询代理轨迹 627366
     public List<AgentLog> queryAgentLogList(AgentLog condition);
 
-    // 根据编号查询代理轨迹 TODO
+    // 根据编号查询代理轨迹 TODO 627367
     public AgentLog getAgentLog(String code);
 
 }
