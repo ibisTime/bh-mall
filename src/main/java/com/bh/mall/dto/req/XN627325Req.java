@@ -1,7 +1,7 @@
 package com.bh.mall.dto.req;
 
 /**
- * 分页查意向代理
+ * 分页查代理
  * @author: nyc 
  * @since: 2018年3月29日 下午6:28:14 
  * @history:

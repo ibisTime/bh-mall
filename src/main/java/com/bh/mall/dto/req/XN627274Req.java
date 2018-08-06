@@ -3,21 +3,26 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 通过
+ * 审核取消
  * @author: nyc 
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
 public class XN627274Req {
-    // （必填） 编号
-    @NotBlank(message = "代理编号不能为空")
+
+    // （必填）编号
+    @NotBlank(message = "编号不能为空")
     private String userId;
 
-    // （必填）审核人
-    @NotBlank(message = "审核人不能为空")
+    // （必填） 审核人
+    @NotBlank(message = " 审核人不能为空")
     private String approver;
 
-    // （选填）备注
+    // （必填）结果;（0，不通过，1 通过）
+    @NotBlank(message = "结果不能为空")
+    private String result;
+
+    // （选填）审核备注
     private String remark;
 
     public String getUserId() {
@@ -42,6 +47,14 @@ public class XN627274Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
 }

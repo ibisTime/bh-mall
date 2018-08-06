@@ -2,52 +2,48 @@ package com.bh.mall.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-/**
- * 修改mobile
- * @author: nyc 
- * @since: 2018年4月26日 下午5:54:31 
- * @history:
- */
 public class XN627310Req {
+    // 开放编号（必填）
+    @NotBlank(message = "微信编号不能为空")
+    private String code;
 
-    // （必填）用户编号
-    @NotBlank(message = "用户编号不能为空")
-    private String userId;
+    // 推荐人
+    private String userReferee;
 
-    // （必填)用户类型
-    @NotBlank(message = "用户类型不能为空")
-    private String kind;
+    // 是否强制绑定手机号（必填）
+    private String isNeedMobile;
 
-    // （必填）新手机号
-    @NotBlank(message = "新手机号不能为空")
-    private String newMobile;
+    // 手机号（选填）
+    private String mobile;
 
-    // (必填) 新手机号验证码
-    @NotBlank(message = "新手机号验证码不能为空")
+    // 短信验证码（选填）
     private String smsCaptcha;
 
-    public String getUserId() {
-        return userId;
+    // 是否(非微信登录)登录状态，是则无需验证手机号，否则传验证验证手机
+    private String isLoginStatus;
+
+    public String getCode() {
+        return code;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getKind() {
-        return kind;
+    public String getIsNeedMobile() {
+        return isNeedMobile;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setIsNeedMobile(String isNeedMobile) {
+        this.isNeedMobile = isNeedMobile;
     }
 
-    public String getNewMobile() {
-        return newMobile;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setNewMobile(String newMobile) {
-        this.newMobile = newMobile;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getSmsCaptcha() {
@@ -56,6 +52,22 @@ public class XN627310Req {
 
     public void setSmsCaptcha(String smsCaptcha) {
         this.smsCaptcha = smsCaptcha;
+    }
+
+    public String getIsLoginStatus() {
+        return isLoginStatus;
+    }
+
+    public void setIsLoginStatus(String isLoginStatus) {
+        this.isLoginStatus = isLoginStatus;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
     }
 
 }

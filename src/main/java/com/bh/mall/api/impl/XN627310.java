@@ -5,15 +5,14 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627310Req;
-import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 修改手机号
- * @author: chenshan 
- * @since: 2018年3月25日 下午4:36:19 
+ * B端登录注册
+ * @author: myb858 
+ * @since: 2015年11月10日 下午12:59:10 
  * @history:
  */
 public class XN627310 extends AProcessor {
@@ -23,9 +22,8 @@ public class XN627310 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.doResetMoblie(req.getUserId(), req.getNewMobile(),
-            req.getSmsCaptcha());
-        return new BooleanRes(true);
+        return agentAO.doLoginWeChatByAgent(req.getCode(),
+            req.getUserReferee());
     }
 
     @Override
