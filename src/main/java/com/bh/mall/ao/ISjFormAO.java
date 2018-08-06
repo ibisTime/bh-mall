@@ -39,6 +39,6 @@ public interface ISjFormAO {
     public List<SjForm> querySjFormList(SjForm condition);
 
     // 详细查询
-    public SjForm getSjForm(String code);
+    public SjForm getSjForm(String userId);
 
 }

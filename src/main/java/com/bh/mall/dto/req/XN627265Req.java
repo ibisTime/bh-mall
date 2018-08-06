@@ -1,17 +1,17 @@
 package com.bh.mall.dto.req;
 
 /**
- * 列表查询意向代理
+ * 分页查询意向代理
  * @author: nyc 
  * @since: 2018年8月5日 下午10:07:46 
  * @history:
  */
-public class XN627266Req extends APageReq {
+public class XN627265Req extends APageReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
-    private static final long serialVersionUID = -2643447436023904514L;
+    private static final long serialVersionUID = -1814685367618601346L;
 
     // （选填） 申请等级
     private String applyLevel;

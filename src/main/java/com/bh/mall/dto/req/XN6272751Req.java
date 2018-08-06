@@ -2,7 +2,7 @@ package com.bh.mall.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class XN627292Req {
+public class XN6272751Req {
 
     // （必填）编号
     @NotBlank(message = "编号不能为空")
@@ -50,4 +50,5 @@ public class XN627292Req {
     public void setResult(String result) {
         this.result = result;
     }
+
 }

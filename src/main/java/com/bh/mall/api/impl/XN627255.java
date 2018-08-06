@@ -1,6 +1,6 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IAgentAO;
+import com.bh.mall.ao.IYxFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
@@ -11,21 +11,21 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * update information
+ * 忽略意向
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
 public class XN627255 extends AProcessor {
-    private IAgentAO agentAO = SpringContextHolder.getBean(IAgentAO.class);
+
+    private IYxFormAO yxForm = SpringContextHolder.getBean(IYxFormAO.class);
 
     private XN627255Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.editInformation(req.getAddress(), req.getArea(), req.getCity(),
-            req.getMobile(), req.getProvince(), req.getRealName(),
-            req.getTeamName(), req.getUserId(), req.getWxId());
+        yxForm.ignoreYxFormByP(req.getUserId(), req.getApprover(),
+            req.getRemark());
         return new BooleanRes(true);
     }
 

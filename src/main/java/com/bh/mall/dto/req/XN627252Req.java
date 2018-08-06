@@ -13,11 +13,8 @@ public class XN627252Req {
     @NotBlank(message = "代理编号不能为空")
     private String userId;
 
-    // （必填）管理员
-    @NotBlank(message = "管理员不能为空")
-    private String manager;
-
     // （必填）分配给谁
+    @NotBlank(message = "意向归属人不能为空")
     private String toUserId;
 
     // （必填）审核人
@@ -33,14 +30,6 @@ public class XN627252Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getManager() {
-        return manager;
-    }
-
-    public void setManager(String manager) {
-        this.manager = manager;
     }
 
     public String getToUserId() {

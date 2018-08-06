@@ -3,48 +3,22 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * update information
+ * 通过
  * @author: nyc 
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
 public class XN627255Req {
-
-    // （必填）用户编号
-    @NotBlank(message = "用户编号不能为空")
+    // （必填） 编号
+    @NotBlank(message = "代理编号不能为空")
     private String userId;
 
-    // 真实姓名
-    @NotBlank(message = "真实姓名不能为空")
-    private String realName;
+    // （必填）审核人
+    @NotBlank(message = "审核人不能为空")
+    private String approver;
 
-    // （必填）微信号
-    @NotBlank(message = "微信号不能为空")
-    private String wxId;
-
-    // （必填）电话
-    @NotBlank(message = "电话不能为空")
-    private String mobile;
-
-    // （必填）团队名称
-    @NotBlank(message = "团队名称不能为空")
-    private String teamName;
-
-    // （必填）省
-    @NotBlank(message = "省不能为空")
-    private String province;
-
-    // （必填）市
-    @NotBlank(message = "市不能为空")
-    private String city;
-
-    // （必填）区
-    @NotBlank(message = "区不能为空")
-    private String area;
-
-    // （必填） 详细地址
-    @NotBlank(message = "详细地址不能为空")
-    private String address;
+    // （选填）备注
+    private String remark;
 
     public String getUserId() {
         return userId;
@@ -54,68 +28,20 @@ public class XN627255Req {
         this.userId = userId;
     }
 
-    public String getAddress() {
-        return address;
+    public String getApprover() {
+        return approver;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setApprover(String approver) {
+        this.approver = approver;
     }
 
-    public String getProvince() {
-        return province;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getWxId() {
-        return wxId;
-    }
-
-    public void setWxId(String wxId) {
-        this.wxId = wxId;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

@@ -7,7 +7,7 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.domain.SjForm;
-import com.bh.mall.dto.req.XN627293Req;
+import com.bh.mall.dto.req.XN627306Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -23,7 +23,7 @@ public class XN627293 extends AProcessor {
     private ISjFormAO sjFormAO = SpringContextHolder
         .getBean(ISjFormAO.class);
 
-    private XN627293Req req = null;
+    private XN627306Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -44,7 +44,7 @@ public class XN627293 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627293Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627306Req.class);
     }
 
 }

@@ -1,38 +1,37 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.ISjFormAO;
+import com.bh.mall.ao.ICUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627292Req;
+import com.bh.mall.dto.req.XN6272861Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 审核升级申请（front）
- * @author: nyc 
- * @since: 2018年3月29日 下午6:28:14 
+ * C -user modify photo
+ * @author: clockorange 
+ * @since: Jul 17, 2018 1:14:37 PM 
  * @history:
  */
 
-public class XN627292 extends AProcessor {
+public class XN6272861 extends AProcessor {
 
-    private ISjFormAO sjFormAO = SpringContextHolder.getBean(ISjFormAO.class);
+    private ICUserAO userAO = SpringContextHolder.getBean(ICUserAO.class);
 
-    private XN627292Req req = null;
+    private XN6272861Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        sjFormAO.approveSjFormByB(req.getUserId(), req.getApprover(),
-            req.getRemark(), req.getResult());
+        userAO.doModifyPhoto(req.getUserId(), req.getPhoto());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627292Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN6272861Req.class);
         ObjValidater.validateReq(req);
     }
 

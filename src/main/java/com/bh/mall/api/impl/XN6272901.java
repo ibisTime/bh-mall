@@ -2,38 +2,35 @@ package com.bh.mall.api.impl;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.bh.mall.ao.ISjFormAO;
+import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
-import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.SjForm;
-import com.bh.mall.dto.req.XN627306Req;
+import com.bh.mall.domain.SqForm;
+import com.bh.mall.dto.req.XN6272901Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 列表查询升级单
+ * 列表查询代理轨迹
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
+public class XN6272901 extends AProcessor {
 
-public class XN627306 extends AProcessor {
-    private ISjFormAO sjFormAO = SpringContextHolder.getBean(ISjFormAO.class);
+    private ISqFormAO sqFormAO = SpringContextHolder
+        .getBean(ISqFormAO.class);
 
-    private XN627306Req req = null;
+    private XN6272901Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        SjForm condition = new SjForm();
+        SqForm condition = new SqForm();
         condition.setKeyWord(req.getKeyword());
         condition.setStatus(req.getStatus());
-        condition.setLevel(StringValidater.toInteger(req.getLevel()));
-        condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
+        // condition.setLevel(StringValidater.toInteger(req.getLevel()));
 
         Date approveDatetimeStart = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
@@ -42,18 +39,12 @@ public class XN627306 extends AProcessor {
         condition.setApproveDatetimeStart(approveDatetimeStart);
         condition.setApproveDatetimeEnd(approveDatetimeEnd);
 
-        String column = req.getOrderColumn();
-        if (StringUtils.isBlank(column)) {
-            column = ISjFormAO.DEFAULT_ORDER_COLUMN;
-        }
-        condition.setOrder(column, req.getOrderDir());
-
-        return sjFormAO.querySjFormList(condition);
+        return sqFormAO.querySqFormList(condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627306Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN6272901Req.class);
     }
 
 }

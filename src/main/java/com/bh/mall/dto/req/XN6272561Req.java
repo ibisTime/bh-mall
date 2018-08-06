@@ -3,12 +3,12 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 审核授权
+ * 审核取消
  * @author: nyc 
  * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
-public class XN627257Req {
+public class XN6272561Req {
 
     // （必填）编号
     @NotBlank(message = "编号不能为空")

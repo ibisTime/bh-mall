@@ -3,15 +3,15 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 列表查询意向代理
+ * 分页查意向代理
  * @author: nyc 
- * @since: 2018年8月5日 下午10:07:46 
+ * @since: 2018年3月29日 下午6:28:14 
  * @history:
  */
-public class XN627267Req {
+public class XN627287Req {
 
-    // （选填） userId
-    @NotBlank(message = "Id不能为空")
+    // 用户编号
+    @NotBlank(message = "用户编号不能为空")
     private String userId;
 
     public String getUserId() {

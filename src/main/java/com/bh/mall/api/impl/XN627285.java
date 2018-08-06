@@ -4,36 +4,35 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.ISYSUserAO;
-import com.bh.mall.ao.IYxFormAO;
+import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.YxForm;
-import com.bh.mall.dto.req.XN627361Req;
+import com.bh.mall.domain.SqForm;
+import com.bh.mall.dto.req.XN627285Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 分页查询意向代理
+ * 分页查询授权单
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN627361 extends AProcessor {
+public class XN627285 extends AProcessor {
 
-    private IYxFormAO yxFormAO = SpringContextHolder.getBean(IYxFormAO.class);
+    private ISqFormAO sqFormAO = SpringContextHolder.getBean(ISqFormAO.class);
 
-    private XN627361Req req = null;
+    private XN627285Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
 
-        YxForm condition = new YxForm();
+        SqForm condition = new SqForm();
         condition.setKeyWord(req.getKeyword());
-        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setApplyLevel(StringValidater.toInteger(req.getApplyLevel()));
         condition.setStatus(req.getStatus());
 
@@ -46,20 +45,19 @@ public class XN627361 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = ISYSUserAO.DEFAULT_ORDER_COLUMN;
+            column = ISqFormAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return yxFormAO.queryYxFormPage(start, limit, condition);
+        return sqFormAO.querySqFormPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627361Req.class);
-        StringValidater.validateBlank(req.getStart(), req.getLimit(),
-            req.getUserId());
+        req = JsonUtil.json2Bean(inputparams, XN627285Req.class);
+        ObjValidater.validateReq(req);
     }
 
 }

@@ -1,37 +1,34 @@
 package com.bh.mall.api.impl;
 
-import com.bh.mall.ao.IYxFormAO;
+import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN627274Req;
-import com.bh.mall.dto.res.BooleanRes;
+import com.bh.mall.dto.req.XN627287Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 忽略意向(front)
+ * 详情查询授权单
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
-public class XN627274 extends AProcessor {
+public class XN627287 extends AProcessor {
 
-    private IYxFormAO yxForm = SpringContextHolder.getBean(IYxFormAO.class);
+    private ISqFormAO sqFormAO = SpringContextHolder.getBean(ISqFormAO.class);
 
-    private XN627274Req req = null;
+    private XN627287Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        yxForm.ignoreYxFormByP(req.getUserId(), req.getApprover(),
-            req.getRemark());
-        return new BooleanRes(true);
+        return sqFormAO.getSqForm(req.getUserId());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627274Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627287Req.class);
         ObjValidater.validateReq(req);
     }
 

@@ -11,7 +11,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 忽略意向
+ * 通过(front)
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
@@ -24,7 +24,7 @@ public class XN627254 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        yxForm.ignoreYxFormByP(req.getUserId(), req.getApprover(),
+        yxForm.acceptYxFormByP(req.getUserId(), req.getApprover(),
             req.getRemark());
         return new BooleanRes(true);
     }

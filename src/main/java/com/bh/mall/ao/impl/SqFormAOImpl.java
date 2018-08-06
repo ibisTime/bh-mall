@@ -37,8 +37,8 @@ import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.domain.YxForm;
-import com.bh.mall.dto.req.XN627251Req;
-import com.bh.mall.dto.req.XN627362Req;
+import com.bh.mall.dto.req.XN627270Req;
+import com.bh.mall.dto.req.XN627271Req;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
@@ -101,11 +101,11 @@ public class SqFormAOImpl implements ISqFormAO {
      * 有头的代理申请授权
      * 1、校验介绍人、身份证、团队名称
      * 2、根据申请等级判断两个代理的关系
-     * @see com.bh.mall.ao.ISqFormAO#applyHaveUserReferee(com.bh.mall.dto.req.XN627251Req)
+     * @see com.bh.mall.ao.ISqFormAO#applyHaveUserReferee(com.bh.mall.dto.req.XN627270Req)
      */
     @Override
     @Transactional
-    public void applyHaveUserReferee(XN627251Req req) {
+    public void applyHaveUserReferee(XN627270Req req) {
         PhoneUtil.checkMobile(req.getMobile());
         agentBO.isMobileExist(req.getMobile());
 
@@ -190,7 +190,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
     // 补全授权所需资料
     @Override
-    public void addInfo(XN627362Req req) {
+    public void addInfo(XN627271Req req) {
 
         Agent data = agentBO.getAgent(req.getUserId());
         // 校验介绍人

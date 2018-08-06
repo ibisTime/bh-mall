@@ -47,6 +47,6 @@ public interface IYxFormAO {
     public List<YxForm> queryYxFormList(YxForm condition);
 
     // 详细查询
-    public YxForm getYxForm(String code);
+    public YxForm getYxForm(String userId);
 
 }

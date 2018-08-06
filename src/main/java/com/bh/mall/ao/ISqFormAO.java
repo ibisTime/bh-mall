@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.SqForm;
-import com.bh.mall.dto.req.XN627251Req;
-import com.bh.mall.dto.req.XN627362Req;
+import com.bh.mall.dto.req.XN627270Req;
+import com.bh.mall.dto.req.XN627271Req;
 
 /**
  * 授权单
@@ -21,10 +21,10 @@ public interface ISqFormAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 代理申请，包含推荐人
-    public void applyHaveUserReferee(XN627251Req req);
+    public void applyHaveUserReferee(XN627270Req req);
 
     //  授权所需信息补充
-    public void addInfo(XN627362Req req);
+    public void addInfo(XN627271Req req);
 
     // 审核授权
     public void approveSqFormByP(String userId, String approver, String result,

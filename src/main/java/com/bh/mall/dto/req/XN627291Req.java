@@ -2,27 +2,28 @@ package com.bh.mall.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class XN627291Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 9092885295612580388L;
+/**
+ * 审核升级申请
+ * @author: nyc 
+ * @since: 2018年4月1日 上午10:58:40 
+ * @history:
+ */
+public class XN627291Req {
 
-    // 用户编号
-    @NotBlank(message = "用户编号不能为空")
+    // （必填）编号
+    @NotBlank(message = "编号不能为空")
     private String userId;
 
-    // （选填）等级
-    private String level;
+    // （必填） 审核人
+    @NotBlank(message = " 审核人不能为空")
+    private String approver;
 
-    // （选填）申请等级
-    private String applyLevel;
+    // （必填）结果;（0，不通过，1 通过）
+    @NotBlank(message = "结果不能为空")
+    private String result;
 
-    // 状态（选填）
-    private String status;
-
-    // 关键字 （选填）
-    private String keyword;
+    // （选填）审核备注
+    private String remark;
 
     public String getUserId() {
         return userId;
@@ -32,36 +33,28 @@ public class XN627291Req extends APageReq {
         this.userId = userId;
     }
 
-    public String getLevel() {
-        return level;
+    public String getApprover() {
+        return approver;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setApprover(String approver) {
+        this.approver = approver;
     }
 
-    public String getStatus() {
-        return status;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    public String getKeyword() {
-        return keyword;
+    public String getResult() {
+        return result;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
-    public String getApplyLevel() {
-        return applyLevel;
-    }
-
-    public void setApplyLevel(String applyLevel) {
-        this.applyLevel = applyLevel;
+    public void setResult(String result) {
+        this.result = result;
     }
 
 }

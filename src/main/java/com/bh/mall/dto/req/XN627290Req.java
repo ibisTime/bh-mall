@@ -1,59 +1,104 @@
 package com.bh.mall.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+/**
+ * 升级申请
+ * @author: nyc 
+ * @since: 2018年4月1日 上午10:58:40 
+ * @history:
+ */
 public class XN627290Req {
-    // （选填）审核开始时间
-    private String dateStart;
+    // （必填）用户编号
+    @NotBlank(message = "用户编号不能为空")
+    private String userId;
 
-    // （选填）审核结束时间
-    private String dateEnd;
+    // （必填） 升级等级
+    @NotBlank(message = " 升级等级不能为空")
+    private String highLevel;
 
-    // （选填）关键字
-    private String keyword;
+    // （必填）打款截图
+    @NotBlank(message = "打款截图不能为空")
+    private String payPdf;
 
-    // （选填）等级
-    private String level;
+    // （必填）打款金额
+    @NotBlank(message = "打款金额不能为空")
+    private String padAmount;
 
-    /// （选填）状态
-    private String status;
+    // (选填) 团队名称
+    private String teamName;
 
-    public String getKeyword() {
-        return keyword;
+    // （选填）证件类型
+    private String idKind;
+
+    // (选填) 身份证号
+    private String idNo;
+
+    // (选填) 手持身份证
+    private String idHand;
+
+    public String getUserId() {
+        return userId;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getLevel() {
-        return level;
+    public String getHighLevel() {
+        return highLevel;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setHighLevel(String highLevel) {
+        this.highLevel = highLevel;
     }
 
-    public String getStatus() {
-        return status;
+    public String getPayPdf() {
+        return payPdf;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPayPdf(String payPdf) {
+        this.payPdf = payPdf;
     }
 
-    public String getDateStart() {
-        return dateStart;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setDateStart(String dateStart) {
-        this.dateStart = dateStart;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
-    public String getDateEnd() {
-        return dateEnd;
+    public String getPadAmount() {
+        return padAmount;
     }
 
-    public void setDateEnd(String dateEnd) {
-        this.dateEnd = dateEnd;
+    public void setPadAmount(String padAmount) {
+        this.padAmount = padAmount;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public String getIdHand() {
+        return idHand;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public void setIdHand(String idHand) {
+        this.idHand = idHand;
     }
 
 }

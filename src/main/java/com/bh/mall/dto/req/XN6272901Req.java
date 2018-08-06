@@ -1,6 +1,6 @@
 package com.bh.mall.dto.req;
 
-public class XN627293Req {
+public class XN6272901Req {
     // （选填）审核开始时间
     private String dateStart;
 

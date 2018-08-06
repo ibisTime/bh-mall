@@ -8,6 +8,7 @@ import com.bh.mall.ao.ISjFormAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.dto.req.XN627306Req;
@@ -16,13 +17,13 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 列表查询升级单
+ * 分页查询升级单
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
  */
 
-public class XN627306 extends AProcessor {
+public class XN627305 extends AProcessor {
     private ISjFormAO sjFormAO = SpringContextHolder.getBean(ISjFormAO.class);
 
     private XN627306Req req = null;
@@ -48,12 +49,15 @@ public class XN627306 extends AProcessor {
         }
         condition.setOrder(column, req.getOrderDir());
 
-        return sjFormAO.querySjFormList(condition);
+        int start = StringValidater.toInteger(req.getStart());
+        int limit = StringValidater.toInteger(req.getLimit());
+        return sjFormAO.querySjFormPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627306Req.class);
+        ObjValidater.validateReq(req);
     }
 
 }
