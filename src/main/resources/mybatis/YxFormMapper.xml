@@ -60,7 +60,7 @@
 	
 	<select id="select_yxForm" parameterType="yxForm" resultMap="yxForm_DB_Result">
 		SELECT 
-		,t.user_id
+		t.user_id
 		,t.real_name
 		,t.mobile
 		,t.wx_id
@@ -95,7 +95,7 @@
 	<insert id="insert_yxForm" parameterType="yxForm">
 		INSERT INTO
 		tbh_yx_form(
-		,user_id
+		user_id
 		,real_name	
 		,mobile
 		,wx_id
