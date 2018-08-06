@@ -21,8 +21,6 @@
 		<result column="id_kind" property="idKind" />
 		
 		<result column="id_no" property="idNo" />
-		<result column="id_front" property="idFront" />
-		<result column="id_behind" property="idBehind" />
 		<result column="id_hand" property="idHand" />
 		<result column="real_name" property="realName" />
 		
@@ -41,6 +39,7 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="approver" property="approver" />
+		<result column="approve_name" property="approveName" />
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="impower_datetime" property="impowerDatetime" />
 		
@@ -89,13 +88,7 @@
 			</if>
 			
 			<choose>
-				<when test="statusList != null and statusList.size() >0 ">
-					AND t.status IN
-					<foreach collection="statusList" index="index" item="item"
-						open="(" separator="," close=")">
-						#{item}
-					</foreach>
-				</when>
+				
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
 				</when>
@@ -142,9 +135,6 @@
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name = #{teamName}
 			</if>
-			<if test="toUserId != null and toUserId != '' ">
-				AND l.to_user_id = #{toUserId}
-			</if>
 
 			<if test="keyWord !=null and keyWord != '' ">
 				AND (t.real_name like "%"#{keyWord}"%" or t.nickname like
@@ -164,7 +154,7 @@
 
 		,t.nickname
 		,t.trade_pwd
-
+		,t.trade_pwd_strength
 		,t.level
 		,t.referrer
 		,t.introducer
@@ -193,6 +183,7 @@
 		,t.update_datetime
 		,t.approver
 
+		,t.approve_name
 		,t.approve_datetime
 		,t.last_agent_log
 		,t.impower_datetime
@@ -251,6 +242,7 @@
 		,updater
 		,update_datetime
 		,approver
+		,approve_name
 		,approve_datetime
 		,last_agent_log
 
@@ -290,6 +282,7 @@
 		,#{updater}
 		,#{updateDatetime}
 		,#{approver}
+		,#{approveName}
 		,#{approveDatetime}
 		,#{lastAgentLog}
 
@@ -338,6 +331,7 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,approver = #{approver}
+		,approve_name = #{approveName}
 		,approve_datetime =	#{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
 		,remark = #{remark}
