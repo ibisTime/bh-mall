@@ -6,7 +6,6 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627111Req;
 import com.bh.mall.dto.res.XN627300Res;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -25,10 +24,8 @@ public class XN627111 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new XN627300Res(
-            userAO.doLogin(req.getLoginName(), req.getLoginPwd()),
-            EUserStatus.ALLOTED.getCode());
+            userAO.doLogin(req.getLoginName(), req.getLoginPwd()));
     }
-    
 
     @Override
     public void doCheck(String inputparams) throws ParaException {

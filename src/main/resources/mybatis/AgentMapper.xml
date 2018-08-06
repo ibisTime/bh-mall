@@ -62,7 +62,6 @@
 			<if test="nickname != null and nickname != '' ">
 				AND t.nickname like "%"#{nickname}"%"
 			</if>
-
 			
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
@@ -87,19 +86,9 @@
 			<if test="realName != null and realName != '' ">
 				AND t.real_name = #{realName}
 			</if>
-			
-			<choose>
-				<when test="statusList != null and statusList.size() >0 ">
-					AND t.status IN
-					<foreach collection="statusList" index="index" item="item"
-						open="(" separator="," close=")">
-						#{item}
-					</foreach>
-				</when>
-				<when test="status != null and status != '' ">
-					AND t.status = #{status}
-				</when>
-			</choose>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
@@ -141,9 +130,6 @@
 			</if>
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name = #{teamName}
-			</if>
-			<if test="toUserId != null and toUserId != '' ">
-				AND l.to_user_id = #{toUserId}
 			</if>
 
 			<if test="keyWord !=null and keyWord != '' ">
@@ -198,7 +184,7 @@
 		,t.impower_datetime
 		,t.remark
 		FROM
-		tbh_user t
+		tbh_agent t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -208,23 +194,23 @@
 	</select>
 
 	<select id="select_agent_count" parameterType="agent" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_user t
+		SELECT count(1) FROM tbh_agent t
 		<include refid="where_condition" />
 	</select>
 
 
 	<insert id="insert_agent" parameterType="agent">
 		INSERT INTO
-		tbh_user(
+		tbh_agent(
 		user_id
+		,from_user_id
+		,real_name
 		,mobile
 		,wx_id
 		,photo
 
 		,nickname
-		,kind
 		,level
-
 		,referrer
 		,introducer
 		,high_user_id
@@ -233,11 +219,9 @@
 		,id_kind
 		,id_no
 		,id_hand
-
-		,real_name
 		,status
-
 		,manager
+		
 		,union_id
 		,h5_open_id
 		,app_open_id
@@ -258,13 +242,14 @@
 		)
 		VALUES(
 		#{userId}
+		,#{fromUserId}
+		,#{realName}
 		,#{mobile}
 		,#{wxId}
 		,#{photo}
 
 		,#{nickname}
 		,#{level}
-
 		,#{referrer}
 		,#{introducer}
 		,#{highUserId}
@@ -273,10 +258,9 @@
 		,#{idKind}
 		,#{idNo}
 		,#{idHand}
-
-		,#{realName}
 		,#{status}
 		,#{manager}
+		
 		,#{unionId}
 		,#{h5OpenId}
 		,#{appOpenId}
@@ -298,7 +282,7 @@
 	</insert>
 
 	<update id="update_status" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		status = #{status}
 		,updater = #{updater}
@@ -310,7 +294,7 @@
 
 
 	<update id="update_agent" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		mobile = #{mobile}
 		,wx_id = #{wxId}
@@ -347,7 +331,7 @@
 
 
 	<update id="update_trade_pwd" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		trade_pwd = #{tradePwd}
 		,trade_pwd_strength = #{tradePwdStrength}
@@ -357,14 +341,14 @@
 
 
 	<update id="update_agent_photo" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		photo = #{photo}
 		WHERE user_id = #{userId}
 	</update>
 
 	<update id="update_mobile" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		mobile = #{mobile}
 		WHERE user_id = #{userId}
@@ -373,7 +357,7 @@
 
 
 	<update id="update_information" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		province = #{province}
 		,city = #{city}
@@ -388,7 +372,7 @@
 	</update>
 
 	<update id="update_highUser" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		high_user_id = #{highUserId}
 		,updater = #{updater}
@@ -399,7 +383,7 @@
 	</update>
 
 	<update id="update_userReferee" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		referrer = #{referrer}
 		,updater = #{updater}
@@ -408,7 +392,7 @@
 	</update>
 
 	<update id="update_manager" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		manager = #{manager}
 		,updater = #{updater}
@@ -417,7 +401,7 @@
 	</update>
 
 	<update id="update_high" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		high_user_id = #{highUserId}
 		,referrer = #{referrer}
@@ -430,14 +414,14 @@
 	</update>
 
 	<update id="update_teamName" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		team_name = #{teamName}
 		WHERE user_id = #{userId}
 	</update>
 
 	<update id="abolish_impower" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		status = #{status}
 		,mobile = #{mobile}
@@ -454,7 +438,7 @@
 	</update>
 	
 	<update id="update_info" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		mobile = #{mobile}
 		,id_no = #{idNo}
@@ -467,7 +451,7 @@
 	</update>
 	
 	<update id="update_lastLog" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		status = status
 		,approver = #{approver}
@@ -478,7 +462,7 @@
 	</update>
 
 	<update id="apply_agent" parameterType="agent">
-		UPDATE tbh_user
+		UPDATE tbh_agent
 		SET
 		mobile = #{mobile}
 		,wx_id = #{wxId}
