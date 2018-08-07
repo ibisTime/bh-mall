@@ -320,6 +320,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
+    public void refreshLevel(Agent buser) {
+        agentDAO.refreshLevel(buser);
+    }
+
+    @Override
     public void refreshHighUser(Agent data, String highUser, String updater,
             String remark) {
 

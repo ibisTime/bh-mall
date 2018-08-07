@@ -170,9 +170,9 @@
 	,re_number = #{reNumber}
 	,level = #{level}
 	,apply_level = #{applyLevel}
-	,payAmount = #{payAmount}
+	,pay_amount = #{payAmount}
 	
-	,payPdf = #{payPdf}
+	,pay_pdf = #{payPdf}
 	,to_user_id = #{toUserId}
 	,apply_datetime = #{applyDatetime}
 	,approver = #{approver}
@@ -181,7 +181,20 @@
 	,approve_datetime = #{approveDatetime}
 	,remark = #{remark}
 	WHERE user_id = #{userId}                       	
-	</update>                                           	
+	</update>         
+	
+	<update id="approve_sjForm" parameterType="sjForm">
+	UPDATE tbh_sj_form
+	SET
+	real_name = #{realName}
+	,status = #{status}
+	,approver = #{approver}
+	,approve_name = #{approveName}
+	
+	,approve_datetime = #{approveDatetime}
+	,remark = #{remark}
+	WHERE user_id = #{userId}                       	
+	</update>                                                                   	
 	                                                    	
 </mapper>                                               	
                                                         		

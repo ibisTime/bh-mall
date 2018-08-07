@@ -80,6 +80,8 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
      */
     public void resetBindMobile(Agent user);
 
+    public void refreshLevel(Agent user);
+
     /**
      * 查询下级代理 
      * @param condition

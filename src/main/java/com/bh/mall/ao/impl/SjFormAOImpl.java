@@ -132,7 +132,7 @@ public class SjFormAOImpl implements ISjFormAO {
         String toUserId = data.getHighUserId();
 
         // 申请等级为董事的代理，直接由平台审核
-        if (EAgentLevel.ONE.getCode().equals(highLevel)) {
+        if (EAgentLevel.ONE.getCode().equals(newLevel)) {
             status = ESjFormStatus.COMPANY_APPROVE.getCode();
             // 校验团队名称
             if (StringUtils.isBlank(teamName)) {

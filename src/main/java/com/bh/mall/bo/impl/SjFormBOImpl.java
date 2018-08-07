@@ -73,7 +73,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         sjForm.setPayAmount(StringValidater.toLong(payAmount));
         Date date = new Date();
         sjForm.setApplyDatetime(date);
-        sjFormDAO.update(data);
+        sjFormDAO.update(sjForm);
 
         return agentLogBO.applySjForm(sjForm, data);
     }
@@ -87,6 +87,10 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         sjForm.setApproveDatetime(date);
         sjForm.setRemark(remark);
         agentLogBO.applySjForm(sjForm, agent);
+
+        Agent user = agentBO.getAgent(sjForm.getUserId());
+        user.setLevel(sjForm.getApplyLevel());
+        agentBO.refreshLevel(user);
         sjFormDAO.approveSjForm(sjForm);
     }
 
