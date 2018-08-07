@@ -8,114 +8,65 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年8月1日 下午4:01:42 
  * @history:
  */
-public class XN627900Req extends APageReq {
+public class XN627900Req {
 
-    private static final long serialVersionUID = 673666854499244469L;
+    // （必填）下单人
+    @NotBlank(message = "下单人不能为空")
+    private String applyUser;
 
-    // 编号(必填)
-    private String code;
+    // （必填） 订单归属人
+    @NotBlank(message = "订单归属人不能为空")
+    private String toUserId;
 
-    // 内购产品编号
-    @NotBlank
-    private String innerProductCode;
+    // （必填）产品规格编号
+    @NotBlank(message = "产品规格编号不能为空")
+    private String specsCode;
 
-    // 规格名称
-    @NotBlank
-    private String name;
+    // （必填）数量
+    @NotBlank(message = "数量不能为空")
+    private String quantity;
 
-    // 规格包含数量
-    @NotBlank
-    private String number;
+    // （选填）下单备注
+    private String applyNote;
 
-    // 重量
-    @NotBlank
-    private String weight;
-
-    // 单价
-    @NotBlank
-    private String price;
-
-    // 关联规格编号
-    private String refCode;
-
-    // 是否可拆单
-    @NotBlank
-    private String isSingle;
-
-    // 拆单数量
-    @NotBlank
-    private String singleNumber;
-
-    public String getCode() {
-        return code;
+    public String getApplyUser() {
+        return applyUser;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public String getToUserId() {
+        return toUserId;
     }
 
-    public String getInnerProductCode() {
-        return innerProductCode;
+    public String getSpecsCode() {
+        return specsCode;
     }
 
-    public void setInnerProductCode(String innerProductCode) {
-        this.innerProductCode = innerProductCode;
+    public String getQuantity() {
+        return quantity;
     }
 
-    public String getName() {
-        return name;
+    public String getApplyNote() {
+        return applyNote;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
     }
 
-    public String getNumber() {
-        return number;
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
-    public String getWeight() {
-        return weight;
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getRefCode() {
-        return refCode;
-    }
-
-    public void setRefCode(String refCode) {
-        this.refCode = refCode;
-    }
-
-    public String getIsSingle() {
-        return isSingle;
-    }
-
-    public void setIsSingle(String isSingle) {
-        this.isSingle = isSingle;
-    }
-
-    public String getSingleNumber() {
-        return singleNumber;
-    }
-
-    public void setSingleNumber(String singleNumber) {
-        this.singleNumber = singleNumber;
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
     }
 
 }

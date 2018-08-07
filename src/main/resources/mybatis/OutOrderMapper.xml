@@ -12,7 +12,7 @@
 		<result column="product_name" property="productName" />
 		<result column="specs_code" property="specsCode" />
 		<result column="specs_name" property="specsName" />
-		<result column="bar_code" property="barCode" />
+		<result column="pro_code" property="proCode" />
 		<result column="pic" property="pic" />
 		<result column="quantity" property="quantity" />
 		
@@ -49,7 +49,7 @@
 		
 		<result column="logistics_company" property="logisticsCompany" />
 		<result column="pdf" property="pdf" />
-		<result column="bar_code" property="barCode" />
+		<result column="pro_code" property="proCode" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="update_note" property="updateNote" />
@@ -95,12 +95,6 @@
 						#{item}
 					</foreach>
 				</when>
-				<when test="fialStatus != null and fialStatus > 0 ">
-					AND t.status NOT IN
-					<foreach collection="fialStatus" index="index" item="item" open="(" separator="," close=")">
-						#{item}
-					</foreach>
-				</when>
 			</choose>
 			<if test="keyword != null and keyword != '' ">
 				AND (t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%" or t.team_name like "%"#{keyword}"%" )
@@ -112,20 +106,8 @@
 				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
 			</if>
 			
-			
-			<choose>
-				<when test="level != null and level != '' ">
-					AND t.level = #{level}
-				</when>
-				<when test="levelList != null and levelList.size() > 0 ">
-					AND t.level IN
-					<foreach collection="levelList" index="index" item="item" open="(" separator="," close=")" >
-						#{item}
-					</foreach>
-				</when>
-			</choose>
-			<if test="barCode != null and barCode != '' ">
-				AND t.bar_code = #{barCode}
+			<if test="proCode != null and proCode != '' ">
+				AND t.pro_code = #{proCode}
 			</if>
 			<if test="deliver != null and deliver != '' ">
 				AND t.deliver = #{deliver}
@@ -144,7 +126,7 @@
 		,t.product_name
 		,t.specs_code
 		,t.specs_name
-		,t.bar_code
+		,t.pro_code
 		,t.pic
 		,t.quantity
 		
@@ -178,7 +160,7 @@
 		,t.delive_datetime
 		,t.logistics_code
 		,t.logistics_company
-		,t.bar_code
+		,t.pro_code
 		,t.pdf
 		
 		,t.updater
@@ -190,7 +172,7 @@
 		,t.approve_note
 		,t.remark
 		FROM
-		tbh_out_order 
+		tbh_out_order t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -217,7 +199,7 @@
 		
 		,specs_code
 		,specs_name
-		,bar_code
+		,pro_code
 		,pic
 		,quantity
 		,price
@@ -250,7 +232,7 @@
 		
 		,#{specsCode}
 		,#{specsName}
-		,#{barCode}
+		,#{proCode}
 		,#{pic}
 		,#{quantity}
 		,#{price}
@@ -313,7 +295,7 @@
 		,logistics_company = #{logisticsCompany}
 		,pdf = #{pdf}
 		
-		,bar_code = #{barCode}
+		,pro_code = #{proCode}
 		,is_company_send = #{isCompanySend}
 		,status = #{status}
 		,remark = #{remark}

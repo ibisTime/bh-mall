@@ -25,17 +25,6 @@ public class InnerSpecsAOImpl implements IInnerSpecsAO {
         String code = OrderNoGenerater.generate("IS");
         InnerSpecs data = new InnerSpecs();
 
-        data.setCode(code);
-        data.setInnerProductCode(req.getInnerProductCode());
-        data.setName(req.getName());
-        data.setNumber(Integer.valueOf(req.getNumber()));
-        data.setWeight(Integer.valueOf(req.getWeight()));
-
-        data.setPrice(Integer.valueOf(req.getWeight()));
-        data.setRefCode(req.getRefCode());
-        data.setIsSingle(req.getIsSingle());
-        data.setSingleNumber(Integer.valueOf(req.getSingleNumber()));
-
         innerSpecsBO.saveInnerSpecs(data);
         return code;
     }

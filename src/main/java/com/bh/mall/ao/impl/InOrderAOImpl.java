@@ -47,8 +47,6 @@ import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.TjAward;
 import com.bh.mall.domain.Ware;
-import com.bh.mall.dto.req.XN627640Req;
-import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
@@ -64,7 +62,6 @@ import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
@@ -121,25 +118,26 @@ public class InOrderAOImpl implements IInOrderAO {
 
     @Override
     @Transactional
-    public List<String> addInOrder(XN627640Req req) {
+    public List<String> addInOrder(List<String> codeList, String applyUser,
+            String applyNote) {
         // 下单人及下单代理
-        Agent applyUser = agentBO.getAgent(req.getApplyUser());
+        Agent applyAgent = agentBO.getAgent(applyUser);
 
         // 团队长
-        Agent teamLeader = agentBO.getTeamLeader(applyUser.getTeamName());
+        Agent teamLeader = agentBO.getTeamLeader(applyAgent.getTeamName());
 
         // 获取订单归属人
         String toUserName = null;
-        if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
+        if (agentBO.isHighest(applyAgent.getUserId())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(applyAgent.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
-            Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
+            Agent highUser = agentBO.getAgent(applyAgent.getHighUserId());
             toUserName = highUser.getRealName();
         }
 
         List<String> list = new ArrayList<String>();
-        for (String code : req.getCartList()) {
+        for (String code : codeList) {
             Cart cart = cartBO.getCart(code);
             Product pData = productBO.getProduct(cart.getProductCode());
             Specs specs = specsBO.getSpecs(cart.getSpecsCode());
@@ -147,7 +145,7 @@ public class InOrderAOImpl implements IInOrderAO {
                 throw new BizException("xn0000", "产品包含未上架商品,不能下单");
             }
             AgentPrice agentPrice = agentPriceBO
-                .getPriceByLevel(specs.getCode(), applyUser.getLevel());
+                .getPriceByLevel(specs.getCode(), applyAgent.getLevel());
 
             // 检查是否可购买
             if (EBoolean.NO.getCode().equals(agentPrice.getIsBuy())) {
@@ -155,15 +153,16 @@ public class InOrderAOImpl implements IInOrderAO {
             }
 
             // 检查限购
-            this.checkLimitNumber(applyUser, specs, agentPrice,
+            this.checkLimitNumber(applyAgent, specs, agentPrice,
                 cart.getQuantity());
 
-            String orderCode = inOrderBO.saveInOrder(applyUser.getUserId(),
-                applyUser.getRealName(), applyUser.getLevel(),
-                applyUser.getTeamName(), applyUser.getHighUserId(), toUserName,
-                teamLeader.getRealName(), pData.getCode(), pData.getName(),
-                specs.getCode(), specs.getName(), pData.getAdvPic(),
-                agentPrice.getPrice(), cart.getQuantity(), req.getApplyNote());
+            String orderCode = inOrderBO.saveInOrder(applyAgent.getUserId(),
+                applyAgent.getRealName(), applyAgent.getLevel(),
+                applyAgent.getTeamName(), applyAgent.getHighUserId(),
+                toUserName, teamLeader.getRealName(), pData.getCode(),
+                pData.getName(), specs.getCode(), specs.getName(),
+                pData.getAdvPic(), agentPrice.getPrice(), cart.getQuantity(),
+                applyNote);
             list.add(orderCode);
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -173,38 +172,37 @@ public class InOrderAOImpl implements IInOrderAO {
 
     @Override
     @Transactional
-    public String addInOrderNoCart(XN627641Req req) {
-        Agent applyUser = agentBO.getAgent(req.getApplyUser());
-        Specs specs = specsBO.getSpecs(req.getSpecsCode());
+    public String addInOrderNoCart(String applyUser, String specsCode,
+            Integer quantity, String applyNote) {
+        Agent applyAgent = agentBO.getAgent(applyUser);
+        Specs specs = specsBO.getSpecs(specsCode);
         Product pData = productBO.getProduct(specs.getProductCode());
 
         // 团队长
-        Agent teamLeader = agentBO.getTeamLeader(applyUser.getTeamName());
+        Agent teamLeader = agentBO.getTeamLeader(applyAgent.getTeamName());
 
         // 获取订单归属人
         String toUserName = null;
-        if (agentBO.isHighest(applyUser.getUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSUser(applyUser.getHighUserId());
+        if (agentBO.isHighest(applyAgent.getUserId())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(applyAgent.getHighUserId());
             toUserName = sysUser.getRealName();
         } else {
-            Agent highUser = agentBO.getAgent(applyUser.getHighUserId());
+            Agent highUser = agentBO.getAgent(applyAgent.getHighUserId());
             toUserName = highUser.getRealName();
         }
 
         // 获取该产品中最小规格的数量
         int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
         AgentLevel agentLevel = agentLevelBO
-            .getAgentByLevel(applyUser.getLevel());
+            .getAgentByLevel(applyAgent.getLevel());
 
         // 非最高等级代理，检查上级云仓
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agentLevel
             .getLevel()) {
-            wareBO.checkProduct(req.getToUser(), req.getSpecsCode());
+            wareBO.checkProduct(applyAgent.getUserId(), specsCode);
         } else {
             // 非最高等级代理，扣减产品库存
-            Integer nowNumber = pData.getRealNumber()
-                    - (StringValidater.toInteger(req.getQuantity())
-                            * minNumber);
+            Integer nowNumber = pData.getRealNumber() - (quantity * minNumber);
             if (nowNumber < 0) {
                 throw new BizException("xn00000", "产品库存不足");
             }
@@ -212,10 +210,9 @@ public class InOrderAOImpl implements IInOrderAO {
 
         // 门槛余额是否高于限制
         AgentPrice agentPrice = agentPriceBO.getPriceByLevel(specs.getCode(),
-            applyUser.getLevel());
-        Long amount = StringValidater.toInteger(req.getQuantity())
-                * agentPrice.getPrice();
-        Account account = accountBO.getAccountByUser(applyUser.getUserId(),
+            applyAgent.getLevel());
+        Long amount = quantity * agentPrice.getPrice();
+        Account account = accountBO.getAccountByUser(applyAgent.getUserId(),
             ECurrency.MK_CNY.getCode());
 
         // 门槛最低余额为零
@@ -234,19 +231,17 @@ public class InOrderAOImpl implements IInOrderAO {
         }
 
         // 检查起购数量
-        if (agentPrice.getStartNumber() > StringValidater
-            .toInteger(req.getQuantity())) {
+        if (agentPrice.getStartNumber() > quantity) {
             throw new BizException("xn0000",
                 "您购买的数量不能低于" + agentPrice.getStartNumber() + "]");
         }
 
-        return inOrderBO.saveInOrder(applyUser.getUserId(),
-            applyUser.getRealName(), applyUser.getLevel(),
-            applyUser.getTeamName(), applyUser.getHighUserId(), toUserName,
+        return inOrderBO.saveInOrder(applyAgent.getUserId(),
+            applyAgent.getRealName(), applyAgent.getLevel(),
+            applyAgent.getTeamName(), applyAgent.getHighUserId(), toUserName,
             teamLeader.getRealName(), pData.getCode(), pData.getName(),
             specs.getCode(), specs.getName(), pData.getAdvPic(),
-            agentPrice.getPrice(), StringValidater.toInteger(req.getQuantity()),
-            req.getApplyNote());
+            agentPrice.getPrice(), quantity, applyNote);
     }
 
     @Override
@@ -289,6 +284,8 @@ public class InOrderAOImpl implements IInOrderAO {
                 data.setPayAmount(data.getAmount());
                 data.setStatus(status);
                 inOrderBO.paySuccess(data);
+
+                // 扣减上级库存
 
                 result = new BooleanRes(true);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {

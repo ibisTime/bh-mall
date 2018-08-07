@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.InOrder;
-import com.bh.mall.dto.req.XN627640Req;
-import com.bh.mall.dto.req.XN627641Req;
 
 /**
  * 云仓订单
@@ -21,20 +19,12 @@ public interface IInOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 提交订单
-    public List<String> addInOrder(XN627640Req req);
-
-    // 分页查询
-    public Paginable<InOrder> queryInOrderPage(int start, int limit,
-            InOrder condition);
-
-    // 列表查询
-    public List<InOrder> queryInOrderList(InOrder condition);
-
-    // 获取详情
-    public InOrder getInOrder(String code);
+    public List<String> addInOrder(List<String> codeList, String applyUser,
+            String applyNote);
 
     // 提交订单（无购物车）
-    public String addInOrderNoCart(XN627641Req req);
+    public String addInOrderNoCart(String applyUser, String specsCode,
+            Integer quantity, String applyNote);
 
     // 付款
     public Object payInOrder(List<String> codeList, String payType);
@@ -51,5 +41,15 @@ public interface IInOrderAO {
 
     // 订单作废
     public void invalidInOrder(String code, String approver, String remark);
+
+    // 分页查询
+    public Paginable<InOrder> queryInOrderPage(int start, int limit,
+            InOrder condition);
+
+    // 列表查询
+    public List<InOrder> queryInOrderList(InOrder condition);
+
+    // 获取详情
+    public InOrder getInOrder(String code);
 
 }

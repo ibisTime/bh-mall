@@ -436,7 +436,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
-            Agent uData = agentBO.getAgent(data.getApplyUser());
             data.setPayType(EChannelType.WeChat_XCX.getCode());
             Object payResult = this.payWXH5(data,
                 PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
@@ -539,14 +538,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-
-        // 获取开放云仓的等级
-        List<Integer> levelList = new ArrayList<Integer>();
-        List<AgentLevel> agentList = agentLevelBO.getAgentHaveWH();
-        for (AgentLevel agent : agentList) {
-            levelList.add(agent.getLevel());
-        }
-        condition.setLevelList(levelList);
 
         Paginable<OutOrder> page = outOrderBO.getPaginable(start, limit,
             condition);
