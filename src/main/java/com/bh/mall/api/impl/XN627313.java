@@ -26,7 +26,7 @@ public class XN627313 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         agentAO.editUserReferee(req.getUserId(), req.getUserReferee(),
-            req.getUpdater());
+            req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

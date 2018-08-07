@@ -130,6 +130,9 @@ public class OutOrder extends ABaseDO {
     // 物流公司
     private String logisticsCompany;
 
+    // 箱码
+    private String barCode;
+
     // 更新人
     private String updater;
 
@@ -686,6 +689,14 @@ public class OutOrder extends ABaseDO {
 
     public void setTeamLeader(String teamLeader) {
         this.teamLeader = teamLeader;
+    }
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
     }
 
 }

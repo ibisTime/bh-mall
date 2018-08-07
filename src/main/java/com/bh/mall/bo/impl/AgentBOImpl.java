@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
@@ -21,7 +22,6 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
-import com.bh.mall.enums.EAgentType;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -29,7 +29,10 @@ import com.bh.mall.exception.BizException;
 public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     @Autowired
-    private IAgentDAO agentDAO;
+    IAgentDAO agentDAO;
+
+    @Autowired
+    IAgentLogBO agentLogBO;
 
     /*************** 注册并保存新用户 **********************/
     // 注册
@@ -279,10 +282,19 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
      * @see com.bh.mall.bo.IAgentBO#refreshAgent(com.bh.mall.domain.Agent)
      */
     @Override
-    public void refreshAgent(Agent data) {
-        if (data != null) {
-            agentDAO.update(data);
-        }
+    public void refreshAgent(Agent data, String wxId, String mobile,
+            String realName, String teamName, String province, String city,
+            String area, String address) {
+        data.setWxId(wxId);
+        data.setMobile(mobile);
+        data.setRealName(realName);
+        data.setTeamName(teamName);
+        data.setProvince(province);
+
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
+        agentDAO.update(data);
     }
 
     @Override
@@ -308,40 +320,39 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public void refreshHighUser(Agent data, String highUser, String updater) {
+    public void refreshHighUser(Agent data, String highUser, String updater,
+            String remark) {
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
+        data.setHighUserId(highUser);
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
 
-        Agent alData = new Agent();
-        alData.setLastAgentLog(code);
-        alData.setUserId(data.getUserId());
-        alData.setStatus(EAgentType.Update.getCode());
-        agentDAO.updateHigh(alData);
+        String logCode = agentLogBO.updateAgent(data);
+        data.setLastAgentLog(logCode);
+        agentDAO.updateHigh(data);
 
     }
 
     @Override
-    public void refreshReferee(Agent data, String userReferee, String updater) {
+    public void refreshReferee(Agent data, String referrer, String updater,
+            String remark) {
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        data.setLastAgentLog(code);
+        data.setReferrer(referrer);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+
+        String logCode = agentLogBO.updateAgent(data);
+        data.setLastAgentLog(logCode);
         agentDAO.updateUserReferee(data);
 
     }
 
     @Override
     public void refreshManager(Agent data, String manager, String updater) {
-
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        data.setLastAgentLog(code);
-        data.setHighUserId(manager);
+        data.setManager(manager);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         agentDAO.updateManager(data);
@@ -549,6 +560,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             agentDAO.resetUserReferee(agent);
         }
 
+    }
+
+    @Override
+    public void refreshLog(Agent data, String logCode) {
+        data.setLastAgentLog(logCode);
+        agentDAO.updateLastLog(data);
     }
 
 }

@@ -13,6 +13,7 @@
 		<result column="level" property="level" />
 		<result column="apply_level" property="applyLevel" />
 		<result column="high_user_id" property="highUserId" />
+		<result column="high_user_name" property="highUserName" />
 		<result column="referrer" property="referrer" />
 				
 		<result column="team_name" property="teamName" />
@@ -47,8 +48,8 @@
 				AND t.status = #{status}
 			</if>
 			
-			<if test="keyWord != null and keyWord != ''">
-				AND (t.wx_id LIKE "%${keyWord}%" OR t.real_name LIKE "%${keyWord}%" OR t.team_name LIKE "%${keyWord}%")
+			<if test="keyword != null and keyword != ''">
+				AND (t.wx_id LIKE "%#{keyword}%" OR t.real_name LIKE "%#{keyword}%" OR t.team_name LIKE "%#{keyword}%")
 			</if>
 			
 			<if test="level != null and level != '' ">
@@ -86,6 +87,7 @@
 		,t.level
 		,t.apply_level
 		,t.high_user_id
+		,t.high_user_name
 		,t.referrer
 		,t.introducer
 		
@@ -136,6 +138,7 @@
 		,level
 		,apply_level
 		,high_user_id
+		,high_user_name
 		,referrer
 		,introducer
 		
@@ -168,6 +171,7 @@
 		,#{level}
 		,#{applyLevel}
 		,#{highUserId}
+		,#{highUserName}
 		,#{referrer}
 		,#{introducer}
 		,#{teamName}

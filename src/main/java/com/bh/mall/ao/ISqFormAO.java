@@ -18,7 +18,7 @@ import com.bh.mall.dto.req.XN627271Req;
 @Component
 public interface ISqFormAO {
 
-    static final String DEFAULT_ORDER_COLUMN = "code";
+    static final String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 代理申请，包含推荐人
     public void applyHaveUserReferee(XN627270Req req);

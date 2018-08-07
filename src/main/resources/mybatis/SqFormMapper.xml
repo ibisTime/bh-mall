@@ -185,5 +185,15 @@
 		WHERE user_id= #{userId}
 	</update>
 	
+		<update id="cancel_sqForm" parameterType="sqForm">
+		UPDATE tbh_sq_form
+		SET		
+		status = #{status}
+		,to_user_id = #{toUserId}
+        ,apply_datetime = #{applyDatetime}
+		,status = #{status}
+		WHERE user_id= #{userId}
+	</update>
+	
 	
 </mapper>

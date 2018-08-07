@@ -69,15 +69,19 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public void refreshWxInfo(String userId, String type, String unionId,
             String openId, String nickname, String photo);
 
-    public void refreshReferee(Agent data, String userReferee, String updater);
+    public void refreshReferee(Agent data, String userReferee, String updater,
+            String remark);
 
     public void refreshPhoto(String userId, String photo);
 
-    public void refreshAgent(Agent data);
+    public void refreshAgent(Agent data, String wxId, String mobile,
+            String realName, String teamName, String province, String city,
+            String area, String address);
 
     public void resetBindMobile(Agent buser, String newMobile);
 
-    public void refreshHighUser(Agent data, String highUser, String updater);
+    public void refreshHighUser(Agent data, String highUser, String updater,
+            String remark);
 
     public void refreshManager(Agent data, String manager, String updater);
 
@@ -114,5 +118,8 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     // 清空推荐关系
     public void resetUserReferee(String userId);
+
+    // 最后代理记录
+    public void refreshLog(Agent agent, String logCode);
 
 }

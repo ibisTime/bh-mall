@@ -18,9 +18,12 @@ public class XN627312Req {
     @NotBlank(message = "上级不能为空")
     private String highUser;
 
-    // （选填）更新人
+    // （必填）更新人
     @NotBlank(message = "更新人不能为空")
     private String updater;
+
+    // （选填 ）备注
+    private String remark;
 
     public String getUserId() {
         return userId;
@@ -44,6 +47,14 @@ public class XN627312Req {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

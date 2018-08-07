@@ -41,6 +41,9 @@ public class AgentLog extends ABaseDO {
     // 上级
     private String highUserId;
 
+    // 上级名称
+    private String highUserName;
+
     // 推荐人
     private String referrer;
 
@@ -111,14 +114,17 @@ public class AgentLog extends ABaseDO {
     // 介绍人姓名
     private String introduceName;
 
-    // 上级用户
-    private String highUserName;
-
     // 关键字（用户名称、团队名称、手机号模糊查询）
     private String keyword;
 
+    // 申请开始时间
+    private Date applyDatetimeStart;
+
+    // 申请结束时间
+    private Date applyDatetimeEnd;
+
     // 审核开始时间
-    private Date approveDatetimeStrat;
+    private Date approveDatetimeStart;
 
     // 审核结束时间
     private Date approveDatetimeEnd;
@@ -403,20 +409,40 @@ public class AgentLog extends ABaseDO {
         this.keyword = keyword;
     }
 
-    public Date getApproveDatetimeStrat() {
-        return approveDatetimeStrat;
+    public Date getApproveDatetimeStart() {
+        return approveDatetimeStart;
     }
 
     public Date getApproveDatetimeEnd() {
         return approveDatetimeEnd;
     }
 
-    public void setApproveDatetimeStrat(Date approveDatetimeStrat) {
-        this.approveDatetimeStrat = approveDatetimeStrat;
+    public void setApproveDatetimeStart(Date approveDatetimeStart) {
+        this.approveDatetimeStart = approveDatetimeStart;
     }
 
     public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
         this.approveDatetimeEnd = approveDatetimeEnd;
+    }
+
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeStrat(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
     }
 
 }

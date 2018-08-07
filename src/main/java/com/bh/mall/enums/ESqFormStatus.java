@@ -5,9 +5,10 @@ import java.util.Map;
 
 public enum ESqFormStatus {
 
-    TO_APPROVE("0", "待审核授权"), BC_ZL("1", "补充授权资料"), COMPANY_APPROVE("2",
-            "待公司审核授权"), APPROVED("3",
-                    "已授权"), NO_THROUGH("4", "授权未通过"), TO_CANCEL("5", "申请退出");
+    TO_APPROVE("0", "待上级审核授权"), BC_ZL("1", "补充授权资料"), COMPANY_APPROVE("2",
+            "待公司审核授权"), APPROVED("3", "已授权"), NO_THROUGH("4",
+                    "授权未通过"), TO_CANCEL("5",
+                            "申请退出待上级审核"), TO_COMPANY_CANCLE("6", "申请退出待公司审核");
 
     ESqFormStatus(String code, String value) {
         this.code = code;

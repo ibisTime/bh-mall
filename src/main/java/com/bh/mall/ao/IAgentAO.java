@@ -34,11 +34,12 @@ public interface IAgentAO {
             String smsCaptcha);
 
     // 修改上级 627312
-    public void editHighUser(String userId, String highUser, String updater);
+    public void editHighUser(String userId, String highUser, String updater,
+            String remark);
 
     // 修改推荐人 627313
     public void editUserReferee(String userId, String userReferee,
-            String updater);
+            String updater, String remark);
 
     // 修改管理员 627317
     public void editManager(String userId, String manager, String updater);

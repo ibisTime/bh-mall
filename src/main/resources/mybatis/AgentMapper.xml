@@ -495,5 +495,24 @@
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
+	
+		
+	<update id="update_referee" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		referrer = #{referrer}
+		WHERE user_id = #{userId}
+	</update>
 
+	<update id="reset_info" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		mobile = #{mobile}
+		,referrer = #{referrer}
+		,introducer = #{introducer}
+		,high_user_id = #{highUserId}
+		,id_no = #{idNo}
+		,team_name = #{teamName}
+		WHERE user_id = #{userId}
+	</update>
 </mapper>

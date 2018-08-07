@@ -26,7 +26,7 @@ public class XN627312 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         agentAO.editHighUser(req.getUserId(), req.getHighUser(),
-            req.getUpdater());
+            req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

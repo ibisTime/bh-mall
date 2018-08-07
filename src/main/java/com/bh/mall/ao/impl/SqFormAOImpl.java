@@ -321,11 +321,9 @@ public class SqFormAOImpl implements ISqFormAO {
     public void cancelSqFormByB(String userId, String approver, String result,
             String remark) {
         SqForm sqForm = sqFormBO.getSqForm(userId);
-
         Agent agent = agentBO.getAgent(userId);
 
-        SqForm data = new SqForm();
-        if (!EUserStatus.TO_CANCEL.getCode().equals(data.getStatus())) {
+        if (!ESqFormStatus.TO_CANCEL.getCode().equals(sqForm.getStatus())) {
             throw new BizException("xn000", "该代理未申请退出状态");
         }
 
@@ -339,11 +337,11 @@ public class SqFormAOImpl implements ISqFormAO {
                 .equals(agentLevel.getIsCompanyImpower())) {
                 status = EUserStatus.TO_COMPANYCANCEL.getCode();
             } else {
-                Account account = accountBO.getAccountByUser(data.getUserId(),
+                Account account = accountBO.getAccountByUser(sqForm.getUserId(),
                     ECurrency.MK_CNY.getCode());
                 // 账户清零
                 accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, data.getUserId(),
+                    EChannelType.NBZ, null, null, sqForm.getUserId(),
                     EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
                     -account.getAmount());
 
@@ -365,9 +363,9 @@ public class SqFormAOImpl implements ISqFormAO {
     public void cancelSqFormByP(String userId, String approver, String result,
             String remark) {
         Agent agent = agentBO.getAgent(userId);
-
-        SqForm data = new SqForm();
-        if (!EUserStatus.TO_COMPANYCANCEL.getCode().equals(data.getStatus())) {
+        SqForm data = sqFormBO.getSqForm(userId);
+        if (!ESqFormStatus.TO_COMPANY_CANCLE.getCode()
+            .equals(data.getStatus())) {
             throw new BizException("xn000", "该代理未申请退出");
         }
 
@@ -457,6 +455,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Override
     public void toQuit(String userId) {
+        SqForm sqForm = sqFormBO.getSqForm(userId);
         Agent agent = agentBO.getAgent(userId);
 
         // 是否有下级
@@ -491,6 +490,16 @@ public class SqFormAOImpl implements ISqFormAO {
         if (ioCount != 0) {
             throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
         }
+
+        // 最搞级别代理申请，直接由公司审核
+        String status = ESqFormStatus.TO_CANCEL.getCode();
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
+            .getLevel()) {
+            status = ESqFormStatus.TO_COMPANY_CANCLE.getCode();
+        }
+
+        String logCode = sqFormBO.cancelSqForm(sqForm, status);
+        agentBO.refreshLog(agent, logCode);
     }
 
     private void approveSqForm(SqForm sqForm) {

@@ -104,7 +104,9 @@ public class SjFormAOImpl implements ISjFormAO {
             // 之前未实名
             if (StringUtils.isBlank(data.getIdNo())
                     || StringUtils.isBlank(data.getIdHand())) {
-                throw new BizException("xn00000", "升至该等级需完成实名认证");
+                if (StringUtils.isBlank(idNo) || StringUtils.isBlank(idHand)) {
+                    throw new BizException("xn00000", "升至该等级需完成实名认证");
+                }
             }
 
             // 校验身份证号
@@ -116,7 +118,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         String status = EUserStatus.TO_UPGRADE.getCode();
         String toUserId = data.getHighUserId();
-        Agent highAgent = agentBO.getAgent(data.getHighUserId());
+
         // 申请等级为董事的代理，直接由平台审核
         if (EAgentLevel.ONE.getCode().equals(highLevel)) {
             EUserStatus.TO_COMPANYCANCEL.getCode();
@@ -127,10 +129,12 @@ public class SjFormAOImpl implements ISjFormAO {
             agentBO.checkTeamName(teamName);
             SYSUser sysUser = sysUserBO.getSYSUser();
             toUserId = sysUser.getUserId();
-        } else if (StringValidater.toInteger(newLevel) <= highAgent
-            .getLevel()) {
-            toUserId = this.getHighUser(data.getHighUserId(),
-                StringValidater.toInteger(newLevel));
+        } else {
+            Agent highAgent = agentBO.getAgent(data.getHighUserId());
+            if (StringValidater.toInteger(newLevel) <= highAgent.getLevel()) {
+                toUserId = this.getHighUser(data.getHighUserId(),
+                    StringValidater.toInteger(newLevel));
+            }
         }
 
         SjForm sjForm = sjFormBO.getSjForm(data.getUserId());

@@ -18,6 +18,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -44,6 +45,7 @@ import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
@@ -103,6 +105,9 @@ public class AgentAOImpl implements IAgentAO {
 
     @Autowired
     IAgentReportBO agentReportBO;
+
+    @Autowired
+    IAgentLogBO agentLogBO;
 
     // 微信注册
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
@@ -291,23 +296,31 @@ public class AgentAOImpl implements IAgentAO {
     public void editInformation(String userId, String wxId, String mobile,
             String realName, String teamName, String province, String city,
             String area, String address) {
-        Agent agent = agentBO.getAgent(userId);
+        Agent data = agentBO.getAgent(userId);
         // 一级代理修改团队名称，下级同步
-        if (agentBO.isHighest(agent.getUserId())) {
-            agentBO.refreshTeamName(agent, teamName);
-            this.editTeamName(agent.getUserId(), teamName);
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getLevel()) {
+            agentBO.refreshTeamName(data, teamName);
+            this.editTeamName(data.getUserId(), teamName);
         } else {
             // 非一级代理不允许修改团队名称
             throw new BizException("xn00000", "非最高等级代理的团队名称无法修改");
         }
+        agentBO.refreshAgent(data, wxId, mobile, realName, teamName, province,
+            city, area, address);
     }
 
     // 修改上级
     @Override
-    public void editHighUser(String userId, String highUser, String updater) {
+    public void editHighUser(String userId, String highUser, String updater,
+            String remark) {
         Agent data = agentBO.getAgent(userId);
-        Agent highAgent = agentBO.getAgent(highUser);
-        agentBO.refreshHighUser(data, highUser, updater);
+        agentBO.refreshHighUser(data, highUser, updater, remark);
+        String highUserId = highUser;
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getLevel()) {
+            highUserId = ESysUser.SYS_USER_BH.getCode();
+        }
 
         // 增肌上级门槛
         Account account = accountBO.getAccountByUser(data.getUserId(),
@@ -315,7 +328,7 @@ public class AgentAOImpl implements IAgentAO {
 
         if (0 != account.getAmount()) {
             accountBO.transAmountCZB(data.getUserId(),
-                ECurrency.MK_CNY.getCode(), highAgent.getUserId(),
+                ECurrency.MK_CNY.getCode(), highUserId,
                 ECurrency.MK_CNY.getCode(), account.getAmount(),
                 EBizType.AJ_XGSJ, EBizType.AJ_XGSJ.getValue(),
                 EBizType.AJ_XGSJ.getValue(), data.getUserId());
@@ -324,11 +337,14 @@ public class AgentAOImpl implements IAgentAO {
 
     // 修改推荐人
     @Override
-    public void editUserReferee(String userId, String userReferee,
-            String updater) {
+    public void editUserReferee(String userId, String referrer, String updater,
+            String remark) {
         Agent data = agentBO.getAgent(userId);
-        agentBO.getAgent(userReferee);
-        agentBO.refreshReferee(data, userReferee, updater);
+        Agent referrAgent = agentBO.getAgent(referrer);
+        if (referrAgent.getLevel() != data.getLevel()) {
+            throw new BizException("xn00000", "代理要与推荐人的等级相同哦");
+        }
+        agentBO.refreshReferee(data, referrAgent.getUserId(), updater, remark);
     }
 
     // 分页查询代理
@@ -345,7 +361,11 @@ public class AgentAOImpl implements IAgentAO {
                 data.setUserRefreeMobile(userRefree.getMobile());
             }
             // 介绍人转义
-            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            if (StringUtils.isNotBlank(data.getIntroducer())) {
+                Agent introducer = agentBO.getAgent(data.getIntroducer());
+                data.setIntroduceName(introducer.getRealName());
+            }
+
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
@@ -372,7 +392,10 @@ public class AgentAOImpl implements IAgentAO {
                 data.setUserRefreeMobile(userRefree.getMobile());
             }
             // 介绍人转义
-            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            if (StringUtils.isNotBlank(data.getIntroducer())) {
+                Agent introducer = agentBO.getAgent(data.getIntroducer());
+                data.setIntroduceName(introducer.getRealName());
+            }
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
@@ -399,7 +422,11 @@ public class AgentAOImpl implements IAgentAO {
                 data.setUserRefreeMobile(userRefree.getMobile());
             }
             // 介绍人转义
-            data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+            if (StringUtils.isNotBlank(data.getIntroducer())) {
+                Agent introducer = agentBO.getAgent(data.getIntroducer());
+                data.setUserRefreeName(introducer.getRealName());
+            }
+
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
@@ -460,7 +487,10 @@ public class AgentAOImpl implements IAgentAO {
             data.setUserRefreeMobile(userRefree.getMobile());
         }
         // 介绍人转义
-        data.setIntroduceName(agentBO.getAgentName(data.getIntroducer()));
+        if (StringUtils.isNotBlank(data.getIntroducer())) {
+            Agent introducer = agentBO.getAgent(data.getIntroducer());
+            data.setIntroduceName(introducer.getRealName());
+        }
         // 上级转义
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {

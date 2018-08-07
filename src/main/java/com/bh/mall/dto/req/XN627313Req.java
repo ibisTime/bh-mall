@@ -20,6 +20,9 @@ public class XN627313Req {
     @NotBlank(message = "更新人不能为空")
     private String updater;
 
+    // （选填）备注
+    private String remark;
+
     public String getUserId() {
         return userId;
     }
@@ -42,6 +45,14 @@ public class XN627313Req {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

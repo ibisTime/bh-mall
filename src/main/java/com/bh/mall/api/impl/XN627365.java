@@ -34,7 +34,7 @@ public class XN627365 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setKeyword(req.getKeyword());
 
-        condition.setApproveDatetimeStrat(DateUtil.strToDate(req.getDateStart(),
+        condition.setApproveDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setApproveDatetimeEnd(
             DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));

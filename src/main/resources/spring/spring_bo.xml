@@ -165,5 +165,10 @@
 	<bean id="innerSpecsBO" class="com.bh.mall.bo.impl.InnerSpecsBOImpl">
 		<property name="paginableDAO" ref="innerSpecsDAOImpl"/>
 	</bean>
+		
+	<bean id="agentLogBO" class="com.bh.mall.bo.impl.AgentLogBOImpl">
+		<property name="paginableDAO" ref="agentLogDAOImpl"/>
+	</bean>
+	
 	
 </beans>

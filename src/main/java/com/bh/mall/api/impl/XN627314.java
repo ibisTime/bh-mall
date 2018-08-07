@@ -23,9 +23,9 @@ public class XN627314 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.editInformation(req.getAddress(), req.getArea(), req.getCity(),
-            req.getMobile(), req.getProvince(), req.getRealName(),
-            req.getTeamName(), req.getUserId(), req.getWxId());
+        agentAO.editInformation(req.getUserId(), req.getWxId(), req.getMobile(),
+            req.getRealName(), req.getTeamName(), req.getProvince(),
+            req.getCity(), req.getArea(), req.getAddress());
         return new BooleanRes(true);
     }
 

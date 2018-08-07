@@ -67,7 +67,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setToUserId(sqForm.getToUserId());
         data.setTeamName(sqForm.getTeamName());
         data.setIntroducer(sqForm.getIntroducer());
-        data.setReferrerName(sqForm.getReferrer());
+        data.setReferrer(sqForm.getReferrer());
 
         data.setApplyDatetime(sqForm.getApplyDatetime());
         data.setProvince(sqForm.getProvince());
@@ -98,12 +98,12 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setWxId(agent.getWxId());
         data.setMobile(agent.getMobile());
 
+        data.setLevel(sjForm.getLevel());
         data.setApplyLevel(data.getApplyLevel());
         data.setToUserId(sjForm.getToUserId());
         data.setTeamName(sjForm.getTeamName());
         data.setIntroducer(agent.getIntroducer());
 
-        data.setApplyDatetime(sjForm.getApplyDatetime());
         data.setProvince(agent.getProvince());
         data.setCity(agent.getCity());
         data.setArea(agent.getAddress());
@@ -139,6 +139,39 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
             }
         }
         return data;
+    }
+
+    @Override
+    public String updateAgent(Agent agent) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentLog.getCode());
+        AgentLog data = new AgentLog();
+
+        data.setCode(code);
+        data.setApplyUser(agent.getUserId());
+        data.setRealName(agent.getRealName());
+        data.setWxId(agent.getWxId());
+        data.setMobile(agent.getMobile());
+
+        data.setApplyLevel(data.getApplyLevel());
+        data.setTeamName(agent.getTeamName());
+        data.setIntroducer(agent.getIntroducer());
+        data.setReferrer(agent.getReferrer());
+
+        data.setHighUserId(agent.getHighUserId());
+        data.setProvince(agent.getProvince());
+        data.setCity(agent.getCity());
+        data.setArea(agent.getAddress());
+        data.setAddress(agent.getAddress());
+
+        data.setStatus(agent.getStatus());
+        data.setApprover(agent.getApprover());
+        data.setApproveName(agent.getApproveName());
+        data.setApproveDatetime(agent.getApproveDatetime());
+        data.setRemark(agent.getRemark());
+
+        agentLogDAO.insert(data);
+        return code;
     }
 
 }
