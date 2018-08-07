@@ -11,7 +11,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.SjForm;
-import com.bh.mall.dto.req.XN627306Req;
+import com.bh.mall.dto.req.XN627305Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -26,7 +26,7 @@ import com.bh.mall.spring.SpringContextHolder;
 public class XN627305 extends AProcessor {
     private ISjFormAO sjFormAO = SpringContextHolder.getBean(ISjFormAO.class);
 
-    private XN627306Req req = null;
+    private XN627305Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -56,7 +56,7 @@ public class XN627305 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627306Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627305Req.class);
         ObjValidater.validateReq(req);
     }
 

@@ -2,6 +2,7 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IInOrderAO;
 import com.bh.mall.ao.IWareAO;
+import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentPriceBO;
+import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IInOrderBO;
+import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISpecsBO;
@@ -22,9 +26,11 @@ import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.AgentPrice;
+import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.Specs;
@@ -32,8 +38,12 @@ import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627805Res;
 import com.bh.mall.dto.res.XN627814Res;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.EChargeStatus;
+import com.bh.mall.enums.ECheckStatus;
+import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
@@ -70,6 +80,15 @@ public class WareAOImpl implements IWareAO {
 
     @Autowired
     IAddressBO addressBO;
+
+    @Autowired
+    IAccountBO accountBO;
+
+    @Autowired
+    IOutOrderBO outOrderBO;
+
+    @Autowired
+    IChargeBO chargeBO;
 
     // 分页查询
     @Override
@@ -325,96 +344,107 @@ public class WareAOImpl implements IWareAO {
 
     @Override
     public XN627805Res checkAmount(String userId) {
-        // XN627805Res res = new XN627805Res();
-        // Agent user = agentBO.getAgent(userId);
-        // // 门槛所需充值金额
-        // Long chargeAmount = 0L;
-        // String result = ECheckStatus.NORMAL.getCode();
-        // String isWare = EBoolean.YES.getCode();
-        //
-        // // 代理已通过审核
-        // if (null != user.getLevel() && 0 != user.getLevel()) {
-        // AgentLevel agent = agentLevelBO.getAgentByLevel(user.getLevel());
-        // AgentLevel impower = agentLevelBO.getAgentByLevel(user.getLevel());
-        //
-        // // 检查云仓红线
-        // Long whAmount = 0L;
-        // List<Ware> list = wareBO.getWareByUser(userId);
-        // for (Ware ware : list) {
-        // if (null != ware.getAmount()) {
-        // whAmount = whAmount + ware.getAmount();
-        // }
-        // }
-        //
-        // // 检查开启云仓代理的红线，
-        // if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
-        //
-        // // 是否完成授权单
-        // if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
-        // user.getUserId(), user.getImpowerDatetime())) {
-        // result = ECheckStatus.NO_Impwoer.getCode();
-        // }
-        //
-        // // 红线设置为零视为无限制
-        // if (0 < agent.getRedAmount()) {
-        // // 订单金额
-        // Long orderAmount = orderBO.getOrderByUser(user.getUserId());
-        // // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
-        // if (orderAmount < agent.getAmount()) {
-        // // result = ECheckStatus.TO_BUY.getCode();
-        // result = ECheckStatus.RED_LOW.getCode();
-        // }
-        // }
-        // // 未开启云仓，只检查是否完成授权单
-        // } else if (0 != impower.getMinCharge() && orderBO.checkImpowerOrder(
-        // user.getUserId(), user.getImpowerDatetime())) {
-        // // 未完成授权单
-        // result = ECheckStatus.RED_LOW.getCode();
-        // }
-        //
-        // // 检查门槛余额
-        // Account account = accountBO.getAccountNocheck(user.getUserId(),
-        // ECurrency.MK_CNY.getCode());
-        // if (null != account) {
-        // // 如果可剩余余额为零，不考虑等于的情况
-        // if (0 == agent.getMinSurplus() && account.getAmount() > 0) {
-        // result = ECheckStatus.MIN_LOW.getCode();
-        // } else if (0 != agent.getMinSurplus()
-        // && account.getAmount() >= agent.getMinSurplus()) {
-        // result = ECheckStatus.MIN_LOW.getCode();
-        // }
-        //
-        // }
-        //
-        // // 是否有过充值
-        // Long cAmount = 0L;
-        // List<Charge> charge = chargeBO.getChargeByUser(user.getUserId(),
-        // user.getImpowerDatetime());
-        // for (Charge charge2 : charge) {
-        // cAmount = cAmount + charge2.getAmount();
-        // }
-        //
-        // // 没有过充值，前去充值
-        // if (CollectionUtils.isEmpty(charge)) {
-        // result = ECheckStatus.To_Charge.getCode();
-        // chargeAmount = impower.getMinCharge() - cAmount;
-        //
-        // // 有过充值，但是钱在审核中
-        // } else {
-        // Charge condition = new Charge();
-        // condition.setApplyUser(user.getUserId());
-        // condition.setStatus(EChargeStatus.TO_Cancel.getCode());
-        // condition.setApplyDatetimeStart(user.getImpowerDatetime());
-        // charge = chargeBO.queryChargeList(condition);
-        // if (CollectionUtils.isNotEmpty(charge)) {
-        // result = ECheckStatus.Charging.getCode();
-        // }
-        // }
-        // res = new XN627805Res(result, agent.getRedAmount(),
-        // agent.getMinSurplus(), agent.getAmount(), chargeAmount,
-        // user.getLevel(), isWare);
-        // }
-        // return res;
-        return new XN627805Res();
+        XN627805Res res = new XN627805Res();
+        Agent agent = agentBO.getAgent(userId);
+
+        // 代理已通过审核
+        if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+            AgentLevel agentLevel = agentLevelBO
+                .getAgentByLevel(agent.getLevel());
+
+            Long chargeAmount = agentLevel.getMinCharge();
+            String result = ECheckStatus.NORMAL.getCode();
+            String isWareHouse = EBoolean.YES.getCode();
+
+            // 检查云仓红线
+            Long whAmount = 0L;
+            List<Ware> list = wareBO.getWareByUser(userId);
+            for (Ware wareHouse : list) {
+                if (null != wareHouse.getAmount()) {
+                    whAmount = whAmount + wareHouse.getAmount();
+                }
+            }
+
+            // 检查开启云仓代理的红线，
+            if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
+
+                // 是否完成授权单
+                if (0 != agentLevel.getMinCharge()
+                        && outOrderBO.checkImpowerOrder(agent.getUserId(),
+                            agent.getImpowerDatetime())) {
+                    result = ECheckStatus.NO_Impwoer.getCode();
+                }
+
+                // 红线设置为零视为无限制
+                if (0 < agentLevel.getRedAmount()) {
+                    // 订单金额
+                    Long orderAmount = outOrderBO
+                        .getOutOrderByUser(agent.getUserId());
+                    // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
+                    if (orderAmount < agentLevel.getAmount()) {
+                        // result = ECheckStatus.TO_BUY.getCode();
+                        result = ECheckStatus.RED_LOW.getCode();
+                    }
+                }
+                // 未开启云仓，只检查是否完成授权单
+            } else if (0 != agentLevel.getMinCharge()
+                    && outOrderBO.checkImpowerOrder(agent.getUserId(),
+                        agent.getImpowerDatetime())) {
+                // 未完成授权单
+                // result = ECheckStatus.NO_WAREHOUSE.getCode();
+                result = ECheckStatus.RED_LOW.getCode();
+            }
+
+            // 最后一条轨迹为升级时，检查升级单
+            // AgencyLog log = agencyLogBO.getAgencyLog(user.getLastAgentLog());
+            // if (EUserStatus.UPGRADED.getCode().equals(log.getStatus())) {
+            // amount = agent.getAmount();
+            // result = ECheckStatus.NO_Upgrae.getCode();
+            // }
+
+            // 检查门槛余额
+            Account account = accountBO.getAccountNocheck(agent.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            if (null != account) {
+                // 如果可剩余余额为零，不考虑等于的情况
+                if (0 == agentLevel.getMinSurplus()
+                        && account.getAmount() > 0) {
+                    result = ECheckStatus.MIN_LOW.getCode();
+                } else if (0 != agentLevel.getMinSurplus()
+                        && account.getAmount() >= agentLevel.getMinSurplus()) {
+                    result = ECheckStatus.MIN_LOW.getCode();
+                }
+
+            }
+
+            // 是否有过充值
+            Long cAmount = 0L;
+            List<Charge> charge = chargeBO.getChargeByUser(agent.getUserId(),
+                agent.getImpowerDatetime());
+            for (Charge charge2 : charge) {
+                cAmount = cAmount + charge2.getAmount();
+            }
+            // 没有过充值，前去充值
+            if (CollectionUtils.isEmpty(charge)) {
+                result = ECheckStatus.To_Charge.getCode();
+                chargeAmount = agentLevel.getMinCharge() - cAmount;
+
+            } else {
+                // 有过充值，但是钱在审核中
+                Charge condition = new Charge();
+                condition.setApplyUser(agent.getUserId());
+                condition.setStatus(EChargeStatus.TO_Cancel.getCode());
+                condition.setApplyDatetimeStart(agent.getImpowerDatetime());
+
+                charge = chargeBO.queryChargeList(condition);
+                if (CollectionUtils.isNotEmpty(charge)) {
+                    result = ECheckStatus.Charging.getCode();
+                }
+            }
+            res = new XN627805Res(result, agentLevel.getRedAmount(),
+                agentLevel.getMinSurplus(), agentLevel.getAmount(),
+                chargeAmount, agent.getLevel(), isWareHouse);
+        }
+        return res;
     }
 }

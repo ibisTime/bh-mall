@@ -260,12 +260,7 @@ public class SjFormAOImpl implements ISjFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        Paginable<SjForm> page = sjFormBO.getPaginable(start, limit, condition);
-        for (SjForm uplevelApply : page.getList()) {
-            Agent agent = agentAO.getAgent(uplevelApply.getUserId());
-            uplevelApply.setUser(agent);
-        }
-        return page;
+        return sjFormBO.getPaginable(start, limit, condition);
     }
 
     private String getHighUser(String highUserId, Integer level) {
