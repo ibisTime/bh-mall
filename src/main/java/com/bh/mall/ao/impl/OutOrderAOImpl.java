@@ -506,13 +506,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
             boolean isSucc = weChatAO.reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
             if (isSucc) {
-
                 Agent agent = agentBO.getAgent(data.getApplyUser());
                 // 账户收钱
                 this.payOrder(agent, data, wechatOrderNo);
 
                 String status = EOrderStatus.Paid.getCode();
-
                 data.setPayDatetime(new Date());
                 data.setPayCode(wechatOrderNo);
                 data.setPayAmount(data.getAmount());

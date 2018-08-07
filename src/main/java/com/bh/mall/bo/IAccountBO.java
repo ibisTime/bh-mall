@@ -72,6 +72,6 @@ public interface IAccountBO extends IPaginableBO<Account> {
     public List<Account> queryAccountList(Account data);
 
     // 获取账户
-    public Account getAccountNocheck(String userId, String code);
+    public Account getAccountNocheck(String userId, String currency);
 
 }

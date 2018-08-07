@@ -168,6 +168,12 @@ public class Agent extends ABaseDO {
     // 介绍人姓名
     private String introduceName;
 
+    // 门槛余额
+    private Long mkAmount;
+
+    // 云仓余额
+    private Long wareAmount;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -593,6 +599,22 @@ public class Agent extends ABaseDO {
 
     public void setApproveName(String approveName) {
         this.approveName = approveName;
+    }
+
+    public Long getMkAmount() {
+        return mkAmount;
+    }
+
+    public Long getWareAmount() {
+        return wareAmount;
+    }
+
+    public void setMkAmount(Long mkAmount) {
+        this.mkAmount = mkAmount;
+    }
+
+    public void setWareAmount(Long wareAmount) {
+        this.wareAmount = wareAmount;
     }
 
 }

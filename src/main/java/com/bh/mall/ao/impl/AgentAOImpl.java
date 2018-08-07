@@ -376,6 +376,17 @@ public class AgentAOImpl implements IAgentAO {
                 data.setHighUserName(highAgent.getRealName());
                 data.setHighUserMobile(highAgent.getMobile());
             }
+
+            // 门槛余额
+            Account account = accountBO.getAccountNocheck(data.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            if (null != account) {
+                data.setMkAmount(account.getAmount());
+            }
+
+            // 云仓余额
+            wareBO.getWareByUser(data.getUserId());
+
         }
         return page;
     }

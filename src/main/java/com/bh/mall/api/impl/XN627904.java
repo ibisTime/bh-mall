@@ -25,8 +25,8 @@ public class XN627904 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        inOrderAO.approveCancel(code, result, updater, remark);
-        inOrderAO.cancelInOrder(req.getCode());
+        inOrderAO.approveCancel(req.getCode(), req.getResult(),
+            req.getApprover(), req.getRemark());
         return new BooleanRes(true);
     }
 
