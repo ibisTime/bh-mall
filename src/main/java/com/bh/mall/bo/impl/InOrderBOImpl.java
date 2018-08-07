@@ -17,6 +17,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
+import com.bh.mall.enums.EInOrderStatus;
 import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.exception.BizException;
 
@@ -143,6 +144,9 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
 
     @Override
     public void paySuccess(InOrder data) {
+        Date date = new Date();
+        data.setPayDatetime(date);
+        data.setStatus(EInOrderStatus.Received.getCode());
         inOrderDAO.paySuccess(data);
     }
 

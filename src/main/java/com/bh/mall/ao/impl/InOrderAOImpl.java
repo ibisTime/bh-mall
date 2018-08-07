@@ -264,28 +264,20 @@ public class InOrderAOImpl implements IInOrderAO {
                     EChannelType.NBZ, null, payGroup, data.getCode(),
                     EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
                     -data.getAmount());
-                String status = EOrderStatus.Paid.getCode();
 
-                // 该等级是否启用云仓
-                AgentLevel agent = agentLevelBO
-                    .getAgentByLevel(uData.getLevel());
-                if (EBoolean.YES.getCode().equals(agent.getIsWare())) {
-                    status = EOrderStatus.Received.getCode();
-                    // 购买云仓
-                    wareBO.buyWare(data, uData);
-                    // 出货以及推荐奖励
-                    this.payAward(data);
-                } else {
-                    throw new BizException("xn00000", "您的等级还未开启云仓哦！");
-                }
+                // 扣减上级云仓
+                Product pData = productBO.getProduct(data.getProductCode());
+                Specs specs = specsBO.getSpecs(data.getSpecsCode());
+                this.changeProductNumber(uData, pData, specs, data,
+                    -data.getQuantity(), data.getCode());
 
-                data.setPayDatetime(new Date());
+                // 购买云仓
+                wareBO.buyWare(data, uData);
+                // 出货以及推荐奖励
+                this.payAward(data);
+
                 data.setPayCode(data.getCode());
-                data.setPayAmount(data.getAmount());
-                data.setStatus(status);
                 inOrderBO.paySuccess(data);
-
-                // 扣减上级库存
 
                 result = new BooleanRes(true);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
@@ -339,23 +331,17 @@ public class InOrderAOImpl implements IInOrderAO {
                 // 账户收钱
                 this.payOrder(agent, data, wechatOrderNo);
 
-                String status = EOrderStatus.Paid.getCode();
-                // 代理进货且是购买云仓
-                AgentLevel agentLevel = agentLevelBO
-                    .getAgentByLevel(agent.getLevel());
-                if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
-                    status = EOrderStatus.Received.getCode();
-                    // 购买云仓
-                    wareBO.buyWare(data, agent);
-                    // 出货以及推荐奖励
-                    this.payAward(data);
-                }
+                // 扣减上级云仓
+                Product pData = productBO.getProduct(data.getProductCode());
+                Specs specs = specsBO.getSpecs(data.getSpecsCode());
+                this.changeProductNumber(agent, pData, specs, data,
+                    -data.getQuantity(), data.getCode());
 
-                data.setPayDatetime(new Date());
+                // 购买云仓
+                wareBO.buyWare(data, agent);
+                // 出货以及推荐奖励
+                this.payAward(data);
                 data.setPayCode(wechatOrderNo);
-                data.setPayAmount(data.getAmount());
-                data.setStatus(status);
-
                 inOrderBO.paySuccess(data);
             } else {
 
