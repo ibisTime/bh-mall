@@ -10,8 +10,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 详情查询
- * 
+ * 详情查询代理
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
@@ -24,7 +23,7 @@ public class XN627327 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return agentAO.getAgent(req.getCode());
+        return agentAO.getAgent(req.getUserId());
     }
 
     @Override
