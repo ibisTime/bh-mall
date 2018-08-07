@@ -60,9 +60,6 @@ public interface ICUserBO extends IPaginableBO<CUser> {
     public void refreshWxInfo(String userId, String unionId, String h5OpenId,
             String appOpenId, String nickname, String photo);
 
-    //
-    public void refreshPhoto(String userId, String photo);
-
     public String saveUser(String mobile);
 
     public CUser getUserNoCheck(String userId);

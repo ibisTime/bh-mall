@@ -6,7 +6,7 @@ package com.bh.mall.dto.req;
  * @since: 2016年12月22日 下午7:28:32 
  * @history:
  */
-public class XN637531Req {
+public class XN627531Req {
 
     // 银行卡号
     private String bankcardNumber;

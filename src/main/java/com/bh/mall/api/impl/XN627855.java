@@ -17,14 +17,15 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 我的出货
+ * 我的推荐/介绍
  * @author: nyc 
  * @since: 2018年6月30日 下午7:09:17 
  * @history:
  */
 public class XN627855 extends AProcessor {
 
-    private IAgentReportAO agentReportAO = SpringContextHolder.getBean(IAgentReportAO.class);
+    private IAgentReportAO agentReportAO = SpringContextHolder
+        .getBean(IAgentReportAO.class);
 
     private XN627850Req req = null;
 

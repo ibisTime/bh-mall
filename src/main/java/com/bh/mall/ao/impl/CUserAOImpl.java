@@ -177,12 +177,6 @@ public class CUserAOImpl implements ICUserAO {
         return result;
     }
 
-    // 修改照片
-    @Override
-    public void doModifyPhoto(String userId, String photo) {
-        cuserBO.refreshPhoto(userId, photo);
-    }
-
     // 分页查询
     @Override
     public Paginable<CUser> queryCuserPage(int start, int limit,

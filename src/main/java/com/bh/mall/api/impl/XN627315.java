@@ -4,7 +4,7 @@ import com.bh.mall.ao.ICUserAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.dto.req.XN6273061Req;
+import com.bh.mall.dto.req.XN627315Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
@@ -16,10 +16,10 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2018年3月25日 下午4:36:19 
  * @history:
  */
-public class XN6273061 extends AProcessor {
+public class XN627315 extends AProcessor {
     private ICUserAO userAO = SpringContextHolder.getBean(ICUserAO.class);
 
-    private XN6273061Req req = null;
+    private XN627315Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -29,7 +29,7 @@ public class XN6273061 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN6273061Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627315Req.class);
         ObjValidater.validateReq(req);
     }
 

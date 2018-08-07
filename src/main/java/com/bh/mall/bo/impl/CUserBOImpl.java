@@ -278,16 +278,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
     }
 
     @Override
-    public void refreshPhoto(String userId, String photo) {
-        if (StringUtils.isNotBlank(userId)) {
-            CUser data = new CUser();
-            data.setUserId(userId);
-            data.setPhoto(photo);
-            cuserDAO.updatePhoto(data);
-        }
-    }
-
-    @Override
     public void refreshUser(CUser data) {
         if (data != null) {
             cuserDAO.update(data);
