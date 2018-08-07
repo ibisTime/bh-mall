@@ -86,6 +86,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         Date date = new Date();
         sjForm.setApproveDatetime(date);
         sjForm.setRemark(remark);
+        sjForm.setStatus(status);
         agentLogBO.applySjForm(sjForm, agent);
 
         Agent user = agentBO.getAgent(sjForm.getUserId());
