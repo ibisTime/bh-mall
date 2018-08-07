@@ -85,6 +85,8 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public void refreshManager(Agent data, String manager, String updater);
 
+    public void refreshLevel(Agent buser);
+
     /*************** 查询 **********************/
 
     public List<Agent> selectList(Agent condition, int pageNo, int pageSize);

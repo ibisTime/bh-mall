@@ -77,6 +77,11 @@ public class AgentDAOImpl extends AMybatisTemplate implements IAgentDAO {
     }
 
     @Override
+    public void refreshLevel(Agent buser) {
+        super.update(NAMESPACE.concat("update_level"), buser);
+    }
+
+    @Override
     public void updateHigh(Agent data) {
         super.update(NAMESPACE.concat("update_high"), data);
     }

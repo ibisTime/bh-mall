@@ -32,7 +32,6 @@ import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESjFormStatus;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -132,7 +131,7 @@ public class SjFormAOImpl implements ISjFormAO {
         String toUserId = data.getHighUserId();
 
         // 申请等级为董事的代理，直接由平台审核
-        if (EAgentLevel.ONE.getCode().equals(highLevel)) {
+        if (EAgentLevel.ONE.getCode().equals(newLevel)) {
             status = ESjFormStatus.COMPANY_APPROVE.getCode();
             // 校验团队名称
             if (StringUtils.isBlank(teamName)) {
@@ -171,16 +170,16 @@ public class SjFormAOImpl implements ISjFormAO {
         AgentLevel auData = agentLevelBO
             .getAgentByLevel(sjForm.getApplyLevel());
         // 审核通过
-        String status = EUserStatus.IMPOWERED.getCode();
+        String status = ESjFormStatus.APPROVED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
             Account account = accountBO.getAccountByUser(sjForm.getUserId(),
                 ECurrency.MK_CNY.getCode());
 
             // 是否需要公司审核
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
-                status = EUserStatus.TO_COMPANYUPGRADE.getCode();
+                status = ESjFormStatus.COMPANY_APPROVE.getCode();
             } else {
-                status = EUserStatus.UPGRADED.getCode();
+                status = ESjFormStatus.APPROVED.getCode();
                 // 增加账户余额
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.NBZ, null, null, sjForm.getUserId(),
@@ -194,6 +193,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         Agent agent = agentBO.getAgent(userId);
         Agent approveAgent = agentBO.getAgent(approver);
+
         sjFormBO.approveSjForm(sjForm, agent, approveAgent.getUserId(),
             approveAgent.getRealName(), remark, status);
     }
@@ -204,11 +204,11 @@ public class SjFormAOImpl implements ISjFormAO {
 
         SjForm sjForm = sjFormBO.getSjForm(userId);
         // 审核通过
-        String status = EUserStatus.IMPOWERED.getCode();
+        String status = ESjFormStatus.APPROVED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
             Account account = accountBO.getAccountByUser(sjForm.getUserId(),
                 ECurrency.MK_CNY.getCode());
-            status = EUserStatus.UPGRADED.getCode();
+            status = ESjFormStatus.APPROVED.getCode();
             // 增加账户余额
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
                 null, null, sjForm.getUserId(), EBizType.AJ_QKYE,

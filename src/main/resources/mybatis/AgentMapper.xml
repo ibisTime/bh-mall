@@ -424,6 +424,13 @@
 		WHERE user_id = #{userId}
 	</update>
 
+<update id="update_level" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		level = #{level}
+		WHERE user_id = #{userId}
+	</update>
+	
 	<update id="abolish_impower" parameterType="agent">
 		UPDATE tbh_agent
 		SET
