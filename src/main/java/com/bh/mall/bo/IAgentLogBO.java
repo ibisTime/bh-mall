@@ -33,6 +33,6 @@ public interface IAgentLogBO extends IPaginableBO<AgentLog> {
     public AgentLog getAgentLog(String code);
 
     // 修改代理
-    public String updateAgent(Agent data);
+    public String refreshAgent(Agent data);
 
 }

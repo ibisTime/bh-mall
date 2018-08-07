@@ -469,6 +469,17 @@ public class AgentAOImpl implements IAgentAO {
     public void abolishSqForm(String userId, String updater, String remark) {
         Agent data = agentBO.getAgent(userId);
         agentBO.refreshStatus(data, updater, remark);
+
+        // 清空推荐关系
+        Agent condition = new Agent();
+        condition.setReferrer(data.getUserId());
+        List<Agent> list = agentBO.queryAgentList(condition);
+        for (Agent agent : list) {
+            agentBO.resetInfo(agent);
+        }
+
+        // 清空介绍关系
+
     }
 
     @Override

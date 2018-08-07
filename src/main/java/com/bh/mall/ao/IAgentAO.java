@@ -54,9 +54,6 @@ public interface IAgentAO {
     // 详细查询 627327
     public Agent getAgent(String userId);
 
-    // 详细查询包含代理轨迹 TODO 627328
-    // public Agent getAgent(String userId);
-
     // 分页我的下级 627320
     public Paginable<Agent> queryMyLowAgentPage(int start, int limit,
             Agent condition);

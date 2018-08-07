@@ -11,7 +11,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 修改头像
+ * 公司直接取消授权
  * @author: chenshan 
  * @since: 2018年3月25日 下午4:36:19 
  * @history:
@@ -24,7 +24,8 @@ public class XN627316 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        agentAO.doModifyPhoto(req.getUserId(), req.getPhoto());
+        agentAO.abolishSqForm(req.getUserId(), req.getUpdater(),
+            req.getRemark());
         return new BooleanRes(true);
     }
 

@@ -13,9 +13,13 @@ public class XN627316Req {
     @NotBlank(message = "用户Id不能为空")
     private String userId;
 
-    // 短信验证码
-    @NotBlank(message = "用户Id不能为空")
-    private String photo;
+    // 更新人
+    @NotBlank(message = "更新人不能为空")
+    private String updater;
+
+    // 备注
+    @NotBlank(message = "备注不能为空")
+    private String remark;
 
     public String getUserId() {
         return userId;
@@ -25,12 +29,20 @@ public class XN627316Req {
         this.userId = userId;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

@@ -14,7 +14,6 @@ import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.MD5Util;
 import com.bh.mall.common.PhoneUtil;
-import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IAgentDAO;
@@ -254,15 +253,18 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshStatus(Agent data, String updater, String remark) {
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AgentLog.getCode());
-
-        data.setUserId(data.getUserId());
         data.setStatus(EUserStatus.CANCELED.getCode());
         data.setUpdater(updater);
-        data.setUpdateDatetime(new Date());
-        data.setLastAgentLog(code);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
         data.setRemark(remark);
+        String logCode = agentLogBO.refreshAgent(data);
+
+        data.setLastAgentLog(logCode);
+        data.setHighUserId(null);
+        data.setReferrer(null);
+        data.setIntroducer(null);
+
         agentDAO.updateStatus(data);
 
     }
@@ -329,7 +331,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setUpdateDatetime(date);
         data.setRemark(remark);
 
-        String logCode = agentLogBO.updateAgent(data);
+        String logCode = agentLogBO.refreshAgent(data);
         data.setLastAgentLog(logCode);
         agentDAO.updateHigh(data);
 
@@ -344,7 +346,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
 
-        String logCode = agentLogBO.updateAgent(data);
+        String logCode = agentLogBO.refreshAgent(data);
         data.setLastAgentLog(logCode);
         agentDAO.updateUserReferee(data);
 
@@ -490,9 +492,10 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setMobile(null);
         data.setIdNo(null);
         data.setReferrer(null);
+        data.setIntroducer(null);
         data.setHighUserId(null);
-        data.setTeamName(null);
 
+        data.setTeamName(null);
         agentDAO.resetInfo(data);
     }
 
