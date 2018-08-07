@@ -80,6 +80,8 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setApprover(sqForm.getApprover());
         data.setApproveName(sqForm.getApproveName());
         data.setApproveDatetime(sqForm.getApproveDatetime());
+
+        data.setImpowerDatetime(sqForm.getImpowerDatetime());
         data.setRemark(sqForm.getRemark());
 
         agentLogDAO.insert(data);
@@ -117,6 +119,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
 
         data.setApproveName(sjForm.getApproveName());
         data.setApproveDatetime(sjForm.getApproveDatetime());
+        data.setImpowerDatetime(agent.getImpowerDatetime());
         data.setRemark(sjForm.getRemark());
         agentLogDAO.insert(data);
         return code;
@@ -153,6 +156,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setWxId(agent.getWxId());
         data.setMobile(agent.getMobile());
 
+        data.setLevel(agent.getLevel());
         data.setApplyLevel(data.getApplyLevel());
         data.setTeamName(agent.getTeamName());
         data.setIntroducer(agent.getIntroducer());
@@ -168,6 +172,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setApprover(agent.getApprover());
         data.setApproveName(agent.getApproveName());
         data.setApproveDatetime(agent.getApproveDatetime());
+        data.setImpowerDatetime(agent.getImpowerDatetime());
         data.setRemark(agent.getRemark());
 
         agentLogDAO.insert(data);

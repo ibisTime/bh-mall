@@ -41,9 +41,6 @@ public class AgentLog extends ABaseDO {
     // 上级
     private String highUserId;
 
-    // 上级名称
-    private String highUserName;
-
     // 推荐人
     private String referrer;
 
@@ -95,6 +92,9 @@ public class AgentLog extends ABaseDO {
     // 申请时间
     private Date applyDatetime;
 
+    // 授权时间
+    private Date impowerDatetime;
+
     // 备注
     private String remark;
 
@@ -128,6 +128,9 @@ public class AgentLog extends ABaseDO {
 
     // 审核结束时间
     private Date approveDatetimeEnd;
+
+    // 上级名称
+    private String highUserName;
 
     public String getCode() {
         return code;
@@ -443,6 +446,14 @@ public class AgentLog extends ABaseDO {
 
     public void setApplyDatetimeStart(Date applyDatetimeStart) {
         this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getImpowerDatetime() {
+        return impowerDatetime;
+    }
+
+    public void setImpowerDatetime(Date impowerDatetime) {
+        this.impowerDatetime = impowerDatetime;
     }
 
 }

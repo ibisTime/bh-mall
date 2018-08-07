@@ -312,16 +312,16 @@ public class AgentAOImpl implements IAgentAO {
 
     // 修改上级
     @Override
-    public void editHighUser(String userId, String highUser, String updater,
+    public void editHighUser(String userId, String highUserId, String updater,
             String remark) {
         Agent data = agentBO.getAgent(userId);
-        agentBO.refreshHighUser(data, highUser, updater, remark);
-        String highUserId = highUser;
+
+        // 判断上级
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
             highUserId = ESysUser.SYS_USER_BH.getCode();
         }
-
+        agentBO.refreshHighUser(data, highUserId, updater, remark);
         // 增肌上级门槛
         Account account = accountBO.getAccountByUser(data.getUserId(),
             ECurrency.MK_CNY.getCode());
@@ -371,7 +371,7 @@ public class AgentAOImpl implements IAgentAO {
                 .getLevel()) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
-            } else {
+            } else if (StringUtils.isNotBlank(data.getHighUserId())) {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
                 data.setHighUserMobile(highAgent.getMobile());
@@ -401,7 +401,7 @@ public class AgentAOImpl implements IAgentAO {
                 .getLevel()) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
-            } else {
+            } else if (StringUtils.isNotBlank(data.getHighUserId())) {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
                 data.setHighUserMobile(highAgent.getMobile());
@@ -432,7 +432,7 @@ public class AgentAOImpl implements IAgentAO {
                 .getLevel()) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
-            } else {
+            } else if (StringUtils.isNotBlank(data.getHighUserId())) {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
                 data.setHighUserMobile(highAgent.getMobile());
@@ -496,7 +496,7 @@ public class AgentAOImpl implements IAgentAO {
             .getLevel()) {
             SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
             data.setHighUserName(sysUser.getRealName());
-        } else {
+        } else if (StringUtils.isNotBlank(data.getHighUserId())) {
             Agent highAgent = agentBO.getAgent(data.getHighUserId());
             data.setHighUserName(highAgent.getRealName());
             data.setHighUserMobile(highAgent.getMobile());

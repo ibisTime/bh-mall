@@ -69,6 +69,16 @@ public class SjFormAOImpl implements ISjFormAO {
             throw new BizException("xn000", "您的状态无法申请升级");
         }
 
+        // 已经申请过升级
+        SjForm sjForm = sjFormBO.getSjForm(data.getUserId());
+        if (null != sjForm) {
+            if (ESjFormStatus.APPROVE_SJ.getCode().equals(sjForm.getStatus())
+                    || ESjFormStatus.COMPANY_APPROVE.getCode()
+                        .equals(sjForm.getStatus())) {
+                throw new BizException("xn000", "您已经申请过升级了，请勿重复申请");
+            }
+        }
+
         if (data.getLevel() <= StringValidater.toInteger(newLevel)) {
             throw new BizException("xn0000", "升级等级要大于当前等级");
         }
@@ -139,14 +149,16 @@ public class SjFormAOImpl implements ISjFormAO {
             }
         }
 
-        SjForm sjForm = sjFormBO.getSjForm(data.getUserId());
+        // 申请升级
+        String logCode = null;
         if (null == sjForm) {
-            sjFormBO.applySjForm(data, toUserId, newLevel, idKind, idNo, idHand,
-                payPdf, payAmount, status);
-        } else {
-            sjFormBO.refreshSjForm(sjForm, data, toUserId, newLevel, idKind,
+            logCode = sjFormBO.applySjForm(data, toUserId, newLevel, idKind,
                 idNo, idHand, payPdf, payAmount, status);
+        } else {
+            logCode = sjFormBO.refreshSjForm(sjForm, data, toUserId, newLevel,
+                idKind, idNo, idHand, payPdf, payAmount, status);
         }
+        agentBO.refreshLog(data, logCode);
 
     }
 

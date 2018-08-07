@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
@@ -23,6 +24,9 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
 
     @Autowired
     private IAgentLogBO agentLogBO;
+
+    @Autowired
+    private IAgentBO agentBO;
 
     // 升级申请
     @Override
@@ -46,7 +50,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         sjForm.setPayAmount(StringValidater.toLong(payAmount));
         Date date = new Date();
         sjForm.setApplyDatetime(date);
-
+        sjFormDAO.insert(sjForm);
         return agentLogBO.applySjForm(sjForm, data);
     }
 

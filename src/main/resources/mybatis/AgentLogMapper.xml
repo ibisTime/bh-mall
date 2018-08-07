@@ -13,7 +13,6 @@
 		<result column="level" property="level" />
 		<result column="apply_level" property="applyLevel" />
 		<result column="high_user_id" property="highUserId" />
-		<result column="high_user_name" property="highUserName" />
 		<result column="referrer" property="referrer" />
 				
 		<result column="team_name" property="teamName" />
@@ -28,6 +27,7 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		
+		<result column="impower_datetime" property="impowerDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
 	<sql id="where_condition">
@@ -87,7 +87,6 @@
 		,t.level
 		,t.apply_level
 		,t.high_user_id
-		,t.high_user_name
 		,t.referrer
 		,t.introducer
 		
@@ -107,6 +106,7 @@
 		,t.approve_datetime
 		,t.updater
 		,t.update_datetime
+		,t.impower_datetime
 		,t.remark
 		FROM
 		tbh_agent_log t 
@@ -138,7 +138,6 @@
 		,level
 		,apply_level
 		,high_user_id
-		,high_user_name
 		,referrer
 		,introducer
 		
@@ -158,6 +157,7 @@
 		,approve_datetime
 		,updater
 		,update_datetime
+		,impower_datetime
 		,remark
 		)
 		VALUES(
@@ -171,7 +171,6 @@
 		,#{level}
 		,#{applyLevel}
 		,#{highUserId}
-		,#{highUserName}
 		,#{referrer}
 		,#{introducer}
 		,#{teamName}
@@ -190,6 +189,7 @@
 		,#{approveDatetime}
 		,#{updater}
 		,#{updateDatetime}
+		,#{impowerDatetime}
 		,#{remark}
 		)
 	</insert>
