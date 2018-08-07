@@ -31,6 +31,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.ESjFormStatus;
 import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
@@ -117,12 +118,12 @@ public class SjFormAOImpl implements ISjFormAO {
             }
         }
 
-        String status = EUserStatus.TO_UPGRADE.getCode();
+        String status = ESjFormStatus.APPROVE_SJ.getCode();
         String toUserId = data.getHighUserId();
 
         // 申请等级为董事的代理，直接由平台审核
         if (EAgentLevel.ONE.getCode().equals(highLevel)) {
-            EUserStatus.TO_COMPANYCANCEL.getCode();
+            status = ESjFormStatus.COMPANY_APPROVE.getCode();
             // 校验团队名称
             if (StringUtils.isBlank(teamName)) {
                 throw new BizException("xn00000", "给自己团队起个名字吧");

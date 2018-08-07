@@ -16,7 +16,7 @@ import com.bh.mall.domain.SjForm;
 @Component
 public interface ISjFormAO {
 
-    static final String DEFAULT_ORDER_COLUMN = "code";
+    static final String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 升级申请 627290
     public void applySjForm(String userId, String highLevel, String payPdf,

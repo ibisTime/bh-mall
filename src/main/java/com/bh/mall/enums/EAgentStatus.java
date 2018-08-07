@@ -7,8 +7,8 @@ public enum EAgentStatus {
 
     NO_IMPOWER("0", "未授权"), IGNORE("1", "已忽略"), TO_APPROVE("2",
             "待审核授权"), IMPOWERO_INFO("3", "待填写授权资料"), ADD_INFO("4",
-                    "补充授权资料"), IMPOWERED("5",
-                            "已授权"), COMPANY_IMPOWER("6", "待公司授权");
+                    "补充授权资料"), COMPANY_IMPOWER("5", "待公司授权"), IMPOWERED("5",
+                            "已授权"), UPGRADE("6", "已升级");
 
     EAgentStatus(String code, String value) {
         this.code = code;
