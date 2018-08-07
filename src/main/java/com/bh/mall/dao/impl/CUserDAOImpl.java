@@ -61,11 +61,6 @@ public class CUserDAOImpl extends AMybatisTemplate implements ICUserDAO {
     }
 
     @Override
-    public int updatePhoto(CUser data) {
-        return super.update(NAMESPACE.concat("update_cuser_photo"), data);
-    }
-
-    @Override
     public int updateWxInfo(CUser data) {
         return super.update(NAMESPACE.concat("update_wx_info"), data);
     }

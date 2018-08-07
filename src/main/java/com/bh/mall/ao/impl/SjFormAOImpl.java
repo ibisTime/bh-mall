@@ -26,6 +26,7 @@ import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -63,7 +64,7 @@ public class SjFormAOImpl implements ISjFormAO {
             String payAmount, String teamName, String idKind, String idNo,
             String idHand) {
         Agent data = agentBO.getAgent(userId);
-        if (!EUserStatus.IMPOWERED.getCode().equals(data.getStatus())) {
+        if (!EAgentStatus.IMPOWERED.getCode().equals(data.getStatus())) {
             throw new BizException("xn000", "您的状态无法申请升级");
         }
 

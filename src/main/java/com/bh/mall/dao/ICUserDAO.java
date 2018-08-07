@@ -25,15 +25,6 @@ public interface ICUserDAO extends IBaseDAO<CUser> {
     public int updateNickname(CUser data);
 
     /**
-     * 更新头像 
-     * @param data
-     * @return 
-     * @create: 2018年7月31日 下午2:35:40 LENOVO
-     * @history:
-     */
-    public int updatePhoto(CUser data);
-
-    /**
      * 更新更新c端
      * @param data
      * @return 

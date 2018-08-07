@@ -1,16 +1,8 @@
 package com.bh.mall.dto.req;
 
-/**
- * 分页查询用户
- * @author: chenshan 
- * @since: 2018年3月26日 下午6:28:36 
- * @history:
- */
-public class XN627126Req extends AListReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 2531978925998093639L;
+public class XN627125Req extends APageReq {
+
+    private static final long serialVersionUID = -7049202319583663210L;
 
     // （选填）用户名
     private String realName;

@@ -20,9 +20,6 @@ public interface ICUserAO {
     public XN627304Res doLoginWeChatByCustomer(String code, String nickname,
             String avatarUrl, String kind);
 
-    // 修改照片
-    public void doModifyPhoto(String userId, String photo);
-
     // 分页查询
     public Paginable<CUser> queryCuserPage(int start, int limit,
             CUser condition);
