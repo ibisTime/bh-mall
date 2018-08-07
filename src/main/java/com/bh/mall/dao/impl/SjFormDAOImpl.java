@@ -27,8 +27,8 @@ public class SjFormDAOImpl extends AMybatisTemplate implements ISjFormDAO {
     }
 
     @Override
-    public void updateHighUser(SjForm data) {
-        super.update(NAMESPACE.concat("insert_sjForm"), data);
+    public void update(SjForm data) {
+        super.update(NAMESPACE.concat("update_sjForm"), data);
     }
 
     @Override

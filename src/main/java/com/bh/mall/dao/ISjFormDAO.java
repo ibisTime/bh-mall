@@ -13,6 +13,6 @@ public interface ISjFormDAO extends IBaseDAO<SjForm> {
 
     public void applySjForm(SjForm data);
 
-    public void updateHighUser(SjForm data);
+    public void update(SjForm data);
 
 }

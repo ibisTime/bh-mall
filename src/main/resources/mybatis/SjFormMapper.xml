@@ -158,20 +158,34 @@
 	
 	<!-- update payment / status -->
 	<update id="update_sjForm" parameterType="sjForm">
-		UPDATE tbh_sj_form
-		SET
-		,to_user_id=#{toUserId}
-		,apply_level = #{applyLevel}
-		,re_number = #{reNumber}
-        ,pay_amount = #{payAmount}
-		,pay_pdf = #{payPdf}
-		,status = #{status}
-		,approver = #{approver}
-		,approve_name = #{approveName}
-		,apply_datetime = #{applyDatetime}
-		,approve_datetime = #{approveDatetime}
-		,remark = #{remark}
-		WHERE user_id = #{userId}
-	</update>
+	UPDATE tbh_sj_form
+	SET
+	real_name = #{realName}
+	,status = #{status}
+	,id_kind = #{idKind}
+	,id_no = #{idNo}
+	,id_hand = #{idHand}
 	
-</mapper>
+	,team_name =#{teamName}
+	,re_number = #{reNumber}
+	,level = #{level}
+	,apply_level = #{applyLevel}
+	,payAmount = #{payAmount}
+	
+	,payPdf = #{payPdf}
+	,to_user_id = #{toUserId}
+	,apply_datetime = #{applyDatetime}
+	,approver = #{approver}
+	,approve_name = #{approveName}
+	
+	,approve_datetime = #{approveDatetime}
+	,remark = #{remark}
+	WHERE user_id = #{userId}                       	
+	</update>                                           	
+	                                                    	
+</mapper>                                               	
+                                                        		
+                                                        	
+                                                        	
+                                                        	
+                                                        	
