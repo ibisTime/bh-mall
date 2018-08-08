@@ -153,8 +153,8 @@ public class WeChatAOImpl implements IWeChatAO {
                     order.getBizNote(), order.getAmount());
 
                 // 上级加钱 TODO
-                // Agent agent = agentBO.getAgent(order.getApplyUser());
-                // userAO.addHighAccount(agent, order.getAmount());
+                Agent agent = agentBO.getAgent(order.getApplyUser());
+                accountBO.addHighAccount(agent, order.getAmount());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);

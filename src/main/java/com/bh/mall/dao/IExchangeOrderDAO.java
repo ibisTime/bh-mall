@@ -17,7 +17,6 @@ public interface IExchangeOrderDAO extends IBaseDAO<ExchangeOrder> {
     void updateChangePrice(ExchangeOrder data);
 
     /**
-     * TODO
      * @param data 
      * @create: 2018年7月31日 下午2:38:56 LENOVO
      * @history:

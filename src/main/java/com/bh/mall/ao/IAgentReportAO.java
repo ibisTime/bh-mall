@@ -22,10 +22,10 @@ public interface IAgentReportAO {
     public Paginable<AgentReport> queryAgentReportPage(int start, int limit,
             AgentReport condition);
 
-    // 列表查询代理统计 TODO
+    // 列表查询代理统计
     public List<AgentReport> queryAgentReportList(AgentReport condition);
 
-    // 根据编号查询代理统计 TODO
+    // 根据编号查询代理统计
     public AgentReport getAgentReport(String code);
 
 }

@@ -25,7 +25,6 @@ public interface IAgentLevelBO extends IPaginableBO<AgentLevel> {
     // 详情查询
     public AgentLevel getAgentByLevel(Integer level);
 
-    // TODO
     public List<AgentLevel> getAgentHaveWH();
 
 }

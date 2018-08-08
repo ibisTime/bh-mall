@@ -27,8 +27,6 @@ public interface IAgentAO {
             String realName, String teamName, String province, String city,
             String area, String address);
 
-    // TODO 修改交易密码 627315
-
     // 更换手机 627311
     public void doResetMoblie(String userId, String newMobile,
             String smsCaptcha);
@@ -61,7 +59,7 @@ public interface IAgentAO {
     // 列表查询代理结构 627321
     public List<Agent> queryAgentJgList(Agent condition);
 
-    // 公司直接取消授权 TODO
+    // 公司直接取消授权
     public void abolishSqForm(String userId, String updater, String remark);
 
     // 根据手机号查询代理 627322
