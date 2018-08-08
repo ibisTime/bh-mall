@@ -8,9 +8,6 @@ package com.bh.mall.dto.req;
  */
 public class XN627816Req extends APageReq {
 
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = -6966136403372983712L;
 
     // 用户编号（必填）

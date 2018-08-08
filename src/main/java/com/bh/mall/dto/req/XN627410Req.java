@@ -8,9 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 public class XN627410Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = -475508549053098334L;
 
     // 用户编号

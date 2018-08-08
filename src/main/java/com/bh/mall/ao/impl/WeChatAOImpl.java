@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
@@ -55,6 +56,9 @@ public class WeChatAOImpl implements IWeChatAO {
 
     @Autowired
     IChargeBO chargeBO;
+
+    @Autowired
+    IAccountAO accountAO;
 
     @Autowired
     IAccountBO accountBO;
@@ -152,9 +156,10 @@ public class WeChatAOImpl implements IWeChatAO {
                     EBizType.getBizTypeMap().get(order.getBizType()),
                     order.getBizNote(), order.getAmount());
 
-                // 上级加钱 TODO
+                // 上级加钱
                 Agent agent = agentBO.getAgent(order.getApplyUser());
-                accountBO.addHighAccount(agent, order.getAmount());
+                accountAO.addHighAccount(agent, order.getAmount(),
+                    wechatOrderNo, order.getPayGroup());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);

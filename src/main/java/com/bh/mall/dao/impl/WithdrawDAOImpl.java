@@ -18,7 +18,6 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
 
     @Override
     public int delete(Withdraw data) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -30,8 +29,8 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
 
     @Override
     public long selectTotalCount(Withdraw condition) {
-        return super.selectTotalCount(
-            NAMESPACE.concat("select_withdraw_count"), condition);
+        return super.selectTotalCount(NAMESPACE.concat("select_withdraw_count"),
+            condition);
     }
 
     @Override

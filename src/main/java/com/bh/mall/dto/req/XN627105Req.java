@@ -2,9 +2,6 @@ package com.bh.mall.dto.req;
 
 public class XN627105Req extends APageReq {
 
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = -4578161783507127781L;
 
     // 银行别称 （选填）

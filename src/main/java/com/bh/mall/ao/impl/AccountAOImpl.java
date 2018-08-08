@@ -18,6 +18,7 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.enums.EAccountType;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
@@ -171,6 +172,23 @@ public class AccountAOImpl implements IAccountAO {
             account.getUserId(), bizType, bizNote,
             StringValidater.toLong(changeAmount));
 
+    }
+
+    @Override
+    public void addHighAccount(Agent agent, Long amount, String channelOrder,
+            String payGroup) {
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agent
+            .getLevel()) {
+            Agent highAgent = agentBO.getAgent(agent.getHighUserId());
+            Account account = accountBO.getAccountByUser(highAgent.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            accountBO.changeAmount(account.getAccountNumber(),
+                EChannelType.WeChat_H5, channelOrder, payGroup,
+                agent.getUserId(), EBizType.AJ_XJCZ,
+                EBizType.AJ_XJCZ.getValue(), amount);
+            addHighAccount(highAgent, amount, channelOrder, payGroup);
+
+        }
     }
 
 }

@@ -72,7 +72,6 @@ public class ObjValidater {
         if (stringBuilder.toString().isEmpty() == false) {
             throw new BizException("xn702000", stringBuilder.toString());
         }
-        // TODO：emjio
     }
 
 }

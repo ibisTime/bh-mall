@@ -1,9 +1,7 @@
 package com.bh.mall.dto.req;
 
 public class XN627491Req extends AListReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 1L;
 
     // 订单分组组号（信息代表）---核心字段1

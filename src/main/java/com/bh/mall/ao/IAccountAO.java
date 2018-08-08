@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 
 /**
  * 账户
@@ -47,5 +48,9 @@ public interface IAccountAO {
     // 扣款/充值
     public void transAmount(String accountNumber, String changeAmount,
             String remark);
+
+    // 微信H5充值增加上级库存
+    public void addHighAccount(Agent agent, Long amount, String channelOrder,
+            String payGroup);
 
 }

@@ -18,7 +18,6 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
 
     @Override
     public int delete(Charge data) {
-        // TODO Auto-generated method stub
         return 0;
     }
 

@@ -1,9 +1,7 @@
 package com.bh.mall.dto.req;
 
 public class XN627490Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 1L;
 
     // 流水分组组号（橙账本代表）---核心字段2
