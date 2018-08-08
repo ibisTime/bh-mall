@@ -5,6 +5,7 @@
 	<resultMap id="proCode_DB_Result" type="proCode">
 		<result column="code" property="code" />
 		<result column="status" property="status" />
+		<result column="batch"  property="batch" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="use_datetime" property="useDatetime" />
 	</resultMap>
@@ -24,6 +25,7 @@
 		SELECT
 		t.code
 		,t.status
+		,t.batch
 		,t.create_datetime
 		,t.use_datetime
 		FROM
@@ -56,12 +58,14 @@
 		tbh_pro_code(
 		code
 		,status
+		,batch
 		,create_datetime
 		,use_datetime
 		)
 		VALUES(
 		#{code}
 		,#{status}
+		,#{batch}
 		,#{createDatetime}
 		,#{useDatetime}
 		)

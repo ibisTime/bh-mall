@@ -11,6 +11,7 @@
 		<result column="photo" property="photo" />	
 		<result column="nickname" property="nickname" />
 		<result column="create_datetime" property="createDatetime" />
+		<result column="updater" property="updater" />
 		<result column="status" property="status" />
 		
 	</resultMap>
@@ -51,6 +52,7 @@
 		,photo
 		,nickname
 		,create_datetime
+		,updater
 		,status
 		)
 		VALUES(
@@ -62,6 +64,7 @@
 		,#{photo}
 		,#{nickname}
 		,#{createDatetime}
+		,#{updater}
 	    ,#{status}
 
 		)
@@ -77,6 +80,7 @@
 		,t.photo
 		,t.nickname
 		,t.create_datetime
+		,t.updater
 		,t.status
 		FROM
 		tbh_cuser t
@@ -103,6 +107,7 @@
 		,photo = #{photo}
 		,nickname = #{nickname}
 		,create_datetime = #{createDatetime}
+		,updater=#{updater}
 		,status = #{status}
 		WHERE user_id = #{userId}
 	</update>

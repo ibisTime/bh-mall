@@ -33,14 +33,11 @@ public interface IInOrderAO {
     public void cancelInOrder(String code);
 
     // 审核取消
-    public void approveCancel(String code, String result, String updater,
+    public void approveCancel(String code, String result, String approver,
             String remark);
 
     // 支付成功
     void paySuccess(String result);
-
-    // 订单作废
-    public void invalidInOrder(String code, String approver, String remark);
 
     // 分页查询
     public Paginable<InOrder> queryInOrderPage(int start, int limit,

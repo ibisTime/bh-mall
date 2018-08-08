@@ -16,6 +16,7 @@
 		<result column="amount" property="amount" />
 		
 		<result column="user_id" property="userId" />
+		<result column ="real_name" property="realName" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />	
 		<result column="last_change_code" property="lastChangeCode" />
@@ -61,6 +62,7 @@
 		,t.quantity
 		
 		,t.user_id
+		,t.real_name
 		,t.status
 		,t.create_datetime
 		,t.last_change_code
@@ -96,6 +98,7 @@
 		
 		,amount
 		,user_id
+		,real_name
 		,status
 		,create_datetime
 		,last_change_code
@@ -116,6 +119,7 @@
 		,#{amount}
 		
 		,#{userId}
+		,#{realName}
 		,#{status}
 		,#{createDatetime}
 		,#{lastChangeCode}
