@@ -198,7 +198,7 @@ public class InOrderAOImpl implements IInOrderAO {
         // 非最高等级代理，检查上级云仓
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agentLevel
             .getLevel()) {
-            wareBO.checkProduct(applyAgent.getUserId(), specsCode);
+            wareBO.checkProduct(applyAgent.getHighUserId(), specsCode);
         } else {
             // 非最高等级代理，扣减产品库存
             Integer nowNumber = pData.getRealNumber() - (quantity * minNumber);
