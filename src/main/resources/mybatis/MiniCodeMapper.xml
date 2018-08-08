@@ -6,7 +6,9 @@
 		<result column="mini_code" property="miniCode" />
 		<result column="trace_code" property="traceCode" />
 		<result column="ref_code" property="refCode" />
+		
 		<result column="status" property="status" />
+		<result column="batch"  property="batch" />
 		<result column="order_code" property="orderCode" />
 		
 		<result column="number" property="number" />
@@ -54,6 +56,7 @@
 		,t.ref_code
 		,t.order_code
 		,t.status
+		,t.batch
 		,t.create_datetime
 		,t.use_datetime
 		FROM
@@ -87,12 +90,14 @@
 		mini_code
 		,trace_code
 		,status
+		,batch
 		,create_datetime
 		)
 		VALUES(
 		#{miniCode}
 		,#{traceCode}
 		,#{status}
+		,#{batch}
 		,#{createDatetime}
 		)
 	</insert>

@@ -17,7 +17,7 @@
 		
 		<result column="from_info" property="fromInfo"/>
 		<result column ="status" property="status"/>
-				<result column ="apply_datetime" property="applyDatetime"/>	
+		<result column ="apply_datetime" property="applyDatetime"/>	
 		<result column ="approver" property="approver"/>
 		<result column ="approve_name" property="approveName"/>
 	
