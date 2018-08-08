@@ -19,9 +19,8 @@ import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627250Req;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBoolean;
-import com.bh.mall.enums.ESqFormStatus;
-import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -101,8 +100,8 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshLastLog(agent, EYxFormStatus.IGNORED.getCode(),
-            sysUser.getUserId(), sysUser.getRealName(), logCode);
+        agentBO.refreshLastLog(agent, null, sysUser.getUserId(),
+            sysUser.getRealName(), logCode);
     }
 
     /**
@@ -141,7 +140,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshLastLog(agent, EYxFormStatus.IGNORED.getCode(),
+        agentBO.refreshLastLog(agent, EAgentStatus.IGNORED.getCode(),
             sysUser.getUserId(), sysUser.getRealName(), logCode);
 
     }
@@ -159,7 +158,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshLastLog(agent, EYxFormStatus.IGNORED.getCode(),
+        agentBO.refreshLastLog(agent, EAgentStatus.IGNORED.getCode(),
             agent.getUserId(), agent.getRealName(), logCode);
     }
 
@@ -177,7 +176,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshLastLog(agent, ESqFormStatus.BC_ZL.getCode(),
+        agentBO.refreshLastLog(agent, EAgentStatus.ADD_INFO.getCode(),
             agent.getUserId(), agent.getRealName(), logCode);
 
     }
@@ -196,7 +195,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshLastLog(agent, ESqFormStatus.BC_ZL.getCode(),
+        agentBO.refreshLastLog(agent, EAgentStatus.ADD_INFO.getCode(),
             agent.getUserId(), agent.getRealName(), logCode);
 
     }
@@ -211,16 +210,14 @@ public class YxFormAOImpl implements IYxFormAO {
                     .after(condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-
-        List<YxForm> list = yxFormBO.queryYxFormList(condition);
-        return list;
+        return yxFormBO.queryYxFormList(condition);
     }
 
     // 详细查询意向代理
     @Override
     public YxForm getYxForm(String code) {
-        YxForm data = yxFormBO.getYxForm(code);
-        return data;
+        return yxFormBO.getYxForm(code);
+
     }
 
     // 分页查询意向代理

@@ -863,7 +863,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn0000", "该订单未申请取消");
         }
 
-        // TODO 回退状态怎么确定
         if (EResult.Result_YES.getCode().equals(result)) {
             if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
                 String toUser = data.getToUserId();

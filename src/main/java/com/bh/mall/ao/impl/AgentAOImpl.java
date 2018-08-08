@@ -320,7 +320,12 @@ public class AgentAOImpl implements IAgentAO {
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
             highUserId = ESysUser.SYS_USER_BH.getCode();
+        } else {
+            // 非一级代理同步上级团队名称
+            Agent highAgent = agentBO.getAgent(highUserId);
+            data.setTeamName(highAgent.getTeamName());
         }
+
         agentBO.refreshHighUser(data, highUserId, updater, remark);
         // 增肌上级门槛
         Account account = accountBO.getAccountByUser(data.getUserId(),
@@ -333,6 +338,7 @@ public class AgentAOImpl implements IAgentAO {
                 EBizType.AJ_XGSJ, EBizType.AJ_XGSJ.getValue(),
                 EBizType.AJ_XGSJ.getValue(), data.getUserId());
         }
+
     }
 
     // 修改推荐人
