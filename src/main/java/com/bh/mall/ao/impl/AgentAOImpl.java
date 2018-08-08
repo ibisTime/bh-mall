@@ -113,11 +113,8 @@ public class AgentAOImpl implements IAgentAO {
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
             String h5OpenId, String nickname, String photo, String fromUserId,
             String status) {
-        agentBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
-        Integer level = 0;
         String userId = agentBO.doRegister(unionId, h5OpenId, appOpenId, null,
-            EUserPwd.InitPwd.getCode(), nickname, photo, status, level,
-            fromUserId);
+            EUserPwd.InitPwd.getCode(), nickname, photo, status, fromUserId);
         XN627303Res result = new XN627303Res(userId, status);
         return result;
     }
@@ -310,7 +307,11 @@ public class AgentAOImpl implements IAgentAO {
             city, area, address);
     }
 
-    // 修改上级
+    /**
+     * 修改上级
+     * 1、该代理不是一级代理时，团队名称同步新上级的（包括他的下级），新的上级门槛中增加相应的余额
+     * @see com.bh.mall.ao.IAgentAO#editHighUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public void editHighUser(String userId, String highUserId, String updater,
             String remark) {
@@ -323,21 +324,23 @@ public class AgentAOImpl implements IAgentAO {
         } else {
             // 非一级代理同步上级团队名称
             Agent highAgent = agentBO.getAgent(highUserId);
-            data.setTeamName(highAgent.getTeamName());
+            agentBO.refreshTeamName(data, highAgent.getTeamName());
+            this.editTeamName(data.getUserId(), highAgent.getTeamName());
+
+            // 增加上级门槛
+            Account account = accountBO.getAccountByUser(data.getUserId(),
+                ECurrency.MK_CNY.getCode());
+
+            if (0 != account.getAmount()) {
+                accountBO.transAmountCZB(data.getUserId(),
+                    ECurrency.MK_CNY.getCode(), highUserId,
+                    ECurrency.MK_CNY.getCode(), account.getAmount(),
+                    EBizType.AJ_XGSJ, EBizType.AJ_XGSJ.getValue(),
+                    EBizType.AJ_XGSJ.getValue(), data.getUserId());
+            }
         }
 
         agentBO.refreshHighUser(data, highUserId, updater, remark);
-        // 增肌上级门槛
-        Account account = accountBO.getAccountByUser(data.getUserId(),
-            ECurrency.MK_CNY.getCode());
-
-        if (0 != account.getAmount()) {
-            accountBO.transAmountCZB(data.getUserId(),
-                ECurrency.MK_CNY.getCode(), highUserId,
-                ECurrency.MK_CNY.getCode(), account.getAmount(),
-                EBizType.AJ_XGSJ, EBizType.AJ_XGSJ.getValue(),
-                EBizType.AJ_XGSJ.getValue(), data.getUserId());
-        }
 
     }
 
@@ -534,9 +537,9 @@ public class AgentAOImpl implements IAgentAO {
     }
 
     // 修改下级团队名称
-    private void editTeamName(String userId, String teamName) {
+    private void editTeamName(String highUserId, String teamName) {
         Agent condition = new Agent();
-        condition.setHighUserId(userId);
+        condition.setHighUserId(highUserId);
         List<Agent> list = agentBO.queryAgentList(condition);
         for (Agent data : list) {
             agentBO.refreshTeamName(data, teamName);

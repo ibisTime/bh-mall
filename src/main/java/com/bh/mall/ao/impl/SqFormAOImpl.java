@@ -158,7 +158,7 @@ public class SqFormAOImpl implements ISqFormAO {
             agentBO.checkTeamName(req.getTeamName());
             agent.setTeamName(req.getTeamName());
             // 直接由公司审核
-            status = ESqFormStatus.COMPANY_APPROVE.getCode();
+            status = ESqFormStatus.COMPANY_IMPOWER.getCode();
         }
 
         // 新增授权单
@@ -179,7 +179,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
         String logCode = agentLogBO.applySqForm(sqForm);
 
-        agentBO.refreshAgent(sqForm, logCode);
+        agentBO.refreshAgent(sqForm, logCode, status);
     }
 
     /**
@@ -216,7 +216,7 @@ public class SqFormAOImpl implements ISqFormAO {
             agentBO.checkTeamName(req.getTeamName());
             data.setTeamName(req.getTeamName());
             // 直接由公司审核
-            status = ESqFormStatus.COMPANY_APPROVE.getCode();
+            status = ESqFormStatus.COMPANY_IMPOWER.getCode();
         }
 
         // 意向单
@@ -241,7 +241,7 @@ public class SqFormAOImpl implements ISqFormAO {
             data.getAddress(), status);
 
         String logCode = agentLogBO.applySqForm(sqForm);
-        agentBO.refreshAgent(sqForm, logCode);
+        agentBO.addInfo(sqForm, logCode, status);
     }
 
     /**
@@ -260,18 +260,21 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 审核通过
-        String status = ESqFormStatus.NO_THROUGH.getCode();
+        String status = ESqFormStatus.CANCELED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             AgentLevel impower = agentLevelBO
                 .getAgentByLevel(sqForm.getApplyLevel());
             // 需要公司授权
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
-                status = ESqFormStatus.COMPANY_APPROVE.getCode();
+                status = ESqFormStatus.COMPANY_IMPOWER.getCode();
             } else {
                 status = ESqFormStatus.IMPOWERED.getCode();
-
                 this.approveSqForm(sqForm);
             }
+        } else {
+            // 未通过，清空手机号等信息，防止重新申请时重复
+            Agent agent = agentBO.getAgent(userId);
+            agentBO.resetInfo(agent);
         }
 
         Agent approveAgent = agentBO.getAgent(approver);
@@ -279,8 +282,10 @@ public class SqFormAOImpl implements ISqFormAO {
             approveAgent.getRealName(), remark, status);
         // 记录日志
         Agent agent = agentBO.getAgent(sqForm.getUserId());
-        agentBO.refreshLastLog(agent, status, approver,
+        agentBO.refreshSq(agent, sqForm, sqForm.getToUserId(),
+            sqForm.getTeamName(), sqForm.getApplyLevel(), status, approver,
             approveAgent.getRealName(), logCode);
+
     }
 
     /**
@@ -298,7 +303,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 审核通过
-        String status = ESqFormStatus.NO_THROUGH.getCode();
+        String status = ESqFormStatus.CANCELED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             status = ESqFormStatus.IMPOWERED.getCode();
             this.approveSqForm(sqForm);
@@ -307,10 +312,15 @@ public class SqFormAOImpl implements ISqFormAO {
             Agent agent = agentBO.getAgent(userId);
             agentBO.resetInfo(agent);
         }
-
+        // 记录日志
         SYSUser sysUser = sysUserBO.getSYSUser(approver);
-        sqFormBO.approveSqForm(sqForm, approver, sysUser.getRealName(), remark,
-            status);
+        String logCode = sqFormBO.approveSqForm(sqForm, approver,
+            sysUser.getRealName(), remark, status);
+
+        Agent agent = agentBO.getAgent(sqForm.getUserId());
+        agentBO.refreshSq(agent, sqForm, sqForm.getToUserId(),
+            sqForm.getTeamName(), sqForm.getApplyLevel(), status, approver,
+            sysUser.getRealName(), logCode);
 
     }
 
@@ -330,13 +340,13 @@ public class SqFormAOImpl implements ISqFormAO {
 
         String status = ESqFormStatus.IMPOWERED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            status = ESqFormStatus.NO_THROUGH.getCode();
+            status = ESqFormStatus.CANCELED.getCode();
             AgentLevel agentLevel = agentLevelBO
                 .getAgentByLevel(agent.getLevel());
             // 是否需要公司审核
             if (EBoolean.YES.getCode()
                 .equals(agentLevel.getIsCompanyImpower())) {
-                status = ESqFormStatus.TO_COMPANY_CANCLE.getCode();
+                status = ESqFormStatus.CANCEL_COMPANY.getCode();
             } else {
                 Account account = accountBO.getAccountByUser(sqForm.getUserId(),
                     ECurrency.MK_CNY.getCode());
@@ -353,7 +363,14 @@ public class SqFormAOImpl implements ISqFormAO {
                 agentBO.resetUserReferee(agent.getUserId());
             }
         }
-        sqFormBO.cancelSqForm(sqForm, status);
+        // 记录日志
+        Agent approveAgent = agentBO.getAgent(approver);
+        String logCode = sqFormBO.approveSqForm(sqForm, approver,
+            approveAgent.getRealName(), remark, status);
+
+        agentBO.refreshSq(agent, sqForm, null, null, null, status, approver,
+            approveAgent.getRealName(), logCode);
+
     }
 
     /**
@@ -365,14 +382,13 @@ public class SqFormAOImpl implements ISqFormAO {
             String remark) {
         Agent agent = agentBO.getAgent(userId);
         SqForm data = sqFormBO.getSqForm(userId);
-        if (!ESqFormStatus.TO_COMPANY_CANCLE.getCode()
-            .equals(data.getStatus())) {
+        if (!ESqFormStatus.CANCEL_COMPANY.getCode().equals(data.getStatus())) {
             throw new BizException("xn000", "该代理未申请退出");
         }
 
         String status = ESqFormStatus.IMPOWERED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            status = ESqFormStatus.NO_THROUGH.getCode();
+            status = ESqFormStatus.CANCELED.getCode();
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
             // 账户清零
@@ -387,6 +403,15 @@ public class SqFormAOImpl implements ISqFormAO {
             agentBO.resetUserReferee(agent.getUserId());
         }
         sqFormBO.cancelSqForm(data, status);
+
+        // 记录日志
+        SYSUser sysUser = sysUserBO.getSYSUser(approver);
+        String logCode = sqFormBO.approveSqForm(data, approver,
+            sysUser.getRealName(), remark, status);
+
+        agentBO.refreshSq(agent, data, null, null, null, status, approver,
+            sysUser.getRealName(), logCode);
+
     }
 
     // 列表查询
@@ -491,7 +516,7 @@ public class SqFormAOImpl implements ISqFormAO {
         String status = ESqFormStatus.TO_CANCEL.getCode();
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
             .getLevel()) {
-            status = ESqFormStatus.TO_COMPANY_CANCLE.getCode();
+            status = ESqFormStatus.CANCEL_COMPANY.getCode();
         }
 
         String logCode = sqFormBO.cancelSqForm(sqForm, status);
@@ -543,7 +568,6 @@ public class SqFormAOImpl implements ISqFormAO {
         }
         Agent agent = agentBO.getAgent(sqForm.getUserId());
         agentReportBO.saveAgentReport(sqForm, agent);
-        agentBO.sqSuccess(sqForm);
     }
 
 }

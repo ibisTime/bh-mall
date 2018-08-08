@@ -22,6 +22,8 @@ import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
+import com.bh.mall.enums.ESjFormStatus;
+import com.bh.mall.enums.ESqFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -38,7 +40,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public String doRegister(String unionId, String h5OpenId, String appOpenId,
             String mobile, String loginPwd, String nickname, String photo,
-            String status, Integer level, String fromUserId) {
+            String status, String fromUserId) {
         String userId = OrderNoGenerater.generate("U");
         Agent buser = new Agent();
         buser.setUserId(userId);
@@ -57,7 +59,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         Date date = new Date();
         buser.setCreateDatetime(date);
 
-        buser.setLevel(level);
         agentDAO.insert(buser);
         return userId;
     }
@@ -98,30 +99,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         return agentDAO.selectList(data);
     }
 
-    @Override
-    public List<Agent> queryAgentList(String mobile, String kind) {
-        Agent condition = new Agent();
-        condition.setMobile(mobile);
-        return agentDAO.selectList(condition);
-    }
-
-    /*************** 检查信息 **********************/
-    /** 
-     * @see com.bh.mall.bo.IAgentBO#doCheckOpenId(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void doCheckOpenId(String unionId, String h5OpenId,
-            String appOpenId) {
-        Agent condition = new Agent();
-        condition.setUnionId(unionId);
-        condition.setH5OpenId(h5OpenId);
-        condition.setAppOpenId(appOpenId);
-        long count = getTotalCount(condition);
-        if (count > 0) {
-            throw new BizException("xn702002", "微信编号已存在");
-        }
-    }
-
     // 检查手机号是否已存在
     @Override
     public void isMobileExist(String mobile) {
@@ -133,36 +110,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "手机号已经存在");
-            }
-        }
-    }
-
-    // 判断登录名
-    @Override
-    public String getUserId(String mobile, String kind) {
-        String userId = null;
-        if (StringUtils.isNotBlank(mobile) && StringUtils.isNotBlank(kind)) {
-            Agent condition = new Agent();
-            condition.setMobile(mobile);
-            List<Agent> list = agentDAO.selectList(condition);
-            if (CollectionUtils.isNotEmpty(list)) {
-                Agent data = list.get(0);
-                userId = data.getUserId();
-            }
-        }
-        return userId;
-    }
-
-    // 检查推荐人
-    @Override
-    public void checkAgentReferee(String userReferee, String systemCode) {
-        if (StringUtils.isNotBlank(userReferee)) {
-            // 判断格式
-            Agent condition = new Agent();
-            condition.setUserId(userReferee);
-            long count = getTotalCount(condition);
-            if (count <= 0) {
-                throw new BizException("li01003", "推荐人不存在");
             }
         }
     }
@@ -190,34 +137,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             }
         }
         return data;
-    }
-
-    @Override
-    public boolean isUserExist(String userId) {
-        Agent condition = new Agent();
-        condition.setUserId(userId);
-        if (agentDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    /** 
-     * @see com.bh.mall.bo.IAgentBO#checkIdentify(java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void checkIdentify(String kind, String idKind, String idNo,
-            String realName) {
-        Agent condition = new Agent();
-        condition.setIdKind(idKind);
-        condition.setIdNo(idNo);
-        condition.setRealName(realName);
-        List<Agent> userList = agentDAO.selectList(condition);
-        if (CollectionUtils.isNotEmpty(userList)) {
-            Agent data = userList.get(0);
-            throw new BizException("xn000001",
-                "用户[" + data.getMobile() + "]已使用该身份信息，请重新填写");
-        }
     }
 
     // 检查团队名称
@@ -297,22 +216,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setArea(area);
         data.setAddress(address);
         agentDAO.update(data);
-    }
-
-    @Override
-    public void refreshWxInfo(String userId, String unionId, String h5OpenId,
-            String appOpenId, String nickname, String photo) {
-        Agent dbAgent = getAgent(userId);
-        dbAgent.setUnionId(unionId);
-        if (StringUtils.isNotBlank(h5OpenId)) {
-            dbAgent.setH5OpenId(h5OpenId);
-        }
-        if (StringUtils.isNotBlank(appOpenId)) {
-            dbAgent.setAppOpenId(appOpenId);
-        }
-        dbAgent.setNickname(nickname);
-        dbAgent.setPhoto(photo);
-        agentDAO.updateWxInfo(dbAgent);
     }
 
     @Override
@@ -459,37 +362,18 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public void refreshLastLog(Agent data, String status, String approver,
+    public void refreshYx(Agent data, String status, String approver,
             String approveName, String logCode) {
-        if (StringUtils.isNotEmpty(status)) {
-            data.setStatus(status);
+        if (StringUtils.isNotBlank(status)) {
+            data.setStatus(EAgentStatus.IGNORED.getCode());
         }
+
         data.setApproveDatetime(new Date());
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setLastAgentLog(logCode);
 
         agentDAO.updateLastLog(data);
-    }
-
-    @Override
-    public void refreshAgent(SqForm sqForm) {
-        Agent data = this.getAgent(sqForm.getUserId());
-        data.setRealName(sqForm.getRealName());
-        data.setWxId(sqForm.getWxId());
-        data.setReferrer(sqForm.getReferrer());
-        data.setIntroducer(sqForm.getIntroducer());
-
-        data.setTeamName(sqForm.getTeamName());
-        data.setIdKind(sqForm.getIdKind());
-        data.setIdNo(sqForm.getIdNo());
-        data.setIdHand(sqForm.getIdHand());
-        data.setProvince(sqForm.getProvince());
-
-        data.setCity(sqForm.getCity());
-        data.setArea(sqForm.getArea());
-        data.setAddress(sqForm.getAddress());
-        agentDAO.update(data);
     }
 
     @Override
@@ -505,54 +389,18 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public void sqSuccess(SqForm sqForm) {
-        Agent agent = getAgent(sqForm.getUserId());
-        agent.setRealName(sqForm.getRealName());
-        agent.setLevel(sqForm.getApplyLevel());
-        agent.setReferrer(sqForm.getReferrer());
-        agent.setIntroducer(sqForm.getIntroducer());
-
-        agent.setIdKind(sqForm.getIdKind());
-        agent.setIdNo(sqForm.getIdNo());
-        agent.setIdHand(sqForm.getIdHand());
-        agent.setTeamName(sqForm.getTeamName());
-        agent.setHighUserId(sqForm.getToUserId());
-
-        agent.setStatus(EAgentStatus.IMPOWERED.getCode());
-        agent.setProvince(sqForm.getProvince());
-        agent.setCity(sqForm.getCity());
-        agent.setArea(sqForm.getArea());
-        agent.setAddress(sqForm.getAddress());
-
-        agent.setApprover(sqForm.getApprover());
-        agent.setApproveName(sqForm.getApproveName());
-        agent.setRemark(sqForm.getRemark());
-        agent.setImpowerDatetime(sqForm.getImpowerDatetime());
-        agentDAO.sqSuccess(agent);
-    }
-
-    @Override
-    public void sjSuccess(SjForm sjForm) {
-        Agent agent = getAgent(sjForm.getUserId());
-        agent.setIdKind(sjForm.getIdKind());
-        agent.setIdNo(sjForm.getIdNo());
-        agent.setIdHand(sjForm.getIdHand());
-        agent.setTeamName(sjForm.getTeamName());
-
-        agent.setLevel(sjForm.getApplyLevel());
-        agent.setApprover(sjForm.getApprover());
-        agent.setApproveName(sjForm.getApproveName());
-        agent.setRemark(sjForm.getRemark());
-        agentDAO.sjSuccess(agent);
-    }
-
-    @Override
-    public void refreshAgent(SqForm sqForm, String logCode) {
+    public void refreshAgent(SqForm sqForm, String logCode, String status) {
         Agent data = getAgent(sqForm.getUserId());
         data.setIdKind(sqForm.getIdKind());
         data.setIdNo(sqForm.getIdNo());
         data.setIdHand(sqForm.getIdHand());
         data.setTeamName(sqForm.getTeamName());
+
+        if (ESqFormStatus.COMPANY_IMPOWER.getCode().equals(status)) {
+            data.setStatus(EAgentStatus.COMPANY_IMPOWER.getCode());
+        } else {
+            data.setStatus(EAgentStatus.TO_APPROVE.getCode());
+        }
 
         data.setIntroducer(sqForm.getIntroducer());
         agentDAO.addInfo(data);
@@ -574,6 +422,85 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshLog(Agent data, String logCode) {
         data.setLastAgentLog(logCode);
         agentDAO.updateLastLog(data);
+    }
+
+    @Override
+    public void addInfo(SqForm sqForm, String logCode, String status) {
+        Agent agent = getAgent(sqForm.getUserId());
+        agent.setRealName(sqForm.getRealName());
+        agent.setReferrer(sqForm.getReferrer());
+        agent.setIntroducer(sqForm.getIntroducer());
+
+        agent.setIdKind(sqForm.getIdKind());
+        agent.setIdNo(sqForm.getIdNo());
+        agent.setIdHand(sqForm.getIdHand());
+        agent.setTeamName(sqForm.getTeamName());
+        agent.setHighUserId(sqForm.getToUserId());
+
+        if (ESqFormStatus.COMPANY_IMPOWER.getCode().equals(status)) {
+            agent.setStatus(EAgentStatus.COMPANY_IMPOWER.getCode());
+        } else {
+            agent.setStatus(EAgentStatus.TO_APPROVE.getCode());
+        }
+        agent.setProvince(sqForm.getProvince());
+        agent.setCity(sqForm.getCity());
+        agent.setArea(sqForm.getArea());
+        agent.setAddress(sqForm.getAddress());
+
+        agentDAO.applyAgent(agent);
+    }
+
+    @Override
+    public void refreshSq(Agent data, SqForm sqForm, String highUserId,
+            String teamName, Integer level, String status, String approver,
+            String approveName, String logCode) {
+
+        if (EAgentStatus.IMPOWERED.getCode().equals(status)) {
+            Date date = new Date();
+            data.setLevel(sqForm.getApplyLevel());
+            data.setImpowerDatetime(date);
+        } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
+            highUserId = null;
+            teamName = null;
+        }
+
+        data.setHighUserId(sqForm.getToUserId());
+        data.setTeamName(teamName);
+        data.setStatus(status);
+
+        data.setApprover(approver);
+        data.setApproveName(approveName);
+        data.setApproveDatetime(sqForm.getApproveDatetime());
+        data.setRemark(sqForm.getRemark());
+        data.setLastAgentLog(logCode);
+
+        agentDAO.updateSq(data);
+    }
+
+    @Override
+    public void refreshSj(Agent data, SjForm sjForm, String approver,
+            String approveName, String remark, String status, String logCode) {
+        if (ESjFormStatus.THROUGH_YES.getCode().equals(status)) {
+            data.setLevel(sjForm.getApplyLevel());
+            data.setTeamName(sjForm.getTeamName());
+            data.setIdKind(sjForm.getIdKind());
+            data.setIdNo(sjForm.getIdNo());
+            data.setIdHand(sjForm.getIdHand());
+            data.setStatus(EAgentStatus.IMPOWERED.getCode());
+
+        } else {
+            data.setStatus(status);
+        }
+
+        Date date = new Date();
+        data.setApprover(approver);
+        data.setApproveName(approveName);
+        data.setApproveDatetime(date);
+        data.setRemark(remark);
+
+        data.setLastAgentLog(logCode);
+        agentDAO.updateSj(data);
+
     }
 
 }

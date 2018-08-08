@@ -79,7 +79,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     }
 
     @Override
-    public void approveSjForm(SjForm sjForm, Agent agent, String approver,
+    public String approveSjForm(SjForm sjForm, Agent agent, String approver,
             String approveName, String remark, String status) {
         sjForm.setApprover(approver);
         sjForm.setApproveName(approveName);
@@ -87,12 +87,9 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         sjForm.setApproveDatetime(date);
         sjForm.setRemark(remark);
         sjForm.setStatus(status);
-        agentLogBO.applySjForm(sjForm, agent);
 
-        Agent user = agentBO.getAgent(sjForm.getUserId());
-        user.setLevel(sjForm.getApplyLevel());
-        agentBO.refreshLevel(user);
         sjFormDAO.approveSjForm(sjForm);
+        return agentLogBO.applySjForm(sjForm, agent);
     }
 
     // 详细查询

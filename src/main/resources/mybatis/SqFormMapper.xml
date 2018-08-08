@@ -185,7 +185,7 @@
 		WHERE user_id= #{userId}
 	</update>
 	
-		<update id="cancel_sqForm" parameterType="sqForm">
+	<update id="cancel_sqForm" parameterType="sqForm">
 		UPDATE tbh_sq_form
 		SET		
 		status = #{status}

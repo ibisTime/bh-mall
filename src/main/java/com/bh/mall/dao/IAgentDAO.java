@@ -127,13 +127,11 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
     // 清空推荐关系
     public void resetUserReferee(Agent agent);
 
-    // 授权成功
-    public void sqSuccess(Agent agent);
-
-    // 升级成功
-    public void sjSuccess(Agent agent);
-
     // 添加授权资料
     public void addInfo(Agent data);
+
+    public void updateSq(Agent data);
+
+    public void updateSj(Agent data);
 
 }

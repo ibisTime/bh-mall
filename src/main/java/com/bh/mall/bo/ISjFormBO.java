@@ -16,7 +16,7 @@ public interface ISjFormBO extends IPaginableBO<SjForm> {
             String newLevel, String idKind, String idNo, String idHand,
             String payPdf, String payAmount, String status);
 
-    public void approveSjForm(SjForm sjForm, Agent agent, String userId,
+    public String approveSjForm(SjForm sjForm, Agent agent, String userId,
             String realName, String remark, String status);
 
     public List<SjForm> querySjFormList(SjForm condition);

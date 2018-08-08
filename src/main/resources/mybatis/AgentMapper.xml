@@ -424,7 +424,7 @@
 		WHERE user_id = #{userId}
 	</update>
 
-<update id="update_level" parameterType="agent">
+	<update id="update_level" parameterType="agent">
 		UPDATE tbh_agent
 		SET
 		level = #{level}
@@ -492,13 +492,11 @@
 	<update id="add_info" parameterType="agent">
 		UPDATE tbh_agent
 		SET
-		team_name = #{teamName}
+		status = #{status}
+		,team_name = #{teamName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_hand = #{idHand}
-		,approver = #{approver}
-		,approve_name = #{approveName}
-		,approve_datetime =	#{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
@@ -522,4 +520,32 @@
 		,team_name = #{teamName}
 		WHERE user_id = #{userId}
 	</update>
+	
+	<update id="update_sq" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		level = #{level}
+		,high_user_id = #{highUserId}
+		,team_name = #{teamName}
+		,approver = #{approver}
+		,approve_name = #{approveName}
+		,approve_datetime =	#{approveDatetime}
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="update_sj" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		level = #{level}
+		,team_name = #{teamName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		,id_hand = #{idHand}
+		,high_user_id = #{highUserId}
+		,approver = #{approver}
+		,approve_name = #{approveName}
+		,approve_datetime =	#{approveDatetime}
+		WHERE user_id = #{userId}
+	</update>
+	
 </mapper>
