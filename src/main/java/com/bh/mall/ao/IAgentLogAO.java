@@ -28,7 +28,7 @@ public interface IAgentLogAO {
     // 列表查询代理轨迹 627366
     public List<AgentLog> queryAgentLogList(AgentLog condition);
 
-    // 根据编号查询代理轨迹 TODO 627367
+    // 根据编号查询代理轨迹
     public AgentLog getAgentLog(String code);
 
 }

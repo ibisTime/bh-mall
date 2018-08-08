@@ -138,7 +138,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Autowired
     ISYSUserBO sysUserBO;
 
-    // TODO 判别下单人信息
     @Override
     @Transactional
     public List<String> addOutOrder(XN627640Req req) {

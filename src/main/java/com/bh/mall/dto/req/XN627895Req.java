@@ -3,9 +3,7 @@ package com.bh.mall.dto.req;
 import java.util.List;
 
 public class XN627895Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = -3747505680351428877L;
 
     // 状态

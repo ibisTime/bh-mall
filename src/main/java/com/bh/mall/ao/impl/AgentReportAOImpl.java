@@ -42,7 +42,7 @@ public class AgentReportAOImpl implements IAgentReportAO {
                 agentReport.setUserRefereeName(userName.getRealName());
                 userName = agentBO.getAgent(agentReport.getIntroducer());
                 agentReport.setIntroduceName(userName.getRealName());
-                // TODO 关联管理员
+
             }
         }
 

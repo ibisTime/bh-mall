@@ -235,12 +235,6 @@ public class YxFormAOImpl implements IYxFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        // TODO
-        if (EYxFormStatus.ALLOTED.getCode().equals(condition.getStatus())) {
-            condition.setApprover(condition.getUserIdForQuery());
-        } else {
-            condition.setToUserId(condition.getUserIdForQuery()); // 意向归属人
-        }
         return yxFormBO.getPaginable(start, limit, condition);
     }
 
