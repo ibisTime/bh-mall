@@ -92,6 +92,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
 
     @Override
     public void cancelInOrder(InOrder data) {
+        data.setStatus(EInOrderStatus.TO_Cancel.getCode());
         inOrderDAO.cancelOrder(data);
 
     }
@@ -185,7 +186,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
 
     @Override
     public String pickUpGoods(String productCode, String productName,
-            String pic, String productSpecsCode, String productSpecsName,
+            String pic, String productSpecsCode, String specsName,
             Integer singleNumber, Long price, Long amount, Long yunfei,
             String highUserId, String userId, String signer, String mobile,
             String province, String city, String area, String address,
@@ -200,7 +201,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         data.setPic(pic);
 
         data.setSpecsCode(productSpecsCode);
-        data.setSpecsName(productSpecsName);
+        data.setSpecsName(specsName);
         data.setQuantity(singleNumber);
         data.setPrice(price);
 

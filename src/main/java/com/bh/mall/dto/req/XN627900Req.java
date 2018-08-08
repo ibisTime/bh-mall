@@ -14,10 +14,6 @@ public class XN627900Req {
     @NotBlank(message = "下单人不能为空")
     private String applyUser;
 
-    // （必填） 订单归属人
-    @NotBlank(message = "订单归属人不能为空")
-    private String toUserId;
-
     // （必填）产品规格编号
     @NotBlank(message = "产品规格编号不能为空")
     private String specsCode;
@@ -31,10 +27,6 @@ public class XN627900Req {
 
     public String getApplyUser() {
         return applyUser;
-    }
-
-    public String getToUserId() {
-        return toUserId;
     }
 
     public String getSpecsCode() {
@@ -51,10 +43,6 @@ public class XN627900Req {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
-    }
-
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
     }
 
     public void setSpecsCode(String specsCode) {

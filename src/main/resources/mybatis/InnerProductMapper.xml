@@ -4,7 +4,6 @@
 <mapper namespace="com.bh.mall.dao.IInnerProductDAO">
 	<resultMap id="innerProduct_DB_Result" type="innerProduct">
 		<result column="code" property="code"/>
-		<result column="name" property="name"/>
 		<result column="pic" property="pic"/>
 		<result column="adv_pic" property="advPic"/>
 		<result column="slogan" property="slogan"/>
@@ -26,9 +25,7 @@
 			<if test="code != null and code != ''">
 				AND t.code = #{code}
 			</if>
-			<if test="name != null and name != ''">
-				AND t.name like "%"#{name}"%"
-			</if>
+		
 			<if test="status != null and status !=''">
 				AND t.status  = #{status}
 			</if>
@@ -38,7 +35,6 @@
 	<select id="select_innerProduct" parameterType="innerProduct" resultMap="innerProduct_DB_Result">
 		SELECT 
 		t.code
-		,t.name
 		,t.pic
 		,t.adv_pic
 		,t.slogan
@@ -71,7 +67,6 @@
 	<insert id="insert_innerProduct" parameterType="innerProduct">
 		INSERT INTO tbh_inner_product(
 		code
-		,name
 		,pic
 		,adv_pic
 		,slogan
@@ -86,7 +81,6 @@
 		)
 		VALUES(
 		#{code}
-		,#{name}
 		,#{pic}
 		,#{advPic}
 		,#{slogan}
@@ -105,8 +99,7 @@
 	<update id="update_innerProduct" parameterType="innerProduct">
 		UPDATE tbh_inner_product 
 		SET 
-		name = #{name}
-		,pic = #{pic}
+		pic = #{pic}
 		,adv_pic = #{advPic}
 		,slogan = #{slogan}
 		,price = #{price}

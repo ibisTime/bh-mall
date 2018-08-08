@@ -199,7 +199,7 @@ public class InOrderAOImpl implements IInOrderAO {
         // 非最高等级代理，检查上级云仓
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agentLevel
             .getLevel()) {
-            wareBO.checkProduct(applyAgent.getUserId(), specsCode);
+            wareBO.checkProduct(applyAgent.getHighUserId(), specsCode);
         } else {
             // 非最高等级代理，扣减产品库存
             Integer nowNumber = pData.getRealNumber() - (quantity * minNumber);
@@ -538,7 +538,7 @@ public class InOrderAOImpl implements IInOrderAO {
     public void approveCancel(String code, String result, String updater,
             String remark) {
         InOrder data = inOrderBO.getInOrder(code);
-        if (!EOrderStatus.TO_Cancel.getCode().equals(data.getStatus())) {
+        if (!EInOrderStatus.TO_Cancel.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该订单未申请取消");
         }
 

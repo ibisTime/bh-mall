@@ -222,7 +222,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
             condition.setSpecsCode(specsCode);
             data = wareDAO.select(condition);
             if (null == data) {
-                throw new BizException("xn00000", "上级云仓中没有改产品");
+                throw new BizException("xn00000", "上级云仓中没有该产品");
             }
         }
 
