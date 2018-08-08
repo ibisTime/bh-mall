@@ -10,14 +10,16 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 
 public interface IChargeBO extends IPaginableBO<Charge> {
+
     String applyOrderOnline(Account account, String payGroup, String refNo,
             EBizType bizType, String bizNote, Long transAmount,
-            EChannelType channelType, String applyUser);
+            EChannelType channelType, String applyUser, Integer level);
 
     void callBackChange(Charge dbCharge, boolean booleanFlag);
 
     String applyOrderOffline(Account account, EBizType bizType, Long amount,
-            String applyUser, String applyNote, String chargePdf);
+            String applyUser, Integer level, String applyNote,
+            String chargePdf);
 
     void payOrder(Charge data, String status, String payUser, String payNote);
 

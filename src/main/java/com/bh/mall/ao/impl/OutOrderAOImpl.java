@@ -65,7 +65,6 @@ import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EPayType;
@@ -76,8 +75,6 @@ import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
@@ -433,7 +430,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Object result = null;
         for (String code : codeList) {
             OutOrder data = outOrderBO.getOutOrder(code);
-            if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+            if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
             data.setPayType(EChannelType.WeChat_XCX.getCode());
@@ -451,7 +448,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     EChannelType.NBZ, null, payGroup, data.getCode(),
                     EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
                     -data.getAmount());
-                String status = EOrderStatus.Paid.getCode();
+                String status = EOutOrderStatus.TO_APPROVE.getCode();
 
                 data.setPayDatetime(new Date());
                 data.setPayCode(data.getCode());
@@ -498,7 +495,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             String outTradeNo = map.get("out_trade_no");
 
             OutOrder data = outOrderBO.getOutOrder(outTradeNo);
-            if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+            if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单已支付");
             }
 
@@ -510,7 +507,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 // 账户收钱
                 this.payOrder(agent, data, wechatOrderNo);
 
-                String status = EOrderStatus.Paid.getCode();
+                String status = EOutOrderStatus.TO_APPROVE.getCode();
                 data.setPayDatetime(new Date());
                 data.setPayCode(wechatOrderNo);
                 data.setPayAmount(data.getAmount());
@@ -519,7 +516,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 outOrderBO.paySuccess(data);
             } else {
 
-                data.setStatus(EOrderStatus.Pay_NO.getCode());
+                data.setStatus(EOutOrderStatus.PAY_FAIL.getCode());
                 data.setPayDatetime(new Date());
                 outOrderBO.payNo(data);
             }
@@ -620,8 +617,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     public void editOutOrder(XN627643Req req) {
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
-        if (EOrderStatus.TO_Deliver.getCode().equals(data.getStatus())
-                || EOrderStatus.Received.getCode().equals(data.getStatus())) {
+        if (EOutOrderStatus.TO_RECEIVE.getCode().equals(data.getStatus())
+                || EOutOrderStatus.RECEIVED.getCode()
+                    .equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已发货");
         }
         data.setSigner(req.getSigner());
@@ -724,10 +722,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Agent toUser = agentBO.getAgent(data.getToUserId());
 
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
-            // C端产品无法云仓发
-            if (EUserKind.Customer.getCode().equals(data.getKind())) {
-                throw new BizException("xn00000", "非代理的订单无法从云仓发货哦！");
-            }
 
             AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
                 toUser.getLevel());
@@ -761,7 +755,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         data.setLogisticsCompany(req.getLogisticsCompany());
 
         data.setIsCompanySend(req.getIsCompanySend());
-        data.setStatus(EOrderStatus.TO_Deliver.getCode());
+        data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
         data.setRemark(req.getRemark());
 
         // 是否有填写箱码或盒码
@@ -823,10 +817,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
             String approveNote) {
         for (String code : codeList) {
             OutOrder data = outOrderBO.getOutOrder(code);
-            if (!EOrderStatus.Paid.getCode().equals(data.getStatus())) {
+            if (!EOutOrderStatus.TO_APPROVE.getCode()
+                .equals(data.getStatus())) {
                 throw new BizException("xn00000", "该订单不处于待审核状态");
             }
-            data.setStatus(EOrderStatus.TO_Apprvoe.getCode());
+            data.setStatus(EOutOrderStatus.TO_SEND.getCode());
             data.setApprover(approver);
             data.setApproveDatetime(new Date());
             data.setApproveNote(approveNote);
@@ -840,13 +835,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
         OutOrder data = outOrderBO.getOutOrder(code);
 
         // 订单已申请取消或已取消
-        if (EOrderStatus.TO_Cancel.getCode().equals(data.getStatus())
-                || EOrderStatus.Canceled.getCode().equals(data.getStatus())) {
+        if (EOutOrderStatus.TO_CANECL.getCode().equals(data.getStatus())
+                || EOutOrderStatus.CANCELED.getCode()
+                    .equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已申请取消喽，请勿重复申请！");
         }
-        // 订单已发货或已收货无法取消
-        if (EOrderStatus.TO_Deliver.getCode().equals(data.getStatus())
-                || EOrderStatus.Received.getCode().equals(data.getStatus())) {
+        // 非待支付和待审单的订单无法取消
+        if (EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || EOutOrderStatus.TO_APPROVE.getCode()
+                    .equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已发货或已收货，无法申请取消");
         }
 
@@ -855,7 +852,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn00000", "授权单无法取消哦！");
         }
 
-        data.setStatus(EOrderStatus.TO_Cancel.getCode());
+        data.setStatus(EOutOrderStatus.TO_CANECL.getCode());
         outOrderBO.cancelOutOrder(data);
     }
 
@@ -863,13 +860,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public void approveCancel(String code, String result, String updater,
             String remark) {
         OutOrder data = outOrderBO.getOutOrder(code);
-        if (!EOrderStatus.TO_Cancel.getCode().equals(data.getStatus())) {
+        if (!EOutOrderStatus.TO_CANECL.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该订单未申请取消");
         }
 
-        data.setStatus(EOrderStatus.Paid.getCode());
+        // TODO 回退状态怎么确定
         if (EResult.Result_YES.getCode().equals(result)) {
-            data.setStatus(EOrderStatus.Canceled.getCode());
             if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
                 String toUser = data.getToUserId();
                 if (StringUtils.isBlank(toUser)) {
@@ -893,7 +889,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     public void receivedOutOrder(String code) {
         OutOrder data = outOrderBO.getOutOrder(code);
-        data.setStatus(EOrderStatus.Received.getCode());
+        data.setStatus(EOutOrderStatus.RECEIVED.getCode());
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
         outOrderBO.receivedOutOrder(data);
@@ -901,29 +897,29 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     private String checkOrder(Agent applyUser, Specs specs) {
         String kind = EOutOrderKind.Normal_Order.getCode();
-        // 是否完成授权单
-        if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
-            if (!outOrderBO.checkImpowerOrder(applyUser.getUserId(),
-                applyUser.getImpowerDatetime())) {
-                kind = EOutOrderKind.Impower_Order.getCode();
-                if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(specs.getIsImpowerOrder())) {
-                    throw new BizException("xn0000", "该产品规格不予授权单单下单");
-                }
-            }
-        }
+        // // 是否完成授权单
+        // if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
+        // if (!outOrderBO.checkImpowerOrder(applyUser.getUserId(),
+        // applyUser.getImpowerDatetime())) {
+        // kind = EOutOrderKind.Impower_Order.getCode();
+        // if (EProductSpecsType.Apply_NO.getCode()
+        // .equals(specs.getIsImpowerOrder())) {
+        // throw new BizException("xn0000", "该产品规格不予授权单单下单");
+        // }
+        // }
+        // }
 
-        // 是否完成升级单
-        // boolean upgradeOrder = this.CheckImpowerOrder(applyUser);
-        if (EUserStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
-            // if (!upgradeOrder) {
-            // kind = EOrderKind.Upgrade_Order.getCode();
-            // }
-            if (EProductSpecsType.Apply_NO.getCode()
-                .equals(specs.getIsUpgradeOrder())) {
-                throw new BizException("xn0000", "该产品规格不予授权单单下单");
-            }
-        }
+        // // 是否完成升级单
+        // // boolean upgradeOrder = this.CheckImpowerOrder(applyUser);
+        // if (EUserStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
+        // // if (!upgradeOrder) {
+        // // kind = EOrderKind.Upgrade_Order.getCode();
+        // // }
+        // if (EProductSpecsType.Apply_NO.getCode()
+        // .equals(specs.getIsUpgradeOrder())) {
+        // throw new BizException("xn0000", "该产品规格不予授权单单下单");
+        // }
+        // }
 
         // 是否允许普通单下单
         if (EProductSpecsType.Apply_NO.getCode()
@@ -971,10 +967,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 && StringUtils.isNotBlank(agent.getReferrer())) {
             // 下单金额是否超过授权金额
             List<String> statusList = new ArrayList<String>();
-            statusList.add(EOrderStatus.Paid.getCode());
-            statusList.add(EOrderStatus.TO_Apprvoe.getCode());
-            statusList.add(EOrderStatus.TO_Deliver.getCode());
-            statusList.add(EOrderStatus.Received.getCode());
+            statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
+            statusList.add(EOutOrderStatus.TO_SEND.getCode());
+            statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
+            statusList.add(EOutOrderStatus.RECEIVED.getCode());
 
             OutOrder condition = new OutOrder();
             condition.setApplyUser(agent.getUserId());
@@ -1033,8 +1029,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         OutOrder data = outOrderBO.getOutOrder(code);
         // 非待支付与未审核订单无法作废
-        if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())
-                || !EOrderStatus.Paid.getCode().equals(data.getStatus())) {
+        if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || !EOutOrderStatus.TO_APPROVE.getCode()
+                    .equals(data.getStatus())) {
             throw new BizException("xn00000", "该订单无法作废");
         }
         outOrderBO.invalidOutOrder(data, updater, remark);

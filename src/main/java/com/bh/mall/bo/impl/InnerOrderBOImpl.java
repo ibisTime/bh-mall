@@ -12,6 +12,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IInnerOrderDAO;
 import com.bh.mall.domain.InnerOrder;
+import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -105,6 +106,7 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
 
     @Override
     public void paySuccess(InnerOrder data) {
+        data.setStatus(EInnerOrderStatus.Paid.getCode());
         innerOrderDAO.paySuccess(data);
     }
 
@@ -117,6 +119,7 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
 
     @Override
     public void payNo(InnerOrder data) {
+        data.setStatus(EInnerOrderStatus.Pay_No.getCode());
         innerOrderDAO.payNo(data);
 
     }

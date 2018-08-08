@@ -54,7 +54,6 @@ import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInOrderStatus;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductIsTotal;
 import com.bh.mall.enums.EProductLogType;
@@ -250,7 +249,7 @@ public class InOrderAOImpl implements IInOrderAO {
         Object result = null;
         for (String code : codeList) {
             InOrder data = inOrderBO.getInOrder(code);
-            if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+            if (!EInOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
             Agent uData = agentBO.getAgent(data.getApplyUser());
@@ -318,7 +317,7 @@ public class InOrderAOImpl implements IInOrderAO {
             String outTradeNo = map.get("out_trade_no");
 
             InOrder data = inOrderBO.getInOrder(outTradeNo);
-            if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+            if (!EInOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单已支付");
             }
 
@@ -345,7 +344,7 @@ public class InOrderAOImpl implements IInOrderAO {
                 inOrderBO.paySuccess(data);
             } else {
 
-                data.setStatus(EOrderStatus.Pay_NO.getCode());
+                data.setStatus(EInOrderStatus.Pay_NO.getCode());
                 data.setPayDatetime(new Date());
                 inOrderBO.payNo(data);
             }
@@ -522,7 +521,7 @@ public class InOrderAOImpl implements IInOrderAO {
 
         // 订单已申请取消或已取消
         if (EInOrderStatus.TO_Cancel.getCode().equals(data.getStatus())
-                || EOrderStatus.Canceled.getCode().equals(data.getStatus())) {
+                || EInOrderStatus.Canceled.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已申请取消喽，请勿重复申请！");
         }
         // 订单已发货或已收货无法取消
@@ -530,7 +529,7 @@ public class InOrderAOImpl implements IInOrderAO {
             throw new BizException("xn00000", "订单已收货，无法申请取消");
         }
 
-        data.setStatus(EOrderStatus.TO_Cancel.getCode());
+        data.setStatus(EInOrderStatus.TO_Cancel.getCode());
         inOrderBO.cancelInOrder(data);
     }
 
@@ -538,13 +537,13 @@ public class InOrderAOImpl implements IInOrderAO {
     public void approveCancel(String code, String result, String updater,
             String remark) {
         InOrder data = inOrderBO.getInOrder(code);
-        if (!EOrderStatus.TO_Cancel.getCode().equals(data.getStatus())) {
+        if (!EInOrderStatus.TO_Cancel.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该订单未申请取消");
         }
 
-        data.setStatus(EOrderStatus.Paid.getCode());
+        data.setStatus(EInOrderStatus.Unpaid.getCode());
         if (EResult.Result_YES.getCode().equals(result)) {
-            data.setStatus(EOrderStatus.Canceled.getCode());
+            data.setStatus(EInOrderStatus.Canceled.getCode());
             // 云仓提货，归还云仓库存
             if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
                 String toUser = data.getToUserId();
@@ -572,7 +571,7 @@ public class InOrderAOImpl implements IInOrderAO {
             // 下单金额是否超过授权金额
             InOrder condition = new InOrder();
             condition.setApplyUser(agent.getUserId());
-            condition.setStatus(EOrderStatus.Received.getCode());
+            condition.setStatus(EInOrderStatus.Received.getCode());
             List<InOrder> list = inOrderBO.queryInOrderList(condition);
             Long amount = 0L;
             for (InOrder inOrder : list) {
@@ -624,7 +623,7 @@ public class InOrderAOImpl implements IInOrderAO {
     public void invalidInOrder(String code, String updater, String remark) {
         InOrder data = inOrderBO.getInOrder(code);
         // 非待支付与未审核订单无法作废
-        if (!EOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+        if (!EInOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "该订单无法作废");
         }
         inOrderBO.invalidOrder(data, updater, remark);
@@ -636,7 +635,7 @@ public class InOrderAOImpl implements IInOrderAO {
         // 每十二个小时执行一次，删除是个小时前未支付的订单
         Date date = new Date();
         InOrder condition = new InOrder();
-        condition.setStatus(EOrderStatus.Unpaid.getCode());
+        condition.setStatus(EInOrderStatus.Unpaid.getCode());
         condition.setEndDatetime(date);
         List<InOrder> list = inOrderBO.queryInOrderList(condition);
         for (InOrder data : list) {

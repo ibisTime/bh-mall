@@ -42,12 +42,12 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.EUserPwd;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.http.PostSimulater;
 import com.google.gson.Gson;
@@ -125,9 +125,9 @@ public class AgentAOImpl implements IAgentAO {
     // 注册登录
     @Override
     public XN627303Res doLoginWeChatByAgent(String code, String fromUserId) {
-        String status = EUserStatus.TO_MIND.getCode(); // 待申请意向代理
+        String status = EAgentStatus.MIND.getCode();
         if (StringUtils.isNotBlank(fromUserId)) {
-            status = EUserStatus.IMPOWERO_INFO.getCode(); // 待填写授权资料
+            status = EAgentStatus.IMPOWERO_INFO.getCode();
         }
         return doLoginWeChatH(code, fromUserId, status);
     }

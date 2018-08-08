@@ -14,11 +14,8 @@ public class XN627620Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
-    // （必填）产品编号
-    @NotBlank(message = "产品编号不能为空")
-    private String productCode;
-
     // （选填）规格编号
+    @NotBlank(message = "规格编号不能为空")
     private String productSpecsCode;
 
     // （必填）数量
@@ -31,14 +28,6 @@ public class XN627620Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
     }
 
     public String getProductSpecsCode() {

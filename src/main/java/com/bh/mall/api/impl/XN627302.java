@@ -5,7 +5,6 @@ import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627302Req;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -27,7 +26,7 @@ public class XN627302 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return userAO.doLoginWeChatByCustomer(req.getCode(), req.getNickname(),
-            req.getPhoto(), EUserKind.Customer.getCode());
+            req.getPhoto());
     }
 
     @Override

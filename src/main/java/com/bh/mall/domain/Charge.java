@@ -60,6 +60,12 @@ public class Charge extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 申请人名称
+    private String realName;
+
+    // 充值人等级
+    private Integer level;
+
     // 申请时间
     private Date applyDatetime;
 
@@ -90,9 +96,6 @@ public class Charge extends ABaseDO {
 
     // 上级
     private String highAgentId;
-
-    // 充值人等级
-    private Integer level;
 
     // 状态
     private List<String> statusList;
@@ -311,6 +314,14 @@ public class Charge extends ABaseDO {
 
     public void setPayUser(String payUser) {
         this.payUser = payUser;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

@@ -71,8 +71,8 @@ public class ChargeAOImpl implements IChargeAO {
         }
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account,
-            EBizType.getBizType(type), tranAmount, applyUser, applyNote,
-            chargePdf);
+            EBizType.getBizType(type), tranAmount, applyUser, agent.getLevel(),
+            applyNote, chargePdf);
         return code;
     }
 
@@ -99,36 +99,18 @@ public class ChargeAOImpl implements IChargeAO {
     private void payOrderYES(Charge data, String payUser, String payNote) {
         chargeBO.payOrder(data, EChargeStatus.Cancel_YES.getCode(), payUser,
             payNote);
-        // Account account = accountBO.getAccount(data.getAccountNumber());
         // 账户加钱
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
             null, null, data.getCode(), EBizType.getBizType(data.getBizType()),
             EBizType.getBizType(data.getBizType()).getValue(),
             data.getAmount());
-        // if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())) {
-        // // 托管账户加钱
-        // accountBO.changeAmount(ESysUser.SYS_USER_BH.getCode(),
-        // EChannelType.Offline, null, null, data.getCode(),
-        // EBizType.getBizType(data.getBizType()),
-        // EBizType.getBizType(data.getBizType()).getValue(),
-        // data.getAmount());
-        // }
     }
 
     @Override
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {
 
-        Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
-        // for (Charge charge : page.getList()) {
-        // // 获取一级代理
-        // if (!EUser.ADMIN.getCode().equals(charge.getPayUser())
-        // && charge.getPayUser() != null) {
-        // Agent agent = agentBO.getAgent(charge.getPayUser());
-        // charge.setPayUser(agent.getLoginName());
-        // }
-        // }
-        return page;
+        return chargeBO.getPaginable(start, limit, condition);
     }
 
     @Override

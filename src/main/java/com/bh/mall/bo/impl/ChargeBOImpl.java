@@ -27,7 +27,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
     @Override
     public String applyOrderOffline(Account account, EBizType bizType,
-            Long amount, String applyUser, String applyNote, String chargePdf) {
+            Long amount, String applyUser, Integer level, String applyNote,
+            String chargePdf) {
         if (amount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -50,8 +51,10 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
         data.setStatus(EChargeStatus.TO_Cancel.getCode());
         data.setApplyUser(applyUser);
+        data.setLevel(level);
         data.setApplyDatetime(new Date());
         data.setChannelType(EChannelType.Offline.getCode());
+
         data.setChargePdf(chargePdf);
         chargeDAO.insert(data);
         return code;
@@ -60,7 +63,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Override
     public String applyOrderOnline(Account account, String payGroup,
             String refNo, EBizType bizType, String bizNote, Long transAmount,
-            EChannelType channelType, String applyUser) {
+            EChannelType channelType, String applyUser, Integer level) {
+
         if (transAmount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -69,6 +73,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         Charge data = new Charge();
         data.setCode(code);
         data.setAccountNumber(account.getAccountNumber());
+
         data.setAccountName(account.getRealName());
         data.setPayGroup(payGroup);
         data.setRefNo(refNo);
@@ -81,8 +86,10 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
         data.setStatus(EChargeStatus.toPay.getCode());
         data.setApplyUser(applyUser);
+        data.setLevel(level);
         data.setApplyDatetime(new Date());
         data.setChannelType(channelType.getCode());
+
         chargeDAO.insert(data);
         return code;
     }

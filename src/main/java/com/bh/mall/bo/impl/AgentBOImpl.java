@@ -21,7 +21,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
-import com.bh.mall.enums.EUserStatus;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -253,7 +253,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshStatus(Agent data, String updater, String remark) {
 
-        data.setStatus(EUserStatus.CANCELED.getCode());
+        data.setStatus(EAgentStatus.CANCELED.getCode());
         data.setUpdater(updater);
         Date date = new Date();
         data.setUpdateDatetime(date);
@@ -518,7 +518,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         agent.setTeamName(sqForm.getTeamName());
         agent.setHighUserId(sqForm.getToUserId());
 
-        agent.setStatus(sqForm.getStatus());
+        agent.setStatus(EAgentStatus.IMPOWERED.getCode());
         agent.setProvince(sqForm.getProvince());
         agent.setCity(sqForm.getCity());
         agent.setArea(sqForm.getArea());

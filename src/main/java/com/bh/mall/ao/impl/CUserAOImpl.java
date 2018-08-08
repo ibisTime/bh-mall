@@ -81,13 +81,13 @@ public class CUserAOImpl implements ICUserAO {
     // 微信注册，登录
     @Override
     public XN627304Res doLoginWeChatByCustomer(String code, String nickname,
-            String avatarUrl, String kind) {
-        return doLoginWeChatM(code, nickname, avatarUrl, kind);
+            String avatarUrl) {
+        return doLoginWeChatM(code, nickname, avatarUrl);
     }
 
     @Transactional
     private XN627304Res doLoginWeChatM(String code, String nickname,
-            String photo, String kind) {
+            String photo) {
 
         // Step1：获取密码参数信息
         Map<String, String> configPwd = sysConfigBO
@@ -137,7 +137,7 @@ public class CUserAOImpl implements ICUserAO {
                 result = new XN627304Res(dbUser.getUserId(),
                     dbUser.getStatus());
             } else {
-                result = doWxLoginReg(openId, nickname, photo, kind, null,
+                result = doWxLoginReg(null, null, openId, nickname, photo,
                     EUserStatus.NORMAL.getCode());
             }
         } catch (Exception e) {

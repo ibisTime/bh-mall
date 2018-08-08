@@ -98,7 +98,6 @@ public class CUserBOImpl extends PaginableBOImpl<CUser> implements ICUserBO {
         user.setPhoto(photo);
         user.setNickname(nickname);
 
-        user.setStatus(EUserStatus.MIND.getCode());
         user.setUnionId(unionId);
         user.setH5OpenId(h5OpenId);
         user.setAppOpenId(appOpenId);

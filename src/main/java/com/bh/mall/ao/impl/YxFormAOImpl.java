@@ -21,7 +21,6 @@ import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.ESqFormStatus;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
 
@@ -236,7 +235,8 @@ public class YxFormAOImpl implements IYxFormAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        if (EUserStatus.IGNORED.getCode().equals(condition.getStatus())) {
+        // TODO
+        if (EYxFormStatus.ALLOTED.getCode().equals(condition.getStatus())) {
             condition.setApprover(condition.getUserIdForQuery());
         } else {
             condition.setToUserId(condition.getUserIdForQuery()); // 意向归属人

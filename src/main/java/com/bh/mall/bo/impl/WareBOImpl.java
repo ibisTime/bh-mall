@@ -24,7 +24,6 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -44,7 +43,6 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
             String bizNote, String refNo) {
         String logCode = wareLogBO.saveWareLog(data, quantity, bizType, bizNote,
             refNo);
-        data.setType(EUserKind.Merchant.getCode());
         data.setLastChangeCode(logCode);
         wareDAO.insert(data);
 

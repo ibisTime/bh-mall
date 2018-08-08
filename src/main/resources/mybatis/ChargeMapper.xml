@@ -20,6 +20,7 @@
 		<result column="biz_note" property="bizNote" />
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
+		<result column="level" property="level" />
 		<result column="apply_note" property="applyNote" />
 		
 		<result column="apply_datetime" property="applyDatetime" />
@@ -94,7 +95,7 @@
 				AND t.channel_type = #{channelType}
 			</if>
 			<if test="level != null and level != '' ">
-				AND u.level = #{level}
+				AND t.level = #{level}
 			</if>
 		</trim>
 	</sql>
@@ -112,20 +113,21 @@
 		,t.currency
 		,t.charge_pdf
 		,t.channel_type
+		
 		,t.channel_order
 		,t.biz_type
 		,t.biz_note
-		
 		,t.status
 		,t.apply_user
-		,t.apply_datetime
+		,t.level
 		
+		,t.apply_datetime
 		,t.pay_user
 		,t.pay_note
 		,t.pay_datetime
 		,t.channel_type
 		FROM
-		tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		tbh_charge t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -135,49 +137,10 @@
 	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_charge t LEFT JOIN tbh_user u ON u.user_id = t.apply_user 
+		SELECT count(1) FROM tbh_charge t 
 		<include refid="where_condition" />
 	</select>
 		
-	<select id="select_front_charge" parameterType="charge" resultMap="charge_DB_Result">
-		SELECT
-		t.code
-		,t.pay_group
-		,t.ref_no
-		,t.account_number
-		,t.amount
-		
-		,t.account_name
-		,t.type
-		,t.currency
-		,t.charge_pdf
-		,t.channel_type
-		,t.channel_order
-		,t.biz_type
-		,t.biz_note
-		
-		,t.status
-		,t.apply_user
-		,t.apply_datetime
-		
-		,t.pay_user
-		,t.pay_note
-		,t.pay_datetime
-		,t.channel_type
-		FROM
-		tbh_charge t INNER JOIN tbh_user u ON t.apply_user = u.user_id AND u.high_user_id = #{highUserId}
-		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>
-	</select>
-
-	<select id="select_front_count" parameterType="charge" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_charge t INNER JOIN tbh_user u ON t.apply_user = u.user_id AND u.high_user_id = #{highUserId}
-		<include refid="where_condition" />
-	</select>
 
 
 	
@@ -200,6 +163,7 @@
 		
 		,status
 		,apply_user
+		,level
 		,apply_datetime
 		)
 		VALUES(
@@ -220,6 +184,7 @@
 		
 		,#{status}
 		,#{applyUser}
+		,#{level}
 		,#{applyDatetime}
 		)
 	</insert>

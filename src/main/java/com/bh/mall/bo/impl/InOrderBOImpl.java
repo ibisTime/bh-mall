@@ -13,12 +13,8 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IInOrderDAO;
-import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InOrder;
-import com.bh.mall.domain.Product;
-import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.EInOrderStatus;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -57,7 +53,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         data.setQuantity(quantity);
         data.setPrice(price);
         data.setPic(pic);
-        data.setStatus(EOrderStatus.Unpaid.getCode());
+        data.setStatus(EInOrderStatus.Unpaid.getCode());
         Date date = new Date();
 
         data.setApplyDatetime(date);
@@ -168,10 +164,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     @Override
     public Long getInOrderByUser(String userId) {
         List<String> statusList = new ArrayList<String>();
-        statusList.add(EOrderStatus.Paid.getCode());
-        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
-        statusList.add(EOrderStatus.TO_Deliver.getCode());
-        statusList.add(EOrderStatus.Received.getCode());
+        statusList.add(EInOrderStatus.Received.getCode());
 
         InOrder condition = new InOrder();
         condition.setApplyUser(userId);
@@ -204,7 +197,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         data.setQuantity(singleNumber);
         data.setPrice(price);
 
-        data.setStatus(EOrderStatus.Paid.getCode());
+        data.setStatus(EInOrderStatus.Received.getCode());
         inOrderDAO.insert(data);
         return code;
 
@@ -213,7 +206,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     @Override
     public void invalidOrder(InOrder data, String approver, String remark) {
         Date date = new Date();
-        data.setStatus(EOrderStatus.Canceled.getCode());
+        data.setStatus(EInOrderStatus.Canceled.getCode());
         data.setApprover(approver);
         data.setApproveDatetime(date);
         data.setRemark(remark);
@@ -224,12 +217,6 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     @Override
     public void removeOrder(InOrder data) {
         inOrderDAO.delete(data);
-    }
-
-    @Override
-    public List<String> addOrder(Agent applyUser, Product pData, Specs psData,
-            Integer integer, String applyNote) {
-        return null;
     }
 
 }

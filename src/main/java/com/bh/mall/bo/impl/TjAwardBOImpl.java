@@ -14,7 +14,6 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.ITjAwardDAO;
 import com.bh.mall.domain.TjAward;
 import com.bh.mall.dto.req.XN627548Req;
-import com.bh.mall.enums.EAwardType;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -28,7 +27,6 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     public void saveTjAward(String code, List<XN627548Req> awardList) {
 
         for (XN627548Req req : awardList) {
-            EAwardType.getAwardTypeMap().get(req.getType());
             TjAward data = new TjAward();
             String aCode = OrderNoGenerater
                 .generate(EGeneratePrefix.Award.getCode());
@@ -57,7 +55,6 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
     @Override
     public void refreshTjAwardList(List<XN627548Req> list) {
         for (XN627548Req req : list) {
-            EAwardType.getAwardTypeMap().get(req.getType());
             if (StringUtils.isBlank(req.getCode())) {
                 throw new BizException("xn000", "编号不能为空");
             }

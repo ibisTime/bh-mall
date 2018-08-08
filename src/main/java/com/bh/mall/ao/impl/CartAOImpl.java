@@ -37,15 +37,13 @@ public class CartAOImpl implements ICartAO {
     IAgentPriceBO agentPriceBO;
 
     @Override
-    public String addCart(String userId, String productCode, String specsCode,
-            String quantity) {
+    public String addCart(String userId, String specsCode, String quantity) {
 
         if (StringValidater.toInteger(quantity) <= 0) {
             throw new BizException("xn00000", "添加数量不能少于零");
         }
 
-        productBO.getProduct(productCode);
-        Cart data = cartBO.getCartByProductCode(productCode, specsCode);
+        Cart data = cartBO.getCartByProductCode(userId, specsCode);
         AgentPrice specsPrice = agentPriceBO.getPriceByLevel(specsCode, 6);
 
         String code = OrderNoGenerater.generate(EGeneratePrefix.Cart.getCode());
@@ -59,7 +57,7 @@ public class CartAOImpl implements ICartAO {
             data.setCode(code);
             data.setUserId(userId);
 
-            data.setProductCode(productCode);
+            data.setProductCode(data.getProductCode());
             data.setSpecsCode(specsCode);
             data.setQuantity(StringValidater.toInteger(quantity));
             data.setPrice(specsPrice.getPrice());

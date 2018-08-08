@@ -17,17 +17,16 @@ public class XN627548Req {
     @NotBlank(message = "等级不能为空")
     private String level;
 
-    // （必填）类型
-    private String type;
-
-    // 直接推荐/出货奖励
-    @NotBlank(message = "奖励不能为空")
+    // （必填）直推
+    @NotBlank(message = "直推奖励不能为空")
     private String value1;
 
-    // （选填）间接推荐奖励
+    // （必填）间推奖励
+    @NotBlank(message = "间推奖励不能为空")
     private String value2;
 
     // （选填）次推荐奖励
+    @NotBlank(message = "次推荐奖励不能为空")
     private String value3;
 
     public String getCode() {
@@ -44,14 +43,6 @@ public class XN627548Req {
 
     public void setLevel(String level) {
         this.level = level;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getValue1() {

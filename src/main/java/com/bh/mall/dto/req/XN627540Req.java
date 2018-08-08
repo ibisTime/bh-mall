@@ -57,7 +57,7 @@ public class XN627540Req {
     @NotEmpty(message = "产品规格不能为空")
     private List<XN627546Req> specList;
 
-    // (必填) 出货/推荐奖励
+    // (必填) 推荐奖励
     @NotEmpty(message = "奖励规则不能为空")
     private List<XN627548Req> awardList;
 

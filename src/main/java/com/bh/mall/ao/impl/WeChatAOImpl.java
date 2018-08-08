@@ -73,8 +73,8 @@ public class WeChatAOImpl implements IWeChatAO {
     public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
             String payGroup, String refNo, String bizType, String bizNote,
             Long transAmount, String backUrl) {
-        Agent user = agentBO.getAgent(applyUser);
-        AgentLevel aData = agentLevelBO.getAgentByLevel(user.getLevel());
+        Agent agent = agentBO.getAgent(applyUser);
+        AgentLevel aData = agentLevelBO.getAgentByLevel(agent.getLevel());
         if (null != aData.getMinChargeAmount()
                 && (aData.getMinChargeAmount() / 1000) > transAmount) {
             throw new BizException("xn000000",
@@ -85,7 +85,7 @@ public class WeChatAOImpl implements IWeChatAO {
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
             refNo, EBizType.getBizType(bizType), bizNote, transAmount,
-            EChannelType.WeChat_H5, applyUser);
+            EChannelType.WeChat_H5, applyUser, agent.getLevel());
         return this.getPrepayIdH5(applyUser, accountNumber, payGroup,
             chargeOrderCode, bizType, bizNote, transAmount, backUrl,
             EChannelType.WeChat_H5.getCode());

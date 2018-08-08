@@ -9,7 +9,6 @@ import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.dto.req.XN627320Req;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -30,7 +29,6 @@ public class XN627320 extends AProcessor {
     public Object doBusiness() throws BizException {
 
         Agent condition = new Agent();
-        condition.setStatus(EUserStatus.IMPOWERED.getCode());
         condition.setHighUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
 

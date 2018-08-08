@@ -40,18 +40,16 @@ import com.bh.mall.dto.req.XN627270Req;
 import com.bh.mall.dto.req.XN627271Req;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAgentLevel;
-import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EOrderStatus;
+import com.bh.mall.enums.EInnerOrderStatus;
+import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESqFormStatus;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
-import com.bh.mall.enums.EUserStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -111,7 +109,7 @@ public class SqFormAOImpl implements ISqFormAO {
             PhoneUtil.checkMobile(req.getIntroducer());
             Agent agent = agentBO.getAgentByMobile(req.getIntroducer());
             introducer = agent.getUserId();
-            if (!EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+            if (!ESqFormStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
             if (agent.getUserId().equals(req.getUserId())) {
@@ -184,7 +182,10 @@ public class SqFormAOImpl implements ISqFormAO {
         agentBO.refreshAgent(sqForm, logCode);
     }
 
-    // 补全授权所需资料
+    /**
+     * 意向代理通过之后，补充授权所需信息
+     * @see com.bh.mall.ao.ISqFormAO#addInfo(com.bh.mall.dto.req.XN627271Req)
+     */
     @Override
     public void addInfo(XN627271Req req) {
 
@@ -196,7 +197,7 @@ public class SqFormAOImpl implements ISqFormAO {
             Agent agent = agentBO.getAgentByMobile(req.getIntroducer());
             introducer = agent.getUserId();
 
-            if (!EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+            if (!ESqFormStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
             if (agent.getUserId().equals(req.getUserId())) {
@@ -265,9 +266,9 @@ public class SqFormAOImpl implements ISqFormAO {
                 .getAgentByLevel(sqForm.getApplyLevel());
             // 需要公司授权
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
-                status = EUserStatus.TO_COMPANYAPPROVE.getCode();
+                status = ESqFormStatus.COMPANY_APPROVE.getCode();
             } else {
-                status = EUserStatus.IMPOWERED.getCode();
+                status = ESqFormStatus.IMPOWERED.getCode();
 
                 this.approveSqForm(sqForm);
             }
@@ -297,9 +298,9 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 审核通过
-        String status = EUserStatus.NO_THROUGH.getCode();
+        String status = ESqFormStatus.NO_THROUGH.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            status = EUserStatus.IMPOWERED.getCode();
+            status = ESqFormStatus.IMPOWERED.getCode();
             this.approveSqForm(sqForm);
         } else {
             // 未通过，清空手机号等信息，防止重新申请时重复
@@ -327,15 +328,15 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn000", "该代理未申请退出状态");
         }
 
-        String status = EUserStatus.IMPOWERED.getCode();
+        String status = ESqFormStatus.IMPOWERED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            status = EUserStatus.CANCELED.getCode();
+            status = ESqFormStatus.NO_THROUGH.getCode();
             AgentLevel agentLevel = agentLevelBO
                 .getAgentByLevel(agent.getLevel());
             // 是否需要公司审核
             if (EBoolean.YES.getCode()
                 .equals(agentLevel.getIsCompanyImpower())) {
-                status = EUserStatus.TO_COMPANYCANCEL.getCode();
+                status = ESqFormStatus.TO_COMPANY_CANCLE.getCode();
             } else {
                 Account account = accountBO.getAccountByUser(sqForm.getUserId(),
                     ECurrency.MK_CNY.getCode());
@@ -369,9 +370,9 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn000", "该代理未申请退出");
         }
 
-        String status = EUserStatus.IMPOWERED.getCode();
+        String status = ESqFormStatus.IMPOWERED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
-            status = EUserStatus.CANCELED.getCode();
+            status = ESqFormStatus.NO_THROUGH.getCode();
             Account account = accountBO.getAccountByUser(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
             // 账户清零
@@ -441,15 +442,10 @@ public class SqFormAOImpl implements ISqFormAO {
     }
 
     // 分配账号
-    private List<String> distributeAccount(String userId, String mobile,
-            String kind) {
+    private List<String> distributeAccount(String userId, String mobile) {
         List<String> currencyList = new ArrayList<String>();
-        if (EUserKind.Customer.getCode().equals(kind)) {
-            currencyList.add(ECurrency.YJ_CNY.getCode());
-        } else if (EUserKind.Merchant.getCode().equals(kind)) {
-            currencyList.add(ECurrency.YJ_CNY.getCode());
-            currencyList.add(ECurrency.MK_CNY.getCode());
-        }
+        currencyList.add(ECurrency.YJ_CNY.getCode());
+        currencyList.add(ECurrency.MK_CNY.getCode());
         return currencyList;
     }
 
@@ -476,7 +472,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // 是否有未完成的订单
         OutOrder oCondition = new OutOrder();
         oCondition.setApplyUser(agent.getUserId());
-        oCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
+        oCondition.setStatusForQuery(EOutOrderStatus.TO_APPROVE.getCode());
         long count = outOrderBO.selectCount(oCondition);
         if (count != 0) {
             throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
@@ -485,7 +481,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // 是够有未完成的内购订单
         InnerOrder ioCondition = new InnerOrder();
         ioCondition.setApplyUser(agent.getUserId());
-        ioCondition.setStatusForQuery(EOrderStatus.NO_CallOFF.getCode());
+        ioCondition.setStatusForQuery(EInnerOrderStatus.Paid.getCode());
         long ioCount = innerOrderBO.selectCount(ioCondition);
         if (ioCount != 0) {
             throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
@@ -507,7 +503,7 @@ public class SqFormAOImpl implements ISqFormAO {
             .getAgentByLevel(sqForm.getApplyLevel());
         // 根据用户类型获取账户列表
         List<String> currencyList = distributeAccount(sqForm.getUserId(),
-            sqForm.getRealName(), EUserKind.Merchant.getCode());
+            sqForm.getRealName());
 
         // 分配账户
         accountBO.distributeAccount(sqForm.getUserId(), sqForm.getRealName(),

@@ -43,7 +43,6 @@ import com.bh.mall.enums.EProductYunFei;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
-import com.bh.mall.enums.EUserKind;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
@@ -186,11 +185,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                 EChannelType.WeChat_H5.getCode());
             if (isSuccess) {
                 data = innerOrderBO.getInnerOrderByPayGroup(outTradeNo);
-                data.setPayDatetime(new Date());
                 data.setPayCode(wechatOrderNo);
                 data.setPayAmount(data.getAmount());
 
-                data.setStatus(EInnerOrderStatus.Paid.getCode());
                 Account account = accountBO.getSysAccountNumber(
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
                     ECurrency.YJ_CNY);
@@ -200,8 +197,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                     EBizType.AJ_YCCH.getValue(), data.getAmount());
                 innerOrderBO.paySuccess(data);
             } else {
-                data.setPayDatetime(new Date());
-                data.setStatus(EInnerOrderStatus.Pay_No.getCode());
                 innerOrderBO.payNo(data);
             }
 

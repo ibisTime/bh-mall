@@ -14,7 +14,7 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IYxFormDAO;
 import com.bh.mall.domain.YxForm;
-import com.bh.mall.enums.EUserStatus;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EYxFormStatus;
 
 @Component
@@ -44,7 +44,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setArea(area);
         data.setAddress(address);
 
-        data.setStatus(EUserStatus.MIND.getCode()); // 有意愿
+        data.setStatus(EAgentStatus.MIND.getCode()); // 有意愿
         data.setApplyDatetime(new Date());
         data.setSource(fromInfo);
         yxFormDAO.insert(data);
@@ -68,7 +68,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setArea(area);
         data.setAddress(address);
 
-        data.setStatus(EUserStatus.MIND.getCode()); // 有意愿
+        data.setStatus(EAgentStatus.MIND.getCode());
         data.setApplyDatetime(new Date());
         data.setSource(fromInfo);
         yxFormDAO.update(data);

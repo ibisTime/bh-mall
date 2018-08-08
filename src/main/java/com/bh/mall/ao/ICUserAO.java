@@ -18,7 +18,7 @@ public interface ICUserAO {
 
     // 微信登录/注册
     public XN627304Res doLoginWeChatByCustomer(String code, String nickname,
-            String avatarUrl, String kind);
+            String avatarUrl);
 
     // 分页查询
     public Paginable<CUser> queryCuserPage(int start, int limit,

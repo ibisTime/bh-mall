@@ -17,8 +17,8 @@ import com.bh.mall.dao.IOutOrderDAO;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
-import com.bh.mall.enums.EOrderStatus;
 import com.bh.mall.enums.EOutOrderKind;
+import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -178,10 +178,10 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     @Override
     public boolean checkImpowerOrder(String applyUser, Date impoweDatetime) {
         List<String> statusList = new ArrayList<String>();
-        statusList.add(EOrderStatus.Paid.getCode());
-        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
-        statusList.add(EOrderStatus.TO_Deliver.getCode());
-        statusList.add(EOrderStatus.Received.getCode());
+        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
+        statusList.add(EOutOrderStatus.TO_SEND.getCode());
+        statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
+        statusList.add(EOutOrderStatus.RECEIVED.getCode());
 
         OutOrder condition = new OutOrder();
         condition.setApplyUser(applyUser);
@@ -199,10 +199,10 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     @Override
     public boolean checkUpgradeOrder(String applyUser) {
         List<String> statusList = new ArrayList<String>();
-        statusList.add(EOrderStatus.Paid.getCode());
-        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
-        statusList.add(EOrderStatus.TO_Deliver.getCode());
-        statusList.add(EOrderStatus.Received.getCode());
+        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
+        statusList.add(EOutOrderStatus.TO_SEND.getCode());
+        statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
+        statusList.add(EOutOrderStatus.RECEIVED.getCode());
 
         OutOrder condition = new OutOrder();
         condition.setApplyUser(applyUser);
@@ -228,10 +228,10 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     @Override
     public Long getOutOrderByUser(String userId) {
         List<String> statusList = new ArrayList<String>();
-        statusList.add(EOrderStatus.Paid.getCode());
-        statusList.add(EOrderStatus.TO_Apprvoe.getCode());
-        statusList.add(EOrderStatus.TO_Deliver.getCode());
-        statusList.add(EOrderStatus.Received.getCode());
+        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
+        statusList.add(EOutOrderStatus.TO_SEND.getCode());
+        statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
+        statusList.add(EOutOrderStatus.RECEIVED.getCode());
 
         OutOrder condition = new OutOrder();
         condition.setApplyUser(userId);
@@ -279,7 +279,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setAddress(address);
 
         data.setKind(kind);
-        data.setStatus(EOrderStatus.Paid.getCode());
+        data.setStatus(EOutOrderStatus.TO_APPROVE.getCode());
         outOrderDAO.insert(data);
         return code;
 
@@ -288,7 +288,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     @Override
     public void invalidOutOrder(OutOrder data, String updater, String remark) {
         Date date = new Date();
-        data.setStatus(EOrderStatus.Canceled.getCode());
+        data.setStatus(EOutOrderStatus.CANCELED.getCode());
         data.setUpdater(updater);
         data.setUpdateDatetime(date);
         data.setRemark(remark);

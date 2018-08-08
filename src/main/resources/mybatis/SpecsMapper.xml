@@ -14,8 +14,8 @@
 		<result column="number" property="number"/>
 		<result column="weight" property="weight"/>
 		
-		<result column="is_impower_order" property="isImpowerOrder"/>
-		<result column="is_upgrade_order" property="isUpgradeOrder"/>
+		<result column="is_sq_order" property="isSqOrder"/>
+		<result column="is_sj_order" property="isSjOrder"/>
 		<result column="is_normal_order" property="isNormalOrder"/>
 	</resultMap>
 	
@@ -30,11 +30,11 @@
 			<if test="name != null and name != ''">
 				AND t.name like "%"#{name}"%"
 			</if>
-			<if test="isImpowerOrder != null and isImpowerOrder !=''">
-				AND t.is_impower_order  = #{isImpowerOrder}
+			<if test="isSqOrder != null and isSqOrder !=''">
+				AND t.is_sq_order  = #{isSqOrder}
 			</if>
-			<if test="isUpgradeOrder != null and isUpgradeOrder !=''">
-				AND t.is_upgrade_order  = #{isUpgradeOrder}
+			<if test="isSjOrder != null and isSjOrder !=''">
+				AND t.is_sj_order  = #{isSjOrder}
 			</if>
 			
 			<if test="isNormalOrder != null and isNormalOrder !=''">
@@ -64,10 +64,10 @@
 		,t.number
 		,t.weight
 		
-		,t.is_impower_order
-		,t.is_upgrade_order
+		,t.is_sq_order
+		,t.is_sj_order
 		,t.is_normal_order
-		FROM tbh_product_specs t 
+		FROM tbh_specs t 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -78,20 +78,20 @@
 	
 	
 	<select id="select_specs_count" parameterType="specs" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_product_specs t
+		SELECT count(1) FROM tbh_specs t
 		<include refid="where_condition"/>
 	</select>
 	
 	<insert id="insert_specs" parameterType="specs">
-		INSERT INTO tbh_product_specs(
+		INSERT INTO tbh_specs(
 		code
 		,product_code
 		,name
 		,number
 		,weight
 		
-		,is_impower_order
-		,is_upgrade_order
+		,is_sq_order
+		,is_sj_order
 		,is_normal_order
 		)
 		VALUES(
@@ -101,14 +101,14 @@
 		,#{number}
 		,#{weight}
 		
-		,#{isImpowerOrder}
-		,#{isUpgradeOrder}
+		,#{isSqOrder}
+		,#{isSjOrder}
 		,#{isNormalOrder}
 		)
 	</insert>
 	
 	<update id="update_specs" parameterType="specs">
-		UPDATE tbh_product_specs
+		UPDATE tbh_specs
 		SET 
 		is_single = #{isSingle}
 		,single_number = #{singleNumber}
@@ -117,15 +117,15 @@
 		,number = #{number}
 		
 		,weight = #{weight}
-		,is_impower_order = #{isImpowerOrder}
-		,is_upgrade_order = #{isUpgradeOrder}
+		,is_sq_order = #{isSqOrder}
+		,is_sj_order = #{isSjOrder}
 		,is_normal_order = #{isNormalOrder}
 		WHERE code=#{code}
 	</update>
 	
 	<delete id="delete_byProductCode" parameterType="specs">
 		DELETE FROM 
-		tbh_product_specs 
+		tbh_specs 
 		WHERE
 		product_code = #{productCode}
 	</delete>

@@ -29,6 +29,6 @@ public interface ICartBO extends IPaginableBO<Cart> {
     public Cart getCart(String code);
 
     // 根据产品编号和产品规格编号查询
-    public Cart getCartByProductCode(String productCode, String specsCode);
+    public Cart getCartByProductCode(String userId, String specsCode);
 
 }
