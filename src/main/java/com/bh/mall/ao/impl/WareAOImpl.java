@@ -395,13 +395,6 @@ public class WareAOImpl implements IWareAO {
                 result = ECheckStatus.RED_LOW.getCode();
             }
 
-            // 最后一条轨迹为升级时，检查升级单
-            // AgencyLog log = agencyLogBO.getAgencyLog(user.getLastAgentLog());
-            // if (EUserStatus.UPGRADED.getCode().equals(log.getStatus())) {
-            // amount = agent.getAmount();
-            // result = ECheckStatus.NO_Upgrae.getCode();
-            // }
-
             // 检查门槛余额
             Account account = accountBO.getAccountNocheck(agent.getUserId(),
                 ECurrency.MK_CNY.getCode());
@@ -429,17 +422,16 @@ public class WareAOImpl implements IWareAO {
                 result = ECheckStatus.To_Charge.getCode();
                 chargeAmount = agentLevel.getMinCharge() - cAmount;
 
-            } else {
-                // 有过充值，但是钱在审核中
+                // 是否有待审核的充值订单
                 Charge condition = new Charge();
                 condition.setApplyUser(agent.getUserId());
                 condition.setStatus(EChargeStatus.TO_Cancel.getCode());
                 condition.setApplyDatetimeStart(agent.getImpowerDatetime());
-
                 charge = chargeBO.queryChargeList(condition);
                 if (CollectionUtils.isNotEmpty(charge)) {
                     result = ECheckStatus.Charging.getCode();
                 }
+
             }
             res = new XN627805Res(result, agentLevel.getRedAmount(),
                 agentLevel.getMinSurplus(), agentLevel.getAmount(),
