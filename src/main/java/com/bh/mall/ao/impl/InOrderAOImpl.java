@@ -618,18 +618,6 @@ public class InOrderAOImpl implements IInOrderAO {
         }
     }
 
-    @Override
-    @Transactional
-    public void invalidInOrder(String code, String updater, String remark) {
-        InOrder data = inOrderBO.getInOrder(code);
-        // 非待支付与未审核订单无法作废
-        if (!EInOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
-            throw new BizException("xn00000", "该订单无法作废");
-        }
-        inOrderBO.invalidOrder(data, updater, remark);
-
-    }
-
     // 删除未支付订单
     public void removeOrderTimer() {
         // 每十二个小时执行一次，删除是个小时前未支付的订单
