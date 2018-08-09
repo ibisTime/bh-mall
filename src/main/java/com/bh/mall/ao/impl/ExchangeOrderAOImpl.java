@@ -31,13 +31,10 @@ import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627790Req;
-import com.bh.mall.enums.EAccountStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
-import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductLogType;
-import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -221,20 +218,19 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
         int canChangeQuantity = (int) (data.getAmount()
                 / StringValidater.toLong(changePrice));
-        Ware whData = wareBO.getWareByProductSpec(data.getApplyUser(),
-            data.getProductSpecsCode());
+        Product changeData = productBO
+            .getProduct(data.getExchangeProductCode());
+        Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
 
-        String logCode = wareLogBO.refreshChangePrice(data, whData,
-            StringValidater.toLong(changePrice), canChangeQuantity,
-            data.getStatus(), "[" + data.getExchangeProductName() + "]的换货价由["
-                    + data.getExchangePrice() + "]变为[" + changePrice + "]");
-        whData.setLastChangeCode(logCode);
-        wareBO.refreshLogCode(whData);
+        if (0 < (changeData.getRealNumber() - data.getExcanChangeQuantity())) {
+            throw new BizException("xn00000", "产品[" + changeData.getName() + "-"
+                    + changeSpecs.getName() + "]的数量不足");
+        }
+
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setApproveNote(approveNote);
         data.setExchangePrice(StringValidater.toLong(changePrice));
-
         data.setCanExchangeQuantity(canChangeQuantity);
 
         exchangeOrderBO.refreshChangePrice(data);
@@ -252,58 +248,39 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         // 审核通过
         if (EBoolean.YES.getCode().equals(result)) {
             status = EChangeProductStatus.THROUGH_YES.getCode();
+            // 产品
             Product pData = productBO.getProduct(data.getProductCode());
-            Product changeData = productBO
-                .getProduct(data.getExchangeProductCode());
-            Specs psData = specsBO.getSpecs(data.getProductSpecsCode());
+            Specs specs = specsBO.getSpecs(data.getSpecsCode());
 
-            int quantity = data.getQuantity() * psData.getNumber();
-            pData.setRealNumber(pData.getRealNumber() - quantity);
+            pData.setRealNumber(pData.getRealNumber() - data.getQuantity());
             productBO.refreshRealNumber(pData);
 
+            // 保存库存记录
             specsLogBO.saveExchangeProductLog(pData,
                 EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
-                quantity, approver);
+                data.getQuantity(), approver);
 
-            // 云仓新增产品
-            Ware whData = wareBO.getWareByProductSpec(data.getApplyUser(),
-                data.getExchangeSpecsCode());
-            if (whData == null) {
-                String whCode = OrderNoGenerater
-                    .generate(EGeneratePrefix.Ware.getCode());
-                Ware ware = new Ware();
-                ware.setCode(whCode);
-                ware.setProductCode(data.getExchangeProductCode());
-                ware.setProductName(data.getExchangeProductName());
-                ware.setSpecsCode(data.getExchangeSpecsCode());
-                ware.setSpecsName(data.getExchangeSpecsName());
+            // 要置换的产品
+            Product changeData = productBO
+                .getProduct(data.getExchangeProductCode());
+            Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
 
-                ware.setCurrency(ECurrency.YC_CNY.getCode());
-                ware.setUserId(data.getApplyUser());
-                ware.setRealName(data.getRealName());
-                ware.setCreateDatetime(new Date());
-                AgentPrice pspData = agentPriceBO.getPriceByLevel(
-                    data.getExchangeSpecsCode(), data.getLevel());
-
-                ware.setPrice(pspData.getPrice());
-
-                ware.setQuantity(data.getExcanChangeQuantity());
-                Long amount = data.getExcanChangeQuantity()
-                        * pspData.getPrice();
-                ware.setAmount(amount);
-                ware.setLastChangeCode(data.getCode());
-                ware.setStatus(EAccountStatus.NORMAL.getCode());
-                ware.setCompanyCode(ESystemCode.BH.getCode());
-                ware.setSystemCode(ESystemCode.BH.getCode());
-                wareBO.saveWare(ware, data.getQuantity(), EBizType.AJ_YCZH,
-                    "[" + data.getProductName() + "]置换为["
-                            + data.getExchangeProductName() + "]",
-                    data.getCode());
-            } else {
-                wareBO.changeWare(whData.getCode(), data.getQuantity(),
-                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
-                    data.getCode());
+            if (0 < (changeData.getRealNumber()
+                    - data.getExcanChangeQuantity())) {
+                throw new BizException("xn00000", "产品[" + changeData.getName()
+                        + "-" + changeSpecs.getName() + "]的数量不足");
             }
+
+            // 保存要置换的产品库存记录
+            pData.setRealNumber(
+                pData.getRealNumber() - data.getExcanChangeQuantity());
+            productBO.refreshRealNumber(pData);
+            specsLogBO.saveExchangeProductLog(changeData,
+                EProductLogType.ChangeProduct.getCode(), -pData.getRealNumber(),
+                data.getExcanChangeQuantity(), approver);
+
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            wareBO.buyWare(data, agent);
 
         }
 

@@ -157,10 +157,7 @@ public class ProductAOImpl implements IProductAO {
         aCondition.setProductCode(data.getCode());
         List<TjAward> directAwardList = tjAwardBO.queryTjAwardList(aCondition);
 
-        // 出货奖励
-        List<TjAward> sendAwardList = tjAwardBO.queryTjAwardList(aCondition);
         data.setDirectAwardList(directAwardList);
-        data.setSendAwardList(sendAwardList);
         if (CollectionUtils.isNotEmpty(psList)) {
             for (Specs productSpecs : psList) {
 
@@ -312,12 +309,7 @@ public class ProductAOImpl implements IProductAO {
             aCondition.setProductCode(product.getCode());
             List<TjAward> directAwardList = tjAwardBO
                 .queryTjAwardList(aCondition);
-
-            // 出货奖励
-            List<TjAward> sendAwardList = tjAwardBO
-                .queryTjAwardList(aCondition);
             product.setDirectAwardList(directAwardList);
-            product.setSendAwardList(sendAwardList);
 
             if (CollectionUtils.isNotEmpty(psList)) {
                 for (Specs productSpecs : psList) {

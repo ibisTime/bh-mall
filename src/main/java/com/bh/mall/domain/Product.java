@@ -79,9 +79,6 @@ public class Product extends ABaseDO {
     // 推荐奖励
     private List<TjAward> directAwardList;
 
-    // 介绍奖励
-    private List<TjAward> sendAwardList;
-
     // 各级代理云仓该产品最小规格数量
     private Integer whNumber;
 
@@ -257,14 +254,6 @@ public class Product extends ABaseDO {
 
     public void setDirectAwardList(List<TjAward> directAwardList) {
         this.directAwardList = directAwardList;
-    }
-
-    public List<TjAward> getSendAwardList() {
-        return sendAwardList;
-    }
-
-    public void setSendAwardList(List<TjAward> sendAwardList) {
-        this.sendAwardList = sendAwardList;
     }
 
     public Integer getWhNumber() {

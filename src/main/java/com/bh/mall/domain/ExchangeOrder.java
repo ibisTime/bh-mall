@@ -131,7 +131,7 @@ public class ExchangeOrder extends ABaseDO {
         this.realName = realName;
     }
 
-    public String getProductSpecsCode() {
+    public String getSpecsCode() {
         return specsCode;
     }
 

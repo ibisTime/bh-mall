@@ -201,6 +201,10 @@ public class SjFormAOImpl implements ISjFormAO {
                     EChannelType.NBZ, null, null, sjForm.getUserId(),
                     EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
                     sjForm.getPayAmount());
+
+                // 更新云仓价格
+                wareBO.changeWarePrice(sjForm.getUserId(),
+                    sjForm.getApplyLevel());
             }
         }
 
@@ -229,6 +233,9 @@ public class SjFormAOImpl implements ISjFormAO {
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
                 null, null, sjForm.getUserId(), EBizType.AJ_QKYE,
                 EBizType.AJ_QKYE.getValue(), sjForm.getPayAmount());
+
+            // 更新云仓价格
+            wareBO.changeWarePrice(sjForm.getUserId(), sjForm.getApplyLevel());
         }
 
         Agent agent = agentBO.getAgent(userId);

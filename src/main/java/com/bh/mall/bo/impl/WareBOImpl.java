@@ -18,6 +18,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentPrice;
+import com.bh.mall.domain.ExchangeOrder;
 import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EBizType;
@@ -200,8 +201,11 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     @Override
-    public void changeWarePrice(List<Ware> whList, Integer level) {
-        for (Ware data : whList) {
+    public void changeWarePrice(String userId, Integer level) {
+        Ware condition = new Ware();
+        condition.setUserId(userId);
+        List<Ware> list = wareDAO.selectList(condition);
+        for (Ware data : list) {
             AgentPrice psPrice = agentPriceBO
                 .getPriceByLevel(data.getSpecsCode(), level);
             data.setPrice(psPrice.getPrice());
@@ -224,6 +228,44 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
             }
         }
 
+    }
+
+    @Override
+    public void buyWare(ExchangeOrder data, Agent agent) {
+        Ware ware = this.getWareByProductSpec(agent.getUserId(),
+            data.getSpecsCode());
+
+        // 没有该产品
+        if (null == ware) {
+            String code = OrderNoGenerater
+                .generate(EGeneratePrefix.Ware.getCode());
+            Ware whData = new Ware();
+            whData.setCode(code);
+            whData.setProductCode(data.getExchangeProductCode());
+            whData.setProductName(data.getExchangeProductName());
+            whData.setSpecsCode(data.getExchangeSpecsCode());
+            whData.setSpecsName(data.getExchangeSpecsName());
+
+            whData.setCurrency(ECurrency.YC_CNY.getCode());
+            whData.setUserId(agent.getUserId());
+            whData.setRealName(agent.getRealName());
+            whData.setCreateDatetime(new Date());
+            whData.setPrice(data.getPrice());
+
+            whData.setQuantity(data.getExcanChangeQuantity());
+            Long amount = data.getQuantity() * data.getPrice();
+            whData.setAmount(amount);
+            whData.setStatus(EProductStatus.Shelf_YES.getCode());
+
+            whData.setCompanyCode(ESystemCode.BH.getCode());
+            whData.setSystemCode(ESystemCode.BH.getCode());
+            this.saveWare(whData, data.getQuantity(), EBizType.AJ_GMYC,
+                "购买" + data.getProductName(), data.getCode());
+
+        } else {
+            this.changeWare(ware.getCode(), data.getQuantity(),
+                EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), data.getCode());
+        }
     }
 
 }

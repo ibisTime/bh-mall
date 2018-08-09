@@ -32,7 +32,7 @@ public class Specs extends ABaseDO {
     // 规格名称
     private String name;
 
-    // 规格包含数量
+    // 规格数量
     private Integer number;
 
     // 重量
