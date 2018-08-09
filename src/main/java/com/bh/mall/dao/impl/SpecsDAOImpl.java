@@ -18,7 +18,7 @@ public class SpecsDAOImpl extends AMybatisTemplate implements ISpecsDAO {
 
     @Override
     public int delete(Specs data) {
-        return super.delete(NAMESPACE.concat("delete_byProductCode"), data);
+        return super.delete(NAMESPACE.concat("delete_specs"), data);
     }
 
     @Override
@@ -48,6 +48,11 @@ public class SpecsDAOImpl extends AMybatisTemplate implements ISpecsDAO {
     @Override
     public void update(Specs data) {
         super.update(NAMESPACE.concat("update_specs"), data);
+    }
+
+    @Override
+    public void deleteByProdut(Specs data) {
+        super.delete(NAMESPACE.concat("delete_byProductCode"), data);
     }
 
 }

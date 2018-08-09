@@ -18,7 +18,7 @@ public class SpecsAOImpl implements ISpecsAO {
 
     @Override
     public void dropSpecs(String code) {
-        specsBO.removeSpecs(code);
+        specsBO.removeSpecsByProduct(code);
     }
 
     @Override

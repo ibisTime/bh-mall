@@ -9,7 +9,7 @@ import com.bh.mall.dto.req.XN627547Req;
 
 public interface ISpecsBO extends IPaginableBO<Specs> {
 
-    void removeSpecs(String productCode);
+    void removeSpecsByProduct(String productCode);
 
     List<Specs> querySpecsList(Specs condition);
 
@@ -21,10 +21,11 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
 
     Specs getSpecs(String productSpecsCode);
 
-    void refreshSpecs(XN627546Req psReq,
-            List<XN627547Req> specsPriceList);
+    void refreshSpecs(XN627546Req psReq, List<XN627547Req> specsPriceList);
 
     // 获取最小规格数量
     public Integer getMinSpecsNumber(String productCode);
+
+    void removeSpecs(Specs specs);
 
 }

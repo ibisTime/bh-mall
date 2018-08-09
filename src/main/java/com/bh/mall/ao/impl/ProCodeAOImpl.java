@@ -36,8 +36,11 @@ public class ProCodeAOImpl implements IProCodeAO {
     ISYSConfigBO sysConfigBO;
 
     /**
-     * 1、取出所有的盒码与箱码
-     * 2、新生成箱码并与数据库中的箱码
+     * 1、取出所有的盒码与箱码，用于后续的比较
+     * 2、每新生成一个箱码与之前新生成进行比较，如不重复，放入新生成的List中用于下次对比
+     * 3、每新生成一个盒码与之前新生成进行比较，如不重复，放入新生成的List中用于下次对比
+     * 4、开始生成盒码与箱码比较，相同时跳出当前循环，重新生成
+     * 5、新生成的盒码/箱码与数据库中的进行对比，重复时重新生成
      * @see com.bh.mall.ao.IProCodeAO#addProCode(int, int)
      */
     @Override
@@ -55,7 +58,7 @@ public class ProCodeAOImpl implements IProCodeAO {
         List<String> newTraceList = new LinkedList<String>();
 
         Date date = null;
-        for (int pro = 0; pro < proNumber; pro++) {
+        loop: for (int pro = 0; pro < proNumber; pro++) {
 
             String proCode = OrderNoGenerater.generate();
             // 新生成的箱码是否重复
@@ -73,13 +76,6 @@ public class ProCodeAOImpl implements IProCodeAO {
                 String miniCode = OrderNoGenerater.generateTrace();
                 String traceCode = OrderNoGenerater.generateTrace();
 
-                // 新城生的盒码之间或与箱码重复，跳出当前循环，重新生成盒码
-                if (miniCode.equals(traceCode) || miniCode.equals(proCode)
-                        || traceCode.equals(proCode)) {
-                    mini--;
-                    continue;
-                }
-
                 // 最新的防伪码与之前生成的盒码/箱码重复，跳出当前循环，重新生成盒码
                 if (newProList.contains(miniCode)
                         || newMiniList.contains(miniCode)
@@ -96,16 +92,26 @@ public class ProCodeAOImpl implements IProCodeAO {
                     continue;
                 }
 
+                // 新城生的盒码之间或与箱码重复，跳出当前循环，重新生成盒码
+                if (miniCode.equals(traceCode) || miniCode.equals(proCode)
+                        || traceCode.equals(proCode)) {
+                    mini--;
+                    continue;
+                } else {
+                    newMiniList.add(miniCode);
+                    newTraceList.add(traceCode);
+                }
+
                 // 校验新增的盒码与箱码是否与原有的箱码重复
                 for (ProCode data : proList) {
                     if (data.getCode().equals(proCode)) {
                         pro--;
-                        break;
+                        continue loop;
                     }
                     if (data.getCode().equals(miniCode)
                             || data.getCode().equals(traceCode)) {
                         mini--;
-                        continue;
+                        break;
                     }
                 }
 
@@ -114,7 +120,7 @@ public class ProCodeAOImpl implements IProCodeAO {
                     if (data.getMiniCode().equals(proCode)
                             || data.getTraceCode().equals(proCode)) {
                         pro--;
-                        break;
+                        continue loop;
                     }
 
                     if (data.getMiniCode().equals(miniCode)
@@ -122,7 +128,7 @@ public class ProCodeAOImpl implements IProCodeAO {
                             || data.getTraceCode().equals(traceCode)
                             || data.getTraceCode().equals(miniCode)) {
                         mini--;
-                        continue;
+                        break;
                     }
                 }
 

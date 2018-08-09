@@ -128,7 +128,7 @@ public class ProductAOImpl implements IProductAO {
         for (Specs specs : dbPsList) {
             boolean result = this.checkCode(specs.getCode(), psList);
             if (result) {
-                specsBO.removeSpecs(specs.getCode());
+                specsBO.removeSpecs(specs);
             }
         }
 
@@ -188,7 +188,7 @@ public class ProductAOImpl implements IProductAO {
         }
         productBO.removeProduct(data);
         // 删除规格、价格、库存记录
-        specsBO.removeSpecs(code);
+        specsBO.removeSpecsByProduct(code);
         specsLogBO.removeSpecsLog(code);
         tjAwardBO.removeTjAward(code);
     }

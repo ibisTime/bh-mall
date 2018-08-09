@@ -92,14 +92,14 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     }
 
     @Override
-    public void removeSpecs(String productCode) {
+    public void removeSpecsByProduct(String productCode) {
         if (StringUtils.isNotBlank(productCode)) {
             Specs data = new Specs();
             data.setProductCode(productCode);
 
             AgentPrice pspData = new AgentPrice();
             pspData.setSpecsCode(productCode);
-            specsDAO.delete(data);
+            specsDAO.deleteByProdut(data);
             agentPriceDAO.delete(pspData);
         }
     }
@@ -261,6 +261,11 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
             getMinSpecsNumber(productSpecs, number);
         }
         return number;
+    }
+
+    @Override
+    public void removeSpecs(Specs data) {
+        specsDAO.delete(data);
     }
 
 }
