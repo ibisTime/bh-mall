@@ -16,6 +16,7 @@ import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.domain.YxForm;
+import com.bh.mall.enums.EAgentLogType;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -32,6 +33,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         AgentLog data = new AgentLog();
 
         data.setCode(code);
+        data.setType(EAgentLogType.Allot.getCode());
         data.setApplyUser(yxForm.getUserId());
         data.setRealName(yxForm.getRealName());
         data.setWxId(yxForm.getWxId());
@@ -52,39 +54,41 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
     }
 
     @Override
-    public String applySqForm(SqForm sqForm) {
+    public String applySqForm(SqForm sqForm, String type) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         AgentLog data = new AgentLog();
 
         data.setCode(code);
+        data.setType(type);
+        data.setType(EAgentLogType.Imporder.getCode());
         data.setApplyUser(sqForm.getUserId());
         data.setRealName(sqForm.getRealName());
+
         data.setWxId(sqForm.getWxId());
         data.setMobile(sqForm.getMobile());
-
         data.setApplyLevel(data.getApplyLevel());
         data.setToUserId(sqForm.getToUserId());
         data.setTeamName(sqForm.getTeamName());
+
         data.setIntroducer(sqForm.getIntroducer());
         data.setReferrer(sqForm.getReferrer());
-
         data.setApplyDatetime(sqForm.getApplyDatetime());
         data.setProvince(sqForm.getProvince());
         data.setCity(sqForm.getCity());
+
         data.setArea(sqForm.getAddress());
         data.setAddress(sqForm.getAddress());
-
         data.setStatus(sqForm.getStatus());
         data.setApplyDatetime(sqForm.getApplyDatetime());
         data.setApprover(sqForm.getApprover());
+
         data.setApproveName(sqForm.getApproveName());
         data.setApproveDatetime(sqForm.getApproveDatetime());
-
         data.setImpowerDatetime(sqForm.getImpowerDatetime());
         data.setRemark(sqForm.getRemark());
-
         agentLogDAO.insert(data);
+
         return code;
     }
 
@@ -95,6 +99,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         AgentLog data = new AgentLog();
 
         data.setCode(code);
+        data.setType(EAgentLogType.Upgrade.getCode());
         data.setApplyUser(sjForm.getUserId());
         data.setRealName(sjForm.getRealName());
         data.setWxId(agent.getWxId());

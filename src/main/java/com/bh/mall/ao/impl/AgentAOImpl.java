@@ -46,7 +46,6 @@ import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.http.PostSimulater;
@@ -320,7 +319,8 @@ public class AgentAOImpl implements IAgentAO {
         // 判断上级
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
-            highUserId = ESysUser.SYS_USER_BH.getCode();
+            SYSUser sysUser = sysUserBO.getSYSUser(highUserId);
+            highUserId = sysUser.getUserId();
         } else {
             // 非一级代理同步上级团队名称
             Agent highAgent = agentBO.getAgent(highUserId);

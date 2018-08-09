@@ -1,5 +1,6 @@
 package com.bh.mall.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
@@ -7,7 +8,7 @@ import com.bh.mall.domain.ProCode;
 
 public interface IProCodeBO extends IPaginableBO<ProCode> {
 
-    public void saveProCode(ProCode data);
+    public void saveProCode(String proCode, Date date);
 
     public void refreshProCode(ProCode data);
 

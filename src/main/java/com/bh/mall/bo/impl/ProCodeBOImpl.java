@@ -23,7 +23,11 @@ public class ProCodeBOImpl extends PaginableBOImpl<ProCode>
     @Autowired
     private IProCodeDAO proCodeDAO;
 
-    public void saveProCode(ProCode data) {
+    public void saveProCode(String proCode, Date date) {
+        ProCode data = new ProCode();
+        data.setCode(proCode);
+        data.setCreateDatetime(date);
+        data.setStatus(ECodeStatus.TO_USER.getCode());
         proCodeDAO.insert(data);
 
     }

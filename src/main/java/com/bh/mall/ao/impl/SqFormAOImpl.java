@@ -40,6 +40,7 @@ import com.bh.mall.dto.req.XN627270Req;
 import com.bh.mall.dto.req.XN627271Req;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EAgentLogType;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -177,7 +178,8 @@ public class SqFormAOImpl implements ISqFormAO {
                 req.getCity(), req.getArea(), req.getAddress(), status);
         }
 
-        String logCode = agentLogBO.applySqForm(sqForm);
+        String logCode = agentLogBO.applySqForm(sqForm,
+            EAgentLogType.Imporder.getCode());
 
         agentBO.refreshAgent(sqForm, logCode, status);
     }
@@ -240,7 +242,8 @@ public class SqFormAOImpl implements ISqFormAO {
             data.getProvince(), data.getCity(), data.getArea(),
             data.getAddress(), status);
 
-        String logCode = agentLogBO.applySqForm(sqForm);
+        String logCode = agentLogBO.applySqForm(sqForm,
+            EAgentLogType.Imporder.getCode());
         agentBO.addInfo(sqForm, logCode, status);
     }
 

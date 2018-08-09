@@ -35,40 +35,103 @@ public class ProCodeAOImpl implements IProCodeAO {
     @Autowired
     ISYSConfigBO sysConfigBO;
 
+    /**
+     * 1、取出所有的盒码与箱码
+     * 2、新生成箱码并与数据库中的箱码
+     * @see com.bh.mall.ao.IProCodeAO#addProCode(int, int)
+     */
     @Override
     @Transactional
-    public void addProCode(int number) {
+    public void addProCode(int proNumber, int miniNumber) {
+        Integer count = proNumber * miniNumber;
+
         // 获取数据库的防伪溯源码与条形码
-        List<ProCode> barList = proCodeBO.queryCodeList();
-        List<MiniCode> stList = miniCodeBO.queryCodeList();
+        List<ProCode> proList = proCodeBO.queryCodeList();
+        List<MiniCode> miniList = miniCodeBO.queryCodeList();
 
         // 将新增的Code存储起来，并进行比较
-        List<String> list = new LinkedList<String>();
+        List<String> newProList = new LinkedList<String>();
+        List<String> newMiniList = new LinkedList<String>();
+        List<String> newTraceList = new LinkedList<String>();
 
-        // 新增并校验是否重复
-        loop: for (int i = 0; i < number; i++) {
+        Date date = null;
+        for (int pro = 0; pro < proNumber; pro++) {
+
             String proCode = OrderNoGenerater.generate();
-            // 新增箱码,若重复，重新生成
-            if (this.checkCode(proCode, barList, stList)) {
-                i--;
-                continue;
+            // 新生成的箱码是否重复
+            if (newProList.contains(proCode) || newMiniList.contains(proCode)
+                    || newTraceList.contains(proCode)) {
+                pro--;
+                break;
+            } else {
+                // 把新生成的箱码放入newProList中
+                newProList.add(proCode);
             }
 
-            for (String string : list) {
-                if (proCode.equals(string)) {
-                    i--;
-                    continue loop;
+            for (int mini = 0; mini < count; mini++) {
+                date = new Date();
+                String miniCode = OrderNoGenerater.generateTrace();
+                String traceCode = OrderNoGenerater.generateTrace();
+
+                // 新城生的盒码之间或与箱码重复，跳出当前循环，重新生成盒码
+                if (miniCode.equals(traceCode) || miniCode.equals(proCode)
+                        || traceCode.equals(proCode)) {
+                    mini--;
+                    continue;
                 }
-            }
-            // 新增的Code放入List中
-            list.add(proCode);
-            Date date = new Date();
-            ProCode barData = new ProCode();
-            barData.setCode(proCode);
-            barData.setStatus(ECodeStatus.TO_USER.getCode());
-            barData.setCreateDatetime(date);
-            proCodeBO.saveProCode(barData);
 
+                // 最新的防伪码与之前生成的盒码/箱码重复，跳出当前循环，重新生成盒码
+                if (newProList.contains(miniCode)
+                        || newMiniList.contains(miniCode)
+                        || newTraceList.contains(miniCode)) {
+                    mini--;
+                    continue;
+                }
+
+                // 最新的溯源码与之前生成的盒码/箱码重复，跳出当前循环，重新生成盒码
+                if (newProList.contains(traceCode)
+                        || newMiniList.contains(traceCode)
+                        || newTraceList.contains(traceCode)) {
+                    mini--;
+                    continue;
+                }
+
+                // 校验新增的盒码与箱码是否与原有的箱码重复
+                for (ProCode data : proList) {
+                    if (data.getCode().equals(proCode)) {
+                        pro--;
+                        break;
+                    }
+                    if (data.getCode().equals(miniCode)
+                            || data.getCode().equals(traceCode)) {
+                        mini--;
+                        continue;
+                    }
+                }
+
+                // 校验新增的盒码与箱码是否与原有的盒码重复
+                for (MiniCode data : miniList) {
+                    if (data.getMiniCode().equals(proCode)
+                            || data.getTraceCode().equals(proCode)) {
+                        pro--;
+                        break;
+                    }
+
+                    if (data.getMiniCode().equals(miniCode)
+                            || data.getTraceCode().equals(miniCode)
+                            || data.getTraceCode().equals(traceCode)
+                            || data.getTraceCode().equals(miniCode)) {
+                        mini--;
+                        continue;
+                    }
+                }
+
+                // 绑定盒码与箱码关系
+                miniCodeBO.saveMiniCode(miniCode, traceCode, proCode, date);
+            }
+
+            // 新增箱码关系
+            proCodeBO.saveProCode(proCode, date);
         }
 
     }
@@ -92,12 +155,11 @@ public class ProCodeAOImpl implements IProCodeAO {
 
     @Override
     @Transactional
-    public synchronized List<ProCode> downLoad(int number, int quantity) {
+    public synchronized List<ProCode> downLoad(int number) {
         // 获取盒码
         ProCode condition = new ProCode();
         condition.setStatus(ECodeStatus.TO_USER.getCode());
-        Paginable<ProCode> page = proCodeBO.getPaginable(0, quantity,
-            condition);
+        Paginable<ProCode> page = proCodeBO.getPaginable(0, number, condition);
         if (CollectionUtils.isEmpty(page.getList())) {
             throw new BizException("xn00000", "箱码已经没有啦");
         }
@@ -109,10 +171,10 @@ public class ProCodeAOImpl implements IProCodeAO {
         // 获取箱码下得盒码
         for (ProCode proCode : page.getList()) {
             proCode.setUrl(sysConfig.getCvalue());
-            MiniCode traceCondition = new MiniCode();
-            traceCondition.setStatus(ECodeStatus.TO_USER.getCode());
-            Paginable<MiniCode> tracePage = miniCodeBO
-                .getPaginable(quantity - 1, number, traceCondition);
+            MiniCode miniCondition = new MiniCode();
+            miniCondition.setStatus(ECodeStatus.TO_USER.getCode());
+            List<MiniCode> miniList = miniCodeBO
+                .queryMiniCodeList(miniCondition);
 
             // 更新箱状态
             if (!ECodeStatus.TO_USER.getCode().equals(proCode.getStatus())) {
@@ -121,15 +183,14 @@ public class ProCodeAOImpl implements IProCodeAO {
             proCodeBO.refreshProCode(proCode);
 
             // 是否还有可用盒码
-            if (CollectionUtils.isEmpty(tracePage.getList())) {
+            if (CollectionUtils.isEmpty(miniList)) {
                 throw new BizException("xn00000", "盒码已经没有啦");
             }
             // 建立关联关系并更新状态
-            for (MiniCode trace : tracePage.getList()) {
-                miniCodeBO.refreshMiniCode(trace, proCode.getCode());
+            for (MiniCode trace : miniList) {
+                miniCodeBO.refreshMiniCode(trace);
             }
-            proCode.setStList(tracePage.getList());
-            quantity = quantity + 1;
+            proCode.setStList(miniList);
         }
         return page.getList();
 
@@ -149,28 +210,6 @@ public class ProCodeAOImpl implements IProCodeAO {
     @Override
     public ProCode getProCode(String code) {
         return proCodeBO.getProCode(code);
-    }
-
-    @Override
-    public boolean checkCode(String code, List<ProCode> list,
-            List<MiniCode> stList) {
-        // 是否与箱码重复
-        for (ProCode proCode : list) {
-            if (proCode.getCode().equals(code)) {
-                return true;
-            }
-        }
-
-        // 校验是否重复
-        for (MiniCode miniCode : stList) {
-            if (miniCode.getMiniCode().equals(code)) {
-                return true;
-            }
-            if (miniCode.getTraceCode().equals(code)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

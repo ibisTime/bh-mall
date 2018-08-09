@@ -14,6 +14,7 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.ISqFormDAO;
 import com.bh.mall.domain.SqForm;
+import com.bh.mall.enums.EAgentLogType;
 
 @Component
 public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
@@ -130,7 +131,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         data.setStatus(status);
         sqFormDAO.approveSqForm(data);
 
-        return agentLogBO.applySqForm(data);
+        return agentLogBO.applySqForm(data, EAgentLogType.Imporder.getCode());
     }
 
     @Override
@@ -140,7 +141,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         data.setApplyDatetime(date);
         sqFormDAO.cancelSqForm(data);
 
-        return agentLogBO.applySqForm(data);
+        return agentLogBO.applySqForm(data, EAgentLogType.OUT.getCode());
     }
 
 }

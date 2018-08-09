@@ -105,7 +105,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setUserId(userId);
             data = sysUserDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "用户不存在");
+                throw new BizException("xn0000", "系统用户不存在");
             }
         }
         return data;
@@ -116,7 +116,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         SYSUser condition = new SYSUser();
         List<SYSUser> list = sysUserDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn0000", "用户不存在");
+            throw new BizException("xn0000", "系统用户不存在");
         }
         return list.get(0);
 

@@ -22,7 +22,15 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
     @Autowired
     private IMiniCodeDAO miniCodeDAO;
 
-    public void saveMiniCode(MiniCode data) {
+    public void saveMiniCode(String miniCode, String traceCode, String proCode,
+            Date date) {
+        MiniCode data = new MiniCode();
+        data.setMiniCode(miniCode);
+        data.setTraceCode(traceCode);
+        data.setRefCode(proCode);
+        data.setStatus(ECodeStatus.TO_USER.getCode());
+
+        data.setCreateDatetime(date);
         miniCodeDAO.insert(data);
     }
 
@@ -39,9 +47,7 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
     }
 
     @Override
-    public void refreshMiniCode(MiniCode data, String refCode) {
-        data.setRefCode(refCode);
-        data.setStatus(ECodeStatus.USE_NO.getCode());
+    public void refreshMiniCode(MiniCode data) {
         miniCodeDAO.update(data);
     }
 

@@ -17,6 +17,9 @@ public class AgentLog extends ABaseDO {
     // 编号
     private String code;
 
+    // 操作类型
+    private String type;
+
     // 申请人
     private String applyUser;
 
@@ -454,6 +457,14 @@ public class AgentLog extends ABaseDO {
 
     public void setImpowerDatetime(Date impowerDatetime) {
         this.impowerDatetime = impowerDatetime;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

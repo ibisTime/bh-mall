@@ -24,7 +24,7 @@ public interface IAgentLogBO extends IPaginableBO<AgentLog> {
     public String applySjForm(SjForm sjForm, Agent data);
 
     // 授权单记录
-    public String applySqForm(SqForm data);
+    public String applySqForm(SqForm data, String agentType);
 
     // 列表查询
     public List<AgentLog> queryAgentLogList(AgentLog condition);

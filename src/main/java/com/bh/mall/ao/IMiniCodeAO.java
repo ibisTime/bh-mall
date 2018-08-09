@@ -28,9 +28,6 @@ public interface IMiniCodeAO {
     // 详情查询
     public MiniCode getMiniCode(String code);
 
-    // 新增防伪溯源码
-    public void addMiniCode(int number);
-
     // 防伪查询
     public int getSecurity(String miniCode);
 
