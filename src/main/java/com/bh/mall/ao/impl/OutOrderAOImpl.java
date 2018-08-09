@@ -485,11 +485,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         try {
             logger.info("========回调信息=================");
             map = XMLUtil.doXMLParse(result);
-            String attach = map.get("attach");
-            String[] codes = attach.split("\\|\\|");
-            String systemCode = codes[0];
-            String companyCode = codes[1];
-            String bizBackUrl = codes[2];
+
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
 
