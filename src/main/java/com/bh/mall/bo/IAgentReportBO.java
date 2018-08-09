@@ -22,12 +22,18 @@ public interface IAgentReportBO extends IPaginableBO<AgentReport> {
     public int removeAgentReport(String code);
 
     // 更新代理统计
-    public int refreshAgentReport(AgentReport data);
+    public void refreshAgentReport(AgentReport data);
 
     // 列表查询代理统计
     public List<AgentReport> queryAgentReportList(AgentReport condition);
 
     // 详情查询
     public AgentReport getAgentReport(String code);
+
+    // 根据代理查询统计信息
+    public AgentReport getAgentReportByUser(String highUserId);
+
+    // 更新累积奖励
+    public void refreshAward(AgentReport data);
 
 }

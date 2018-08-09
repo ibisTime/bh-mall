@@ -271,7 +271,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         req.getApplyNote(), req.getSigner(), req.getMobile(),
                         req.getProvince(), req.getCity(), req.getArea(),
                         req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
-                        EOutOrderKind.Normal_Order.getCode()));
+                        EOutOrderKind.C_ORDER.getCode()));
                 }
             } else {
                 // 不可拆单
@@ -282,7 +282,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     req.getSigner(), req.getMobile(), req.getProvince(),
                     req.getCity(), req.getArea(), req.getAddress(),
                     EOutOrderStatus.Unpaid.getCode(),
-                    EOutOrderKind.Normal_Order.getCode()));
+                    EOutOrderKind.C_ORDER.getCode()));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -407,7 +407,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     req.getApplyNote(), req.getSigner(), req.getMobile(),
                     req.getProvince(), req.getCity(), req.getArea(),
                     req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
-                    EOutOrderKind.Normal_Order.getCode()));
+                    EOutOrderKind.C_ORDER.getCode()));
             }
         } else {
             // 不可拆单
@@ -418,7 +418,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 req.getApplyNote(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
                 req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
-                EOutOrderKind.Normal_Order.getCode()));
+                EOutOrderKind.C_ORDER.getCode()));
         }
         return list;
     }

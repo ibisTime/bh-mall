@@ -15,8 +15,6 @@
 		<result column="parent_code" property="parentCode" />
 		<result column="remark" property="remark" />
 		<result column="content_type" property="contentType" />
-		<result column="company_code" property="companyCode" />
-		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -44,25 +42,6 @@
 			<if test="contentType != null and contentType != '' ">
 				AND t.content_type = #{contentType}
 			</if>
-			<choose>
-				 <when test='companyCode != "0" and isFront == "0"'>
-				 	AND (t.company_code = #{companyCode} or (t.belong = 2 and NOT EXISTS (select * from tbh_cnavigate tc where tc.belong = t.code and tc.company_code = #{companyCode})))
-				 </when>
-				 <when test='companyCode != "0" and isFront == "1"'>
-				 	AND (t.company_code = #{companyCode} or t.belong = 1 or (t.belong = 2 and NOT EXISTS (select * from tbh_cnavigate tc where tc.belong = t.code and tc.company_code = #{companyCode})))
-				 </when>
-				  <when test='companyCode == "0"'>
-				  	AND 1 = 1
-				  </when>
-				 <otherwise>
-				 	<if test="companyCode != null and companyCode != ''">
-							AND t.company_code = #{companyCode}
-					</if>
-				 </otherwise>
-			</choose>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_cNavigate" parameterType="cNavigate" resultMap="cNavigate_DB_Result">
@@ -79,8 +58,6 @@
 		,t.parent_code
 		,t.remark
 		,t.content_type
-		,t.company_code
-		,t.system_code
 		FROM
 		tbh_cnavigate t 
 		<include refid="where_condition" />
@@ -108,8 +85,6 @@
 		,parent_code
 		,remark
 		,content_type
-		,company_code
-		,system_code
 		)
 		VALUES(
 		#{code}
@@ -124,8 +99,6 @@
 		,#{parentCode}
 		,#{remark}
 		,#{contentType}
-		,#{companyCode}
-		,#{systemCode}
 		)
 	</insert>
 
@@ -149,8 +122,6 @@
 		,belong = #{belong}
 		,parent_code = #{parentCode}
 		,remark = #{remark}
-		,content_type = #{contentType}
-		,company_code = #{companyCode}
 		WHERE code = #{code}
 	</update>
 </mapper>

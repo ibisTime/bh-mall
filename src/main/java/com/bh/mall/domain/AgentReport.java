@@ -69,7 +69,7 @@ public class AgentReport extends ABaseDO {
     private Long refreeAward;
 
     // 累积差额利润
-    private Long priceSpread;
+    private Long profitAward;
 
     // **************************db properties **************************
     // 授权开始时间
@@ -271,12 +271,12 @@ public class AgentReport extends ABaseDO {
         this.manageName = manageName;
     }
 
-    public Long getPriceSpread() {
-        return priceSpread;
+    public Long getProfitAward() {
+        return profitAward;
     }
 
-    public void setPriceSpread(Long priceSpread) {
-        this.priceSpread = priceSpread;
+    public void setProfitAward(Long profitAward) {
+        this.profitAward = profitAward;
     }
 
 }

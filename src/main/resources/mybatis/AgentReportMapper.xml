@@ -24,7 +24,7 @@
 		<result column="send_award" property="sendAward" />
 		<result column="intr_award" property="intrAward" />
 		<result column="refree_award" property="refreeAward" />
-		<result column="price_spread" property="priceSpread" />
+		<result column="profit_award" property="profitAward" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -85,7 +85,7 @@
 		,t.intr_award
 		
 		,t.refree_award
-		,t.price_spread
+		,t.profit_award
 		FROM
 		tbh_agent_report t
 		<include refid="where_condition" />
@@ -120,7 +120,7 @@
 		,area
 		,address
 		,impower_datetime
-		,price_spread
+		,profit_award
 		)
 		VALUES(
 		#{userId}
@@ -138,7 +138,7 @@
 		,#{area}
 		,#{address}
 		,#{impowerDatetime}
-		,#{priceSpread}
+		,#{profitAward}
 		)
 	</insert>
 

@@ -12,6 +12,7 @@ import com.bh.mall.dao.IAgentReportDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.SqForm;
+import com.bh.mall.exception.BizException;
 
 @Component
 public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
@@ -54,9 +55,9 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
     }
 
     @Override
-    public int refreshAgentReport(AgentReport data) {
-        int count = 0;
-        return count;
+    public void refreshAgentReport(AgentReport data) {
+
+        agentReportDAO.insert(data);
     }
 
     @Override
@@ -73,4 +74,24 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         }
         return data;
     }
+
+    @Override
+    public AgentReport getAgentReportByUser(String highUserId) {
+        AgentReport data = null;
+        if (StringUtils.isNotBlank(highUserId)) {
+            AgentReport condition = new AgentReport();
+            condition.setUserId(highUserId);
+            data = agentReportDAO.select(condition);
+            if (null != data) {
+                throw new BizException("xn000000", "该代理的统计信息不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public void refreshAward(AgentReport data) {
+        report.s
+    }
+
 }
