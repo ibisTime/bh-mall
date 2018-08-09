@@ -203,8 +203,8 @@ public class WeChatAOImpl implements IWeChatAO {
 
         logger.info("out_trade_no：" + map.get("out_trade_no"));
 
-        String attach = map.get("attach");
-        String[] codes = attach.split("\\|\\|");
+        // String attach = map.get("attach");
+        // String[] codes = attach.split("\\|\\|");
 
         Map<String, String> sysConfig = null;
 

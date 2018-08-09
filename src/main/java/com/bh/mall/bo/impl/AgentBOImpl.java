@@ -190,13 +190,9 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     // 更新头像
     @Override
-    public void refreshPhoto(String userId, String photo) {
-        if (StringUtils.isNotBlank(userId)) {
-            Agent data = new Agent();
-            data.setUserId(userId);
-            data.setPhoto(photo);
-            agentDAO.updatePhoto(data);
-        }
+    public void refreshPhoto(Agent buser, String photo) {
+        buser.setPhoto(photo);
+        agentDAO.updatePhoto(buser);
     }
 
     /** 

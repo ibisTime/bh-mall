@@ -199,13 +199,10 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void refreshPhoto(String userId, String photo) {
-        if (StringUtils.isNotBlank(userId)) {
-            SYSUser data = new SYSUser();
-            data.setUserId(userId);
-            data.setPhoto(photo);
-            sysUserDAO.updatePhoto(data);
-        }
+    public void refreshPhoto(SYSUser user, String photo) {
+        user.setPhoto(photo);
+        sysUserDAO.updatePhoto(user);
+
     }
 
     @Override

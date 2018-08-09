@@ -69,9 +69,6 @@ public class SYSUser extends ABaseDO {
     // 注册时间止
     private Date createDatetimeEnd;
 
-    // 关键词
-    private String KeyWord;
-
     public List<SYSUser> getSysUserList() {
         return sysUserList;
     }

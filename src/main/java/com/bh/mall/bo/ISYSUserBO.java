@@ -26,7 +26,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public void resetSelfPwd(SYSUser user, String newLoginPwd);
 
     // 修改照片
-    public void refreshPhoto(String userId, String photo);
+    public void refreshPhoto(SYSUser user, String photo);
 
     // 判断手机号是否存在
     public void isMobileExist(String mobile);
