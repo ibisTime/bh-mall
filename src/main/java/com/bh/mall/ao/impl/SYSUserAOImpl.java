@@ -191,7 +191,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 修改照片
     @Override
     public void doModifyPhoto(String userId, String photo) {
-        sysUserBO.refreshPhoto(userId, photo);
+        SYSUser user = sysUserBO.getSYSUser(userId);
+        sysUserBO.refreshPhoto(user, photo);
     }
 
     // 更换绑定手机号

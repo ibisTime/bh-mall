@@ -251,7 +251,8 @@ public class AgentAOImpl implements IAgentAO {
     // 修改头像
     @Override
     public void doModifyPhoto(String userId, String photo) {
-        agentBO.refreshPhoto(userId, photo);
+        Agent buser = agentBO.getAgent(userId);
+        agentBO.refreshPhoto(buser, photo);
     }
 
     // 更换绑定手机号

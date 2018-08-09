@@ -47,7 +47,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public void refreshReferee(Agent data, String userReferee, String updater,
             String remark);
 
-    public void refreshPhoto(String userId, String photo);
+    public void refreshPhoto(Agent buser, String photo);
 
     public void refreshAgent(Agent data, String wxId, String mobile,
             String realName, String teamName, String province, String city,
