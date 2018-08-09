@@ -770,10 +770,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
             data.setProCode(req.getProCode());
             // 修改箱码状态
             ProCode barData = proCodeBO.getProCode(req.getProCode());
-            if (ECodeStatus.USE_YES.equals(barData.getStatus())) {
+            if (ECodeStatus.USE_YES.getCode().equals(barData.getStatus())) {
                 throw new BizException("xn00000", "该箱码已经使用过");
             }
-            if (ECodeStatus.SPLIT_SINGLE.equals(barData.getStatus())) {
+            if (ECodeStatus.SPLIT_SINGLE.getCode()
+                .equals(barData.getStatus())) {
                 throw new BizException("xn00000", "该箱码已拆分");
             }
             proCodeBO.refreshProCode(barData);
@@ -1027,9 +1028,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         OutOrder data = outOrderBO.getOutOrder(code);
         // 非待支付与未审核订单无法作废
-        if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
-                || !EOutOrderStatus.TO_APPROVE.getCode()
-                    .equals(data.getStatus())) {
+        if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "该订单无法作废");
         }
         outOrderBO.invalidOutOrder(data, updater, remark);
