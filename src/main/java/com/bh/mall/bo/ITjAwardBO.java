@@ -28,4 +28,6 @@ public interface ITjAwardBO extends IPaginableBO<TjAward> {
 
     public TjAward getAwardByLevel(Integer level, String productCode);
 
+    public List<TjAward> getAwardByProduct(String code);
+
 }

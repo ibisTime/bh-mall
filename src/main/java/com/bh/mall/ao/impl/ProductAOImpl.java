@@ -264,21 +264,19 @@ public class ProductAOImpl implements IProductAO {
         List<Product> list = page.getList();
         for (Product product : list) {
 
+            // 产品规格
             Specs psCondition = new Specs();
             psCondition.setProductCode(product.getCode());
-
             List<Specs> psList = specsBO.querySpecsList(psCondition);
-            if (CollectionUtils.isNotEmpty(psList)) {
-                for (Specs productSpecs : psList) {
+            for (Specs productSpecs : psList) {
 
-                    AgentPrice pspCondition = new AgentPrice();
-                    pspCondition.setSpecsCode(productSpecs.getCode());
-
-                    List<AgentPrice> pspList = agentPriceBO
-                        .queryAgentPriceList(pspCondition);
-                    if (CollectionUtils.isNotEmpty(pspList)) {
-                        productSpecs.setPriceList(pspList);
-                    }
+                // 产品规格价格
+                AgentPrice pspCondition = new AgentPrice();
+                pspCondition.setSpecsCode(productSpecs.getCode());
+                List<AgentPrice> pspList = agentPriceBO
+                    .queryAgentPriceList(pspCondition);
+                if (CollectionUtils.isNotEmpty(pspList)) {
+                    productSpecs.setPriceList(pspList);
                 }
                 product.setSpecsList(psList);
             }
@@ -291,6 +289,11 @@ public class ProductAOImpl implements IProductAO {
                 whNumber = whNumber + nowNumber * ware.getQuantity();
             }
             product.setWhNumber(whNumber);
+
+            // 奖励
+            List<TjAward> awardList = tjAwardBO
+                .getAwardByProduct(product.getCode());
+            product.setDirectAwardList(awardList);
         }
         return page;
     }
@@ -304,12 +307,6 @@ public class ProductAOImpl implements IProductAO {
             psCondition.setProductCode(product.getCode());
 
             List<Specs> psList = specsBO.querySpecsList(psCondition);
-            // 推荐奖励
-            TjAward aCondition = new TjAward();
-            aCondition.setProductCode(product.getCode());
-            List<TjAward> directAwardList = tjAwardBO
-                .queryTjAwardList(aCondition);
-            product.setDirectAwardList(directAwardList);
 
             if (CollectionUtils.isNotEmpty(psList)) {
                 for (Specs productSpecs : psList) {
@@ -325,6 +322,10 @@ public class ProductAOImpl implements IProductAO {
                 }
                 product.setSpecsList(psList);
             }
+            // 奖励
+            List<TjAward> awardList = tjAwardBO
+                .getAwardByProduct(product.getCode());
+            product.setDirectAwardList(awardList);
         }
         return list;
     }

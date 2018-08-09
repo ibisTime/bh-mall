@@ -131,4 +131,11 @@ public class TjAwardBOImpl extends PaginableBOImpl<TjAward>
         return data;
     }
 
+    @Override
+    public List<TjAward> getAwardByProduct(String code) {
+        TjAward condition = new TjAward();
+        condition.setProductCode(code);
+        return tjAwardDAO.selectList(condition);
+    }
+
 }
