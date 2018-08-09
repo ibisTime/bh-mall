@@ -7,23 +7,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.IAgentPriceBO;
+import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.dao.ISpecsDAO;
 import com.bh.mall.dao.IAgentPriceDAO;
-import com.bh.mall.domain.Specs;
+import com.bh.mall.dao.ISpecsDAO;
 import com.bh.mall.domain.AgentPrice;
+import com.bh.mall.domain.Specs;
 import com.bh.mall.dto.req.XN627546Req;
 import com.bh.mall.dto.req.XN627547Req;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class SpecsBOImpl extends PaginableBOImpl<Specs>
-        implements ISpecsBO {
+public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
 
     @Autowired
     private ISpecsDAO specsDAO;
@@ -156,8 +155,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
             agentPrice
                 .setLevel(StringValidater.toInteger(specsPrice.getLevel()));
 
-            agentPrice
-                .setPrice(StringValidater.toLong(specsPrice.getPrice()));
+            agentPrice.setPrice(StringValidater.toLong(specsPrice.getPrice()));
             agentPrice.setMinNumber(
                 StringValidater.toInteger(specsPrice.getMinNumber()));
             agentPrice.setStartNumber(
@@ -247,9 +245,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
         for (Specs data : list) {
             // 规格之间有关联
             if (StringUtils.isNotBlank(data.getRefCode())) {
-                Specs productSpecs = this
-                    .getSpecs(data.getRefCode());
-                number = getMinSpecsNumber(productSpecs, number);
+                number = getMinSpecsNumber(data, number);
             } else {
                 // 各规格之前没有关联
                 number = data.getNumber();
@@ -259,9 +255,9 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs>
     }
 
     private Integer getMinSpecsNumber(Specs data, int number) {
-        Specs productSpecs = this.getSpecs(data.getRefCode());
-        number = number * productSpecs.getNumber();
-        if (StringUtils.isNotBlank(productSpecs.getRefCode())) {
+        if (StringUtils.isNotBlank(data.getRefCode())) {
+            Specs productSpecs = this.getSpecs(data.getRefCode());
+            number = number * productSpecs.getNumber();
             getMinSpecsNumber(productSpecs, number);
         }
         return number;
