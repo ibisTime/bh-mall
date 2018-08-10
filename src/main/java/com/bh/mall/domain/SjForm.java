@@ -94,6 +94,9 @@ public class SjForm extends ABaseDO {
     // 关键词
     private String keyWord;
 
+    // 归属人名称
+    private String toUserName;
+
     public String getToUserId() {
         return toUserId;
     }
@@ -318,6 +321,14 @@ public class SjForm extends ABaseDO {
 
     public void setIdHand(String idHand) {
         this.idHand = idHand;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
     }
 
 }

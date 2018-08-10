@@ -38,6 +38,10 @@ public class XN627546Req {
     @NotBlank(message = "规格包含数量不能为空")
     private String number;
 
+    // （必填）规格库存
+    @NotBlank(message = "不能为空")
+    private String stockNumber;
+
     // （必填）重量
     @NotBlank(message = "重量不能为空")
     private String weight;
@@ -143,6 +147,14 @@ public class XN627546Req {
 
     public void setRefCode(String refCode) {
         this.refCode = refCode;
+    }
+
+    public String getStockNumber() {
+        return stockNumber;
+    }
+
+    public void setStockNumber(String stockNumber) {
+        this.stockNumber = stockNumber;
     }
 
 }

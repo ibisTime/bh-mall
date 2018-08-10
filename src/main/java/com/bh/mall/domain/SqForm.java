@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -105,6 +106,9 @@ public class SqForm extends ABaseDO {
 
     // 用户id 查询
     private String userIdForQuery;
+
+    // 状态
+    private List<String> statusList;
 
     // 获取微信号
     public String getWxId() {
@@ -366,6 +370,14 @@ public class SqForm extends ABaseDO {
 
     public void setImpowerDatetime(Date impowerDatetime) {
         this.impowerDatetime = impowerDatetime;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

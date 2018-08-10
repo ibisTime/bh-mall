@@ -76,16 +76,14 @@ public class ProCodeAOImpl implements IProCodeAO {
                 String traceCode = OrderNoGenerater.generateTrace();
 
                 // 最新的防伪码与之前生成的盒码/箱码重复，跳出当前循环，重新生成盒码
-                if (newProList.contains(miniCode)
-                        || newMiniList.contains(miniCode)
+                if (newProList.contains(miniCode) || newMiniList.contains(miniCode)
                         || newTraceList.contains(miniCode)) {
                     mini--;
                     continue;
                 }
 
                 // 最新的溯源码与之前生成的盒码/箱码重复，跳出当前循环，重新生成盒码
-                if (newProList.contains(traceCode)
-                        || newMiniList.contains(traceCode)
+                if (newProList.contains(traceCode) || newMiniList.contains(traceCode)
                         || newTraceList.contains(traceCode)) {
                     mini--;
                     continue;

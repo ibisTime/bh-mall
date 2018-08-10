@@ -48,4 +48,9 @@ public interface IYxFormBO extends IPaginableBO<YxForm> {
     // 分页查询
     public List<YxForm> queryYxFormPage(int start, int limit, YxForm condition);
 
+    // 修改意向资料
+    public void refreshYxForm(YxForm data, String realName, String wxId,
+            String mobile, Integer level, String province, String city,
+            String area, String address);
+
 }

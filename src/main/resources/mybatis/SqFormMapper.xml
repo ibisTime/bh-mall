@@ -41,6 +41,17 @@
 			<if test="toUserId != null and toUserId != '' ">
 				AND t.to_user_id= #{toUserId}
 			</if>
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}				
+				</when>
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" index="iddex" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 			
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}

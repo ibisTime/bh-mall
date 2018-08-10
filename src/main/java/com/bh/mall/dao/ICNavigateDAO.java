@@ -15,4 +15,20 @@ public interface ICNavigateDAO extends IBaseDAO<CNavigate> {
      */
     public int update(CNavigate data);
 
+    /**
+     * 上架
+     * @param data 
+     * @create: 2018年8月10日 下午3:33:39 nyc
+     * @history:
+     */
+    public void putOn(CNavigate data);
+
+    /**
+     * 下架
+     * @param data 
+     * @create: 2018年8月10日 下午3:33:39 nyc
+     * @history:
+     */
+    public void putDown(CNavigate data);
+
 }

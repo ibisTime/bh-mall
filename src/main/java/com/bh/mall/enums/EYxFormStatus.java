@@ -5,8 +5,8 @@ import java.util.Map;
 
 public enum EYxFormStatus {
 
-    MIND("0", "有意愿"), IGNORED("1", "已忽略"), ALLOTED("2", "已分配"), ACCEPT("3",
-            "已接受");
+    MIND("0", "有意愿"), IGNORED("1", "已忽略"), ACCEPT("2", "已接受"), ALLOTED("3",
+            "已分配");
 
     EYxFormStatus(String code, String value) {
         this.code = code;

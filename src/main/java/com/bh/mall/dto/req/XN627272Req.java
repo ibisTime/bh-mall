@@ -14,6 +14,9 @@ public class XN627272Req {
     @NotBlank(message = "编号不能为空")
     private String userId;
 
+    // （必填）管理员
+    private String manager;
+
     // （必填） 审核人
     @NotBlank(message = " 审核人不能为空")
     private String approver;
@@ -55,6 +58,14 @@ public class XN627272Req {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
     }
 
 }

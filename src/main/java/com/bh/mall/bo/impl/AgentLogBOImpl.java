@@ -16,6 +16,7 @@ import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.domain.YxForm;
+import com.bh.mall.enums.EAgentLogStatus;
 import com.bh.mall.enums.EAgentLogType;
 import com.bh.mall.exception.BizException;
 
@@ -33,7 +34,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         AgentLog data = new AgentLog();
 
         data.setCode(code);
-        data.setType(EAgentLogType.Allot.getCode());
+        data.setType(EAgentLogStatus.MIND.getCode());
         data.setApplyUser(yxForm.getUserId());
         data.setRealName(yxForm.getRealName());
         data.setWxId(yxForm.getWxId());

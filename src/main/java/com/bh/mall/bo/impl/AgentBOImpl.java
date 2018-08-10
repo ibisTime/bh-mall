@@ -447,9 +447,9 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public void refreshSq(Agent data, SqForm sqForm, String highUserId,
-            String teamName, Integer level, String status, String approver,
-            String approveName, String logCode) {
+    public void refreshSq(Agent data, SqForm sqForm, String manager,
+            String highUserId, String teamName, Integer level, String status,
+            String approver, String approveName, String logCode) {
 
         if (EAgentStatus.IMPOWERED.getCode().equals(status)) {
             Date date = new Date();
@@ -463,6 +463,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setHighUserId(sqForm.getToUserId());
         data.setTeamName(teamName);
         data.setStatus(status);
+        data.setManager(manager);
 
         data.setApprover(approver);
         data.setApproveName(approveName);

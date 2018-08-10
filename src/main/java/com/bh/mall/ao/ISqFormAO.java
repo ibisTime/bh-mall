@@ -27,8 +27,8 @@ public interface ISqFormAO {
     public void addInfo(XN627271Req req);
 
     // 审核授权 627272
-    public void approveSqFormByP(String userId, String approver, String result,
-            String remark);
+    public void approveSqFormByP(String userId, String manager, String approver,
+            String result, String remark);
 
     // 审核授权 627273
     public void approveSqFormByB(String userId, String approver, String result,

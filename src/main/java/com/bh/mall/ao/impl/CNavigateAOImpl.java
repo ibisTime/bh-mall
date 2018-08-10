@@ -13,6 +13,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.CNavigate;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.ECNavigateStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -99,5 +100,23 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public CNavigate getCNavigate(String code) {
         return cNavigateBO.getCNavigate(code);
+    }
+
+    @Override
+    public void putOn(String code, String updater, String remark) {
+        CNavigate data = cNavigateBO.getCNavigate(code);
+        if (ECNavigateStatus.APPROVE_YES.getCode().equals(data.getStatus())) {
+            throw new BizException("xn000000", "导航图已发布，请勿重复操作");
+        }
+        cNavigateBO.putOn(data, updater, remark);
+    }
+
+    @Override
+    public void putDown(String code, String updater, String remark) {
+        CNavigate data = cNavigateBO.getCNavigate(code);
+        if (!ECNavigateStatus.APPROVE_YES.getCode().equals(data.getStatus())) {
+            throw new BizException("xn000000", "导航图还未发布，无法撤下");
+        }
+        cNavigateBO.putDown(data, updater, remark);
     }
 }

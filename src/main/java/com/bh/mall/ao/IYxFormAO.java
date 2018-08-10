@@ -49,4 +49,9 @@ public interface IYxFormAO {
     // 详细查询 627267
     public YxForm getYxForm(String userId);
 
+    // 修改意向代理资料
+    public void editYxForm(String userId, String wxId, String mobile,
+            String realName, Integer integer, String province, String city,
+            String area, String address);
+
 }

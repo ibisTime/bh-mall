@@ -14,6 +14,7 @@ public class XN627251Req {
     private String userId;
 
     // （必填）分配给谁
+    @NotBlank(message = "归属人不能为空")
     private String toUserId;
 
     // （必填）审核人

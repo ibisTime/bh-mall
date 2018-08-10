@@ -9,7 +9,8 @@ import com.bh.mall.dao.base.support.AMybatisTemplate;
 import com.bh.mall.domain.CNavigate;
 
 @Repository("cNavigateDAOImpl")
-public class CNavigateDAOImpl extends AMybatisTemplate implements ICNavigateDAO {
+public class CNavigateDAOImpl extends AMybatisTemplate
+        implements ICNavigateDAO {
 
     @Override
     public int insert(CNavigate data) {
@@ -35,12 +36,13 @@ public class CNavigateDAOImpl extends AMybatisTemplate implements ICNavigateDAO 
 
     @Override
     public List<CNavigate> selectList(CNavigate condition) {
-        return super.selectList(NAMESPACE.concat("select_cNavigate"),
-            condition, CNavigate.class);
+        return super.selectList(NAMESPACE.concat("select_cNavigate"), condition,
+            CNavigate.class);
     }
 
     @Override
-    public List<CNavigate> selectList(CNavigate condition, int start, int count) {
+    public List<CNavigate> selectList(CNavigate condition, int start,
+            int count) {
         return super.selectList(NAMESPACE.concat("select_cNavigate"), start,
             count, condition, CNavigate.class);
     }
@@ -48,5 +50,15 @@ public class CNavigateDAOImpl extends AMybatisTemplate implements ICNavigateDAO 
     @Override
     public int update(CNavigate data) {
         return super.update(NAMESPACE.concat("update_cNavigate"), data);
+    }
+
+    @Override
+    public void putOn(CNavigate data) {
+        super.update(NAMESPACE.concat("put_on"), data);
+    }
+
+    @Override
+    public void putDown(CNavigate data) {
+        super.update(NAMESPACE.concat("put_down"), data);
     }
 }

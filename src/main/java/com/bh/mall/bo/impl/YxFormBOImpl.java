@@ -14,8 +14,8 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IYxFormDAO;
 import com.bh.mall.domain.YxForm;
+import com.bh.mall.enums.EAgentLogStatus;
 import com.bh.mall.enums.EAgentStatus;
-import com.bh.mall.enums.EYxFormStatus;
 
 @Component
 public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
@@ -68,7 +68,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setArea(area);
         data.setAddress(address);
 
-        data.setStatus(EAgentStatus.MIND.getCode());
+        data.setStatus(EAgentLogStatus.MIND.getCode());
         data.setApplyDatetime(new Date());
         data.setSource(fromInfo);
         yxFormDAO.update(data);
@@ -82,7 +82,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     public String allotYxForm(YxForm data, String toUserId, String approver,
             String approveName, String remark) {
         data.setToUserId(toUserId);
-        data.setStatus(EYxFormStatus.ALLOTED.getCode());
+        data.setStatus(EAgentLogStatus.ALLOTED.getCode());
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setApproveDatetime(new Date());
@@ -98,7 +98,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String ignoreYxForm(YxForm data, String approver, String approveName,
             String remark) {
-        data.setStatus(EYxFormStatus.IGNORED.getCode());
+        data.setStatus(EAgentLogStatus.IGNORED.getCode());
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setRemark(remark);
@@ -111,7 +111,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     public String acceptYxForm(YxForm data, String approver, String approveName,
             String remark) {
         data.setToUserId(approver);
-        data.setStatus(EYxFormStatus.ACCEPT.getCode());
+        data.setStatus(EAgentLogStatus.ACCEPT.getCode());
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setRemark(remark);
@@ -155,6 +155,22 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         Page<YxForm> page = new Page<YxForm>(start, limit, totalCount);
         return yxFormDAO.selectList(condition, page.getPageNO(),
             page.getPageSize());
+    }
+
+    @Override
+    public void refreshYxForm(YxForm data, String realName, String wxId,
+            String mobile, Integer level, String province, String city,
+            String area, String address) {
+        data.setRealName(realName);
+        data.setWxId(wxId);
+        data.setMobile(mobile);
+        data.setApplyLevel(level);
+        data.setProvince(province);
+
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
+        yxFormDAO.update(data);
     }
 
 }

@@ -21,6 +21,7 @@ import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627250Req;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -123,8 +124,7 @@ public class YxFormAOImpl implements IYxFormAO {
             agent.getRealName(), remark);
 
         // 更新最后一条轨迹
-        agentBO.refreshYx(agent, null, approver, agent.getRealName(),
-            logCode);
+        agentBO.refreshYx(agent, null, approver, agent.getRealName(), logCode);
     }
 
     /**
@@ -233,6 +233,19 @@ public class YxFormAOImpl implements IYxFormAO {
         }
 
         return yxFormBO.getPaginable(start, limit, condition);
+    }
+
+    @Override
+    public void editYxForm(String userId, String realName, String wxId,
+            String mobile, Integer level, String province, String city,
+            String area, String address) {
+        YxForm data = yxFormBO.getYxForm(userId);
+        if (EYxFormStatus.MIND.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "该代理已经被接受喽，无法修改资料了");
+        }
+        yxFormBO.refreshYxForm(data, realName, wxId, mobile, level, province,
+            city, area, address);
+
     }
 
 }

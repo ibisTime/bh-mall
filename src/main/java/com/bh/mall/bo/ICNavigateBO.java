@@ -19,4 +19,8 @@ public interface ICNavigateBO extends IPaginableBO<CNavigate> {
 
     public CNavigate getCNavigate(String code);
 
+    public void putOn(CNavigate data, String updater, String remark);
+
+    public void putDown(CNavigate data, String updater, String remark);
+
 }

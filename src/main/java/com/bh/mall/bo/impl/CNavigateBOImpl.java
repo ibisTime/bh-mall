@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,11 +13,12 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.ICNavigateDAO;
 import com.bh.mall.domain.CNavigate;
+import com.bh.mall.enums.ECNavigateStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
-public class CNavigateBOImpl extends PaginableBOImpl<CNavigate> implements
-        ICNavigateBO {
+public class CNavigateBOImpl extends PaginableBOImpl<CNavigate>
+        implements ICNavigateBO {
 
     @Autowired
     private ICNavigateDAO cNavigateDAO;
@@ -81,5 +83,27 @@ public class CNavigateBOImpl extends PaginableBOImpl<CNavigate> implements
             }
         }
         return data;
+    }
+
+    @Override
+    public void putOn(CNavigate data, String updater, String remark) {
+        data.setStatus(ECNavigateStatus.APPROVE_YES.getCode());
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+
+        cNavigateDAO.putOn(data);
+    }
+
+    @Override
+    public void putDown(CNavigate data, String updater, String remark) {
+        data.setStatus(ECNavigateStatus.APPROVE_NO.getCode());
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+
+        cNavigateDAO.putDown(data);
     }
 }

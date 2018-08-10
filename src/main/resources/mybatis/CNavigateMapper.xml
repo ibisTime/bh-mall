@@ -13,6 +13,8 @@
 		<result column="order_no" property="orderNo" />
 		<result column="belong" property="belong" />
 		<result column="parent_code" property="parentCode" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 		<result column="content_type" property="contentType" />
 	</resultMap>
@@ -121,6 +123,30 @@
 		,order_no = #{orderNo}
 		,belong = #{belong}
 		,parent_code = #{parentCode}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+		
+	<update id="put_on" parameterType="cNavigate">
+		UPDATE tbh_cnavigate
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+		<update id="put_down" parameterType="cNavigate">
+		UPDATE tbh_cnavigate
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>

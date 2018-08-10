@@ -258,6 +258,7 @@ public class SjFormAOImpl implements ISjFormAO {
         for (SjForm sjFrom : list) {
             Agent agent = agentAO.getAgent(sjFrom.getUserId());
             sjFrom.setUser(agent);
+
         }
         return list;
     }

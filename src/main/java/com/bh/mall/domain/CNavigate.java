@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.util.Date;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -41,6 +43,12 @@ public class CNavigate extends ABaseDO {
 
     // 父编号
     private String parentCode;
+
+    // 更新人
+    private String updater;
+
+    // 更新时间
+    private Date updateDatetime;
 
     // 备注
     private String remark;
@@ -166,4 +174,21 @@ public class CNavigate extends ABaseDO {
     public void setIsCompanyEdit(String isCompanyEdit) {
         this.isCompanyEdit = isCompanyEdit;
     }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
 }

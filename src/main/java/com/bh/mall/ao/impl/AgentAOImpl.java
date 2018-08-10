@@ -387,6 +387,10 @@ public class AgentAOImpl implements IAgentAO {
                 data.setHighUserMobile(highAgent.getMobile());
             }
 
+            // 管理员
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+            data.setManageName(sysUser.getRealName());
+
             // 门槛余额
             Account account = accountBO.getAccountNocheck(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
@@ -417,6 +421,7 @@ public class AgentAOImpl implements IAgentAO {
                 Agent introducer = agentBO.getAgent(data.getIntroducer());
                 data.setIntroduceName(introducer.getRealName());
             }
+
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
@@ -427,6 +432,10 @@ public class AgentAOImpl implements IAgentAO {
                 data.setHighUserName(highAgent.getRealName());
                 data.setHighUserMobile(highAgent.getMobile());
             }
+
+            // 管理员
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+            data.setManageName(sysUser.getRealName());
         }
         return list;
     }
@@ -458,6 +467,10 @@ public class AgentAOImpl implements IAgentAO {
                 data.setHighUserName(highAgent.getRealName());
                 data.setHighUserMobile(highAgent.getMobile());
             }
+
+            // 管理员
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+            data.setManageName(sysUser.getRealName());
         }
         return page;
     }
@@ -523,6 +536,7 @@ public class AgentAOImpl implements IAgentAO {
             Agent introducer = agentBO.getAgent(data.getIntroducer());
             data.setIntroduceName(introducer.getRealName());
         }
+
         // 上级转义
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
@@ -533,6 +547,10 @@ public class AgentAOImpl implements IAgentAO {
             data.setHighUserName(highAgent.getRealName());
             data.setHighUserMobile(highAgent.getMobile());
         }
+
+        // 管理员
+        SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+        data.setManageName(sysUser.getRealName());
 
         return data;
     }

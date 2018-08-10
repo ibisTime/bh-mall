@@ -174,6 +174,9 @@ public class Agent extends ABaseDO {
     // 云仓余额
     private Long wareAmount;
 
+    // 管理员名称
+    private String manageName;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -611,6 +614,14 @@ public class Agent extends ABaseDO {
 
     public void setMkAmount(Long mkAmount) {
         this.mkAmount = mkAmount;
+    }
+
+    public String getManageName() {
+        return manageName;
+    }
+
+    public void setManageName(String manageName) {
+        this.manageName = manageName;
     }
 
     public void setWareAmount(Long wareAmount) {

@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查意向代理
  * @author: nyc 
@@ -21,6 +23,9 @@ public class XN627285Req extends APageReq {
 
     // 状态（选填）
     private String status;
+
+    // 状态
+    private List<String> statusList;
 
     // 关键字 （选填）
     private String keyword;
@@ -63,6 +68,14 @@ public class XN627285Req extends APageReq {
 
     public void setApplyLevel(String applyLevel) {
         this.applyLevel = applyLevel;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

@@ -95,9 +95,9 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     // 填写授权资料
     public void addInfo(SqForm sqForm, String logCode, String status);
 
-    public void refreshSq(Agent data, SqForm sqForm, String highUserId,
-            String teamName, Integer level, String status, String approver,
-            String approveName, String logCode);
+    public void refreshSq(Agent data, SqForm sqForm, String manager,
+            String highUserId, String teamName, Integer level, String status,
+            String approver, String approveName, String logCode);
 
     public void refreshYx(Agent agent, String status, String approver,
             String approveName, String logCode);

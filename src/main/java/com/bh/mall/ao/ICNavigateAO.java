@@ -33,4 +33,10 @@ public interface ICNavigateAO {
 
     // 详情查询
     public CNavigate getCNavigate(String code);
+
+    // 发布导航
+    public void putOn(String code, String updater, String remark);
+
+    // 撤下导航
+    public void putDown(String code, String updater, String remark);
 }

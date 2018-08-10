@@ -262,7 +262,9 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn000", "该代理未处于待授权状态");
         }
 
+        Agent approveAgent = agentBO.getAgent(approver);
         // 审核通过
+        String manager = null;
         String status = ESqFormStatus.CANCELED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             AgentLevel impower = agentLevelBO
@@ -272,6 +274,7 @@ public class SqFormAOImpl implements ISqFormAO {
                 status = ESqFormStatus.COMPANY_IMPOWER.getCode();
             } else {
                 status = ESqFormStatus.IMPOWERED.getCode();
+                manager = approveAgent.getManager();
                 this.approveSqForm(sqForm);
             }
         } else {
@@ -280,12 +283,11 @@ public class SqFormAOImpl implements ISqFormAO {
             agentBO.resetInfo(agent);
         }
 
-        Agent approveAgent = agentBO.getAgent(approver);
         String logCode = sqFormBO.approveSqForm(sqForm, approver,
             approveAgent.getRealName(), remark, status);
         // 记录日志
         Agent agent = agentBO.getAgent(sqForm.getUserId());
-        agentBO.refreshSq(agent, sqForm, sqForm.getToUserId(),
+        agentBO.refreshSq(agent, sqForm, manager, sqForm.getToUserId(),
             sqForm.getTeamName(), sqForm.getApplyLevel(), status, approver,
             approveAgent.getRealName(), logCode);
 
@@ -297,8 +299,8 @@ public class SqFormAOImpl implements ISqFormAO {
      */
     @Override
     @Transactional
-    public void approveSqFormByP(String userId, String approver, String result,
-            String remark) {
+    public void approveSqFormByP(String userId, String manager, String approver,
+            String result, String remark) {
 
         SqForm sqForm = sqFormBO.getSqForm(userId);
         if (!ESqFormStatus.TO_APPROVE.getCode().equals(sqForm.getStatus())) {
@@ -309,6 +311,14 @@ public class SqFormAOImpl implements ISqFormAO {
         String status = ESqFormStatus.CANCELED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             status = ESqFormStatus.IMPOWERED.getCode();
+            // 为一级代理绑定管理员
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sqForm
+                .getApplyLevel()) {
+                if (StringUtils.isBlank(manager)) {
+                    throw new BizException("xn000", "请给该代理关联一个管理员");
+                }
+            }
+
             this.approveSqForm(sqForm);
         } else {
             // 未通过，清空手机号等信息，防止重新申请时重复
@@ -322,8 +332,8 @@ public class SqFormAOImpl implements ISqFormAO {
 
         Agent agent = agentBO.getAgent(sqForm.getUserId());
         agentBO.refreshSq(agent, sqForm, sqForm.getToUserId(),
-            sqForm.getTeamName(), sqForm.getApplyLevel(), status, approver,
-            sysUser.getRealName(), logCode);
+            sqForm.getTeamName(), manager, sqForm.getApplyLevel(), status,
+            approver, sysUser.getRealName(), logCode);
 
     }
 
@@ -371,8 +381,8 @@ public class SqFormAOImpl implements ISqFormAO {
         String logCode = sqFormBO.approveSqForm(sqForm, approver,
             approveAgent.getRealName(), remark, status);
 
-        agentBO.refreshSq(agent, sqForm, null, null, null, status, approver,
-            approveAgent.getRealName(), logCode);
+        agentBO.refreshSq(agent, sqForm, null, null, null, null, status,
+            approver, approveAgent.getRealName(), logCode);
 
     }
 
@@ -412,7 +422,7 @@ public class SqFormAOImpl implements ISqFormAO {
         String logCode = sqFormBO.approveSqForm(data, approver,
             sysUser.getRealName(), remark, status);
 
-        agentBO.refreshSq(agent, data, null, null, null, status, approver,
+        agentBO.refreshSq(agent, data, null, null, null, null, status, approver,
             sysUser.getRealName(), logCode);
 
     }
