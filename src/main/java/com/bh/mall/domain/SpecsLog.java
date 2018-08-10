@@ -18,7 +18,7 @@ public class SpecsLog extends ABaseDO {
     private String code;
 
     // 产品编号
-    private String productCode;
+    private String specsCode;
 
     // 类型
     private String type;
@@ -60,12 +60,12 @@ public class SpecsLog extends ABaseDO {
         this.code = code;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getSpecsCode() {
+        return specsCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
     public String getType() {

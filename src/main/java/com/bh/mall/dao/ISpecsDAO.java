@@ -9,4 +9,6 @@ public interface ISpecsDAO extends IBaseDAO<Specs> {
     void update(Specs data);
 
     void deleteByProdut(Specs data);
+
+    void updateRepertory(Specs data);
 }

@@ -15,17 +15,19 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
 
     void saveSpecs(String code, XN627546Req psReq);
 
-    void saveSpecsList(String code, List<XN627546Req> specList);
+    void saveSpecsList(String code, List<XN627546Req> specList, String updater);
 
     List<Specs> getSpecsByProduct(String productCode);
 
-    Specs getSpecs(String productSpecsCode);
+    Specs getSpecs(String code);
 
     void refreshSpecs(XN627546Req psReq, List<XN627547Req> specsPriceList);
 
-    // 获取最小规格数量
-    public Integer getMinSpecsNumber(String productCode);
-
     void removeSpecs(Specs specs);
+
+    void refreshRepertory(Specs specs, String type, Integer number,
+            String updater);
+
+    Integer getMinSpecsNumber(String productCode);
 
 }

@@ -26,7 +26,7 @@ public class XN627611 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SpecsLog condition = new SpecsLog();
-        condition.setProductCode(req.getProductCode());
+        condition.setSpecsCode(req.getProductCode());
         condition.setType(req.getType());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));

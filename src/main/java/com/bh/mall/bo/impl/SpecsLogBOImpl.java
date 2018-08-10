@@ -11,11 +11,9 @@ import com.bh.mall.bo.ISpecsLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
-import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.ISpecsLogDAO;
-import com.bh.mall.domain.Product;
+import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.SpecsLog;
-import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -26,16 +24,16 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     private ISpecsLogDAO specsLogDAO;
 
     @Override
-    public void saveSpecsLog(String code, String updater, String realNumber) {
+    public void saveSpecsLog(Specs specs, String type, Integer number,
+            String updater) {
         SpecsLog data = new SpecsLog();
         String plCode = OrderNoGenerater
             .generate(EGeneratePrefix.ProductLog.getCode());
         data.setCode(plCode);
-        data.setProductCode(code);
-        data.setType(EProductLogType.Input.getCode());
-        data.setTranCount(StringValidater.toInteger(realNumber));
-        data.setPreCount(0);
-        data.setPostCount(StringValidater.toInteger(realNumber));
+        data.setSpecsCode(specs.getCode());
+        data.setTranCount(number);
+        data.setPreCount(specs.getStockNumber());
+        data.setPostCount(specs.getStockNumber() + number);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         specsLogDAO.insert(data);
@@ -45,7 +43,7 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     public void removeSpecsLog(String code) {
         if (StringUtils.isNotBlank(code)) {
             SpecsLog data = new SpecsLog();
-            data.setProductCode(code);
+            data.setSpecsCode(code);
             specsLogDAO.delete(data);
         }
     }
@@ -72,43 +70,6 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
             }
         }
         return data;
-    }
-
-    @Override
-    public void saveExchangeLog(Product data, String type, Integer realNumber,
-            Integer changeNumber, String updater) {
-        SpecsLog plData = new SpecsLog();
-        String plCode = OrderNoGenerater
-            .generate(EGeneratePrefix.ProductLog.getCode());
-        plData.setCode(plCode);
-        plData.setType(type);
-        plData.setProductCode(data.getCode());
-        plData.setTranCount(changeNumber);
-        plData.setPreCount(realNumber);
-        plData.setPostCount(realNumber + changeNumber);
-        plData.setUpdater(updater);
-        plData.setUpdateDatetime(new Date());
-        specsLogDAO.insert(plData);
-
-    }
-
-    @Override
-    public void saveExchangeProductLog(Product data, String type,
-            Integer realNumber, Integer changeNumber, String approver) {
-        SpecsLog plData = new SpecsLog();
-        String plCode = OrderNoGenerater
-            .generate(EGeneratePrefix.ProductLog.getCode());
-        plData.setCode(plCode);
-        plData.setType(type);
-        plData.setProductCode(data.getCode());
-        plData.setTranCount(changeNumber);
-        plData.setPreCount(data.getRealNumber() + changeNumber);
-        plData.setPostCount(data.getRealNumber());
-
-        plData.setUpdater(approver);
-        plData.setUpdateDatetime(new Date());
-        specsLogDAO.insert(plData);
-
     }
 
 }

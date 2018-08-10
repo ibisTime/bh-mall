@@ -23,8 +23,6 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     void putOnProduct(Product data);
 
-    void refreshRealNumber(Product data);
-
     void refreshVirNumber(Product data);
 
 }

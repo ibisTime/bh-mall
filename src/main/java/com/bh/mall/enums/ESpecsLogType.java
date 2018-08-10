@@ -1,10 +1,10 @@
 package com.bh.mall.enums;
 
-public enum EProductLogType {
+public enum ESpecsLogType {
     Output("0", "出库"), Input("1", "入库"), Order("2", "代理下单"), ChangeProduct("3",
             "代理换货");
 
-    EProductLogType(String code, String value) {
+    ESpecsLogType(String code, String value) {
         this.code = code;
         this.value = value;
     }

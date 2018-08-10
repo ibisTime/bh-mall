@@ -7,7 +7,6 @@ import com.bh.mall.domain.Product;
 import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
-import com.bh.mall.dto.req.XN627545Req;
 
 /**
  * 产品
@@ -27,9 +26,6 @@ public interface IProductAO {
 
     // 删除产品
     void dropProduct(String code);
-
-    // 修改规格库存 （放到规格表下面）
-    void editRepertory(XN627545Req req);
 
     // 产品上架
     void putOnProduct(XN627543Req req);

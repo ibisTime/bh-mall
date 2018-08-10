@@ -9,6 +9,7 @@ import com.bh.mall.ao.ISpecsAO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Specs;
+import com.bh.mall.enums.ESpecsLogType;
 
 @Service
 public class SpecsAOImpl implements ISpecsAO {
@@ -17,8 +18,13 @@ public class SpecsAOImpl implements ISpecsAO {
     private ISpecsBO specsBO;
 
     @Override
-    public void dropSpecs(String code) {
-        specsBO.removeSpecsByProduct(code);
+    public void editRepertory(String code, String type, Integer number,
+            String updater) {
+        Specs specs = specsBO.getSpecs(code);
+        if (ESpecsLogType.Output.getCode().equals(type)) {
+            number = -number;
+        }
+        specsBO.refreshRepertory(specs, type, number, updater);
     }
 
     @Override
@@ -35,15 +41,6 @@ public class SpecsAOImpl implements ISpecsAO {
     @Override
     public Specs getSpecs(String code) {
         return specsBO.getSpecs(code);
-    }
-
-    @Override
-    public String addSpecs(Specs data) {
-        return null;
-    }
-
-    @Override
-    public void editSpecs(Specs data) {
     }
 
 }

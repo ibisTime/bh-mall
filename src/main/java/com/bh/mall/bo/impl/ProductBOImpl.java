@@ -74,12 +74,6 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
-    public void refreshRealNumber(Product data) {
-        productDAO.updateRealNumber(data);
-
-    }
-
-    @Override
     public void refreshVirNumber(Product data) {
         productDAO.updateVirNumber(data);
 

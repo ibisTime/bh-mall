@@ -34,7 +34,7 @@ import com.bh.mall.dto.req.XN627790Req;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
-import com.bh.mall.enums.EProductLogType;
+import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -249,16 +249,10 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         if (EBoolean.YES.getCode().equals(result)) {
             status = EChangeProductStatus.THROUGH_YES.getCode();
             // 产品
-            Product pData = productBO.getProduct(data.getProductCode());
             Specs specs = specsBO.getSpecs(data.getSpecsCode());
-
-            pData.setRealNumber(pData.getRealNumber() - data.getQuantity());
-            productBO.refreshRealNumber(pData);
-
-            // 保存库存记录
-            specsLogBO.saveExchangeProductLog(pData,
-                EProductLogType.ChangeProduct.getCode(), pData.getRealNumber(),
-                data.getQuantity(), approver);
+            specsBO.refreshRepertory(specs,
+                ESpecsLogType.ChangeProduct.getCode(), data.getQuantity(),
+                approver);
 
             // 要置换的产品
             Product changeData = productBO
@@ -272,12 +266,9 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             }
 
             // 保存要置换的产品库存记录
-            pData.setRealNumber(
-                pData.getRealNumber() - data.getExcanChangeQuantity());
-            productBO.refreshRealNumber(pData);
-            specsLogBO.saveExchangeProductLog(changeData,
-                EProductLogType.ChangeProduct.getCode(), -pData.getRealNumber(),
-                data.getExcanChangeQuantity(), approver);
+            specsBO.refreshRepertory(specs,
+                ESpecsLogType.ChangeProduct.getCode(),
+                -data.getExcanChangeQuantity(), approver);
 
             Agent agent = agentBO.getAgent(data.getApplyUser());
             wareBO.buyWare(data, agent);

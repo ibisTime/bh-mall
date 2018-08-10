@@ -32,8 +32,11 @@ public class Specs extends ABaseDO {
     // 规格名称
     private String name;
 
-    // 规格数量
+    // 对应规格数量
     private Integer number;
+
+    // 规格库存
+    private Integer stockNumber;
 
     // 重量
     private Double weight;
@@ -157,6 +160,30 @@ public class Specs extends ABaseDO {
 
     public void setRefCode(String refCode) {
         this.refCode = refCode;
+    }
+
+    public Integer getStockNumber() {
+        return stockNumber;
+    }
+
+    public String getIsSqOrder() {
+        return isSqOrder;
+    }
+
+    public String getIsSjOrder() {
+        return isSjOrder;
+    }
+
+    public void setStockNumber(Integer stockNumber) {
+        this.stockNumber = stockNumber;
+    }
+
+    public void setIsSqOrder(String isSqOrder) {
+        this.isSqOrder = isSqOrder;
+    }
+
+    public void setIsSjOrder(String isSjOrder) {
+        this.isSjOrder = isSjOrder;
     }
 
 }

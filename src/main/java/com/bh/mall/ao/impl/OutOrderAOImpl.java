@@ -71,10 +71,10 @@ import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductIsTotal;
-import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductSpecsType;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
+import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
@@ -954,8 +954,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
     // 变动产品数量
     private void changeProductNumber(Agent agent, Product pData, Specs specs,
             OutOrder OutOrder, Integer number, String code) {
-        int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
-        int quantity = number * minNumber;
 
         // 有上级代理,扣减上级代理云仓,且自己开启云仓
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
@@ -975,10 +973,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
             // 无上级代理,扣减产品实际库存
-            specsLogBO.saveExchangeLog(pData, EProductLogType.Order.getCode(),
-                pData.getRealNumber(), quantity, null);
-            pData.setRealNumber(pData.getRealNumber() + quantity);
-            productBO.refreshRealNumber(pData);
+            specsLogBO.saveSpecsLog(specs, ESpecsLogType.Order.getCode(),
+                -number, null);
         }
     }
 

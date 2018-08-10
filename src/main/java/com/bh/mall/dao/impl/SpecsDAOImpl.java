@@ -55,4 +55,10 @@ public class SpecsDAOImpl extends AMybatisTemplate implements ISpecsDAO {
         super.delete(NAMESPACE.concat("delete_byProductCode"), data);
     }
 
+    @Override
+    public void updateRepertory(Specs data) {
+        super.update(NAMESPACE.concat("update_repertory"), data);
+
+    }
+
 }

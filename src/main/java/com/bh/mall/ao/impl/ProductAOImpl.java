@@ -29,11 +29,8 @@ import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
-import com.bh.mall.dto.req.XN627545Req;
 import com.bh.mall.dto.req.XN627546Req;
 import com.bh.mall.enums.EBoolean;
-import com.bh.mall.enums.EProductLogType;
-import com.bh.mall.enums.EProductNumberType;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.exception.BizException;
 
@@ -91,8 +88,7 @@ public class ProductAOImpl implements IProductAO {
             }
         }
 
-        specsBO.saveSpecsList(code, req.getSpecList());
-        specsLogBO.saveSpecsLog(code, req.getUpdater(), req.getRealNumber());
+        specsBO.saveSpecsList(code, req.getSpecList(), req.getUpdater());
         tjAwardBO.saveTjAward(code, req.getAwardList());
         return code;
     }
@@ -214,45 +210,6 @@ public class ProductAOImpl implements IProductAO {
             throw new BizException("xn00000", "产品未上架");
         }
         productBO.putdownProduct(data, updater);
-    }
-
-    @Override
-    public void editRepertory(XN627545Req req) {
-        Product data = productBO.getProduct(req.getCode());
-        Integer changeNumber = 0;
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(new Date());
-        if (StringUtils.isNotBlank(req.getRealNumber())
-                && StringValidater.toInteger(req.getRealNumber()) < 0) {
-            throw new BizException("xn0000", "变动数量不能小于0");
-        }
-        if (StringUtils.isNotBlank(req.getVirNumber())
-                && StringValidater.toInteger(req.getVirNumber()) < 0) {
-            throw new BizException("xn0000", "变动数量不能小于0");
-        }
-        if (EProductNumberType.Real.getCode().equals(req.getKind())) {
-            changeNumber = StringValidater.toInteger(req.getRealNumber());
-
-            if (EProductLogType.Output.getCode().equals(req.getType())) {
-                changeNumber = -changeNumber;
-            }
-            specsLogBO.saveExchangeLog(data, req.getType(),
-                data.getRealNumber(), changeNumber, req.getUpdater());
-            data.setRealNumber(data.getRealNumber() + changeNumber);
-            productBO.refreshRealNumber(data);
-        }
-        if (EProductNumberType.Virtual.getCode().equals(req.getKind())) {
-            changeNumber = StringValidater.toInteger(req.getVirNumber());
-            if (EProductLogType.Output.getCode().equals(req.getType())) {
-                changeNumber = -changeNumber;
-            }
-            // productLogBO.saveChangeLog(data, req.getType(),
-            // data.getVirNumber(),
-            // changeNumber, req.getUpdater());
-            data.setVirNumber(data.getVirNumber() + changeNumber);
-            productBO.refreshVirNumber(data);
-        }
-
     }
 
     @Override

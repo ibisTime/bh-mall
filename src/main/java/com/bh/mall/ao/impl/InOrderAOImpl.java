@@ -58,9 +58,9 @@ import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInOrderStatus;
 import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductIsTotal;
-import com.bh.mall.enums.EProductLogType;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
+import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
@@ -679,8 +679,6 @@ public class InOrderAOImpl implements IInOrderAO {
     // 变动产品数量
     private void changeProductNumber(Agent agent, Product pData, Specs psData,
             InOrder inOrder, Integer number, String code) {
-        int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
-        int quantity = number * minNumber;
         // 开启云仓的代理
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
         if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
@@ -701,11 +699,8 @@ public class InOrderAOImpl implements IInOrderAO {
 
             } else {
                 // 无上级代理,扣减产品实际库存
-                specsLogBO.saveExchangeLog(pData,
-                    EProductLogType.Order.getCode(), pData.getRealNumber(),
-                    quantity, null);
-                pData.setRealNumber(pData.getRealNumber() + quantity);
-                productBO.refreshRealNumber(pData);
+                specsBO.refreshRepertory(psData, ESpecsLogType.Order.getCode(),
+                    -number, null);
             }
         }
     }

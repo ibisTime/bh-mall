@@ -12,10 +12,11 @@
 		
 		<result column="name" property="name"/>
 		<result column="number" property="number"/>
+		<result column="stock_number" property="stockNumber"/>
 		<result column="weight" property="weight"/>
-		
 		<result column="is_sq_order" property="isSqOrder"/>
 		<result column="is_sj_order" property="isSjOrder"/>
+		
 		<result column="is_normal_order" property="isNormalOrder"/>
 	</resultMap>
 	
@@ -62,6 +63,7 @@
 		
 		,t.name
 		,t.number
+		,t.stock_number
 		,t.weight
 		
 		,t.is_sq_order
@@ -88,6 +90,7 @@
 		,product_code
 		,name
 		,number
+		,stock_number
 		,weight
 		
 		,is_sq_order
@@ -99,6 +102,7 @@
 		,#{productCode}
 		,#{name}
 		,#{number}
+		,#{stockNumber}
 		,#{weight}
 		
 		,#{isSqOrder}
@@ -115,6 +119,7 @@
 		,ref_code = #{refCode}
 		,name = #{name}
 		,number = #{number}
+		,stock_number = #{stockNumber}
 		
 		,weight = #{weight}
 		,is_sq_order = #{isSqOrder}
@@ -136,4 +141,12 @@
 		WHERE
 		code = #{code}
 	</delete>
+	
+	<update id="update_repertory">
+		UPDATE tbh_specs 
+		SET
+		stock_number = #{stockNumber}
+		WHERE 
+		code = #{code}
+	</update>
 </mapper>

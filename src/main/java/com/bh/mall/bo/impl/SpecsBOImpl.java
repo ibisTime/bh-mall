@@ -6,9 +6,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.ISpecsBO;
+import com.bh.mall.bo.ISpecsLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -19,6 +21,7 @@ import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.dto.req.XN627546Req;
 import com.bh.mall.dto.req.XN627547Req;
+import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -33,8 +36,12 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     @Autowired
     private IAgentPriceBO agentPriceBO;
 
+    @Autowired
+    private ISpecsLogBO specsLogBO;
+
     @Override
-    public void saveSpecsList(String code, List<XN627546Req> specList) {
+    public void saveSpecsList(String code, List<XN627546Req> specList,
+            String updater) {
         // 添加产品规格
         for (XN627546Req productSpec : specList) {
             if (StringUtils.isBlank(productSpec.getCode())) {
@@ -53,6 +60,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 data.setIsImpowerOrder(productSpec.getIsImpowerOrder());
                 data.setIsNormalOrder(productSpec.getIsNormalOrder());
 
+                specsLogBO.saveSpecsLog(data, ESpecsLogType.Input.getCode(), 0,
+                    updater);
                 specsDAO.insert(data);
 
                 List<XN627547Req> specsPriceList = productSpec
@@ -266,6 +275,20 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     @Override
     public void removeSpecs(Specs data) {
         specsDAO.delete(data);
+    }
+
+    @Override
+    @Transactional
+    public void refreshRepertory(Specs data, String type, Integer number,
+            String updater) {
+        specsLogBO.saveSpecsLog(data, type, number, updater);
+
+        Integer nowNumber = data.getStockNumber() + number;
+        if (0 < nowNumber) {
+            throw new BizException("xn00000", "该规格的数量不足");
+        }
+        data.setStockNumber(nowNumber);
+        specsDAO.updateRepertory(data);
     }
 
 }

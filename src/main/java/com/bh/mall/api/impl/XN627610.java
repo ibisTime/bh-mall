@@ -30,7 +30,7 @@ public class XN627610 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SpecsLog condition = new SpecsLog();
-        condition.setProductCode(req.getProductCode());
+        condition.setSpecsCode(req.getProductCode());
         condition.setType(req.getType());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
