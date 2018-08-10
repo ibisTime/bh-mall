@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -15,29 +17,46 @@ public class InnerSpecs extends ABaseDO {
     // 编号
     private String code;
 
-    // 内购产品编号
+    // 产品编号
     private String innerProductCode;
-
-    // 规格名称
-    private String name;
-
-    // 规格包含数量
-    private Integer number;
-
-    // 重量
-    private Integer weight;
-
-    // 单价
-    private Integer price;
-
-    // 关联规格编号
-    private String refCode;
 
     // 是否可拆单
     private String isSingle;
 
     // 拆单数量
     private Integer singleNumber;
+
+    // 关联规格
+    private String refCode;
+
+    // 规格名称
+    private String name;
+
+    // 对应规格数量
+    private Integer number;
+
+    // 规格库存
+    private Integer stockNumber;
+
+    // 重量
+    private Double weight;
+
+    // 是否允许授权单下单
+    private String isSqOrder;
+
+    // 是否允许升级单下单
+    private String isSjOrder;
+
+    // 是否允许普通单下单
+    private String isNormalOrder;
+
+    // 规格价格
+    private List<AgentPrice> priceList;
+
+    // *************db**************
+
+    // 规格价格
+    private AgentPrice price;
 
     public String getCode() {
         return code;
@@ -71,44 +90,100 @@ public class InnerSpecs extends ABaseDO {
         this.number = number;
     }
 
-    public Integer getWeight() {
+    public String getIsImpowerOrder() {
+        return isSjOrder;
+    }
+
+    public void setIsImpowerOrder(String isImpowerOrder) {
+        this.isSjOrder = isImpowerOrder;
+    }
+
+    public String getIsUpgradeOrder() {
+        return isSqOrder;
+    }
+
+    public void setIsUpgradeOrder(String isUpgradeOrder) {
+        this.isSqOrder = isUpgradeOrder;
+    }
+
+    public String getIsNormalOrder() {
+        return isNormalOrder;
+    }
+
+    public void setIsNormalOrder(String isNormalOrder) {
+        this.isNormalOrder = isNormalOrder;
+    }
+
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
-    public Integer getPrice() {
+    public List<AgentPrice> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(List<AgentPrice> priceList) {
+        this.priceList = priceList;
+    }
+
+    public AgentPrice getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(AgentPrice price) {
         this.price = price;
-    }
-
-    public String getRefCode() {
-        return refCode;
-    }
-
-    public void setRefCode(String refCode) {
-        this.refCode = refCode;
     }
 
     public String getIsSingle() {
         return isSingle;
     }
 
-    public void setIsSingle(String isSingle) {
-        this.isSingle = isSingle;
-    }
-
     public Integer getSingleNumber() {
         return singleNumber;
     }
 
+    public String getRefCode() {
+        return refCode;
+    }
+
+    public void setIsSingle(String isSingle) {
+        this.isSingle = isSingle;
+    }
+
     public void setSingleNumber(Integer singleNumber) {
         this.singleNumber = singleNumber;
+    }
+
+    public void setRefCode(String refCode) {
+        this.refCode = refCode;
+    }
+
+    public Integer getStockNumber() {
+        return stockNumber;
+    }
+
+    public String getIsSqOrder() {
+        return isSqOrder;
+    }
+
+    public String getIsSjOrder() {
+        return isSjOrder;
+    }
+
+    public void setStockNumber(Integer stockNumber) {
+        this.stockNumber = stockNumber;
+    }
+
+    public void setIsSqOrder(String isSqOrder) {
+        this.isSqOrder = isSqOrder;
+    }
+
+    public void setIsSjOrder(String isSjOrder) {
+        this.isSjOrder = isSjOrder;
     }
 
 }

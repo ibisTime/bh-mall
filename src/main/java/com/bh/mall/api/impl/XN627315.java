@@ -23,7 +23,7 @@ public class XN627315 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
+        userAO.getCuser(req.getUserId());
         return new BooleanRes(true);
     }
 

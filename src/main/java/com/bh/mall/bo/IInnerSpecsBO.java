@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.InnerSpecs;
+import com.bh.mall.dto.req.XN627547Req;
+import com.bh.mall.dto.req.XN627890Req;
 
 /**
  * 内购产品规格
@@ -15,11 +17,15 @@ public interface IInnerSpecsBO extends IPaginableBO<InnerSpecs> {
 
     public boolean isInnerSpecsExist(String code);
 
-    public int saveInnerSpecs(InnerSpecs data);
+    public void saveInnerSpecsList(String code, List<XN627890Req> specList,
+            String updater);
 
-    public int removeInnerSpecs(String code);
+    public void saveInnerSpecs(String code, XN627890Req innerpsReq);
 
-    public int refreshInnerSpecs(InnerSpecs data);
+    public void removeInnerSpecs(InnerSpecs data);
+
+    public void refreshInnerSpecs(XN627890Req innerpsReq,
+            List<XN627547Req> innerSpecsPriceList);
 
     public InnerSpecs getInnerSpecs(String code);
 
