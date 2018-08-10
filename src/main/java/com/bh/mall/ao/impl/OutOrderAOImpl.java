@@ -20,6 +20,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentPriceBO;
+import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IChAwardBO;
@@ -43,6 +44,7 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.AgentPrice;
+import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.CUser;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.ChAward;
@@ -137,6 +139,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     @Autowired
     ISYSUserBO sysUserBO;
+
+    @Autowired
+    IAgentReportBO agentReportBO;
 
     @Override
     @Transactional
@@ -640,6 +645,28 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (!(StringValidater
             .toInteger(EAgentLevel.ONE.getCode()) == (applyUser.getLevel()))) {
             fromUserId = applyUser.getHighUserId();
+
+            // 计算差额利润
+            AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
+                applyUser.getLevel());
+            Agent toUser = agentBO.getAgent(applyUser.getHighUserId());
+            AgentPrice highPrice = agentPriceBO
+                .getPriceByLevel(data.getSpecsCode(), toUser.getLevel());
+            Long profit = (price.getPrice() - highPrice.getPrice())
+                    * data.getQuantity();
+
+            // 订单归属人账户
+            Account account = accountBO.getAccountByUser(toUser.getUserId(),
+                ECurrency.YJ_CNY.getCode());
+            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
+                null, null, data.getCode(), EBizType.AJ_CELR,
+                EBizType.AJ_CELR.getValue(), profit);
+
+            // 统计差额利润
+            AgentReport report = agentReportBO
+                .getAgentReportByUser(applyUser.getHighUserId());
+            report.setProfitAward(profit);
+            agentReportBO.refreshAward(report);
         }
 
         // **********出货奖*******
@@ -777,7 +804,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             // 更新箱码关联的盒码与订单编号
             List<MiniCode> stList = miniCodeBO
-                .getMiniCodeByproCode(barData.getCode());
+                .getMiniCodeByProCode(barData.getCode());
             for (MiniCode miniCode : stList) {
                 miniCodeBO.refreshStatus(miniCode, data.getCode());
             }

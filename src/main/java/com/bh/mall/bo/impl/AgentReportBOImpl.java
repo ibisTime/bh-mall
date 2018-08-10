@@ -91,7 +91,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
 
     @Override
     public void refreshAward(AgentReport data) {
-        report.s
+        agentReportDAO.updateAward(data);
     }
 
 }

@@ -499,7 +499,7 @@ public class AgentAOImpl implements IAgentAO {
             agentBO.resetInfo(agent);
         }
 
-        // 清空介绍关系
+        // 清空介绍关系 TODO
 
     }
 

@@ -15,7 +15,7 @@ public interface IMiniCodeBO extends IPaginableBO<MiniCode> {
 
     public MiniCode getMiniCode(String code);
 
-    public List<MiniCode> getMiniCodeByproCode(String code);
+    public List<MiniCode> getMiniCodeByProCode(String code);
 
     public List<MiniCode> queryCodeList();
 

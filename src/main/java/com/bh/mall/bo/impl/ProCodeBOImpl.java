@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.dao.IProCodeDAO;
 import com.bh.mall.domain.ProCode;
 import com.bh.mall.enums.EBoolean;
@@ -28,6 +29,7 @@ public class ProCodeBOImpl extends PaginableBOImpl<ProCode>
         data.setCode(proCode);
         data.setCreateDatetime(date);
         data.setStatus(ECodeStatus.TO_USER.getCode());
+        data.setBatch(DateUtil.getToDay());
         proCodeDAO.insert(data);
 
     }

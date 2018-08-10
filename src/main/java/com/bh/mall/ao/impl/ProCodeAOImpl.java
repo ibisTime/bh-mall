@@ -46,7 +46,7 @@ public class ProCodeAOImpl implements IProCodeAO {
     @Override
     @Transactional
     public void addProCode(int proNumber, int miniNumber) {
-        Integer count = proNumber * miniNumber;
+        long start = System.currentTimeMillis();
 
         // 获取数据库的防伪溯源码与条形码
         List<ProCode> proList = proCodeBO.queryCodeList();
@@ -58,20 +58,19 @@ public class ProCodeAOImpl implements IProCodeAO {
         List<String> newTraceList = new LinkedList<String>();
 
         Date date = null;
-        loop: for (int pro = 0; pro < proNumber; pro++) {
-
+        loop: for (int pro = proNumber; pro > 0; pro--) {
             String proCode = OrderNoGenerater.generate();
             // 新生成的箱码是否重复
             if (newProList.contains(proCode) || newMiniList.contains(proCode)
                     || newTraceList.contains(proCode)) {
-                pro--;
+                pro++;
                 break;
             } else {
                 // 把新生成的箱码放入newProList中
                 newProList.add(proCode);
             }
 
-            for (int mini = 0; mini < count; mini++) {
+            for (int mini = 0; mini < miniNumber; mini++) {
                 date = new Date();
                 String miniCode = OrderNoGenerater.generateTrace();
                 String traceCode = OrderNoGenerater.generateTrace();
@@ -105,7 +104,7 @@ public class ProCodeAOImpl implements IProCodeAO {
                 // 校验新增的盒码与箱码是否与原有的箱码重复
                 for (ProCode data : proList) {
                     if (data.getCode().equals(proCode)) {
-                        pro--;
+                        pro++;
                         continue loop;
                     }
                     if (data.getCode().equals(miniCode)
@@ -119,7 +118,7 @@ public class ProCodeAOImpl implements IProCodeAO {
                 for (MiniCode data : miniList) {
                     if (data.getMiniCode().equals(proCode)
                             || data.getTraceCode().equals(proCode)) {
-                        pro--;
+                        pro++;
                         continue loop;
                     }
 
@@ -140,6 +139,8 @@ public class ProCodeAOImpl implements IProCodeAO {
             proCodeBO.saveProCode(proCode, date);
         }
 
+        long end = System.currentTimeMillis();
+        System.out.println("耗时：" + (end - start));
     }
 
     @Override
@@ -205,17 +206,35 @@ public class ProCodeAOImpl implements IProCodeAO {
     @Override
     public Paginable<ProCode> queryProCodePage(int start, int limit,
             ProCode condition) {
-        return proCodeBO.getPaginable(start, limit, condition);
+        Paginable<ProCode> page = proCodeBO.getPaginable(start, limit,
+            condition);
+        for (ProCode data : page.getList()) {
+            List<MiniCode> list = miniCodeBO
+                .getMiniCodeByProCode(data.getCode());
+            data.setStList(list);
+        }
+        return page;
     }
 
     @Override
     public List<ProCode> queryProCodeList(ProCode condition) {
-        return proCodeBO.queryProCodeList(condition);
+
+        List<ProCode> list = proCodeBO.queryProCodeList(condition);
+        for (ProCode data : list) {
+            List<MiniCode> miniList = miniCodeBO
+                .getMiniCodeByProCode(data.getCode());
+            data.setStList(miniList);
+        }
+        return list;
     }
 
     @Override
     public ProCode getProCode(String code) {
-        return proCodeBO.getProCode(code);
+        ProCode data = proCodeBO.getProCode(code);
+        List<MiniCode> miniList = miniCodeBO
+            .getMiniCodeByProCode(data.getCode());
+        data.setStList(miniList);
+        return data;
     }
 
 }

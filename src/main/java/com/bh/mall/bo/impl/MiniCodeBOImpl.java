@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IMiniCodeBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.dao.IMiniCodeDAO;
 import com.bh.mall.domain.MiniCode;
 import com.bh.mall.enums.ECodeStatus;
@@ -30,15 +31,15 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
         data.setRefCode(proCode);
         data.setStatus(ECodeStatus.TO_USER.getCode());
 
+        data.setBatch(DateUtil.getToDay());
         data.setCreateDatetime(date);
         miniCodeDAO.insert(data);
     }
 
     @Override
-    public List<MiniCode> getMiniCodeByproCode(String code) {
+    public List<MiniCode> getMiniCodeByProCode(String code) {
         MiniCode condition = new MiniCode();
         condition.setRefCode(code);
-        condition.setStatus(ECodeStatus.USE_NO.getCode());
         List<MiniCode> list = miniCodeDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn00000", "该箱码已被使用啦！");

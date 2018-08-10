@@ -48,8 +48,13 @@ public class AgentReportDAOImpl extends AMybatisTemplate
     }
 
     @Override
-    public int update(AgentReport data) {
-        return 0;
+    public void update(AgentReport data) {
+        super.update(NAMESPACE.concat("update_agentReport"), data);
+    }
+
+    @Override
+    public void updateAward(AgentReport data) {
+        super.update(NAMESPACE.concat("update_award"), data);
     }
 
 }

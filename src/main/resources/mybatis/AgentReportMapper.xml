@@ -120,7 +120,6 @@
 		,area
 		,address
 		,impower_datetime
-		,profit_award
 		)
 		VALUES(
 		#{userId}
@@ -138,7 +137,6 @@
 		,#{area}
 		,#{address}
 		,#{impowerDatetime}
-		,#{profitAward}
 		)
 	</insert>
 
@@ -159,11 +157,17 @@
 		,area = #{area}
 		,address = #{address}
 		,impower_datetime = #{impowerDatetime}
-		send_award = #{sendAward}
-		,intr_award = #{intrAward}
-		,refree_award = #{refreeAward}
 		WHERE user_id = #{userId}
 	</update>
 
+<update id="update_award" parameterType="agentReport">
+		UPDATE tbh_agent_report
+		SET
+		send_award = #{sendAward}
+		,intr_award = #{intrAward}
+		,refree_award = #{refreeAward}
+		,profit_award = #{profitAward}
+		WHERE user_id = #{userId}
+	</update>
 
 </mapper>

@@ -313,10 +313,8 @@ public class InOrderAOImpl implements IInOrderAO {
         try {
             logger.info("========回调信息=================");
             map = XMLUtil.doXMLParse(result);
-
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
-
             InOrder data = inOrderBO.getInOrder(outTradeNo);
             if (!EInOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单已支付");
@@ -482,6 +480,12 @@ public class InOrderAOImpl implements IInOrderAO {
                     applyUser.getUserId(), ECurrency.YJ_CNY.getCode(),
                     awardAmount, EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
                     EBizType.AJ_CHJL.getValue(), data.getCode());
+
+                // 统计出货奖
+                AgentReport report = agentReportBO
+                    .getAgentReportByUser(applyUser.getUserId());
+                report.setSendAward(awardAmount);
+                agentReportBO.refreshAward(report);
             }
         }
 
@@ -505,6 +509,12 @@ public class InOrderAOImpl implements IInOrderAO {
                         EBizType.AJ_TJJL.getValue(),
                         EBizType.AJ_TJJL.getValue(), data.getCode());
 
+                    // 统计推荐奖
+                    AgentReport report = agentReportBO
+                        .getAgentReportByUser(firstReferee.getUserId());
+                    report.setRefreeAward(amount);
+                    agentReportBO.refreshAward(report);
+
                     // 间接推荐奖
                     if (StringUtils.isNotBlank(firstReferee.getReferrer())) {
                         Agent secondReferee = agentBO
@@ -517,6 +527,12 @@ public class InOrderAOImpl implements IInOrderAO {
                             ECurrency.YJ_CNY.getCode(), amount,
                             EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
                             EBizType.AJ_TJJL.getValue(), data.getCode());
+
+                        // 统计推荐奖
+                        report = agentReportBO
+                            .getAgentReportByUser(secondReferee.getUserId());
+                        report.setRefreeAward(amount);
+                        agentReportBO.refreshAward(report);
 
                         // 次推荐奖
                         if (StringUtils
@@ -531,6 +547,12 @@ public class InOrderAOImpl implements IInOrderAO {
                                 ECurrency.YJ_CNY.getCode(), amount,
                                 EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
                                 EBizType.AJ_TJJL.getValue(), data.getCode());
+
+                            // 统计推荐奖
+                            report = agentReportBO
+                                .getAgentReportByUser(thirdReferee.getUserId());
+                            report.setRefreeAward(amount);
+                            agentReportBO.refreshAward(report);
                         }
                     }
                 }
