@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.InnerSpecs;
-import com.bh.mall.dto.req.XN627900Req;
 
 /**
  * 内购产品规格
@@ -15,15 +14,6 @@ import com.bh.mall.dto.req.XN627900Req;
 public interface IInnerSpecsAO {
 
     String DEFAULT_ORDER_COLUMN = "code";
-
-    // 新增内购产品规格
-    public String addInnerSpecs(XN627900Req req);
-
-    // 删除内购产品规格
-    public boolean dropInnerSpecs(String code);
-
-    // 修改内购产品规格
-    public boolean editInnerSpecs(InnerSpecs data);
 
     // 列表查询内购产品规格（根据内购产品编号）
     public List<InnerSpecs> queryInnerSpecsList(InnerSpecs condition);

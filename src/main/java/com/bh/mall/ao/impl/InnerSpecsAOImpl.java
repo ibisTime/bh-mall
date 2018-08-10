@@ -4,14 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IInnerSpecsAO;
 import com.bh.mall.bo.IInnerSpecsBO;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.domain.InnerSpecs;
-import com.bh.mall.dto.req.XN627900Req;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -19,36 +16,6 @@ public class InnerSpecsAOImpl implements IInnerSpecsAO {
 
     @Autowired
     IInnerSpecsBO innerSpecsBO;
-
-    @Override
-    public String addInnerSpecs(XN627900Req req) {
-        String code = OrderNoGenerater.generate("IS");
-        InnerSpecs data = new InnerSpecs();
-
-        innerSpecsBO.saveInnerSpecs(data);
-        return code;
-    }
-
-    @Override
-    @Transactional
-    public boolean dropInnerSpecs(String code) {
-        if (!innerSpecsBO.isInnerSpecsExist(code)) {
-            throw new BizException("lh4000", "内购产品规格编号不存在！");
-        }
-        innerSpecsBO.removeInnerSpecs(code);
-        return true;
-
-    }
-
-    @Override
-    public boolean editInnerSpecs(InnerSpecs data) {
-        if (data != null && innerSpecsBO.isInnerSpecsExist(data.getCode())) {
-            innerSpecsBO.refreshInnerSpecs(data);
-        } else {
-            throw new BizException("lh4000", "内购产品规格编号不存在！");
-        }
-        return true;
-    }
 
     @Override
     public List<InnerSpecs> queryInnerSpecsList(InnerSpecs condition) {
