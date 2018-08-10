@@ -26,6 +26,7 @@ public class XN627900 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+
         return new PKCodeRes(inOrderAO.addInOrderNoCart(req.getApplyUser(),
             req.getSpecsCode(), StringValidater.toInteger(req.getQuantity()),
             req.getApplyNote()));
