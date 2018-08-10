@@ -51,15 +51,15 @@ public class XN627805Res {
     }
 
     public Long getAmount() {
-        return minAmount;
+        return amount;
     }
 
     public void setRedAmount(Long redAmount) {
         this.redAmount = redAmount;
     }
 
-    public void setAmount(Long minAmount) {
-        this.minAmount = minAmount;
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
     public Long getMinAmount() {

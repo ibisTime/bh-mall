@@ -24,8 +24,8 @@ public class XN627328 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+        return agentLogAO.getAgentLog(req.getUserId());
 
-        return null;
     }
 
     @Override

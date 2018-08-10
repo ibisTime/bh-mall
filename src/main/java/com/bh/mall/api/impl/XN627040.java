@@ -4,7 +4,6 @@ import com.bh.mall.ao.ISYSRoleAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
-import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN627040Req;
 import com.bh.mall.dto.res.PKCodeRes;
 import com.bh.mall.exception.BizException;

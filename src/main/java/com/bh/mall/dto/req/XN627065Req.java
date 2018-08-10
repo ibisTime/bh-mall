@@ -10,6 +10,11 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627065Req extends AListReq {
 
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = -7984371747655264073L;
+
     // 角色编号（必填）
     @NotBlank
     private String roleCode;
