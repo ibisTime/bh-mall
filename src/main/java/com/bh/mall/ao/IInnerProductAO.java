@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.InnerProduct;
 import com.bh.mall.dto.req.XN627700Req;
-import com.bh.mall.dto.req.XN627701Req;
+import com.bh.mall.dto.req.XN627702Req;
 
 /**
  * 内购产品
@@ -27,7 +27,7 @@ public interface IInnerProductAO {
     void dropInnerProduct(String code);
 
     // 修改内购产品
-    void editInnerProduct(XN627701Req req);
+    void editInnerProduct(XN627702Req req);
 
     // 分页查询内购产品
     Paginable<InnerProduct> queryInnerProductPage(int start, int limit,

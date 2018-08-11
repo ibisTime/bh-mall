@@ -6,6 +6,7 @@ import com.bh.mall.ao.IChargeAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.dto.req.XN627473Req;
@@ -14,7 +15,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 分页查询充值订单（front）
+ * 分页查询充值订单
  * @author: xieyj 
  * @since: 2017年5月13日 下午7:58:10 
  * @history:
@@ -28,7 +29,6 @@ public class XN627473 extends AProcessor {
     public Object doBusiness() throws BizException {
         Charge condition = new Charge();
         condition.setHighAgentId(req.getUserId());
-        // condition.setApplyUser(req.getUserId());
         condition.setStatus(req.getStatus());
 
         condition.setApplyDatetimeStart(
@@ -50,8 +50,7 @@ public class XN627473 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627473Req.class);
-        StringValidater.validateBlank(req.getStart(), req.getLimit(),
-            req.getUserId());
+        ObjValidater.validateReq(req);
     }
 
 }

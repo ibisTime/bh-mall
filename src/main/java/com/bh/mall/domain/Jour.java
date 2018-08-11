@@ -91,6 +91,18 @@ public class Jour extends ABaseDO {
     // 判断支出与收入
     private String kind;
 
+    // 代理电话
+    private String mobile;
+
+    // 代理
+    private Agent agent;
+
+    // 出货订单
+    private OutOrder outOrder;
+
+    // 云仓订单
+    private InOrder inOrder;
+
     // ********db************
 
     public String getCurrency() {
@@ -291,6 +303,38 @@ public class Jour extends ABaseDO {
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public Agent getAgent() {
+        return agent;
+    }
+
+    public OutOrder getOutOrder() {
+        return outOrder;
+    }
+
+    public InOrder getInOrder() {
+        return inOrder;
+    }
+
+    public void setAgent(Agent agent) {
+        this.agent = agent;
+    }
+
+    public void setOutOrder(OutOrder outOrder) {
+        this.outOrder = outOrder;
+    }
+
+    public void setInOrder(InOrder inOrder) {
+        this.inOrder = inOrder;
     }
 
 }

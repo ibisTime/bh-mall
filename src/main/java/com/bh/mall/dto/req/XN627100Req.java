@@ -18,6 +18,10 @@ public class XN627100Req {
     @NotBlank(message = "银行名称不能为空")
     private String bankName;
 
+    // 更新人
+    @NotBlank(message = "更新人不能为空")
+    private String updater;
+
     public String getBankCode() {
         return bankCode;
     }
@@ -32,6 +36,14 @@ public class XN627100Req {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
 }

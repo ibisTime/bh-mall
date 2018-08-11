@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IChannelBankAO;
 import com.bh.mall.bo.IChannelBankBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.ChannelBank;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -18,16 +20,22 @@ public class ChannelBankAOImpl implements IChannelBankAO {
     @Autowired
     private IChannelBankBO channelBankBO;
 
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
     @Override
-    public int addChannelBank(String bankCode, String bankName) {
-        return channelBankBO.saveChannelBank(bankCode, bankName);
+    public int addChannelBank(String bankCode, String bankName,
+            String updater) {
+        return channelBankBO.saveChannelBank(bankCode, bankName, updater);
     }
 
     @Override
-    public void editChannelBank(String id, String bankCode, String bankName) {
+    public void editChannelBank(String id, String bankCode, String bankName,
+            String updater, String remark) {
         ChannelBank data = channelBankBO
             .getChannelBank(StringValidater.toLong(id));
-        channelBankBO.refreshChannelBank(data, bankCode, bankName);
+        channelBankBO.refreshChannelBank(data, bankCode, bankName, updater,
+            remark);
     }
 
     @Override
@@ -41,16 +49,32 @@ public class ChannelBankAOImpl implements IChannelBankAO {
     @Override
     public Paginable<ChannelBank> queryChannelBankPage(int start, int limit,
             ChannelBank condition) {
-        return channelBankBO.getPaginable(start, limit, condition);
+        Paginable<ChannelBank> page = channelBankBO.getPaginable(start, limit,
+            condition);
+        for (ChannelBank data : page.getList()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
+
+        return page;
     }
 
     @Override
     public List<ChannelBank> queryChannelBankList(ChannelBank condition) {
-        return channelBankBO.queryChannelBankList(condition);
+        List<ChannelBank> list = channelBankBO.queryChannelBankList(condition);
+        for (ChannelBank data : list) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
+
+        return list;
     }
 
     @Override
     public ChannelBank getChannelBank(Long id) {
-        return channelBankBO.getChannelBank(id);
+        ChannelBank data = channelBankBO.getChannelBank(id);
+        SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+        data.setUpdateName(sysUser.getRealName());
+        return data;
     }
 }

@@ -11,12 +11,13 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 修改内购产品
+ * 删除内购产品
  * @author: nyc 
- * @since: 2018年3月26日 下午2:17:57 
+ * @since: 2018年3月26日 下午3:14:53 
  * @history:
  */
 public class XN627701 extends AProcessor {
+
     private IInnerProductAO innerProductAO = SpringContextHolder
         .getBean(IInnerProductAO.class);
 
@@ -24,7 +25,7 @@ public class XN627701 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        innerProductAO.editInnerProduct(req);
+        innerProductAO.dropInnerProduct(req.getCode());
         return new BooleanRes(true);
     }
 
@@ -32,7 +33,6 @@ public class XN627701 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627701Req.class);
         ObjValidater.validateReq(req);
-
     }
 
 }

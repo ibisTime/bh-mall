@@ -17,7 +17,8 @@ public interface IChannelBankBO extends IPaginableBO<ChannelBank> {
     public boolean isChannelBankExist(Long id);
 
     // 新增渠道银行
-    public int saveChannelBank(String bankCode, String bankName);
+    public int saveChannelBank(String bankCode, String bankName,
+            String updater);
 
     // 删除
     public int removeChannelBank(Long id);
@@ -33,6 +34,6 @@ public interface IChannelBankBO extends IPaginableBO<ChannelBank> {
 
     // 更新
     public void refreshChannelBank(ChannelBank data, String bankCode,
-            String bankName);
+            String bankName, String updater, String remark);
 
 }

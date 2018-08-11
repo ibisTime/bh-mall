@@ -1,7 +1,5 @@
 package com.bh.mall.domain;
 
-import java.util.List;
-
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -35,28 +33,14 @@ public class InnerSpecs extends ABaseDO {
     // 对应规格数量
     private Integer number;
 
-    // 规格库存
+    // 库存
     private Integer stockNumber;
 
     // 重量
     private Double weight;
 
-    // 是否允许授权单下单
-    private String isSqOrder;
-
-    // 是否允许升级单下单
-    private String isSjOrder;
-
-    // 是否允许普通单下单
-    private String isNormalOrder;
-
-    // 规格价格
-    private List<AgentPrice> priceList;
-
-    // *************db**************
-
-    // 规格价格
-    private AgentPrice price;
+    // 价格
+    private String price;
 
     public String getCode() {
         return code;
@@ -90,30 +74,6 @@ public class InnerSpecs extends ABaseDO {
         this.number = number;
     }
 
-    public String getIsImpowerOrder() {
-        return isSjOrder;
-    }
-
-    public void setIsImpowerOrder(String isImpowerOrder) {
-        this.isSjOrder = isImpowerOrder;
-    }
-
-    public String getIsUpgradeOrder() {
-        return isSqOrder;
-    }
-
-    public void setIsUpgradeOrder(String isUpgradeOrder) {
-        this.isSqOrder = isUpgradeOrder;
-    }
-
-    public String getIsNormalOrder() {
-        return isNormalOrder;
-    }
-
-    public void setIsNormalOrder(String isNormalOrder) {
-        this.isNormalOrder = isNormalOrder;
-    }
-
     public Double getWeight() {
         return weight;
     }
@@ -122,19 +82,11 @@ public class InnerSpecs extends ABaseDO {
         this.weight = weight;
     }
 
-    public List<AgentPrice> getPriceList() {
-        return priceList;
-    }
-
-    public void setPriceList(List<AgentPrice> priceList) {
-        this.priceList = priceList;
-    }
-
-    public AgentPrice getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(AgentPrice price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -166,24 +118,8 @@ public class InnerSpecs extends ABaseDO {
         return stockNumber;
     }
 
-    public String getIsSqOrder() {
-        return isSqOrder;
-    }
-
-    public String getIsSjOrder() {
-        return isSjOrder;
-    }
-
     public void setStockNumber(Integer stockNumber) {
         this.stockNumber = stockNumber;
-    }
-
-    public void setIsSqOrder(String isSqOrder) {
-        this.isSqOrder = isSqOrder;
-    }
-
-    public void setIsSjOrder(String isSjOrder) {
-        this.isSjOrder = isSjOrder;
     }
 
 }

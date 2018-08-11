@@ -30,6 +30,7 @@ public class XN627365 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentLog condition = new AgentLog();
+        condition.setApplyUser(req.getUserId());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStatus(req.getStatus());
         condition.setKeyword(req.getKeyword());

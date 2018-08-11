@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.util.Date;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -43,7 +45,18 @@ public class ChannelBank extends ABaseDO {
     private Long monthAmount;
 
     // 备注
+    private String updater;
+
+    // 备注
+    private Date updateDatetime;
+
+    // 备注
     private String remark;
+
+    // *****************db*********************
+
+    // 更新人名称
+    private String updateName;
 
     public Long getId() {
         return id;
@@ -132,4 +145,29 @@ public class ChannelBank extends ABaseDO {
     public void setChannelBank(String channelBank) {
         this.channelBank = channelBank;
     }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
 }

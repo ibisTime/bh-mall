@@ -21,6 +21,13 @@ public class XN627102Req {
     @NotBlank(message = "银行名称不能为空")
     private String bankName;
 
+    // 更新人
+    @NotBlank(message = "更新人不能为空")
+    private String updater;
+
+    // 备注
+    private String remark;
+
     public String getId() {
         return id;
     }
@@ -43,6 +50,22 @@ public class XN627102Req {
 
     public void setBankName(String bankName) {
         this.bankName = bankName;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

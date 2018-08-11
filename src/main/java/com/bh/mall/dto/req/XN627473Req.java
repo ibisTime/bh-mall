@@ -10,7 +10,7 @@ public class XN627473Req extends APageReq {
 
     private static final long serialVersionUID = 1678910941853269683L;
 
-    // 用户ID （必填）
+    // 用户ID （选填）
     private String userId;
 
     // 状态（待审核/审核不通过/审核通过）

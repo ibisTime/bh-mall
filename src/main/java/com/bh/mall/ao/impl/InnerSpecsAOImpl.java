@@ -9,7 +9,6 @@ import com.bh.mall.ao.IInnerSpecsAO;
 import com.bh.mall.bo.IInnerSpecsBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.InnerSpecs;
-import com.bh.mall.exception.BizException;
 
 @Service
 public class InnerSpecsAOImpl implements IInnerSpecsAO {
@@ -19,7 +18,7 @@ public class InnerSpecsAOImpl implements IInnerSpecsAO {
 
     @Override
     public List<InnerSpecs> queryInnerSpecsList(InnerSpecs condition) {
-        return innerSpecsBO.queryInnerSpecsList(condition);
+        return null;
     }
 
     @Override
@@ -30,9 +29,6 @@ public class InnerSpecsAOImpl implements IInnerSpecsAO {
 
     @Override
     public InnerSpecs getInnerSpecs(String code) {
-        if (!innerSpecsBO.isInnerSpecsExist(code)) {
-            throw new BizException("lh4000", "内购产品规格编号不存在！");
-        }
-        return innerSpecsBO.getInnerSpecs(code);
+        return null;
     }
 }

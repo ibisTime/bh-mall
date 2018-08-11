@@ -181,23 +181,19 @@ public class CUserAOImpl implements ICUserAO {
     @Override
     public Paginable<CUser> queryCuserPage(int start, int limit,
             CUser condition) {
-
         if (condition.getCreateDatetimeStart() != null
                 && condition.getCreateDatetimeEnd() != null
                 && condition.getCreateDatetimeStart()
                     .after(condition.getCreateDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
+        return cuserBO.getPaginable(start, limit, condition);
 
-        Paginable<CUser> page = cuserBO.getPaginable(start, limit, condition);
-
-        return page;
     }
 
     // 列表查询
     public List<CUser> queryCuserList(CUser condition) {
-        List<CUser> list = cuserBO.queryUserList(condition);
-        return list;
+        return cuserBO.queryUserList(condition);
 
     }
 

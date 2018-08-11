@@ -86,8 +86,9 @@ public class CNavigateBOImpl extends PaginableBOImpl<CNavigate>
     }
 
     @Override
-    public void putOn(CNavigate data, String updater, String remark) {
-        data.setStatus(ECNavigateStatus.APPROVE_YES.getCode());
+    public void putOn(CNavigate data, String status, String updater,
+            String remark) {
+        data.setStatus(status);
         data.setUpdater(updater);
         Date date = new Date();
         data.setUpdateDatetime(date);

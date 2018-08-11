@@ -10,6 +10,9 @@ public class XN627365Req extends APageReq {
 
     private static final long serialVersionUID = 5058231875995341445L;
 
+    // （选填）代理Id
+    private String userId;
+
     // （选填）关键字
     private String keyword;
 
@@ -41,6 +44,14 @@ public class XN627365Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

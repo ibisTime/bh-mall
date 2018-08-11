@@ -57,12 +57,7 @@ public class XN627540Req {
     @NotEmpty(message = "产品规格不能为空")
     private List<XN627546Req> specList;
 
-    // (必填) 内购产品规格
-    @NotEmpty(message = "产品规格不能为空")
-    private List<XN627890Req> innerSpecList;
-
-    // (必填) 推荐奖励
-    @NotEmpty(message = "奖励规则不能为空")
+    // （必填） 奖励List
     private List<XN627548Req> awardList;
 
     // （选填）备注
@@ -162,14 +157,6 @@ public class XN627540Req {
 
     public void setSpecList(List<XN627546Req> specList) {
         this.specList = specList;
-    }
-
-    public List<XN627890Req> getInnerSpecList() {
-        return innerSpecList;
-    }
-
-    public void setInnerSpecList(List<XN627890Req> innerSpecList) {
-        this.innerSpecList = innerSpecList;
     }
 
     public List<XN627548Req> getAwardList() {

@@ -15,6 +15,8 @@
 		<result column="day_amount" property="dayAmount" />
 		
 		<result column="month_amount" property="monthAmount" />
+		<result column="updater" property="updater"  />
+		<result column="update_datetime" property="updateDatetime"  />
 		<result column="remark" property="remark" />
 	</resultMap>
 	<sql id="where_condition">
@@ -54,6 +56,8 @@
 		,t.day_amount
 		
 		,t.month_amount
+		,t.updater
+		,t.update_datetime
 		,t.remark
 		FROM
 		tbh_channel_bank t
@@ -84,6 +88,8 @@
 		,order_amount
 		,day_amount
 		,month_amount
+		,updater
+		,update_datetime
 		,remark
 		)
 		VALUES(
@@ -98,6 +104,8 @@
 		,#{dayAmount}
 		,#{monthAmount}
 		
+		,#{updater}
+		,#{updateDatetime}
 		,#{remark}
 		)
 	</insert>
@@ -115,7 +123,8 @@
 		,order_amount = #{orderAmount}
 		,day_amount = #{dayAmount}
 		,month_amount = #{monthAmount}
-		
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE id = #{id}
 	</update>

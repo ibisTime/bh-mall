@@ -1,18 +1,23 @@
 package com.bh.mall.ao.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IJourAO;
+import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IJourBO;
+import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Jour;
+import com.bh.mall.domain.OutOrder;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.ESysUser;
 
 @Service
 public class JourAOImpl implements IJourAO {
@@ -20,33 +25,94 @@ public class JourAOImpl implements IJourAO {
     @Autowired
     private IJourBO jourBO;
 
+    @Autowired
+    private IAgentBO agentBO;
+
+    @Autowired
+    private IOutOrderBO outOrderBO;
+
+    @Autowired
+    private IInOrderBO inOrderBO;
+
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
+        Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
+        for (Jour data : page.getList()) {
+            if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
+                Agent agent = agentBO.getAgent(data.getUserId());
+                data.setMobile(agent.getMobile());
+            }
+            // 关联订单转义
+            if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
+                    || EBizType.AJ_TJJL_OUT.getCode()
+                        .equals(data.getBizType())) {
+                OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
+                data.setOutOrder(outOrder);
+            } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
+                Agent agent = agentBO.getAgent(data.getUserId());
+                data.setAgent(agent);
+
+            } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())
+                    || EBizType.AJ_TJJL_IN.getCode()
+                        .equals(data.getBizType())) {
+                InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
+                data.setInOrder(inOrder);
+            }
+        }
 
         return jourBO.getPaginable(start, limit, condition);
     }
 
     @Override
     public List<Jour> queryJourList(Jour condition) {
-        String bizType = condition.getBizType();
-        if (StringUtils.isNotBlank(bizType)) {
-            String[] bizTypeArrs = bizType.split(",");
-            List<String> bizTypeList = new ArrayList<String>();
-            for (int i = 0; i < bizTypeArrs.length; i++) {
-                bizTypeList.add(bizTypeArrs[i]);
+        List<Jour> list = jourBO.queryJourList(condition);
+        for (Jour data : list) {
+            if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
+                Agent agent = agentBO.getAgent(data.getUserId());
+                data.setMobile(agent.getMobile());
             }
-            condition.setBizType(null);
-            condition.setBizTypeList(bizTypeList);
+            // 关联订单转义
+            if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
+                    || EBizType.AJ_TJJL_OUT.getCode()
+                        .equals(data.getBizType())) {
+                OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
+                data.setOutOrder(outOrder);
+            } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
+                Agent agent = agentBO.getAgent(data.getUserId());
+                data.setAgent(agent);
+
+            } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())
+                    || EBizType.AJ_TJJL_IN.getCode()
+                        .equals(data.getBizType())) {
+                InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
+                data.setInOrder(inOrder);
+            }
         }
-        List<Jour> jourList = jourBO.queryJourList(condition);
-        List<Jour> result = new ArrayList<Jour>();
-        result.addAll(jourList);
-        return result;
+        return list;
     }
 
     @Override
     public Jour getJour(String code) {
-        return jourBO.getJour(code);
+        Jour data = jourBO.getJour(code);
+        if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
+            Agent agent = agentBO.getAgent(data.getUserId());
+            data.setMobile(agent.getMobile());
+        }
+        // 关联订单转义
+        if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
+                || EBizType.AJ_TJJL_OUT.getCode().equals(data.getBizType())) {
+            OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
+            data.setOutOrder(outOrder);
+        } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
+            Agent agent = agentBO.getAgent(data.getUserId());
+            data.setAgent(agent);
+
+        } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())
+                || EBizType.AJ_TJJL_IN.getCode().equals(data.getBizType())) {
+            InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
+            data.setInOrder(inOrder);
+        }
+        return data;
     }
 
     @Override

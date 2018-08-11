@@ -54,7 +54,7 @@
 			</if>
 			
 			<if test="keyword != null and keyword != ''">
-				AND (t.wx_id LIKE "%#{keyword}%" OR t.real_name LIKE "%#{keyword}%" OR t.team_name LIKE "%#{keyword}%")
+				AND t.wx_id LIKE "%#{keyword}%" OR t.real_name LIKE "%#{keyword}%" OR t.team_name LIKE "%#{keyword}%"
 			</if>
 			
 			<if test="level != null and level != '' ">

@@ -23,7 +23,6 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentPrice;
-import com.bh.mall.domain.InnerSpecs;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.TjAward;
@@ -32,7 +31,6 @@ import com.bh.mall.dto.req.XN627540Req;
 import com.bh.mall.dto.req.XN627541Req;
 import com.bh.mall.dto.req.XN627543Req;
 import com.bh.mall.dto.req.XN627546Req;
-import com.bh.mall.dto.req.XN627890Req;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.exception.BizException;
@@ -94,16 +92,6 @@ public class ProductAOImpl implements IProductAO {
             }
         }
 
-        // 只有一个规格时，数量必须为一
-        if (req.getInnerSpecList().size() == 1) {
-            XN627890Req req3 = req.getInnerSpecList().get(0);
-            if ("1".equals(req3.getNumber())) {
-                throw new BizException("xn00000", "必须有一个的规格的数量为1");
-            }
-        }
-
-        innerSpecsBO.saveInnerSpecsList(code, req.getInnerSpecList(),
-            req.getUpdater());
         specsBO.saveSpecsList(code, req.getSpecList(), req.getUpdater());
         tjAwardBO.saveTjAward(code, req.getAwardList());
         return code;
@@ -150,30 +138,6 @@ public class ProductAOImpl implements IProductAO {
                 specsBO.saveSpecs(data.getCode(), psReq);
             } else {
                 specsBO.refreshSpecs(psReq, psReq.getSpecsPriceList());
-            }
-        }
-
-        List<XN627890Req> innerSpecs = req.getInnerSpecList();
-        InnerSpecs innerCondition = new InnerSpecs();
-        innerCondition.setInnerProductCode(data.getCode());
-        List<InnerSpecs> dbInnerList = innerSpecsBO
-            .queryInnerSpecsList(innerCondition);
-
-        // 如果数据库未存在此规格，表示已经删除
-        for (InnerSpecs innerSp : dbInnerList) {
-            boolean result = this.checkCode(innerSp.getCode(), psList);
-            if (result) {
-                innerSpecsBO.removeInnerSpecs(innerSp);
-            }
-        }
-
-        // 无code为新增，否则修改
-        for (XN627890Req innerpsReq : innerSpecs) {
-            if (StringUtils.isBlank(innerpsReq.getCode())) {
-                innerSpecsBO.saveInnerSpecs(data.getCode(), innerpsReq);
-            } else {
-                innerSpecsBO.refreshInnerSpecs(innerpsReq,
-                    innerpsReq.getSpecsPriceList());
             }
         }
 

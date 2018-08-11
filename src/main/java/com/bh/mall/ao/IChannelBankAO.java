@@ -16,13 +16,14 @@ public interface IChannelBankAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
 
     // 添加渠道银行
-    public int addChannelBank(String bankCode, String bankName);
+    public int addChannelBank(String bankCode, String bankName, String updater);
 
     // 删除渠道银行
     public void dropChannelBank(Long id);
 
     // 修改渠道银行
-    public void editChannelBank(String id, String bankCode, String bankName);
+    public void editChannelBank(String id, String bankCode, String bankName,
+            String updater, String remark);
 
     // 分页查询
     public Paginable<ChannelBank> queryChannelBankPage(int start, int limit,

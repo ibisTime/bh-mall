@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -37,11 +38,15 @@ public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank>
     }
 
     @Override
-    public int saveChannelBank(String bankCode, String bankName) {
+    public int saveChannelBank(String bankCode, String bankName,
+            String updater) {
         ChannelBank data = new ChannelBank();
         data.setBankCode(bankCode);
         data.setBankName(bankName);
         data.setChannelType(EChannelType.BankCard.getCode());
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
         return channelBankDAO.insert(data);
     }
 
@@ -58,9 +63,14 @@ public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank>
 
     @Override
     public void refreshChannelBank(ChannelBank data, String bankCode,
-            String bankName) {
+            String bankName, String updater, String remark) {
         data.setBankCode(bankCode);
         data.setBankName(bankName);
+        data.setUpdater(updater);
+        Date date = new Date();
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+
         channelBankDAO.update(data);
     }
 

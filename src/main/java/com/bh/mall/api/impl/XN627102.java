@@ -26,7 +26,7 @@ public class XN627102 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         channelBankAO.editChannelBank(req.getId(), req.getBankCode(),
-            req.getBankName());
+            req.getBankName(), req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

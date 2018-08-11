@@ -485,8 +485,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setIdHand(sjForm.getIdHand());
             data.setStatus(EAgentStatus.IMPOWERED.getCode());
 
-        } else {
-            data.setStatus(status);
         }
 
         Date date = new Date();

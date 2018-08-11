@@ -105,10 +105,11 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public void putOn(String code, String updater, String remark) {
         CNavigate data = cNavigateBO.getCNavigate(code);
+        String status = ECNavigateStatus.APPROVE_YES.getCode();
         if (ECNavigateStatus.APPROVE_YES.getCode().equals(data.getStatus())) {
-            throw new BizException("xn000000", "导航图已发布，请勿重复操作");
+            status = ECNavigateStatus.APPROVE_NO.getCode();
         }
-        cNavigateBO.putOn(data, updater, remark);
+        cNavigateBO.putOn(data, status, updater, remark);
     }
 
     @Override

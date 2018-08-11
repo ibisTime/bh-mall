@@ -7,4 +7,5 @@ public interface IInnerSpecsDAO extends IBaseDAO<InnerSpecs> {
     String NAMESPACE = IInnerSpecsDAO.class.getName().concat(".");
 
     public int update(InnerSpecs data);
+
 }

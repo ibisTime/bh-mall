@@ -1,6 +1,11 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.bh.mall.domain.InnerSpecs;
 
 /**
  * 新增内购产品
@@ -40,6 +45,10 @@ public class XN627700Req {
 
     // （选填）备注
     private String remark;
+
+    // 内购产品规格
+    @NotEmpty(message = "规格不能为空")
+    private List<InnerSpecs> specsList;
 
     public String getName() {
         return name;
@@ -103,6 +112,14 @@ public class XN627700Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<InnerSpecs> getSpecsList() {
+        return specsList;
+    }
+
+    public void setSpecsList(List<InnerSpecs> specsList) {
+        this.specsList = specsList;
     }
 
 }

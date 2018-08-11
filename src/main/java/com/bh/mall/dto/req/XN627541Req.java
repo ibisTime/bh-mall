@@ -44,9 +44,6 @@ public class XN627541Req {
     // (必填) 产品规格
     private List<XN627546Req> specList;
 
-    // (必填) 产品规格
-    private List<XN627890Req> innerSpecList;
-
     // (必填) 出货/推荐奖励
     private List<XN627548Req> awardList;
 
@@ -139,14 +136,6 @@ public class XN627541Req {
 
     public void setSpecList(List<XN627546Req> specList) {
         this.specList = specList;
-    }
-
-    public List<XN627890Req> getInnerSpecList() {
-        return innerSpecList;
-    }
-
-    public void setInnerSpecList(List<XN627890Req> innerSpecList) {
-        this.innerSpecList = innerSpecList;
     }
 
     public List<XN627548Req> getAwardList() {

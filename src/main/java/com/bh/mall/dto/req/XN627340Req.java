@@ -2,7 +2,7 @@ package com.bh.mall.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class XN627302Req {
+public class XN627340Req {
 
     // 开放编号（必填）
     @NotBlank(message = "微信开放编号不能为空")
