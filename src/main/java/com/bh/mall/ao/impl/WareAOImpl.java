@@ -22,7 +22,6 @@ import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.IWareBO;
-import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.StringValidater;
@@ -93,12 +92,10 @@ public class WareAOImpl implements IWareAO {
     // 分页查询
     @Override
     public Paginable<Ware> queryWarePage(int start, int limit, Ware condition) {
-        long count = wareBO.getTotalCountByProduct(condition);
-        Page<Ware> page = new Page<Ware>(start, limit, count);
-        List<Ware> list = wareBO.queryWareProductList(condition);
+        Paginable<Ware> page = wareBO.getPaginable(start, limit, condition);
 
         Ware specsCondition = new Ware();
-        for (Ware ware : list) {
+        for (Ware ware : page.getList()) {
             Agent agent = agentBO.getAgent(ware.getUserId());
             ware.setAgent(agent);
             Product product = productBO.getProduct(ware.getProductCode());
@@ -108,8 +105,6 @@ public class WareAOImpl implements IWareAO {
             ware.setWhsList(wareBO.queryWareList(specsCondition));
 
         }
-
-        page.setList(list);
         return page;
     }
 
@@ -157,12 +152,10 @@ public class WareAOImpl implements IWareAO {
     @Override
     public Paginable<Ware> queryWareFrontPage(int start, int limit,
             Ware condition) {
-        long count = wareBO.getTotalCountByProduct(condition);
-        Page<Ware> page = new Page<Ware>(start, limit, count);
-        List<Ware> list = wareBO.queryWareProductList(condition);
+        Paginable<Ware> page = wareBO.getPaginable(start, limit, condition);
 
         Ware specsCondition = new Ware();
-        for (Ware ware : list) {
+        for (Ware ware : page.getList()) {
             Agent agent = agentBO.getAgent(ware.getUserId());
             ware.setAgent(agent);
             Product product = productBO.getProduct(ware.getProductCode());
@@ -174,7 +167,6 @@ public class WareAOImpl implements IWareAO {
             ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
 
         }
-        page.setList(list);
         return page;
     }
 
@@ -302,12 +294,11 @@ public class WareAOImpl implements IWareAO {
     @Override
     public Paginable<Ware> queryWareCFrontPage(int start, int limit,
             Ware condition) {
-        long count = wareBO.getTotalCountByProduct(condition);
-        Page<Ware> page = new Page<Ware>(start, limit, count);
-        List<Ware> list = wareBO.queryWareProductList(condition);
+        Paginable<Ware> page = wareBO.getPaginable(start, limit, condition);
+
         Ware specsCondition = new Ware();
         Product product = null;
-        for (Ware ware : list) {
+        for (Ware ware : page.getList()) {
             product = productBO.getProduct(ware.getProductCode());
             ware.setProduct(product);
             specsCondition.setUserId(ware.getUserId());
@@ -320,7 +311,6 @@ public class WareAOImpl implements IWareAO {
             }
             ware.setWhsList(whList);
         }
-        page.setList(list);
         return page;
     }
 

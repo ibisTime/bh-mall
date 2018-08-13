@@ -38,8 +38,6 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public long getTotalCountByProduct(Ware condition);
 
-    public List<Ware> queryWareProductList(Ware condition);
-
     public void buyWare(InOrder inOrder, Agent agent);
 
     public void changeWarePrice(String userId, Integer level);

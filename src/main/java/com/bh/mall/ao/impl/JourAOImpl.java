@@ -38,10 +38,6 @@ public class JourAOImpl implements IJourAO {
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
         Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
         for (Jour data : page.getList()) {
-            if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
-                Agent agent = agentBO.getAgent(data.getUserId());
-                data.setMobile(agent.getMobile());
-            }
             // 关联订单转义
             if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
                     || EBizType.AJ_TJJL_OUT.getCode()
@@ -49,7 +45,7 @@ public class JourAOImpl implements IJourAO {
                 OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
                 data.setOutOrder(outOrder);
             } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
-                Agent agent = agentBO.getAgent(data.getUserId());
+                Agent agent = agentBO.getAgent(data.getRefNo());
                 data.setAgent(agent);
 
             } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())

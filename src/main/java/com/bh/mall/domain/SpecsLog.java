@@ -18,7 +18,19 @@ public class SpecsLog extends ABaseDO {
     private String code;
 
     // 产品编号
+    private String productCode;
+
+    // 产品名称
+    private String productName;
+
+    // 规格编号
     private String specsCode;
+
+    // 规格编号
+    private String specsName;
+
+    // 关联订单
+    private String refCode;
 
     // 类型
     private String type;
@@ -48,9 +60,6 @@ public class SpecsLog extends ABaseDO {
 
     // 结束时间
     private Date endDatetime;
-
-    // 产品名称
-    private String productName;
 
     public String getCode() {
         return code;
@@ -146,6 +155,30 @@ public class SpecsLog extends ABaseDO {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getRefCode() {
+        return refCode;
+    }
+
+    public void setRefCode(String refCode) {
+        this.refCode = refCode;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
 }

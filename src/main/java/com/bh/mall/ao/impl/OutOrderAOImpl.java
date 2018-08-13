@@ -1006,8 +1006,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
             // 无上级代理,扣减产品实际库存
-            specsLogBO.saveSpecsLog(specs, ESpecsLogType.Order.getCode(),
-                -number, null);
+            specsLogBO.saveSpecsLog(pData.getCode(), specs,
+                ESpecsLogType.Order.getCode(), -number, null);
         }
     }
 

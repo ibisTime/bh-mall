@@ -62,12 +62,6 @@ public class WareDAOImpl extends AMybatisTemplate implements IWareDAO {
     }
 
     @Override
-    public List<Ware> selectPorductList(Ware condition) {
-        return super.selectList(NAMESPACE.concat("select_ware_product"),
-            condition, Ware.class);
-    }
-
-    @Override
     public void changePrice(Ware data) {
         super.update(NAMESPACE.concat("update_Price"), data);
     }

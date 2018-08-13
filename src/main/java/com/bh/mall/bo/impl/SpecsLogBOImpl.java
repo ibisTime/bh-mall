@@ -24,18 +24,21 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
     private ISpecsLogDAO specsLogDAO;
 
     @Override
-    public void saveSpecsLog(Specs specs, String type, Integer number,
-            String updater) {
+    public void saveSpecsLog(String productCode, Specs specs, String type,
+            Integer number, String updater) {
         SpecsLog data = new SpecsLog();
         String plCode = OrderNoGenerater
             .generate(EGeneratePrefix.ProductLog.getCode());
         data.setCode(plCode);
+        data.setProductCode(productCode);
         data.setSpecsCode(specs.getCode());
+
         data.setTranCount(number);
         data.setPreCount(specs.getStockNumber());
         data.setPostCount(specs.getStockNumber() + number);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
+
         specsLogDAO.insert(data);
     }
 

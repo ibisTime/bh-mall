@@ -60,8 +60,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 data.setIsImpowerOrder(productSpec.getIsImpowerOrder());
                 data.setIsNormalOrder(productSpec.getIsNormalOrder());
 
-                specsLogBO.saveSpecsLog(data, ESpecsLogType.Input.getCode(), 0,
-                    updater);
+                specsLogBO.saveSpecsLog(code, data,
+                    ESpecsLogType.Input.getCode(), 0, updater);
                 specsDAO.insert(data);
 
                 List<XN627547Req> specsPriceList = productSpec
@@ -281,7 +281,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     @Transactional
     public void refreshRepertory(Specs data, String type, Integer number,
             String updater) {
-        specsLogBO.saveSpecsLog(data, type, number, updater);
+        specsLogBO.saveSpecsLog(data.getProductCode(), data, type, number,
+            updater);
 
         Integer nowNumber = data.getStockNumber() + number;
         if (0 < nowNumber) {

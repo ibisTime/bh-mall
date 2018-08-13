@@ -158,11 +158,6 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     @Override
-    public List<Ware> queryWareProductList(Ware condition) {
-        return wareDAO.selectPorductList(condition);
-    }
-
-    @Override
     public void buyWare(InOrder data, Agent agent) {
         Ware ware = this.getWareByProductSpec(agent.getUserId(),
             data.getSpecsCode());
