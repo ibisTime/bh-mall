@@ -82,6 +82,9 @@ public class OutOrder extends ABaseDO {
     // 下单人
     private String applyUser;
 
+    // 上级
+    private String highUserId;
+
     // 下单人等级
     private Integer level;
 
@@ -697,6 +700,14 @@ public class OutOrder extends ABaseDO {
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
+    }
+
+    public String getHighUserId() {
+        return highUserId;
+    }
+
+    public void setHighUserId(String highUserId) {
+        this.highUserId = highUserId;
     }
 
 }

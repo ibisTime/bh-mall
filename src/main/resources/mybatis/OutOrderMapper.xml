@@ -30,6 +30,7 @@
 		<result column="pay_code" property="payCode" />
 		
 		<result column="apply_user" property="applyUser" />
+		<result column="high_user_id" property="highUserId" />
 		<result column="level" property="level" />
 		<result column="real_name" property="realName" />
 		<result column="team_name" property="teamName" />
