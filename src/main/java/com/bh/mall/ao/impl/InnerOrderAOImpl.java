@@ -347,4 +347,13 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         return name;
     }
 
+    @Override
+    public void batchApprove(List<String> codeList, String approver,
+            String remark) {
+        for (String code : codeList) {
+            InnerOrder data = innerOrderBO.getInnerOrder(code);
+            innerOrderBO.batchApprove(data, approver, remark);
+        }
+    }
+
 }

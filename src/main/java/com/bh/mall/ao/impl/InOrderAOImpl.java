@@ -24,6 +24,7 @@ import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IProductBO;
+import com.bh.mall.bo.IProductReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISpecsBO;
@@ -45,6 +46,7 @@ import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.ChAward;
 import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Product;
+import com.bh.mall.domain.ProductReport;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.TjAward;
@@ -119,6 +121,9 @@ public class InOrderAOImpl implements IInOrderAO {
 
     @Autowired
     IAgentReportBO agentReportBO;
+
+    @Autowired
+    IProductReportBO productReportBO;
 
     @Override
     @Transactional
@@ -370,16 +375,6 @@ public class InOrderAOImpl implements IInOrderAO {
             Agent agent = agentBO.getAgent(inOrder.getApplyUser());
             inOrder.setAgent(agent);
 
-            // 团队长,一级代理自己是团队长
-            if (1 != agent.getLevel()) {
-                Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
-                inOrder.setLeaderName(teamLeader.getRealName());
-                inOrder.setLeaderMobile(teamLeader.getMobile());
-            } else {
-                inOrder.setLeaderName(agent.getRealName());
-                inOrder.setLeaderMobile(agent.getMobile());
-            }
-
             // 产品信息
             Product product = productBO.getProduct(inOrder.getProductCode());
             inOrder.setProduct(product);
@@ -403,16 +398,6 @@ public class InOrderAOImpl implements IInOrderAO {
             Agent agent = agentBO.getAgent(inOrder.getApplyUser());
             inOrder.setAgent(agent);
 
-            // 团队长,一级代理自己是团队长
-            if (1 != agent.getLevel()) {
-                Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
-                inOrder.setLeaderName(teamLeader.getRealName());
-                inOrder.setLeaderMobile(teamLeader.getMobile());
-            } else {
-                inOrder.setLeaderName(agent.getRealName());
-                inOrder.setLeaderMobile(agent.getMobile());
-            }
-
             // 产品信息
             Product product = productBO.getProduct(inOrder.getProductCode());
             inOrder.setProduct(product);
@@ -434,6 +419,16 @@ public class InOrderAOImpl implements IInOrderAO {
     }
 
     private void payAward(InOrder data) {
+
+        // 统计出货量
+        ProductReport productReport = productReportBO
+            .getProductReport(data.getTeamName(), data.getSpecsCode());
+        if (null == productReport) {
+            productReportBO.saveProductReport(data);
+        } else {
+            productReportBO.refreshProductReport(productReport,
+                productReport.getQuantity() + data.getQuantity());
+        }
 
         Product product = productBO.getProduct(data.getProductCode());
         Agent applyUser = agentBO.getAgent(data.getApplyUser());
@@ -699,8 +694,8 @@ public class InOrderAOImpl implements IInOrderAO {
 
             } else {
                 // 无上级代理,扣减产品实际库存
-                specsBO.refreshRepertory(psData, ESpecsLogType.Order.getCode(),
-                    -number, null);
+                specsBO.refreshRepertory(pData.getName(), psData,
+                    ESpecsLogType.Order.getCode(), -number, null);
             }
         }
     }

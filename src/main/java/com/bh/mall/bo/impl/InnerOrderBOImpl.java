@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -121,6 +122,18 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     public void payNo(InnerOrder data) {
         data.setStatus(EInnerOrderStatus.Pay_No.getCode());
         innerOrderDAO.payNo(data);
+    }
+
+    @Override
+    public void batchApprove(InnerOrder data, String approver,
+            String approveNote) {
+        data.setStatus(EInnerOrderStatus.TO_SEND.getCode());
+        data.setUpdater(approver);
+        Date date = new Date();
+        data.setApprover(approver);
+        data.setApproveNote(approveNote);
+
+        innerOrderDAO.batchApprove(data);
 
     }
 

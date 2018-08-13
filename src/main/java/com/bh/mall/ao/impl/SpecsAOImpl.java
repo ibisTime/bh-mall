@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.ISpecsAO;
+import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.ESpecsLogType;
 
@@ -17,6 +19,9 @@ public class SpecsAOImpl implements ISpecsAO {
     @Autowired
     private ISpecsBO specsBO;
 
+    @Autowired
+    private IProductBO productBO;
+
     @Override
     public void editRepertory(String code, String type, Integer number,
             String updater) {
@@ -24,7 +29,9 @@ public class SpecsAOImpl implements ISpecsAO {
         if (ESpecsLogType.Output.getCode().equals(type)) {
             number = -number;
         }
-        specsBO.refreshRepertory(specs, type, number, updater);
+        Product product = productBO.getProduct(specs.getProductCode());
+        specsBO.refreshRepertory(product.getName(), specs, type, number,
+            updater);
     }
 
     @Override

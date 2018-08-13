@@ -12,6 +12,7 @@
 		<result column="price" property="price" />
 		<result column="apply_user" property="applyUser" />
 		<result column="level" property="level" />
+		<result column="real_name" property="realName" />
 		<result column="team_name" property="teamName" />
 		
 		<result column="apply_datetime" property="applyDatetime" />
@@ -32,15 +33,19 @@
 		<result column="area" property="area" />
 		<result column="address" property="address" />
 		<result column="deliver" property="deliver" />
+		
 		<result column="delive_datetime" property="deliveDatetime" />
 		<result column="logistics_code" property="logisticsCode" />
 		<result column="logistics_company" property="logisticsCompany" />
 		<result column="pdf" property="pdf" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
+		<result column="approve_note" property="approveNote" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 		
-		<result column="real_name" property="realName" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -108,9 +113,8 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
-		,u.real_name
 		FROM
-		tbh_inner_order t LEFT JOIN tbh_user u ON t.apply_user = u.user_id
+		tbh_inner_order t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -121,7 +125,7 @@
 
 	<select id="select_innerOrder_count" parameterType="innerOrder"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_inner_order t LEFT JOIN tbh_user u ON t.apply_user = u.user_id
+		SELECT count(1) FROM tbh_inner_order t 
 		<include refid="where_condition" />
 	</select>
 
@@ -257,4 +261,13 @@
 		WHERE code = #{code}
 	</update>
 
+	<update id="batch_approve" parameterType="innerOrder">
+		UPDATE tbh_inner_order
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,approve_note = #{approveNote}
+		WHERE code = #{code}
+	</update>
 </mapper>

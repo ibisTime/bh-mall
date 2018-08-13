@@ -28,7 +28,7 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public String addBankcard(XN627520Req req) {
         // 判断卡号是否重复
-        boolean flag = bankcardBO.isBankcardExist(req.getUserId());
+        boolean flag = bankcardBO.isBankcardExist(req.getBankcardNumber());
         if (flag) {
             throw new BizException("xn0000", "该银行卡已存在");
         }
@@ -49,9 +49,6 @@ public class BankcardAOImpl implements IBankcardAO {
 
     @Override
     public void dropBankcard(String code) {
-        if (!bankcardBO.isBankcardExist(code)) {
-            throw new BizException("xn0000", "银行卡编号不存在");
-        }
         bankcardBO.removeBankcard(code);
     }
 

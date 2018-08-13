@@ -2,6 +2,7 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,10 +64,11 @@ public class ChannelBankAOImpl implements IChannelBankAO {
     public List<ChannelBank> queryChannelBankList(ChannelBank condition) {
         List<ChannelBank> list = channelBankBO.queryChannelBankList(condition);
         for (ChannelBank data : list) {
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
-            data.setUpdateName(sysUser.getRealName());
+            if (StringUtils.isNotBlank(data.getUpdater())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                data.setUpdateName(sysUser.getRealName());
+            }
         }
-
         return list;
     }
 

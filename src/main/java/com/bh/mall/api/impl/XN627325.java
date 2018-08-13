@@ -36,6 +36,8 @@ public class XN627325 extends AProcessor {
 
         condition.setRealName(req.getRealName());
         condition.setStatus(req.getStatus());
+        condition.setWxId(req.getWxId());
+        condition.setTeamName(req.getTeamName());
 
         condition.setUnionId(req.getUnionId());
         condition.setH5OpenId(req.getH5OpenId());

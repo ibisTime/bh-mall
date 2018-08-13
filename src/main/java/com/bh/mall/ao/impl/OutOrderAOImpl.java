@@ -542,16 +542,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             Agent agent = agentBO.getAgent(OutOrder.getApplyUser());
             OutOrder.setAgent(agent);
 
-            // 团队长,一级代理自己是团队长
-            if (1 != agent.getLevel()) {
-                Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
-                OutOrder.setLeaderName(teamLeader.getRealName());
-                OutOrder.setLeaderMobile(teamLeader.getMobile());
-            } else {
-                OutOrder.setLeaderName(agent.getRealName());
-                OutOrder.setLeaderMobile(agent.getMobile());
-            }
-
             // 产品信息
             Product product = productBO.getProduct(OutOrder.getProductCode());
             OutOrder.setProduct(product);
@@ -583,16 +573,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 下单人
             Agent agent = agentBO.getAgent(outOrder.getApplyUser());
             outOrder.setAgent(agent);
-
-            // 团队长,一级代理自己是团队长
-            if (1 != agent.getLevel()) {
-                Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
-                outOrder.setLeaderName(teamLeader.getRealName());
-                outOrder.setLeaderMobile(teamLeader.getMobile());
-            } else {
-                outOrder.setLeaderName(agent.getRealName());
-                outOrder.setLeaderMobile(agent.getMobile());
-            }
 
             // 产品信息
             Product product = productBO.getProduct(outOrder.getProductCode());
@@ -1006,7 +986,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
             // 无上级代理,扣减产品实际库存
-            specsLogBO.saveSpecsLog(pData.getCode(), specs,
+            specsLogBO.saveSpecsLog(pData.getCode(), pData.getName(), specs,
                 ESpecsLogType.Order.getCode(), -number, null);
         }
     }

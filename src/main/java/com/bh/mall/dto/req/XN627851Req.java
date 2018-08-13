@@ -6,19 +6,19 @@ package com.bh.mall.dto.req;
  * @since: 2018年6月30日 下午7:10:33 
  * @history:
  */
-public class XN627850Req extends APageReq {
+public class XN627851Req extends APageReq {
 
     private static final long serialVersionUID = -2391610940732263759L;
 
     // 代理编号
-    private String userId;
+    private String teamName;
 
-    public String getUserId() {
-        return userId;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }

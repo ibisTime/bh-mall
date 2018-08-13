@@ -40,8 +40,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     private ISpecsLogBO specsLogBO;
 
     @Override
-    public void saveSpecsList(String code, List<XN627546Req> specList,
-            String updater) {
+    public void saveSpecsList(String productCode, String productName,
+            List<XN627546Req> specList, String updater) {
         // 添加产品规格
         for (XN627546Req productSpec : specList) {
             if (StringUtils.isBlank(productSpec.getCode())) {
@@ -49,7 +49,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 String psCode = OrderNoGenerater
                     .generate(EGeneratePrefix.ProductSpecs.getCode());
                 data.setCode(psCode);
-                data.setProductCode(code);
+                data.setProductCode(productCode);
                 data.setName(productSpec.getName());
 
                 data.setNumber(
@@ -60,7 +60,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 data.setIsImpowerOrder(productSpec.getIsImpowerOrder());
                 data.setIsNormalOrder(productSpec.getIsNormalOrder());
 
-                specsLogBO.saveSpecsLog(code, data,
+                specsLogBO.saveSpecsLog(productCode, productName, data,
                     ESpecsLogType.Input.getCode(), 0, updater);
                 specsDAO.insert(data);
 
@@ -279,10 +279,10 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
 
     @Override
     @Transactional
-    public void refreshRepertory(Specs data, String type, Integer number,
-            String updater) {
-        specsLogBO.saveSpecsLog(data.getProductCode(), data, type, number,
-            updater);
+    public void refreshRepertory(String productName, Specs data, String type,
+            Integer number, String updater) {
+        specsLogBO.saveSpecsLog(productName, data.getProductCode(), data, type,
+            number, updater);
 
         Integer nowNumber = data.getStockNumber() + number;
         if (0 < nowNumber) {

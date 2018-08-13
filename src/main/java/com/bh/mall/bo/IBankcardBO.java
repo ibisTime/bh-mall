@@ -14,7 +14,7 @@ import com.bh.mall.domain.Bankcard;
 public interface IBankcardBO extends IPaginableBO<Bankcard> {
 
     // 根据编号查询是否存在
-    public boolean isBankcardExist(String code);
+    public boolean isBankcardExist(String bankcardNumber);
 
     // 新增银行卡
     public String saveBankcard(Bankcard data);

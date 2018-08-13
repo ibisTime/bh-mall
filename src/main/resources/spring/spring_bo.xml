@@ -169,9 +169,12 @@
 	<bean id="agentLogBO" class="com.bh.mall.bo.impl.AgentLogBOImpl">
 		<property name="paginableDAO" ref="agentLogDAOImpl"/>
 	</bean>
-	
 			
 	<bean id="channelBankBO" class="com.bh.mall.bo.impl.ChannelBankBOImpl">
 		<property name="paginableDAO" ref="channelBankDAOImpl"/>
+	</bean>
+	
+	<bean id="productReportBO" class="com.bh.mall.bo.impl.ProductReportBOImpl">
+		<property name="paginableDAO" ref="productReportDAOImpl"/>
 	</bean>
 </beans>

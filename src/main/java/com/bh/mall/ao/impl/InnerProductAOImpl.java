@@ -43,7 +43,6 @@ public class InnerProductAOImpl implements IInnerProductAO {
         data.setPic(req.getPic());
 
         data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setQuantity(StringValidater.toInteger(req.getQuantity()));
         data.setStatus(EInnerProductStatus.TO_Shelf.getCode());
         data.setUpdater(req.getUpdater());
         data.setCreateDatetime(new Date());

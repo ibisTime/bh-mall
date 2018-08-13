@@ -26,7 +26,9 @@ public enum EGeneratePrefix {
 
     ChangeProduct("CP", "置换单编号"), AgentReport("R", "统计表编号"), IntroLevel("IL",
             "可介绍等级"), AwardInterval("AI", "出货奖区间"), proCode("BC",
-                    "条形码表"), Agent("AG", "代理"), InnerSpecs("IS", "内购产品规格");
+                    "条形码表"), Agent("AG", "代理"), InnerSpecs("IS", "内购产品规格"),
+
+    ProductReport("PR", "产品销售统计表");
 
     public static Map<String, EGeneratePrefix> getOrderTypeMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

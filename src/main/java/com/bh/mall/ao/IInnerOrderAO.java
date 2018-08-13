@@ -56,4 +56,8 @@ public interface IInnerOrderAO {
     // 支付成功
     public void paySuccess(String result);
 
+    // 批量审单
+    public void batchApprove(List<String> codeList, String approver,
+            String remark);
+
 }

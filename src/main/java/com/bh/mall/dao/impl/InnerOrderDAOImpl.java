@@ -92,4 +92,9 @@ public class InnerOrderDAOImpl extends AMybatisTemplate
 
     }
 
+    @Override
+    public void batchApprove(InnerOrder data) {
+        super.update(NAMESPACE.concat("batch_approve"), data);
+    }
+
 }

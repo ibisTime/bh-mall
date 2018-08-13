@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bh.mall.ao.ISYSUserAO;
 import com.bh.mall.ao.IWithdrawAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
@@ -20,6 +21,7 @@ import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Withdraw;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
@@ -43,6 +45,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private ISYSUserAO sysUserAO;
 
     @Override
     @Transactional
@@ -178,10 +183,19 @@ public class WithdrawAOImpl implements IWithdrawAO {
         Paginable<Withdraw> page = withdrawBO.getPaginable(start, limit,
             condition);
         if (CollectionUtils.isNotEmpty(page.getList())) {
-            List<Withdraw> list = page.getList();
-            for (Withdraw withdraw : list) {
-                Agent agent = agentBO.getAgent(withdraw.getApplyUser());
-                withdraw.setAgent(agent);
+            SYSUser sysUser = null;
+            for (Withdraw data : page.getList()) {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setAgent(agent);
+
+                if (StringUtils.isNotBlank(data.getApproveUser())) {
+                    sysUser = sysUserAO.getSYSUser(data.getApproveUser());
+                    data.setApproveName(sysUser.getRealName());
+                }
+                if (StringUtils.isNotBlank(data.getPayUser())) {
+                    sysUser = sysUserAO.getSYSUser(data.getPayUser());
+                    data.setPayUserName(sysUser.getRealName());
+                }
             }
         }
         return page;
@@ -191,9 +205,18 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public List<Withdraw> queryWithdrawList(Withdraw condition) {
         List<Withdraw> list = withdrawBO.queryWithdrawList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
-            for (Withdraw withdraw : list) {
-                Agent agent = agentBO.getAgent(withdraw.getApplyUser());
-                withdraw.setAgent(agent);
+            SYSUser sysUser = null;
+            for (Withdraw data : list) {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setAgent(agent);
+                if (StringUtils.isNotBlank(data.getApproveUser())) {
+                    sysUser = sysUserAO.getSYSUser(data.getApproveUser());
+                    data.setApproveName(sysUser.getRealName());
+                }
+                if (StringUtils.isNotBlank(data.getPayUser())) {
+                    sysUser = sysUserAO.getSYSUser(data.getPayUser());
+                    data.setPayUserName(sysUser.getRealName());
+                }
             }
         }
         return list;
@@ -201,10 +224,20 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Override
     public Withdraw getWithdraw(String code) {
-        Withdraw withdraw = withdrawBO.getWithdraw(code);
-        Agent agent = agentBO.getAgent(withdraw.getApplyUser());
-        withdraw.setAgent(agent);
-        return withdraw;
+        Withdraw data = withdrawBO.getWithdraw(code);
+        Agent agent = agentBO.getAgent(data.getApplyUser());
+        data.setAgent(agent);
+
+        SYSUser sysUser = null;
+        if (StringUtils.isNotBlank(data.getApproveUser())) {
+            sysUser = sysUserAO.getSYSUser(data.getApproveUser());
+            data.setApproveName(sysUser.getRealName());
+        }
+        if (StringUtils.isNotBlank(data.getPayUser())) {
+            sysUser = sysUserAO.getSYSUser(data.getPayUser());
+            data.setPayUserName(sysUser.getRealName());
+        }
+        return data;
     }
 
     /**

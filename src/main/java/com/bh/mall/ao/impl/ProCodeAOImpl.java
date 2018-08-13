@@ -76,14 +76,16 @@ public class ProCodeAOImpl implements IProCodeAO {
                 String traceCode = OrderNoGenerater.generateTrace();
 
                 // 最新的防伪码与之前生成的盒码/箱码重复，跳出当前循环，重新生成盒码
-                if (newProList.contains(miniCode) || newMiniList.contains(miniCode)
+                if (newProList.contains(miniCode)
+                        || newMiniList.contains(miniCode)
                         || newTraceList.contains(miniCode)) {
                     mini--;
                     continue;
                 }
 
                 // 最新的溯源码与之前生成的盒码/箱码重复，跳出当前循环，重新生成盒码
-                if (newProList.contains(traceCode) || newMiniList.contains(traceCode)
+                if (newProList.contains(traceCode)
+                        || newMiniList.contains(traceCode)
                         || newTraceList.contains(traceCode)) {
                     mini--;
                     continue;
@@ -207,8 +209,9 @@ public class ProCodeAOImpl implements IProCodeAO {
         Paginable<ProCode> page = proCodeBO.getPaginable(start, limit,
             condition);
         for (ProCode data : page.getList()) {
-            List<MiniCode> list = miniCodeBO
-                .getMiniCodeByProCode(data.getCode());
+            MiniCode miniCondition = new MiniCode();
+            miniCondition.setRefCode(data.getCode());
+            List<MiniCode> list = miniCodeBO.queryMiniCodeList(miniCondition);
             data.setStList(list);
         }
         return page;

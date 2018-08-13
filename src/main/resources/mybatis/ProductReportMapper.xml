@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bh.mall.dao.IProductReportDAO">
+	<resultMap id="productReport_DB_Result" type="productReport">
+		<result column="code" property="code" />
+		<result column="team_name" property="teamName" />
+		<result column="product_code" property="productCode" />
+		<result column="product_name" property="productName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
+		<result column="quantity" property="quantity" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="teamName != null and teamName != '' ">
+				AND t.team_name = #{teamName}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="specsCode != null and specsCode != '' ">
+				AND t.specs_code = #{specsCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_productReport" parameterType="productReport" resultMap="productReport_DB_Result">
+		SELECT
+		t.code
+		,t.team_name
+		,t.product_code
+		,t.product_name
+		,t.specs_code
+		,t.specs_name
+		,t.quantity
+		FROM
+		tbh_product_report t
+		<include refid="where_condition" />
+		GROUP BY t.team_name,t.product_code
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_byTeamName" parameterType="productReport" resultMap="productReport_DB_Result">
+		SELECT
+		t.code
+		,t.team_name
+		,t.product_code
+		,t.product_name
+		,t.specs_code
+		,t.specs_name
+		,t.quantity
+		FROM
+		tbh_product_report t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_productReport_count" parameterType="productReport"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_product_report t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_productReport" parameterType="productReport">
+		INSERT INTO
+		tbh_product_report(
+		code
+		,team_name
+		,product_code
+		,product_name
+		,specs_code
+		,specs_name
+		,quantity
+		)
+		VALUES(
+		#{code}
+		,#{teamName}
+		,#{productCode}
+		,#{productName}
+		,#{specsCode}
+		,#{specsName}
+		,#{quantity}
+		)
+	</insert>
+
+	<update id="update_productReport" parameterType="productReport">
+		UPDATE tbh_product_report
+		SET
+		quantity = #{quantity}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

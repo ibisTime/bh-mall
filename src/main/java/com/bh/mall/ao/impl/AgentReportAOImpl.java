@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IAgentReportAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentReportBO;
+import com.bh.mall.bo.IProductReportBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentReport;
+import com.bh.mall.domain.ProductReport;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -22,6 +24,9 @@ public class AgentReportAOImpl implements IAgentReportAO {
 
     @Autowired
     IAgentBO agentBO;
+
+    @Autowired
+    IProductReportBO productReportBO;
 
     @Override
     public Paginable<AgentReport> queryAgentReportPage(int start, int limit,
@@ -44,6 +49,10 @@ public class AgentReportAOImpl implements IAgentReportAO {
                 agentReport.setIntroduceName(userName.getRealName());
 
             }
+
+            // 出货统计
+            List<ProductReport> list = productReportBO
+                .getReportByTeamName(agentReport.getTeamName());
         }
 
         return agentReportBO.getPaginable(start, limit, condition);

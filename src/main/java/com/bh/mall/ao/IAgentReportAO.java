@@ -16,7 +16,7 @@ import com.bh.mall.domain.AgentReport;
 @Component
 public interface IAgentReportAO {
 
-    static final String DEFAULT_ORDER_COLUMN = "code";
+    static final String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 分页查询代理统计
     public Paginable<AgentReport> queryAgentReportPage(int start, int limit,

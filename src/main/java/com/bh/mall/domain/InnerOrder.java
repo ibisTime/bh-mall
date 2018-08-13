@@ -104,6 +104,14 @@ public class InnerOrder extends ABaseDO {
     // 物流单
     private String pdf;
 
+    // 最后审核人
+    private String approver;
+
+    // 最后审核时间
+    private Date approveDatetime;
+
+    private String approveNote;
+
     // 最后更新人
     private String updater;
 
@@ -464,6 +472,30 @@ public class InnerOrder extends ABaseDO {
 
     public void setApplyName(String applyName) {
         this.applyName = applyName;
+    }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public Date getApproveDatetime() {
+        return approveDatetime;
+    }
+
+    public String getApproveNote() {
+        return approveNote;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver;
+    }
+
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
+    }
+
+    public void setApproveNote(String approveNote) {
+        this.approveNote = approveNote;
     }
 
 }

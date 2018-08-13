@@ -24,4 +24,6 @@ public interface IInnerOrderDAO extends IBaseDAO<InnerOrder> {
             InnerOrder condition);
 
     void payNo(InnerOrder data);
+
+    void batchApprove(InnerOrder data);
 }

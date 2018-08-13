@@ -38,4 +38,6 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
     public void payNo(InnerOrder data);
 
+    public void batchApprove(InnerOrder data, String approver, String remark);
+
 }

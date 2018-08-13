@@ -55,5 +55,7 @@
 		<typeAlias alias="sjForm" type="com.bh.mall.domain.SjForm"/>
 		
 		<typeAlias alias="innerSpecs" type="com.bh.mall.domain.InnerSpecs"/>
+		<typeAlias alias="productReport" type="com.bh.mall.domain.ProductReport"/>
+		
 	</typeAliases>
 </configuration>	

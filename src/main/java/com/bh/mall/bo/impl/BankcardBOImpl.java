@@ -30,9 +30,9 @@ public class BankcardBOImpl extends PaginableBOImpl<Bankcard>
     private IBankCardDAO bankcardDAO;
 
     @Override
-    public boolean isBankcardExist(String code) {
+    public boolean isBankcardExist(String bankcardNumber) {
         Bankcard condition = new Bankcard();
-        condition.setCode(code);
+        condition.setBankcardNumber(bankcardNumber);
         if (bankcardDAO.selectTotalCount(condition) > 0) {
             return true;
         }

@@ -250,7 +250,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             status = EChangeProductStatus.THROUGH_YES.getCode();
             // 产品
             Specs specs = specsBO.getSpecs(data.getSpecsCode());
-            specsBO.refreshRepertory(specs,
+            specsBO.refreshRepertory(data.getProductName(), specs,
                 ESpecsLogType.ChangeProduct.getCode(), data.getQuantity(),
                 approver);
 
@@ -266,7 +266,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             }
 
             // 保存要置换的产品库存记录
-            specsBO.refreshRepertory(specs,
+            specsBO.refreshRepertory(changeData.getName(), specs,
                 ESpecsLogType.ChangeProduct.getCode(),
                 -data.getExcanChangeQuantity(), approver);
 

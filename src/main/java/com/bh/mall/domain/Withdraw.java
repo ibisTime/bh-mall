@@ -103,6 +103,12 @@ public class Withdraw extends ABaseDO {
     // 申请用户
     private Agent agent;
 
+    // 审核人
+    private String approveName;
+
+    // 支付回录人
+    private String payUserName;
+
     public Agent getAgent() {
         return agent;
     }
@@ -333,6 +339,22 @@ public class Withdraw extends ABaseDO {
 
     public void setPayDatetime(Date payDatetime) {
         this.payDatetime = payDatetime;
+    }
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public String getPayUserName() {
+        return payUserName;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
+    }
+
+    public void setPayUserName(String payUserName) {
+        this.payUserName = payUserName;
     }
 
 }

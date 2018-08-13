@@ -27,10 +27,13 @@ public class XN627326 extends AProcessor {
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
         condition.setTeamName(req.getTeamName());
-        condition.setKeyWord(req.getKeyword());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStatus(req.getStatus());
 
+        condition.setRealName(req.getRealName());
+        condition.setStatus(req.getStatus());
+        condition.setWxId(req.getWxId());
+        condition.setTeamName(req.getTeamName());
         condition.setReferrer(req.getUserReferee());
 
         condition.setCreateDatetimeStart(DateUtil.strToDate(req.getDateStart(),

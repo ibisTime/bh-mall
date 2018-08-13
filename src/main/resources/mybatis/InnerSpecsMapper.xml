@@ -14,10 +14,7 @@
 		<result column="number" property="number"/>
 		<result column="stock_number" property="stockNumber"/>
 		<result column="weight" property="weight"/>
-		<result column="is_sq_order" property="isSqOrder"/>
-		<result column="is_sj_order" property="isSjOrder"/>
-		
-		<result column="is_normal_order" property="isNormalOrder"/>
+		<result column="price" property="price"/>
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -30,18 +27,8 @@
 			<if test="name != null and name != ''">
 				AND t.name like "%"#{name}"%"
 			</if>
-			<if test="isSqOrder != null and isSqOrder !=''">
-				AND t.is_sq_order  = #{isSqOrder}
-			</if>
-			<if test="isSjOrder != null and isSjOrder !=''">
-				AND t.is_sj_order  = #{isSjOrder}
-			</if>
-			
 			<if test="isNormalOrder != null and isNormalOrder !=''">
 				AND t.is_normal_order  = #{isNormalOrder}
-			</if>
-			<if test="isSingle != null and isSingle !=''">
-				AND t.is_single  = #{isSingle}
 			</if>
 			<if test="singleNumber != null and singleNumber !=''">
 				AND t.single_number  = #{singleNumber}
@@ -63,14 +50,15 @@
 		,t.number
 		,t.stock_number
 		,t.weight
-		
-		,t.is_sq_order
-		,t.is_sj_order
-		,t.is_normal_order
+		,t.price
 		FROM
 		tbh_inner_specs t
 		<include refid="where_condition" />
-		<!-- order by t.update_datetime desc -->
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
 	</select>
 
 	<select id="select_innerSpecs_count" parameterType="innerSpecs" resultType="java.lang.Long">
@@ -87,9 +75,7 @@
 		,stock_number
 		,weight
 		
-		,is_sq_order
-		,is_sj_order
-		,is_normal_order
+		,price
 		)
 		VALUES(
 		#{code}
@@ -99,9 +85,7 @@
 		,#{stockNumber}
 		,#{weight}
 		
-		,#{isSqOrder}
-		,#{isSjOrder}
-		,#{isNormalOrder}
+		,#{price}
 		)
 	</insert>
 
@@ -121,9 +105,7 @@
 		,stock_number = #{stockNumber}
 		
 		,weight = #{weight}
-		,is_sq_order = #{isSqOrder}
-		,is_sj_order = #{isSjOrder}
-		,is_normal_order = #{isNormalOrder}
+		,price = #{price}
 		WHERE code = #{code}
 	</update>
 	

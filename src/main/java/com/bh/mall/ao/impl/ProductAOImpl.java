@@ -92,7 +92,8 @@ public class ProductAOImpl implements IProductAO {
             }
         }
 
-        specsBO.saveSpecsList(code, req.getSpecList(), req.getUpdater());
+        specsBO.saveSpecsList(code, req.getName(), req.getSpecList(),
+            req.getUpdater());
         tjAwardBO.saveTjAward(code, req.getAwardList());
         return code;
     }

@@ -388,9 +388,11 @@ public class AgentAOImpl implements IAgentAO {
             }
 
             // 管理员
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
-            data.setManageName(sysUser.getRealName());
+            if (StringUtils.isNotBlank(data.getManager())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+                data.setManageName(sysUser.getRealName());
 
+            }
             // 门槛余额
             Account account = accountBO.getAccountNocheck(data.getUserId(),
                 ECurrency.MK_CNY.getCode());
