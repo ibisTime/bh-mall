@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class ProductReportAOImpl implements IProductReportAO {
             ProductReport condition) {
         Paginable<ProductReport> page = productReportBO.getPaginable(start,
             limit, condition);
+        List<String> pList = new ArrayList<String>();
         for (ProductReport data : page.getList()) {
             ProductReport pCondition = new ProductReport();
             pCondition.setTeamName(data.getTeamName());
@@ -28,10 +30,11 @@ public class ProductReportAOImpl implements IProductReportAO {
             List<ProductReport> list = productReportBO
                 .queryProductReportList(pCondition);
             for (ProductReport productReport : list) {
-                data.setProductQuantity(productReport.getProductName() + ":"
-                        + "[" + productReport.getQuantity() + "]"
+                pList.add(productReport.getProductName() + ":" + "["
+                        + productReport.getQuantity() + "]"
                         + productReport.getSpecsName());
             }
+            data.setProductQuantity(pList);
 
         }
         return page;
@@ -41,6 +44,7 @@ public class ProductReportAOImpl implements IProductReportAO {
     public List<ProductReport> queryProductReportList(ProductReport condition) {
         List<ProductReport> list = productReportBO
             .queryProductReportList(condition);
+        List<String> pqList = new ArrayList<String>();
         for (ProductReport data : list) {
             ProductReport pCondition = new ProductReport();
             pCondition.setTeamName(data.getTeamName());
@@ -48,11 +52,11 @@ public class ProductReportAOImpl implements IProductReportAO {
             List<ProductReport> pList = productReportBO
                 .queryProductReportList(pCondition);
             for (ProductReport productReport : pList) {
-                data.setProductQuantity(productReport.getProductName() + ":"
-                        + "[" + productReport.getQuantity() + "]"
+                pqList.add(productReport.getProductName() + ":" + "["
+                        + productReport.getQuantity() + "]"
                         + productReport.getSpecsName());
             }
-
+            data.setProductQuantity(pqList);
         }
         return list;
     }

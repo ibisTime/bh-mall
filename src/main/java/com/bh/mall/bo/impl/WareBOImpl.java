@@ -236,9 +236,9 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
                 .generate(EGeneratePrefix.Ware.getCode());
             Ware whData = new Ware();
             whData.setCode(code);
-            whData.setProductCode(data.getExchangeProductCode());
-            whData.setProductName(data.getExchangeProductName());
-            whData.setSpecsCode(data.getExchangeSpecsCode());
+            whData.setProductCode(data.getChangeProductCode());
+            whData.setProductName(data.getChangeProductName());
+            whData.setSpecsCode(data.getChangeSpecsCode());
             whData.setSpecsName(data.getExchangeSpecsName());
 
             whData.setCurrency(ECurrency.YC_CNY.getCode());
@@ -247,7 +247,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
             whData.setCreateDatetime(new Date());
             whData.setPrice(data.getPrice());
 
-            whData.setQuantity(data.getExcanChangeQuantity());
+            whData.setQuantity(data.getCanChangeQuantity());
             Long amount = data.getQuantity() * data.getPrice();
             whData.setAmount(amount);
             whData.setStatus(EProductStatus.Shelf_YES.getCode());

@@ -2,7 +2,6 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IAgentReportAO;
 import com.bh.mall.ao.IProductReportAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
@@ -34,7 +33,7 @@ public class XN627851 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IAgentReportAO.DEFAULT_ORDER_COLUMN;
+            column = IProductReportAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 

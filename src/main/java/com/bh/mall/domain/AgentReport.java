@@ -87,6 +87,9 @@ public class AgentReport extends ABaseDO {
     // 管理员名字
     private String manageName;
 
+    // 可提现账户余额
+    private Long yjAmount;
+
     public void setRealName(String realName) {
         this.realName = realName;
     }
@@ -277,6 +280,14 @@ public class AgentReport extends ABaseDO {
 
     public void setProfitAward(Long profitAward) {
         this.profitAward = profitAward;
+    }
+
+    public Long getYjAmount() {
+        return yjAmount;
+    }
+
+    public void setYjAmount(Long yjAmount) {
+        this.yjAmount = yjAmount;
     }
 
 }

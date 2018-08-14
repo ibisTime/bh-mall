@@ -21,9 +21,6 @@ public class ProductReportBOImpl extends PaginableBOImpl<ProductReport>
     @Autowired
     private IProductReportDAO productReportDAO;
 
-    public void saveOrderReport(ProductReport data) {
-    }
-
     @Override
     public List<ProductReport> queryProductReportList(ProductReport condition) {
         return productReportDAO.selectList(condition);
@@ -43,13 +40,14 @@ public class ProductReportBOImpl extends PaginableBOImpl<ProductReport>
     }
 
     @Override
-    public void saveProductReport(InOrder order) {
+    public void saveProductReport(InOrder order, String realName) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ProductReport.getCode());
 
         ProductReport data = new ProductReport();
         data.setCode(code);
         data.setTeamName(order.getTeamName());
+        data.setTeamLeader(realName);
         data.setProductName(order.getProductName());
         data.setSpecsName(order.getSpecsName());
 

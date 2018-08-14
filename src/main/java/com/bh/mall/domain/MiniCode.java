@@ -53,6 +53,12 @@ public class MiniCode extends ABaseDO {
     // 关键字
     private String keyword;
 
+    // 盒码状态
+    private String proCode;
+
+    // 盒码状态
+    private String proStatus;
+
     public void setTraceCode(String traceCode) {
         this.traceCode = traceCode;
     }
@@ -147,6 +153,22 @@ public class MiniCode extends ABaseDO {
 
     public void setBatch(String batch) {
         this.batch = batch;
+    }
+
+    public String getProStatus() {
+        return proStatus;
+    }
+
+    public void setProStatus(String proStatus) {
+        this.proStatus = proStatus;
+    }
+
+    public String getProCode() {
+        return proCode;
+    }
+
+    public void setProCode(String proCode) {
+        this.proCode = proCode;
     }
 
 }

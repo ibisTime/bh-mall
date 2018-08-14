@@ -37,6 +37,7 @@ import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.XN627805Res;
 import com.bh.mall.dto.res.XN627814Res;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
@@ -100,9 +101,18 @@ public class WareAOImpl implements IWareAO {
             ware.setAgent(agent);
             Product product = productBO.getProduct(ware.getProductCode());
             ware.setProduct(product);
+
             specsCondition.setUserId(ware.getUserId());
             specsCondition.setProductCode(ware.getProductCode());
             ware.setWhsList(wareBO.queryWareList(specsCondition));
+
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
+                .getLevel()) {
+                ware.setTeamLeader(agent.getRealName());
+            } else {
+                agent = agentBO.getTeamLeader(agent.getTeamName());
+                ware.setTeamLeader(agent.getRealName());
+            }
 
         }
         return page;
@@ -120,9 +130,18 @@ public class WareAOImpl implements IWareAO {
             ware.setProduct(product);
             specsCondition.setUserId(ware.getUserId());
             specsCondition.setProductCode(ware.getProductCode());
+
             ware.setWhsList(wareBO.queryWareList(specsCondition));
             int minSpecsNumber = specsBO.getMinSpecsNumber(product.getCode());
             ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
+
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
+                .getLevel()) {
+                ware.setTeamLeader(agent.getRealName());
+            } else {
+                agent = agentBO.getTeamLeader(agent.getTeamName());
+                ware.setTeamLeader(agent.getRealName());
+            }
         }
         return list;
     }
@@ -137,6 +156,7 @@ public class WareAOImpl implements IWareAO {
         condition.setUserId(data.getUserId());
         condition.setProductCode(data.getProductCode());
         List<Ware> specsList = wareBO.queryWareList(condition);
+
         for (Ware wh : specsList) {
             AgentPrice price = agentPriceBO.getPriceByLevel(wh.getSpecsCode(),
                 agent.getLevel());
@@ -145,6 +165,14 @@ public class WareAOImpl implements IWareAO {
         data.setWhsList(specsList);
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
+
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
+            .getLevel()) {
+            data.setTeamLeader(agent.getRealName());
+        } else {
+            agent = agentBO.getTeamLeader(agent.getTeamName());
+            data.setTeamLeader(agent.getRealName());
+        }
         return data;
     }
 

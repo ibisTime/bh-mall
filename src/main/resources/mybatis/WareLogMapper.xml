@@ -19,9 +19,7 @@
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
 		<result column="change_number" property="changeNumber" />
-		<result column="change_price" property="changePrice" />
-		<result column="change_amount" property="changeAmount" />
-		
+		<result column="change_price" property="changeprice" />
 		<result column="status" property="status" />
 		
 		<result column="apply_user" property="applyUser" />
@@ -191,8 +189,9 @@
 		,specs_name = #{specsName}
 		,price = #{price}
 		,amount = #{amount}
-		,change_number = #{changeNumber}
-		,change_price = #{changePrice}
+		,change_number = #{changeNumber} 
+		,change_price = #{changePrice}  
+		
 		,status = #{status}
 		,apply_user = #{applyUser}
 		,apply_datetime = #{applyDatetime}

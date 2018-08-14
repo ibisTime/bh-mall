@@ -47,20 +47,17 @@ public class WareLog extends ABaseDO {
     // 变动后数量
     private Integer afterNumber;
 
+    // 置换数量
+    private Integer changeNumber;
+
+    // 置换单价
+    private Long changePrice;
+
     // 单价
     private Long price;
 
     // 总价
     private Long amount;
-
-    // 可置换数量
-    private Integer changeNumber;
-
-    // 置换价格
-    private Long changePrice;
-
-    // 置换总价
-    private Long changeAmount;
 
     // 状态
     private String status;
@@ -215,18 +212,6 @@ public class WareLog extends ABaseDO {
         this.endDatetime = endDatetime;
     }
 
-    public Integer getChangeNumber() {
-        return changeNumber;
-    }
-
-    public Long getChangePrice() {
-        return changePrice;
-    }
-
-    public Long getChangeAmount() {
-        return changeAmount;
-    }
-
     public Date getApproveDatetime() {
         return approveDatetime;
     }
@@ -245,18 +230,6 @@ public class WareLog extends ABaseDO {
 
     public void setAmount(Long amount) {
         this.amount = amount;
-    }
-
-    public void setChangeNumber(Integer changeNumber) {
-        this.changeNumber = changeNumber;
-    }
-
-    public void setChangePrice(Long changePrice) {
-        this.changePrice = changePrice;
-    }
-
-    public void setChangeAmount(Long changeAmount) {
-        this.changeAmount = changeAmount;
     }
 
     public void setApproveDatetime(Date approveDatetime) {
@@ -333,6 +306,30 @@ public class WareLog extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public Integer getChangeNumber() {
+        return changeNumber;
+    }
+
+    public void setChangeNumber(Integer changeNumber) {
+        this.changeNumber = changeNumber;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public Long getChangePrice() {
+        return changePrice;
+    }
+
+    public void setChangePrice(Long changePrice) {
+        this.changePrice = changePrice;
     }
 
 }

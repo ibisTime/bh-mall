@@ -117,10 +117,11 @@ public class ChargeAOImpl implements IChargeAO {
     public List<Charge> queryChargeList(Charge condition) {
         List<Charge> list = chargeBO.queryChargeList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
-            for (Charge charge : list) {
-                if (charge.getApplyUser() != null) {
-                    Agent user = agentBO.getAgent(charge.getApplyUser());
-                    charge.setAgent(user);
+            for (Charge data : list) {
+                if (data.getApplyUser() != null) {
+                    Agent agent = agentBO.getAgent(data.getApplyUser());
+                    data.setAgent(agent);
+                    data.setTeamName(agent.getTeamName());
                 }
             }
         }
@@ -129,18 +130,24 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Override
     public Charge getCharge(String code) {
-        Charge charge = chargeBO.getCharge(code);
-        if (charge.getApplyUser() != null) {
-            Agent user = agentBO.getAgent(charge.getApplyUser());
-            charge.setAgent(user);
+        Charge data = chargeBO.getCharge(code);
+        if (data.getApplyUser() != null) {
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            data.setAgent(agent);
+            data.setTeamName(agent.getTeamName());
         }
-        return charge;
+        return data;
     }
 
     @Override
     public Paginable<Charge> queryFrontChargePage(int start, int limit,
             Charge condition) {
-        return chargeBO.getPaginable(start, limit, condition);
+        Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
+        for (Charge data : page.getList()) {
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            data.setTeamName(agent.getTeamName());
+        }
+        return page;
     }
 
 }

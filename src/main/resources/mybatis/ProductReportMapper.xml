@@ -5,6 +5,7 @@
 	<resultMap id="productReport_DB_Result" type="productReport">
 		<result column="code" property="code" />
 		<result column="team_name" property="teamName" />
+		<result column="team_leader" property="teamLeader" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
 		<result column="specs_code" property="specsCode" />
@@ -31,6 +32,7 @@
 		SELECT
 		t.code
 		,t.team_name
+		,t.team_leader
 		,t.product_code
 		,t.product_name
 		,t.specs_code
@@ -51,6 +53,7 @@
 		SELECT
 		t.code
 		,t.team_name
+		,t.team_leader
 		,t.product_code
 		,t.product_name
 		,t.specs_code
@@ -77,6 +80,7 @@
 		tbh_product_report(
 		code
 		,team_name
+		,team_leader
 		,product_code
 		,product_name
 		,specs_code
@@ -86,6 +90,7 @@
 		VALUES(
 		#{code}
 		,#{teamName}
+		,#{teamLeader}
 		,#{productCode}
 		,#{productName}
 		,#{specsCode}

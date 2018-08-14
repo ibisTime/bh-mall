@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -17,6 +19,9 @@ public class ProductReport extends ABaseDO {
 
     // 团队名称
     private String teamName;
+
+    // 团队长
+    private String teamLeader;
 
     // 产品编号
     private String productCode;
@@ -36,7 +41,9 @@ public class ProductReport extends ABaseDO {
     // **************db******************
 
     // 商产品数量
-    private String productQuantity;
+    private List<String> productQuantity;
+
+    // 产品
 
     public void setCode(String code) {
         this.code = code;
@@ -78,11 +85,11 @@ public class ProductReport extends ABaseDO {
         this.quantity = quantity;
     }
 
-    public String getProductQuantity() {
+    public List<String> getProductQuantity() {
         return productQuantity;
     }
 
-    public void setProductQuantity(String productQuantity) {
+    public void setProductQuantity(List<String> productQuantity) {
         this.productQuantity = productQuantity;
     }
 
@@ -100,6 +107,14 @@ public class ProductReport extends ABaseDO {
 
     public void setSpecsName(String specsName) {
         this.specsName = specsName;
+    }
+
+    public String getTeamLeader() {
+        return teamLeader;
+    }
+
+    public void setTeamLeader(String teamLeader) {
+        this.teamLeader = teamLeader;
     }
 
 }

@@ -3,6 +3,7 @@ package com.bh.mall.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IExchangeOrderBO;
 import com.bh.mall.bo.IProductBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.ISpecsLogBO;
 import com.bh.mall.bo.IWareBO;
@@ -28,6 +30,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.ExchangeOrder;
 import com.bh.mall.domain.Product;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627790Req;
@@ -72,6 +75,9 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
     @Autowired
     IChargeBO chargeBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     @Override
     public String addExchangeOrder(XN627790Req req) {
@@ -122,11 +128,11 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
                     / changeSpecsPrice.getChangePrice());
         }
 
-        data.setExchangeProductCode(exchangeProduct.getCode());
-        data.setExchangeProductName(exchangeProduct.getName());
+        data.setChangeProductCode(exchangeProduct.getCode());
+        data.setChangeProductName(exchangeProduct.getName());
         data.setExchangeSpecsName(changeSpecs.getName());
-        data.setExchangeSpecsCode(changeSpecs.getCode());
-        data.setCanExchangeQuantity(canChangeQuantity);
+        data.setChangeSpecsCode(changeSpecs.getCode());
+        data.setCanChangeQuantity(canChangeQuantity);
 
         data.setApplyUser(req.getApplyUser());
         data.setRealName(uData.getRealName());
@@ -167,10 +173,14 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         List<ExchangeOrder> list = exchangeOrderBO.queryChangeOrderPage(
             page.getStart(), page.getPageSize(), condition);
 
-        for (ExchangeOrder ecchangeProduct : list) {
+        for (ExchangeOrder data : list) {
             // 补充下单代理的信息
-            Agent agent = agentBO.getAgent(ecchangeProduct.getApplyUser());
-            ecchangeProduct.setAgent(agent);
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            data.setAgent(agent);
+            if (StringUtils.isNotBlank(data.getApprover())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getApprover());
+                data.setApproveName(sysUser.getRealName());
+            }
         }
         page.setList(list);
         return page;
@@ -187,9 +197,13 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         List<ExchangeOrder> list = exchangeOrderBO
             .queryChangeOrderList(condition);
 
-        for (ExchangeOrder changeProduct : list) {
-            Agent agent = agentBO.getAgent(changeProduct.getApplyUser());
-            changeProduct.setAgent(agent);
+        for (ExchangeOrder data : list) {
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            data.setAgent(agent);
+            if (StringUtils.isNotBlank(data.getApprover())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getApprover());
+                data.setApproveName(sysUser.getRealName());
+            }
         }
 
         return list;
@@ -200,6 +214,10 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         ExchangeOrder data = exchangeOrderBO.getChangeOrder(code);
         Agent agent = agentBO.getAgent(data.getApplyUser());
         data.setAgent(agent);
+        if (StringUtils.isNotBlank(data.getApprover())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getApprover());
+            data.setApproveName(sysUser.getRealName());
+        }
         return data;
     }
 
@@ -218,11 +236,10 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
         int canChangeQuantity = (int) (data.getAmount()
                 / StringValidater.toLong(changePrice));
-        Product changeData = productBO
-            .getProduct(data.getExchangeProductCode());
+        Product changeData = productBO.getProduct(data.getChangeProductCode());
         Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
 
-        if (0 < (changeData.getRealNumber() - data.getExcanChangeQuantity())) {
+        if (0 < (changeData.getRealNumber() - data.getCanChangeQuantity())) {
             throw new BizException("xn00000", "产品[" + changeData.getName() + "-"
                     + changeSpecs.getName() + "]的数量不足");
         }
@@ -230,8 +247,8 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
         data.setApproveNote(approveNote);
-        data.setExchangePrice(StringValidater.toLong(changePrice));
-        data.setCanExchangeQuantity(canChangeQuantity);
+        data.setChangePrice(StringValidater.toLong(changePrice));
+        data.setCanChangeQuantity(canChangeQuantity);
 
         exchangeOrderBO.refreshChangePrice(data);
     }
@@ -256,11 +273,11 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
             // 要置换的产品
             Product changeData = productBO
-                .getProduct(data.getExchangeProductCode());
+                .getProduct(data.getChangeProductCode());
             Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
 
             if (0 < (changeData.getRealNumber()
-                    - data.getExcanChangeQuantity())) {
+                    - data.getCanChangeQuantity())) {
                 throw new BizException("xn00000", "产品[" + changeData.getName()
                         + "-" + changeSpecs.getName() + "]的数量不足");
             }
@@ -268,7 +285,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             // 保存要置换的产品库存记录
             specsBO.refreshRepertory(changeData.getName(), specs,
                 ESpecsLogType.ChangeProduct.getCode(),
-                -data.getExcanChangeQuantity(), approver);
+                -data.getCanChangeQuantity(), approver);
 
             Agent agent = agentBO.getAgent(data.getApplyUser());
             wareBO.buyWare(data, agent);
@@ -318,7 +335,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             canChangeQuantity = (int) (amount
                     / changeSpecsPrice.getChangePrice());
         }
-        cpData.setCanExchangeQuantity(canChangeQuantity);
+        cpData.setCanChangeQuantity(canChangeQuantity);
 
         return cpData;
     }

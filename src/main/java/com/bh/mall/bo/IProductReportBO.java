@@ -8,7 +8,7 @@ import com.bh.mall.domain.ProductReport;
 
 public interface IProductReportBO extends IPaginableBO<ProductReport> {
 
-    public void saveProductReport(InOrder data);
+    public void saveProductReport(InOrder data, String realName);
 
     public List<ProductReport> queryProductReportList(ProductReport condition);
 

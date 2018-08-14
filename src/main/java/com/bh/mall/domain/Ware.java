@@ -86,6 +86,9 @@ public class Ware extends ABaseDO {
     // 产品名称
     private List<Ware> specsList;
 
+    // 团队长
+    private String teamLeader;
+
     public Agent getAgent() {
         return agent;
     }
@@ -276,6 +279,14 @@ public class Ware extends ABaseDO {
 
     public void setSpecsList(List<Ware> specsList) {
         this.specsList = specsList;
+    }
+
+    public String getTeamLeader() {
+        return teamLeader;
+    }
+
+    public void setTeamLeader(String teamLeader) {
+        this.teamLeader = teamLeader;
     }
 
 }

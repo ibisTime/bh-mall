@@ -423,15 +423,22 @@ public class InOrderAOImpl implements IInOrderAO {
         // 统计出货量
         ProductReport productReport = productReportBO
             .getProductReport(data.getTeamName(), data.getSpecsCode());
-        if (null == productReport) {
-            productReportBO.saveProductReport(data);
-        } else {
-            productReportBO.refreshProductReport(productReport,
-                productReport.getQuantity() + data.getQuantity());
-        }
-
-        Product product = productBO.getProduct(data.getProductCode());
         Agent applyUser = agentBO.getAgent(data.getApplyUser());
+
+        // 只统计一级代理
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == applyUser
+            .getLevel()) {
+            if (null == productReport) {
+                productReportBO.saveProductReport(data,
+                    applyUser.getRealName());
+            } else {
+                productReportBO.refreshProductReport(productReport,
+                    productReport.getQuantity() + data.getQuantity());
+            }
+
+        }
+        Product product = productBO.getProduct(data.getProductCode());
+
         Long orderAmount = data.getAmount();
         // 计算差额利润
         AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),

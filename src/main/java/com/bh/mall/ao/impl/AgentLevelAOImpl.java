@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,25 +26,36 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         AgentLevel data = agentLevelBO.getAgentLevel(req.getCode());
         data.setName(req.getName());
         data.setLevel(Integer.valueOf(req.getLevel()));
-        data.setAmount(StringValidater.toLong(req.getAmount()));
-        data.setRedAmount(StringValidater.toLong(req.getRedAmount()));
+        if (StringUtils.isNotBlank(req.getAmount())) {
+            data.setAmount(StringValidater.toLong(req.getAmount()));
+        }
+        if (StringUtils.isNotBlank(req.getRedAmount())) {
+            data.setRedAmount(StringValidater.toLong(req.getRedAmount()));
+        }
+        if (StringUtils.isNotBlank(req.getMinChargeAmount())) {
+            data.setMinChargeAmount(
+                StringValidater.toLong(req.getMinChargeAmount()));
+        }
 
-        data.setMinChargeAmount(
-            StringValidater.toLong(req.getMinChargeAmount()));
-        data.setMinSurplus(StringValidater.toLong(req.getMinSurplus()));
+        if (StringUtils.isNotBlank(req.getMinSurplus())) {
+            data.setMinSurplus(StringValidater.toLong(req.getMinSurplus()));
+        }
         data.setIsSend(req.getIsSend());
         data.setIsWare(req.getIsWare());
         data.setIsCompanyApprove(req.getIsCompanyApprove());
 
-        data.setReNumber(Integer.valueOf(req.getReNumber()));
+        if (StringUtils.isNotBlank(req.getReNumber())) {
+            data.setReNumber(StringValidater.toInteger(req.getReNumber()));
+        }
         data.setIsIntent(req.getIsIntent());
         data.setIsReset(req.getIsReset());
         data.setIsRealName(req.getIsRealName());
         data.setIsCompanyImpower(req.getIsCompanyImpower());
 
-        data.setAmount(StringValidater.toLong(req.getAmount()));
         data.setIsJsAward(req.getIsJsAward());
-        data.setMinCharge(Long.valueOf(req.getMinCharge()));
+        if (StringUtils.isNotBlank(req.getMinCharge())) {
+            data.setMinCharge(StringValidater.toLong(req.getMinCharge()));
+        }
 
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());

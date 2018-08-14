@@ -100,6 +100,9 @@ public class Charge extends ABaseDO {
     // 状态
     private List<String> statusList;
 
+    // 充值人团队
+    private String teamName;
+
     public String getCode() {
         return code;
     }
@@ -322,6 +325,14 @@ public class Charge extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }

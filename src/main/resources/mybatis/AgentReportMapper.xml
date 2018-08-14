@@ -40,6 +40,9 @@
 			<if test="highUserId != null and highUserId != '' ">
 				AND t.high_user_id = #{highUserId}
 			</if>
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>
 			
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name like "%"#{teamName}"%"

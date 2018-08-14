@@ -33,7 +33,6 @@ public class XN627107 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627107Req.class);
         ObjValidater.validateReq(req);
-
     }
 
 }

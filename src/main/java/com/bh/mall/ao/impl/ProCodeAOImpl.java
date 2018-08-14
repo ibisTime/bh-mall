@@ -206,27 +206,13 @@ public class ProCodeAOImpl implements IProCodeAO {
     @Override
     public Paginable<ProCode> queryProCodePage(int start, int limit,
             ProCode condition) {
-        Paginable<ProCode> page = proCodeBO.getPaginable(start, limit,
-            condition);
-        for (ProCode data : page.getList()) {
-            MiniCode miniCondition = new MiniCode();
-            miniCondition.setRefCode(data.getCode());
-            List<MiniCode> list = miniCodeBO.queryMiniCodeList(miniCondition);
-            data.setStList(list);
-        }
-        return page;
+
+        return proCodeBO.getPaginable(start, limit, condition);
     }
 
     @Override
     public List<ProCode> queryProCodeList(ProCode condition) {
-
-        List<ProCode> list = proCodeBO.queryProCodeList(condition);
-        for (ProCode data : list) {
-            List<MiniCode> miniList = miniCodeBO
-                .getMiniCodeByProCode(data.getCode());
-            data.setStList(miniList);
-        }
-        return list;
+        return proCodeBO.queryProCodeList(condition);
     }
 
     @Override

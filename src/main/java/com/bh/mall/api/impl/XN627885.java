@@ -31,12 +31,13 @@ public class XN627885 extends AProcessor {
         MiniCode condition = new MiniCode();
         condition.setStatusList(req.getStatusList());
         condition.setKeyword(req.getKeyword());
+        condition.setProStatus(req.getProStatus());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IMiniCodeAO.DEFAULT_ORDER_COLUMN;
         }
-
+        condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
