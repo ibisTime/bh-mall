@@ -68,12 +68,12 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
             AgentLevel condition) {
         Paginable<AgentLevel> page = agentLevelBO.getPaginable(start, limit,
             condition);
-        for (AgentLevel agentLevel : page.getList()) {
-            // 6代表c端用户
-            if (6 != agentLevel.getLevel()) {
-                AgentLevel impower = agentLevelBO
-                    .getAgentByLevel(agentLevel.getLevel());
-                agentLevel.setIsRealName(impower.getIsRealName());
+        for (Iterator<AgentLevel> iterator = page.getList().iterator(); iterator
+            .hasNext();) {
+            AgentLevel agent = iterator.next();
+            if (6 == agent.getLevel()) {
+                iterator.remove();
+                continue;
             }
         }
         return page;
@@ -82,12 +82,12 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
     @Override
     public List<AgentLevel> queryAgentLevelList(AgentLevel condition) {
         List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
-        for (AgentLevel agent : list) {
-            // 6代表c端用户
-            if (6 != agent.getLevel()) {
-                AgentLevel impower = agentLevelBO
-                    .getAgentByLevel(agent.getLevel());
-                agent.setIsRealName(impower.getIsRealName());
+        for (Iterator<AgentLevel> iterator = list.iterator(); iterator
+            .hasNext();) {
+            AgentLevel agent = iterator.next();
+            if (6 == agent.getLevel()) {
+                iterator.remove();
+                continue;
             }
         }
         return list;

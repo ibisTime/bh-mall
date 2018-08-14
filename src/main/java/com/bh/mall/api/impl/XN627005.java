@@ -19,7 +19,8 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627005 extends AProcessor {
 
-    private IAgentLevelAO agentAO = SpringContextHolder.getBean(IAgentLevelAO.class);
+    private IAgentLevelAO agentAO = SpringContextHolder
+        .getBean(IAgentLevelAO.class);
 
     private XN627005Req req = null;
 
@@ -27,7 +28,7 @@ public class XN627005 extends AProcessor {
     public Object doBusiness() throws BizException {
         AgentLevel condition = new AgentLevel();
         condition.setName(req.getName());
-       // condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
+        condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
