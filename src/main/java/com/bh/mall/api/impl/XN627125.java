@@ -28,6 +28,8 @@ public class XN627125 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SYSUser condition = new SYSUser();
+        condition.setRealName(req.getRealName());
+        condition.setRoleCode(req.getRoleCode());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

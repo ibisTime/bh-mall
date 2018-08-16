@@ -28,7 +28,11 @@
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
 
-			</if>					
+			</if>		
+			<if test="realName != null and realName != '' ">
+				AND t.realName like "%"#{realName}"%"
+
+			</if>				
 
 			
 			<if test="loginPwd != null and loginPwd != '' ">

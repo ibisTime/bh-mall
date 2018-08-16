@@ -233,10 +233,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
 
-        Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
-            condition);
-
-        return page;
+        return sysUserBO.getPaginable(start, limit, condition);
     }
 
     // 列表查询
