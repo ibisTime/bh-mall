@@ -18,7 +18,7 @@ import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IInnerProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
-import com.bh.mall.bo.base.Page;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.core.EGeneratePrefix;
@@ -29,6 +29,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.InnerProduct;
 import com.bh.mall.domain.SYSConfig;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.req.XN627720Req;
 import com.bh.mall.dto.req.XN627722Req;
 import com.bh.mall.dto.req.XN627723Req;
@@ -66,6 +67,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     @Autowired
     private IWeChatAO weChatAO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     public String addInnerOrder(XN627720Req req) {
@@ -232,19 +236,20 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        long totalCount = innerOrderBO.getTotalCount(condition);
 
-        Page<InnerOrder> page = new Page<InnerOrder>(start, limit, totalCount);
-        List<InnerOrder> list = innerOrderBO.queryInnerOrderPage(
-            page.getStart(), page.getPageSize(), condition);
-        for (InnerOrder innerOrder : list) {
-            String updateName = this.getName(innerOrder.getUpdater());
-            innerOrder.setUpdater(updateName);
-            String deliveName = this.getName(innerOrder.getDeliver());
-            innerOrder.setDeliveName(deliveName);
+        Paginable<InnerOrder> page = innerOrderBO.getPaginable(start, limit,
+            condition);
+        for (InnerOrder data : page.getList()) {
+            if (StringUtils.isNotBlank(data.getUpdater())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                data.setUpdater(sysUser.getRealName());
+
+            }
+            if (StringUtils.isNotBlank(data.getDeliver())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
+                data.setDeliveName(sysUser.getRealName());
+            }
         }
-        page.setList(list);
-
         return page;
     }
 
@@ -257,11 +262,16 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         List<InnerOrder> list = innerOrderBO.queryInnerOrderList(condition);
-        for (InnerOrder innerOrder : list) {
-            String updateName = this.getName(innerOrder.getUpdater());
-            innerOrder.setUpdater(updateName);
-            String deliveName = this.getName(innerOrder.getDeliver());
-            innerOrder.setDeliveName(deliveName);
+        for (InnerOrder data : list) {
+            if (StringUtils.isNotBlank(data.getUpdater())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                data.setUpdater(sysUser.getRealName());
+
+            }
+            if (StringUtils.isNotBlank(data.getDeliver())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
+                data.setDeliveName(sysUser.getRealName());
+            }
         }
         return list;
     }
@@ -269,10 +279,15 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public InnerOrder getInnerOrder(String code) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
-        String updateName = this.getName(data.getUpdater());
-        data.setUpdater(updateName);
-        String deliveName = this.getName(data.getDeliver());
-        data.setDeliveName(deliveName);
+        if (StringUtils.isNotBlank(data.getUpdater())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdater(sysUser.getRealName());
+
+        }
+        if (StringUtils.isNotBlank(data.getDeliver())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
+            data.setDeliveName(sysUser.getRealName());
+        }
         return data;
     }
 
@@ -332,19 +347,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
         data.setStatus(EInnerOrderStatus.Delivered.getCode());
         innerOrderBO.receiveInnerOrder(data);
-    }
-
-    private String getName(String user) {
-
-        if (StringUtils.isBlank(user)) {
-            return null;
-        }
-        String name = null;
-        Agent data = agentBO.getAgent(user);
-        if (data != null) {
-            name = data.getRealName();
-        }
-        return name;
     }
 
     @Override
