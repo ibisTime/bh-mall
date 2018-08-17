@@ -30,6 +30,7 @@ public class XN627473 extends AProcessor {
         Charge condition = new Charge();
         condition.setHighAgentId(req.getUserId());
         condition.setStatus(req.getStatus());
+        condition.setAccountName(req.getAccountName());
 
         condition.setApplyDatetimeStart(
             DateUtil.getFrontDate(req.getApplyDateStart(), false));

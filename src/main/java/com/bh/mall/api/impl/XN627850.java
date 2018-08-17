@@ -24,7 +24,8 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627850 extends AProcessor {
 
-    private IAgentReportAO agentReportAO = SpringContextHolder.getBean(IAgentReportAO.class);
+    private IAgentReportAO agentReportAO = SpringContextHolder
+        .getBean(IAgentReportAO.class);
 
     private XN627850Req req = null;
 
@@ -32,6 +33,8 @@ public class XN627850 extends AProcessor {
     public Object doBusiness() throws BizException {
         AgentReport condition = new AgentReport();
         condition.setUserId(req.getUserId());
+        condition.setRealName(req.getRealName());
+
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
         Date endDatetime = DateUtil.strToDate(req.getDateStart(),

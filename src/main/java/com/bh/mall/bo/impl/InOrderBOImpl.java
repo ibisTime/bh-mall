@@ -52,6 +52,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
 
         data.setQuantity(quantity);
         data.setPrice(price);
+        data.setAmount(quantity * price);
         data.setPic(pic);
         data.setStatus(EInOrderStatus.Unpaid.getCode());
         Date date = new Date();

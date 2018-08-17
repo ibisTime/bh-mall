@@ -51,6 +51,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 data.setCode(psCode);
                 data.setProductCode(productCode);
                 data.setName(productSpec.getName());
+                data.setStockNumber(
+                    StringValidater.toInteger(productSpec.getStockNumber()));
 
                 data.setNumber(
                     StringValidater.toInteger(productSpec.getNumber()));
@@ -66,6 +68,9 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
 
                 List<XN627547Req> specsPriceList = productSpec
                     .getSpecsPriceList();
+                if (CollectionUtils.isEmpty(specsPriceList)) {
+                    throw new BizException("xn00000", "规格价格不能为空");
+                }
 
                 // 新增价格体系
                 for (XN627547Req specsPrice : specsPriceList) {

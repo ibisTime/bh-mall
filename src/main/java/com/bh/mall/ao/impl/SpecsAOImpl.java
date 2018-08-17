@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.ISpecsAO;
+import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.ESpecsLogType;
@@ -21,6 +24,9 @@ public class SpecsAOImpl implements ISpecsAO {
 
     @Autowired
     private IProductBO productBO;
+
+    @Autowired
+    private IAgentPriceBO agentPriceBO;
 
     @Override
     public void editRepertory(String code, String type, Integer number,
@@ -48,6 +54,17 @@ public class SpecsAOImpl implements ISpecsAO {
     @Override
     public Specs getSpecs(String code) {
         return specsBO.getSpecs(code);
+    }
+
+    @Override
+    public Specs getSpecsByLevel(String code, String level) {
+        Specs data = specsBO.getSpecs(code);
+        AgentPrice price = agentPriceBO.getPriceByLevel(data.getCode(),
+            StringValidater.toInteger(level));
+        Product product = productBO.getProduct(data.getProductCode());
+        data.setPrice(price);
+        data.setProduct(product);
+        return data;
     }
 
 }

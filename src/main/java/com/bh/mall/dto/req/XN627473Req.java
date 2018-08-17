@@ -13,6 +13,9 @@ public class XN627473Req extends APageReq {
     // 用户ID （选填）
     private String userId;
 
+    // 户名
+    private String accountName;
+
     // 状态（待审核/审核不通过/审核通过）
     private String status;
 
@@ -52,6 +55,14 @@ public class XN627473Req extends APageReq {
 
     public void setApplyDateEnd(String applyDateEnd) {
         this.applyDateEnd = applyDateEnd;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
 }

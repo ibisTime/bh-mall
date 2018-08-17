@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.bh.mall.ao.IProductAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Product;
 import com.bh.mall.dto.req.XN627555Req;
@@ -46,7 +47,7 @@ public class XN627555 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627555Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
+        ObjValidater.validateReq(req);
     }
 
 }

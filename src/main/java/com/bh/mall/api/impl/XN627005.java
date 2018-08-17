@@ -29,6 +29,7 @@ public class XN627005 extends AProcessor {
         AgentLevel condition = new AgentLevel();
         condition.setName(req.getName());
         condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
+        condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

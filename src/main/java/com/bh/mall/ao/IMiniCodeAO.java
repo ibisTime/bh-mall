@@ -16,7 +16,7 @@ import com.bh.mall.domain.MiniCode;
 @Component
 public interface IMiniCodeAO {
 
-    static final String DEFAULT_ORDER_COLUMN = "security_code";
+    static final String DEFAULT_ORDER_COLUMN = "mini_code";
 
     // 分页查询
     public Paginable<MiniCode> queryMiniCodePage(int start, int limit,

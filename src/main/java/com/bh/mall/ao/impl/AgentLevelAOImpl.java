@@ -66,31 +66,13 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
     @Override
     public Paginable<AgentLevel> queryAgentLevelListPage(int start, int limit,
             AgentLevel condition) {
-        Paginable<AgentLevel> page = agentLevelBO.getPaginable(start, limit,
-            condition);
-        for (Iterator<AgentLevel> iterator = page.getList().iterator(); iterator
-            .hasNext();) {
-            AgentLevel agent = iterator.next();
-            if (6 == agent.getLevel()) {
-                iterator.remove();
-                continue;
-            }
-        }
-        return page;
+        return agentLevelBO.getPaginable(start, limit, condition);
+
     }
 
     @Override
     public List<AgentLevel> queryAgentLevelList(AgentLevel condition) {
-        List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
-        for (Iterator<AgentLevel> iterator = list.iterator(); iterator
-            .hasNext();) {
-            AgentLevel agent = iterator.next();
-            if (6 == agent.getLevel()) {
-                iterator.remove();
-                continue;
-            }
-        }
-        return list;
+        return agentLevelBO.queryAgentList(condition);
     }
 
     @Override

@@ -85,11 +85,14 @@ public class ProductAOImpl implements IProductAO {
         productBO.saveProduct(data);
 
         // 只有一个规格时，数量必须为一
-        if (req.getSpecList().size() == 1) {
-            XN627546Req req2 = req.getSpecList().get(0);
-            if ("1".equals(req2.getNumber())) {
-                throw new BizException("xn00000", "必须有一个的规格的数量为1");
+        boolean flag = true;
+        for (XN627546Req specs : req.getSpecList()) {
+            if (EBoolean.YES.getCode().equals(specs.getNumber())) {
+                flag = false;
             }
+        }
+        if (flag) {
+            throw new BizException("xn00000", "必须有一个的规格的数量为1");
         }
 
         specsBO.saveSpecsList(code, req.getName(), req.getSpecList(),

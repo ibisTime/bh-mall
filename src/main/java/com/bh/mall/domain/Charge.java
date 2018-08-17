@@ -63,6 +63,9 @@ public class Charge extends ABaseDO {
     // 申请人名称
     private String realName;
 
+    // 充值人团队
+    private String teamName;
+
     // 充值人等级
     private Integer level;
 
@@ -100,8 +103,8 @@ public class Charge extends ABaseDO {
     // 状态
     private List<String> statusList;
 
-    // 充值人团队
-    private String teamName;
+    // 审核人名称
+    private String payUserName;
 
     public String getCode() {
         return code;
@@ -333,6 +336,14 @@ public class Charge extends ABaseDO {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public String getPayUserName() {
+        return payUserName;
+    }
+
+    public void setPayUserName(String payUserName) {
+        this.payUserName = payUserName;
     }
 
 }

@@ -177,42 +177,31 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
     @Override
     public boolean checkImpowerOrder(String applyUser, Date impoweDatetime) {
-        List<String> statusList = new ArrayList<String>();
-        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
-        statusList.add(EOutOrderStatus.TO_SEND.getCode());
-        statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
-        statusList.add(EOutOrderStatus.RECEIVED.getCode());
 
         OutOrder condition = new OutOrder();
         condition.setApplyUser(applyUser);
         condition.setKind(EOutOrderKind.Impower_Order.getCode());
-        condition.setStatusList(statusList);
         condition.setStartDatetime(impoweDatetime);
 
         List<OutOrder> list = outOrderDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override
-    public boolean checkUpgradeOrder(String applyUser) {
-        List<String> statusList = new ArrayList<String>();
-        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
-        statusList.add(EOutOrderStatus.TO_SEND.getCode());
-        statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
-        statusList.add(EOutOrderStatus.RECEIVED.getCode());
+    public boolean checkUpgradeOrder(String applyUser, Date datetime) {
 
         OutOrder condition = new OutOrder();
+        condition.setApplyDatetime(datetime);
         condition.setApplyUser(applyUser);
         condition.setKind(EOutOrderKind.Upgrade_Order.getCode());
-        condition.setStatusList(statusList);
         List<OutOrder> list = outOrderDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override

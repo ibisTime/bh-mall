@@ -16,6 +16,9 @@ public class XN627005Req extends APageReq {
     // 低于自己等级的等级（选填）
     private String lowLevel;
 
+    // 高于自己等级的等级（选填）
+    private String highLevel;
+
     // 等级名称 （选填）
     private String name;
 
@@ -41,6 +44,14 @@ public class XN627005Req extends APageReq {
 
     public void setLowLevel(String lowLevel) {
         this.lowLevel = lowLevel;
+    }
+
+    public String getHighLevel() {
+        return highLevel;
+    }
+
+    public void setHighLevel(String highLevel) {
+        this.highLevel = highLevel;
     }
 
 }

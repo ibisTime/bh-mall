@@ -23,4 +23,6 @@ public interface ISjFormBO extends IPaginableBO<SjForm> {
 
     public SjForm getSjForm(String code);
 
+    public boolean checkIsSj(String userId);
+
 }

@@ -18,15 +18,18 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627006 extends AProcessor {
 
-    private IAgentLevelAO agentAO = SpringContextHolder.getBean(IAgentLevelAO.class);
+    private IAgentLevelAO agentAO = SpringContextHolder
+        .getBean(IAgentLevelAO.class);
 
     private XN627006Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         AgentLevel condition = new AgentLevel();
-        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setName(req.getName());
+        condition.setLowLevel(StringValidater.toInteger(req.getLowLevel()));
+        condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
+
         return agentAO.queryAgentLevelList(condition);
     }
 

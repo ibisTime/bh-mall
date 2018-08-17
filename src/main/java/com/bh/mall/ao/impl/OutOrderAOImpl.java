@@ -19,6 +19,7 @@ import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ICUserBO;
@@ -30,6 +31,7 @@ import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSUserBO;
+import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.ISpecsLogBO;
 import com.bh.mall.bo.ITjAwardBO;
@@ -43,6 +45,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.CUser;
@@ -62,6 +65,7 @@ import com.bh.mall.dto.req.XN627643Req;
 import com.bh.mall.dto.req.XN627645Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EAgentLogStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -143,6 +147,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Autowired
     IAgentReportBO agentReportBO;
 
+    @Autowired
+    IAgentLogBO agentLogBO;
+
+    @Autowired
+    ISjFormBO sjFormBO;
+
     @Override
     @Transactional
     public List<String> addOutOrder(XN627640Req req) {
@@ -193,14 +203,24 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 throw new BizException("xn0000",
                     "您购买的数量不能低于" + price.getStartNumber() + "]");
             }
+            // 检查是否可买
+            this.checkOrder(applyUser, specs);
 
-            // 判断未开启云仓的代理是否完成授权单
+            // 未开启云仓的代理
             if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
+                // 是否完成授权单
                 if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
                     applyUser.getImpowerDatetime())) {
                     // 防止多出的订单计入授权单
                     if (agentLevel.getAmount() > amount) {
                         kind = EOutOrderKind.Impower_Order.getCode();
+                        // 订单金额
+                        amount = amount + price.getPrice() * cart.getQuantity();
+                    }
+                    // 是否完成升级单
+                } else if (sjFormBO.checkIsSj(applyUser.getUserId())) {
+                    if (agentLevel.getAmount() > amount) {
+                        kind = EOutOrderKind.Upgrade_Order.getCode();
                         // 订单金额
                         amount = amount + price.getPrice() * cart.getQuantity();
                     }
@@ -239,8 +259,13 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         // 订单金额不能低于授权单金额
         if (agentLevel.getAmount() > amount) {
-            throw new BizException("xn00000", agentLevel.getName() + "授权单金额为["
-                    + agentLevel.getAmount() / 1000 + "]元");
+            if (EOutOrderKind.Impower_Order.getCode().equals(kind)) {
+                throw new BizException("xn00000", agentLevel.getName()
+                        + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
+            } else if (EOutOrderKind.Upgrade_Order.getCode().equals(kind)) {
+                throw new BizException("xn00000", agentLevel.getName()
+                        + "升级单金额为[" + agentLevel.getAmount() / 1000 + "]元");
+            }
         }
 
         // 检查门槛余额
@@ -326,18 +351,22 @@ public class OutOrderAOImpl implements IOutOrderAO {
             applyUser.getLevel());
 
         // 订单类型
-        String kind = EOutOrderKind.Normal_Order.getCode();
         // 未开云仓的代理，判断是否为授权单
         Long amount = StringValidater.toInteger(req.getQuantity())
                 * price.getPrice();
+
+        // 判断是否可购买
+        String kind = this.checkOrder(applyUser, specs);
+
         if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
-            if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
-                applyUser.getImpowerDatetime())) {
-                kind = EOutOrderKind.Impower_Order.getCode();
+            if (EOutOrderKind.Impower_Order.getCode().equals(kind)) {
                 if (agentLevel.getAmount() > amount) {
                     throw new BizException("xn00000", agentLevel.getName()
                             + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
                 }
+            } else if (EOutOrderKind.Upgrade_Order.getCode().equals(kind)) {
+                throw new BizException("xn00000", agentLevel.getName()
+                        + "升级单金额为[" + agentLevel.getAmount() / 1000 + "]元");
             }
         }
 
@@ -437,11 +466,16 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
-            data.setPayType(EChannelType.WeChat_XCX.getCode());
-            Object payResult = this.payWXH5(data,
-                PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
-            result = payResult;
 
+            // C端下单支付
+            if (EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
+                data.setPayType(EChannelType.WeChat_XCX.getCode());
+                Object payResult = this.payWXH5(data,
+                    PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
+                result = payResult;
+            }
+
+            // 未开启云仓账户的代理用门槛款支付
             if (EPayType.RMB_YE.getCode().equals(payType)) {
                 // 账户扣钱
                 String payGroup = outOrderBO.addPayGroup(data);
@@ -461,6 +495,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 outOrderBO.paySuccess(data);
 
                 result = new BooleanRes(true);
+
+                // 用微信支付
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
                 Object payResult1 = this.payWXH5(data,
                     PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
@@ -871,8 +907,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
         OutOrder data = outOrderBO.getOutOrder(code);
 
         // 订单已申请取消或已取消
-        if (EOutOrderStatus.TO_CANECL.getCode().equals(data.getStatus())
-                || EOutOrderStatus.CANCELED.getCode()
+        if (EOutOrderStatus.TO_RECEIVE.getCode().equals(data.getStatus())
+                || EOutOrderStatus.RECEIVED.getCode()
                     .equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已申请取消喽，请勿重复申请！");
         }
@@ -932,34 +968,34 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     private String checkOrder(Agent applyUser, Specs specs) {
         String kind = EOutOrderKind.Normal_Order.getCode();
-        // // 是否完成授权单
-        // if (EUserStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
-        // if (!outOrderBO.checkImpowerOrder(applyUser.getUserId(),
-        // applyUser.getImpowerDatetime())) {
-        // kind = EOutOrderKind.Impower_Order.getCode();
-        // if (EProductSpecsType.Apply_NO.getCode()
-        // .equals(specs.getIsImpowerOrder())) {
-        // throw new BizException("xn0000", "该产品规格不予授权单单下单");
-        // }
-        // }
-        // }
 
-        // // 是否完成升级单
-        // // boolean upgradeOrder = this.CheckImpowerOrder(applyUser);
-        // if (EUserStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
-        // // if (!upgradeOrder) {
-        // // kind = EOrderKind.Upgrade_Order.getCode();
-        // // }
-        // if (EProductSpecsType.Apply_NO.getCode()
-        // .equals(specs.getIsUpgradeOrder())) {
-        // throw new BizException("xn0000", "该产品规格不予授权单单下单");
-        // }
-        // }
+        // 是否完成授权单
+        if (outOrderBO.checkImpowerOrder(applyUser.getUserId(),
+            applyUser.getImpowerDatetime())) {
+            kind = EOutOrderKind.Impower_Order.getCode();
+            if (EProductSpecsType.Apply_NO.getCode()
+                .equals(specs.getIsImpowerOrder())) {
+                throw new BizException("xn0000", "该产品规格不允许授权单下单");
+            }
+        }
+
+        // 是否有过升级记录
+        AgentLog condition = new AgentLog();
+        condition.setApplyUser(applyUser.getUserId());
+        condition.setStatus(EAgentLogStatus.THROUGH_YES.getCode());
+        List<AgentLog> logList = agentLogBO.queryAgentLogList(condition);
+        if (CollectionUtils.isNotEmpty(logList)) {
+            kind = EOutOrderKind.Upgrade_Order.getCode();
+            if (outOrderBO.checkUpgradeOrder(applyUser.getUserId(),
+                applyUser.getImpowerDatetime())) {
+                throw new BizException("xn0000", "该产品规格不允许升级单下单");
+            }
+        }
 
         // 是否允许普通单下单
         if (EProductSpecsType.Apply_NO.getCode()
             .equals(specs.getIsNormalOrder())) {
-            throw new BizException("xn0000", "该产品规格不予许普通单下单");
+            throw new BizException("xn0000", "该产品规格不允许普通单下单");
         }
         return kind;
     }
@@ -1037,9 +1073,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 ECurrency.YJ_CNY.getCode());
             // 收款方账户价钱
             accountBO.changeAmount(account.getAccountNumber(),
-                EChannelType.WeChat_H5, wechatOrderNo, data.getPayGroup(),
-                data.getCode(), EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
-                data.getAmount());
+                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
+                data.getPayGroup(), data.getCode(), EBizType.AJ_YCCH,
+                EBizType.AJ_YCCH.getValue(), data.getAmount());
             // 托管账户加钱
             accountBO.changeAmount(ESystemCode.BH.getCode(),
                 EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,

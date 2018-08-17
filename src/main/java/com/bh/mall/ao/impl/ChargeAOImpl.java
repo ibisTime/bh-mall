@@ -12,11 +12,15 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IChargeBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.Charge;
+import com.bh.mall.domain.SYSUser;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -37,6 +41,9 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Autowired
     IAgentLevelBO agentLevelBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     @Override
     public String applyCharge(String accountNumber, String type, Long amount,
@@ -71,8 +78,7 @@ public class ChargeAOImpl implements IChargeAO {
         }
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account,
-            EBizType.getBizType(type), tranAmount, applyUser, agent.getLevel(),
-            applyNote, chargePdf);
+            EBizType.getBizType(type), tranAmount, agent, applyNote, chargePdf);
         return code;
     }
 
@@ -109,8 +115,18 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {
-
-        return chargeBO.getPaginable(start, limit, condition);
+        Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
+        for (Charge data : page.getList()) {
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
+                data.setPayUserName(sysUser.getRealName());
+            } else {
+                Agent agent = agentBO.getAgent(data.getPayUser());
+                data.setPayUserName(agent.getRealName());
+            }
+        }
+        return page;
     }
 
     @Override
@@ -118,10 +134,13 @@ public class ChargeAOImpl implements IChargeAO {
         List<Charge> list = chargeBO.queryChargeList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (Charge data : list) {
-                if (data.getApplyUser() != null) {
-                    Agent agent = agentBO.getAgent(data.getApplyUser());
-                    data.setAgent(agent);
-                    data.setTeamName(agent.getTeamName());
+                if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                    .getLevel()) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
+                    data.setPayUserName(sysUser.getRealName());
+                } else {
+                    Agent agent = agentBO.getAgent(data.getPayUser());
+                    data.setPayUserName(agent.getRealName());
                 }
             }
         }
@@ -131,10 +150,13 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Charge getCharge(String code) {
         Charge data = chargeBO.getCharge(code);
-        if (data.getApplyUser() != null) {
-            Agent agent = agentBO.getAgent(data.getApplyUser());
-            data.setAgent(agent);
-            data.setTeamName(agent.getTeamName());
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getLevel()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
+            data.setPayUserName(sysUser.getRealName());
+        } else {
+            Agent agent = agentBO.getAgent(data.getPayUser());
+            data.setPayUserName(agent.getRealName());
         }
         return data;
     }
@@ -144,8 +166,14 @@ public class ChargeAOImpl implements IChargeAO {
             Charge condition) {
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
         for (Charge data : page.getList()) {
-            Agent agent = agentBO.getAgent(data.getApplyUser());
-            data.setTeamName(agent.getTeamName());
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
+                data.setPayUserName(sysUser.getRealName());
+            } else {
+                Agent agent = agentBO.getAgent(data.getPayUser());
+                data.setPayUserName(agent.getRealName());
+            }
         }
         return page;
     }

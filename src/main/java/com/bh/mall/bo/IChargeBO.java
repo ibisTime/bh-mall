@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
@@ -18,8 +19,7 @@ public interface IChargeBO extends IPaginableBO<Charge> {
     void callBackChange(Charge dbCharge, boolean booleanFlag);
 
     String applyOrderOffline(Account account, EBizType bizType, Long amount,
-            String applyUser, Integer level, String applyNote,
-            String chargePdf);
+            Agent agent, String applyNote, String chargePdf);
 
     void payOrder(Charge data, String status, String payUser, String payNote);
 

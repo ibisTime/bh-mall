@@ -47,6 +47,9 @@
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name like "%"#{teamName}"%"
 			</if>
+			<if test="realName != null and realName != '' ">
+				AND t.real_name like "%"#{realName}"%"
+			</if>
 			<if test="manager != null and manager != '' ">
 				AND t.manager = #{manager}
 			</if>

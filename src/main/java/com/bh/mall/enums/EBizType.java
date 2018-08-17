@@ -26,8 +26,8 @@ public enum EBizType {
             "云仓出货"), AJ_YCZH("AJ_YCZH", "云仓置换"), AJ_GMCP("AJ_GMCP", "购买产品"),
 
     AJ_YCTH("AJ_YCTH", "云仓提货"), AJ_XGSJ("AJ_XGSJ", "修改上级"), AJ_QXSQ("AJ_QXSQ",
-            "退出清空余额"), AJ_XGSH("AJ_XGSH",
-                    "更改上级"), AJ_XJCZ("AJ_XJCZ", "下级微信充值"), AJ_TH("AJ_TH", "退货"),
+            "退出清空余额"), AJ_XGSH("AJ_XGSH", "更改上级"), AJ_XJCZ("AJ_XJCZ",
+                    "下级微信充值"), AJ_XCX("AJ_XCX", "小程序付款"),
 
     AJ_CHJL_OUT("AJ_CHJL_OUT", "云仓订单出货奖"), AJ_TJJL_OUT("AJ_TJJL_OUT",
             "云仓订单推荐奖"), AJ_CHJL_IN("AJ_CHJL_OUT",

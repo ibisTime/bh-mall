@@ -20,14 +20,16 @@
 		<result column="biz_note" property="bizNote" />
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
+		<result column="real_name" property="realName" />
+		
+		<result column="team_name" property="teamName" />
 		<result column="level" property="level" />
 		<result column="apply_note" property="applyNote" />
-		
 		<result column="apply_datetime" property="applyDatetime" />
+		
 		<result column="pay_user" property="payUser" />
 		<result column="pay_note" property="payNote" />
 		<result column="pay_datetime" property="payDatetime" />
-		<result column="channel_type" property="channelType" />
 		
 	</resultMap>
 	<sql id="where_condition">
@@ -97,6 +99,12 @@
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
 			</if>
+			<if test="realName != null and realName != '' ">
+				AND t.real_name like "%"#{realName}"%"
+			</if>
+			<if test="teamName != null and teamName != '' ">
+				AND t.team_name like "%"#{teamName}"%"
+			</if>
 		</trim>
 	</sql>
 	
@@ -119,6 +127,8 @@
 		,t.biz_note
 		,t.status
 		,t.apply_user
+		,t.real_name
+		,t.team_name
 		,t.level
 		
 		,t.apply_datetime
@@ -163,6 +173,8 @@
 		
 		,status
 		,apply_user
+		,real_name
+		,team_name
 		,level
 		,apply_datetime
 		)
@@ -184,6 +196,8 @@
 		
 		,#{status}
 		,#{applyUser}
+		,#{realName}
+		,#{teamName}
 		,#{level}
 		,#{applyDatetime}
 		)

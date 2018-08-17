@@ -32,4 +32,7 @@ public interface ISpecsAO {
     // 详细查询
     public Specs getSpecs(String code);
 
+    // 根据等级查询规格
+    public Specs getSpecsByLevel(String code, String level);
+
 }

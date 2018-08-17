@@ -14,6 +14,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IChargeDAO;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
@@ -27,8 +28,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
     @Override
     public String applyOrderOffline(Account account, EBizType bizType,
-            Long amount, String applyUser, Integer level, String applyNote,
-            String chargePdf) {
+            Long amount, Agent agent, String applyNote, String chargePdf) {
         if (amount == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -50,8 +50,10 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         }
 
         data.setStatus(EChargeStatus.TO_Cancel.getCode());
-        data.setApplyUser(applyUser);
-        data.setLevel(level);
+        data.setApplyUser(agent.getUserId());
+        data.setRealName(data.getRealName());
+        data.setTeamName(agent.getRealName());
+        data.setLevel(agent.getLevel());
         data.setApplyDatetime(new Date());
         data.setChannelType(EChannelType.Offline.getCode());
 

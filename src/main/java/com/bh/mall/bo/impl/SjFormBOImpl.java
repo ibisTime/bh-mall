@@ -14,6 +14,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.ISjFormDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SjForm;
+import com.bh.mall.enums.ESjFormStatus;
 
 @Component
 public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
@@ -104,6 +105,19 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
     @Override
     public List<SjForm> querySjFormList(SjForm condition) {
         return sjFormDAO.selectList(condition);
+    }
+
+    @Override
+    public boolean checkIsSj(String userId) {
+        SjForm condition = new SjForm();
+        condition.setUserId(userId);
+        condition.setStatus(ESjFormStatus.THROUGH_YES.getCode());
+        SjForm data = sjFormDAO.select(condition);
+        if (null == data) {
+            return false;
+        }
+
+        return true;
     }
 
 }

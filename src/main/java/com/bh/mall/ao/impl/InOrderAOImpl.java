@@ -286,6 +286,7 @@ public class InOrderAOImpl implements IInOrderAO {
                 this.payAward(data);
 
                 data.setPayCode(data.getCode());
+                data.setPayType(EPayType.RMB_YE.getCode());
                 inOrderBO.paySuccess(data);
 
                 result = new BooleanRes(true);
@@ -424,45 +425,46 @@ public class InOrderAOImpl implements IInOrderAO {
         ProductReport productReport = productReportBO
             .getProductReport(data.getTeamName(), data.getSpecsCode());
         Agent applyUser = agentBO.getAgent(data.getApplyUser());
+        if (null == productReport) {
+            productReportBO.saveProductReport(data, applyUser.getRealName());
+        } else {
+            productReportBO.refreshProductReport(productReport,
+                productReport.getQuantity() + data.getQuantity());
+        }
 
         // 只统计一级代理
-        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == applyUser
+        AgentReport report = null;
+        Account account = null;
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != applyUser
             .getLevel()) {
-            if (null == productReport) {
-                productReportBO.saveProductReport(data,
-                    applyUser.getRealName());
-            } else {
-                productReportBO.refreshProductReport(productReport,
-                    productReport.getQuantity() + data.getQuantity());
-            }
 
+            // 计算差额利润
+            AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
+                applyUser.getLevel());
+            Agent toUser = agentBO.getAgent(applyUser.getHighUserId());
+            AgentPrice highPrice = agentPriceBO
+                .getPriceByLevel(data.getSpecsCode(), toUser.getLevel());
+            Long profit = (price.getPrice() - highPrice.getPrice())
+                    * data.getQuantity();
+
+            // 订单归属人账户
+            account = accountBO.getAccountByUser(toUser.getUserId(),
+                ECurrency.YJ_CNY.getCode());
+            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
+                null, null, data.getCode(), EBizType.AJ_CELR,
+                EBizType.AJ_CELR.getValue(), profit);
+
+            // 统计差额利润
+            report = agentReportBO
+                .getAgentReportByUser(applyUser.getHighUserId());
+            report.setProfitAward(profit);
+            agentReportBO.refreshAward(report);
         }
-        Product product = productBO.getProduct(data.getProductCode());
-
-        Long orderAmount = data.getAmount();
-        // 计算差额利润
-        AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
-            applyUser.getLevel());
-        Agent toUser = agentBO.getAgent(applyUser.getHighUserId());
-        AgentPrice highPrice = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
-            toUser.getLevel());
-        Long profit = (price.getPrice() - highPrice.getPrice())
-                * data.getQuantity();
-
-        // 订单归属人账户
-        Account account = accountBO.getAccountByUser(toUser.getUserId(),
-            ECurrency.YJ_CNY.getCode());
-        accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-            null, null, data.getCode(), EBizType.AJ_CELR,
-            EBizType.AJ_CELR.getValue(), profit);
-
-        // 统计差额利润
-        AgentReport report = agentReportBO
-            .getAgentReportByUser(applyUser.getHighUserId());
-        report.setProfitAward(profit);
-        agentReportBO.refreshAward(report);
 
         // **********出货奖*******
+        Product product = productBO.getProduct(data.getProductCode());
+        Long orderAmount = data.getAmount();
+
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
             ChAward award = chAwardBO.getChAwardByLevel(applyUser.getLevel(),
