@@ -49,4 +49,7 @@ public interface IProductAO {
     // 详细查询单个产品
     Product getProduct(String code);
 
+    Paginable<Product> selectProductPageByB(int start, int limit,
+            Product condition);
+
 }

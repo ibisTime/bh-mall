@@ -484,6 +484,7 @@ public class SqFormAOImpl implements ISqFormAO {
         List<String> currencyList = new ArrayList<String>();
         currencyList.add(ECurrency.YJ_CNY.getCode());
         currencyList.add(ECurrency.MK_CNY.getCode());
+        currencyList.add(ECurrency.C_CNY.getCode());
         return currencyList;
     }
 

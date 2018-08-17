@@ -234,6 +234,7 @@ public class ProductAOImpl implements IProductAO {
 
                 // 产品规格价格
                 AgentPrice pspCondition = new AgentPrice();
+                pspCondition.setLevel(condition.getLevel());
                 pspCondition.setSpecsCode(productSpecs.getCode());
                 List<AgentPrice> pspList = agentPriceBO
                     .queryAgentPriceList(pspCondition);
@@ -264,7 +265,6 @@ public class ProductAOImpl implements IProductAO {
     public List<Product> selectProductList(Product condition) {
         List<Product> list = productBO.selectProductList(condition);
         for (Product product : list) {
-
             Specs psCondition = new Specs();
             psCondition.setProductCode(product.getCode());
 
@@ -275,7 +275,6 @@ public class ProductAOImpl implements IProductAO {
 
                     AgentPrice pspCondition = new AgentPrice();
                     pspCondition.setSpecsCode(productSpecs.getCode());
-                    pspCondition.setLevel(condition.getLevel());
                     List<AgentPrice> pspList = agentPriceBO
                         .queryAgentPriceList(pspCondition);
                     if (CollectionUtils.isNotEmpty(pspList)) {
@@ -332,5 +331,35 @@ public class ProductAOImpl implements IProductAO {
         product.setSpecs(specs);
         product.setSpecsPrice(specsPrice);
         return product;
+    }
+
+    @Override
+    public Paginable<Product> selectProductPageByB(int start, int limit,
+            Product condition) {
+        Paginable<Product> page = productBO.getPaginable(start, limit,
+            condition);
+        List<Product> list = page.getList();
+        for (Product product : list) {
+
+            // 产品规格
+            Specs psCondition = new Specs();
+            psCondition.setProductCode(product.getCode());
+            List<Specs> psList = specsBO.querySpecsList(psCondition);
+            for (Specs productSpecs : psList) {
+
+                // 产品规格价格
+                AgentPrice pspCondition = new AgentPrice();
+                pspCondition.setIsBuy(EBoolean.YES.getCode());
+                pspCondition.setLevel(condition.getLevel());
+                pspCondition.setSpecsCode(productSpecs.getCode());
+                List<AgentPrice> pspList = agentPriceBO
+                    .queryAgentPriceList(pspCondition);
+                if (CollectionUtils.isNotEmpty(pspList)) {
+                    productSpecs.setPriceList(pspList);
+                }
+                product.setSpecsList(psList);
+            }
+        }
+        return page;
     }
 }
