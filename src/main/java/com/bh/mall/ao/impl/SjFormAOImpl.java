@@ -62,7 +62,6 @@ public class SjFormAOImpl implements ISjFormAO {
      * 2、判断是够由不需要实名认证等级升上来，若是进行实名验证
      * 3、判断是否升为最高等级，若是校验团队名称，并更新下级团队名称
      * 4、检查升至申请等级门槛是否需要清零
-     * @see com.bh.mall.ao.ISjFormAO#applySjForm(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     public void applySjForm(String userId, String newLevel, String payPdf,
@@ -174,8 +173,8 @@ public class SjFormAOImpl implements ISjFormAO {
      * 上级审核升级（B端）
      * 1、判断升级是否需要上级审核
      * 2、 检查升至本等级门槛是否清零，若不清零，判断所升等级是否高于等级原上级，高于等于时，检查原上级门槛中余额是否多余该代理门槛余额，不高于时失败。
-     * 3、
-     * @see com.bh.mall.ao.ISjFormAO#approveSjFormByB(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     * 3、审核通过后，更新云仓价格，清空推荐关系
+     * 4、若升级为最高等级，下级同步新的团队名称
      */
     @Override
     @Transactional
@@ -185,6 +184,7 @@ public class SjFormAOImpl implements ISjFormAO {
         SjForm sjForm = sjFormBO.getSjForm(userId);
         AgentLevel auData = agentLevelBO
             .getAgentByLevel(sjForm.getApplyLevel());
+
         // 审核通过
         String status = ESjFormStatus.IMPOWERED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
@@ -205,6 +205,15 @@ public class SjFormAOImpl implements ISjFormAO {
                 // 更新云仓价格
                 wareBO.changeWarePrice(sjForm.getUserId(),
                     sjForm.getApplyLevel());
+
+                // 清空推荐关系
+                agentBO.resetUserReferee(userId);
+
+                // 升级等级为最高等级，下级同步新的团队名称
+                if (StringValidater.toInteger(
+                    EAgentLevel.ONE.getCode()) == sjForm.getApplyLevel()) {
+                    agentAO.editTeamName(userId, sjForm.getTeamName());
+                }
             }
         }
 
@@ -218,6 +227,12 @@ public class SjFormAOImpl implements ISjFormAO {
             approveAgent.getRealName(), remark, status, logCode);
     }
 
+    /**
+     * 上级审核升级（P端）
+     * 1、 检查升至本等级门槛是否清零，若不清零，判断所升等级是否高于等级原上级，高于等于时，检查原上级门槛中余额是否多余该代理门槛余额，不高于时失败。
+     * 2、审核通过后，更新云仓价格，清空推荐关系
+     * 4、若升级为最高等级，下级同步新的团队名称
+     */
     @Override
     public void approveSjFormByP(String userId, String approver, String result,
             String remark) {
@@ -236,6 +251,15 @@ public class SjFormAOImpl implements ISjFormAO {
 
             // 更新云仓价格
             wareBO.changeWarePrice(sjForm.getUserId(), sjForm.getApplyLevel());
+
+            // 清空推荐关系
+            agentBO.resetUserReferee(userId);
+
+            // 升级等级为最高等级，下级同步新的团队名称
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sjForm
+                .getApplyLevel()) {
+                agentAO.editTeamName(userId, sjForm.getTeamName());
+            }
         }
 
         Agent agent = agentBO.getAgent(userId);
@@ -289,6 +313,9 @@ public class SjFormAOImpl implements ISjFormAO {
         return page;
     }
 
+    /*
+     * 
+     */
     private String getHighUser(String highUserId, Integer level) {
         Agent highAgent = agentBO.getAgent(highUserId);
         if (level <= highAgent.getLevel()) {

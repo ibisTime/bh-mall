@@ -221,4 +221,10 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         inOrderDAO.delete(data);
     }
 
+    public static void main(String[] args) {
+        float i = 10;
+        int j = 3;
+        double d = i / j;
+        System.out.println(d);
+    }
 }

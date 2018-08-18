@@ -8,14 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IJourAO;
 import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IJourBO;
+import com.bh.mall.bo.IOrderReportBO;
 import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Jour;
+import com.bh.mall.domain.OrderReport;
 import com.bh.mall.domain.OutOrder;
+import com.bh.mall.dto.res.XN627855Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ESysUser;
 
@@ -33,6 +38,12 @@ public class JourAOImpl implements IJourAO {
 
     @Autowired
     private IInOrderBO inOrderBO;
+
+    @Autowired
+    private IAgentReportBO agentReportBO;
+
+    @Autowired
+    private IOrderReportBO orderReportBO;
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
@@ -73,7 +84,7 @@ public class JourAOImpl implements IJourAO {
             }
         }
 
-        return jourBO.getPaginable(start, limit, condition);
+        return page;
     }
 
     @Override
@@ -164,7 +175,7 @@ public class JourAOImpl implements IJourAO {
                 OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
                 data.setOutOrder(outOrder);
             } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
-                Agent agent = agentBO.getAgent(data.getRefNo());
+                Agent agent = agentBO.getAgent(data.getUserId());
                 data.setAgent(agent);
 
             } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())
@@ -175,6 +186,27 @@ public class JourAOImpl implements IJourAO {
             }
         }
         return page;
+    }
+
+    @Override
+    public XN627855Res queryJourPageByP(int start, int limit, Jour condition) {
+
+        Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
+        for (Jour data : page.getList()) {
+            if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
+                Agent agent = agentBO.getAgent(data.getUserId());
+                data.setMobile(agent.getMobile());
+            }
+
+            // 关联订单转义
+            OrderReport report = orderReportBO.getOrderReport(data.getRefNo());
+            data.setReport(report);
+        }
+        AgentReport report = agentReportBO
+            .getAgentReport(condition.getUserId());
+        XN627855Res res = new XN627855Res(page.getList(),
+            report.getProfitAward());
+        return res;
     }
 
 }

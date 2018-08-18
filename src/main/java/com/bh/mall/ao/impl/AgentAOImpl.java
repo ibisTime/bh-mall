@@ -558,7 +558,8 @@ public class AgentAOImpl implements IAgentAO {
     }
 
     // 修改下级团队名称
-    private void editTeamName(String highUserId, String teamName) {
+    @Override
+    public void editTeamName(String highUserId, String teamName) {
         Agent condition = new Agent();
         condition.setHighUserId(highUserId);
         List<Agent> list = agentBO.queryAgentList(condition);

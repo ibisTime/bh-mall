@@ -28,11 +28,15 @@ public class XN627440 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-        accountAO.transAmountCZB(req.getUserId(), ECurrency.YJ_CNY.getCode(),
-            req.getUserId(), ECurrency.MK_CNY.getCode(),
+        accountAO.transAmountCZB(req.getUserId(), req.getFromAccount(),
+            req.getUserId(), req.getToAccount(),
             StringValidater.toLong(req.getAmount()), EBizType.AJ_MKCZ.getCode(),
-            "可提现账户转入门槛账户[" + StringValidater.toLong(req.getAmount()) + "]",
-            "可提现账户转入门槛账户[" + StringValidater.toLong(req.getAmount()) + "]",
+            ECurrency.getCurrency(req.getFromAccount()) + "转入"
+                    + ECurrency.getCurrency(req.getToAccount()) + "["
+                    + StringValidater.toLong(req.getAmount()) + "]",
+            ECurrency.getCurrency(req.getFromAccount()) + "转入"
+                    + ECurrency.getCurrency(req.getToAccount()) + "["
+                    + StringValidater.toLong(req.getAmount()) + "]",
             req.getUserId());
         return null;
     }

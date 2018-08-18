@@ -177,4 +177,8 @@
 	<bean id="productReportBO" class="com.bh.mall.bo.impl.ProductReportBOImpl">
 		<property name="paginableDAO" ref="productReportDAOImpl"/>
 	</bean>
+	
+	<bean id="orderReportBO" class="com.bh.mall.bo.impl.OrderReportBOImpl">
+		<property name="paginableDAO" ref="orderReportDAOImpl"/>
+	</bean>
 </beans>

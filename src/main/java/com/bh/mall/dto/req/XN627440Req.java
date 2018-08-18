@@ -10,20 +10,35 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627440Req {
 
-    // 用户ID
-    @NotBlank(message = "用户ID不能为空")
+    // 用户Id
     private String userId;
+
+    // 付款账户
+    @NotBlank(message = "用户ID不能为空")
+    private String fromAccount;
+
+    // 收款账户
+    @NotBlank(message = "用户ID不能为空")
+    private String toAccount;
 
     // 转账金额
     @NotBlank(message = "转账金额不能为空")
     private String amount;
 
-    public String getUserId() {
-        return userId;
+    public String getFromAccount() {
+        return fromAccount;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getToAccount() {
+        return toAccount;
+    }
+
+    public void setFromAccount(String fromAccount) {
+        this.fromAccount = fromAccount;
+    }
+
+    public void setToAccount(String toAccount) {
+        this.toAccount = toAccount;
     }
 
     public String getAmount() {
@@ -32,6 +47,14 @@ public class XN627440Req {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

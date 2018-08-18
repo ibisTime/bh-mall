@@ -1,4 +1,4 @@
-package com.bh.mall.dto.req;
+package com.bh.mall.dto.res;
 
 public class XN627853Res {
 

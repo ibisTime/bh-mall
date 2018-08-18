@@ -14,7 +14,7 @@ package com.bh.mall.enums;
  * @history:
  */
 public enum ECNavigateStatus {
-    TO_APPROVE("0", "待上架"), APPROVE_YES("1", "上架"), APPROVE_NO("2", "下架");
+    APPROVE_YES("1", "已发布"), APPROVE_NO("2", "已撤下");
 
     ECNavigateStatus(String code, String value) {
         this.code = code;

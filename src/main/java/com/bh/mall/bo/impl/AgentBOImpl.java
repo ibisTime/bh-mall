@@ -404,6 +404,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
 
     @Override
     public void resetUserReferee(String userId) {
+
+        Agent data = getAgent(userId);
+        data.setReferrer(null);
+        agentDAO.resetUserReferee(data);
+
         Agent condition = new Agent();
         condition.setReferrer(userId);
         List<Agent> list = agentDAO.selectList(condition);

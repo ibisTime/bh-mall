@@ -65,4 +65,7 @@ public interface IAgentAO {
     // 根据手机号查询代理 627322
     public Agent doGetAgentByMobile(String mobile);
 
+    // 修改所有下级团队名称
+    void editTeamName(String highUserId, String teamName);
+
 }

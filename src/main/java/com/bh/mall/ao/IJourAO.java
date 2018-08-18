@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Jour;
+import com.bh.mall.dto.res.XN627855Res;
 
 /**
  * 账户流水
@@ -39,5 +40,7 @@ public interface IJourAO {
     // 分页查询流水记录（front）
     public Paginable<Jour> queryDetailPage(int start, int limit,
             Jour condition);
+
+    public XN627855Res queryJourPageByP(int start, int limit, Jour condition);
 
 }

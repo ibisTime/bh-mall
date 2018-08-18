@@ -71,9 +71,9 @@ public class AccountAOImpl implements IAccountAO {
             String toUserId, String toCurrency, Long transAmount,
             String bizType, String fromBizNote, String toBizNote,
             String refNo) {
-        EBizType a = EBizType.getBizType(bizType);
+        EBizType biz = EBizType.getBizType(bizType);
         accountBO.transAmountCZB(fromUserId, fromCurrency, toUserId, toCurrency,
-            transAmount, a, fromBizNote, toBizNote, refNo);
+            transAmount, biz, fromBizNote, toBizNote, refNo);
     }
 
     @Override

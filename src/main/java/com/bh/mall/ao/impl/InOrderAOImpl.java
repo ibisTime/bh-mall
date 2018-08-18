@@ -23,6 +23,7 @@ import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.IInOrderBO;
+import com.bh.mall.bo.IOrderReportBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.IProductReportBO;
 import com.bh.mall.bo.ISYSConfigBO;
@@ -124,6 +125,9 @@ public class InOrderAOImpl implements IInOrderAO {
 
     @Autowired
     IProductReportBO productReportBO;
+
+    @Autowired
+    IOrderReportBO orderReportBO;
 
     @Override
     @Transactional
@@ -459,6 +463,9 @@ public class InOrderAOImpl implements IInOrderAO {
                 .getAgentReportByUser(applyUser.getHighUserId());
             report.setProfitAward(profit);
             agentReportBO.refreshAward(report);
+
+            // 统计出货
+            orderReportBO.saveInOrderReport(data);
         }
 
         // **********出货奖*******

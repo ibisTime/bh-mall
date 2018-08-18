@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.AgentReport;
-import com.bh.mall.dto.req.XN627853Res;
+import com.bh.mall.dto.res.XN627852Res;
+import com.bh.mall.dto.res.XN627853Res;
 
 /**
  * 代理统计
@@ -30,6 +31,9 @@ public interface IAgentReportAO {
     public AgentReport getAgentReport(String code);
 
     public XN627853Res queryAgentReportNumber(int start, int limit,
+            AgentReport condition);
+
+    public XN627852Res queryAgentReportPageByP(int start, int limit,
             AgentReport condition);
 
 }

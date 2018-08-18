@@ -26,6 +26,7 @@ import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IChAwardBO;
 import com.bh.mall.bo.IMiniCodeBO;
+import com.bh.mall.bo.IOrderReportBO;
 import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.IProCodeBO;
 import com.bh.mall.bo.IProductBO;
@@ -152,6 +153,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     @Autowired
     ISjFormBO sjFormBO;
+
+    @Autowired
+    IOrderReportBO orderReportBO;
 
     @Override
     @Transactional
@@ -655,27 +659,36 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
         Agent applyUser = agentBO.getAgent(data.getApplyUser());
         Long orderAmount = data.getAmount();
+
         // 计算差额利润
-        AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
-            applyUser.getLevel());
-        Agent toUser = agentBO.getAgent(applyUser.getHighUserId());
-        AgentPrice highPrice = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
-            toUser.getLevel());
-        Long profit = (price.getPrice() - highPrice.getPrice())
-                * data.getQuantity();
+        Account account = null;
+        AgentReport report = null;
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != applyUser
+            .getLevel()) {
+            AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
+                applyUser.getLevel());
+            Agent toUser = agentBO.getAgent(data.getToUserId());
+            AgentPrice highPrice = agentPriceBO
+                .getPriceByLevel(data.getSpecsCode(), toUser.getLevel());
+            Long profit = (price.getPrice() - highPrice.getPrice())
+                    * data.getQuantity();
 
-        // 订单归属人账户
-        Account account = accountBO.getAccountByUser(toUser.getUserId(),
-            ECurrency.YJ_CNY.getCode());
-        accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-            null, null, data.getCode(), EBizType.AJ_CELR,
-            EBizType.AJ_CELR.getValue(), profit);
+            // 订单归属人账户
+            account = accountBO.getAccountByUser(toUser.getUserId(),
+                ECurrency.YJ_CNY.getCode());
+            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
+                null, null, data.getCode(), EBizType.AJ_CELR,
+                EBizType.AJ_CELR.getValue(), profit);
 
-        // 统计差额利润
-        AgentReport report = agentReportBO
-            .getAgentReportByUser(applyUser.getHighUserId());
-        report.setProfitAward(profit);
-        agentReportBO.refreshAward(report);
+            // 统计差额利润
+            report = agentReportBO
+                .getAgentReportByUser(applyUser.getHighUserId());
+            report.setProfitAward(profit);
+            agentReportBO.refreshAward(report);
+        }
+
+        // 订单统计
+        orderReportBO.saveInOrderReport(data);
 
         // **********出货奖*******
         // 出货奖励,且产品计入出货
@@ -791,7 +804,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public void deliverOutOrder(XN627645Req req) {
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
         Agent toUser = agentBO.getAgent(data.getToUserId());
-
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
 
             AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),

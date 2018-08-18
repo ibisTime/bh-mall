@@ -66,10 +66,11 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
     }
 
     @Override
-    public AgentReport getAgentReport(String code) {
+    public AgentReport getAgentReport(String userId) {
         AgentReport data = null;
-        if (StringUtils.isNotBlank(code)) {
+        if (StringUtils.isNotBlank(userId)) {
             AgentReport condition = new AgentReport();
+            condition.setUserId(userId);
             data = agentReportDAO.select(condition);
         }
         return data;

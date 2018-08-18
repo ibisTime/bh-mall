@@ -15,7 +15,8 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentReport;
-import com.bh.mall.dto.req.XN627853Res;
+import com.bh.mall.dto.res.XN627852Res;
+import com.bh.mall.dto.res.XN627853Res;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.exception.BizException;
 
@@ -99,6 +100,34 @@ public class AgentReportAOImpl implements IAgentReportAO {
             AgentReport condition) {
         XN627853Res res = new XN627853Res(
             agentReportBO.getTotalCount(condition));
+        return res;
+    }
+
+    @Override
+    public XN627852Res queryAgentReportPageByP(int start, int limit,
+            AgentReport condition) {
+        long count = agentReportBO.getTotalCount(condition);
+
+        Paginable<AgentReport> page = agentReportBO.getPaginable(start, limit,
+            condition);
+        Agent userName = null;
+        for (AgentReport agentReport : page.getList()) {
+            if (StringUtils.isNotBlank(agentReport.getUserReferee())) {
+                // 推荐/介绍人转义
+                userName = agentBO.getAgent(agentReport.getUserReferee());
+                agentReport.setUserRefereeName(userName.getRealName());
+                userName = agentBO.getAgent(agentReport.getIntroducer());
+                agentReport.setIntroduceName(userName.getRealName());
+
+            }
+
+            // 可提现账户余额
+            Account account = accountBO.getAccountByUser(
+                agentReport.getUserId(), ECurrency.YJ_CNY.getCode());
+            agentReport.setYjAmount(account.getAmount());
+        }
+
+        XN627852Res res = new XN627852Res(page.getList(), count);
         return res;
     }
 }

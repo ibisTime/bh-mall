@@ -105,6 +105,9 @@ public class Jour extends ABaseDO {
 
     // ********db************
 
+    // 云仓订单
+    private OrderReport report;
+
     public String getCurrency() {
         return currency;
     }
@@ -335,6 +338,14 @@ public class Jour extends ABaseDO {
 
     public void setInOrder(InOrder inOrder) {
         this.inOrder = inOrder;
+    }
+
+    public OrderReport getReport() {
+        return report;
+    }
+
+    public void setReport(OrderReport report) {
+        this.report = report;
     }
 
 }
