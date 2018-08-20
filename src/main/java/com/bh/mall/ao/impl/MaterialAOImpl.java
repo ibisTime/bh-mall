@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,10 @@ public class MaterialAOImpl implements IMaterialAO {
 
         data.setTitle(req.getTitle());
         data.setType(req.getType());
+        data.setUpdater(req.getUpdater());
+        Date date = new Date();
+        data.setRemark(req.getRemark());
+
         materialBO.addMaterial(data);
         return code;
     }

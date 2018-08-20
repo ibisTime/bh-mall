@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,6 +80,10 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     public Paginable<Account> queryAccountPage(int start, int limit,
             Account condition) {
+        if (StringUtils.isNotBlank(condition.getMobile())) {
+            Agent agent = agentBO.getAgentByMobile(condition.getMobile());
+            condition.setUserId(agent.getUserId());
+        }
 
         Paginable<Account> page = accountBO.getPaginable(start, limit,
             condition);

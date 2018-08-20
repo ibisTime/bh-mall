@@ -124,10 +124,10 @@ public class WeChatAOImpl implements IWeChatAO {
         }
 
         if (EChannelType.WeChat_XCX.getCode().equals(payType)) {
-            payType = EConfigType.WEIXIN_XCX.getCode();
+            payType = EConfigType.XCX_PAY.getCode();
 
         } else if (EChannelType.WeChat_H5.getCode().equals(payType)) {
-            payType = EConfigType.WEIXIN_H5.getCode();
+            payType = EConfigType.WX_PAY.getCode();
         }
 
         Map<String, String> sysConfig = sysConfigBO.getConfigsMap(payType);

@@ -27,25 +27,24 @@
 			<if test="realName != null and realName != '' ">
 				AND t.real_name like "%"#{realName}"%"
 			</if>
-			<choose>
-			     <when test='type == "NOT_P"'>
-				 	AND t.type not in('P')
-				 </when>
-				  <when test='type == "P,B"'>
-				 	AND t.type IN ('P','B')
-				 </when>
-				 <otherwise>
-					<if test="type != null and type != '' ">
-						AND t.type = #{type}
-					</if>
-				 </otherwise>
-			</choose>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="currency != null and currency != '' ">
-				AND t.currency = #{currency}
-			</if>
+			
+			<choose>
+				<when test="currency != null and currency != '' ">
+					AND t.currency = #{currency}
+				</when>
+				<when test="currencyList != null and currencyList.size() > 0 ">
+					AND t.currency	IN
+					<foreach collection="currencyList" index="index" item="item" open="(" separator="," close=")">
+						#{item}					
+					</foreach>
+				</when>
+			</choose>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>

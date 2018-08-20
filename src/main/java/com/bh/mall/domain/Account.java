@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -22,6 +23,9 @@ public class Account extends ABaseDO {
 
     // 户名
     private String realName;
+
+    // 手机号
+    private String mobile;
 
     // 类别（C端账号/B端账号/P平台账号）
     private String type;
@@ -53,6 +57,9 @@ public class Account extends ABaseDO {
 
     // 代理
     private Agent agent;
+
+    // 账户
+    private List<String> currencyList;
 
     public Agent getAgent() {
         return agent;
@@ -156,6 +163,22 @@ public class Account extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public List<String> getCurrencyList() {
+        return currencyList;
+    }
+
+    public void setCurrencyList(List<String> currencyList) {
+        this.currencyList = currencyList;
     }
 
 }

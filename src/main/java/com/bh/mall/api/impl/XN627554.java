@@ -29,7 +29,9 @@ public class XN627554 extends AProcessor {
     public Object doBusiness() throws BizException {
         Product condition = new Product();
         condition.setStatus(req.getStatus());
+        condition.setCode(req.getCode());
         condition.setName(req.getName());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IProductAO.DEFAULT_ORDER_COLUMN;

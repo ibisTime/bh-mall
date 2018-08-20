@@ -25,6 +25,12 @@ public class XN627420Req {
     // （必填）排序
     private String orderNo;
 
+    // 更新人
+    private String updater;
+
+    // 备注
+    private String remark;
+
     public String getLevel() {
         return level;
     }
@@ -71,6 +77,22 @@ public class XN627420Req {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

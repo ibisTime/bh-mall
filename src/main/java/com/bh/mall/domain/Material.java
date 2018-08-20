@@ -1,5 +1,7 @@
 package com.bh.mall.domain;
 
+import java.util.Date;
+
 import com.bh.mall.dao.base.ABaseDO;
 
 /**
@@ -32,6 +34,15 @@ public class Material extends ABaseDO {
 
     // 状态
     private String status;
+
+    // 更新人
+    private String updater;
+
+    // 更新时间
+    private Date updateDatetime;
+
+    // 备注
+    private String remark;
 
     public String getCode() {
         return code;
@@ -87,6 +98,30 @@ public class Material extends ABaseDO {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }
