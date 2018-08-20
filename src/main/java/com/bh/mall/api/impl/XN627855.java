@@ -32,6 +32,8 @@ public class XN627855 extends AProcessor {
     public Object doBusiness() throws BizException {
         Jour condition = new Jour();
         condition.setUserId(req.getUserId());
+        condition.setBizType(req.getBizType());
+
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
         Date endDatetime = DateUtil.strToDate(req.getDateStart(),

@@ -16,12 +16,23 @@ public class XN627855Req extends APageReq {
     @NotBlank(message = "代理编号不能为空")
     private String userId;
 
+    // 流水类型
+    private String bizType;
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
     }
 
 }
