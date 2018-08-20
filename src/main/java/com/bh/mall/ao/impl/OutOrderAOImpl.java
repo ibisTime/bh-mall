@@ -579,6 +579,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
                 Agent agent = agentBO.getAgent(data.getApplyUser());
                 data.setAgent(agent);
+            } else if (agentBO.isHighest(data.getApplyUser())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+                data.setHighUserName(sysUser.getRealName());
+            } else {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setHighUserName(agent.getRealName());
             }
 
             // 产品信息
@@ -613,6 +619,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
                 Agent agent = agentBO.getAgent(data.getApplyUser());
                 data.setAgent(agent);
+            } else if (agentBO.isHighest(data.getApplyUser())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+                data.setHighUserName(sysUser.getRealName());
+            } else {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setHighUserName(agent.getRealName());
             }
 
             // 产品信息
@@ -629,6 +641,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
             Agent agent = agentBO.getAgent(data.getApplyUser());
             data.setAgent(agent);
+        } else if (agentBO.isHighest(data.getApplyUser())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+            data.setHighUserName(sysUser.getRealName());
+        } else {
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            data.setHighUserName(agent.getRealName());
         }
 
         // 产品信息

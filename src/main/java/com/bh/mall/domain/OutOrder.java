@@ -206,6 +206,9 @@ public class OutOrder extends ABaseDO {
     // 等级list
     private List<Integer> levelList;
 
+    // 上级名称
+    private String highUserName;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -708,6 +711,14 @@ public class OutOrder extends ABaseDO {
 
     public void setHighUserId(String highUserId) {
         this.highUserId = highUserId;
+    }
+
+    public String getHighUserName() {
+        return highUserName;
+    }
+
+    public void setHighUserName(String highUserName) {
+        this.highUserName = highUserName;
     }
 
 }
