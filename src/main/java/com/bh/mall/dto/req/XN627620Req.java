@@ -22,6 +22,10 @@ public class XN627620Req {
     @NotBlank(message = "数量不能为空")
     private String quantity;
 
+    // （必填）等级
+    @NotBlank(message = "等级不能为空")
+    private String level;
+
     public String getUserId() {
         return userId;
     }
@@ -44,6 +48,14 @@ public class XN627620Req {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

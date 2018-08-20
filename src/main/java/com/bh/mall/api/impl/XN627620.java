@@ -24,7 +24,7 @@ public class XN627620 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(cartAO.addCart(req.getUserId(),
+        return new PKCodeRes(cartAO.addCart(req.getUserId(), req.getLevel(),
             req.getProductSpecsCode(), req.getQuantity()));
     }
 

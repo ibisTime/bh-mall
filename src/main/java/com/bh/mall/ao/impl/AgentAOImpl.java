@@ -40,6 +40,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SYSUser;
+import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
@@ -401,8 +402,12 @@ public class AgentAOImpl implements IAgentAO {
             }
 
             // 云仓余额
-            wareBO.getWareByUser(data.getUserId());
-
+            List<Ware> list = wareBO.getWareByUser(data.getUserId());
+            Long amount = 0L;
+            for (Ware ware : list) {
+                amount = amount + ware.getAmount();
+            }
+            data.setWareAmount(amount);
         }
         return page;
     }
@@ -438,6 +443,14 @@ public class AgentAOImpl implements IAgentAO {
             // 管理员
             SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
             data.setManageName(sysUser.getRealName());
+
+            // 云仓余额
+            List<Ware> wareList = wareBO.getWareByUser(data.getUserId());
+            Long amount = 0L;
+            for (Ware ware : wareList) {
+                amount = amount + ware.getAmount();
+            }
+            data.setWareAmount(amount);
         }
         return list;
     }
@@ -554,6 +567,13 @@ public class AgentAOImpl implements IAgentAO {
         SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
         data.setManageName(sysUser.getRealName());
 
+        // 云仓余额
+        List<Ware> wareList = wareBO.getWareByUser(data.getUserId());
+        Long amount = 0L;
+        for (Ware ware : wareList) {
+            amount = amount + ware.getAmount();
+        }
+        data.setWareAmount(amount);
         return data;
     }
 

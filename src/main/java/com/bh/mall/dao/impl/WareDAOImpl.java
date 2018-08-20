@@ -63,7 +63,7 @@ public class WareDAOImpl extends AMybatisTemplate implements IWareDAO {
 
     @Override
     public void changePrice(Ware data) {
-        super.update(NAMESPACE.concat("update_Price"), data);
+        super.update(NAMESPACE.concat("update_price"), data);
     }
 
 }

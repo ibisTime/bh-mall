@@ -58,7 +58,7 @@ public class ProCodeAOImpl implements IProCodeAO {
         List<String> newTraceList = new LinkedList<String>();
 
         Date date = null;
-        loop: for (int pro = 0; pro < proNumber; pro--) {
+        loop: for (int pro = 0; pro < proNumber; pro++) {
             String proCode = OrderNoGenerater.generate();
             // 新生成的箱码是否重复
             if (newProList.contains(proCode) || newMiniList.contains(proCode)

@@ -1,18 +1,18 @@
 package com.bh.mall.dto.res;
 
-public class XN627300Res {
+public class XN627111Res {
     private String userId;
 
     private String status;
 
-    public XN627300Res() {
+    public XN627111Res() {
     }
 
-    public XN627300Res(String userId) {
+    public XN627111Res(String userId) {
         this.userId = userId;
     }
 
-    public XN627300Res(String userId, String status) {
+    public XN627111Res(String userId, String status) {
         super();
         this.userId = userId;
         this.status = status;

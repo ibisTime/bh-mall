@@ -150,5 +150,14 @@
 		WHERE code = #{code}
 	</delete>
 
+	<update id="update_price" parameterType="ware">
+		UPDATE tbh_ware
+		SET
+		price = #{price}
+		,amount = #{amount}
+		,last_change_code = #{lastChangeCode}
+		WHERE code = #{code}
+	</update>
+
 
 </mapper>

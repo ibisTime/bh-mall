@@ -120,6 +120,7 @@ public class ProductAOImpl implements IProductAO {
         data.setUpdater(req.getUpdater());
 
         data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
         productBO.refreshProduct(data);
 
         List<XN627546Req> psList = req.getSpecList();

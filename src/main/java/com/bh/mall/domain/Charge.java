@@ -60,9 +60,6 @@ public class Charge extends ABaseDO {
     // 申请人
     private String applyUser;
 
-    // 申请人名称
-    private String realName;
-
     // 充值人团队
     private String teamName;
 
@@ -320,14 +317,6 @@ public class Charge extends ABaseDO {
 
     public void setPayUser(String payUser) {
         this.payUser = payUser;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
     }
 
     public String getTeamName() {

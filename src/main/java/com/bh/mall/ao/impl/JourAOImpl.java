@@ -47,6 +47,7 @@ public class JourAOImpl implements IJourAO {
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
+
         if (EBizType.AJ_TJJL.getCode().equals(condition.getBizType())) {
             List<String> list = new ArrayList<String>();
             list.add(EBizType.AJ_TJJL_OUT.getCode());

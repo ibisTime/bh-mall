@@ -548,4 +548,11 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+	<update id="reset_userReferee" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		referrer = #{referrer}
+		WHERE user_id = #{userId}
+	</update>
+	
 </mapper>

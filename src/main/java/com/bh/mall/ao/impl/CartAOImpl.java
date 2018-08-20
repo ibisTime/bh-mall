@@ -37,14 +37,21 @@ public class CartAOImpl implements ICartAO {
     IAgentPriceBO agentPriceBO;
 
     @Override
-    public String addCart(String userId, String specsCode, String quantity) {
+    public String addCart(String userId, String level, String specsCode,
+            String quantity) {
 
         if (StringValidater.toInteger(quantity) <= 0) {
             throw new BizException("xn00000", "添加数量不能少于零");
         }
 
+        Specs specs = specsBO.getSpecs(specsCode);
+        if (specs.getSingleNumber() > StringValidater.toInteger(quantity)) {
+            throw new BizException("xn00000", "该产品库存不足");
+        }
+
         Cart data = cartBO.getCartByProductCode(userId, specsCode);
-        AgentPrice specsPrice = agentPriceBO.getPriceByLevel(specsCode, 6);
+        AgentPrice specsPrice = agentPriceBO.getPriceByLevel(specsCode,
+            StringValidater.toInteger(level));
 
         String code = OrderNoGenerater.generate(EGeneratePrefix.Cart.getCode());
         if (data != null) {
@@ -57,7 +64,7 @@ public class CartAOImpl implements ICartAO {
             data.setCode(code);
             data.setUserId(userId);
 
-            data.setProductCode(data.getProductCode());
+            data.setProductCode(specs.getProductCode());
             data.setSpecsCode(specsCode);
             data.setQuantity(StringValidater.toInteger(quantity));
             data.setPrice(specsPrice.getPrice());
@@ -70,11 +77,11 @@ public class CartAOImpl implements ICartAO {
     @Override
     public void editCart(String code, String quantity) {
         Cart data = cartBO.getCart(code);
-        // Product pData = productBO.getProduct(data.getProductCode());
-        // if (pData.getRealNumber() < StringValidater.toInteger(quantity)
-        // || StringValidater.toInteger(quantity) < 0) {
-        // throw new BizException("xn00000", "产品数量不足或小于零");
-        // }
+        Product pData = productBO.getProduct(data.getProductCode());
+        if (pData.getRealNumber() < StringValidater.toInteger(quantity)
+                || StringValidater.toInteger(quantity) < 0) {
+            throw new BizException("xn00000", "产品数量不足或小于零");
+        }
         data.setQuantity(StringValidater.toInteger(quantity));
         cartBO.refreshCart(data);
     }

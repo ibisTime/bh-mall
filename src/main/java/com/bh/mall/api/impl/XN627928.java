@@ -11,7 +11,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 规格库存
+ * 根据等级查询规格
  * @author: nyc 
  * @since: 2018年3月25日 下午3:37:49 
  * @history:

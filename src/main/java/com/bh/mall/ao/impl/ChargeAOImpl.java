@@ -3,6 +3,7 @@ package com.bh.mall.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,8 +120,10 @@ public class ChargeAOImpl implements IChargeAO {
         for (Charge data : page.getList()) {
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
-                data.setPayUserName(sysUser.getRealName());
+                if (StringUtils.isNotEmpty(data.getPayUser())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
+                    data.setPayUserName(sysUser.getRealName());
+                }
             } else {
                 Agent agent = agentBO.getAgent(data.getPayUser());
                 data.setPayUserName(agent.getRealName());
@@ -168,8 +171,10 @@ public class ChargeAOImpl implements IChargeAO {
         for (Charge data : page.getList()) {
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                 .getLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
-                data.setPayUserName(sysUser.getRealName());
+                if (StringUtils.isNotBlank(data.getPayUser())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
+                    data.setPayUserName(sysUser.getRealName());
+                }
             } else {
                 Agent agent = agentBO.getAgent(data.getPayUser());
                 data.setPayUserName(agent.getRealName());

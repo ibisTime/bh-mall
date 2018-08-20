@@ -32,7 +32,8 @@ public interface ICartAO {
     Cart getCart(String code);
 
     // 添加购物车
-    String addCart(String userId, String specsCode, String quantity);
+    String addCart(String userId, String level, String specsCode,
+            String quantity);
 
     // 修改产品数量
     void editCart(String code, String quantity);
