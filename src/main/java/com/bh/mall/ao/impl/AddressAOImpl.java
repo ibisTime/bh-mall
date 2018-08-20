@@ -32,7 +32,6 @@ public class AddressAOImpl implements IAddressAO {
     @Override
     @Transactional
     public String addAddress(Address data) {
-        agentBO.getAgent(data.getUserId());
         String code = null;
         if (data != null) {
             // 用户没有地址，则第一条地址为默认地址

@@ -502,6 +502,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                 // 用微信支付
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+                data.setPayType(EChannelType.WeChat_H5.getCode());
                 Object payResult1 = this.payWXH5(data,
                     PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
                 result = payResult1;
@@ -513,15 +514,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     private Object payWXH5(OutOrder data, String callBackUrl) {
         Long rmbAmount = data.getAmount();
-        Agent agent = agentBO.getAgent(data.getApplyUser());
         String payGroup = outOrderBO.addPayGroup(data);
-        agentBO.getAgent(data.getToUserId());
-        Account account = accountBO.getAccountByUser(data.getToUserId(),
-            ECurrency.YJ_CNY.getCode());
-        return weChatAO.getPrepayIdH5(agent.getUserId(),
-            account.getAccountNumber(), payGroup, data.getCode(),
-            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            callBackUrl, data.getPayType());
+        return weChatAO.getPrepayIdH5(data.getApplyUser(), payGroup,
+            data.getCode(), EBizType.AJ_GMCP.getCode(),
+            EBizType.AJ_GMCP.getValue(), rmbAmount, callBackUrl,
+            data.getPayType());
     }
 
     @Override
@@ -577,16 +574,18 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Paginable<OutOrder> page = outOrderBO.getPaginable(start, limit,
             condition);
         List<OutOrder> list = page.getList();
-        for (OutOrder OutOrder : list) {
+        for (OutOrder data : list) {
             // 下单人
-            Agent agent = agentBO.getAgent(OutOrder.getApplyUser());
-            OutOrder.setAgent(agent);
+            if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setAgent(agent);
+            }
 
             // 产品信息
-            Product product = productBO.getProduct(OutOrder.getProductCode());
-            OutOrder.setProduct(product);
+            Product product = productBO.getProduct(data.getProductCode());
+            data.setProduct(product);
 
-            OutOrder.setPic(product.getAdvPic());
+            data.setPic(product.getAdvPic());
         }
         page.setList(list);
         return page;
@@ -609,29 +608,33 @@ public class OutOrderAOImpl implements IOutOrderAO {
         condition.setLevelList(levelList);
 
         List<OutOrder> list = outOrderBO.queryOutOrderList(condition);
-        for (OutOrder outOrder : list) {
+        for (OutOrder data : list) {
             // 下单人
-            Agent agent = agentBO.getAgent(outOrder.getApplyUser());
-            outOrder.setAgent(agent);
+            if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setAgent(agent);
+            }
 
             // 产品信息
-            Product product = productBO.getProduct(outOrder.getProductCode());
-            outOrder.setProduct(product);
+            Product product = productBO.getProduct(data.getProductCode());
+            data.setProduct(product);
         }
         return list;
     }
 
     @Override
     public OutOrder getOutOrder(String code) {
-        OutOrder OutOrder = outOrderBO.getOutOrder(code);
+        OutOrder data = outOrderBO.getOutOrder(code);
         // 下单人
-        Agent agent = agentBO.getAgent(OutOrder.getApplyUser());
-        OutOrder.setAgent(agent);
+        if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            data.setAgent(agent);
+        }
 
         // 产品信息
-        Product product = productBO.getProduct(OutOrder.getProductCode());
-        OutOrder.setProduct(product);
-        return OutOrder;
+        Product product = productBO.getProduct(data.getProductCode());
+        data.setProduct(product);
+        return data;
     }
 
     @Override
@@ -919,15 +922,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
         OutOrder data = outOrderBO.getOutOrder(code);
 
         // 订单已申请取消或已取消
-        if (EOutOrderStatus.TO_RECEIVE.getCode().equals(data.getStatus())
-                || EOutOrderStatus.RECEIVED.getCode()
-                    .equals(data.getStatus())) {
+        if (EOutOrderStatus.TO_CANECL.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已申请取消喽，请勿重复申请！");
         }
         // 非待支付和待审单的订单无法取消
-        if (EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
-                || EOutOrderStatus.TO_APPROVE.getCode()
-                    .equals(data.getStatus())) {
+        if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已发货或已收货，无法申请取消");
         }
 

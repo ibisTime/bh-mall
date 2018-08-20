@@ -16,6 +16,7 @@ import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.ISYSConfigBO;
@@ -26,12 +27,14 @@ import com.bh.mall.common.SysConstant;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.CUser;
 import com.bh.mall.domain.CallbackResult;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
+import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.ESysConfigType;
 import com.bh.mall.enums.ESystemCode;
@@ -72,6 +75,9 @@ public class WeChatAOImpl implements IWeChatAO {
     @Autowired
     IAgentLevelBO agentLevelBO;
 
+    @Autowired
+    ICUserBO cuserBO;
+
     @Override
     @Transactional
     public XN627462Res toPrepayIdH5(String applyUser, String accountNumber,
@@ -90,25 +96,40 @@ public class WeChatAOImpl implements IWeChatAO {
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
             refNo, EBizType.getBizType(bizType), bizNote, transAmount,
             EChannelType.WeChat_H5, applyUser, agent.getLevel());
-        return this.getPrepayIdH5(applyUser, accountNumber, payGroup,
-            chargeOrderCode, bizType, bizNote, transAmount, backUrl,
-            EChannelType.WeChat_H5.getCode());
+        return this.getPrepayIdH5(applyUser, payGroup, chargeOrderCode, bizType,
+            bizNote, transAmount, backUrl, EChannelType.WeChat_H5.getCode());
     }
 
     @Override
     @Transactional
-    public XN627462Res getPrepayIdH5(String applyUser, String accountNumber,
-            String payGroup, String refNo, String bizType, String bizNote,
-            Long transAmount, String backUrl, String payType) {
-        Agent agent = agentBO.getAgent(applyUser);
+    public XN627462Res getPrepayIdH5(String applyUser, String payGroup,
+            String refNo, String bizType, String bizNote, Long transAmount,
+            String backUrl, String payType) {
+
+        String openId = null;
+        if (EChannelType.WeChat_XCX.getCode().equals(payType)) {
+            CUser cuser = cuserBO.getUser(applyUser);
+            openId = cuser.getH5OpenId();
+        } else {
+            Agent agent = agentBO.getAgent(applyUser);
+            openId = agent.getH5OpenId();
+        }
 
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
         }
-        String openId = agent.getH5OpenId();
+
         if (StringUtils.isBlank(openId)) {
             throw new BizException("xn0000", "请先微信登录再支付");
         }
+
+        if (EChannelType.WeChat_XCX.getCode().equals(payType)) {
+            payType = EConfigType.WEIXIN_XCX.getCode();
+
+        } else if (EChannelType.WeChat_H5.getCode().equals(payType)) {
+            payType = EConfigType.WEIXIN_H5.getCode();
+        }
+
         Map<String, String> sysConfig = sysConfigBO.getConfigsMap(payType);
         // 获取微信公众号支付prepayid
         String prepayId = weChatBO.getPrepayIdH5(sysConfig, openId, bizNote,

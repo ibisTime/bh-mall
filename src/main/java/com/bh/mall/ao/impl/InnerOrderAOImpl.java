@@ -165,9 +165,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         Agent agent = agentBO.getAgent(order.getApplyUser());
         String payGroup = innerOrderBO.addPayGroup(order,
             EBoolean.YES.getCode());
-        return weChatAO.getPrepayIdH5(agent.getUserId(),
-            ESystemCode.BH.getCode(), payGroup, order.getCode(),
-            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
+        return weChatAO.getPrepayIdH5(agent.getUserId(), payGroup,
+            order.getCode(), EBizType.AJ_GMCP.getCode(),
+            EBizType.AJ_GMCP.getValue(), rmbAmount,
             PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
             EChannelType.WeChat_H5.getCode());
     }

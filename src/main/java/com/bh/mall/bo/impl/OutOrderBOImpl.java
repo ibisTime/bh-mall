@@ -63,6 +63,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setApplyNote(applyNote);
         data.setStatus(status);
         data.setKind(kind);
+        data.setSigner(signer);
+        data.setProvince(province);
+
+        data.setCity(city);
+        data.setArea(area);
+        data.setAddress(address);
         outOrderDAO.insert(data);
         return code;
     }

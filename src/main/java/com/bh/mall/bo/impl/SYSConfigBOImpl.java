@@ -100,9 +100,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
                 map.put(sysConfig.getCkey(), sysConfig.getCvalue());
             }
         }
-
         return map;
-
     }
-
 }

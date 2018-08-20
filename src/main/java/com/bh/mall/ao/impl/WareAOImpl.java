@@ -20,6 +20,7 @@ import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
@@ -89,6 +90,9 @@ public class WareAOImpl implements IWareAO {
 
     @Autowired
     IChargeBO chargeBO;
+
+    @Autowired
+    ISjFormBO sjFormBO;
 
     // 分页查询
     @Override
@@ -249,28 +253,27 @@ public class WareAOImpl implements IWareAO {
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
 
         // 是否完成授权单
-        Long amount = data.getPrice()
+        Long allAmount = data.getPrice()
                 * StringValidater.toInteger(req.getQuantity());
 
-        // if (inOrderBO.checkImpowerOrder(agent.getUserId(),
-        // agent.getImpowerDatetime())) {
-        // if (agentLevel.getAmount() > amount) {
-        // throw new BizException("xn00000", agentLevel.getName()
-        // + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
-        // } else {
-        // kind = EOrderKind.Impower_Order.getCode();
-        // }
-        //
-        // } else {
-        // kind = EOrderKind.Pick_Up.getCode();
-        // }
+        if (outOrderBO.checkImpowerOrder(agent.getUserId(),
+            agent.getImpowerDatetime())) {
+            if (agentLevel.getAmount() > allAmount) {
+                throw new BizException("xn00000", agentLevel.getName()
+                        + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
+            }
+            kind = EOutOrderKind.Impower_Order.getCode();
 
-        // 是否完成升级单
-        // if (EUserStatus.UPGRADED.getCode().equals(user.getStatus())) {
-        // if (!orderBO.checkUpgradeOrder(user.getUserId())) {
-        // kind = EOrderKind.Upgrade_Order.getCode();
-        // }
-        // }
+            // 是否完成升级单
+        } else if (sjFormBO.checkIsSj(agent.getUserId())) {
+
+            kind = EOutOrderKind.Upgrade_Order.getCode();
+            if (agentLevel.getAmount() > allAmount) {
+                throw new BizException("xn00000", agentLevel.getName()
+                        + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
+            }
+
+        }
 
         // 产品不包邮，计算运费
         Long yunfei = 0L;
@@ -282,11 +285,17 @@ public class WareAOImpl implements IWareAO {
 
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
-
             int singleNumber = StringValidater.toInteger(req.getQuantity())
                     / psData.getSingleNumber();
 
+            Long amount = 0L;
             for (int i = 0; i < singleNumber; i++) {
+
+                // 防止多出的订单为授权单或升级单
+                if (amount > agentLevel.getAmount()) {
+                    kind = EOutOrderKind.Pick_Up.getCode();
+                }
+                amount = amount + psData.getSingleNumber() * data.getPrice();
 
                 String code = inOrderBO.pickUpGoods(data.getProductCode(),
                     data.getProductName(), product.getPic(),

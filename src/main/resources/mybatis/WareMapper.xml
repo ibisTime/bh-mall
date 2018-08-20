@@ -41,9 +41,6 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<if test="status != null and status != '' ">
-				AND p.status = #{status}
-			</if>
 		</trim>
 	</sql>
 	

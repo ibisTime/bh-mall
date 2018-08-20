@@ -309,12 +309,10 @@ public class InOrderAOImpl implements IInOrderAO {
         Agent agent = agentBO.getAgent(data.getApplyUser());
         String payGroup = inOrderBO.addPayGroup(data);
         agentBO.getAgent(data.getToUserId());
-        Account account = accountBO.getAccountByUser(data.getToUserId(),
-            ECurrency.YJ_CNY.getCode());
-        return weChatAO.getPrepayIdH5(agent.getUserId(),
-            account.getAccountNumber(), payGroup, data.getCode(),
-            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), rmbAmount,
-            callBackUrl, data.getPayType());
+        return weChatAO.getPrepayIdH5(agent.getUserId(), payGroup,
+            data.getCode(), EBizType.AJ_GMCP.getCode(),
+            EBizType.AJ_GMCP.getValue(), rmbAmount, callBackUrl,
+            data.getPayType());
     }
 
     @Override
