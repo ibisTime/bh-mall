@@ -264,8 +264,11 @@ public class SjFormAOImpl implements ISjFormAO {
 
         Agent agent = agentBO.getAgent(userId);
         SYSUser sysUser = sysUserBO.getSYSUser(approver);
-        sjFormBO.approveSjForm(sjForm, agent, sysUser.getUserId(),
-            sysUser.getRealName(), remark, status);
+        String logCode = sjFormBO.approveSjForm(sjForm, agent,
+            sysUser.getUserId(), sysUser.getRealName(), remark, status);
+
+        agentBO.refreshSj(agent, sjForm, sysUser.getUserId(),
+            sysUser.getRealName(), remark, status, logCode);
     }
 
     @Override

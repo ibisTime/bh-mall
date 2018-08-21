@@ -41,6 +41,7 @@ import com.bh.mall.dto.req.XN627271Req;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentLogType;
+import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -534,6 +535,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         String logCode = sqFormBO.cancelSqForm(sqForm, status);
+        agent.setStatus(EAgentStatus.CANCELED.getCode());
         agentBO.refreshLog(agent, logCode);
     }
 
