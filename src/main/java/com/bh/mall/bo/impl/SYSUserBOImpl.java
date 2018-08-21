@@ -118,7 +118,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn0000", "系统用户不存在");
         }
-        return list.get(0);
+        return list.get(list.size() - 1);
 
     }
 

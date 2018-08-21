@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 内购订单分页
  * @author: nyc 
@@ -18,6 +20,9 @@ public class XN627731Req extends APageReq {
 
     // 下单人
     private String applyUser;
+
+    // 订单状态
+    private List<String> statusList;
 
     public String getStatus() {
         return status;
@@ -41,6 +46,14 @@ public class XN627731Req extends APageReq {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

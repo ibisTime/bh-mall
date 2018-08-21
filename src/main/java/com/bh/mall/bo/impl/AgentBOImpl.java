@@ -361,7 +361,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshYx(Agent data, String status, String approver,
             String approveName, String logCode) {
         if (StringUtils.isNotBlank(status)) {
-            data.setStatus(EAgentStatus.IGNORED.getCode());
+            data.setStatus(status);
         }
 
         data.setApproveDatetime(new Date());

@@ -17,6 +17,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IInnerProductBO;
+import com.bh.mall.bo.IInnerSpecsBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
@@ -28,6 +29,7 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.InnerProduct;
+import com.bh.mall.domain.InnerSpecs;
 import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.req.XN627720Req;
@@ -57,6 +59,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     private IInnerProductBO innerProductBO;
 
     @Autowired
+    private IInnerSpecsBO innerSpecsBO;
+
+    @Autowired
     private IAccountBO accountBO;
 
     @Autowired
@@ -75,25 +80,30 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     public String addInnerOrder(XN627720Req req) {
         Agent user = agentBO.getAgent(req.getApplyUser());
 
+        InnerSpecs specs = innerSpecsBO.getInnerSpecs(req.getSpecsCode());
         InnerProduct innerProduct = innerProductBO
-            .getInnerProduct(req.getProductCode());
+            .getInnerProduct(specs.getInnerProductCode());
         if (!EInnerProductStatus.Shelf_YES.getCode()
             .equals(innerProduct.getStatus())) {
             throw new BizException("xn00000", "产品未上架，无法下单");
         }
         Integer quantity = StringValidater.toInteger(req.getQuantity());
-        if (innerProduct.getQuantity() < quantity) {
+
+        if (specs.getStockNumber() < quantity) {
             throw new BizException("xn0000", "产品库存不足");
         }
+
         InnerOrder data = new InnerOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.InnerOrder.getCode());
         data.setCode(code);
-        data.setProductCode(req.getProductCode());
-        data.setProductName(innerProduct.getProductName());
+        data.setProductCode(innerProduct.getCode());
+        data.setProductName(innerProduct.getName());
+
+        data.setSpecsCode(specs.getCode());
+        data.setSpecsName(specs.getName());
         data.setPic(innerProduct.getPic());
         data.setPrice(innerProduct.getPrice());
-
         data.setQuantity(quantity);
 
         Long amount = quantity * innerProduct.getPrice();
@@ -108,18 +118,17 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         }
 
         data.setAmount(amount);
-
         data.setApplyUser(req.getApplyUser());
         data.setLevel(user.getLevel());
         data.setTeamName(user.getTeamName());
-
         data.setApplyDatetime(new Date());
+
         data.setApplyNote(req.getApplyNote());
         data.setProvince(req.getProvince());
-
         data.setArea(req.getArea());
         data.setCity(req.getCity());
         data.setAddress(req.getAddress());
+
         data.setMobile(req.getMobile());
         data.setSigner(req.getSigner());
 

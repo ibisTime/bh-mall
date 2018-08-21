@@ -325,6 +325,7 @@ public class SqFormAOImpl implements ISqFormAO {
             // 未通过，清空手机号等信息，防止重新申请时重复
             Agent agent = agentBO.getAgent(userId);
             agentBO.resetInfo(agent);
+
         }
         // 记录日志
         SYSUser sysUser = sysUserBO.getSYSUser(approver);

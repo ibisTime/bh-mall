@@ -37,12 +37,11 @@ public class InnerProductAOImpl implements IInnerProductAO {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.InnerProduct.getCode());
         data.setCode(code);
-        data.setProductName(req.getName());
+        data.setName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
 
-        data.setPrice(StringValidater.toLong(req.getPrice()));
         data.setStatus(EInnerProductStatus.TO_Shelf.getCode());
         data.setUpdater(req.getUpdater());
         data.setCreateDatetime(new Date());
@@ -69,7 +68,7 @@ public class InnerProductAOImpl implements IInnerProductAO {
         if (EInnerProductStatus.Shelf_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "产品已上架,请下架后再修改");
         }
-        data.setProductName(req.getName());
+        data.setName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
@@ -124,17 +123,35 @@ public class InnerProductAOImpl implements IInnerProductAO {
     @Override
     public Paginable<InnerProduct> queryInnerProductPage(int start, int limit,
             InnerProduct condition) {
-        return innerProductBO.getPaginable(start, limit, condition);
+        Paginable<InnerProduct> page = innerProductBO.getPaginable(start, limit,
+            condition);
+        for (InnerProduct data : page.getList()) {
+            List<InnerSpecs> specsList = innerSpecsBO
+                .getInnerSpecsByProduct(data.getCode());
+            data.setSpecsList(specsList);
+        }
+        return page;
     }
 
     @Override
     public List<InnerProduct> queryInnerProductList(InnerProduct condition) {
-        return innerProductBO.queryInnerProductList(condition);
+        List<InnerProduct> list = innerProductBO
+            .queryInnerProductList(condition);
+        for (InnerProduct data : list) {
+            List<InnerSpecs> specsList = innerSpecsBO
+                .getInnerSpecsByProduct(data.getCode());
+            data.setSpecsList(specsList);
+        }
+        return list;
     }
 
     @Override
     public InnerProduct getInnerProduct(String code) {
-        return innerProductBO.getInnerProduct(code);
+        InnerProduct data = innerProductBO.getInnerProduct(code);
+        List<InnerSpecs> specsList = innerSpecsBO
+            .getInnerSpecsByProduct(data.getCode());
+        data.setSpecsList(specsList);
+        return data;
     }
 
     @Override

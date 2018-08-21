@@ -57,6 +57,7 @@
 		<typeAlias alias="innerSpecs" type="com.bh.mall.domain.InnerSpecs"/>
 		<typeAlias alias="productReport" type="com.bh.mall.domain.ProductReport"/>
 		<typeAlias alias="orderReport" type="com.bh.mall.domain.OrderReport"/>
+		<typeAlias alias="deliveOrder" type="com.bh.mall.domain.DeliveOrder"/>
 		
 	</typeAliases>
 </configuration>	

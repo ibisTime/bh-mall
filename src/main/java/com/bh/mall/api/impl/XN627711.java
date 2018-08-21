@@ -25,7 +25,7 @@ public class XN627711 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         InnerProduct condition = new InnerProduct();
-        condition.setProductName(req.getName());
+        condition.setName(req.getName());
         condition.setStatus(req.getStatus());
         return innerProductAO.queryInnerProductList(condition);
     }

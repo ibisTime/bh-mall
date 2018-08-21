@@ -9,7 +9,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @history:
  */
 public class XN627512Req {
-    @NotBlank
+
+    @NotBlank(message = "编号不能为空")
     private String code;
 
     public String getCode() {

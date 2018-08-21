@@ -20,6 +20,7 @@ import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.IWareBO;
@@ -33,6 +34,7 @@ import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.SYSConfig;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627815Req;
@@ -93,6 +95,9 @@ public class WareAOImpl implements IWareAO {
 
     @Autowired
     ISjFormBO sjFormBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     // 分页查询
     @Override
@@ -235,8 +240,6 @@ public class WareAOImpl implements IWareAO {
             agent.getLevel());
 
         // 检查限购
-        // inOrderAO.checkLimitNumber(agent, psData, pspData,
-        // StringValidater.toInteger(req.getQuantity()));
         if (pspData.getMinNumber() > data.getQuantity()) {
             throw new BizException("xn00000",
                 "该产品云仓提货不能少于" + pspData.getMinNumber() + psData.getName());
@@ -283,6 +286,11 @@ public class WareAOImpl implements IWareAO {
             yunfei = StringValidater.toLong(sysConfig.getCvalue());
         }
 
+        // 获取团队长
+        Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
+        // 订单归属人
+        SYSUser sysUser = sysUserBO.getSYSUser();
+
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
             int singleNumber = StringValidater.toInteger(req.getQuantity())
@@ -296,13 +304,13 @@ public class WareAOImpl implements IWareAO {
                     kind = EOutOrderKind.Pick_Up.getCode();
                 }
                 amount = amount + psData.getSingleNumber() * data.getPrice();
-
-                String code = inOrderBO.pickUpGoods(data.getProductCode(),
+                String code = outOrderBO.pickUpGoods(data.getProductCode(),
                     data.getProductName(), product.getPic(),
                     data.getSpecsCode(), data.getSpecsName(),
                     psData.getSingleNumber(), data.getPrice(),
                     psData.getSingleNumber() * data.getPrice(), yunfei,
-                    agent.getHighUserId(), data.getUserId(), req.getSigner(),
+                    agent.getHighUserId(), agent, teamLeader.getRealName(),
+                    sysUser.getUserId(), sysUser.getRealName(), req.getSigner(),
                     req.getMobile(), req.getProvince(), req.getCity(),
                     req.getArea(), req.getAddress(), kind);
 
@@ -312,12 +320,13 @@ public class WareAOImpl implements IWareAO {
                     EBizType.AJ_YCTH, EBizType.AJ_YCTH.getValue(), code);
             }
         } else {
-            String code = inOrderBO.pickUpGoods(data.getProductCode(),
+            String code = outOrderBO.pickUpGoods(data.getProductCode(),
                 data.getProductName(), product.getPic(), data.getSpecsCode(),
                 data.getSpecsName(),
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),
                 psData.getSingleNumber() * data.getPrice(), yunfei,
-                agent.getHighUserId(), data.getUserId(), req.getSigner(),
+                agent.getHighUserId(), agent, teamLeader.getRealName(),
+                sysUser.getUserId(), sysUser.getRealName(), req.getSigner(),
                 req.getMobile(), req.getProvince(), req.getCity(),
                 req.getArea(), req.getAddress(), kind);
             // 减少云仓库存

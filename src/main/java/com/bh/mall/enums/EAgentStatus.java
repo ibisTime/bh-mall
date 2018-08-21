@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum EAgentStatus {
 
-    MIND("0", "有意向"), IGNORED("2", "已忽略"), IMPOWERO_INFO("4",
+    MIND("0", "有意向"), IGNORED("3", "已忽略"), IMPOWERO_INFO("4",
             "待填写授权资料"), ADD_INFO("5", "补充授权资料"), TO_APPROVE("6", "待上级授权"),
 
     COMPANY_IMPOWER("7", "待公司授权"), IMPOWERED("8", "已授权"), CANCELED("9",

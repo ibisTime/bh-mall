@@ -47,6 +47,7 @@ public class YxFormDAOImpl extends AMybatisTemplate implements IYxFormDAO {
 
     @Override
     public void updateStatus(YxForm data) {
+        super.update(NAMESPACE.concat("update_status"), data);
     }
 
     @Override

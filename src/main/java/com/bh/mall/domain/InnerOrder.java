@@ -23,6 +23,12 @@ public class InnerOrder extends ABaseDO {
     // 产品名称
     private String productName;
 
+    // 产品编号
+    private String specsCode;
+
+    // 产品名称
+    private String specsName;
+
     // 缩略图
     private String pic;
 
@@ -34,6 +40,9 @@ public class InnerOrder extends ABaseDO {
 
     // 下单代理
     private String applyUser;
+
+    // 真实姓名
+    private String realName;
 
     // 下单代理等级
     private Integer level;
@@ -131,9 +140,6 @@ public class InnerOrder extends ABaseDO {
     // 状态查询
     private String statusForQuery;
 
-    // 真实姓名
-    private String realName;
-
     // 审核人姓名
     private String approveName;
 
@@ -145,6 +151,9 @@ public class InnerOrder extends ABaseDO {
 
     // 申请人姓名
     private String applyName;
+
+    // 状态
+    private String statusList;
 
     public String getStatusForQuery() {
         return statusForQuery;
@@ -496,6 +505,30 @@ public class InnerOrder extends ABaseDO {
 
     public void setApproveNote(String approveNote) {
         this.approveNote = approveNote;
+    }
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
+    }
+
+    public String getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(String statusList) {
+        this.statusList = statusList;
     }
 
 }

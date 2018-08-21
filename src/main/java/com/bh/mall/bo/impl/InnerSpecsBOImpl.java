@@ -45,17 +45,17 @@ public class InnerSpecsBOImpl extends PaginableBOImpl<InnerSpecs>
             InnerSpecs condition = new InnerSpecs();
             condition.setCode(code);
             data = innerSpecsDAO.select(condition);
-            if (null != data) {
+            if (null == data) {
                 throw new BizException("xn00000", "产品规格不存在");
             }
         }
-        return null;
+        return data;
     }
 
     @Override
-    public List<InnerSpecs> getInnerSpecsByProduct(String code) {
+    public List<InnerSpecs> getInnerSpecsByProduct(String innerProductCode) {
         InnerSpecs condition = new InnerSpecs();
-        condition.setCode(code);
+        condition.setInnerProductCode(innerProductCode);
         return innerSpecsDAO.selectList(condition);
     }
 

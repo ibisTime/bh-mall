@@ -39,6 +39,7 @@ import com.bh.mall.common.WechatConstant;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.res.XN627303Res;
@@ -221,7 +222,6 @@ public class AgentAOImpl implements IAgentAO {
                 result = new XN627303Res(result.getUserId(), result.getStatus(),
                     subscribe);
             }
-            // result.setSubscribe(subscribe);
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
         }
@@ -564,8 +564,10 @@ public class AgentAOImpl implements IAgentAO {
         }
 
         // 管理员
-        SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
-        data.setManageName(sysUser.getRealName());
+        if (StringUtils.isNotBlank(data.getManager())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+            data.setManageName(sysUser.getRealName());
+        }
 
         // 云仓余额
         List<Ware> wareList = wareBO.getWareByUser(data.getUserId());
@@ -574,6 +576,11 @@ public class AgentAOImpl implements IAgentAO {
             amount = amount + ware.getAmount();
         }
         data.setWareAmount(amount);
+
+        // 代理轨迹
+        List<AgentLog> logList = agentLogBO
+            .getAgentLogByAgent(data.getUserId());
+        data.setLogList(logList);
         return data;
     }
 

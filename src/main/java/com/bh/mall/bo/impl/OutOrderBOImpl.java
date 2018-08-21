@@ -14,6 +14,7 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOutOrderDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
@@ -243,9 +244,9 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     public String pickUpGoods(String productCode, String productName,
             String pic, String productSpecsCode, String productSpecsName,
             Integer singleNumber, Long price, Long amount, Long yunfei,
-            String highUserId, String userId, String signer, String mobile,
-            String province, String city, String area, String address,
-            String kind) {
+            String highUserId, Agent agent, String teamLeader, String toUserId,
+            String toUserName, String signer, String mobile, String province,
+            String city, String area, String address, String kind) {
         OutOrder data = new OutOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
@@ -260,12 +261,17 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setQuantity(singleNumber);
         data.setPrice(price);
 
-        // data.setToUser(toUser.getUserId());
+        data.setToUserId(toUserId);
+        data.setToUserName(toUserName);
+
         data.setYunfei(yunfei);
         data.setAmount(amount + yunfei);
-        data.setApplyUser(userId);
-        data.setApplyDatetime(new Date());
+        data.setApplyUser(agent.getUserId());
+        data.setRealName(agent.getRealName());
+        data.setTeamName(agent.getTeamName());
+        data.setTeamLeader(teamLeader);
 
+        data.setApplyDatetime(new Date());
         data.setSigner(signer);
         data.setMobile(mobile);
         data.setProvince(province);

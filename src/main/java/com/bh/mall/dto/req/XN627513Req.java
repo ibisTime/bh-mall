@@ -10,6 +10,9 @@ public class XN627513Req extends APageReq {
 
     private static final long serialVersionUID = -2015437210978527476L;
 
+    // 取现编号
+    private String code;
+
     // 支付渠道
     private String channelType;
 
@@ -36,6 +39,14 @@ public class XN627513Req extends APageReq {
 
     // 针对用户编号
     private String userId;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getApplyDateStart() {
         return applyDateStart;

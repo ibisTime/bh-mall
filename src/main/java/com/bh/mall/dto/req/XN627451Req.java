@@ -12,6 +12,9 @@ public class XN627451Req extends AListReq {
     // 户名
     private String realName;
 
+    // 用户
+    private String userId;
+
     // 类别（B端账号，C端账号，P平台账号）
     private String type;
 
@@ -62,6 +65,14 @@ public class XN627451Req extends AListReq {
 
     public void setLastOrder(String lastOrder) {
         this.lastOrder = lastOrder;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

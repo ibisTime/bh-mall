@@ -40,8 +40,7 @@ public class YxFormAOImpl implements IYxFormAO {
     private ISYSUserBO sysUserBO;
 
     /**
-    * 申请意向代理
-    * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+    * 申请意向代理(无头的代理)
     */
     @Override
     @Transactional
@@ -82,8 +81,8 @@ public class YxFormAOImpl implements IYxFormAO {
     }
 
     /**
-     * 平台分配意向代理
-     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
+     * 平台分配意向代理，向下分配给其他代理
+     * 
      */
     @Override
     public void allotYxFormByP(String userId, String toUserId, String approver,
@@ -107,7 +106,6 @@ public class YxFormAOImpl implements IYxFormAO {
 
     /**
      * 代理分配意向代理
-     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
      */
     @Override
     public void allotYxFormByB(String userId, String toUserId, String approver,
@@ -129,7 +127,6 @@ public class YxFormAOImpl implements IYxFormAO {
 
     /**
      * 平台忽略意向代理
-     * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
      */
     @Override
     public void ignoreYxFormByP(String userId, String approver, String remark) {
@@ -140,7 +137,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshYx(agent, EAgentStatus.IGNORED.getCode(),
+        agentBO.refreshYx(agent, EAgentStatus.MIND.getCode(),
             sysUser.getUserId(), sysUser.getRealName(), logCode);
 
     }
@@ -158,8 +155,8 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshYx(agent, EAgentStatus.IGNORED.getCode(),
-            agent.getUserId(), agent.getRealName(), logCode);
+        agentBO.refreshYx(agent, EAgentStatus.MIND.getCode(), agent.getUserId(),
+            agent.getRealName(), logCode);
     }
 
     /**
@@ -170,7 +167,7 @@ public class YxFormAOImpl implements IYxFormAO {
     public void acceptYxFormByP(String userId, String approver, String remark) {
 
         YxForm yxForm = yxFormBO.getYxForm(userId);
-        SYSUser sysUser = sysUserBO.getSYSUser(approver);
+        SYSUser sysUser = sysUserBO.getSYSUser();
         String logCode = yxFormBO.acceptYxForm(yxForm, sysUser.getUserId(),
             sysUser.getRealName(), remark);
 

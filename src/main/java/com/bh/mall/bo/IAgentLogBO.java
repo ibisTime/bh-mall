@@ -35,4 +35,7 @@ public interface IAgentLogBO extends IPaginableBO<AgentLog> {
     // 修改代理
     public String refreshAgent(Agent data);
 
+    // 根据代理
+    public List<AgentLog> getAgentLogByAgent(String userId);
+
 }

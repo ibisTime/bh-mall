@@ -27,7 +27,7 @@ public class AgentPrice extends ABaseDO {
     // 换货价
     private Long changePrice;
 
-    // 本等级云仓最低发货数量
+    // 云仓最低发货数量
     private Integer minNumber;
 
     // 起购数量

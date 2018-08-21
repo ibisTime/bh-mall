@@ -9,7 +9,6 @@
 		<result column="single_number" property="singleNumber"/>
 		<result column="ref_code" property="refCode"/>
 		
-		
 		<result column="name" property="name"/>
 		<result column="number" property="number"/>
 		<result column="stock_number" property="stockNumber"/>
@@ -21,14 +20,11 @@
 			<if test="code != null and code != ''">
 				AND t.code = #{code}
 			</if>
-			<if test="productCode != null and productCode != ''">
-				AND t.product_code = #{productCode}
+			<if test="innerProductCode != null and innerProductCode != ''">
+				AND t.inner_product_code = #{innerProductCode}
 			</if>
 			<if test="name != null and name != ''">
 				AND t.name like "%"#{name}"%"
-			</if>
-			<if test="isNormalOrder != null and isNormalOrder !=''">
-				AND t.is_normal_order  = #{isNormalOrder}
 			</if>
 			<if test="singleNumber != null and singleNumber !=''">
 				AND t.single_number  = #{singleNumber}

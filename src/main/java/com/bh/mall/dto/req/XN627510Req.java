@@ -10,6 +10,9 @@ public class XN627510Req extends APageReq {
 
     private static final long serialVersionUID = -2015437210978527476L;
 
+    // 取现编号
+    private String code;
+
     // 针对账号
     private String accountNumber;
 
@@ -62,6 +65,14 @@ public class XN627510Req extends APageReq {
 
     // 针对用户编号
     private String userId;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getType() {
         return type;

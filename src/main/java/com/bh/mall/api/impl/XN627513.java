@@ -47,6 +47,7 @@ public class XN627513 extends AProcessor {
             } catch (Exception e) {
             }
         }
+        condition.setCode(req.getCode());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getUserId());
 

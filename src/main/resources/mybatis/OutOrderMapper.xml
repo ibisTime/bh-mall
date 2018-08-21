@@ -5,7 +5,7 @@
 <mapper namespace="com.bh.mall.dao.IOutOrderDAO">
 	<resultMap id="order_DB_Result" type="outOrder">
 		<result column="code" property="code" />
-		<result column="is_company_send" property="isCompanySend" />
+		<result column="is_ware_send" property="isWareSend" />
 		<result column="kind" property="kind" />
 		<result column="product_code" property="productCode" />
 		
@@ -119,7 +119,7 @@
 	<select id="select_outOrder" parameterType="outOrder" resultMap="order_DB_Result">
 		SELECT
 		t.code
-		,t.is_company_send
+		,t.is_ware_send
 		,t.kind
 		,t.product_code
 		
@@ -191,7 +191,7 @@
 		INSERT INTO
 		tbh_out_order(
 		code
-		,is_company_send
+		,is_ware_send
 		,kind
 		,product_code
 		,product_name
@@ -224,7 +224,7 @@
 		)
 		VALUES(
 		#{code}
-		,#{isCompanySend}
+		,#{isWareSend}
 		,#{kind}
 		,#{productCode}
 		,#{productName}
@@ -295,7 +295,7 @@
 		
 		
 		,pro_code = #{proCode}
-		,is_company_send = #{isCompanySend}
+		,is_ware_send = #{isWareSend}
 		,status = #{status}
 		,remark = #{remark}
 		WHERE code = #{code}

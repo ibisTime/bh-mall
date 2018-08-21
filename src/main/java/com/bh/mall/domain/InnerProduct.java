@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -21,7 +22,7 @@ public class InnerProduct extends ABaseDO {
     private String isFree;
 
     // 产品名称
-    private String productName;
+    private String name;
 
     // 缩略图
     private String pic;
@@ -56,6 +57,10 @@ public class InnerProduct extends ABaseDO {
     // 备注
     private String remark;
 
+    // *************db*************
+    // 规格
+    private List<InnerSpecs> specsList;
+
     public String getCode() {
         return code;
     }
@@ -64,12 +69,12 @@ public class InnerProduct extends ABaseDO {
         this.code = code;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPic() {
@@ -166,6 +171,14 @@ public class InnerProduct extends ABaseDO {
 
     public void setIsFree(String isFree) {
         this.isFree = isFree;
+    }
+
+    public List<InnerSpecs> getSpecsList() {
+        return specsList;
+    }
+
+    public void setSpecsList(List<InnerSpecs> specsList) {
+        this.specsList = specsList;
     }
 
 }

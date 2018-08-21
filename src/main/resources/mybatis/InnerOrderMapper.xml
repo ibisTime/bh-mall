@@ -6,6 +6,8 @@
 		<result column="code" property="code" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
 		<result column="pic" property="pic" />
 		<result column="quantity" property="quantity" />
 		
@@ -52,11 +54,17 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="specsCode != null and specsCode != '' ">
+				AND t.specs_code = #{specsCode}
+			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
-			<if test="applyName != null and applyName != '' ">
-				AND t.apply_user like "%"${applyName}
+			<if test="realName != null and realName != '' ">
+				AND t.real_name like "%"${realName}
 			</if>
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name like  "%"${teamName}"%"
@@ -64,12 +72,17 @@
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
-			<if test="statusForQuery != null and statusForQuery != '' ">
-				AND t.status IN (1,2,3,5)
-			</if>
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList != '' ">
+					AND t.status IN
+					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
 			</if>
@@ -83,10 +96,13 @@
 		t.code
 		,t.product_code
 		,t.product_name
+		,t.specs_code
+		,t.specs_name
 		,t.pic
 		,t.quantity
 		,t.price
 		,t.apply_user
+		,t.real_name
 		,t.level
 		,t.team_name
 		,t.apply_note
@@ -135,10 +151,13 @@
 		code
 		,product_code
 		,product_name
+		,specs_code
+		,specs_name
 		,pic
 		,quantity
 		,price
 		,apply_user
+		,real_name
 		,level
 		,team_name
 		,apply_note
@@ -163,10 +182,13 @@
 		#{code}
 		,#{productCode}
 		,#{productName}
+		,#{specsCode}
+		,#{specsName}
 		,#{pic}
 		,#{quantity}
 		,#{price}
 		,#{applyUser}
+		,#{realName}
 		,#{level}
 		,#{teamName}
 		,#{applyNote}

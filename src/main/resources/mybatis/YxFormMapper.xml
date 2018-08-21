@@ -34,6 +34,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="applyLevel != null and applyLevel != '' ">
+				AND t.apply_level = #{applyLevel}
+			</if>
 			
 			<if test="toUserId != null and toUserId != '' ">
 				AND t.to_user_id = #{toUserId}
@@ -174,7 +177,7 @@
 	<update id="update_status" parameterType="yxForm">
 		UPDATE tbh_yx_form
 		SET
-		status = status = #{status}	
+		status =  #{status}	
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,remark=#{remark}

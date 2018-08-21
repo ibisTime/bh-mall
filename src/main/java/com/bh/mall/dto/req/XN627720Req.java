@@ -10,9 +10,9 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN627720Req {
 
-    // （必填）产品编号
-    @NotBlank(message = "产品编号不能为空")
-    private String productCode;
+    // （必填）规格编号
+    @NotBlank(message = "规格编号不能为空")
+    private String specsCode;
 
     // （必填）数量
     @NotBlank(message = "数量不能为空")
@@ -49,12 +49,12 @@ public class XN627720Req {
     // （选填）下单备注
     private String applyNote;
 
-    public String getProductCode() {
-        return productCode;
+    public String getSpecsCode() {
+        return specsCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
     public String getQuantity() {

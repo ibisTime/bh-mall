@@ -177,6 +177,9 @@ public class Agent extends ABaseDO {
     // 管理员名称
     private String manageName;
 
+    // 轨迹列表
+    private List<AgentLog> logList;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -626,6 +629,14 @@ public class Agent extends ABaseDO {
 
     public void setWareAmount(Long wareAmount) {
         this.wareAmount = wareAmount;
+    }
+
+    public List<AgentLog> getLogList() {
+        return logList;
+    }
+
+    public void setLogList(List<AgentLog> logList) {
+        this.logList = logList;
     }
 
 }

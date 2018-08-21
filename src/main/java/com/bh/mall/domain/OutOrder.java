@@ -19,8 +19,8 @@ public class OutOrder extends ABaseDO {
     // 编号
     private String code;
 
-    // 是否公司发货
-    private String isCompanySend;
+    // 是否云仓
+    private String isWareSend;
 
     // 分类
     private String kind;
@@ -233,8 +233,8 @@ public class OutOrder extends ABaseDO {
         return code;
     }
 
-    public void setIsCompanySend(String isCompanySend) {
-        this.isCompanySend = isCompanySend;
+    public void setIsWareSend(String isWareSend) {
+        this.isWareSend = isWareSend;
     }
 
     public Agent getAgent() {
@@ -245,8 +245,8 @@ public class OutOrder extends ABaseDO {
         this.agent = agent;
     }
 
-    public String getIsCompanySend() {
-        return isCompanySend;
+    public String getIsWareSend() {
+        return isWareSend;
     }
 
     public void setKind(String kind) {

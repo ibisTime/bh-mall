@@ -8,7 +8,6 @@ import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.domain.Account;
 import com.bh.mall.dto.req.XN627451Req;
-import com.bh.mall.enums.EAccountType;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -33,11 +32,7 @@ public class XN627451 extends AProcessor {
     public Object doBusiness() throws BizException {
         Account condition = new Account();
         condition.setRealName(req.getRealName());
-        if (StringUtils.isBlank(req.getType())) {
-            condition.setType(EAccountType.AllAccount.getCode());
-        } else {
-            condition.setType(req.getType());
-        }
+        condition.setUserId(req.getUserId());
         condition.setStatus(req.getStatus());
         condition.setCurrency(req.getCurrency());
 

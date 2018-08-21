@@ -58,6 +58,7 @@ public class XN627540Req {
     private List<XN627546Req> specList;
 
     // （必填） 奖励List
+    @NotEmpty(message = "奖励不能为空")
     private List<XN627548Req> awardList;
 
     // （选填）备注

@@ -25,6 +25,7 @@ import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ICUserBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IChAwardBO;
+import com.bh.mall.bo.IDeliveOrderBO;
 import com.bh.mall.bo.IMiniCodeBO;
 import com.bh.mall.bo.IOrderReportBO;
 import com.bh.mall.bo.IOutOrderBO;
@@ -156,6 +157,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     @Autowired
     IOrderReportBO orderReportBO;
+
+    @Autowired
+    IDeliveOrderBO deliveOrderBO;
 
     @Override
     @Transactional
@@ -573,18 +577,19 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         Paginable<OutOrder> page = outOrderBO.getPaginable(start, limit,
             condition);
-        List<OutOrder> list = page.getList();
-        for (OutOrder data : list) {
+        for (OutOrder data : page.getList()) {
             // 下单人
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
-                Agent agent = agentBO.getAgent(data.getApplyUser());
-                data.setAgent(agent);
-            } else if (agentBO.isHighest(data.getApplyUser())) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
-                data.setHighUserName(sysUser.getRealName());
-            } else {
-                Agent agent = agentBO.getAgent(data.getApplyUser());
-                data.setHighUserName(agent.getRealName());
+                if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                    .getLevel()) {
+                    SYSUser sysUser = sysUserBO
+                        .getSYSUser(data.getHighUserId());
+                    data.setHighUserName(sysUser.getRealName());
+                } else {
+                    Agent agent = agentBO.getAgent(data.getApplyUser());
+                    data.setAgent(agent);
+                    data.setHighUserName(agent.getRealName());
+                }
             }
 
             // 产品信息
@@ -593,7 +598,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             data.setPic(product.getAdvPic());
         }
-        page.setList(list);
         return page;
     }
 
@@ -616,15 +620,16 @@ public class OutOrderAOImpl implements IOutOrderAO {
         List<OutOrder> list = outOrderBO.queryOutOrderList(condition);
         for (OutOrder data : list) {
             // 下单人
+
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
-                Agent agent = agentBO.getAgent(data.getApplyUser());
-                data.setAgent(agent);
-            } else if (agentBO.isHighest(data.getApplyUser())) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
-                data.setHighUserName(sysUser.getRealName());
-            } else {
-                Agent agent = agentBO.getAgent(data.getApplyUser());
-                data.setHighUserName(agent.getRealName());
+                if (agentBO.isHighest(data.getApplyUser())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+                    data.setHighUserName(sysUser.getRealName());
+                } else {
+                    Agent agent = agentBO.getAgent(data.getApplyUser());
+                    data.setAgent(agent);
+                    data.setHighUserName(agent.getRealName());
+                }
             }
 
             // 产品信息
@@ -638,15 +643,16 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public OutOrder getOutOrder(String code) {
         OutOrder data = outOrderBO.getOutOrder(code);
         // 下单人
+
         if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
-            Agent agent = agentBO.getAgent(data.getApplyUser());
-            data.setAgent(agent);
-        } else if (agentBO.isHighest(data.getApplyUser())) {
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
-            data.setHighUserName(sysUser.getRealName());
-        } else {
-            Agent agent = agentBO.getAgent(data.getApplyUser());
-            data.setHighUserName(agent.getRealName());
+            if (agentBO.isHighest(data.getApplyUser())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+                data.setHighUserName(sysUser.getRealName());
+            } else {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setAgent(agent);
+                data.setHighUserName(agent.getRealName());
+            }
         }
 
         // 产品信息
@@ -858,7 +864,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         data.setLogisticsCode(req.getLogisticsCode());
         data.setLogisticsCompany(req.getLogisticsCompany());
 
-        data.setIsCompanySend(req.getIsCompanySend());
+        data.setIsWareSend(req.getIsCompanySend());
         data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
         data.setRemark(req.getRemark());
 
@@ -931,6 +937,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
             data.setApproveDatetime(new Date());
             data.setApproveNote(approveNote);
             outOrderBO.approveOutOrder(data);
+
+            // 添加至发货的字段
+            deliveOrderBO.saveDeliveOrder(data);
         }
 
     }

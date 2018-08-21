@@ -185,4 +185,11 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         return code;
     }
 
+    @Override
+    public List<AgentLog> getAgentLogByAgent(String userId) {
+        AgentLog condition = new AgentLog();
+        condition.setApplyUser(userId);
+        return agentLogDAO.selectList(condition);
+    }
+
 }
