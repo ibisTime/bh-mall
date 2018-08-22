@@ -92,6 +92,14 @@ public class DeliveOrder extends ABaseDO {
     // 物流公司
     private String logisticsCompany;
 
+    // *******************db***************
+
+    // 关键字（下单人名称模糊查）
+    private String keyword;
+
+    // 发货人
+    private String deliveName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -298,6 +306,22 @@ public class DeliveOrder extends ABaseDO {
 
     public String getBarCode() {
         return barCode;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getDeliveName() {
+        return deliveName;
+    }
+
+    public void setDeliveName(String deliveName) {
+        this.deliveName = deliveName;
     }
 
 }

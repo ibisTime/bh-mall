@@ -33,4 +33,7 @@ public interface ISqFormBO extends IPaginableBO<SqForm> {
     // 申请退出
     public String cancelSqForm(SqForm sqForm, String status);
 
+    // 删除授权单
+    public void removeSqForm(SqForm sqForm);
+
 }

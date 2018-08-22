@@ -123,10 +123,11 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
 
     // 详细查询
     @Override
-    public YxForm getYxForm(String code) {
+    public YxForm getYxForm(String userId) {
         YxForm data = null;
-        if (StringUtils.isNotBlank(code)) {
+        if (StringUtils.isNotBlank(userId)) {
             YxForm condition = new YxForm();
+            condition.setUserId(userId);
             data = yxFormDAO.select(condition);
         }
         return data;

@@ -129,6 +129,8 @@
 		tbh_sq_form(
 		user_id
 		,real_name
+		,team_name
+		,to_user_id
 		,wx_id
 		,mobile
 		,id_kind
@@ -145,11 +147,13 @@
 		,area
 		,address
 		,status
-		
+		,apply_datetime
 		)
 		VALUES(
         #{userId}
 		,#{realName}
+		,#{teamName}
+		,#{toUserId}
 		,#{wxId}
 		,#{mobile}
 		,#{idKind}
@@ -166,19 +170,32 @@
 		,#{area}
 		,#{address}
 		,#{status}
+		,#{applyDatetime}
 		)
 	</insert>
 
-	<update id="update_sqForm" parameterType="sqForm">
+	<update id="udpate_sqForm" parameterType="sqForm">
 		UPDATE tbh_sq_form
 		SET		
-		apply_level = #{applyLevel}
-		,to_user_id = #{toUserId}
-        ,apply_datetime = #{applyDatetime}
-		,status = #{status}
-		,approver = #{approver}
-		,approve_datetime = #{approveDatetime}
-		,impower_datetime = #{impowerDatetime}
+		real_name =	#{realName}    
+		,team_name = #{teamName}    
+		,to_user_id	= #{toUserId}    
+		,wx_id = #{wxId}        
+		,mobile = #{mobile}      
+		,id_kind = #{idKind}      
+		,id_no = #{idNo}        
+		,id_hand = #{idHand}      
+			        
+		,apply_level = #{applyLevel}	
+		,introducer = #{introducer}  
+		,referrer =	#{referrer}    
+		           
+		,province =	#{province}    
+		,city =	#{city}        
+		,area =	#{area}        
+		,address =#{address}     
+		,status = #{status}      
+		,apply_datetime = #{applyDatetime}
 		WHERE user_id= #{userId}
 	</update>
 	
@@ -191,6 +208,7 @@
         ,apply_datetime = #{applyDatetime}
 		,status = #{status}
 		,approver = #{approver}
+		,approve_name = #{approveName}
 		,approve_datetime = #{approveDatetime}
 		,impower_datetime = #{impowerDatetime}
 		WHERE user_id= #{userId}

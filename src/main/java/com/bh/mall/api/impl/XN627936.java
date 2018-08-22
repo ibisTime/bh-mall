@@ -2,49 +2,49 @@ package com.bh.mall.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IWareAO;
+import com.bh.mall.ao.IDeliveOrderAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Ware;
-import com.bh.mall.dto.req.XN627810Req;
+import com.bh.mall.domain.DeliveOrder;
+import com.bh.mall.dto.req.XN627936Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 分页查询云仓产品
- * @author: nyc 
- * @since: 2018年4月4日 下午5:27:32 
+ * 列表发货订单
+ * @author: LENOVO 
+ * @since: 2018年8月2日 下午4:30:04 
  * @history:
  */
-public class XN627810 extends AProcessor {
+public class XN627936 extends AProcessor {
 
-    private IWareAO wareAO = SpringContextHolder.getBean(IWareAO.class);
+    private IDeliveOrderAO deliveOrderAO = SpringContextHolder
+        .getBean(IDeliveOrderAO.class);
 
-    private XN627810Req req = null;
+    private XN627936Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Ware condition = new Ware();
-        condition.setType(req.getType());
+        DeliveOrder condition = new DeliveOrder();
         condition.setKeyword(req.getKeyword());
+        condition.setStatus(req.getStatus());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IWareAO.DEFAULT_ORDER_COLUMN;
+            column = IDeliveOrderAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return wareAO.queryWarePage(start, limit, condition);
+
+        return deliveOrderAO.queryDeliveOrderPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627810Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
+        req = JsonUtil.json2Bean(inputparams, XN627936Req.class);
     }
-
 }

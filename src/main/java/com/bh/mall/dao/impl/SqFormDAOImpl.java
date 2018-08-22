@@ -28,7 +28,6 @@ public class SqFormDAOImpl extends AMybatisTemplate implements ISqFormDAO {
         super.update(NAMESPACE.concat("add_info"), data);
     }
 
-    // 新增日志
     @Override
     public int insert(SqForm data) {
         return super.insert(NAMESPACE.concat("insert_sqForm"), data);
@@ -66,6 +65,11 @@ public class SqFormDAOImpl extends AMybatisTemplate implements ISqFormDAO {
     @Override
     public void applySqForm(SqForm data) {
         super.insert(NAMESPACE.concat("insert_sqForm"), data);
+    }
+
+    @Override
+    public void update(SqForm data) {
+        super.update(NAMESPACE.concat("udpate_sqForm"), data);
     }
 
 }

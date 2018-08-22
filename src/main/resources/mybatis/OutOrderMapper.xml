@@ -45,6 +45,7 @@
 		<result column="area" property="area" />
 		<result column="address" property="address" />
 		<result column="deliver" property="deliver" />
+		<result column="delive_name" property="deliveName" />
 		<result column="delive_datetime" property="deliveDatetime" />
 		<result column="logistics_code" property="logisticsCode" />
 		
@@ -83,7 +84,7 @@
 				AND t.to_user_id = #{toUserId}
 			</if>
 			<if test="statusForQuery != null and statusForQuery != '' ">
-				AND t.status IN ${statusForQuery}
+				AND t.status IN #{statusForQuery}
 			</if>
 			<choose>
 				<when test="status != null and status != '' ">
@@ -157,6 +158,7 @@
 		,t.address
 		
 		,t.deliver
+		,t.delive_name
 		,t.delive_datetime
 		,t.logistics_code
 		,t.logistics_company
@@ -289,6 +291,7 @@
 		UPDATE tbh_out_order
 		SET
 		deliver = #{deliver}
+		,delive_name = #{deliveName}
 		,delive_datetime = #{deliveDatetime}
 		,logistics_code = #{logisticsCode}
 		,logistics_company = #{logisticsCompany}

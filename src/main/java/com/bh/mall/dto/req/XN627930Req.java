@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import java.util.List;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -10,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年3月28日 下午1:59:11 
  * @history:
  */
-public class XN627645Req {
+public class XN627930Req {
 
     // （必填）编号
     @NotBlank(message = "编号不能为空")
@@ -20,22 +18,16 @@ public class XN627645Req {
     @NotBlank(message = "发货人不能为空")
     private String deliver;
 
-    private String isCompanySend;
-
-    // （选填）物流编号
+    // （必填）物流编号
+    @NotBlank(message = "物流单号不能为空")
     private String logisticsCode;
 
-    // （选填）物流公司
+    // （必填）物流公司
+    @NotBlank(message = "物流公司不能为空")
     private String logisticsCompany;
 
     // （选填 ） 箱码
     private String proCode;
-
-    // （选填）盒码
-    private List<String> traceCodeList;
-
-    // （选填）物流单
-    private String pdf;
 
     // （选填）备注
     private String remark;
@@ -72,14 +64,6 @@ public class XN627645Req {
         this.logisticsCompany = logisticsCompany;
     }
 
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
-    }
-
     public String getRemark() {
         return remark;
     }
@@ -88,28 +72,12 @@ public class XN627645Req {
         this.remark = remark;
     }
 
-    public String getIsCompanySend() {
-        return isCompanySend;
-    }
-
-    public void setIsCompanySend(String isCompanySend) {
-        this.isCompanySend = isCompanySend;
-    }
-
     public String getProCode() {
         return proCode;
     }
 
-    public List<String> getTraceCodeList() {
-        return traceCodeList;
-    }
-
     public void setproCode(String proCode) {
         this.proCode = proCode;
-    }
-
-    public void setTraceCodeList(List<String> traceCodeList) {
-        this.traceCodeList = traceCodeList;
     }
 
 }

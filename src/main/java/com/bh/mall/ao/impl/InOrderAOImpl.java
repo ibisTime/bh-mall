@@ -165,6 +165,20 @@ public class InOrderAOImpl implements IInOrderAO {
                 throw new BizException("xn0000", "您的等级无法购买该规格的产品");
             }
 
+            // 非最高等级代理，检查上级云仓
+            AgentLevel agentLevel = agentLevelBO
+                .getAgentByLevel(applyAgent.getLevel());
+            if (StringValidater.toInteger(
+                EAgentLevel.ONE.getCode()) != agentLevel.getLevel()) {
+                wareBO.checkProduct(applyAgent.getHighUserId(),
+                    cart.getSpecsCode());
+            } else {
+                // 非最高等级代理，扣减产品库存
+                if (pData.getRealNumber() < cart.getQuantity()) {
+                    throw new BizException("xn00000", "产品库存不足");
+                }
+            }
+
             // 检查限购
             this.checkLimitNumber(applyAgent, specs, agentPrice,
                 cart.getQuantity());
@@ -205,7 +219,6 @@ public class InOrderAOImpl implements IInOrderAO {
         }
 
         // 获取该产品中最小规格的数量
-        int minNumber = specsBO.getMinSpecsNumber(pData.getCode());
         AgentLevel agentLevel = agentLevelBO
             .getAgentByLevel(applyAgent.getLevel());
 
@@ -215,8 +228,7 @@ public class InOrderAOImpl implements IInOrderAO {
             wareBO.checkProduct(applyAgent.getHighUserId(), specsCode);
         } else {
             // 非最高等级代理，扣减产品库存
-            Integer nowNumber = pData.getRealNumber() - (quantity * minNumber);
-            if (nowNumber < 0) {
+            if (pData.getRealNumber() < quantity) {
                 throw new BizException("xn00000", "产品库存不足");
             }
         }
@@ -251,7 +263,7 @@ public class InOrderAOImpl implements IInOrderAO {
 
         return inOrderBO.saveInOrder(applyAgent.getUserId(),
             applyAgent.getRealName(), applyAgent.getLevel(),
-            applyAgent.getTeamName(), applyAgent.getHighUserId(), toUserName,
+            applyAgent.getHighUserId(), toUserName, applyAgent.getTeamName(),
             teamLeader.getRealName(), pData.getCode(), pData.getName(),
             specs.getCode(), specs.getName(), pData.getAdvPic(),
             agentPrice.getPrice(), quantity, applyNote);

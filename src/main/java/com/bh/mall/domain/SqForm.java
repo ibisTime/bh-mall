@@ -110,6 +110,9 @@ public class SqForm extends ABaseDO {
     // 状态
     private List<String> statusList;
 
+    // 上级
+    private String toUserName;
+
     // 获取微信号
     public String getWxId() {
         return wxId;
@@ -378,6 +381,14 @@ public class SqForm extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
     }
 
 }

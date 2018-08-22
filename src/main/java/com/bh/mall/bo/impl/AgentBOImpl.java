@@ -23,7 +23,6 @@ import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.ESjFormStatus;
-import com.bh.mall.enums.ESqFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -387,18 +386,22 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshAgent(SqForm sqForm, String logCode, String status) {
         Agent data = getAgent(sqForm.getUserId());
+
+        data.setRealName(sqForm.getRealName());
         data.setIdKind(sqForm.getIdKind());
         data.setIdNo(sqForm.getIdNo());
         data.setIdHand(sqForm.getIdHand());
-        data.setTeamName(sqForm.getTeamName());
+        data.setWxId(sqForm.getRealName());
 
-        if (ESqFormStatus.COMPANY_IMPOWER.getCode().equals(status)) {
-            data.setStatus(EAgentStatus.COMPANY_IMPOWER.getCode());
-        } else {
-            data.setStatus(EAgentStatus.TO_APPROVE.getCode());
-        }
+        data.setMobile(sqForm.getMobile());
+        data.setProvince(sqForm.getProvince());
+        data.setCity(sqForm.getCity());
+        data.setArea(sqForm.getCity());
+        data.setAddress(sqForm.getAddress());
 
+        data.setStatus(status);
         data.setIntroducer(sqForm.getIntroducer());
+        data.setLastAgentLog(logCode);
         agentDAO.addInfo(data);
     }
 
@@ -429,25 +432,18 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void addInfo(SqForm sqForm, String logCode, String status) {
         Agent agent = getAgent(sqForm.getUserId());
         agent.setRealName(sqForm.getRealName());
-        agent.setReferrer(sqForm.getReferrer());
         agent.setIntroducer(sqForm.getIntroducer());
 
         agent.setIdKind(sqForm.getIdKind());
         agent.setIdNo(sqForm.getIdNo());
         agent.setIdHand(sqForm.getIdHand());
-        agent.setTeamName(sqForm.getTeamName());
-        agent.setHighUserId(sqForm.getToUserId());
 
-        if (ESqFormStatus.COMPANY_IMPOWER.getCode().equals(status)) {
-            agent.setStatus(EAgentStatus.COMPANY_IMPOWER.getCode());
-        } else {
-            agent.setStatus(EAgentStatus.TO_APPROVE.getCode());
-        }
+        agent.setStatus(status);
         agent.setProvince(sqForm.getProvince());
         agent.setCity(sqForm.getCity());
         agent.setArea(sqForm.getArea());
         agent.setAddress(sqForm.getAddress());
-
+        agent.setLastAgentLog(logCode);
         agentDAO.applyAgent(agent);
     }
 
@@ -460,12 +456,13 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             Date date = new Date();
             data.setLevel(sqForm.getApplyLevel());
             data.setImpowerDatetime(date);
+
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
             highUserId = null;
             teamName = null;
         }
 
-        data.setHighUserId(sqForm.getToUserId());
+        data.setHighUserId(highUserId);
         data.setTeamName(teamName);
         data.setStatus(status);
         data.setManager(manager);

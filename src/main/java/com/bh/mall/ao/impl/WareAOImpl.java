@@ -405,9 +405,8 @@ public class WareAOImpl implements IWareAO {
             if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
 
                 // 是否完成授权单
-                if (0 != agentLevel.getMinCharge()
-                        && outOrderBO.checkImpowerOrder(agent.getUserId(),
-                            agent.getImpowerDatetime())) {
+                if (0 != agentLevel.getAmount() && outOrderBO.checkImpowerOrder(
+                    agent.getUserId(), agent.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
 
@@ -423,7 +422,7 @@ public class WareAOImpl implements IWareAO {
                     }
                 }
                 // 未开启云仓，只检查是否完成授权单
-            } else if (0 != agentLevel.getMinCharge()
+            } else if (0 != agentLevel.getAmount()
                     && outOrderBO.checkImpowerOrder(agent.getUserId(),
                         agent.getImpowerDatetime())) {
                 // 未完成授权单

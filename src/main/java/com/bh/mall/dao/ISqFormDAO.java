@@ -15,4 +15,6 @@ public interface ISqFormDAO extends IBaseDAO<SqForm> {
 
     void applySqForm(SqForm data);
 
+    void update(SqForm data);
+
 }

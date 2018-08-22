@@ -14,7 +14,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- * 添加库存
+ * 分页产品
  * @author: nyc 
  * @since: 2018年3月25日 下午3:40:25 
  * @history:

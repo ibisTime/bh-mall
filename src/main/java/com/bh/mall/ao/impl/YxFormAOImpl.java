@@ -213,7 +213,10 @@ public class YxFormAOImpl implements IYxFormAO {
     // 详细查询意向代理
     @Override
     public YxForm getYxForm(String code) {
-        return yxFormBO.getYxForm(code);
+        YxForm data = yxFormBO.getYxForm(code);
+        Agent agent = agentBO.getAgent(data.getUserId());
+        data.setNickname(agent.getNickname());
+        return data;
 
     }
 
@@ -228,8 +231,13 @@ public class YxFormAOImpl implements IYxFormAO {
                     .after(condition.getApplyDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
+        Paginable<YxForm> page = yxFormBO.getPaginable(start, limit, condition);
+        for (YxForm data : page.getList()) {
+            Agent agent = agentBO.getAgent(data.getUserId());
+            data.setNickname(agent.getNickname());
+        }
 
-        return yxFormBO.getPaginable(start, limit, condition);
+        return page;
     }
 
     @Override

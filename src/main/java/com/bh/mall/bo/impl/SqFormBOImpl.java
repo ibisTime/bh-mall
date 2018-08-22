@@ -86,7 +86,7 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         data.setStatus(status);
         Date date = new Date();
         data.setApplyDatetime(date);
-        sqFormDAO.insert(data);
+        sqFormDAO.update(data);
         return data;
     }
 
@@ -142,6 +142,11 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
         sqFormDAO.cancelSqForm(data);
 
         return agentLogBO.applySqForm(data, EAgentLogType.OUT.getCode());
+    }
+
+    @Override
+    public void removeSqForm(SqForm sqForm) {
+
     }
 
 }

@@ -18,6 +18,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.exception.BizException;
@@ -43,6 +44,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setCode(code);
         data.setProductCode(pData.getCode());
         data.setProductName(pData.getName());
+        data.setIsWareSend(EBoolean.NO.getCode());
 
         data.setSpecsCode(specs.getCode());
         data.setSpecsName(specs.getName());
@@ -104,7 +106,16 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public void deliverOutOrder(OutOrder data) {
+    public void deliverOutOrder(OutOrder data, String deliver,
+            String logisticsCode, String logisticsCompany, String remark) {
+        data.setDeliver(deliver);
+        Date date = new Date();
+        data.setDeliveDatetime(date);
+        data.setLogisticsCode(logisticsCode);
+        data.setLogisticsCompany(logisticsCompany);
+
+        data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
+        data.setRemark(remark);
         outOrderDAO.deliverOutOrder(data);
     }
 
@@ -192,9 +203,9 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
         List<OutOrder> list = outOrderDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -261,6 +272,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setQuantity(singleNumber);
         data.setPrice(price);
 
+        data.setIsWareSend(EBoolean.YES.getCode());
         data.setToUserId(toUserId);
         data.setToUserName(toUserName);
 

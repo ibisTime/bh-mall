@@ -51,6 +51,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
         data.setStatus(EChargeStatus.TO_Cancel.getCode());
         data.setApplyUser(agent.getUserId());
+        data.setHighAgentId(agent.getHighUserId());
+
         data.setTeamName(agent.getRealName());
         data.setLevel(agent.getLevel());
         data.setApplyDatetime(new Date());

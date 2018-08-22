@@ -20,6 +20,7 @@
 		<result column="biz_note" property="bizNote" />
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
+		<result column="high_user_id" property="highUserId" />
 		
 		<result column="team_name" property="teamName" />
 		<result column="level" property="level" />
@@ -76,6 +77,9 @@
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
+			<if test="highUserId != null and highUserId != '' ">
+				AND t.high_user_id = #{highUserId}
+			</if>
 			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
 				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
 			</if>
@@ -124,6 +128,7 @@
 		,t.biz_note
 		,t.status
 		,t.apply_user
+		,t.high_user_id
 		,t.team_name
 		,t.level
 		
@@ -169,6 +174,7 @@
 		
 		,status
 		,apply_user
+		,high_user_id
 		,team_name
 		,level
 		,apply_datetime
@@ -191,6 +197,7 @@
 		
 		,#{status}
 		,#{applyUser}
+		,#{highUserId}
 		,#{teamName}
 		,#{level}
 		,#{applyDatetime}

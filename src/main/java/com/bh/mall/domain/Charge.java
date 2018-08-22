@@ -60,6 +60,9 @@ public class Charge extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 上级
+    private String highUserId;
+
     // 充值人团队
     private String teamName;
 
@@ -93,9 +96,6 @@ public class Charge extends ABaseDO {
 
     // 用户信息
     private Agent agent;
-
-    // 上级
-    private String highAgentId;
 
     // 状态
     private List<String> statusList;
@@ -176,11 +176,11 @@ public class Charge extends ABaseDO {
     }
 
     public String getHighAgentId() {
-        return highAgentId;
+        return highUserId;
     }
 
     public void setHighAgentId(String highAgentId) {
-        this.highAgentId = highAgentId;
+        this.highUserId = highAgentId;
     }
 
     public String getPayNote() {

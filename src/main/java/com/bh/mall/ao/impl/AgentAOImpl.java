@@ -42,6 +42,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Ware;
+import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
@@ -392,7 +393,6 @@ public class AgentAOImpl implements IAgentAO {
             if (StringUtils.isNotBlank(data.getManager())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
                 data.setManageName(sysUser.getRealName());
-
             }
             // 门槛余额
             Account account = accountBO.getAccountNocheck(data.getUserId(),
@@ -441,8 +441,10 @@ public class AgentAOImpl implements IAgentAO {
             }
 
             // 管理员
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
-            data.setManageName(sysUser.getRealName());
+            if (StringUtils.isNotBlank(data.getManager())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+                data.setManageName(sysUser.getRealName());
+            }
 
             // 云仓余额
             List<Ware> wareList = wareBO.getWareByUser(data.getUserId());
@@ -484,8 +486,10 @@ public class AgentAOImpl implements IAgentAO {
             }
 
             // 管理员
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
-            data.setManageName(sysUser.getRealName());
+            if (StringUtils.isNotBlank(data.getManager())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
+                data.setManageName(sysUser.getRealName());
+            }
         }
         return page;
     }
@@ -581,6 +585,21 @@ public class AgentAOImpl implements IAgentAO {
         List<AgentLog> logList = agentLogBO
             .getAgentLogByAgent(data.getUserId());
         data.setLogList(logList);
+
+        // 获取归属人的团队名称(有推荐人)
+        if (StringUtils.isNotBlank(data.getFromUserId())) {
+            Agent fromAgent = agentBO.getAgent(data.getFromUserId());
+            data.setToTeamName(fromAgent.getTeamName());
+        }
+        // 无推荐人
+        YxForm yxForm = yxFormBO.getYxForm(data.getUserId());
+        if (null != yxForm && StringValidater
+            .toInteger(EAgentLevel.ONE.getCode()) != yxForm.getApplyLevel()) {
+            if (StringUtils.isNotBlank(yxForm.getToUserId())) {
+                Agent fromAgent = agentBO.getAgent(yxForm.getToUserId());
+                data.setToTeamName(fromAgent.getTeamName());
+            }
+        }
         return data;
     }
 

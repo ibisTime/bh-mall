@@ -180,6 +180,9 @@ public class Agent extends ABaseDO {
     // 轨迹列表
     private List<AgentLog> logList;
 
+    // 归属人的团队名称
+    private String toTeamName;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -637,6 +640,14 @@ public class Agent extends ABaseDO {
 
     public void setLogList(List<AgentLog> logList) {
         this.logList = logList;
+    }
+
+    public String getToTeamName() {
+        return toTeamName;
+    }
+
+    public void setToTeamName(String toTeamName) {
+        this.toTeamName = toTeamName;
     }
 
 }

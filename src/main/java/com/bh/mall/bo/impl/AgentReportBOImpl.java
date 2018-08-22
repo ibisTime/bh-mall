@@ -56,7 +56,6 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
 
     @Override
     public void refreshAgentReport(AgentReport data) {
-
         agentReportDAO.insert(data);
     }
 
@@ -83,7 +82,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
             AgentReport condition = new AgentReport();
             condition.setUserId(highUserId);
             data = agentReportDAO.select(condition);
-            if (null != data) {
+            if (null == data) {
                 throw new BizException("xn000000", "该代理的统计信息不存在");
             }
         }

@@ -154,10 +154,12 @@ public class ChargeAOImpl implements IChargeAO {
     public Charge getCharge(String code) {
         Charge data = chargeBO.getCharge(code);
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-            .getLevel()) {
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
-            data.setPayUserName(sysUser.getRealName());
-        } else {
+            .getLevel() && StringUtils.isNotBlank(data.getPayUser())) {
+            if (StringUtils.isNotBlank(data.getPayUser())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
+                data.setPayUserName(sysUser.getRealName());
+            }
+        } else if (StringUtils.isNotBlank(data.getPayUser())) {
             Agent agent = agentBO.getAgent(data.getPayUser());
             data.setPayUserName(agent.getRealName());
         }
@@ -170,12 +172,12 @@ public class ChargeAOImpl implements IChargeAO {
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
         for (Charge data : page.getList()) {
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                .getLevel()) {
+                .getLevel() && StringUtils.isNotBlank(data.getPayUser())) {
                 if (StringUtils.isNotBlank(data.getPayUser())) {
                     SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
                     data.setPayUserName(sysUser.getRealName());
                 }
-            } else {
+            } else if (StringUtils.isNotBlank(data.getPayUser())) {
                 Agent agent = agentBO.getAgent(data.getPayUser());
                 data.setPayUserName(agent.getRealName());
             }

@@ -37,6 +37,9 @@ public class XN627662Req extends APageReq {
     // 订单归属人
     private String toUser;
 
+    // 是否云仓发货
+    private String isWareSend;
+
     public String getProductName() {
         return productName;
     }
@@ -99,6 +102,14 @@ public class XN627662Req extends APageReq {
 
     public void setToUser(String toUser) {
         this.toUser = toUser;
+    }
+
+    public String getIsWareSend() {
+        return isWareSend;
+    }
+
+    public void setIsWareSend(String isWareSend) {
+        this.isWareSend = isWareSend;
     }
 
 }

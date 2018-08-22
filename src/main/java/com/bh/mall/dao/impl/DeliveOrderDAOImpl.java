@@ -48,4 +48,9 @@ public class DeliveOrderDAOImpl extends AMybatisTemplate
             count, condition, DeliveOrder.class);
     }
 
+    @Override
+    public void deliverOrder(DeliveOrder data) {
+        super.update(NAMESPACE.concat("delive_Order"), data);
+    }
+
 }

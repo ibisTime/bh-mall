@@ -290,7 +290,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
             number, updater);
 
         Integer nowNumber = data.getStockNumber() + number;
-        if (0 < nowNumber) {
+        if (0 > nowNumber) {
             throw new BizException("xn00000", "该规格的数量不足");
         }
         data.setStockNumber(nowNumber);

@@ -57,7 +57,14 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     }
 
     @Override
-    public void deliverInnerProduct(InnerOrder data) {
+    public void deliverInnerProduct(InnerOrder data, String deliver,
+            String logisticsCode, String logisticsCompany, String remark) {
+        data.setDeliver(deliver);
+        data.setDeliveDatetime(new Date());
+        data.setLogisticsCode(logisticsCode);
+        data.setLogisticsCompany(logisticsCompany);
+        data.setStatus(EInnerOrderStatus.TO_SEND.getCode());
+        data.setRemark(remark);
         innerOrderDAO.deliverInnerProduct(data);
     }
 

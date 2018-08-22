@@ -65,7 +65,9 @@
 	<insert id="insert_innerSpecs" parameterType="innerSpecs">
 		INSERT INTO tbh_inner_specs(
 		code
-		,inner_product_code
+		,inner_product_code                        
+		,is_single       
+		,single_number   
 		,name
 		,number
 		,stock_number
@@ -76,6 +78,8 @@
 		VALUES(
 		#{code}
 		,#{innerProductCode}
+		,#{isSingle}
+		,#{singleNumber}
 		,#{name}
 		,#{number}
 		,#{stockNumber}

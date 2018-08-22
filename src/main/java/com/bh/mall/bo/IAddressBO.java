@@ -43,6 +43,6 @@ public interface IAddressBO extends IPaginableBO<Address> {
             String isDefault);
 
     // 获取默认地址
-    public Address getDefaultAddress(String userId, String code);
+    public Address getDefaultAddress(String userId, String isDefault);
 
 }

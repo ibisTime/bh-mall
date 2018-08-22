@@ -152,7 +152,7 @@ CREATE TABLE `tbh_agent_price` (
   `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
   `level` int(11) DEFAULT '0' COMMENT '等级',
   `price` bigint(20) DEFAULT '0' COMMENT '价格',
-  `change_price` bigint(20) DEFAULT NULL COMMENT '换货价',
+  `change_price` bigint(20) DEFAULT '0' COMMENT '换货价',
   `start_number` int(11) DEFAULT '0' COMMENT '起购数',
   `min_number` int(11) DEFAULT '0' COMMENT '本等级最低云仓发货数',
   `daily_number` int(11) DEFAULT '0' COMMENT '日限购',
@@ -279,7 +279,7 @@ CREATE TABLE `tbh_channel_bank` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tbh_charge` */
 
@@ -299,6 +299,8 @@ CREATE TABLE `tbh_charge` (
   `biz_note` varchar(255) DEFAULT NULL COMMENT '流水说明',
   `status` varchar(4) NOT NULL COMMENT '状态',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `high_user_id` varchar(32) DEFAULT NULL COMMENT '上级',
+  `team_name` varchar(255) DEFAULT NULL COMMENT '申请人团队',
   `level` int(11) DEFAULT NULL COMMENT '等级',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
@@ -357,7 +359,7 @@ CREATE TABLE `tbh_company_channel` (
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tbh_cuser` */
 
@@ -451,10 +453,13 @@ CREATE TABLE `tbh_inner_order` (
   `code` varchar(32) NOT NULL,
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(64) DEFAULT NULL COMMENT '产品名称',
+  `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
   `pic` varchar(255) DEFAULT NULL COMMENT '缩略图',
   `price` bigint(20) DEFAULT NULL COMMENT '单价',
   `quantity` int(11) DEFAULT NULL COMMENT '数量',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '下单代理',
+  `real_name` varchar(255) DEFAULT NULL COMMENT '代理名称',
   `level` int(11) DEFAULT NULL COMMENT '下单代理等级',
   `team_name` varchar(64) DEFAULT NULL COMMENT '团队名称',
   `apply_note` text COMMENT '下单备注',
@@ -494,7 +499,7 @@ DROP TABLE IF EXISTS `tbh_inner_product`;
 CREATE TABLE `tbh_inner_product` (
   `code` varchar(32) NOT NULL,
   `is_free` varchar(4) DEFAULT NULL COMMENT '是否包邮',
-  `product_name` varchar(64) DEFAULT NULL COMMENT '产品名称',
+  `name` varchar(64) DEFAULT NULL COMMENT '产品名称',
   `pic` varchar(255) DEFAULT NULL COMMENT '缩略图',
   `adv_pic` varchar(255) DEFAULT NULL COMMENT '广告图',
   `slogan` text COMMENT '广告语',
@@ -521,7 +526,7 @@ CREATE TABLE `tbh_inner_specs` (
   `weight` int(11) DEFAULT '0' COMMENT '重量',
   `price` int(11) DEFAULT '0' COMMENT '单价',
   `ref_code` varchar(32) DEFAULT NULL COMMENT '关联规格编号',
-  `stock_number` int(11) DEFAULT NULL COMMENT '库存',
+  `stock_number` int(11) DEFAULT '0' COMMENT '库存',
   `is_single` char(1) DEFAULT NULL COMMENT '是否可拆单',
   `single_number` int(11) DEFAULT '0' COMMENT '拆单数量',
   PRIMARY KEY (`code`)
@@ -595,6 +600,9 @@ CREATE TABLE `tbh_material` (
   `order_no` int(11) DEFAULT NULL COMMENT '排序',
   `status` varchar(4) DEFAULT NULL COMMENT '状态（0未发布 1发布）',
   `level` varchar(32) DEFAULT NULL COMMENT '查看等级',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` text COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -615,6 +623,60 @@ CREATE TABLE `tbh_mini_code` (
   PRIMARY KEY (`mini_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*Table structure for table `tbh_order_report` */
+
+DROP TABLE IF EXISTS `tbh_order_report`;
+
+CREATE TABLE `tbh_order_report` (
+  `code` varchar(32) NOT NULL,
+  `level` int(32) DEFAULT NULL COMMENT '等级',
+  `is_company_send` varchar(32) DEFAULT NULL COMMENT '是否公司发货',
+  `kind` varchar(4) DEFAULT NULL COMMENT '分类',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `pro_code` varchar(32) DEFAULT NULL COMMENT '关联箱码',
+  `pic` varbinary(255) DEFAULT NULL COMMENT '图片',
+  `quantity` int(11) DEFAULT NULL COMMENT '数量',
+  `price` bigint(20) DEFAULT NULL COMMENT '单价',
+  `to_user_id` varchar(32) DEFAULT NULL COMMENT '向谁提货',
+  `to_user_name` varchar(255) DEFAULT NULL COMMENT '订单归属人姓名',
+  `amount` bigint(20) DEFAULT NULL COMMENT '总价',
+  `yunfei` bigint(20) DEFAULT NULL COMMENT '运费',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `pay_type` varchar(64) DEFAULT NULL COMMENT '支付渠道',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_amount` bigint(20) DEFAULT NULL COMMENT '支付金额',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '渠道编号',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',
+  `high_user_id` varchar(32) DEFAULT NULL COMMENT '上级',
+  `real_name` varchar(255) DEFAULT NULL COMMENT '下单人姓名',
+  `team_name` varchar(255) DEFAULT NULL COMMENT '团队名称',
+  `team_leader` varchar(255) DEFAULT NULL COMMENT '团队长',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '下单时间',
+  `apply_note` text COMMENT '下单备注',
+  `signer` varchar(32) DEFAULT NULL COMMENT '收件人姓名',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '收件人电话',
+  `province` varchar(32) DEFAULT NULL COMMENT '省',
+  `city` varchar(32) DEFAULT NULL COMMENT '市',
+  `area` varchar(32) DEFAULT NULL COMMENT '区',
+  `address` varchar(255) DEFAULT NULL COMMENT '收货地址',
+  `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
+  `delive_datetime` datetime DEFAULT NULL COMMENT '发货时间',
+  `logistics_code` varchar(32) DEFAULT NULL COMMENT '物流单号',
+  `logistics_company` varchar(32) DEFAULT NULL COMMENT '物流公司',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `update_note` varchar(32) DEFAULT NULL COMMENT '更新备注',
+  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `approve_note` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*Table structure for table `tbh_out_order` */
 
 DROP TABLE IF EXISTS `tbh_out_order`;
@@ -622,7 +684,7 @@ DROP TABLE IF EXISTS `tbh_out_order`;
 CREATE TABLE `tbh_out_order` (
   `code` varchar(32) NOT NULL,
   `level` int(32) DEFAULT NULL COMMENT '等级',
-  `is_company_send` varchar(32) DEFAULT NULL COMMENT '是否公司发货',
+  `is_ware_send` varchar(32) DEFAULT NULL COMMENT '是否云仓发货',
   `kind` varchar(4) DEFAULT NULL COMMENT '分类',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
@@ -811,6 +873,7 @@ CREATE TABLE `tbh_sq_form` (
   `user_id` varchar(32) DEFAULT NULL COMMENT '申请人',
   `wx_id` varchar(255) DEFAULT NULL COMMENT '微信号',
   `apply_level` varchar(32) DEFAULT NULL COMMENT '申请等级',
+  `team_name` varchar(255) DEFAULT NULL COMMENT '团队名称',
   `real_name` varchar(64) DEFAULT NULL COMMENT '真实姓名',
   `to_user_id` varchar(32) DEFAULT NULL COMMENT '授权归属人',
   `address` varchar(255) DEFAULT NULL COMMENT '地址',
@@ -868,6 +931,31 @@ CREATE TABLE `tbh_ware` (
   `last_change_code` varchar(32) DEFAULT NULL COMMENT '最后一条流水',
   `system_code` varchar(32) DEFAULT NULL,
   `company_code` varbinary(32) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `tbh_ware_house` */
+
+DROP TABLE IF EXISTS `tbh_ware_house`;
+
+CREATE TABLE `tbh_ware_house` (
+  `code` varchar(32) NOT NULL,
+  `type` varchar(4) DEFAULT NULL COMMENT '类型（B/P）',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户ID',
+  `currency` varchar(64) DEFAULT NULL COMMENT '币种',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `product_specs_code` varchar(255) DEFAULT NULL COMMENT '规格编号',
+  `product_specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `price` bigint(20) DEFAULT NULL COMMENT '价格',
+  `amount` bigint(20) DEFAULT NULL COMMENT '总价',
+  `quantity` int(11) DEFAULT NULL COMMENT '数量',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_change_code` varchar(32) DEFAULT NULL COMMENT '最后一条流水',
+  `system_code` varchar(32) DEFAULT NULL,
+  `company_code` varbinary(32) DEFAULT NULL,
+  `real_name` varchar(255) DEFAULT NULL COMMENT '代理名称',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1060,3 +1148,4 @@ CREATE TABLE `tsys_user` (
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

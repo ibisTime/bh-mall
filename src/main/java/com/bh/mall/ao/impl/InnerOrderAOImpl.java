@@ -15,6 +15,7 @@ import com.bh.mall.ao.IInnerOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
+import com.bh.mall.bo.IDeliveOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IInnerProductBO;
 import com.bh.mall.bo.IInnerSpecsBO;
@@ -75,6 +76,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IDeliveOrderBO deliveOrderBO;
 
     @Override
     public String addInnerOrder(XN627720Req req) {
@@ -310,10 +314,10 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setDeliveDatetime(new Date());
         data.setLogisticsCode(req.getLogisticsCode());
         data.setLogisticsCompany(req.getLogisticsCompany());
-        data.setPdf(req.getPdf());
         data.setStatus(EInnerOrderStatus.TO_Deliver.getCode());
         data.setRemark(req.getRemark());
-        innerOrderBO.deliverInnerProduct(data);
+        innerOrderBO.deliverInnerProduct(data, req.getDeliverer(),
+            req.getLogisticsCode(), req.getLogisticsCompany(), req.getRemark());
 
     }
 
@@ -364,6 +368,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         for (String code : codeList) {
             InnerOrder data = innerOrderBO.getInnerOrder(code);
             innerOrderBO.batchApprove(data, approver, remark);
+
+            // 审批到发货
+            deliveOrderBO.saveDeliveOrder(data);
         }
     }
 

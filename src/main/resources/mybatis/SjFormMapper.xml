@@ -32,13 +32,18 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 			<if test="approver != null and approver != '' ">
 				AND t.approver = #{approver}
 			</if>
 			
 			<if test="applyLevel != null and applyLevel != '' ">
 				AND t.apply_level = #{applyLevel}
+			</if>
+			<if test="toUserId != null and toUserId != '' ">
+				AND t.to_user_id = #{toUserId}
 			</if>
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}

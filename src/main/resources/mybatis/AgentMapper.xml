@@ -475,7 +475,8 @@
 	<update id="apply_agent" parameterType="agent">
 		UPDATE tbh_agent
 		SET
-		mobile = #{mobile}
+		status = #{status}
+		,mobile = #{mobile}
 		,wx_id = #{wxId}
 		,real_name = #{realName}
 		,province = #{province}
@@ -493,10 +494,16 @@
 		UPDATE tbh_agent
 		SET
 		status = #{status}
-		,team_name = #{teamName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_hand = #{idHand}
+		,mobile = #{mobile}
+		,wx_id = #{wxId}
+		,real_name = #{realName}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,address = #{address}
 		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
@@ -524,7 +531,8 @@
 	<update id="update_sq" parameterType="agent">
 		UPDATE tbh_agent
 		SET
-		level = #{level}
+		status = #{status}
+		,level = #{level}
 		,high_user_id = #{highUserId}
 		,team_name = #{teamName}
 		,approver = #{approver}

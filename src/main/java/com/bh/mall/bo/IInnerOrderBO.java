@@ -17,7 +17,8 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
     public InnerOrder getInnerOrder(String code);
 
-    public void deliverInnerProduct(InnerOrder data);
+    public void deliverInnerProduct(InnerOrder data, String deliver,
+            String logisticsCode, String logisticsCompany, String remark);
 
     public void cancelInnerOrder(InnerOrder data);
 

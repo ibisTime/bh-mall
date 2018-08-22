@@ -181,4 +181,8 @@
 	<bean id="orderReportBO" class="com.bh.mall.bo.impl.OrderReportBOImpl">
 		<property name="paginableDAO" ref="orderReportDAOImpl"/>
 	</bean>
+	
+	<bean id="deliveOrderBO" class="com.bh.mall.bo.impl.DeliveOrderBOImpl">
+		<property name="paginableDAO" ref="deliveOrderDAOImpl"/>
+	</bean>
 </beans>

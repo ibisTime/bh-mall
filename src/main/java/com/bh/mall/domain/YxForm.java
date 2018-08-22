@@ -97,6 +97,9 @@ public class YxForm extends ABaseDO {
     // 查询关键词
     private String keyWord;
 
+    // 昵称
+    private String nickname;
+
     // 获取微信号
     public String getWxId() {
         return wxId;
@@ -322,6 +325,14 @@ public class YxForm extends ABaseDO {
 
     public void setApproveName(String approveName) {
         this.approveName = approveName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
 }

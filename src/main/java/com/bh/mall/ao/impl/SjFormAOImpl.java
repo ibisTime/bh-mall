@@ -295,6 +295,15 @@ public class SjFormAOImpl implements ISjFormAO {
         SjForm data = sjFormBO.getSjForm(code);
         Agent agent = agentAO.getAgent(data.getUserId());
         data.setUser(agent);
+
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getApplyLevel()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUserId());
+            data.setToUserName(sysUser.getRealName());
+        } else {
+            Agent toUser = agentBO.getAgent(data.getToUserId());
+            data.setToUserName(toUser.getRealName());
+        }
         return data;
     }
 
@@ -312,6 +321,14 @@ public class SjFormAOImpl implements ISjFormAO {
         for (SjForm sjForm : page.getList()) {
             Agent agent = agentBO.getAgent(sjForm.getUserId());
             sjForm.setUser(agent);
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sjForm
+                .getApplyLevel()) {
+                SYSUser sysUser = sysUserBO.getSYSUser(sjForm.getUserId());
+                sjForm.setToUserName(sysUser.getRealName());
+            } else {
+                Agent toUser = agentBO.getAgent(sjForm.getToUserId());
+                sjForm.setToUserName(toUser.getRealName());
+            }
         }
         return page;
     }

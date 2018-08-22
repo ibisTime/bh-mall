@@ -578,7 +578,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Paginable<OutOrder> page = outOrderBO.getPaginable(start, limit,
             condition);
         for (OutOrder data : page.getList()) {
-            // 下单人
+
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
                 if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                     .getLevel()) {
@@ -586,9 +586,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         .getSYSUser(data.getHighUserId());
                     data.setHighUserName(sysUser.getRealName());
                 } else {
+                    // 下单人
                     Agent agent = agentBO.getAgent(data.getApplyUser());
                     data.setAgent(agent);
-                    data.setHighUserName(agent.getRealName());
+                    data.setHighUserName(data.getHighUserId());
                 }
             }
 
@@ -859,15 +860,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
         }
 
-        data.setDeliver(req.getDeliver());
-        data.setDeliveDatetime(new Date());
-        data.setLogisticsCode(req.getLogisticsCode());
-        data.setLogisticsCompany(req.getLogisticsCompany());
-
-        data.setIsWareSend(req.getIsCompanySend());
-        data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
-        data.setRemark(req.getRemark());
-
         // 是否有填写箱码或盒码
         if (StringUtils.isEmpty(req.getProCode())
                 && CollectionUtils.isEmpty(req.getTraceCodeList()))
@@ -918,8 +910,16 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 更新关联的箱码状态
             proCodeBO.splitSingle(barData);
         }
+        data.setDeliver(req.getDeliver());
+        data.setDeliveDatetime(new Date());
+        data.setLogisticsCode(req.getLogisticsCode());
+        data.setLogisticsCompany(req.getLogisticsCompany());
 
-        outOrderBO.deliverOutOrder(data);
+        data.setIsWareSend(req.getIsCompanySend());
+        data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
+        data.setRemark(req.getRemark());
+        outOrderBO.deliverOutOrder(data, req.getDeliver(),
+            req.getLogisticsCode(), req.getLogisticsCompany(), req.getRemark());
 
     }
 
