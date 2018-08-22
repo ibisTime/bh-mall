@@ -456,6 +456,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             Date date = new Date();
             data.setLevel(sqForm.getApplyLevel());
             data.setImpowerDatetime(date);
+            data.setManager(manager);
 
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
             highUserId = null;
@@ -465,7 +466,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setHighUserId(highUserId);
         data.setTeamName(teamName);
         data.setStatus(status);
-        data.setManager(manager);
 
         data.setApprover(approver);
         data.setApproveName(approveName);

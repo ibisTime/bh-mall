@@ -258,6 +258,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                 data.setUpdater(sysUser.getRealName());
 
             }
+
+            // 发货人转义
             if (StringUtils.isNotBlank(data.getDeliver())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
                 data.setDeliveName(sysUser.getRealName());
@@ -281,10 +283,13 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                 data.setUpdater(sysUser.getRealName());
 
             }
+
+            // 发货人转义
             if (StringUtils.isNotBlank(data.getDeliver())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
                 data.setDeliveName(sysUser.getRealName());
             }
+
         }
         return list;
     }
@@ -301,6 +306,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
             data.setDeliveName(sysUser.getRealName());
         }
+
         return data;
     }
 

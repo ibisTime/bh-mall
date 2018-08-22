@@ -124,9 +124,6 @@ public class OutOrder extends ABaseDO {
     // 发货人
     private String deliver;
 
-    // 发货人
-    private String deliveName;
-
     // 发货时间
     private Date deliveDatetime;
 
@@ -196,6 +193,9 @@ public class OutOrder extends ABaseDO {
 
     // 收货人名字
     private String signeName;
+
+    // 发货人
+    private String deliveName;
 
     // 团队长名称
     private String leaderName;

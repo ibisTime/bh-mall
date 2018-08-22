@@ -110,7 +110,6 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String acceptYxForm(YxForm data, String approver, String approveName,
             String remark) {
-        data.setToUserId(approver);
         data.setStatus(EAgentLogStatus.ACCEPT.getCode());
         data.setApprover(approver);
         data.setApproveName(approveName);

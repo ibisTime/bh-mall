@@ -497,12 +497,10 @@ public class AgentAOImpl implements IAgentAO {
     // 列表查询代理结构
     @Override
     public List<Agent> queryAgentJgList(Agent condition) {
-
         List<Agent> agentList = agentBO.queryAgentList(condition);
         if (CollectionUtils.isNotEmpty(agentList)) {
             getAgentList(agentList);
         }
-
         return agentList;
     }
 

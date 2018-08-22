@@ -34,9 +34,9 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     public String saveOutOrder(String applyUser, String name, Integer level,
             String toUserId, String toUserName, String teamName,
             String teamLeader, Product pData, Specs specs, Long price,
-            Integer quantity, String applyNote, String signer, String mobile,
-            String province, String city, String area, String address,
-            String status, String kind) {
+            Integer quantity, String applyNote, String isWareSend,
+            String signer, String mobile, String province, String city,
+            String area, String address, String status, String kind) {
 
         OutOrder data = new OutOrder();
         String code = OrderNoGenerater
@@ -66,6 +66,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setApplyNote(applyNote);
         data.setStatus(status);
         data.setKind(kind);
+        data.setIsWareSend(isWareSend);
         data.setSigner(signer);
         data.setProvince(province);
 
@@ -256,8 +257,9 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
             String pic, String productSpecsCode, String productSpecsName,
             Integer singleNumber, Long price, Long amount, Long yunfei,
             String highUserId, Agent agent, String teamLeader, String toUserId,
-            String toUserName, String signer, String mobile, String province,
-            String city, String area, String address, String kind) {
+            String toUserName, String isWareSend, String signer, String mobile,
+            String province, String city, String area, String address,
+            String kind) {
         OutOrder data = new OutOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
@@ -281,17 +283,19 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setApplyUser(agent.getUserId());
         data.setRealName(agent.getRealName());
         data.setTeamName(agent.getTeamName());
-        data.setTeamLeader(teamLeader);
 
+        data.setTeamLeader(teamLeader);
         data.setApplyDatetime(new Date());
+        data.setIsWareSend(isWareSend);
         data.setSigner(signer);
         data.setMobile(mobile);
+
         data.setProvince(province);
         data.setCity(city);
         data.setArea(area);
         data.setAddress(address);
-
         data.setKind(kind);
+
         data.setStatus(EOutOrderStatus.TO_APPROVE.getCode());
         outOrderDAO.insert(data);
         return code;

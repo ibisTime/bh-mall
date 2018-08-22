@@ -310,9 +310,10 @@ public class WareAOImpl implements IWareAO {
                     psData.getSingleNumber(), data.getPrice(),
                     psData.getSingleNumber() * data.getPrice(), yunfei,
                     agent.getHighUserId(), agent, teamLeader.getRealName(),
-                    sysUser.getUserId(), sysUser.getRealName(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(), kind);
+                    sysUser.getUserId(), sysUser.getRealName(),
+                    EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), kind);
 
                 // 减少云仓库存
                 wareBO.changeWare(data.getCode(),
@@ -326,9 +327,10 @@ public class WareAOImpl implements IWareAO {
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),
                 psData.getSingleNumber() * data.getPrice(), yunfei,
                 agent.getHighUserId(), agent, teamLeader.getRealName(),
-                sysUser.getUserId(), sysUser.getRealName(), req.getSigner(),
-                req.getMobile(), req.getProvince(), req.getCity(),
-                req.getArea(), req.getAddress(), kind);
+                sysUser.getUserId(), sysUser.getRealName(),
+                EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
+                req.getProvince(), req.getCity(), req.getArea(),
+                req.getAddress(), kind);
             // 减少云仓库存
             wareBO.changeWare(data.getCode(),
                 -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCTH,

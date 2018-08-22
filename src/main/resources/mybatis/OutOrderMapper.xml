@@ -45,7 +45,6 @@
 		<result column="area" property="area" />
 		<result column="address" property="address" />
 		<result column="deliver" property="deliver" />
-		<result column="delive_name" property="deliveName" />
 		<result column="delive_datetime" property="deliveDatetime" />
 		<result column="logistics_code" property="logisticsCode" />
 		
@@ -158,7 +157,6 @@
 		,t.address
 		
 		,t.deliver
-		,t.delive_name
 		,t.delive_datetime
 		,t.logistics_code
 		,t.logistics_company
@@ -291,14 +289,12 @@
 		UPDATE tbh_out_order
 		SET
 		deliver = #{deliver}
-		,delive_name = #{deliveName}
 		,delive_datetime = #{deliveDatetime}
 		,logistics_code = #{logisticsCode}
 		,logistics_company = #{logisticsCompany}
 		
 		
 		,pro_code = #{proCode}
-		,is_ware_send = #{isWareSend}
 		,status = #{status}
 		,remark = #{remark}
 		WHERE code = #{code}

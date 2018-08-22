@@ -14,6 +14,9 @@ public class XN627321Req {
     // （选填） 用户Id
     private String userId;
 
+    // （选填） 状态
+    private String status;
+
     public String getKeyword() {
         return keyword;
     }
@@ -28,6 +31,14 @@ public class XN627321Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

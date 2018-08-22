@@ -244,10 +244,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         applyUser.getHighUserId(), toUserName,
                         applyUser.getTeamName(), teamLeader.getRealName(),
                         pData, specs, price.getPrice(), specs.getSingleNumber(),
-                        req.getApplyNote(), req.getSigner(), req.getMobile(),
-                        req.getProvince(), req.getCity(), req.getArea(),
-                        req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
-                        kind));
+                        req.getApplyNote(), EBoolean.NO.getCode(),
+                        req.getSigner(), req.getMobile(), req.getProvince(),
+                        req.getCity(), req.getArea(), req.getAddress(),
+                        EOutOrderStatus.Unpaid.getCode(), kind));
                 }
 
             } else {
@@ -257,9 +257,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     applyUser.getHighUserId(), toUserName,
                     applyUser.getTeamName(), teamLeader.getRealName(), pData,
                     specs, price.getPrice(), cart.getQuantity(),
-                    req.getApplyNote(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+                    req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(), kind));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -306,9 +307,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         cUser.getNickname(), null, agent.getUserId(),
                         agent.getRealName(), null, null, pData, specs,
                         price.getPrice(), specs.getSingleNumber(),
-                        req.getApplyNote(), req.getSigner(), req.getMobile(),
-                        req.getProvince(), req.getCity(), req.getArea(),
-                        req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
+                        req.getApplyNote(), EBoolean.NO.getCode(),
+                        req.getSigner(), req.getMobile(), req.getProvince(),
+                        req.getCity(), req.getArea(), req.getAddress(),
+                        EOutOrderStatus.Unpaid.getCode(),
                         EOutOrderKind.C_ORDER.getCode()));
                 }
             } else {
@@ -317,9 +319,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     cUser.getNickname(), null, agent.getUserId(),
                     agent.getRealName(), null, null, pData, specs,
                     price.getPrice(), cart.getQuantity(), req.getApplyNote(),
-                    req.getSigner(), req.getMobile(), req.getProvince(),
-                    req.getCity(), req.getArea(), req.getAddress(),
-                    EOutOrderStatus.Unpaid.getCode(),
+                    EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
                     EOutOrderKind.C_ORDER.getCode()));
             }
             // 删除购物车记录
@@ -402,9 +404,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     applyUser.getHighUserId(), toUserName,
                     applyUser.getTeamName(), teamLeader.getRealName(), pData,
                     specs, price.getPrice(), specs.getSingleNumber(),
-                    req.getApplyNote(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+                    req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(), kind));
             }
         } else {
             // 不可拆单
@@ -413,9 +416,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 applyUser.getHighUserId(), toUserName, applyUser.getTeamName(),
                 teamLeader.getRealName(), pData, specs, price.getPrice(),
                 StringValidater.toInteger(req.getQuantity()),
-                req.getApplyNote(), req.getSigner(), req.getMobile(),
-                req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+                req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
+                req.getMobile(), req.getProvince(), req.getCity(),
+                req.getArea(), req.getAddress(),
+                EOutOrderStatus.Unpaid.getCode(), kind));
         }
         return list;
     }
@@ -446,9 +450,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     cUser.getNickname(), null, agent.getUserId(),
                     agent.getRealName(), null, null, pData, specs,
                     price.getPrice(), specs.getSingleNumber(),
-                    req.getApplyNote(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
+                    req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getCity(),
+                    req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(),
                     EOutOrderKind.C_ORDER.getCode()));
             }
         } else {
@@ -457,9 +462,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 cUser.getNickname(), null, agent.getUserId(),
                 agent.getRealName(), null, null, pData, specs, price.getPrice(),
                 StringValidater.toInteger(req.getQuantity()),
-                req.getApplyNote(), req.getSigner(), req.getMobile(),
-                req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
+                req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
+                req.getMobile(), req.getProvince(), req.getCity(),
+                req.getArea(), req.getAddress(),
+                EOutOrderStatus.Unpaid.getCode(),
                 EOutOrderKind.C_ORDER.getCode()));
         }
         return list;
@@ -596,8 +602,19 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 产品信息
             Product product = productBO.getProduct(data.getProductCode());
             data.setProduct(product);
-
             data.setPic(product.getAdvPic());
+
+            // 发货人转义
+            if (StringUtils.isNotBlank(data.getDeliver())) {
+                if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
+                    data.setDeliveName(sysUser.getRealName());
+                } else {
+                    Agent deliveAgent = agentBO.getAgent(data.getDeliver());
+                    data.setDeliveName(deliveAgent.getRealName());
+                }
+            }
+
         }
         return page;
     }
@@ -636,6 +653,17 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 产品信息
             Product product = productBO.getProduct(data.getProductCode());
             data.setProduct(product);
+
+            // 发货人转义
+            if (StringUtils.isNotBlank(data.getDeliver())) {
+                if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
+                    data.setDeliveName(sysUser.getRealName());
+                } else {
+                    Agent deliveAgent = agentBO.getAgent(data.getDeliver());
+                    data.setDeliveName(deliveAgent.getRealName());
+                }
+            }
         }
         return list;
     }
@@ -659,6 +687,17 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 产品信息
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
+
+        // 发货人转义
+        if (StringUtils.isNotBlank(data.getDeliver())) {
+            if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
+                data.setDeliveName(sysUser.getRealName());
+            } else {
+                Agent deliveAgent = agentBO.getAgent(data.getDeliver());
+                data.setDeliveName(deliveAgent.getRealName());
+            }
+        }
         return data;
     }
 
@@ -862,10 +901,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         // 是否有填写箱码或盒码
         if (StringUtils.isEmpty(req.getProCode())
-                && CollectionUtils.isEmpty(req.getTraceCodeList()))
-
-        {
-            throw new BizException("xn000000", "请输入一个箱码或盒码！");
+                && CollectionUtils.isEmpty(req.getTraceCodeList())) {
+            throw new BizException("xn000000", "请输入箱码或盒码！");
         }
 
         // 订单与箱码关联（整箱发货）
@@ -894,28 +931,21 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (CollectionUtils.isNotEmpty(req.getTraceCodeList())) {
             for (String stCode : req.getTraceCodeList()) {
                 MiniCode stData = miniCodeBO.getMiniCode(stCode);
-                if (EBoolean.YES.getCode().equals(stData.getStatus())) {
-                    throw new BizException("xn00000", "该盒码已被使用");
-                }
                 miniCodeBO.refreshStatus(stData, data.getCode());
             }
 
             MiniCode stData = miniCodeBO
                 .getMiniCode(req.getTraceCodeList().get(0));
             ProCode barData = proCodeBO.getProCode(stData.getRefCode());
-            // 关联箱码不是未使用和已拆分
-            if (ECodeStatus.USE_YES.getCode().equals(barData.getCode())) {
-                throw new BizException("xn00000", "该箱码已被使用");
-            }
             // 更新关联的箱码状态
             proCodeBO.splitSingle(barData);
         }
+
         data.setDeliver(req.getDeliver());
         data.setDeliveDatetime(new Date());
         data.setLogisticsCode(req.getLogisticsCode());
         data.setLogisticsCompany(req.getLogisticsCompany());
 
-        data.setIsWareSend(req.getIsCompanySend());
         data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
         data.setRemark(req.getRemark());
         outOrderBO.deliverOutOrder(data, req.getDeliver(),
