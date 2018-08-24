@@ -225,6 +225,7 @@ public class SqFormAOImpl implements ISqFormAO {
 
         // 意向单
         YxForm yxForm = yxFormBO.getYxForm(agent.getUserId());
+
         AgentLevel agentLevel = agentLevelBO
             .getAgentByLevel(yxForm.getApplyLevel());
         // 校验身份证
@@ -237,22 +238,26 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 新增授权单
-        SYSUser sysUser = sysUserBO.getSYSUser();
+        String toUserId = yxForm.getToUserId();
+        if (StringUtils.isBlank(toUserId)) {
+            SYSUser sysUser = sysUserBO.getSYSUser();
+            toUserId = sysUser.getUserId();
+        }
+
         SqForm sqForm = sqFormBO.getSqForm(agent.getUserId());
         if (null == sqForm) {
             sqForm = sqFormBO.applySqForm(agent.getUserId(),
                 agent.getRealName(), agent.getMobile(), agent.getWxId(),
-                req.getApplyLevel(), sysUser.getUserId(), req.getTeamName(),
-                introducer, null, req.getIdKind(), req.getIdNo(),
-                req.getIdHand(), agent.getProvince(), agent.getCity(),
-                agent.getArea(), agent.getAddress(), status);
+                req.getApplyLevel(), toUserId, req.getTeamName(), introducer,
+                null, req.getIdKind(), req.getIdNo(), req.getIdHand(),
+                agent.getProvince(), agent.getCity(), agent.getArea(),
+                agent.getAddress(), status);
         } else {
             sqFormBO.refreshSqForm(sqForm, agent.getRealName(),
                 agent.getMobile(), agent.getWxId(), req.getApplyLevel(),
-                sysUser.getUserId(), req.getTeamName(), introducer, null,
-                req.getIdKind(), req.getIdNo(), req.getIdHand(),
-                agent.getProvince(), agent.getCity(), agent.getArea(),
-                agent.getAddress(), status);
+                toUserId, req.getTeamName(), introducer, null, req.getIdKind(),
+                req.getIdNo(), req.getIdHand(), agent.getProvince(),
+                agent.getCity(), agent.getArea(), agent.getAddress(), status);
         }
 
         String logCode = agentLogBO.applySqForm(sqForm,
@@ -337,6 +342,12 @@ public class SqFormAOImpl implements ISqFormAO {
         } else {
             // 未通过，清空手机号等信息，防止重新申请时重复
             Agent agent = agentBO.getAgent(userId);
+            if (StringUtils.isNotBlank(agent.getFromUserId())) {
+                agent.setStatus(EAgentStatus.IMPOWERO_INFO.getCode());
+            } else {
+                agent.setStatus(EAgentStatus.ADD_INFO.getCode());
+            }
+
             agentBO.resetInfo(agent);
 
         }
@@ -383,11 +394,18 @@ public class SqFormAOImpl implements ISqFormAO {
                     EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
                     -account.getAmount());
 
+                if (StringUtils.isNotBlank(agent.getFromUserId())) {
+                    agent.setStatus(EAgentStatus.IMPOWERO_INFO.getCode());
+                } else {
+                    agent.setStatus(EAgentStatus.ADD_INFO.getCode());
+                }
+
                 // 清空手机号等信息，防止重新申请时重复
                 agentBO.resetInfo(agent);
 
                 // 清空推荐关系
                 agentBO.resetUserReferee(agent.getUserId());
+
             }
         }
         // 记录日志
@@ -568,7 +586,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // 是够有未完成的内购订单
         InnerOrder ioCondition = new InnerOrder();
         ioCondition.setApplyUser(agent.getUserId());
-        ioCondition.setStatusForQuery(EInnerOrderStatus.Paid.getCode());
+        ioCondition.setStatusForQuery(EInnerOrderStatus.TO_APPROVE.getCode());
         long ioCount = innerOrderBO.selectCount(ioCondition);
         if (ioCount != 0) {
             throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");

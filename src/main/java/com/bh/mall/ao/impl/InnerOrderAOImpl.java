@@ -137,7 +137,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setMobile(req.getMobile());
         data.setSigner(req.getSigner());
 
-        data.setStatus(EInnerOrderStatus.toPay.getCode());
+        data.setStatus(EInnerOrderStatus.Unpaid.getCode());
         innerOrderBO.saveInnerOrder(data);
         return code;
     }
@@ -165,7 +165,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             data.setPayCode(data.getPayCode());
             data.setPayAmount(data.getAmount());
 
-            data.setStatus(EInnerOrderStatus.Paid.getCode());
+            data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
             innerOrderBO.paySuccess(data);
             result = new BooleanRes(true);
         } else if (EBoolean.YES.getCode().equals(payType)) {
@@ -223,8 +223,9 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public void refreshAddress(XN627722Req req) {
         InnerOrder data = innerOrderBO.getInnerOrder(req.getCode());
-        if (!EInnerOrderStatus.toPay.getCode().equals(data.getStatus())
-                || !EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
+        if (!EInnerOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || !EInnerOrderStatus.TO_APPROVE.getCode()
+                    .equals(data.getStatus())) {
             throw new BizException("xn00000", "订单已发货");
         }
 
@@ -265,6 +266,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
                 data.setDeliveName(sysUser.getRealName());
             }
+
+            //
         }
         return page;
     }
@@ -314,14 +317,14 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public void deliverInnerProduct(XN627723Req req) {
         InnerOrder data = innerOrderBO.getInnerOrder(req.getCode());
-        if (!EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
+        if (!EInnerOrderStatus.TO_SEND.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单未支付或已发货");
         }
         data.setDeliver(req.getDeliverer());
         data.setDeliveDatetime(new Date());
         data.setLogisticsCode(req.getLogisticsCode());
         data.setLogisticsCompany(req.getLogisticsCompany());
-        data.setStatus(EInnerOrderStatus.TO_Deliver.getCode());
+        data.setStatus(EInnerOrderStatus.TO_RECEIVE.getCode());
         data.setRemark(req.getRemark());
         innerOrderBO.deliverInnerProduct(data, req.getDeliverer(),
             req.getLogisticsCode(), req.getLogisticsCompany(), req.getRemark());
@@ -331,11 +334,12 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public void cancelInnerOrder(String code) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
-        if (!EInnerOrderStatus.toPay.getCode().equals(data.getStatus())
-                || !EInnerOrderStatus.Paid.getCode().equals(data.getStatus())) {
+        if (!EInnerOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || !EInnerOrderStatus.TO_APPROVE.getCode()
+                    .equals(data.getStatus())) {
             throw new BizException("xn0000", "该订单无法申请取消");
         }
-        data.setStatus(EInnerOrderStatus.TO_Cancel.getCode());
+        data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
         innerOrderBO.cancelInnerOrder(data);
     }
 
@@ -343,18 +347,18 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     public void approveInnerOrder(String code, String result, String updater,
             String remark) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
-        if (!EInnerOrderStatus.TO_Cancel.getCode().equals(data.getStatus())) {
+        if (!EInnerOrderStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单不处于待审核状态");
         }
         // 审核通过取消订单，退钱
         if (EResult.Result_YES.getCode().equals(result)) {
-            data.setStatus(EInnerOrderStatus.Canceled.getCode());
+            data.setStatus(EInnerOrderStatus.CANCELED.getCode());
             accountBO.transAmountCZB(ESysUser.SYS_USER_BH.getCode(),
                 ECurrency.YJ_CNY.getCode(), data.getApplyUser(),
                 ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
                 null, null, data.getCode());
         } else {
-            data.setStatus(EInnerOrderStatus.toPay.getCode());
+            data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
         }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
@@ -365,7 +369,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     @Override
     public void receiveInnerOrder(String code) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
-        data.setStatus(EInnerOrderStatus.Delivered.getCode());
+        data.setStatus(EInnerOrderStatus.RECEIVED.getCode());
         innerOrderBO.receiveInnerOrder(data);
     }
 

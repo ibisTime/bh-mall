@@ -396,6 +396,7 @@ public class WareAOImpl implements IWareAO {
                 .getAgentByLevel(agent.getLevel());
 
             Long chargeAmount = agentLevel.getMinCharge();
+            Long readAmount = agentLevel.getRedAmount();
             String result = ECheckStatus.NORMAL.getCode();
             String isWareHouse = EBoolean.YES.getCode();
 
@@ -428,6 +429,7 @@ public class WareAOImpl implements IWareAO {
                     // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
                 } else if (orderAmount < agentLevel.getAmount()) {
                     // result = ECheckStatus.TO_BUY.getCode();
+                    readAmount = agentLevel.getAmount();
                     result = ECheckStatus.RED_LOW.getCode();
                 }
                 // 未开启云仓，只检查是否完成授权单
@@ -477,7 +479,7 @@ public class WareAOImpl implements IWareAO {
                 }
 
             }
-            res = new XN627805Res(result, agentLevel.getRedAmount(),
+            res = new XN627805Res(result, readAmount,
                 agentLevel.getMinSurplus(), agentLevel.getAmount(),
                 chargeAmount, agent.getLevel(), isWareHouse);
         }

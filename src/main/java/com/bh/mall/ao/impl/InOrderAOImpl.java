@@ -196,6 +196,7 @@ public class InOrderAOImpl implements IInOrderAO {
             // 删除购物车记录
             cartBO.removeCart(cart);
         }
+
         return list;
     }
 

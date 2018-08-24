@@ -22,9 +22,6 @@ public interface IExchangeOrderAO {
     // 添加置换单
     public String addExchangeOrder(XN627790Req req);
 
-    // 修改置换单
-    public int editExchangeOrder(ExchangeOrder data);
-
     // 修改换货价
     public void editExchangePrice(String code, String exchangePrice,
             String approver, String remark);

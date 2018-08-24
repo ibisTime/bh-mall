@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -153,7 +154,7 @@ public class InnerOrder extends ABaseDO {
     private String applyName;
 
     // 状态
-    private String statusList;
+    private List<String> statusList;
 
     public String getStatusForQuery() {
         return statusForQuery;
@@ -523,11 +524,11 @@ public class InnerOrder extends ABaseDO {
         this.specsName = specsName;
     }
 
-    public String getStatusList() {
+    public List<String> getStatusList() {
         return statusList;
     }
 
-    public void setStatusList(String statusList) {
+    public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
     }
 

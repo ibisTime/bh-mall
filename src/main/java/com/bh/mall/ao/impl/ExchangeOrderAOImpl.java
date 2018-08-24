@@ -154,12 +154,6 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
     }
 
     @Override
-    public int editExchangeOrder(ExchangeOrder data) {
-        return exchangeOrderBO.refreshChangeOrder(data);
-
-    }
-
-    @Override
     public Paginable<ExchangeOrder> queryExchangeOrderPage(int start, int limit,
             ExchangeOrder condition) {
         if (condition.getApplyStartDatetime() != null

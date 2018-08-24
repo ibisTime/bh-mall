@@ -89,7 +89,7 @@ public class AgentLogAOImpl implements IAgentLogAO {
             // 介绍人转义
             if (StringUtils.isNotBlank(data.getIntroducer())) {
                 Agent introducer = agentBO.getAgent(data.getIntroducer());
-                data.setReferrerName(introducer.getRealName());
+                data.setIntroduceName(introducer.getRealName());
             }
 
             // 上级转义
@@ -127,9 +127,8 @@ public class AgentLogAOImpl implements IAgentLogAO {
         // 介绍人转义
         if (StringUtils.isNotBlank(data.getIntroducer())) {
             Agent introducer = agentBO.getAgent(data.getIntroducer());
-            data.setReferrerName(introducer.getRealName());
+            data.setIntroduceName(introducer.getRealName());
         }
-
         // 上级转义
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {

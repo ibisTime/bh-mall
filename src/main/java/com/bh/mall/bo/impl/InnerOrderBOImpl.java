@@ -114,7 +114,7 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
 
     @Override
     public void paySuccess(InnerOrder data) {
-        data.setStatus(EInnerOrderStatus.Paid.getCode());
+        data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
         innerOrderDAO.paySuccess(data);
     }
 
@@ -127,7 +127,7 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
 
     @Override
     public void payNo(InnerOrder data) {
-        data.setStatus(EInnerOrderStatus.Pay_No.getCode());
+        data.setStatus(EInnerOrderStatus.PAY_FAIL.getCode());
         innerOrderDAO.payNo(data);
     }
 

@@ -158,7 +158,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         if (psCode.equals(psReq.getRefCode())) {
             throw new BizException("xn000000", "同一个规格之间不能关联哦！");
         }
-        data.setCode(psCode);
+
         if (EBoolean.YES.getCode().equals(psReq.getIsSingle())
                 && EBoolean.NO.getCode().equals(psReq.getSingleNumber())) {
             throw new BizException("xn00000", "拆单数量不能为零");
@@ -167,10 +167,13 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
             data.setSingleNumber(
                 StringValidater.toInteger(psReq.getSingleNumber()));
         }
-        data.setRefCode(psReq.getRefCode());
 
+        data.setCode(psCode);
+        data.setRefCode(psReq.getRefCode());
         data.setProductCode(code);
         data.setName(psReq.getName());
+
+        data.setStockNumber(StringValidater.toInteger(psReq.getStockNumber()));
         data.setNumber(StringValidater.toInteger(psReq.getNumber()));
         data.setWeight(StringValidater.toDouble(psReq.getWeight()));
         data.setIsUpgradeOrder(psReq.getIsSjOrder());
@@ -223,7 +226,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         if (psData.getCode().equals(psReq.getRefCode())) {
             throw new BizException("xn000000", "同一个规格之间不能关联哦！");
         }
-        psData.setIsSingle(psReq.getIsSingle());
+
         if (EBoolean.YES.getCode().equals(psReq.getIsSingle())
                 && EBoolean.NO.getCode().equals(psReq.getSingleNumber())) {
             throw new BizException("xn00000", "拆单数量不能为零");
@@ -233,15 +236,19 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 StringValidater.toInteger(psReq.getSingleNumber()));
         }
 
+        psData.setRefCode(psReq.getRefCode());
+        psData.setIsSingle(psReq.getIsSingle());
         psData.setName(psReq.getName());
         psData.setNumber(StringValidater.toInteger(psReq.getNumber()));
         psData.setWeight(StringValidater.toDouble(psReq.getWeight()));
-        psData.setIsUpgradeOrder(psReq.getIsSjOrder());
 
+        psData
+            .setStockNumber(StringValidater.toInteger(psReq.getStockNumber()));
+        psData.setIsUpgradeOrder(psReq.getIsSjOrder());
         psData.setIsImpowerOrder(psReq.getIsSqOrder());
         psData.setIsNormalOrder(psReq.getIsNormalOrder());
-
         specsDAO.update(psData);
+
         List<XN627547Req> pspList = specsPriceList;
 
         for (XN627547Req specsPrice : pspList) {

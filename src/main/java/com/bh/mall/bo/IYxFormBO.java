@@ -53,4 +53,6 @@ public interface IYxFormBO extends IPaginableBO<YxForm> {
             String mobile, Integer level, String province, String city,
             String area, String address);
 
+    public void removeYxForm(YxForm data);
+
 }

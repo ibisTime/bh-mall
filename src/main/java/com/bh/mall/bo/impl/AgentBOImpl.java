@@ -23,6 +23,7 @@ import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.ESjFormStatus;
+import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -359,9 +360,13 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshYx(Agent data, String status, String approver,
             String approveName, String logCode) {
-        if (EAgentStatus.IGNORED.getCode().equals(status)) {
-            data.setStatus(status);
+
+        if (EYxFormStatus.IGNORED.getCode().equals(status)) {
             data.setMobile(null);
+        } else if (EYxFormStatus.ACCEPT.getCode().equals(status)) {
+            data.setStatus(EAgentStatus.ADD_INFO.getCode());
+        } else {
+            data.setStatus(status);
         }
 
         data.setApproveDatetime(new Date());
@@ -458,6 +463,10 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setLevel(sqForm.getApplyLevel());
             data.setImpowerDatetime(date);
             data.setManager(manager);
+
+            data.setIdKind(sqForm.getIdKind());
+            data.setIdNo(sqForm.getIdNo());
+            data.setIdHand(sqForm.getIdHand());
 
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
             highUserId = null;

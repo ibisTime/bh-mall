@@ -16,6 +16,7 @@ import com.bh.mall.dao.IYxFormDAO;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.enums.EAgentLogStatus;
 import com.bh.mall.enums.EAgentStatus;
+import com.bh.mall.enums.EYxFormStatus;
 
 @Component
 public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
@@ -82,7 +83,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     public String allotYxForm(YxForm data, String toUserId, String approver,
             String approveName, String remark) {
         data.setToUserId(toUserId);
-        data.setStatus(EAgentLogStatus.ALLOTED.getCode());
+        data.setStatus(EYxFormStatus.ALLOTED.getCode());
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setApproveDatetime(new Date());
@@ -98,7 +99,7 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
     @Override
     public String ignoreYxForm(YxForm data, String approver, String approveName,
             String remark) {
-        data.setStatus(EAgentLogStatus.IGNORED.getCode());
+        data.setStatus(EAgentLogStatus.ALLOTED.getCode());
         data.setApprover(approver);
         data.setApproveName(approveName);
         data.setRemark(remark);
@@ -171,6 +172,11 @@ public class YxFormBOImpl extends PaginableBOImpl<YxForm> implements IYxFormBO {
         data.setArea(area);
         data.setAddress(address);
         yxFormDAO.update(data);
+    }
+
+    @Override
+    public void removeYxForm(YxForm data) {
+        yxFormDAO.delete(data);
     }
 
 }

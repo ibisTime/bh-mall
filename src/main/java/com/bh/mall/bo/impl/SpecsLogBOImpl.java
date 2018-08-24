@@ -29,7 +29,9 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
         SpecsLog data = new SpecsLog();
         String plCode = OrderNoGenerater
             .generate(EGeneratePrefix.ProductLog.getCode());
+
         data.setCode(plCode);
+        data.setType(type);
         data.setProductCode(productCode);
         data.setProductName(productName);
         data.setSpecsName(specs.getName());

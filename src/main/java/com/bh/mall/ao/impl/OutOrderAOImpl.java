@@ -905,12 +905,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
         }
 
-        // 是否有填写箱码或盒码
-        if (StringUtils.isEmpty(req.getProCode())
-                && CollectionUtils.isEmpty(req.getTraceCodeList())) {
-            throw new BizException("xn000000", "请输入箱码或盒码！");
-        }
-
         // 订单与箱码关联（整箱发货）
         if (StringUtils.isNotBlank(req.getProCode())) {
             data.setProCode(req.getProCode());
@@ -989,7 +983,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn00000", "订单已申请取消喽，请勿重复申请！");
         }
         // 非待支付和待审单的订单无法取消
-        if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+        if (!(EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || EOutOrderStatus.TO_APPROVE.getCode()
+                    .equals(data.getStatus()))) {
             throw new BizException("xn00000", "订单已发货或已收货，无法申请取消");
         }
 

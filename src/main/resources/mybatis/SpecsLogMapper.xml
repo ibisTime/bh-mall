@@ -50,7 +50,9 @@
 		SELECT 
 		t.code
 		,t.product_code
+		,t.product_name
 		,t.specs_code
+		,t.specs_name
 		,t.type
 		,t.tran_count
 		,t.pre_count

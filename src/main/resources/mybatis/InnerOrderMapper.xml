@@ -76,12 +76,15 @@
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
 				</when>
-				<when test="statusList != null and statusList != '' ">
+				<when test="statusList != null and statusList.size()>0  ">
 					AND t.status IN
 					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
 						#{item}
 					</foreach>
 				</when>
+				<otherwise>
+					AND 1 = 1
+				</otherwise>
 			</choose>
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>

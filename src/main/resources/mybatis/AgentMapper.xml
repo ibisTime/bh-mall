@@ -543,7 +543,11 @@
 		UPDATE tbh_agent
 		SET
 		status = #{status}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		,id_hand = #{idHand}
 		,level = #{level}
+		
 		,high_user_id = #{highUserId}
 		,team_name = #{teamName}
 		,manager = #{manager}

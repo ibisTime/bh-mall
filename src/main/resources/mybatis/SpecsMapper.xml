@@ -90,6 +90,7 @@
 		,product_code
 		,name
 		,number
+		,is_single
 		,stock_number
 		,weight
 		
@@ -102,6 +103,7 @@
 		,#{productCode}
 		,#{name}
 		,#{number}
+		,#{isSingle}
 		,#{stockNumber}
 		,#{weight}
 		

@@ -32,6 +32,8 @@ public class XN627731 extends AProcessor {
         condition.setApplyUser(req.getApplyUser());
         condition.setTeamName(req.getTeamName());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
+
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(

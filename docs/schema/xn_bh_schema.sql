@@ -1049,6 +1049,7 @@ CREATE TABLE `tbh_withdraw` (
   `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人',
+  `high_user_id` varchar(32) DEFAULT NULL COMMENT '上级',
   `approve_note` varchar(255) DEFAULT NULL COMMENT '审批说明',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审批时间',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
@@ -1097,7 +1098,7 @@ CREATE TABLE `tsys_config` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tsys_dict` */
 
@@ -1113,7 +1114,7 @@ CREATE TABLE `tsys_dict` (
   `update_datetime` datetime DEFAULT NULL,
   `remark` varchar(2295) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tsys_menu` */
 
@@ -1146,7 +1147,7 @@ CREATE TABLE `tsys_menu_role` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tsys_role` */
 
@@ -1165,7 +1166,6 @@ CREATE TABLE `tsys_role` (
 /*Table structure for table `tsys_user` */
 
 DROP TABLE IF EXISTS `tsys_user`;
-
 CREATE TABLE `tsys_user` (
   `user_id` varchar(32) NOT NULL COMMENT '用户ID',
   `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',

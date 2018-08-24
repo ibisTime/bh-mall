@@ -4,7 +4,6 @@ import com.bh.mall.dao.base.IBaseDAO;
 import com.bh.mall.domain.YxForm;
 
 public interface IYxFormDAO extends IBaseDAO<YxForm> {
-
     String NAMESPACE = IYxFormDAO.class.getName().concat(".");
 
     public void allotYxForm(YxForm data);

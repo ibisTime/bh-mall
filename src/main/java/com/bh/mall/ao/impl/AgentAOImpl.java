@@ -124,6 +124,12 @@ public class AgentAOImpl implements IAgentAO {
     // 注册登录
     @Override
     public XN627303Res doLoginWeChatByAgent(String code, String fromUserId) {
+
+        // fromUserId偶尔会有undefind
+        if ("undefind".equals(fromUserId)) {
+            throw new BizException("xn00000", "该二维码无法识别，请联系上级获取新的二维码");
+        }
+
         String status = EAgentStatus.MIND.getCode();
         if (StringUtils.isNotBlank(fromUserId)) {
             status = EAgentStatus.IMPOWERO_INFO.getCode();
@@ -213,9 +219,8 @@ public class AgentAOImpl implements IAgentAO {
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
                 // 重新申请时，更新用户状态
-                if (EAgentStatus.IGNORED.getCode().equals(dbUser.getStatus())
-                        || EAgentStatus.CANCELED.getCode()
-                            .equals(dbUser.getStatus())) {
+                if (EAgentStatus.CANCELED.getCode()
+                    .equals(dbUser.getStatus())) {
                     agentBO.refreshStatus(dbUser, status);
                 }
 

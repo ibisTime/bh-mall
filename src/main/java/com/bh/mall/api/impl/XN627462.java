@@ -12,7 +12,9 @@ import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.common.PropertiesUtil;
+import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.ObjValidater;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.dto.req.XN627462Req;
 import com.bh.mall.enums.EBizType;
@@ -37,10 +39,12 @@ public class XN627462 extends AProcessor {
     public Object doBusiness() throws BizException {
         Long transAmount = StringValidater.toLong(req.getAmount());
         if (EChannelType.WeChat_H5.getCode().equals(req.getChannelType())) {
+            String payGroup = OrderNoGenerater
+                .generate(EGeneratePrefix.Charge.getCode());
             return weChatAO.toPrepayIdH5(req.getApplyUser(),
-                req.getAccountNumber(), EBizType.AJ_CZ.getValue(),
-                EBizType.AJ_CZ.getValue(), EBizType.AJ_CZ.getCode(), "微信H5支付充值",
-                transAmount, PropertiesUtil.Config.WECHAT_H5_BACKURL);
+                req.getAccountNumber(), payGroup, req.getApplyUser(),
+                EBizType.AJ_CZ.getCode(), "微信H5支付充值", transAmount,
+                PropertiesUtil.Config.WECHAT_H5_BACKURL);
 
         } else {
             throw new BizException("xn000000", "暂时不支持该渠道");

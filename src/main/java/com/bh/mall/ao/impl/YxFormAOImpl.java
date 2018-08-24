@@ -106,8 +106,8 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshYx(agent, null, sysUser.getUserId(),
-            sysUser.getRealName(), logCode);
+        agentBO.refreshYx(agent, EYxFormStatus.ALLOTED.getCode(),
+            sysUser.getUserId(), sysUser.getRealName(), logCode);
     }
 
     /**
@@ -130,7 +130,9 @@ public class YxFormAOImpl implements IYxFormAO {
             agent.getRealName(), remark);
 
         // 更新最后一条轨迹
-        agentBO.refreshYx(agent, null, approver, agent.getRealName(), logCode);
+        agentBO.refreshYx(agent, EYxFormStatus.ALLOTED.getCode(), approver,
+            agent.getRealName(), logCode);
+
     }
 
     /**
@@ -187,7 +189,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshYx(agent, EAgentStatus.ADD_INFO.getCode(),
+        agentBO.refreshYx(agent, EYxFormStatus.ACCEPT.getCode(),
             agent.getUserId(), agent.getRealName(), logCode);
 
     }
