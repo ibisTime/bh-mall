@@ -25,6 +25,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -40,10 +41,10 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     IAgentPriceBO agentPriceBO;
 
     @Override
-    public void saveWare(Ware data, Integer quantity, EBizType bizType,
-            String bizNote, String refNo) {
-        String logCode = wareLogBO.saveWareLog(data, quantity, bizType, bizNote,
-            refNo);
+    public void saveWare(Ware data, String type, Integer quantity,
+            EBizType bizType, String bizNote, String refNo) {
+        String logCode = wareLogBO.saveWareLog(data, type, quantity, bizType,
+            bizNote, refNo);
         data.setLastChangeCode(logCode);
         wareDAO.insert(data);
 
@@ -89,30 +90,32 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     @Override
-    public void transQuantity(String fromUser, String fromSpecs, String toUser,
-            String toSpecs, Integer quantity, EBizType fromBizType,
-            EBizType toBizType, String fromBizNote, String toBizNote,
-            String refNo) {
+    public void transQuantity(String fromUser, String fromSpecs,
+            String fromType, String toUser, String toSpecs, String toType,
+            Integer quantity, EBizType fromBizType, EBizType toBizType,
+            String fromBizNote, String toBizNote, String refNo) {
         Ware fromWare = this.getWareByProductSpec(fromUser, fromSpecs);
         Ware toWare = this.getWareByProductSpec(toUser, toSpecs);
 
-        transQuantity(fromWare, toWare, quantity, fromBizType, toBizType,
-            fromBizNote, toBizNote, refNo);
+        transQuantity(fromWare, fromType, toWare, toType, quantity, fromBizType,
+            toBizType, fromBizNote, toBizNote, refNo);
     }
 
-    private void transQuantity(Ware fromWare, Ware toWare, Integer quantity,
-            EBizType fromBizType, EBizType toBizType, String fromBizNote,
-            String toBizNote, String refNo) {
+    private void transQuantity(Ware fromWare, String fromType, Ware toWare,
+            String toType, Integer quantity, EBizType fromBizType,
+            EBizType toBizType, String fromBizNote, String toBizNote,
+            String refNo) {
         String fromCode = fromWare.getCode();
         String toCode = toWare.getCode();
-        this.changeWare(fromCode, quantity, fromBizType, fromBizNote, refNo);
-        this.changeWare(toCode, -quantity, toBizType, toBizNote, refNo);
+        this.changeWare(fromCode, fromType, quantity, fromBizType, fromBizNote,
+            refNo);
+        this.changeWare(toCode, toType, -quantity, toBizType, toBizNote, refNo);
     }
 
     @Override
     @Transactional
-    public void changeWare(String code, Integer quantity, EBizType bizType,
-            String bizNote, String refNo) {
+    public void changeWare(String code, String type, Integer quantity,
+            EBizType bizType, String bizNote, String refNo) {
 
         Ware dbData = this.getWare(code);
         Integer nowQuantity = dbData.getQuantity() + quantity;
@@ -122,7 +125,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
         }
 
         // 记录流水
-        String logCode = wareLogBO.saveWareLog(dbData, quantity, bizType,
+        String logCode = wareLogBO.saveWareLog(dbData, type, quantity, bizType,
             bizNote, refNo);
         // 改变数量
         Ware data = new Ware();
@@ -186,12 +189,13 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
             whData.setCompanyCode(ESystemCode.BH.getCode());
             whData.setSystemCode(ESystemCode.BH.getCode());
-            this.saveWare(whData, data.getQuantity(), EBizType.AJ_GMYC,
-                "购买" + data.getProductName(), data.getCode());
+            this.saveWare(whData, EWareLogType.IN.getCode(), data.getQuantity(),
+                EBizType.AJ_GMYC, "购买" + data.getProductName(), data.getCode());
 
         } else {
-            this.changeWare(ware.getCode(), data.getQuantity(),
-                EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), data.getCode());
+            this.changeWare(ware.getCode(), EWareLogType.IN.getCode(),
+                data.getQuantity(), EBizType.AJ_GMYC,
+                EBizType.AJ_GMYC.getValue(), data.getCode());
         }
     }
 
@@ -254,12 +258,14 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
             whData.setCompanyCode(ESystemCode.BH.getCode());
             whData.setSystemCode(ESystemCode.BH.getCode());
-            this.saveWare(whData, data.getQuantity(), EBizType.AJ_GMYC,
+            this.saveWare(whData, EWareLogType.CHANGE.getCode(),
+                data.getQuantity(), EBizType.AJ_GMYC,
                 "购买" + data.getProductName(), data.getCode());
 
         } else {
-            this.changeWare(ware.getCode(), data.getQuantity(),
-                EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), data.getCode());
+            this.changeWare(ware.getCode(), EWareLogType.CHANGE.getCode(),
+                data.getQuantity(), EBizType.AJ_GMYC,
+                EBizType.AJ_GMYC.getValue(), data.getCode());
         }
     }
 

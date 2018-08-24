@@ -237,18 +237,19 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 新增授权单
+        SYSUser sysUser = sysUserBO.getSYSUser();
         SqForm sqForm = sqFormBO.getSqForm(agent.getUserId());
         if (null == sqForm) {
             sqForm = sqFormBO.applySqForm(agent.getUserId(),
                 agent.getRealName(), agent.getMobile(), agent.getWxId(),
-                req.getApplyLevel(), yxForm.getToUserId(), req.getTeamName(),
+                req.getApplyLevel(), sysUser.getUserId(), req.getTeamName(),
                 introducer, null, req.getIdKind(), req.getIdNo(),
                 req.getIdHand(), agent.getProvince(), agent.getCity(),
                 agent.getArea(), agent.getAddress(), status);
         } else {
             sqFormBO.refreshSqForm(sqForm, agent.getRealName(),
                 agent.getMobile(), agent.getWxId(), req.getApplyLevel(),
-                yxForm.getToUserId(), req.getTeamName(), introducer, null,
+                sysUser.getUserId(), req.getTeamName(), introducer, null,
                 req.getIdKind(), req.getIdNo(), req.getIdHand(),
                 agent.getProvince(), agent.getCity(), agent.getArea(),
                 agent.getAddress(), status);
@@ -353,7 +354,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     /**
      * 审核退出，无需公司审核，清空账户
-     * @see com.bh.mall.ao.ISqFormAO#cancelSqFormByB(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
     public void cancelSqFormByB(String userId, String approver, String result,
@@ -453,9 +453,18 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         List<SqForm> list = sqFormBO.querySqFormList(condition);
-        for (SqForm sqForm : list) {
-            Agent buser = agentBO.getAgent(sqForm.getUserId());
-            sqForm.setUser(buser);
+        for (SqForm data : list) {
+            Agent buser = agentBO.getAgent(data.getUserId());
+            data.setUser(buser);
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != data
+                .getApplyLevel()
+                    && StringUtils.isNotBlank(data.getToUserId())) {
+                Agent toUser = agentBO.getAgent(data.getToUserId());
+                data.setToUserName(toUser.getRealName());
+            } else if (StringUtils.isNotBlank(data.getToUserId())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+                data.setToUserName(sysUser.getRealName());
+            }
         }
         return list;
     }
@@ -467,10 +476,16 @@ public class SqFormAOImpl implements ISqFormAO {
         Agent buser = agentBO.getAgent(data.getUserId());
         data.setUser(buser);
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != data
-            .getApplyLevel()) {
+            .getApplyLevel() && StringUtils.isNotBlank(data.getToUserId())) {
             Agent toUser = agentBO.getAgent(data.getToUserId());
             data.setToUserName(toUser.getRealName());
+        } else if (StringUtils.isNotBlank(data.getToUserId())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+            data.setToUserName(sysUser.getRealName());
         }
+        AgentLevel agentLevel = agentLevelBO
+            .getAgentByLevel(data.getApplyLevel());
+        data.setImpowerAmount(agentLevel.getMinCharge());
         return data;
 
     }
@@ -493,10 +508,17 @@ public class SqFormAOImpl implements ISqFormAO {
             Agent agent = agentBO.getAgent(sqForm.getUserId());
             sqForm.setUser(agent);
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != sqForm
-                .getApplyLevel()) {
+                .getApplyLevel()
+                    && StringUtils.isNotBlank(sqForm.getToUserId())) {
                 Agent toUser = agentBO.getAgent(sqForm.getToUserId());
                 sqForm.setToUserName(toUser.getRealName());
+            } else if (StringUtils.isNotBlank(sqForm.getToUserId())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(sqForm.getToUserId());
+                sqForm.setToUserName(sysUser.getRealName());
             }
+            AgentLevel agentLevel = agentLevelBO
+                .getAgentByLevel(sqForm.getApplyLevel());
+            sqForm.setImpowerAmount(agentLevel.getMinCharge());
         }
         return page;
     }

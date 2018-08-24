@@ -32,7 +32,7 @@ public class XN627852 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentReport condition = new AgentReport();
-        condition.setUserReferee(req.getUserReferee());
+        condition.setUserReferee(req.getReferrer());
         condition.setIntroducer(req.getIntroducer());
 
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),

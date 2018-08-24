@@ -19,6 +19,7 @@ public class XN627815Req {
     private String productSpecsCode;
 
     // （必填）数量
+    @NotBlank(message = "数量不能为空")
     private String quantity;
 
     // （必填）收件人

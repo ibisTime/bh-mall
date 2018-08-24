@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bh.mall.ao.IAgentAO;
+import com.bh.mall.ao.IAgentLogAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
-import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -109,7 +109,7 @@ public class AgentAOImpl implements IAgentAO {
     IAgentReportBO agentReportBO;
 
     @Autowired
-    IAgentLogBO agentLogBO;
+    IAgentLogAO agentLogAO;
 
     // 微信注册
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
@@ -212,6 +212,13 @@ public class AgentAOImpl implements IAgentAO {
             String subscribe = String.valueOf(resMap2.get("subscribe"));
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                // 重新申请时，更新用户状态
+                if (EAgentStatus.IGNORED.getCode().equals(dbUser.getStatus())
+                        || EAgentStatus.CANCELED.getCode()
+                            .equals(dbUser.getStatus())) {
+                    agentBO.refreshStatus(dbUser, status);
+                }
+
                 result = new XN627303Res(dbUser.getUserId(), dbUser.getStatus(),
                     subscribe);
             } else {
@@ -431,7 +438,7 @@ public class AgentAOImpl implements IAgentAO {
 
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                .getLevel()) {
+                .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else if (StringUtils.isNotBlank(data.getHighUserId())) {
@@ -476,7 +483,7 @@ public class AgentAOImpl implements IAgentAO {
 
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                .getLevel()) {
+                .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else if (StringUtils.isNotBlank(data.getHighUserId())) {
@@ -529,7 +536,13 @@ public class AgentAOImpl implements IAgentAO {
             agentBO.resetInfo(agent);
         }
 
-        // 清空介绍关系 TODO
+        // 清空介绍关系
+        Agent condition2 = new Agent();
+        condition2.setIntroducer(data.getUserId());
+        List<Agent> list2 = agentBO.queryAgentList(condition);
+        for (Agent agent : list2) {
+            agentBO.resetInfo(agent);
+        }
 
     }
 
@@ -556,7 +569,7 @@ public class AgentAOImpl implements IAgentAO {
 
         // 上级转义
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-            .getLevel()) {
+            .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
             SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
             data.setHighUserName(sysUser.getRealName());
         } else if (StringUtils.isNotBlank(data.getHighUserId())) {
@@ -580,8 +593,10 @@ public class AgentAOImpl implements IAgentAO {
         data.setWareAmount(amount);
 
         // 代理轨迹
-        List<AgentLog> logList = agentLogBO
-            .getAgentLogByAgent(data.getUserId());
+        AgentLog condition = new AgentLog();
+        condition.setApplyUser(data.getUserId());
+        List<AgentLog> logList = agentLogAO.queryAgentLogList(condition);
+
         data.setLogList(logList);
 
         // 获取归属人的团队名称(有推荐人)

@@ -36,9 +36,11 @@
 			<if test="status != null and status !=''">
 				AND t.status  = #{status}
 			</if>
+			<if test="isBuy != null and isBuy !=''">
+				AND p.is_buy  = #{isBuy}
+			</if>		
 		</trim>
 	</sql>
-	
 	
 	
 	<select id="select_product" parameterType="product" resultMap="product_DB_Result">
@@ -76,6 +78,47 @@
 		SELECT count(1) FROM tbh_product t
 		<include refid="where_condition"/>
 	</select>
+	
+	
+	<select id="select_product_b" parameterType="product" resultMap="product_DB_Result">
+		SELECT 
+		t.code
+		,t.name
+		,t.ad_price
+		,t.price
+		
+		,t.vir_number
+		,t.real_number
+		,t.order_no
+		,t.pic
+		,t.adv_pic
+		
+		,t.slogan
+		,t.is_total
+		,t.status
+		,t.create_datetime
+		,t.updater
+		
+		,t.is_free
+		,t.update_datetime
+		,t.remark
+		FROM tbh_product t  LEFT JOIN tbh_specs s ON t.code = s.product_code 
+		LEFT JOIN tbh_agent_price p ON s.code = p.specs_code 
+		<include refid="where_condition"/>
+		GROUP BY t.code
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_product_count_b" parameterType="product" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_product t   LEFT JOIN tbh_specs s ON t.code = s.product_code 
+		LEFT JOIN tbh_agent_price p ON s.code = p.specs_code 
+		<include refid="where_condition"/>
+	</select>
+	
 	
 	<insert id="insert_product" parameterType="product">
 		INSERT INTO tbh_product(

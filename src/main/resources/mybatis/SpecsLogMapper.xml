@@ -79,7 +79,9 @@
 		INSERT INTO tbh_specs_log(
 		code
 		,product_code
+		,product_name
 		,specs_code
+		,specs_name
 		,type
 		,tran_count
 		,pre_count
@@ -92,7 +94,9 @@
 		VALUES(
 		#{code}
 		,#{productCode}
+		,#{productName}
 		,#{specsCode}
+		,#{specsName}
 		,#{type}
 		,#{tranCount}
 		,#{preCount}

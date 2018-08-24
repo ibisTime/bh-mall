@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bh.mall.dao.IDeliveOrderDAO">
 	<resultMap id="deliveOrder_DB_Result" type="deliveOrder">
-		<result column="coed" property="coed" />
+		<result column="code" property="code" />
 		<result column="kind" property="kind" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
@@ -50,7 +50,7 @@
 	</sql>
 	<select id="select_deliveOrder" parameterType="deliveOrder" resultMap="deliveOrder_DB_Result">
 		SELECT
-		t.coed
+		t.code
 		,t.kind
 		,t.product_code
 		,t.product_name
@@ -95,7 +95,7 @@
 	<insert id="insert_deliveOrder" parameterType="deliveOrder">
 		INSERT INTO
 		tbh_delive_order(
-		coed
+		code
 		,kind
 		,product_code
 		,product_name
@@ -123,7 +123,7 @@
 		,bar_code
 		)
 		VALUES(
-		#{coed}
+		#{code}
 		,#{kind}
 		,#{productCode}
 		,#{productName}

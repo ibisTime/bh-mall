@@ -3,6 +3,7 @@ package com.bh.mall.api.impl;
 import com.bh.mall.ao.IWareAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
+import com.bh.mall.core.ObjValidater;
 import com.bh.mall.dto.req.XN627815Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.exception.BizException;
@@ -17,8 +18,7 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627815 extends AProcessor {
 
-    private IWareAO wareAO = SpringContextHolder
-        .getBean(IWareAO.class);
+    private IWareAO wareAO = SpringContextHolder.getBean(IWareAO.class);
 
     private XN627815Req req = null;
 
@@ -31,6 +31,7 @@ public class XN627815 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627815Req.class);
+        ObjValidater.validateReq(req);
     }
 
 }

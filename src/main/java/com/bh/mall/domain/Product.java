@@ -88,6 +88,9 @@ public class Product extends ABaseDO {
     // 规格价格
     private AgentPrice specsPrice;
 
+    // 是否可买
+    private String isBuy;
+
     public String getCode() {
         return code;
     }
@@ -278,6 +281,14 @@ public class Product extends ABaseDO {
 
     public void setSpecsPrice(AgentPrice specsPrice) {
         this.specsPrice = specsPrice;
+    }
+
+    public String getIsBuy() {
+        return isBuy;
+    }
+
+    public void setIsBuy(String isBuy) {
+        this.isBuy = isBuy;
     }
 
 }

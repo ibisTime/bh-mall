@@ -87,6 +87,7 @@
 		,t.real_name
 		,t.wx_id
 		,t.mobile
+		,t.team_name
 		,t.id_kind
 		,t.id_no		
 		,t.id_hand

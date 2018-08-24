@@ -379,6 +379,40 @@ CREATE TABLE `tbh_cuser` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*Table structure for table `tbh_delive_order` */
+
+DROP TABLE IF EXISTS `tbh_delive_order`;
+
+CREATE TABLE `tbh_delive_order` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `kind` char(1) DEFAULT NULL COMMENT '类型（0 出货订单，1内购订单）',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `bar_code` varchar(15) DEFAULT NULL COMMENT '箱码',
+  `pic` varchar(255) DEFAULT NULL COMMENT '图片',
+  `quantity` int(11) DEFAULT '0' COMMENT '数量',
+  `price` bigint(20) DEFAULT '0' COMMENT '单价',
+  `yunfei` bigint(20) DEFAULT '0' COMMENT '运费',
+  `amount` bigint(20) DEFAULT '0' COMMENT '总价',
+  `status` char(4) DEFAULT NULL COMMENT '状态',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',
+  `real_name` varchar(255) DEFAULT NULL COMMENT '下单人姓名',
+  `apply_note` text COMMENT '下单备注',
+  `signer` varchar(255) DEFAULT NULL COMMENT '收货人',
+  `mobile` varchar(16) DEFAULT NULL COMMENT '收货电话',
+  `province` varchar(255) DEFAULT NULL COMMENT '省',
+  `city` varchar(255) DEFAULT NULL COMMENT '市',
+  `area` varchar(255) DEFAULT NULL COMMENT '区',
+  `address` text COMMENT '地址',
+  `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
+  `delive_datetime` datetime DEFAULT NULL COMMENT '发货时间',
+  `logistics_code` varchar(32) DEFAULT NULL COMMENT '物流单号',
+  `logistics_company` varchar(255) DEFAULT NULL COMMENT '物流公司',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*Table structure for table `tbh_exchange_order` */
 
 DROP TABLE IF EXISTS `tbh_exchange_order`;
@@ -705,6 +739,7 @@ CREATE TABLE `tbh_out_order` (
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '渠道编号',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',
+  `high_user_id` varchar(32) DEFAULT NULL COMMENT '上级',
   `real_name` varchar(255) DEFAULT NULL COMMENT '下单人姓名',
   `team_name` varchar(255) DEFAULT NULL COMMENT '团队名称',
   `team_leader` varchar(255) DEFAULT NULL COMMENT '团队长',
@@ -1062,7 +1097,7 @@ CREATE TABLE `tsys_config` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tsys_dict` */
 
@@ -1078,7 +1113,7 @@ CREATE TABLE `tsys_dict` (
   `update_datetime` datetime DEFAULT NULL,
   `remark` varchar(2295) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tsys_menu` */
 
@@ -1111,7 +1146,7 @@ CREATE TABLE `tsys_menu_role` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=202 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tsys_role` */
 

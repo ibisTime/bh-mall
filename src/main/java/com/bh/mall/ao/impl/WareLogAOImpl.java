@@ -26,7 +26,9 @@ public class WareLogAOImpl implements IWareLogAO {
                     .getStartDatetime().after(condition.getEndDatetime())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-        return wareLogBO.getPaginable(start, limit, condition);
+        Paginable<WareLog> page = wareLogBO.getPaginable(start, limit,
+            condition);
+        return page;
     }
 
     // 列表查询

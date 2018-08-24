@@ -38,7 +38,7 @@ public class XN627546Req {
     @NotBlank(message = "规格包含数量不能为空")
     private String number;
 
-    // （必填）规格库存
+    // （必填）库存
     @NotBlank(message = "不能为空")
     private String stockNumber;
 
@@ -48,11 +48,11 @@ public class XN627546Req {
 
     // （必填）是否允许升级单下单
     @NotBlank(message = "是否允许升级单下单不能为空")
-    private String isUpgradeOrder;
+    private String isSjOrder;
 
     // （必填）是否允许授权单下单
     @NotBlank(message = "是否允许授权单下单不能为空")
-    private String isImpowerOrder;
+    private String isSqOrder;
 
     // （必填）是否允许普通单下单
     @NotBlank(message = "是否允许普通单下单不能为空")
@@ -85,20 +85,20 @@ public class XN627546Req {
         this.isNormalOrder = isNormalOrder;
     }
 
-    public String getIsImpowerOrder() {
-        return isImpowerOrder;
+    public String getIsSjOrder() {
+        return isSjOrder;
     }
 
-    public void setIsImpowerOrder(String isImpowerOrder) {
-        this.isImpowerOrder = isImpowerOrder;
+    public String getIsSqOrder() {
+        return isSqOrder;
     }
 
-    public String getIsUpgradeOrder() {
-        return isUpgradeOrder;
+    public void setIsSjOrder(String isSjOrder) {
+        this.isSjOrder = isSjOrder;
     }
 
-    public void setIsUpgradeOrder(String isUpgradeOrder) {
-        this.isUpgradeOrder = isUpgradeOrder;
+    public void setIsSqOrder(String isSqOrder) {
+        this.isSqOrder = isSqOrder;
     }
 
     public String getName() {

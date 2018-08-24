@@ -262,7 +262,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
             String kind) {
         OutOrder data = new OutOrder();
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
+            .generate(EGeneratePrefix.OutOrder.getCode());
 
         data.setCode(code);
         data.setProductCode(productCode);
@@ -281,10 +281,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setYunfei(yunfei);
         data.setAmount(amount + yunfei);
         data.setApplyUser(agent.getUserId());
+        data.setLevel(agent.getLevel());
         data.setRealName(agent.getRealName());
         data.setTeamName(agent.getTeamName());
 
         data.setTeamLeader(teamLeader);
+        data.setHighUserId(agent.getHighUserId());
         data.setApplyDatetime(new Date());
         data.setIsWareSend(isWareSend);
         data.setSigner(signer);

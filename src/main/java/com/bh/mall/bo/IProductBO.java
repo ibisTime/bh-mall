@@ -25,4 +25,8 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     void refreshVirNumber(Product data);
 
+    List<Product> queryProductPage(int pageNO, int pageSize, Product condition);
+
+    long getTotalCountByB(Product condition);
+
 }

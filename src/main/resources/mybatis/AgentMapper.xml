@@ -86,10 +86,20 @@
 				AND t.real_name = #{realName}
 			</if>
 
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
-
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size()>0 ">
+					AND t.status IN
+					<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+						#{item}					
+					</foreach>
+				</when>
+				<otherwise>
+					AND 1=1
+				</otherwise>
+			</choose>
 
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
@@ -465,6 +475,7 @@
 		UPDATE tbh_agent
 		SET
 		status = #{status}
+		,mobile = #{mobile}
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,approve_datetime =	#{approveDatetime}
@@ -535,6 +546,7 @@
 		,level = #{level}
 		,high_user_id = #{highUserId}
 		,team_name = #{teamName}
+		,manager = #{manager}
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,approve_datetime =	#{approveDatetime}

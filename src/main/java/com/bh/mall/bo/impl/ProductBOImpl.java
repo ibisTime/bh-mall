@@ -79,4 +79,15 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
 
     }
 
+    @Override
+    public List<Product> queryProductPage(int pageNO, int pageSize,
+            Product condition) {
+        return productDAO.selectProductPage(pageNO, pageSize, condition);
+    }
+
+    @Override
+    public long getTotalCountByB(Product condition) {
+        return productDAO.selectTotalCountByB(condition);
+    }
+
 }

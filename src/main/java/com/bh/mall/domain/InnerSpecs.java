@@ -40,7 +40,7 @@ public class InnerSpecs extends ABaseDO {
     private Double weight;
 
     // 价格
-    private String price;
+    private Long price;
 
     public String getCode() {
         return code;
@@ -82,11 +82,11 @@ public class InnerSpecs extends ABaseDO {
         this.weight = weight;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 

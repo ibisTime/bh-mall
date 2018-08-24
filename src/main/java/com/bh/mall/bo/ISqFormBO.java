@@ -28,7 +28,9 @@ public interface ISqFormBO extends IPaginableBO<SqForm> {
 
     public List<SqForm> querySqFormList(SqForm condition);
 
-    public SqForm getSqForm(String code);
+    public SqForm getSqForm(String userId);
+
+    public SqForm checkSqForm(String userId);
 
     // 申请退出
     public String cancelSqForm(SqForm sqForm, String status);

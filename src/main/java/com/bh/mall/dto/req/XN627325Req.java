@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查代理
  * @author: nyc 
@@ -57,6 +59,9 @@ public class XN627325Req extends APageReq {
 
     // 微信app第三方登录开放编号
     private String appOpenId;
+
+    // （选填） 状态
+    private List<String> statusList;
 
     public String getApplyEndDatetime() {
         return applyEndDatetime;
@@ -185,4 +190,13 @@ public class XN627325Req extends APageReq {
     public void setHighLevel(String highLevel) {
         this.highLevel = highLevel;
     }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
 }

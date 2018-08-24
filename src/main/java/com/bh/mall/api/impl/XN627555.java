@@ -9,6 +9,7 @@ import com.bh.mall.core.ObjValidater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Product;
 import com.bh.mall.dto.req.XN627555Req;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -33,6 +34,7 @@ public class XN627555 extends AProcessor {
         condition.setName(req.getName());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
 
+        condition.setIsBuy(EBoolean.YES.getCode());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IProductAO.DEFAULT_ORDER_COLUMN;

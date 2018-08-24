@@ -359,8 +359,9 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshYx(Agent data, String status, String approver,
             String approveName, String logCode) {
-        if (StringUtils.isNotBlank(status)) {
+        if (EAgentStatus.IGNORED.getCode().equals(status)) {
             data.setStatus(status);
+            data.setMobile(null);
         }
 
         data.setApproveDatetime(new Date());
@@ -497,6 +498,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setLastAgentLog(logCode);
         agentDAO.updateSj(data);
 
+    }
+
+    @Override
+    public void refreshStatus(Agent data, String status) {
+        data.setStatus(status);
+        agentDAO.updateStatus(data);
     }
 
 }

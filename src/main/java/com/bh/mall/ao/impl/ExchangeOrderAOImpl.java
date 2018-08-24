@@ -38,6 +38,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
 import com.bh.mall.enums.ESpecsLogType;
+import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -143,7 +144,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         data.setStatus(EChangeProductStatus.TO_CHANGE.getCode());
         exchangeOrderBO.saveChangeOrder(data);
 
-        wareBO.changeWare(whData.getCode(),
+        wareBO.changeWare(whData.getCode(), EWareLogType.CHANGE.getCode(),
             -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCZH,
             "[" + product.getName() + "]申请置换为[" + exchangeProduct.getName()
                     + "]",

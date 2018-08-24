@@ -18,6 +18,7 @@ import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.ISpecsLogBO;
 import com.bh.mall.bo.ITjAwardBO;
 import com.bh.mall.bo.IWareBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
@@ -340,9 +341,12 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Paginable<Product> selectProductPageByB(int start, int limit,
             Product condition) {
-        Paginable<Product> page = productBO.getPaginable(start, limit,
-            condition);
-        List<Product> list = page.getList();
+        // 获取该等级代理可购买的规格
+        long count = productBO.getTotalCountByB(condition);
+        Page<Product> page = new Page<Product>(start, limit, count);
+        List<Product> list = productBO.queryProductPage(page.getStart(),
+            page.getPageNO(), condition);
+
         for (Product product : list) {
 
             // 产品规格
@@ -364,6 +368,7 @@ public class ProductAOImpl implements IProductAO {
                 product.setSpecsList(psList);
             }
         }
+        page.setList(list);
         return page;
     }
 }

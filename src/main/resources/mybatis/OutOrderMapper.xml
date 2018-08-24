@@ -132,6 +132,7 @@
 		
 		,t.price
 		,t.to_user_id
+		,t.to_user_name
 		,t.amount
 		,t.yunfei
 		,t.status
@@ -143,6 +144,7 @@
 		,t.pay_code
 		
 		,t.apply_user
+		,t.high_user_id
 		,t.level
 		,t.real_name
 		,t.team_name
@@ -204,6 +206,7 @@
 		,price
 		
 		,to_user_id
+		,to_user_name
 		,amount
 		,yunfei
 		,status
@@ -211,7 +214,9 @@
 		,level
 
 		,real_name
-		,team_name		
+		,team_name	
+		,high_user_id
+		,team_leader	
 		,apply_datetime
 		,apply_note
 		,signer
@@ -237,6 +242,7 @@
 		,#{price}
 		
 		,#{toUserId}
+		,#{toUserName}
 		,#{amount}
 		,#{yunfei}
 		,#{status}
@@ -244,7 +250,9 @@
 		,#{level}
 
 		,#{realName}
-		,#{teamName}		
+		,#{teamName}	
+		,#{highUserId}
+		,#{teamName}	
 		,#{applyDatetime}
 		,#{applyNote}
 		,#{signer}

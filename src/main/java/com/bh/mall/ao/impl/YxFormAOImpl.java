@@ -19,6 +19,7 @@ import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627250Req;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EYxFormStatus;
@@ -87,9 +88,14 @@ public class YxFormAOImpl implements IYxFormAO {
     @Override
     public void allotYxFormByP(String userId, String toUserId, String approver,
             String remark) {
+
         // 确认申请id
         YxForm data = yxFormBO.getYxForm(userId);
         Agent toUser = agentBO.getAgent(toUserId);
+        if (!EAgentStatus.IMPOWERED.getCode().equals(toUser.getStatus())) {
+            throw new BizException("xn0000", "该代理还未完成授权，不能分配给他");
+        }
+
         if (data.getApplyLevel() <= toUser.getLevel()) {
             throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
         }
@@ -111,8 +117,10 @@ public class YxFormAOImpl implements IYxFormAO {
     public void allotYxFormByB(String userId, String toUserId, String approver,
             String remark) {
         YxForm data = yxFormBO.getYxForm(userId);
-
         Agent toUser = agentBO.getAgent(toUserId);
+        if (!EAgentStatus.IMPOWERED.getCode().equals(toUser.getStatus())) {
+            throw new BizException("xn0000", "该代理还未完成授权，不能分配给他");
+        }
         if (data.getApplyLevel() <= toUser.getLevel()) {
             throw new BizException("xn0000", "意向代理的等级不能大于归属人的等级");
         }
@@ -167,6 +175,12 @@ public class YxFormAOImpl implements IYxFormAO {
     public void acceptYxFormByP(String userId, String approver, String remark) {
 
         YxForm yxForm = yxFormBO.getYxForm(userId);
+        // 不能接受非最高等级代理
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != yxForm
+            .getApplyLevel()) {
+            throw new BizException("xn00000", "该代理申请的不是最高等级，请分配给其他代理吧");
+        }
+
         SYSUser sysUser = sysUserBO.getSYSUser();
         String logCode = yxFormBO.acceptYxForm(yxForm, sysUser.getUserId(),
             sysUser.getRealName(), remark);

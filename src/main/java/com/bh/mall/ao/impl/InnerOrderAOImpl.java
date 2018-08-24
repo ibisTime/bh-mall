@@ -107,10 +107,10 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         data.setSpecsCode(specs.getCode());
         data.setSpecsName(specs.getName());
         data.setPic(innerProduct.getPic());
-        data.setPrice(innerProduct.getPrice());
+        data.setPrice(specs.getPrice());
         data.setQuantity(quantity);
 
-        Long amount = quantity * innerProduct.getPrice();
+        Long amount = quantity * specs.getPrice();
         data.setYunfei(0L);
         // 是否包邮
         if (EProductYunFei.YunFei_NO.getCode()
@@ -123,6 +123,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
         data.setAmount(amount);
         data.setApplyUser(req.getApplyUser());
+        data.setRealName(user.getRealName());
         data.setLevel(user.getLevel());
         data.setTeamName(user.getTeamName());
         data.setApplyDatetime(new Date());

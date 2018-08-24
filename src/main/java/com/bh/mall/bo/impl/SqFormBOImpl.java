@@ -15,6 +15,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.ISqFormDAO;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLogType;
+import com.bh.mall.exception.BizException;
 
 @Component
 public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
@@ -98,6 +99,21 @@ public class SqFormBOImpl extends PaginableBOImpl<SqForm> implements ISqFormBO {
             SqForm condition = new SqForm();
             condition.setUserId(userId);
             data = sqFormDAO.select(condition);
+        }
+        return data;
+    }
+
+    // 详细查询
+    @Override
+    public SqForm checkSqForm(String userId) {
+        SqForm data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            SqForm condition = new SqForm();
+            condition.setUserId(userId);
+            data = sqFormDAO.select(condition);
+            if (null == data) {
+                throw new BizException("xn000000", "授权单不存在");
+            }
         }
         return data;
     }

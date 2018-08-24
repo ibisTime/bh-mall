@@ -40,7 +40,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setWxId(yxForm.getWxId());
         data.setMobile(yxForm.getMobile());
 
-        data.setApplyLevel(data.getApplyLevel());
+        data.setApplyLevel(yxForm.getApplyLevel());
         data.setToUserId(yxForm.getToUserId());
         data.setApplyDatetime(yxForm.getApplyDatetime());
         data.setProvince(yxForm.getProvince());
@@ -48,7 +48,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
 
         data.setArea(yxForm.getAddress());
         data.setAddress(yxForm.getAddress());
-        data.setStatus(data.getStatus());
+        data.setStatus(yxForm.getStatus());
         agentLogDAO.insert(data);
 
         return code;
@@ -68,7 +68,13 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
 
         data.setWxId(sqForm.getWxId());
         data.setMobile(sqForm.getMobile());
-        data.setApplyLevel(data.getApplyLevel());
+        if (EAgentLogStatus.IMPOWERED.getCode().equals(sqForm.getStatus())
+                || EAgentLogStatus.COMPANY_IMPOWER.getCode()
+                    .equals(sqForm.getStatus())) {
+            data.setLevel(sqForm.getApplyLevel());
+            data.setHighUserId(sqForm.getToUserId());
+        }
+        data.setApplyLevel(sqForm.getApplyLevel());
         data.setToUserId(sqForm.getToUserId());
         data.setTeamName(sqForm.getTeamName());
 

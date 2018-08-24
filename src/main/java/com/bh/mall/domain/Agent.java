@@ -183,6 +183,9 @@ public class Agent extends ABaseDO {
     // 归属人的团队名称
     private String toTeamName;
 
+    // 归属人的团队名称
+    private List<String> statusList;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -648,6 +651,14 @@ public class Agent extends ABaseDO {
 
     public void setToTeamName(String toTeamName) {
         this.toTeamName = toTeamName;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

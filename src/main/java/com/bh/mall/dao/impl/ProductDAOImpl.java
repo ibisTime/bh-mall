@@ -77,4 +77,17 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
         super.update(NAMESPACE.concat("update_virNumber"), data);
     }
 
+    @Override
+    public List<Product> selectProductPage(int pageNO, int pageSize,
+            Product condition) {
+        return super.selectList(NAMESPACE.concat("select_product_b"), pageNO,
+            pageSize, condition, Product.class);
+    }
+
+    @Override
+    public long selectTotalCountByB(Product condition) {
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_product_count_b"), condition);
+    }
+
 }

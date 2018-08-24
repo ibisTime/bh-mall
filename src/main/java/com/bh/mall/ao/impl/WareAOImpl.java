@@ -49,6 +49,7 @@ import com.bh.mall.enums.ECheckStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -295,6 +296,10 @@ public class WareAOImpl implements IWareAO {
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
             int singleNumber = StringValidater.toInteger(req.getQuantity())
                     / psData.getSingleNumber();
+            // 防止下单数量小于拆单数量
+            if (singleNumber <= 0) {
+                singleNumber = StringValidater.toInteger(req.getQuantity());
+            }
 
             Long amount = 0L;
             for (int i = 0; i < singleNumber; i++) {
@@ -316,7 +321,7 @@ public class WareAOImpl implements IWareAO {
                     req.getAddress(), kind);
 
                 // 减少云仓库存
-                wareBO.changeWare(data.getCode(),
+                wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
                     -StringValidater.toInteger(req.getQuantity()),
                     EBizType.AJ_YCTH, EBizType.AJ_YCTH.getValue(), code);
             }
@@ -332,7 +337,7 @@ public class WareAOImpl implements IWareAO {
                 req.getProvince(), req.getCity(), req.getArea(),
                 req.getAddress(), kind);
             // 减少云仓库存
-            wareBO.changeWare(data.getCode(),
+            wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
                 -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCTH,
                 EBizType.AJ_YCTH.getValue(), code);
         }
@@ -411,24 +416,26 @@ public class WareAOImpl implements IWareAO {
                     agent.getUserId(), agent.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
+                Long orderAmount = inOrderBO
+                    .getInOrderByUser(agent.getUserId());
 
                 // 红线设置为零视为无限制
-                if (0 < agentLevel.getRedAmount()) {
+                if (0 < agentLevel.getRedAmount()
+                        && whAmount < agentLevel.getRedAmount()) {
                     // 订单金额
-                    Long orderAmount = outOrderBO
-                        .getOutOrderByUser(agent.getUserId());
+                    result = ECheckStatus.RED_LOW.getCode();
+
                     // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
-                    if (orderAmount < agentLevel.getAmount()) {
-                        // result = ECheckStatus.TO_BUY.getCode();
-                        result = ECheckStatus.RED_LOW.getCode();
-                    }
+                } else if (orderAmount < agentLevel.getAmount()) {
+                    // result = ECheckStatus.TO_BUY.getCode();
+                    result = ECheckStatus.RED_LOW.getCode();
                 }
                 // 未开启云仓，只检查是否完成授权单
             } else if (0 != agentLevel.getAmount()
                     && outOrderBO.checkImpowerOrder(agent.getUserId(),
                         agent.getImpowerDatetime())) {
                 // 未完成授权单
-                // result = ECheckStatus.NO_WAREHOUSE.getCode();
+                // result = ECheckStatus.NO_WARE.getCode();
                 result = ECheckStatus.RED_LOW.getCode();
             }
 

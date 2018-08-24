@@ -187,7 +187,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
             String kind) {
         InOrder data = new InOrder();
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
+            .generate(EGeneratePrefix.OutOrder.getCode());
 
         data.setCode(code);
         data.setProductCode(productCode);

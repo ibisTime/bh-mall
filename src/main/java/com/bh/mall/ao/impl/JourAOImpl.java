@@ -52,11 +52,13 @@ public class JourAOImpl implements IJourAO {
             List<String> list = new ArrayList<String>();
             list.add(EBizType.AJ_TJJL_OUT.getCode());
             list.add(EBizType.AJ_TJJL_IN.getCode());
+            condition.setBizType(null);
             condition.setBizTypeList(list);
         } else if (EBizType.AJ_CHJL.getCode().equals(condition.getBizType())) {
             List<String> list = new ArrayList<String>();
             list.add(EBizType.AJ_CHJL_OUT.getCode());
             list.add(EBizType.AJ_CHJL_IN.getCode());
+            condition.setBizType(null);
             condition.setBizTypeList(list);
         }
 

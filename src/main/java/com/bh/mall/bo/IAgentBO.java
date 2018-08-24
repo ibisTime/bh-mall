@@ -105,4 +105,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public void refreshSj(Agent agent, SjForm sjForm, String userId,
             String realName, String remark, String status, String logCode);
 
+    public void refreshStatus(Agent dbUser, String status);
+
 }

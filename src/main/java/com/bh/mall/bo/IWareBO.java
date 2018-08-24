@@ -21,16 +21,16 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public List<Ware> getWareByProduct(String productCode);
 
-    void changeWare(String code, Integer quantity, EBizType bizType,
-            String fromBizNote, String refNo);
+    void changeWare(String code, String type, Integer quantity,
+            EBizType bizType, String fromBizNote, String refNo);
 
-    void transQuantity(String fromUser, String fromSpecs, String toUser,
-            String toSpecs, Integer quantity, EBizType fromBizType,
-            EBizType toBizType, String fromBizNote, String toBizNote,
-            String refNo);
+    void transQuantity(String fromUser, String fromSpecs, String fromType,
+            String toUser, String toSpecs, String toType, Integer quantity,
+            EBizType fromBizType, EBizType toBizType, String fromBizNote,
+            String toBizNote, String refNo);
 
-    public void saveWare(Ware data, Integer quantity, EBizType bizType,
-            String bizNote, String refNo);
+    public void saveWare(Ware data, String type, Integer quantity,
+            EBizType bizType, String bizNote, String refNo);
 
     public void refreshLogCode(Ware whData);
 

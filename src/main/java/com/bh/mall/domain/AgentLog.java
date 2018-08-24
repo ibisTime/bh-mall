@@ -135,6 +135,9 @@ public class AgentLog extends ABaseDO {
     // 上级名称
     private String highUserName;
 
+    // 上级名称
+    private String toUserName;
+
     public String getCode() {
         return code;
     }
@@ -465,6 +468,14 @@ public class AgentLog extends ABaseDO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
     }
 
 }

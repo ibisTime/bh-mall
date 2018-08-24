@@ -66,6 +66,7 @@ import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
@@ -155,7 +156,8 @@ public class InOrderAOImpl implements IInOrderAO {
             Product pData = productBO.getProduct(cart.getProductCode());
             Specs specs = specsBO.getSpecs(cart.getSpecsCode());
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
-                throw new BizException("xn0000", "产品包含未上架商品,不能下单");
+                throw new BizException("xn0000",
+                    "您购物的[" + pData.getName() + "]商家已经下架喽！去看看其他的吧");
             }
             AgentPrice agentPrice = agentPriceBO
                 .getPriceByLevel(specs.getCode(), applyAgent.getLevel());
@@ -174,7 +176,7 @@ public class InOrderAOImpl implements IInOrderAO {
                     cart.getSpecsCode());
             } else {
                 // 非最高等级代理，扣减产品库存
-                if (pData.getRealNumber() < cart.getQuantity()) {
+                if (specs.getStockNumber() < cart.getQuantity()) {
                     throw new BizException("xn00000", "产品库存不足");
                 }
             }
@@ -228,7 +230,7 @@ public class InOrderAOImpl implements IInOrderAO {
             wareBO.checkProduct(applyAgent.getHighUserId(), specsCode);
         } else {
             // 非最高等级代理，扣减产品库存
-            if (pData.getRealNumber() < quantity) {
+            if (specs.getStockNumber() < quantity) {
                 throw new BizException("xn00000", "产品库存不足");
             }
         }
@@ -257,8 +259,8 @@ public class InOrderAOImpl implements IInOrderAO {
 
         // 检查起购数量
         if (agentPrice.getStartNumber() > quantity) {
-            throw new BizException("xn0000",
-                "您购买的数量不能低于" + agentPrice.getStartNumber() + "]");
+            throw new BizException("xn0000", "您购买的数量不能低于["
+                    + agentPrice.getStartNumber() + "]" + specs.getName());
         }
 
         return inOrderBO.saveInOrder(applyAgent.getUserId(),
@@ -320,7 +322,6 @@ public class InOrderAOImpl implements IInOrderAO {
         Long rmbAmount = data.getAmount();
         Agent agent = agentBO.getAgent(data.getApplyUser());
         String payGroup = inOrderBO.addPayGroup(data);
-        agentBO.getAgent(data.getToUserId());
         return weChatAO.getPrepayIdH5(agent.getUserId(), payGroup,
             data.getCode(), EBizType.AJ_GMCP.getCode(),
             EBizType.AJ_GMCP.getValue(), rmbAmount, callBackUrl,
@@ -446,7 +447,7 @@ public class InOrderAOImpl implements IInOrderAO {
                 productReport.getQuantity() + data.getQuantity());
         }
 
-        // 只统计一级代理
+        // 统计差额利润
         AgentReport report = null;
         Account account = null;
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != applyUser
@@ -489,11 +490,13 @@ public class InOrderAOImpl implements IInOrderAO {
             if (award != null) {
                 Long awardAmount = AmountUtil.mul(orderAmount,
                     award.getPercent() / 100);
+                account = accountBO.getAccountByUser(applyUser.getUserId(),
+                    ECurrency.YJ_CNY.getCode());
                 // 一级代理直接发奖励
                 if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                     .getLevel()) {
                     accountBO.changeAmount(account.getAccountNumber(),
-                        EChannelType.NBZ, null, null, data.getApplyUser(),
+                        EChannelType.NBZ, null, null, data.getCode(),
                         EBizType.AJ_CHJL_IN, EBizType.AJ_CHJL_IN.getValue(),
                         awardAmount);
 
@@ -713,9 +716,9 @@ public class InOrderAOImpl implements IInOrderAO {
                     throw new BizException("xn00000", "上级代理云仓中没有该产品");
                 } else {
                     // 改变上级云仓
-                    wareBO.changeWare(toWare.getCode(), number,
-                        EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
-                        inOrder.getCode());
+                    wareBO.changeWare(toWare.getCode(),
+                        EWareLogType.OUT.getCode(), number, EBizType.AJ_YCCH,
+                        EBizType.AJ_YCCH.getValue(), inOrder.getCode());
                 }
 
             } else {

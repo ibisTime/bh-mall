@@ -66,10 +66,12 @@ public class AgentLogAOImpl implements IAgentLogAO {
                 .getLevel()) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
+
             } else if (StringUtils.isNotBlank(data.getHighUserId())) {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
             }
+
         }
         return page;
 
@@ -99,6 +101,17 @@ public class AgentLogAOImpl implements IAgentLogAO {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
             }
+
+            // 归属人转义
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getApplyLevel()
+                    && StringUtils.isNotBlank(data.getToUserId())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+                data.setToUserName(sysUser.getRealName());
+            } else if (StringUtils.isNotBlank(data.getToUserId())) {
+                Agent toAgent = agentBO.getAgent(data.getToUserId());
+                data.setToUserName(toAgent.getRealName());
+            }
         }
         return list;
     }
@@ -125,6 +138,16 @@ public class AgentLogAOImpl implements IAgentLogAO {
         } else if (StringUtils.isNotBlank(data.getHighUserId())) {
             Agent highAgent = agentBO.getAgent(data.getHighUserId());
             data.setHighUserName(highAgent.getRealName());
+        }
+
+        // 归属人转义
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getLevel() && StringUtils.isNotBlank(data.getToUserId())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+            data.setToUserName(sysUser.getRealName());
+        } else if (StringUtils.isNotBlank(data.getToUserId())) {
+            Agent toAgent = agentBO.getAgent(data.getToUserId());
+            data.setToUserName(toAgent.getRealName());
         }
         return data;
     }

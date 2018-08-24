@@ -21,4 +21,9 @@ public interface IProductDAO extends IBaseDAO<Product> {
 
     void updateVirNumber(Product data);
 
+    List<Product> selectProductPage(int pageNO, int pageSize,
+            Product condition);
+
+    long selectTotalCountByB(Product condition);
+
 }

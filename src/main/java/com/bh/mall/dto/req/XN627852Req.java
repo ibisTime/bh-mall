@@ -11,21 +11,21 @@ public class XN627852Req extends APageReq {
     private static final long serialVersionUID = -2391610940732263759L;
 
     // 推荐人
-    private String userReferee;
+    private String referrer;
 
     // 介绍人
     private String introducer;
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getReferrer() {
+        return referrer;
     }
 
     public String getIntroducer() {
         return introducer;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setReferrer(String referrer) {
+        this.referrer = referrer;
     }
 
     public void setIntroducer(String introducer) {

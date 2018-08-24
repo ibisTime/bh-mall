@@ -113,6 +113,9 @@ public class SqForm extends ABaseDO {
     // 上级
     private String toUserName;
 
+    // 授权金额
+    private Long impowerAmount;
+
     // 获取微信号
     public String getWxId() {
         return wxId;
@@ -389,6 +392,14 @@ public class SqForm extends ABaseDO {
 
     public void setToUserName(String toUserName) {
         this.toUserName = toUserName;
+    }
+
+    public Long getImpowerAmount() {
+        return impowerAmount;
+    }
+
+    public void setImpowerAmount(Long impowerAmount) {
+        this.impowerAmount = impowerAmount;
     }
 
 }

@@ -22,17 +22,11 @@ public class XN627453 extends AProcessor {
 
     private XN627453Req req = null;
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doBusiness()
-    */
     @Override
     public Object doBusiness() throws BizException {
         return accountAO.getAccountByUserId(req.getUserId(), req.getCurrency());
     }
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
-    */
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN627453Req.class);

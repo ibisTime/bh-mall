@@ -23,7 +23,6 @@ public class XN627833 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         return wareLogAO.getWareLog(req.getCode());
     }
 

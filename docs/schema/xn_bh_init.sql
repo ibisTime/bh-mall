@@ -1,8 +1,11 @@
-insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000001','1','董事','0','5000000','0','0','0','1','1','1','0','1','1','1','1','0','admin',NOW(),'');
-insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000002','2','官方','0','4000000','0','0','1','1','1','1','0','1','1','1','1','0','admin',NOW(),'');
-insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000003','3','总代','0','3000000','0','200000','1','1','0','1','0','1','1','0','0','0','admin',NOW(),'');
-insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000004','4','特约','0','0','0','0','0','0','0','1','0','1','1','0','0','0','admin',NOW(),'');
-insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000005','5','顾问','0','0','0','0','0','0','0','1','0','1','1','0','0','0','admin',NOW(),'');
+insert into `tbh_account` (`account_number`, `user_id`, `real_name`, `type`, `status`, `currency`, `amount`, `frozen_amount`, `create_datetime`, `last_order`) values('CD-CBH000020','SYS_USER_BH','公司','P','0','TX_CNY','0','0','2018-08-17 02:13:10','AJ201808211655150637201');
+
+
+insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000001','1','董事','0','6800000','3400000','3400000','0','1','1','3','1','1','1','1','1','51000000','admin','2018-08-24 01:34:30','');
+insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000002','2','官方','0','8000000','4000000','0','0','1','1','3','1','1','1','1','1','12000000','admin','2018-08-24 01:34:30','');
+insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000003','3','总代','0','2300000','0','0','1','0','1','3','1','1','1','1','1','2300000','admin','2018-08-24 01:34:31','');
+insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000004','4','特约','0','2100000','0','0','1','0','0','3','1','1','1','0','0','420000','admin','2018-08-24 01:34:31','');
+insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000005','5','顾问','0','340000','0','0','1','0','0','3','1','1','0','0','0','340000','admin','2018-08-24 01:34:31','');
 insert into `tbh_agent_level` (`code`, `level`, `name`, `red_amount`, `amount`, `min_charge_amount`, `min_surplus`, `is_send`, `is_ware`, `is_company_approve`, `re_number`, `is_reset`, `is_intent`, `is_jsAward`, `is_real_name`, `is_company_impower`, `min_charge`, `updater`, `update_datetime`, `remark`) values('AL201800000000000006','6','C端用户',NULL,NULL,'0','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('qiniu','qiniu_access_key','Dc0pMP8ImFm78-uk4iGsOPpB2-vHc64D07OsOQVi','admin',NOW(),'七牛云key1');
@@ -66,6 +69,7 @@ insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','company_code','1400666002','admin',NOW(),'渠道代号');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','private_key1','r2jgDFSdiikklwlllejlwjio3242342n','admin',NOW(),'秘钥1');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','private_key2','wx0bf01798e93cb2f9','admin',NOW(),'秘钥2');
+
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'user_status','用户状态','admin','2018-08-17 02:01:46',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','user_status','0','正常','admin','2018-08-17 02:01:46','');
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','user_status','1','程序锁定','admin','2018-08-17 02:01:46',NULL);
@@ -147,8 +151,8 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_GMNP','购买内购商品','admin','2018-08-17 02:01:55',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_GMYC','购买云仓','admin','2018-08-17 02:01:55',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_CELR','差额利润','admin','2018-08-17 02:01:55',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_TJJL','推荐奖励','admin','2018-08-17 02:01:55',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_CHJL','出货奖励','admin','2018-08-17 02:01:56',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_TJJL_IN','推荐奖励','admin','2018-08-17 02:01:55',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_CHJL_IN','出货奖励','admin','2018-08-17 02:01:56',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','jour_status','5','已对账且账不平','admin','2018-08-17 02:01:56',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','jour_status','6','无需对账','admin','2018-08-17 02:01:56',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'withdraw_status','取现状态','admin','2018-08-17 02:01:56',NULL);
@@ -166,18 +170,15 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_status','5','申请取消','admin','2018-08-17 02:01:57',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_status','6','已取消','admin','2018-08-17 02:01:57',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'agent_status','代理状态','admin','2018-08-17 02:01:58',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','0','有意向','admin','2018-08-17 02:01:58',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','2','已忽略','admin','2018-08-17 02:01:58',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','4','待填写授权资料','admin','2018-08-17 02:01:58',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','5','补充授权资料','admin','2018-08-17 02:01:58',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','3','已忽略','admin','2018-08-17 02:01:58',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','6','待上级授权','admin','2018-08-17 02:01:58',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','7','待公司授权','admin','2018-08-17 02:01:58',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','8','已授权','admin','2018-08-17 02:01:58',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','agent_status','9','未授权','admin','2018-08-17 02:01:58',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'out_order_type','订单类型','admin','2018-08-17 02:01:59',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','0','普通单','admin','2018-08-17 02:02:00',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','0','授权单','admin','2018-08-17 02:02:00',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','1','升级单','admin','2018-08-17 02:02:00',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','2','授权单','admin','2018-08-17 02:02:00',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','2','云仓提货','admin','2018-08-17 02:02:00',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','3','订单类型','admin','2018-08-17 02:02:00',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','4','C端订单类型','admin','2018-08-17 02:02:00',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_JSJL','介绍奖励','admin','2018-08-17 02:02:00',NULL);
@@ -220,9 +221,9 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','sq_status','11','申请退出待公司审核','admin','2018-08-17 02:02:04',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'yx_status','意向单状态','admin','2018-08-17 02:02:04',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','0','有意愿','admin','2018-08-17 02:02:05',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','1','已忽略','admin','2018-08-17 02:02:05',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','2','已分配','admin','2018-08-17 02:02:05',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','3','已接受','admin','2018-08-17 02:02:05',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','1','已分配','admin','2018-08-17 02:02:05',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','2','已接受','admin','2018-08-17 02:02:05',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','3','已忽略','admin','2018-08-17 02:02:05',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'sj_status','升级单状态','admin','2018-08-17 02:02:05',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','sj_status','10','上级审核升级','admin','2018-08-17 02:02:05',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','sj_status','11','公司审核升级','admin','2018-08-17 02:02:05',NULL);
@@ -260,18 +261,18 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','mini_code_status','0','待下载','admin','2018-08-17 02:02:09',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','mini_code_status','1','未使用','admin','2018-08-17 02:02:09',NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','mini_code_status','2','已使用','admin','2018-08-17 02:02:09',NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'source','意向来源','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','source','0','公众号','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','C_CNY','C端账户','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'bananer_belong','banner图位置','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','0','全局','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','1','地方','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'yx_status','意向单状态','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','0','有意向','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','1','已忽略','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','2','已接受','admin',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','yx_status','3','已分配','admin',NOW(),NULL);
-
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'source','意向来源','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','source','0','公众号','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','C_CNY','C端账户','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'bananer_belong','banner图位置','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','0','全局','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','1','地方','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'ware_log_type','云仓变动类型','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','ware_log_type','0','购买云仓','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','ware_log_type','1','云仓出货','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','ware_log_type','2','云仓置换','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_TJJL_OUT','推荐奖励','admin','2018-08-17 02:02:10',NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_CHJL_OUT','出货奖励','admin','2018-08-17 02:02:10',NULL);
 
 
 

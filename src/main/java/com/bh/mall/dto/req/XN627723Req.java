@@ -26,7 +26,6 @@ public class XN627723Req {
     private String logisticsCompany;
 
     // （必填）物流单
-    @NotBlank(message = "物流单不能为空")
     private String pdf;
 
     // （选填）备注

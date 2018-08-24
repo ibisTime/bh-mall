@@ -83,6 +83,7 @@ import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.util.wechat.XMLUtil;
 
@@ -586,16 +587,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
         for (OutOrder data : page.getList()) {
 
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
-                if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                    .getLevel()) {
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                data.setAgent(agent);
+                if (agentBO.isHighest(data.getApplyUser())) {
                     SYSUser sysUser = sysUserBO
-                        .getSYSUser(data.getHighUserId());
+                        .getSYSUser(agent.getHighUserId());
                     data.setHighUserName(sysUser.getRealName());
                 } else {
-                    // 下单人
-                    Agent agent = agentBO.getAgent(data.getApplyUser());
-                    data.setAgent(agent);
-                    data.setHighUserName(data.getHighUserId());
+                    Agent highAgent = agentBO.getAgent(data.getHighUserId());
+                    data.setHighUserName(highAgent.getRealName());
                 }
             }
 
@@ -606,12 +606,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             // 发货人转义
             if (StringUtils.isNotBlank(data.getDeliver())) {
-                if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
-                    SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
-                    data.setDeliveName(sysUser.getRealName());
+                if (agentBO.isHighest(data.getApplyUser())) {
+                    Agent agent = agentBO.getAgent(data.getApplyUser());
+                    SYSUser sysUser = sysUserBO
+                        .getSYSUser(agent.getHighUserId());
+                    data.setHighUserName(sysUser.getRealName());
                 } else {
-                    Agent deliveAgent = agentBO.getAgent(data.getDeliver());
-                    data.setDeliveName(deliveAgent.getRealName());
+                    Agent agent = agentBO.getAgent(data.getApplyUser());
+                    data.setAgent(agent);
+                    data.setHighUserName(agent.getRealName());
                 }
             }
 
@@ -641,7 +644,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
                 if (agentBO.isHighest(data.getApplyUser())) {
-                    SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+                    Agent agent = agentBO.getAgent(data.getApplyUser());
+                    SYSUser sysUser = sysUserBO
+                        .getSYSUser(agent.getHighUserId());
                     data.setHighUserName(sysUser.getRealName());
                 } else {
                     Agent agent = agentBO.getAgent(data.getApplyUser());
@@ -675,7 +680,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
             if (agentBO.isHighest(data.getApplyUser())) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                SYSUser sysUser = sysUserBO.getSYSUser(agent.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else {
                 Agent agent = agentBO.getAgent(data.getApplyUser());
@@ -1084,8 +1090,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 throw new BizException("xn00000", "上级代理云仓中没有该产品");
             } else {
                 // 改变上级云仓
-                wareBO.changeWare(toWare.getCode(), number, EBizType.AJ_YCCH,
-                    EBizType.AJ_YCCH.getValue(), OutOrder.getCode());
+                wareBO.changeWare(toWare.getCode(), EWareLogType.OUT.getCode(),
+                    number, EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                    OutOrder.getCode());
             }
 
         } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {

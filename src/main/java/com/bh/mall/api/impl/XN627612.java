@@ -9,6 +9,12 @@ import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
+/**
+ * 详情查产品记录
+ * @author: nyc 
+ * @since: 2018年8月23日 下午6:05:15 
+ * @history:
+ */
 public class XN627612 extends AProcessor {
 
     private ISpecsLogAO productLogAO = SpringContextHolder
