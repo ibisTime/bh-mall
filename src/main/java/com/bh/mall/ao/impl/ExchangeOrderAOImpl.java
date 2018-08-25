@@ -134,6 +134,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         data.setExchangeSpecsName(changeSpecs.getName());
         data.setChangeSpecsCode(changeSpecs.getCode());
         data.setCanChangeQuantity(canChangeQuantity);
+        data.setChangePrice(changeSpecsPrice.getChangePrice());
 
         data.setApplyUser(req.getApplyUser());
         data.setRealName(uData.getRealName());

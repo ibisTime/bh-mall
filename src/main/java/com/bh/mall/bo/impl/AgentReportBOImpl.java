@@ -38,7 +38,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         data.setCity(sqForm.getCity());
         data.setArea(sqForm.getArea());
         data.setAddress(sqForm.getAddress());
-        data.setImpowerDatetime(agent.getImpowerDatetime());
+        data.setImpowerDatetime(sqForm.getImpowerDatetime());
 
         agentReportDAO.insert(data);
 

@@ -495,6 +495,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setIdKind(sjForm.getIdKind());
             data.setIdNo(sjForm.getIdNo());
             data.setIdHand(sjForm.getIdHand());
+            data.setHighUserId(sjForm.getToUserId());
 
         }
 

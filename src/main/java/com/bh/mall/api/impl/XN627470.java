@@ -32,7 +32,6 @@ public class XN627470 extends AProcessor {
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
 
-        condition.setLevel(1);
         condition.setType(req.getType());
         condition.setCurrency(req.getCurrency());
         condition.setBizType(req.getBizType());

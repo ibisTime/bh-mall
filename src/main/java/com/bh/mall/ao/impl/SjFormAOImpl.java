@@ -114,7 +114,7 @@ public class SjFormAOImpl implements ISjFormAO {
             if (0 < account.getAmount()) {
                 throw new BizException("xn00000",
                     "升至[" + agenthLevel.getName() + "]时，门槛中不允许有余额，您的门槛中现剩余["
-                            + account.getAmount() + "]元");
+                            + account.getAmount() / 1000 + "]元");
             }
         }
 
@@ -151,7 +151,7 @@ public class SjFormAOImpl implements ISjFormAO {
         } else {
             Agent highAgent = agentBO.getAgent(data.getHighUserId());
             if (StringValidater.toInteger(newLevel) <= highAgent.getLevel()) {
-                toUserId = this.getHighUser(data.getHighUserId(),
+                toUserId = this.getHighUser(highAgent,
                     StringValidater.toInteger(newLevel));
             }
         }
@@ -336,11 +336,10 @@ public class SjFormAOImpl implements ISjFormAO {
     /*
      * 
      */
-    private String getHighUser(String highUserId, Integer level) {
-        Agent highAgent = agentBO.getAgent(highUserId);
+    private String getHighUser(Agent highAgent, Integer level) {
         if (level <= highAgent.getLevel()) {
             highAgent = agentBO.getAgent(highAgent.getHighUserId());
-            getHighUser(highAgent.getHighUserId(), level);
+            getHighUser(highAgent, level);
         }
         return highAgent.getUserId();
     }

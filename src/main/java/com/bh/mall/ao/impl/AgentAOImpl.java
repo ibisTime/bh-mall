@@ -597,6 +597,11 @@ public class AgentAOImpl implements IAgentAO {
         }
         data.setWareAmount(amount);
 
+        // 门槛余额
+        Account mkAccount = accountBO.getAccountByUser(data.getUserId(),
+            ECurrency.MK_CNY.getCode());
+        data.setMkAmount(mkAccount.getAmount());
+
         // 代理轨迹
         AgentLog condition = new AgentLog();
         condition.setApplyUser(data.getUserId());

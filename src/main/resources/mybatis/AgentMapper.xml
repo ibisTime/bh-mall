@@ -551,6 +551,8 @@
 		,high_user_id = #{highUserId}
 		,team_name = #{teamName}
 		,manager = #{manager}
+		,impower_datetime = #{impowerDatetime}
+		
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,approve_datetime =	#{approveDatetime}
