@@ -32,9 +32,9 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
     @Override
     public String saveOutOrder(String applyUser, String name, Integer level,
-            String toUserId, String toUserName, String teamName,
-            String teamLeader, Product pData, Specs specs, Long price,
-            Integer quantity, String applyNote, String isWareSend,
+            String toUserId, String toUserName, String highUserId,
+            String teamName, String teamLeader, Product pData, Specs specs,
+            Long price, Integer quantity, String applyNote, String isWareSend,
             String signer, String mobile, String province, String city,
             String area, String address, String status, String kind) {
 
@@ -45,6 +45,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setProductCode(pData.getCode());
         data.setProductName(pData.getName());
         data.setIsWareSend(EBoolean.NO.getCode());
+        data.setHighUserId(highUserId);
 
         data.setSpecsCode(specs.getCode());
         data.setSpecsName(specs.getName());
@@ -162,11 +163,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public String addPayGroup(OutOrder OutOrder) {
+    public String addPayGroup(OutOrder data, String payType) {
         String payGroup = OrderNoGenerater
             .generate(EGeneratePrefix.Order.getCode());
-        OutOrder.setPayGroup(payGroup);
-        outOrderDAO.addPayGroup(OutOrder);
+        data.setPayType(payType);
+        data.setPayGroup(payGroup);
+        outOrderDAO.addPayGroup(data);
         return payGroup;
     }
 

@@ -31,4 +31,6 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
 
     Integer getMinSpecsNumber(String productCode);
 
+    List<Specs> querySpecsListByB(Specs psCondition);
+
 }

@@ -350,6 +350,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setProvince(province);
         data.setCity(city);
 
+        data.setStatus(EAgentStatus.CANCELED.getCode());
         data.setArea(area);
         data.setAddress(address);
         data.setLastAgentLog(logCode);
@@ -361,7 +362,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshYx(Agent data, String status, String approver,
             String approveName, String logCode) {
 
-        if (EYxFormStatus.IGNORED.getCode().equals(status)) {
+        if (EYxFormStatus.MIND.getCode().equals(status)) {
             data.setMobile(null);
         } else if (EYxFormStatus.ACCEPT.getCode().equals(status)) {
             data.setStatus(EAgentStatus.ADD_INFO.getCode());
@@ -386,6 +387,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setHighUserId(null);
 
         data.setTeamName(null);
+        data.setStatus(EAgentStatus.MIND.getCode());
         agentDAO.resetInfo(data);
     }
 
@@ -467,15 +469,13 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setIdKind(sqForm.getIdKind());
             data.setIdNo(sqForm.getIdNo());
             data.setIdHand(sqForm.getIdHand());
-
+            data.setStatus(status);
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
-            highUserId = null;
-            teamName = null;
+            data.setStatus(EAgentStatus.MIND.getCode());
         }
 
         data.setHighUserId(highUserId);
         data.setTeamName(teamName);
-        data.setStatus(status);
 
         data.setApprover(approver);
         data.setApproveName(approveName);

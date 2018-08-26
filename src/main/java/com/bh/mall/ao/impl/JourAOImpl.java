@@ -13,6 +13,7 @@ import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.IOrderReportBO;
 import com.bh.mall.bo.IOutOrderBO;
+import com.bh.mall.bo.IWithdrawBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentReport;
@@ -20,6 +21,7 @@ import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Jour;
 import com.bh.mall.domain.OrderReport;
 import com.bh.mall.domain.OutOrder;
+import com.bh.mall.domain.Withdraw;
 import com.bh.mall.dto.res.XN627855Res;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ESysUser;
@@ -44,6 +46,9 @@ public class JourAOImpl implements IJourAO {
 
     @Autowired
     private IOrderReportBO orderReportBO;
+
+    @Autowired
+    private IWithdrawBO withdrawBO;
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
@@ -125,6 +130,7 @@ public class JourAOImpl implements IJourAO {
             Agent agent = agentBO.getAgent(data.getUserId());
             data.setMobile(agent.getMobile());
         }
+
         // 关联订单转义
         if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
                 || EBizType.AJ_TJJL_OUT.getCode().equals(data.getBizType())) {
@@ -138,7 +144,14 @@ public class JourAOImpl implements IJourAO {
                 || EBizType.AJ_TJJL_IN.getCode().equals(data.getBizType())) {
             InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
             data.setInOrder(inOrder);
+
+            // 取现订单转义
+        } else if (EBizType.AJ_QX.getCode().equals(data.getBizType())
+                || EBizType.XXFK.getClass().equals(data.getBizType())) {
+            Withdraw withdraw = withdrawBO.getWithdraw(data.getRefNo());
+            data.setWithdraw(withdraw);
         }
+
         return data;
     }
 

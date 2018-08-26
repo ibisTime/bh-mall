@@ -259,33 +259,45 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         }
         String status = EChangeProductStatus.THROUGH_NO.getCode();
         // 审核通过
+        // 产品
+        Specs specs = specsBO.getSpecs(data.getSpecsCode());
+        specsBO.refreshRepertory(data.getProductName(), specs,
+            ESpecsLogType.ChangeProduct.getCode(), data.getQuantity(),
+            approver);
+
+        // 要置换的产品
+        Product changeData = productBO.getProduct(data.getChangeProductCode());
+        Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
+        Agent agent = agentBO.getAgent(data.getApplyUser());
+        AgentPrice changePrice = agentPriceBO
+            .getPriceByLevel(changeSpecs.getCode(), agent.getLevel());
+
         if (EBoolean.YES.getCode().equals(result)) {
             status = EChangeProductStatus.THROUGH_YES.getCode();
-            // 产品
-            Specs specs = specsBO.getSpecs(data.getSpecsCode());
-            specsBO.refreshRepertory(data.getProductName(), specs,
-                ESpecsLogType.ChangeProduct.getCode(), data.getQuantity(),
-                approver);
 
-            // 要置换的产品
-            Product changeData = productBO
-                .getProduct(data.getChangeProductCode());
-            Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
-
-            if (0 < (changeData.getRealNumber()
-                    - data.getCanChangeQuantity())) {
+            if (changeSpecs.getStockNumber() < data.getCanChangeQuantity()) {
                 throw new BizException("xn00000", "产品[" + changeData.getName()
                         + "-" + changeSpecs.getName() + "]的数量不足");
             }
 
             // 保存要置换的产品库存记录
-            specsBO.refreshRepertory(changeData.getName(), specs,
+            specsBO.refreshRepertory(changeData.getName(), changeSpecs,
                 ESpecsLogType.ChangeProduct.getCode(),
                 -data.getCanChangeQuantity(), approver);
 
-            Agent agent = agentBO.getAgent(data.getApplyUser());
-            wareBO.buyWare(data, agent);
+            wareBO.buyWare(data.getCode(), data.getChangeProductCode(),
+                data.getChangeProductName(), data.getChangeSpecsCode(),
+                changeSpecs.getName(), data.getCanChangeQuantity(),
+                changePrice.getPrice(), agent, EBizType.AJ_YCZH,
+                "[" + data.getProductName() + "]置换为["
+                        + data.getChangeProductName() + "]");
 
+        } else {
+            wareBO.buyWare(data.getCode(), data.getProductCode(),
+                data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
+                data.getQuantity(), data.getPrice(), agent, EBizType.AJ_YCZH,
+                "[" + data.getProductName() + "]置换为["
+                        + data.getChangeProductName() + "]");
         }
 
         data.setApprover(approver);

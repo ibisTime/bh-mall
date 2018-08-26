@@ -1,7 +1,5 @@
 package com.bh.mall.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 导出防伪溯源码
  * @author: nyc 
@@ -11,11 +9,9 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627870Req {
 
     // 导出数量
-    @NotBlank(message = "导出数量不能为空")
     private String number;
 
     // 张数
-    @NotBlank(message = "导出张数不能为空")
     private String quantity;
 
     public String getNumber() {

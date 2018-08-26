@@ -50,6 +50,12 @@
 			<if test="refCode != null and refCode !=''">
 				AND t.ref_code  = #{refCode}
 			</if>
+			<if test="isBuy != null and isBuy !=''">
+				AND p.is_buy  = #{isBuy}
+			</if>
+			<if test="level != null and level !=''">
+				AND p.level  = #{level}
+			</if>
 		</trim>
 	</sql>
 	
@@ -84,6 +90,36 @@
 		<include refid="where_condition"/>
 	</select>
 	
+	
+		
+	<select id="select_specs_b" parameterType="specs" resultMap="specs_DB_Result">
+		SELECT 
+		t.code
+		,t.product_code
+		,t.is_single
+		,t.single_number
+		,t.ref_code
+		
+		,t.name
+		,t.number
+		,t.stock_number
+		,t.weight
+		
+		,t.is_sq_order
+		,t.is_sj_order
+		,t.is_normal_order
+		FROM tbh_specs t  LEFT JOIN tbh_agent_price p ON t.code = p.specs_code
+		<include refid="where_condition"/>
+		GROUP by t.code
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+	
+	
+	
 	<insert id="insert_specs" parameterType="specs">
 		INSERT INTO tbh_specs(
 		code
@@ -91,6 +127,7 @@
 		,name
 		,number
 		,is_single
+		,single_number
 		,stock_number
 		,weight
 		
@@ -104,6 +141,7 @@
 		,#{name}
 		,#{number}
 		,#{isSingle}
+		,#{singleNumber}
 		,#{stockNumber}
 		,#{weight}
 		

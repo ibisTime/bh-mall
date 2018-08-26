@@ -61,4 +61,10 @@ public class SpecsDAOImpl extends AMybatisTemplate implements ISpecsDAO {
 
     }
 
+    @Override
+    public List<Specs> selectSpecsListByB(Specs condition) {
+        return super.selectList(NAMESPACE.concat("select_specs_b"), condition,
+            Specs.class);
+    }
+
 }

@@ -192,6 +192,9 @@ public class YxFormAOImpl implements IYxFormAO {
         agentBO.refreshYx(agent, EYxFormStatus.ACCEPT.getCode(),
             agent.getUserId(), agent.getRealName(), logCode);
 
+        // 删除意向单
+        yxFormBO.removeYxForm(yxForm);
+
     }
 
     /**
@@ -211,6 +214,8 @@ public class YxFormAOImpl implements IYxFormAO {
         agentBO.refreshYx(agent, EAgentStatus.ADD_INFO.getCode(),
             agent.getUserId(), agent.getRealName(), logCode);
 
+        // 删除意向单
+        yxFormBO.removeYxForm(yxForm);
     }
 
     // 列表查询意向代理

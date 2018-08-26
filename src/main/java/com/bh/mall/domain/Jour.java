@@ -103,6 +103,9 @@ public class Jour extends ABaseDO {
     // 云仓订单
     private InOrder inOrder;
 
+    // 取现订单
+    private Withdraw withdraw;
+
     // ********db************
 
     // 云仓订单
@@ -346,6 +349,14 @@ public class Jour extends ABaseDO {
 
     public void setReport(OrderReport report) {
         this.report = report;
+    }
+
+    public Withdraw getWithdraw() {
+        return withdraw;
+    }
+
+    public void setWithdraw(Withdraw withdraw) {
+        this.withdraw = withdraw;
     }
 
 }

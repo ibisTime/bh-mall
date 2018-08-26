@@ -29,6 +29,7 @@ public class XN627326 extends AProcessor {
         condition.setTeamName(req.getTeamName());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStatus(req.getStatus());
+        condition.setNoUserId(req.getNoUserId());
 
         condition.setRealName(req.getRealName());
         condition.setStatus(req.getStatus());

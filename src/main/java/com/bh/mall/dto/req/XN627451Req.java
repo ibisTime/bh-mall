@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /** 
  * @author: xieyj 
  * @since: 2016年12月23日 下午7:48:53 
@@ -23,6 +25,9 @@ public class XN627451Req extends AListReq {
 
     // 币种
     private String currency;
+
+    // 币种
+    private List<String> currencyList;
 
     // 最近一次变动对应的流水编号
     private String lastOrder;
@@ -73,6 +78,14 @@ public class XN627451Req extends AListReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public List<String> getCurrencyList() {
+        return currencyList;
+    }
+
+    public void setCurrencyList(List<String> currencyList) {
+        this.currencyList = currencyList;
     }
 
 }

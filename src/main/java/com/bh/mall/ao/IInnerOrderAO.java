@@ -22,7 +22,7 @@ public interface IInnerOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 提交订单
-    public String addInnerOrder(XN627720Req req);
+    public List<String> addInnerOrder(XN627720Req req);
 
     // 修改收货地址及运费
     public void refreshAddress(XN627722Req req);
@@ -38,7 +38,7 @@ public interface IInnerOrderAO {
     public InnerOrder getInnerOrder(String code);
 
     // 订单支付
-    public Object toPay(String code, String payType);
+    public Object toPay(List<String> codeList, String payType);
 
     // 发货
     public void deliverInnerProduct(XN627723Req req);

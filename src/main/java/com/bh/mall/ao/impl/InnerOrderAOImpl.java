@@ -1,6 +1,7 @@
 package com.bh.mall.ao.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,6 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PropertiesUtil;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -81,10 +80,11 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     private IDeliveOrderBO deliveOrderBO;
 
     @Override
-    public String addInnerOrder(XN627720Req req) {
-        Agent user = agentBO.getAgent(req.getApplyUser());
-
+    public List<String> addInnerOrder(XN627720Req req) {
+        List<String> list = new ArrayList<String>();
+        Agent agent = agentBO.getAgent(req.getApplyUser());
         InnerSpecs specs = innerSpecsBO.getInnerSpecs(req.getSpecsCode());
+
         InnerProduct innerProduct = innerProductBO
             .getInnerProduct(specs.getInnerProductCode());
         if (!EInnerProductStatus.Shelf_YES.getCode()
@@ -93,95 +93,108 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         }
         Integer quantity = StringValidater.toInteger(req.getQuantity());
 
-        if (specs.getStockNumber() < quantity) {
-            throw new BizException("xn0000", "产品库存不足");
-        }
-
-        InnerOrder data = new InnerOrder();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.InnerOrder.getCode());
-        data.setCode(code);
-        data.setProductCode(innerProduct.getCode());
-        data.setProductName(innerProduct.getName());
-
-        data.setSpecsCode(specs.getCode());
-        data.setSpecsName(specs.getName());
-        data.setPic(innerProduct.getPic());
-        data.setPrice(specs.getPrice());
-        data.setQuantity(quantity);
-
-        Long amount = quantity * specs.getPrice();
-        data.setYunfei(0L);
+        Long yunfei = 0L;
         // 是否包邮
         if (EProductYunFei.YunFei_NO.getCode()
             .equals(innerProduct.getIsFree())) {
             SYSConfig sysConfig = sysConfigBO.getConfig(req.getProvince(),
                 ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
-            data.setYunfei(StringValidater.toLong(sysConfig.getCvalue()));
-            amount = amount + StringValidater.toLong(sysConfig.getCvalue());
+            yunfei = StringValidater.toLong(sysConfig.getCvalue());
         }
 
-        data.setAmount(amount);
-        data.setApplyUser(req.getApplyUser());
-        data.setRealName(user.getRealName());
-        data.setLevel(user.getLevel());
-        data.setTeamName(user.getTeamName());
-        data.setApplyDatetime(new Date());
+        if (specs.getStockNumber() < quantity) {
+            throw new BizException("xn0000", "产品库存不足");
+        }
 
-        data.setApplyNote(req.getApplyNote());
-        data.setProvince(req.getProvince());
-        data.setArea(req.getArea());
-        data.setCity(req.getCity());
-        data.setAddress(req.getAddress());
+        if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
+            int number = StringValidater.toInteger(req.getQuantity())
+                    / specs.getSingleNumber();
+            if (StringValidater.toInteger(req.getQuantity())
+                    % specs.getSingleNumber() != 0) {
+                number = number + 1;
+            }
 
-        data.setMobile(req.getMobile());
-        data.setSigner(req.getSigner());
+            for (int i = 0; i < number; i++) {
+                list.add(innerOrderBO.saveInnerOrder(innerProduct, specs, agent,
+                    specs.getSingleNumber(), yunfei, req.getSigner(),
+                    req.getMobile(), req.getProvince(), req.getArea(),
+                    req.getCity(), req.getAddress(), req.getApplyNote()));
+            }
+        } else {
+            list.add(innerOrderBO.saveInnerOrder(innerProduct, specs, agent,
+                StringValidater.toInteger(req.getQuantity()), yunfei,
+                req.getSigner(), req.getMobile(), req.getProvince(),
+                req.getArea(), req.getCity(), req.getAddress(),
+                req.getApplyNote()));
+        }
 
-        data.setStatus(EInnerOrderStatus.Unpaid.getCode());
-        innerOrderBO.saveInnerOrder(data);
-        return code;
+        return list;
     }
 
     @Override
     @Transactional
-    public Object toPay(String code, String payType) {
+    public Object toPay(List<String> codeList, String payType) {
         Object result = null;
-        InnerOrder data = innerOrderBO.getInnerOrder(code);
+        InnerOrder innerOrder = innerOrderBO.getInnerOrder(codeList.get(0));
         InnerProduct innerProduct = innerProductBO
-            .getInnerProduct(data.getProductCode());
+            .getInnerProduct(innerOrder.getProductCode());
+
         if (!EInnerProductStatus.Shelf_YES.getCode()
             .equals(innerProduct.getStatus())) {
             throw new BizException("xn00000", "产品未上架，无法完成支付");
         }
-        if (EBoolean.NO.getCode().equals(payType)) {
-            // 支付订单，更新订单状态
-            accountBO.transAmountCZB(data.getApplyUser(),
-                ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
-                ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
-                EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
-                data.getCode());
 
+        Long allAmount = 0L;
+        StringBuffer sb = new StringBuffer();
+        for (String code : codeList) {
+            InnerOrder data = innerOrderBO.getInnerOrder(code);
             data.setPayDatetime(new Date());
             data.setPayCode(data.getPayCode());
             data.setPayAmount(data.getAmount());
-
             data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
             innerOrderBO.paySuccess(data);
+
+            allAmount = allAmount + data.getAmount();
+            sb.append(code);
+            sb.append(",");
+        }
+
+        String refNo = sb.substring(0, sb.indexOf(","));
+
+        if (EBoolean.NO.getCode().equals(payType)) {
+            // 支付订单，更新订单状态
+            accountBO.transAmountCZB(innerOrder.getApplyUser(),
+                ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
+                ECurrency.YJ_CNY.getCode(), allAmount, EBizType.AJ_GMCP,
+                EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
+                refNo);
+
             result = new BooleanRes(true);
         } else if (EBoolean.YES.getCode().equals(payType)) {
-            return this.payWXH5(data);
+            return this.payWXH5(codeList, innerOrder.getApplyUser());
         }
         return result;
     }
 
-    private Object payWXH5(InnerOrder order) {
-        Long rmbAmount = order.getAmount() + order.getYunfei();
-        Agent agent = agentBO.getAgent(order.getApplyUser());
-        String payGroup = innerOrderBO.addPayGroup(order,
-            EBoolean.YES.getCode());
-        return weChatAO.getPrepayIdH5(agent.getUserId(), payGroup,
-            order.getCode(), EBizType.AJ_GMCP.getCode(),
-            EBizType.AJ_GMCP.getValue(), rmbAmount,
+    private Object payWXH5(List<String> codeList, String applyUser) {
+        Long allAmount = 0L;
+        StringBuffer sb = new StringBuffer();
+        StringBuffer refSb = new StringBuffer();
+
+        for (String code : codeList) {
+            InnerOrder data = innerOrderBO.getInnerOrder(code);
+            sb.append(innerOrderBO.addPayGroup(data,
+                EChannelType.WeChat_H5.getCode()));
+            sb.append(",");
+            refSb.append(code);
+            refSb.append(",");
+            allAmount = allAmount + data.getAmount();
+        }
+        String payGroup = sb.substring(0, sb.indexOf(","));
+        String refNo = sb.substring(0, sb.indexOf(","));
+
+        return weChatAO.getPrepayIdH5(applyUser, payGroup, refNo,
+            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), allAmount,
             PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
             EChannelType.WeChat_H5.getCode());
     }

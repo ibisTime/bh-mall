@@ -279,7 +279,7 @@ CREATE TABLE `tbh_channel_bank` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tbh_charge` */
 
@@ -587,8 +587,8 @@ DROP TABLE IF EXISTS `tbh_jour`;
 
 CREATE TABLE `tbh_jour` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考订单号',
-  `pay_group` varchar(32) DEFAULT NULL COMMENT '分组组号',
+  `ref_no` text COMMENT '参考订单号',
+  `pay_group` text COMMENT '分组组号',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道类型',
   `channel_order` varchar(32) DEFAULT NULL COMMENT '支付渠道单号',
   `account_number` varchar(32) DEFAULT NULL COMMENT '账号',
@@ -1166,6 +1166,7 @@ CREATE TABLE `tsys_role` (
 /*Table structure for table `tsys_user` */
 
 DROP TABLE IF EXISTS `tsys_user`;
+
 CREATE TABLE `tsys_user` (
   `user_id` varchar(32) NOT NULL COMMENT '用户ID',
   `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',

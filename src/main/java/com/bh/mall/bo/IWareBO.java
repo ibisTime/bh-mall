@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.ExchangeOrder;
-import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EBizType;
 
@@ -38,12 +36,13 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public long getTotalCountByProduct(Ware condition);
 
-    public void buyWare(InOrder inOrder, Agent agent);
+    public void buyWare(String orderCode, String productCode,
+            String productName, String specsCode, String specsName,
+            Integer quantity, Long price, Agent agent, EBizType bizType,
+            String bizNote);
 
     public void changeWarePrice(String userId, Integer level);
 
     public void checkProduct(String toUser, String specsCode);
-
-    public void buyWare(ExchangeOrder data, Agent agent);
 
 }

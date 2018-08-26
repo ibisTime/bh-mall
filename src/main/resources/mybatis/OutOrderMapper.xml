@@ -148,6 +148,8 @@
 		,t.level
 		,t.real_name
 		,t.team_name
+		,t.team_leader
+		
 		,t.apply_datetime
 		,t.apply_note
 		,t.signer

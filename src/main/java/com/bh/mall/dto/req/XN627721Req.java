@@ -1,6 +1,9 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 支付订单
@@ -11,8 +14,8 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627721Req {
 
     // （必填）编号
-    @NotBlank(message = "编号不能为空")
-    private String code;
+    @NotEmpty(message = "编号不能为空")
+    private List<String> codeList;
 
     // 支付渠道
     @NotBlank(message = "支付渠道不能为空")
@@ -26,12 +29,12 @@ public class XN627721Req {
         this.payType = payType;
     }
 
-    public String getCode() {
-        return code;
+    public List<String> getCodeList() {
+        return codeList;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
 }

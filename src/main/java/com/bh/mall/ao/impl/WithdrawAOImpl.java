@@ -185,8 +185,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (CollectionUtils.isNotEmpty(page.getList())) {
             SYSUser sysUser = null;
             for (Withdraw data : page.getList()) {
-                Agent agent = agentBO.getAgent(data.getApplyUser());
-                data.setAgent(agent);
+                if (EAccountType.Business.getCode().equals(data.getType())) {
+                    Agent agent = agentBO.getAgent(data.getApplyUser());
+                    data.setAgent(agent);
+                }
 
                 if (StringUtils.isNotBlank(data.getApproveUser())) {
                     sysUser = sysUserAO.getSYSUser(data.getApproveUser());

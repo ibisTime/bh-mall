@@ -195,4 +195,11 @@
 		,remark=#{remark}
 		WHERE user_id=#{userId}
 	</update>
+	
+	<delete id="delete_yxForm">
+		DELETE FROM 
+		tbh_yx_form
+		WHERE 
+		user_id=#{userId}
+	</delete>
 </mapper>

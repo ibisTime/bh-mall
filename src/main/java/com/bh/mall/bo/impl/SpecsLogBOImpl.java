@@ -34,8 +34,8 @@ public class SpecsLogBOImpl extends PaginableBOImpl<SpecsLog>
         data.setType(type);
         data.setProductCode(productCode);
         data.setProductName(productName);
-        data.setSpecsName(specs.getCode());
-        data.setSpecsCode(specs.getName());
+        data.setSpecsCode(specs.getCode());
+        data.setSpecsName(specs.getName());
 
         data.setTranCount(number);
         data.setPreCount(specs.getStockNumber());

@@ -58,6 +58,9 @@ public class XN627326Req extends APageReq {
     // 微信app第三方登录开放编号
     private String appOpenId;
 
+    // 用户Id
+    private String noUserId;
+
     public String getApplyEndDatetime() {
         return applyEndDatetime;
     }
@@ -185,4 +188,13 @@ public class XN627326Req extends APageReq {
     public void setHighLevel(String highLevel) {
         this.highLevel = highLevel;
     }
+
+    public String getNoUserId() {
+        return noUserId;
+    }
+
+    public void setNoUserId(String noUserId) {
+        this.noUserId = noUserId;
+    }
+
 }

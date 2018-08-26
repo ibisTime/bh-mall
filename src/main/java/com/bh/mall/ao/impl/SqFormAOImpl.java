@@ -31,13 +31,13 @@ import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Address;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.JsAward;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SqForm;
-import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.req.XN627270Req;
 import com.bh.mall.dto.req.XN627271Req;
 import com.bh.mall.enums.EAccountType;
@@ -224,10 +224,9 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 意向单
-        YxForm yxForm = yxFormBO.getYxForm(agent.getUserId());
-
+        AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
         AgentLevel agentLevel = agentLevelBO
-            .getAgentByLevel(yxForm.getApplyLevel());
+            .getAgentByLevel(log.getApplyLevel());
         // 校验身份证
         if (EBoolean.YES.getCode().equals(agentLevel.getIsRealName())) {
             IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
@@ -238,7 +237,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 新增授权单
-        String toUserId = yxForm.getToUserId();
+        String toUserId = log.getToUserId();
         if (StringUtils.isBlank(toUserId)) {
             SYSUser sysUser = sysUserBO.getSYSUser();
             toUserId = sysUser.getUserId();
@@ -372,7 +371,7 @@ public class SqFormAOImpl implements ISqFormAO {
         SqForm sqForm = sqFormBO.getSqForm(userId);
         Agent agent = agentBO.getAgent(userId);
 
-        if (!ESqFormStatus.TO_CANCEL.getCode().equals(sqForm.getStatus())) {
+        if (!ESqFormStatus.CANCEL_COMPANY.getCode().equals(sqForm.getStatus())) {
             throw new BizException("xn000", "该代理未申请退出状态");
         }
 
@@ -394,11 +393,13 @@ public class SqFormAOImpl implements ISqFormAO {
                     EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
                     -account.getAmount());
 
-                if (StringUtils.isNotBlank(agent.getFromUserId())) {
-                    agent.setStatus(EAgentStatus.IMPOWERO_INFO.getCode());
-                } else {
-                    agent.setStatus(EAgentStatus.ADD_INFO.getCode());
-                }
+                // if (StringUtils.isNotBlank(agent.getFromUserId())) {
+                // agent.setStatus(EAgentStatus.IMPOWERO_INFO.getCode());
+                // } else {
+                // agent.setStatus(EAgentStatus.MIND.getCode());
+                // }
+
+                agent.setStatus(EAgentStatus.MIND.getCode());
 
                 // 清空手机号等信息，防止重新申请时重复
                 agentBO.resetInfo(agent);
@@ -442,6 +443,7 @@ public class SqFormAOImpl implements ISqFormAO {
                 EBizType.AJ_QXSQ.getValue(), -account.getAmount());
 
             // 清空手机号等信息，防止重新申请时重复
+            agent.setStatus(EAgentStatus.MIND.getCode());
             agentBO.resetInfo(agent);
 
             // 清空推荐关系
@@ -534,6 +536,8 @@ public class SqFormAOImpl implements ISqFormAO {
                 SYSUser sysUser = sysUserBO.getSYSUser(sqForm.getToUserId());
                 sqForm.setToUserName(sysUser.getRealName());
             }
+
+            // 授权金额
             AgentLevel agentLevel = agentLevelBO
                 .getAgentByLevel(sqForm.getApplyLevel());
             sqForm.setImpowerAmount(agentLevel.getMinCharge());
@@ -658,9 +662,11 @@ public class SqFormAOImpl implements ISqFormAO {
         AgentReport report = agentReportBO.getAgentReport(agent.getUserId());
         if (null == report) {
             agentReportBO.saveAgentReport(sqForm, agent);
+        } else {
+            agentReportBO.refreshAgentReport(report, sqForm, agent);
         }
 
-        // 删除授权单
+        // 删除意向单
         sqFormBO.removeSqForm(sqForm);
     }
 

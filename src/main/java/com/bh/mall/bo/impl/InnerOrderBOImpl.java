@@ -12,7 +12,10 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IInnerOrderDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InnerOrder;
+import com.bh.mall.domain.InnerProduct;
+import com.bh.mall.domain.InnerSpecs;
 import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.exception.BizException;
 
@@ -24,8 +27,45 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     private IInnerOrderDAO innerOrderDAO;
 
     @Override
-    public void saveInnerOrder(InnerOrder data) {
+    public String saveInnerOrder(InnerProduct innerProduct, InnerSpecs specs,
+            Agent agent, Integer quantity, Long yunfei, String signer,
+            String mobile, String province, String area, String city,
+            String address, String applyNote) {
+        InnerOrder data = new InnerOrder();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.InnerOrder.getCode());
+        data.setCode(code);
+        data.setProductCode(innerProduct.getCode());
+        data.setProductName(innerProduct.getName());
+
+        data.setSpecsCode(specs.getCode());
+        data.setSpecsName(specs.getName());
+        data.setPic(innerProduct.getPic());
+        data.setPrice(specs.getPrice());
+        data.setQuantity(quantity);
+
+        Long amount = quantity * specs.getPrice();
+        data.setYunfei(0L);
+
+        data.setAmount(amount);
+        data.setApplyUser(agent.getUserId());
+        data.setRealName(agent.getRealName());
+        data.setLevel(agent.getLevel());
+        data.setTeamName(agent.getTeamName());
+        data.setApplyDatetime(new Date());
+
+        data.setApplyNote(applyNote);
+        data.setProvince(province);
+        data.setArea(area);
+        data.setCity(city);
+        data.setAddress(address);
+
+        data.setMobile(mobile);
+        data.setSigner(signer);
+        data.setStatus(EInnerOrderStatus.Unpaid.getCode());
         innerOrderDAO.insert(data);
+
+        return code;
     }
 
     @Override

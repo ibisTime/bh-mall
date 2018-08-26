@@ -19,6 +19,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
@@ -42,7 +43,6 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Ware;
-import com.bh.mall.domain.YxForm;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
@@ -110,6 +110,9 @@ public class AgentAOImpl implements IAgentAO {
 
     @Autowired
     IAgentLogAO agentLogAO;
+
+    @Autowired
+    IAgentLogBO agentLogBO;
 
     // 微信注册
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
@@ -219,8 +222,10 @@ public class AgentAOImpl implements IAgentAO {
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
                 // 重新申请时，更新用户状态
-                if (EAgentStatus.CANCELED.getCode()
-                    .equals(dbUser.getStatus())) {
+                if (EAgentStatus.IMPOWERO_INFO.getCode()
+                    .equals(dbUser.getStatus())
+                        || EAgentStatus.MIND.getCode()
+                            .equals(dbUser.getStatus())) {
                     agentBO.refreshStatus(dbUser, status);
                 }
 
@@ -598,9 +603,11 @@ public class AgentAOImpl implements IAgentAO {
         data.setWareAmount(amount);
 
         // 门槛余额
-        Account mkAccount = accountBO.getAccountByUser(data.getUserId(),
+        Account mkAccount = accountBO.getAccountNocheck(data.getUserId(),
             ECurrency.MK_CNY.getCode());
-        data.setMkAmount(mkAccount.getAmount());
+        if (null != mkAccount) {
+            data.setMkAmount(mkAccount.getAmount());
+        }
 
         // 代理轨迹
         AgentLog condition = new AgentLog();
@@ -615,11 +622,11 @@ public class AgentAOImpl implements IAgentAO {
             data.setToTeamName(fromAgent.getTeamName());
         }
         // 无推荐人
-        YxForm yxForm = yxFormBO.getYxForm(data.getUserId());
-        if (null != yxForm && StringValidater
-            .toInteger(EAgentLevel.ONE.getCode()) != yxForm.getApplyLevel()) {
-            if (StringUtils.isNotBlank(yxForm.getToUserId())) {
-                Agent fromAgent = agentBO.getAgent(yxForm.getToUserId());
+        AgentLog log = agentLogBO.getAgentLog(data.getLastAgentLog());
+        if (null != log && StringValidater
+            .toInteger(EAgentLevel.ONE.getCode()) != log.getApplyLevel()) {
+            if (StringUtils.isNotBlank(log.getToUserId())) {
+                Agent fromAgent = agentBO.getAgent(log.getToUserId());
                 data.setToTeamName(fromAgent.getTeamName());
             }
         }

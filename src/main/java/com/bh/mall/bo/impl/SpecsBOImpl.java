@@ -169,6 +169,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         }
 
         data.setCode(psCode);
+        data.setIsSingle(psReq.getIsSingle());
         data.setRefCode(psReq.getRefCode());
         data.setProductCode(code);
         data.setName(psReq.getName());
@@ -322,7 +323,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     @Transactional
     public void refreshRepertory(String productName, Specs data, String type,
             Integer number, String updater) {
-        specsLogBO.saveSpecsLog(productName, data.getProductCode(), data, type,
+        specsLogBO.saveSpecsLog(data.getProductCode(), productName, data, type,
             number, updater);
 
         Integer nowNumber = data.getStockNumber() + number;
@@ -331,6 +332,11 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         }
         data.setStockNumber(nowNumber);
         specsDAO.updateRepertory(data);
+    }
+
+    @Override
+    public List<Specs> querySpecsListByB(Specs condition) {
+        return specsDAO.selectSpecsListByB(condition);
     }
 
 }

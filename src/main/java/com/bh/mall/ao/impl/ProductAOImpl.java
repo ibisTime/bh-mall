@@ -240,6 +240,7 @@ public class ProductAOImpl implements IProductAO {
                 // 产品规格价格
                 AgentPrice pspCondition = new AgentPrice();
                 pspCondition.setLevel(condition.getLevel());
+                pspCondition.setIsBuy(EBoolean.YES.getCode());
                 pspCondition.setSpecsCode(productSpecs.getCode());
                 List<AgentPrice> pspList = agentPriceBO
                     .queryAgentPriceList(pspCondition);
@@ -352,7 +353,9 @@ public class ProductAOImpl implements IProductAO {
             // 产品规格
             Specs psCondition = new Specs();
             psCondition.setProductCode(product.getCode());
-            List<Specs> psList = specsBO.querySpecsList(psCondition);
+            psCondition.setIsBuy(EBoolean.YES.getCode());
+            psCondition.setLevel(condition.getLevel());
+            List<Specs> psList = specsBO.querySpecsListByB(psCondition);
             for (Specs productSpecs : psList) {
 
                 // 产品规格价格
@@ -365,8 +368,8 @@ public class ProductAOImpl implements IProductAO {
                 if (CollectionUtils.isNotEmpty(pspList)) {
                     productSpecs.setPriceList(pspList);
                 }
-                product.setSpecsList(psList);
             }
+            product.setSpecsList(psList);
         }
         page.setList(list);
         return page;

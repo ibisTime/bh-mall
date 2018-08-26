@@ -398,7 +398,7 @@ public class WareAOImpl implements IWareAO {
             Long chargeAmount = agentLevel.getMinCharge();
             Long readAmount = agentLevel.getRedAmount();
             String result = ECheckStatus.NORMAL.getCode();
-            String isWareHouse = EBoolean.YES.getCode();
+            String isWareHouse = agentLevel.getIsWare();
 
             // 检查云仓红线
             Long whAmount = 0L;
@@ -428,14 +428,14 @@ public class WareAOImpl implements IWareAO {
 
                     // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
                 } else if (orderAmount < agentLevel.getAmount()) {
-                    result = ECheckStatus.TO_BUY.getCode();
+                    result = ECheckStatus.RED_LOW.getCode();
                 }
                 // 未开启云仓，只检查是否完成授权单
             } else if (0 != agentLevel.getAmount()
                     && outOrderBO.checkImpowerOrder(agent.getUserId(),
                         agent.getImpowerDatetime())) {
                 // 未完成授权单
-                result = ECheckStatus.NO_WARE.getCode();
+                result = ECheckStatus.RED_LOW.getCode();
             }
 
             // 检查门槛余额

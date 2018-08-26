@@ -12,9 +12,9 @@ import com.bh.mall.domain.Specs;
 public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public String saveOutOrder(String applyUser, String name, Integer level,
-            String toUserId, String toUserName, String teamName,
-            String teamLeader, Product pData, Specs specs, Long price,
-            Integer quantity, String applyNote, String isWareSend,
+            String toUserId, String toUserName, String highUserId,
+            String teamName, String teamLeader, Product pData, Specs specs,
+            Long price, Integer quantity, String applyNote, String isWareSend,
             String signer, String mobile, String province, String city,
             String area, String address, String status, String kind);
 
@@ -44,7 +44,7 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
     public List<OutOrder> queryToDealList(int pageNo, int pageSize,
             OutOrder condition);
 
-    public String addPayGroup(OutOrder inOrder);
+    public String addPayGroup(OutOrder data, String payType);
 
     public OutOrder getOutOrderByPayGroup(String payGroup);
 

@@ -3,11 +3,17 @@ package com.bh.mall.bo;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InnerOrder;
+import com.bh.mall.domain.InnerProduct;
+import com.bh.mall.domain.InnerSpecs;
 
 public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
-    public void saveInnerOrder(InnerOrder data);
+    public String saveInnerOrder(InnerProduct innerProduct, InnerSpecs specs,
+            Agent agent, Integer quantity, Long yunfei, String signer,
+            String mobile, String province, String area, String city,
+            String address, String applyNote);
 
     public void removeInnerOrder(String code);
 

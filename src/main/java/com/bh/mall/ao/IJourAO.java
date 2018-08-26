@@ -27,6 +27,10 @@ public interface IJourAO {
     // 分页查询流水记录
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition);
 
+    // 分页查询流水记录（front）
+    public Paginable<Jour> queryDetailPage(int start, int limit,
+            Jour condition);
+
     // 列表查询流水记录
     public List<Jour> queryJourList(Jour condition);
 
@@ -36,10 +40,6 @@ public interface IJourAO {
     // 查询变动金额总和
     public Long getTotalAmount(String bizType, String channelType,
             String accountNumber, String dateStart, String dateEnd);
-
-    // 分页查询流水记录（front）
-    public Paginable<Jour> queryDetailPage(int start, int limit,
-            Jour condition);
 
     public XN627855Res queryJourPageByP(int start, int limit, Jour condition);
 

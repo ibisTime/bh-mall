@@ -90,7 +90,7 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
         MiniCode condition = new MiniCode();
         condition.setStatus(ECodeStatus.USE_NO.getCode());
         List<MiniCode> list = miniCodeDAO.selectCodeList(condition);
-        if (CollectionUtils.isNotEmpty(list)) {
+        if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn00000", "盒码没有啦");
         }
         return list.get(0);

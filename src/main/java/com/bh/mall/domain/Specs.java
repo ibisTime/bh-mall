@@ -61,6 +61,12 @@ public class Specs extends ABaseDO {
     // 产品
     private Product product;
 
+    // 是否可买
+    private String isBuy;
+
+    // 等级
+    private Integer level;
+
     public String getCode() {
         return code;
     }
@@ -195,6 +201,22 @@ public class Specs extends ABaseDO {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getIsBuy() {
+        return isBuy;
+    }
+
+    public void setIsBuy(String isBuy) {
+        this.isBuy = isBuy;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

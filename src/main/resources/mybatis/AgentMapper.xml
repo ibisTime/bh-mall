@@ -52,6 +52,10 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="noUserId != null and noUserId != '' ">
+				<![CDATA[AND t.user_id <> #{noUserId}]]>
+			</if>
+			
 			<if test="fromUserId != null and fromUserId != '' ">
 				AND t.from_user_id = #{fromUserId}
 			</if>
@@ -530,7 +534,8 @@
 	<update id="reset_info" parameterType="agent">
 		UPDATE tbh_agent
 		SET
-		mobile = #{mobile}
+		status=#{status}
+		,mobile = #{mobile}
 		,referrer = #{referrer}
 		,introducer = #{introducer}
 		,high_user_id = #{highUserId}

@@ -51,19 +51,15 @@ public class TjAwardAOImpl implements ITjAwardAO {
             Product product = productBO.getProduct(data.getProductCode());
             data.setProductName(product.getName());
         }
-        // for (Iterator<TjAward> iterator = list.iterator(); iterator
-        // .hasNext();) {
-        // TjAward award = iterator.next();
-        // if (award.getLevel() == 6) {
-        // iterator.remove();
-        // }
-        // }
         return list;
     }
 
     @Override
     public TjAward getTjAward(String code) {
-        return tjAwardBO.getTjAward(code);
+        TjAward data = tjAwardBO.getTjAward(code);
+        Product product = productBO.getProduct(data.getProductCode());
+        data.setProductName(product.getName());
+        return data;
     }
 
     @Override

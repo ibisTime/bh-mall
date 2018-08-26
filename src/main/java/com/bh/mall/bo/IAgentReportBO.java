@@ -16,13 +16,14 @@ import com.bh.mall.domain.SqForm;
 public interface IAgentReportBO extends IPaginableBO<AgentReport> {
 
     // 新增代理统计
-    public void saveAgentReport(SqForm data, Agent agent);
+    public void saveAgentReport(SqForm sqForm, Agent agent);
 
     // 删除代理统计
     public int removeAgentReport(String code);
 
     // 更新代理统计
-    public void refreshAgentReport(AgentReport data);
+    public void refreshAgentReport(AgentReport data, SqForm sqForm,
+            Agent agent);
 
     // 列表查询代理统计
     public List<AgentReport> queryAgentReportList(AgentReport condition);

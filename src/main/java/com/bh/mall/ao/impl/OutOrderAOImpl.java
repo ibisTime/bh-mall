@@ -43,6 +43,8 @@ import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.PropertiesUtil;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -81,7 +83,6 @@ import com.bh.mall.enums.EProductSpecsType;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESpecsLogType;
-import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
@@ -243,8 +244,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                         applyUser.getRealName(), applyUser.getLevel(),
                         applyUser.getHighUserId(), toUserName,
-                        applyUser.getTeamName(), teamLeader.getRealName(),
-                        pData, specs, price.getPrice(), specs.getSingleNumber(),
+                        applyUser.getHighUserId(), applyUser.getTeamName(),
+                        teamLeader.getRealName(), pData, specs,
+                        price.getPrice(), specs.getSingleNumber(),
                         req.getApplyNote(), EBoolean.NO.getCode(),
                         req.getSigner(), req.getMobile(), req.getProvince(),
                         req.getCity(), req.getArea(), req.getAddress(),
@@ -256,12 +258,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                     applyUser.getRealName(), applyUser.getLevel(),
                     applyUser.getHighUserId(), toUserName,
-                    applyUser.getTeamName(), teamLeader.getRealName(), pData,
-                    specs, price.getPrice(), cart.getQuantity(),
-                    req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(),
-                    EOutOrderStatus.Unpaid.getCode(), kind));
+                    applyUser.getHighUserId(), applyUser.getTeamName(),
+                    teamLeader.getRealName(), pData, specs, price.getPrice(),
+                    cart.getQuantity(), req.getApplyNote(),
+                    EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
             }
             // 删除购物车记录
             cartBO.removeCart(cart);
@@ -306,7 +308,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 for (int i = 0; i < singleNumber; i++) {
                     list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
                         cUser.getNickname(), null, agent.getUserId(),
-                        agent.getRealName(), null, null, pData, specs,
+                        agent.getRealName(), null, null, null, pData, specs,
                         price.getPrice(), specs.getSingleNumber(),
                         req.getApplyNote(), EBoolean.NO.getCode(),
                         req.getSigner(), req.getMobile(), req.getProvince(),
@@ -318,7 +320,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 // 不可拆单
                 list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
                     cUser.getNickname(), null, agent.getUserId(),
-                    agent.getRealName(), null, null, pData, specs,
+                    agent.getRealName(), null, null, null, pData, specs,
                     price.getPrice(), cart.getQuantity(), req.getApplyNote(),
                     EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
                     req.getProvince(), req.getCity(), req.getArea(),
@@ -403,18 +405,19 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                     applyUser.getRealName(), applyUser.getLevel(),
                     applyUser.getHighUserId(), toUserName,
-                    applyUser.getTeamName(), teamLeader.getRealName(), pData,
-                    specs, price.getPrice(), specs.getSingleNumber(),
-                    req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(),
-                    EOutOrderStatus.Unpaid.getCode(), kind));
+                    applyUser.getHighUserId(), applyUser.getTeamName(),
+                    teamLeader.getRealName(), pData, specs, price.getPrice(),
+                    specs.getSingleNumber(), req.getApplyNote(),
+                    EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
             }
         } else {
             // 不可拆单
             list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                 applyUser.getRealName(), applyUser.getLevel(),
-                applyUser.getHighUserId(), toUserName, applyUser.getTeamName(),
+                applyUser.getHighUserId(), toUserName,
+                applyUser.getHighUserId(), applyUser.getTeamName(),
                 teamLeader.getRealName(), pData, specs, price.getPrice(),
                 StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
@@ -449,7 +452,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             for (int i = 0; i < singleNumber; i++) {
                 list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
                     cUser.getNickname(), null, agent.getUserId(),
-                    agent.getRealName(), null, null, pData, specs,
+                    agent.getRealName(), null, null, null, pData, specs,
                     price.getPrice(), specs.getSingleNumber(),
                     req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
                     req.getMobile(), req.getProvince(), req.getCity(),
@@ -461,8 +464,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 不可拆单
             list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
                 cUser.getNickname(), null, agent.getUserId(),
-                agent.getRealName(), null, null, pData, specs, price.getPrice(),
-                StringValidater.toInteger(req.getQuantity()),
+                agent.getRealName(), null, null, null, pData, specs,
+                price.getPrice(), StringValidater.toInteger(req.getQuantity()),
                 req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
                 req.getMobile(), req.getProvince(), req.getCity(),
                 req.getArea(), req.getAddress(),
@@ -476,60 +479,66 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Transactional
     public Object payOutOrder(List<String> codeList, String payType) {
         Object result = null;
+        OutOrder outOrder = outOrderBO.getOutOrder(codeList.get(0));
+
+        StringBuffer sb = new StringBuffer();
+        Long amount = 0L;
+        // 未开启云仓账户的代理用门槛款支付
         for (String code : codeList) {
             OutOrder data = outOrderBO.getOutOrder(code);
             if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
+            sb.append(
+                OrderNoGenerater.generate(EGeneratePrefix.OutOrder.getCode()));
+            // 账户扣钱
+            String status = EOutOrderStatus.TO_APPROVE.getCode();
 
-            // C端下单支付
-            if (EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
-                data.setPayType(EChannelType.WeChat_XCX.getCode());
-                Object payResult = this.payWXH5(data,
-                    PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
-                result = payResult;
-            }
+            data.setPayDatetime(new Date());
+            data.setPayCode(data.getCode());
+            data.setPayAmount(data.getAmount());
+            data.setStatus(status);
+            outOrderBO.paySuccess(data);
+            result = new BooleanRes(true);
 
-            // 未开启云仓账户的代理用门槛款支付
-            if (EPayType.RMB_YE.getCode().equals(payType)) {
-                // 账户扣钱
-                String payGroup = outOrderBO.addPayGroup(data);
-                Account mkAccount = accountBO.getAccountByUser(
-                    data.getApplyUser(), ECurrency.MK_CNY.getCode());
-                data.setPayType(EChannelType.NBZ.getCode());
-                accountBO.changeAmount(mkAccount.getAccountNumber(),
-                    EChannelType.NBZ, null, payGroup, data.getCode(),
-                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
-                    -data.getAmount());
-                String status = EOutOrderStatus.TO_APPROVE.getCode();
+            amount = amount + data.getAmount();
+        }
+        // C端下单支付
+        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            result = this.payWXH5(codeList, outOrder.getApplyUser(),
+                EChannelType.WeChat_H5.getCode(),
+                PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
 
-                data.setPayDatetime(new Date());
-                data.setPayCode(data.getCode());
-                data.setPayAmount(data.getAmount());
-                data.setStatus(status);
-                outOrderBO.paySuccess(data);
+        } else if (EOutOrderKind.C_ORDER.getCode().equals(outOrder.getKind())) {
+            result = this.payWXH5(codeList, outOrder.getApplyUser(),
+                EChannelType.WeChat_XCX.getCode(),
+                PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
 
-                result = new BooleanRes(true);
-
-                // 用微信支付
-            } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-                data.setPayType(EChannelType.WeChat_H5.getCode());
-                Object payResult1 = this.payWXH5(data,
-                    PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
-                result = payResult1;
-            }
+        } else if (EPayType.RMB_YE.getCode().equals(payType)) {
+            Account mkAccount = accountBO.getAccountByUser(
+                outOrder.getApplyUser(), ECurrency.MK_CNY.getCode());
+            accountBO.changeAmount(mkAccount.getAccountNumber(),
+                EChannelType.NBZ, null, sb.toString(), outOrder.getCode(),
+                EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), -amount);
         }
         return result;
-
     }
 
-    private Object payWXH5(OutOrder data, String callBackUrl) {
-        Long rmbAmount = data.getAmount();
-        String payGroup = outOrderBO.addPayGroup(data);
-        return weChatAO.getPrepayIdH5(data.getApplyUser(), payGroup,
-            data.getCode(), EBizType.AJ_GMCP.getCode(),
-            EBizType.AJ_GMCP.getValue(), rmbAmount, callBackUrl,
-            data.getPayType());
+    private Object payWXH5(List<String> codeList, String applyUser,
+            String payType, String callBackUrl) {
+        StringBuffer sb = new StringBuffer();
+        StringBuffer refNo = new StringBuffer();
+        Long amount = 0L;
+        for (String code : codeList) {
+            OutOrder data = outOrderBO.getOutOrder(code);
+            String payGroup = outOrderBO.addPayGroup(data, payType);
+            sb.append(payGroup);
+            refNo.append(data.getCode());
+            amount = amount + data.getAmount();
+        }
+        return weChatAO.getPrepayIdH5(applyUser, sb.toString(),
+            refNo.toString(), EBizType.AJ_GMCP.getCode(),
+            EBizType.AJ_GMCP.getValue(), amount, callBackUrl, payType);
     }
 
     @Override
@@ -876,11 +885,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Transactional
     public void deliverOutOrder(XN627645Req req) {
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
-        Agent toUser = agentBO.getAgent(data.getToUserId());
+        Agent applyUser = agentBO.getAgent(data.getApplyUser());
         if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
 
             AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
-                toUser.getLevel());
+                applyUser.getLevel());
             Specs specs = specsBO.getSpecs(price.getSpecsCode());
             if (price.getMinNumber() > data.getQuantity()) {
                 throw new BizException("xn00000",
@@ -894,7 +903,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
 
             // 下单人为代理
-            Agent applyUser = agentBO.getAgent(data.getApplyUser());
             AgentLevel agent = agentLevelBO
                 .getAgentByLevel(applyUser.getLevel());
 
@@ -1006,20 +1014,38 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn0000", "该订单未申请取消");
         }
 
-        if (EResult.Result_YES.getCode().equals(result)) {
-            if (EChannelType.NBZ.getCode().equals(data.getPayType())) {
-                String toUser = data.getToUserId();
-                if (StringUtils.isBlank(toUser)) {
-                    toUser = ESysUser.SYS_USER_BH.getCode();
-                }
+        // 非云仓发货初始状态
+        String status = EOutOrderStatus.TO_APPROVE.getCode();
+        // 初始状态是未支付
+        if (null == data.getPayAmount()) {
+            status = EOutOrderStatus.Unpaid.getCode();
+        }
 
-                accountBO.transAmountCZB(toUser, ECurrency.YJ_CNY.getCode(),
-                    data.getApplyUser(), ECurrency.YJ_CNY.getCode(),
-                    data.getAmount(), EBizType.AJ_GMCP_TK,
-                    EBizType.AJ_GMCP_TK.getValue(),
-                    EBizType.AJ_GMCP_TK.getValue(), data.getCode());
+        if (EResult.Result_YES.getCode().equals(result)) {
+            status = EOutOrderStatus.CANCELED.getCode();
+
+            // 没开启云仓用户取消，归还门槛款
+            if (!(EBoolean.YES.getCode().equals(data.getIsWareSend())
+                    || EOutOrderKind.C_ORDER.getCode()
+                        .equals(data.getKind()))) {
+                Account account = accountBO.getAccountByUser(
+                    data.getApplyUser(), ECurrency.MK_CNY.getCode());
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.NBZ, null, null, data.getCode(),
+                    EBizType.AJ_GMCP_TK, EBizType.AJ_GMCP_TK.getValue(),
+                    data.getAmount());
+            } else if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
+                // 云仓提货归还库存
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+                wareBO.buyWare(data.getCode(), data.getProductCode(),
+                    data.getProductName(), data.getSpecsCode(),
+                    data.getSpecsName(), data.getQuantity(), data.getPrice(),
+                    agent, EBizType.AJ_GMYC,
+                    "购买产品：[" + data.getProductName() + "]");
             }
         }
+
+        data.setStatus(status);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);

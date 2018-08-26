@@ -186,6 +186,9 @@ public class Agent extends ABaseDO {
     // 归属人的团队名称
     private List<String> statusList;
 
+    // 用户Id，过滤代理
+    private String noUserId;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -659,6 +662,14 @@ public class Agent extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getNoUserId() {
+        return noUserId;
+    }
+
+    public void setNoUserId(String noUserId) {
+        this.noUserId = noUserId;
     }
 
 }

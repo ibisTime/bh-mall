@@ -25,6 +25,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         AgentReport data = new AgentReport();
         data.setUserId(sqForm.getUserId());
         data.setRealName(sqForm.getRealName());
+        data.setTeamName(agent.getTeamName());
         data.setWxId(sqForm.getWxId());
         data.setMobile(sqForm.getMobile());
 
@@ -55,8 +56,27 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
     }
 
     @Override
-    public void refreshAgentReport(AgentReport data) {
-        agentReportDAO.insert(data);
+    public void refreshAgentReport(AgentReport data, SqForm sqForm,
+            Agent agent) {
+        data.setUserId(sqForm.getUserId());
+        data.setRealName(sqForm.getRealName());
+        data.setTeamName(agent.getTeamName());
+        data.setWxId(sqForm.getWxId());
+        data.setMobile(sqForm.getMobile());
+
+        data.setLevel(agent.getLevel());
+        data.setUserReferee(sqForm.getReferrer());
+        data.setIntroducer(agent.getIntroducer());
+        data.setHighUserId(agent.getHighUserId());
+        data.setManager(agent.getManager());
+
+        data.setProvince(sqForm.getProvince());
+        data.setCity(sqForm.getCity());
+        data.setArea(sqForm.getArea());
+        data.setAddress(sqForm.getAddress());
+        data.setImpowerDatetime(sqForm.getImpowerDatetime());
+
+        agentReportDAO.update(data);
     }
 
     @Override

@@ -300,7 +300,11 @@ public class InOrderAOImpl implements IInOrderAO {
                     -data.getQuantity(), data.getCode());
 
                 // 购买云仓
-                wareBO.buyWare(data, uData);
+                wareBO.buyWare(data.getCode(), data.getProductCode(),
+                    data.getProductName(), data.getSpecsCode(),
+                    data.getSpecsName(), data.getQuantity(), data.getPrice(),
+                    uData, EBizType.AJ_GMYC,
+                    "购买产品：[" + data.getProductName() + "]");
                 // 出货以及推荐奖励
                 this.payAward(data);
 
@@ -310,6 +314,7 @@ public class InOrderAOImpl implements IInOrderAO {
 
                 result = new BooleanRes(true);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+                data.setPayType(EChannelType.WeChat_H5.getCode());
                 Object payResult = this.payWXH5(data,
                     PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
                 result = payResult;
@@ -358,7 +363,11 @@ public class InOrderAOImpl implements IInOrderAO {
                     -data.getQuantity(), data.getCode());
 
                 // 购买云仓
-                wareBO.buyWare(data, agent);
+                wareBO.buyWare(data.getCode(), data.getProductCode(),
+                    data.getProductName(), data.getSpecsCode(),
+                    data.getSpecsName(), data.getQuantity(), data.getPrice(),
+                    agent, EBizType.AJ_GMYC,
+                    "购买产品：[" + data.getProductName() + "]");
                 // 出货以及推荐奖励
                 this.payAward(data);
                 data.setPayCode(wechatOrderNo);
