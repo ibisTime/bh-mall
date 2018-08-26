@@ -129,7 +129,7 @@ public class AgentAOImpl implements IAgentAO {
     public XN627303Res doLoginWeChatByAgent(String code, String fromUserId) {
 
         // fromUserId偶尔会有undefind
-        if ("undefind".equals(fromUserId)) {
+        if ("undefined".equals(fromUserId)) {
             throw new BizException("xn00000", "该二维码无法识别，请联系上级获取新的二维码");
         }
 

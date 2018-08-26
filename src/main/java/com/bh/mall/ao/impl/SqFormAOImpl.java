@@ -212,6 +212,8 @@ public class SqFormAOImpl implements ISqFormAO {
                 throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
         }
+        AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
+        String toUserId = log.getToUserId();
 
         // 申请最高等级
         String status = ESqFormStatus.TO_APPROVE.getCode();
@@ -221,10 +223,10 @@ public class SqFormAOImpl implements ISqFormAO {
             agent.setTeamName(req.getTeamName());
             // 直接由公司审核
             status = ESqFormStatus.COMPANY_IMPOWER.getCode();
+            SYSUser sysUser = sysUserBO.getSYSUser();
+            toUserId = sysUser.getUserId();
         }
 
-        // 意向单
-        AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
         AgentLevel agentLevel = agentLevelBO
             .getAgentByLevel(log.getApplyLevel());
         // 校验身份证
@@ -234,13 +236,6 @@ public class SqFormAOImpl implements ISqFormAO {
                 throw new BizException("xn0000", "请输入正确的身份证号码");
             }
             agentBO.getAgentByIdNo(req.getIdNo());
-        }
-
-        // 新增授权单
-        String toUserId = log.getToUserId();
-        if (StringUtils.isBlank(toUserId)) {
-            SYSUser sysUser = sysUserBO.getSYSUser();
-            toUserId = sysUser.getUserId();
         }
 
         SqForm sqForm = sqFormBO.getSqForm(agent.getUserId());
@@ -371,7 +366,8 @@ public class SqFormAOImpl implements ISqFormAO {
         SqForm sqForm = sqFormBO.getSqForm(userId);
         Agent agent = agentBO.getAgent(userId);
 
-        if (!ESqFormStatus.CANCEL_COMPANY.getCode().equals(sqForm.getStatus())) {
+        if (!ESqFormStatus.CANCEL_COMPANY.getCode()
+            .equals(sqForm.getStatus())) {
             throw new BizException("xn000", "该代理未申请退出状态");
         }
 

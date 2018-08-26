@@ -172,7 +172,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshStatus(Agent data, String updater, String remark) {
 
-        data.setStatus(EAgentStatus.CANCELED.getCode());
+        data.setStatus(EAgentStatus.MIND.getCode());
         data.setUpdater(updater);
         Date date = new Date();
         data.setUpdateDatetime(date);
