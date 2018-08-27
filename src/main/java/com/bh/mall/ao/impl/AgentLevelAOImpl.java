@@ -33,7 +33,6 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         data.setMinChargeAmount(
             StringValidater.toLong(req.getMinChargeAmount()));
         data.setMinSurplus(StringValidater.toLong(req.getMinSurplus()));
-        data.setIsSend(req.getIsSend());
         data.setIsWare(req.getIsWare());
         data.setUpdater(req.getUpdater());
 

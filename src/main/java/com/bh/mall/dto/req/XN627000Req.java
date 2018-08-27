@@ -25,10 +25,6 @@ public class XN627000Req {
     @NotBlank(message = "授权单金额不能为空")
     private String amount;
 
-    // （必填）本等级授权单允许自发
-    @NotBlank(message = "本等级授权单允许自发不能为空")
-    private String isSend;
-
     // 本等级是否启用云仓
     @NotBlank(message = "是否启用云仓不能为空")
     private String isWare;
@@ -130,14 +126,6 @@ public class XN627000Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getIsSend() {
-        return isSend;
-    }
-
-    public void setIsSend(String isSend) {
-        this.isSend = isSend;
     }
 
     public String getImpowerAmount() {

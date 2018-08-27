@@ -38,6 +38,9 @@
 			</if>
 			<if test="isBuy != null and isBuy !=''">
 				AND p.is_buy  = #{isBuy}
+			</if>	
+			<if test="level != null and level !=''">
+				AND p.level  = #{level}
 			</if>		
 		</trim>
 	</sql>
