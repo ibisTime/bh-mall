@@ -240,6 +240,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 订单拆单
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
                 int singleNumber = cart.getQuantity() / specs.getSingleNumber();
+                if ((cart.getQuantity() % specs.getSingleNumber()) != 0) {
+
+                }
+
                 for (int i = 0; i < singleNumber; i++) {
                     list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                         applyUser.getRealName(), applyUser.getLevel(),
