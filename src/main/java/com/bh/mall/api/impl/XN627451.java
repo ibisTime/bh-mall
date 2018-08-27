@@ -36,6 +36,7 @@ public class XN627451 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setCurrency(req.getCurrency());
         condition.setCurrencyList(req.getCurrencyList());
+        condition.setType(req.getType());
 
         condition.setLastOrder(req.getLastOrder());
         condition.setCreateDatetimeStart(

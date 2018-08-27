@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.dto.req.XN627000Req;
+import com.bh.mall.dto.req.XN627001Req;
 import com.bh.mall.dto.req.XN627002Req;
 
 /**
@@ -16,7 +18,13 @@ public interface IAgentLevelAO {
 
     String DEFAULT_ORDER_COLUMN = "level";
 
-    // 修改代理等级
+    // 代理等级设置
+    public void editAgentLevel(XN627000Req req);
+
+    // 代理授权设置
+    public void editAgentLevel(XN627001Req req);
+
+    // 代理升级设置
     public void editAgentLevel(XN627002Req req);
 
     // 分页查询代理

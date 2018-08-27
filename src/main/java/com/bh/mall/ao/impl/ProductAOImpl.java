@@ -14,6 +14,7 @@ import com.bh.mall.ao.IProductAO;
 import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IInnerSpecsBO;
 import com.bh.mall.bo.IProductBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.ISpecsLogBO;
 import com.bh.mall.bo.ITjAwardBO;
@@ -25,6 +26,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Product;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.TjAward;
 import com.bh.mall.domain.Ware;
@@ -59,6 +61,9 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     IWareBO wareBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     @Override
     @Transactional
@@ -263,6 +268,9 @@ public class ProductAOImpl implements IProductAO {
             List<TjAward> awardList = tjAwardBO
                 .getAwardByProduct(product.getCode());
             product.setDirectAwardList(awardList);
+
+            SYSUser sysUser = sysUserBO.getSYSUser(product.getUpdater());
+            product.setUpdateName(sysUser.getRealName());
         }
         return page;
     }

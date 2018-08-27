@@ -27,6 +27,7 @@ public class XN627326 extends AProcessor {
     public Object doBusiness() throws BizException {
         Agent condition = new Agent();
         condition.setTeamName(req.getTeamName());
+        condition.setHighLevel(StringValidater.toInteger(req.getHighLevel()));
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setStatus(req.getStatus());
         condition.setNoUserId(req.getNoUserId());

@@ -91,6 +91,9 @@ public class Product extends ABaseDO {
     // 是否可买
     private String isBuy;
 
+    // 修改人名称
+    private String updateName;
+
     public String getCode() {
         return code;
     }
@@ -289,6 +292,14 @@ public class Product extends ABaseDO {
 
     public void setIsBuy(String isBuy) {
         this.isBuy = isBuy;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 
 }
