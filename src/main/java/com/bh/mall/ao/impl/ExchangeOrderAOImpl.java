@@ -34,7 +34,6 @@ import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627790Req;
-import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChangeProductStatus;
 import com.bh.mall.enums.ESpecsLogType;
@@ -82,6 +81,10 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
     @Override
     public String addExchangeOrder(XN627790Req req) {
+        if (req.getProductSpecsCode().equals(req.getChangeSpecsCode())) {
+            throw new BizException("xn000", "相同产品之间无法置换，请换一个产品吧");
+        }
+
         Agent uData = agentBO.getAgent(req.getApplyUser());
         Ware whData = wareBO.getWareByProductSpec(uData.getUserId(),
             req.getProductSpecsCode());
@@ -121,12 +124,17 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
                 * StringValidater.toInteger(req.getQuantity()));
         data.setAmount(amount);
         int canChangeQuantity = 0;
-        if (changeSpecsPrice.getChangePrice() == null
+        if (null == changeSpecsPrice.getChangePrice()
                 || changeSpecsPrice.getChangePrice() == 0) {
             throw new BizException("xn000", "该产品的换货价为空");
         } else {
             canChangeQuantity = (int) (amount
                     / changeSpecsPrice.getChangePrice());
+        }
+
+        // 判断可换是否低于
+        if (0 == canChangeQuantity) {
+            throw new BizException("xn000", "您要置换的产品价格太高啦！还需要再加几个才能够换一个哦！");
         }
 
         data.setChangeProductCode(exchangeProduct.getCode());
@@ -146,9 +154,9 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         exchangeOrderBO.saveChangeOrder(data);
 
         wareBO.changeWare(whData.getCode(), EWareLogType.CHANGE.getCode(),
-            -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCZH,
-            "[" + product.getName() + "]申请置换为[" + exchangeProduct.getName()
-                    + "]",
+            -StringValidater.toInteger(req.getQuantity()),
+            ESpecsLogType.ChangeProduct, "[" + product.getName() + "]申请置换为["
+                    + exchangeProduct.getName() + "]",
             code);
         return code;
 
@@ -232,6 +240,12 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
         int canChangeQuantity = (int) (data.getAmount()
                 / StringValidater.toLong(changePrice));
+
+        // 判断可换是否低于
+        if (0 == canChangeQuantity) {
+            throw new BizException("xn000", "您设置的价格太高啦！代理连一个都换不了了！");
+        }
+
         Product changeData = productBO.getProduct(data.getChangeProductCode());
         Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
 
@@ -257,13 +271,14 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             .equals(data.getStatus())) {
             throw new BizException("xn000", "该置换单未处于待审核状态");
         }
+
         String status = EChangeProductStatus.THROUGH_NO.getCode();
         // 审核通过
         // 产品
         Specs specs = specsBO.getSpecs(data.getSpecsCode());
         specsBO.refreshRepertory(data.getProductName(), specs,
-            ESpecsLogType.ChangeProduct.getCode(), data.getQuantity(),
-            approver);
+            ESpecsLogType.ChangeProduct.getCode(), data.getQuantity(), approver,
+            approveNote);
 
         // 要置换的产品
         Product changeData = productBO.getProduct(data.getChangeProductCode());
@@ -283,21 +298,21 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             // 保存要置换的产品库存记录
             specsBO.refreshRepertory(changeData.getName(), changeSpecs,
                 ESpecsLogType.ChangeProduct.getCode(),
-                -data.getCanChangeQuantity(), approver);
+                -data.getCanChangeQuantity(), approver, approveNote);
 
             wareBO.buyWare(data.getCode(), data.getChangeProductCode(),
                 data.getChangeProductName(), data.getChangeSpecsCode(),
                 changeSpecs.getName(), data.getCanChangeQuantity(),
-                changePrice.getPrice(), agent, EBizType.AJ_YCZH,
+                changePrice.getPrice(), agent, ESpecsLogType.ChangeProduct,
                 "[" + data.getProductName() + "]置换为["
                         + data.getChangeProductName() + "]");
 
         } else {
             wareBO.buyWare(data.getCode(), data.getProductCode(),
                 data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
-                data.getQuantity(), data.getPrice(), agent, EBizType.AJ_YCZH,
-                "[" + data.getProductName() + "]置换为["
-                        + data.getChangeProductName() + "]");
+                data.getQuantity(), data.getPrice(), agent,
+                ESpecsLogType.ChangeProduct, "[" + data.getProductName()
+                        + "]置换为[" + data.getChangeProductName() + "]");
         }
 
         data.setApprover(approver);

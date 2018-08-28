@@ -110,7 +110,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Override
     public void callBackChange(Charge dbCharge, boolean booleanFlag) {
         if (booleanFlag) {
-
+            dbCharge.setStatus(EChargeStatus.Pay_YES.getCode());
         } else {
             dbCharge.setStatus(EChargeStatus.Pay_NO.getCode());
         }

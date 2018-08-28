@@ -13,7 +13,6 @@ import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.dao.IProCodeDAO;
 import com.bh.mall.domain.ProCode;
-import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.exception.BizException;
 
@@ -77,7 +76,6 @@ public class ProCodeBOImpl extends PaginableBOImpl<ProCode>
     @Override
     public ProCode getNoUseProCode() {
         ProCode condition = new ProCode();
-        condition.setStatus(EBoolean.NO.getCode());
         List<ProCode> list = proCodeDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn00000", "箱码已全部用完，请及时补充箱码！");

@@ -18,7 +18,7 @@ public interface IJourBO extends IPaginableBO<Jour> {
     // 正常新增
     public String addJour(Account dbAccount, EChannelType channelType,
             String channelOrder, String payGroup, String refNo,
-            EBizType bizType, String bizNote, Long transAmount);
+            EBizType bizType, String bizNote, Long transAmount, String remark);
 
     public List<Jour> queryJourList(Jour condition);
 

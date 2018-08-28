@@ -5,6 +5,7 @@
 	<resultMap id="cart_DB_Result" type="cart">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
+		<result column="type" property="type" />
 		<result column="product_code" property="productCode" />
 		<result column="specs_code" property="specsCode" />
 		<result column="quantity" property="quantity" />
@@ -15,6 +16,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
@@ -28,6 +32,7 @@
 		SELECT
 		t.code
 		,t.user_id
+		,t.type
 		,t.product_code
 		,t.specs_code
 		,t.quantity
@@ -53,6 +58,7 @@
 		tbh_cart(
 		code
 		,user_id
+		,type
 		,product_code
 		,specs_code
 		,quantity
@@ -61,6 +67,7 @@
 		VALUES(
 		#{code}
 		,#{userId}
+		,#{type}
 		,#{productCode}
 		,#{specsCode}
 		,#{quantity}

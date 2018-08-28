@@ -35,14 +35,6 @@ public class XN627702Req {
     @NotBlank(message = "缩略图不能为空")
     private String pic;
 
-    // （必填）价格
-    @NotBlank(message = "价格不能为空")
-    private String price;
-
-    // （必填）数量
-    @NotBlank(message = "数量不能为空")
-    private String quantity;
-
     // （必填）更新人
     @NotBlank(message = "更新人不能为空")
     private String updater;
@@ -92,22 +84,6 @@ public class XN627702Req {
 
     public void setPic(String pic) {
         this.pic = pic;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
     }
 
     public String getUpdater() {

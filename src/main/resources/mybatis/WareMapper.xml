@@ -29,8 +29,11 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="codeForQuery != null and codeForQuery != '' ">
+				AND t.code like  "%"#{codeForQuery}"%"
+			</if>
 			<if test="keyword != null and keyword != '' ">
-				AND (t.product_name like  "%"#{keyword}"%" or t.real_name  like  "%"#{keyword}"%")
+				AND t.real_name  like  "%"#{keyword}"%"
 			</if>
 			<if test="specsCode != null and specsCode != '' ">
 				AND t.specs_code = #{specsCode}
@@ -40,6 +43,9 @@
 			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
+			</if>
+			<if test="level != null and level != '' ">
+				AND u.level = #{level}
 			</if>
 		</trim>
 	</sql>
@@ -64,7 +70,7 @@
 		,t.create_datetime
 		,t.last_change_code
 		FROM
-		tbh_ware t 
+		tbh_ware t  LEFT JOIN tbh_agent u ON t.user_id = u.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -75,7 +81,7 @@
 
 	<select id="select_ware_count" parameterType="ware"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_ware t 
+		SELECT count(1) FROM tbh_ware t LEFT JOIN tbh_agent u ON t.user_id = u.user_id
 		<include refid="where_condition" />
 	</select>
 

@@ -75,21 +75,25 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 新增用户
     @Override
     public String addSYSUser(String mobile, String loginPwd, String realName,
-            String photo) {
+            String photo, String remark) {
         sysUserBO.isMobileExist(mobile);
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
         data.setMobile(mobile);
+
         data.setRealName(realName);
         data.setLoginName(mobile);
         data.setLoginPwd(MD5Util.md5(loginPwd));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         data.setPhoto(photo);
+
         data.setStatus(EUserStatus.NORMAL.getCode());
         data.setCreateDatetime(new Date());
         data.setSystemCode(ESystemCode.BH.getCode());
+        data.setRemark(remark);
         sysUserBO.doSaveSYSuser(data);
+
         return userId;
     }
 

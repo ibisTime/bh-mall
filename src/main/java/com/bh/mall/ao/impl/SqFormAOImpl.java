@@ -23,7 +23,6 @@ import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.IdCardChecker;
 import com.bh.mall.common.PhoneUtil;
 import com.bh.mall.core.StringValidater;
@@ -52,7 +51,6 @@ import com.bh.mall.enums.EInnerOrderStatus;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESqFormStatus;
-import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
@@ -113,6 +111,7 @@ public class SqFormAOImpl implements ISqFormAO {
             PhoneUtil.checkMobile(req.getIntroducer());
             Agent agent = agentBO.getAgentByMobile(req.getIntroducer());
             introducer = agent.getUserId();
+
             if (!ESqFormStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
@@ -570,6 +569,13 @@ public class SqFormAOImpl implements ISqFormAO {
             throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
         }
 
+        // C端现账户是否余额
+        Account cAccount = accountBO.getAccountByUser(agent.getUserId(),
+            ECurrency.C_CNY.getCode());
+        if (cAccount.getAmount() > 0) {
+            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
+        }
+
         // 是否有未完成的订单
         OutOrder oCondition = new OutOrder();
         oCondition.setApplyUser(agent.getUserId());
@@ -635,24 +641,26 @@ public class SqFormAOImpl implements ISqFormAO {
             Agent buser = agentBO.getAgent(sqForm.getIntroducer());
             JsAward iData = jsAwardBO.getJsAwardByLevel(buser.getLevel(),
                 sqForm.getApplyLevel());
-            Long amount = AmountUtil.mul(agentLevel.getMinCharge(),
-                iData.getPercent() / 100);
+            if (null != iData) {
+                Long amount = (long) (agentLevel.getMinCharge()
+                        * (iData.getPercent() / 100));
 
-            // 申请等级为最高等级，奖励由公司发，其余由该代理上级发介绍人
-            String fromUser = ESysUser.SYS_USER_BH.getCode();
-            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != sqForm
-                .getApplyLevel()) {
-                Agent fromAgent = agentBO.getAgent(sqForm.getToUserId());
-                fromUser = fromAgent.getUserId();
+                // 申请等级为最高等级，奖励由公司发，其余由该代理上级发介绍人
+                String fromUserId = ESystemCode.BH.getCode();
+                if (StringValidater.toInteger(
+                    EAgentLevel.ONE.getCode()) != sqForm.getApplyLevel()) {
+                    fromUserId = sqForm.getToUserId();
+                }
+                accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
+                    buser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
+                    EBizType.AJ_JSJL,
+                    "介绍代理[" + sqForm.getRealName() + "]的"
+                            + EBizType.AJ_JSJL.getCode() + "支出",
+                    "介绍代理[" + sqForm.getRealName() + "]的"
+                            + EBizType.AJ_JSJL.getValue() + "收入",
+                    sqForm.getUserId());
+
             }
-            accountBO.transAmountCZB(fromUser, ECurrency.YJ_CNY.getCode(),
-                buser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
-                EBizType.AJ_JSJL,
-                "介绍代理[" + sqForm.getRealName() + "]的"
-                        + EBizType.AJ_JSJL.getCode() + "支出",
-                "介绍代理[" + sqForm.getRealName() + "]的"
-                        + EBizType.AJ_JSJL.getValue() + "收入",
-                sqForm.getUserId());
         }
         Agent agent = agentBO.getAgent(sqForm.getUserId());
         AgentReport report = agentReportBO.getAgentReport(agent.getUserId());

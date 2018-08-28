@@ -217,7 +217,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
                 Account account = accountBO.getSysAccountNumber(
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
-                    ECurrency.YJ_CNY);
+                    ECurrency.TG_CNY);
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.WeChat_H5, wechatOrderNo, outTradeNo,
                     data.getCode(), EBizType.AJ_YCCH,

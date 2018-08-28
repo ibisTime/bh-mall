@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public enum ECurrency {
     YJ_CNY("TX_CNY", "可提现账户"), YC_CNY("YC_CNY", "云仓账户"), MK_CNY("MK_CNY",
-            "门槛账户"), C_CNY("C_CNY", "C端账户");
+            "门槛账户"), C_CNY("C_CNY", "C端账户"), TG_CNY("TG_CNY", "托管账户");
 
     public static Map<String, ECurrency> getCurrencyMap() {
         Map<String, ECurrency> map = new HashMap<String, ECurrency>();

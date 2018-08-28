@@ -2,7 +2,7 @@ package com.bh.mall.enums;
 
 public enum ECartType {
 
-    ReduceQuantity("0", "减少数量"), ADDQuantity("1", "增加数量");
+    AGENT("B", "代理"), CUSER("C", "用户");
     ECartType(String code, String value) {
         this.code = code;
         this.value = value;

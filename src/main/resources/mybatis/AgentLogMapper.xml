@@ -52,9 +52,20 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="wxId != null and wxId != '' ">
+				AND t.wx_id = #{wxId}
+			</if>
 			
-			<if test="keyword != null and keyword != ''">
-				AND t.wx_id LIKE "%#{keyword}%" OR t.real_name LIKE "%#{keyword}%" OR t.team_name LIKE "%#{keyword}%"
+			
+			<if test="realName != null and realName != '' ">
+				AND  t.real_name LIKE "%"#{realName}"%" 
+			</if>
+			
+			<if test="teamName != null and teamName != '' ">
+				AND  t.team_name LIKE "%"#{teamName}"%"
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				AND  t.mobile LIKE "%"#{mobile}"%" 
 			</if>
 			
 			<if test="level != null and level != '' ">

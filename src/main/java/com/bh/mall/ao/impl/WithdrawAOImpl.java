@@ -28,6 +28,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWithdrawStatus;
 import com.bh.mall.exception.BizException;
@@ -75,7 +76,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             payCardInfo, payCardNo, applyUser, applyNote);
         // 冻结取现金额
         amount = amount + fee;
-        accountBO.frozenAmount(dbAccount, amount, withdrawCode);
+        accountBO.frozenAmount(dbAccount, amount, withdrawCode, applyNote);
         return withdrawCode;
     }
 
@@ -102,7 +103,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             fee, payCardInfo, payCardNo, applyUser, applyNote);
 
         // 冻结取现金额
-        accountBO.frozenAmount(dbAccount, amount, withdrawCode);
+        accountBO.frozenAmount(dbAccount, amount, withdrawCode, applyNote);
         return withdrawCode;
     }
 
@@ -148,7 +149,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             approveNote);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 释放冻结流水
-        accountBO.unfrozenAmount(dbAccount, data.getAmount(), data.getCode());
+        accountBO.unfrozenAmount(dbAccount, data.getAmount(), data.getCode(),
+            approveNote);
     }
 
     private void payOrderNO(Withdraw data, String payUser, String payNote,
@@ -157,7 +159,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             payCode);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 释放冻结流水
-        accountBO.unfrozenAmount(dbAccount, data.getAmount(), data.getCode());
+        accountBO.unfrozenAmount(dbAccount, data.getAmount(), data.getCode(),
+            payNote);
     }
 
     private void payOrderYES(Withdraw data, String payUser, String payNote,
@@ -171,7 +174,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())
                 || ECurrency.YC_CNY.getCode().equals(account.getCurrency())) {
             // 托管账户减钱
-            accountBO.changeAmount(ESystemCode.BH.getCode(),
+            accountBO.changeAmount(ESysUser.TG_BH.getCode(),
                 EChannelType.Offline, null, null, data.getCode(),
                 EBizType.AJ_QX, "线下取现", -data.getAmount());
         }

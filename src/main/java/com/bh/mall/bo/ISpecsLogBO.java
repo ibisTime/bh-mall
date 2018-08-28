@@ -17,6 +17,7 @@ public interface ISpecsLogBO extends IPaginableBO<SpecsLog> {
     public SpecsLog getSpecsLog(String code);
 
     public void saveSpecsLog(String productCode, String productName,
-            Specs specs, String type, Integer number, String updater);
+            Specs specs, String type, Integer number, String updater,
+            String remark);
 
 }

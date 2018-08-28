@@ -42,12 +42,12 @@ import com.bh.mall.dto.res.XN627805Res;
 import com.bh.mall.dto.res.XN627814Res;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
-import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.ECheckStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EOutOrderKind;
+import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
@@ -241,7 +241,8 @@ public class WareAOImpl implements IWareAO {
             agent.getLevel());
 
         // 检查限购
-        if (pspData.getMinNumber() > data.getQuantity()) {
+        if (pspData.getMinNumber() > StringValidater
+            .toInteger(req.getQuantity())) {
             throw new BizException("xn00000",
                 "该产品云仓提货不能少于" + pspData.getMinNumber() + psData.getName());
         }
@@ -323,23 +324,23 @@ public class WareAOImpl implements IWareAO {
                 // 减少云仓库存
                 wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
                     -StringValidater.toInteger(req.getQuantity()),
-                    EBizType.AJ_YCTH, EBizType.AJ_YCTH.getValue(), code);
+                    ESpecsLogType.Order, ESpecsLogType.Order.getValue(), code);
             }
         } else {
             String code = outOrderBO.pickUpGoods(data.getProductCode(),
                 data.getProductName(), product.getPic(), data.getSpecsCode(),
                 data.getSpecsName(),
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),
-                psData.getSingleNumber() * data.getPrice(), yunfei,
-                agent.getHighUserId(), agent, teamLeader.getRealName(),
+                StringValidater.toInteger(req.getQuantity()) * data.getPrice(),
+                yunfei, agent.getHighUserId(), agent, teamLeader.getRealName(),
                 sysUser.getUserId(), sysUser.getRealName(),
                 EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
                 req.getAddress(), kind);
             // 减少云仓库存
             wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
-                -StringValidater.toInteger(req.getQuantity()), EBizType.AJ_YCTH,
-                EBizType.AJ_YCTH.getValue(), code);
+                -StringValidater.toInteger(req.getQuantity()),
+                ESpecsLogType.Order, ESpecsLogType.Order.getValue(), code);
         }
 
     }
@@ -417,8 +418,6 @@ public class WareAOImpl implements IWareAO {
                     agent.getUserId(), agent.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
-                Long orderAmount = inOrderBO
-                    .getInOrderByUser(agent.getUserId());
 
                 // 红线设置为零视为无限制
                 if (0 < agentLevel.getRedAmount()
@@ -427,13 +426,12 @@ public class WareAOImpl implements IWareAO {
                     result = ECheckStatus.RED_LOW.getCode();
 
                     // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
-                } else if (orderAmount < agentLevel.getAmount()) {
-                    result = ECheckStatus.RED_LOW.getCode();
                 }
                 // 未开启云仓，只检查是否完成授权单
             } else if (0 != agentLevel.getAmount()
                     && outOrderBO.checkImpowerOrder(agent.getUserId(),
                         agent.getImpowerDatetime())) {
+                readAmount = agentLevel.getAmount();
                 // 未完成授权单
                 result = ECheckStatus.RED_LOW.getCode();
             }

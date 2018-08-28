@@ -32,6 +32,9 @@ public class XN627853 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentReport condition = new AgentReport();
+        condition.setRealName(req.getRealName());
+        condition.setMobile(req.getMobile());
+
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setTeamName(req.getTeamName());
         condition.setManager(req.getManager());

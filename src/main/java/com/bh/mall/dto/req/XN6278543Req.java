@@ -13,6 +13,12 @@ public class XN6278543Req extends APageReq {
     // 代理编号
     private String level;
 
+    // 代理名称
+    private String realName;
+
+    // 代理手机号
+    private String mobile;
+
     // 代理编号
     private String status;
 
@@ -86,4 +92,21 @@ public class XN6278543Req extends APageReq {
     public void setArea(String area) {
         this.area = area;
     }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
 }

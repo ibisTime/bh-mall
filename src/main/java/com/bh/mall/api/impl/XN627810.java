@@ -29,6 +29,8 @@ public class XN627810 extends AProcessor {
         Ware condition = new Ware();
         condition.setType(req.getType());
         condition.setKeyword(req.getKeyword());
+        condition.setCodeForQuery(req.getCode());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

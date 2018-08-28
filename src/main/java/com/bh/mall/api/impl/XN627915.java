@@ -30,8 +30,12 @@ public class XN627915 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         InOrder condition = new InOrder();
-        condition.setKeyword(req.getKeyword());
+        condition.setRealName(req.getRealName());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
+        condition.setTeamName(req.getTeamName());
         condition.setStatus(req.getStatus());
+        condition.setProductName(req.getProductName());
+
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
         condition.setEndDatetime(

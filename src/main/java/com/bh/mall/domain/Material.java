@@ -35,6 +35,9 @@ public class Material extends ABaseDO {
     // 状态
     private String status;
 
+    // 创建时间
+    private Date createDatetime;
+
     // 更新人
     private String updater;
 
@@ -122,6 +125,14 @@ public class Material extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
 }

@@ -61,6 +61,9 @@ public class SpecsLog extends ABaseDO {
     // 结束时间
     private Date endDatetime;
 
+    // 更新人名称
+    private String updateName;
+
     public String getCode() {
         return code;
     }
@@ -179,6 +182,14 @@ public class SpecsLog extends ABaseDO {
 
     public void setSpecsName(String specsName) {
         this.specsName = specsName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 
 }

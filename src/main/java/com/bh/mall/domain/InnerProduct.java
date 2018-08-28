@@ -61,6 +61,12 @@ public class InnerProduct extends ABaseDO {
     // 规格
     private List<InnerSpecs> specsList;
 
+    // 编号模糊查询
+    private String codeForQuery;
+
+    // 展示库存
+    private String showNumber;
+
     public String getCode() {
         return code;
     }
@@ -179,6 +185,22 @@ public class InnerProduct extends ABaseDO {
 
     public void setSpecsList(List<InnerSpecs> specsList) {
         this.specsList = specsList;
+    }
+
+    public String getCodeForQuery() {
+        return codeForQuery;
+    }
+
+    public void setCodeForQuery(String codeForQuery) {
+        this.codeForQuery = codeForQuery;
+    }
+
+    public String getShowNumber() {
+        return showNumber;
+    }
+
+    public void setShowNumber(String showNumber) {
+        this.showNumber = showNumber;
     }
 
 }

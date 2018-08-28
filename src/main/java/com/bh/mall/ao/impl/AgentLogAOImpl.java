@@ -72,6 +72,18 @@ public class AgentLogAOImpl implements IAgentLogAO {
                 data.setHighUserName(highAgent.getRealName());
             }
 
+            // 归属人转义
+            if (StringUtils.isNotBlank(data.getToUserId())) {
+                if (StringValidater.toInteger(EAgentLevel.ONE.getCode())
+                    .equals(data.getApplyLevel())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+                    data.setToUserName(sysUser.getRealName());
+                } else {
+                    Agent highAgent = agentBO.getAgent(data.getToUserId());
+                    data.setToUserName(highAgent.getRealName());
+                }
+            }
+
         }
         return page;
 
@@ -140,14 +152,17 @@ public class AgentLogAOImpl implements IAgentLogAO {
         }
 
         // 归属人转义
-        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-            .getLevel() && StringUtils.isNotBlank(data.getToUserId())) {
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
-            data.setToUserName(sysUser.getRealName());
-        } else if (StringUtils.isNotBlank(data.getToUserId())) {
-            Agent toAgent = agentBO.getAgent(data.getToUserId());
-            data.setToUserName(toAgent.getRealName());
+        if (StringUtils.isNotBlank(data.getToUserId())) {
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode())
+                .equals(data.getApplyLevel())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+                data.setToUserName(sysUser.getRealName());
+            } else {
+                Agent highAgent = agentBO.getAgent(data.getToUserId());
+                data.setToUserName(highAgent.getRealName());
+            }
         }
+
         return data;
     }
 

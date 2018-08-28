@@ -18,6 +18,9 @@ public class Cart extends ABaseDO {
     // 用户编号
     private String userId;
 
+    // 用户类型
+    private String type;
+
     // 产品编号
     private String productCode;
 
@@ -99,6 +102,14 @@ public class Cart extends ABaseDO {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

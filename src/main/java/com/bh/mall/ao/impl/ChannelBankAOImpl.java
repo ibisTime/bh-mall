@@ -53,8 +53,10 @@ public class ChannelBankAOImpl implements IChannelBankAO {
         Paginable<ChannelBank> page = channelBankBO.getPaginable(start, limit,
             condition);
         for (ChannelBank data : page.getList()) {
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
-            data.setUpdateName(sysUser.getRealName());
+            if (StringUtils.isNotBlank(data.getUpdater())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                data.setUpdateName(sysUser.getRealName());
+            }
         }
 
         return page;
@@ -65,8 +67,10 @@ public class ChannelBankAOImpl implements IChannelBankAO {
         List<ChannelBank> list = channelBankBO.queryChannelBankList(condition);
         for (ChannelBank data : list) {
             if (StringUtils.isNotBlank(data.getUpdater())) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
-                data.setUpdateName(sysUser.getRealName());
+                if (StringUtils.isNotBlank(data.getUpdater())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                    data.setUpdateName(sysUser.getRealName());
+                }
             }
         }
         return list;

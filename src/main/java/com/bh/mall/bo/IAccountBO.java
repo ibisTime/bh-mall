@@ -34,11 +34,11 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 冻结金额（余额变动）
     public void frozenAmount(Account dbAccount, Long freezeAmount,
-            String withdrawCode);
+            String withdrawCode, String remark);
 
     // 解冻账户(冻结金额原路返回)
     public void unfrozenAmount(Account dbAccount, Long freezeAmount,
-            String withdrawCode);
+            String withdrawCode, String approveNote);
 
     // 扣减冻结金额
     public void cutFrozenAmount(Account dbAccount, Long amount);

@@ -101,7 +101,7 @@ public class ProductAOImpl implements IProductAO {
         }
 
         specsBO.saveSpecsList(code, req.getName(), req.getSpecList(),
-            req.getUpdater());
+            req.getUpdater(), req.getRemark());
         tjAwardBO.saveTjAward(code, req.getAwardList());
         return code;
     }
@@ -235,6 +235,7 @@ public class ProductAOImpl implements IProductAO {
         List<Product> list = page.getList();
         for (Product product : list) {
 
+            StringBuffer sb = new StringBuffer();
             // 产品规格
             Specs psCondition = new Specs();
             psCondition.setProductCode(product.getCode());
@@ -248,11 +249,12 @@ public class ProductAOImpl implements IProductAO {
                 pspCondition.setSpecsCode(productSpecs.getCode());
                 List<AgentPrice> pspList = agentPriceBO
                     .queryAgentPriceList(pspCondition);
-                if (CollectionUtils.isNotEmpty(pspList)) {
-                    productSpecs.setPriceList(pspList);
-                }
+                productSpecs.setPriceList(pspList);
                 product.setSpecsList(psList);
+                sb.append(productSpecs.getName() + ":["
+                        + productSpecs.getStockNumber() + "]");
             }
+            product.setShowNumber(sb.toString());
 
             // 获取各个代理云仓库存
             List<Ware> whList = wareBO.getWareByProduct(product.getCode());
@@ -353,15 +355,13 @@ public class ProductAOImpl implements IProductAO {
         long count = productBO.getTotalCountByB(condition);
         Page<Product> page = new Page<Product>(start, limit, count);
         List<Product> list = productBO.queryProductPage(page.getStart(),
-            page.getPageNO(), condition);
+            page.getPageSize(), condition);
 
         for (Product product : list) {
 
             // 产品规格
             Specs psCondition = new Specs();
             psCondition.setProductCode(product.getCode());
-            psCondition.setIsBuy(EBoolean.YES.getCode());
-            psCondition.setLevel(condition.getLevel());
             List<Specs> psList = specsBO.querySpecsListByB(psCondition);
             for (Specs productSpecs : psList) {
 

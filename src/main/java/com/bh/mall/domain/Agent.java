@@ -189,6 +189,12 @@ public class Agent extends ABaseDO {
     // 用户Id，过滤代理
     private String noUserId;
 
+    // 用户Id，过滤代理
+    private List<String> noUserIdList;
+
+    // 推荐人人数
+    private Long reNumber;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -670,6 +676,22 @@ public class Agent extends ABaseDO {
 
     public void setNoUserId(String noUserId) {
         this.noUserId = noUserId;
+    }
+
+    public List<String> getNoUserIdList() {
+        return noUserIdList;
+    }
+
+    public void setNoUserIdList(List<String> noUserIdList) {
+        this.noUserIdList = noUserIdList;
+    }
+
+    public Long getReNumber() {
+        return reNumber;
+    }
+
+    public void setReNumber(Long reNumber) {
+        this.reNumber = reNumber;
     }
 
 }

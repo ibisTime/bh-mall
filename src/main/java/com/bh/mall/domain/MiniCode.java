@@ -54,10 +54,16 @@ public class MiniCode extends ABaseDO {
     private String keyword;
 
     // 盒码状态
-    private String proCode;
-
-    // 盒码状态
     private String proStatus;
+
+    // 防伪码模糊
+    private String miniCodeForQuery;
+
+    // 溯源码模糊
+    private String traceCodeForQuery;
+
+    // 关联条形码模糊
+    private String refCodeForQuery;
 
     public void setTraceCode(String traceCode) {
         this.traceCode = traceCode;
@@ -163,12 +169,28 @@ public class MiniCode extends ABaseDO {
         this.proStatus = proStatus;
     }
 
-    public String getProCode() {
-        return proCode;
+    public String getMiniCodeForQuery() {
+        return miniCodeForQuery;
     }
 
-    public void setProCode(String proCode) {
-        this.proCode = proCode;
+    public String getTraceCodeForQuery() {
+        return traceCodeForQuery;
+    }
+
+    public String getRefCodeForQuery() {
+        return refCodeForQuery;
+    }
+
+    public void setMiniCodeForQuery(String miniCodeForQuery) {
+        this.miniCodeForQuery = miniCodeForQuery;
+    }
+
+    public void setTraceCodeForQuery(String traceCodeForQuery) {
+        this.traceCodeForQuery = traceCodeForQuery;
+    }
+
+    public void setRefCodeForQuery(String refCodeForQuery) {
+        this.refCodeForQuery = refCodeForQuery;
     }
 
 }

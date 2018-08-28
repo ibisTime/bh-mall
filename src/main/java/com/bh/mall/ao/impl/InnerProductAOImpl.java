@@ -72,7 +72,6 @@ public class InnerProductAOImpl implements IInnerProductAO {
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
         data.setPic(req.getPic());
-        data.setPrice(StringValidater.toLong(req.getPrice()));
 
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
@@ -126,8 +125,13 @@ public class InnerProductAOImpl implements IInnerProductAO {
         Paginable<InnerProduct> page = innerProductBO.getPaginable(start, limit,
             condition);
         for (InnerProduct data : page.getList()) {
+            StringBuffer sb = new StringBuffer();
             List<InnerSpecs> specsList = innerSpecsBO
                 .getInnerSpecsByProduct(data.getCode());
+            for (InnerSpecs innerSpecs : specsList) {
+                sb.append(innerSpecs.getName() + ":["
+                        + innerSpecs.getStockNumber() + "]");
+            }
             data.setSpecsList(specsList);
         }
         return page;

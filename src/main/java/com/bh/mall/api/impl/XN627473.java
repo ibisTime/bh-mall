@@ -31,6 +31,7 @@ public class XN627473 extends AProcessor {
         condition.setHighAgentId(req.getUserId());
         condition.setStatus(req.getStatus());
         condition.setAccountName(req.getAccountName());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
 
         condition.setApplyDatetimeStart(
             DateUtil.getFrontDate(req.getApplyDateStart(), false));

@@ -21,6 +21,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.EAgentLogType;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.ESjFormStatus;
 import com.bh.mall.enums.EYxFormStatus;
@@ -177,7 +178,8 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         Date date = new Date();
         data.setUpdateDatetime(date);
         data.setRemark(remark);
-        String logCode = agentLogBO.refreshAgent(data);
+        String logCode = agentLogBO.refreshAgent(data,
+            EAgentLogType.OUT.getCode());
 
         data.setLastAgentLog(logCode);
         data.setHighUserId(null);
@@ -235,7 +237,8 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setUpdateDatetime(date);
         data.setRemark(remark);
 
-        String logCode = agentLogBO.refreshAgent(data);
+        String logCode = agentLogBO.refreshAgent(data,
+            EAgentLogType.Update.getCode());
         data.setLastAgentLog(logCode);
         agentDAO.updateHigh(data);
 
@@ -250,8 +253,6 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
 
-        String logCode = agentLogBO.refreshAgent(data);
-        data.setLastAgentLog(logCode);
         agentDAO.updateUserReferee(data);
 
     }
@@ -395,11 +396,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshAgent(SqForm sqForm, String logCode, String status) {
         Agent data = getAgent(sqForm.getUserId());
 
+        data.setHighUserId(sqForm.getToUserId());
         data.setRealName(sqForm.getRealName());
         data.setIdKind(sqForm.getIdKind());
         data.setIdNo(sqForm.getIdNo());
         data.setIdHand(sqForm.getIdHand());
-        data.setWxId(sqForm.getRealName());
+        data.setWxId(sqForm.getWxId());
 
         data.setMobile(sqForm.getMobile());
         data.setProvince(sqForm.getProvince());
@@ -442,6 +444,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         agent.setRealName(sqForm.getRealName());
         agent.setIntroducer(sqForm.getIntroducer());
 
+        agent.setHighUserId(sqForm.getUserId());
         agent.setIdKind(sqForm.getIdKind());
         agent.setIdNo(sqForm.getIdNo());
         agent.setIdHand(sqForm.getIdHand());
@@ -465,13 +468,18 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setLevel(sqForm.getApplyLevel());
             data.setImpowerDatetime(date);
             data.setManager(manager);
-
             data.setIdKind(sqForm.getIdKind());
+
             data.setIdNo(sqForm.getIdNo());
             data.setIdHand(sqForm.getIdHand());
             data.setStatus(status);
+            data.setIntroducer(sqForm.getIntroducer());
+            data.setReferrer(sqForm.getReferrer());
+
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
             data.setStatus(EAgentStatus.MIND.getCode());
+        } else {
+            data.setStatus(status);
         }
 
         data.setHighUserId(highUserId);

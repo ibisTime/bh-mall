@@ -179,6 +179,7 @@ public class ProCodeAOImpl implements IProCodeAO {
         for (ProCode proCode : page.getList()) {
             proCode.setUrl(sysConfig.getCvalue());
             MiniCode miniCondition = new MiniCode();
+            miniCondition.setRefCode(proCode.getCode());
             miniCondition.setStatus(ECodeStatus.TO_USER.getCode());
             List<MiniCode> miniList = miniCodeBO
                 .queryMiniCodeList(miniCondition);

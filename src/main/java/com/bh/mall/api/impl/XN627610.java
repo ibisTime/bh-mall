@@ -30,6 +30,8 @@ public class XN627610 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SpecsLog condition = new SpecsLog();
+
+        condition.setProductName(req.getProductName());
         condition.setProductCode(req.getProductCode());
         condition.setType(req.getType());
         String column = req.getOrderColumn();

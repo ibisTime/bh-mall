@@ -15,7 +15,7 @@ import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
 
 /**
- *分页查流水
+ *分页云仓记录
  * @author: nyc 
  * @since: 2018年4月10日 下午8:34:30 
  * @history:
@@ -31,6 +31,8 @@ public class XN627830 extends AProcessor {
         WareLog condition = new WareLog();
         condition.setStatus(req.getStatus());
         condition.setKeyword(req.getKeyword());
+        condition.setProductCode(req.getProductCode());
+        condition.setProductName(req.getProductName());
 
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));

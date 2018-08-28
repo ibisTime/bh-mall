@@ -14,7 +14,7 @@ import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareLogDAO;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.domain.WareLog;
-import com.bh.mall.enums.EBizType;
+import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -45,7 +45,7 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
 
     @Override
     public String saveWareLog(Ware dbData, String type, Integer quantity,
-            EBizType bizType, String bizNote, String refNo) {
+            ESpecsLogType bizType, String bizNote, String refNo) {
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.WareHourseLog.getCode());

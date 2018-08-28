@@ -241,7 +241,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
                 int singleNumber = cart.getQuantity() / specs.getSingleNumber();
                 if ((cart.getQuantity() % specs.getSingleNumber()) != 0) {
-
+                    singleNumber = singleNumber + 1;
                 }
 
                 for (int i = 0; i < singleNumber; i++) {
@@ -890,31 +890,13 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public void deliverOutOrder(XN627645Req req) {
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
         Agent applyUser = agentBO.getAgent(data.getApplyUser());
-        if (EBoolean.YES.getCode().equals(req.getIsCompanySend())) {
+        // 下单人为代理
+        AgentLevel agent = agentLevelBO.getAgentByLevel(applyUser.getLevel());
 
-            AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
-                applyUser.getLevel());
-            Specs specs = specsBO.getSpecs(price.getSpecsCode());
-            if (price.getMinNumber() > data.getQuantity()) {
-                throw new BizException("xn00000",
-                    "该产品云仓发货不能少于" + price.getMinNumber() + specs.getName());
-            }
-
-            Ware toData = wareBO.getWareByProductSpec(data.getToUserId(),
-                data.getSpecsCode());
-            if (null == toData) {
-                throw new BizException("xn00000", "您的云仓中没有该规格的产品");
-            }
-
-            // 下单人为代理
-            AgentLevel agent = agentLevelBO
-                .getAgentByLevel(applyUser.getLevel());
-
-            // 没有开启云仓的发放奖励
-            if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
-                // 出货以及推荐奖励
-                this.payAward(data);
-            }
+        // 没有开启云仓的发放奖励
+        if (EBoolean.NO.getCode().equals(agent.getIsWare())) {
+            // 出货以及推荐奖励
+            this.payAward(data);
         }
 
         // 订单与箱码关联（整箱发货）
@@ -1032,19 +1014,21 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (!(EBoolean.YES.getCode().equals(data.getIsWareSend())
                     || EOutOrderKind.C_ORDER.getCode()
                         .equals(data.getKind()))) {
-                Account account = accountBO.getAccountByUser(
-                    data.getApplyUser(), ECurrency.MK_CNY.getCode());
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, data.getCode(),
-                    EBizType.AJ_GMCP_TK, EBizType.AJ_GMCP_TK.getValue(),
-                    data.getAmount());
+                if (null != data.getPayAmount()) {
+                    Account account = accountBO.getAccountByUser(
+                        data.getApplyUser(), ECurrency.MK_CNY.getCode());
+                    accountBO.changeAmount(account.getAccountNumber(),
+                        EChannelType.NBZ, null, null, data.getCode(),
+                        EBizType.AJ_GMCP_TK, EBizType.AJ_GMCP_TK.getValue(),
+                        data.getAmount());
+                }
             } else if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
                 // 云仓提货归还库存
                 Agent agent = agentBO.getAgent(data.getApplyUser());
                 wareBO.buyWare(data.getCode(), data.getProductCode(),
                     data.getProductName(), data.getSpecsCode(),
                     data.getSpecsName(), data.getQuantity(), data.getPrice(),
-                    agent, EBizType.AJ_GMYC,
+                    agent, ESpecsLogType.Order,
                     "购买产品：[" + data.getProductName() + "]");
             }
         }
@@ -1102,9 +1086,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     // 变动产品数量
     private void changeProductNumber(Agent agent, Product pData, Specs specs,
-            OutOrder OutOrder, Integer number, String code) {
+            OutOrder OutOrder, Integer number, String code, String remark) {
 
-        // 有上级代理,扣减上级代理云仓,且自己开启云仓
+        // 开启云仓代理,扣减上级代理云仓
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
             .getLevel()
@@ -1117,14 +1101,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
             } else {
                 // 改变上级云仓
                 wareBO.changeWare(toWare.getCode(), EWareLogType.OUT.getCode(),
-                    number, EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                    number, ESpecsLogType.Order, ESpecsLogType.Order.getValue(),
                     OutOrder.getCode());
             }
 
         } else if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
             // 无上级代理,扣减产品实际库存
             specsLogBO.saveSpecsLog(pData.getCode(), pData.getName(), specs,
-                ESpecsLogType.Order.getCode(), -number, null);
+                ESpecsLogType.Order.getCode(), -number, agent.getUserId(),
+                remark);
         }
     }
 
@@ -1165,7 +1150,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Product pData = productBO.getProduct(data.getProductCode());
         Specs specs = specsBO.getSpecs(data.getSpecsCode());
         this.changeProductNumber(agent, pData, specs, data, -data.getQuantity(),
-            data.getCode());
+            data.getCode(), data.getApplyNote());
 
         // 订单归属人不是平台，托管账户与代理账户同时加钱
         if (!(StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
@@ -1197,9 +1182,21 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         OutOrder data = outOrderBO.getOutOrder(code);
         // 非待支付与未审核订单无法作废
-        if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
+        if (!(EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || EOutOrderStatus.TO_APPROVE.getCode()
+                    .equals(data.getStatus()))) {
             throw new BizException("xn00000", "该订单无法作废");
         }
+
+        // 云仓提货订单归还库存
+        if (EOutOrderKind.Pick_Up.getCode().equals(data.getKind())) {
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            wareBO.buyWare(data.getCode(), data.getProductCode(),
+                data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
+                data.getQuantity(), data.getPrice(), agent,
+                ESpecsLogType.QX_ORDER, "取消订单");
+        }
+
         outOrderBO.invalidOutOrder(data, updater, remark);
 
     }

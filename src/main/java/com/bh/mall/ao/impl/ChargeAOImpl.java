@@ -124,7 +124,9 @@ public class ChargeAOImpl implements IChargeAO {
                     SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
                     data.setPayUserName(sysUser.getRealName());
                 }
-            } else {
+
+            } else if (EChannelType.WeChat_H5.getCode().equals(data.getType())
+                    && StringUtils.isNotEmpty(data.getPayUser())) {
                 Agent agent = agentBO.getAgent(data.getPayUser());
                 data.setPayUserName(agent.getRealName());
             }
@@ -139,9 +141,15 @@ public class ChargeAOImpl implements IChargeAO {
             for (Charge data : list) {
                 if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
                     .getLevel()) {
-                    SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
-                    data.setPayUserName(sysUser.getRealName());
-                } else {
+                    if (StringUtils.isNotEmpty(data.getPayUser())) {
+                        SYSUser sysUser = sysUserBO
+                            .getSYSUser(data.getPayUser());
+                        data.setPayUserName(sysUser.getRealName());
+                    }
+
+                } else if (EChannelType.WeChat_H5.getCode()
+                    .equals(data.getType())
+                        && StringUtils.isNotEmpty(data.getPayUser())) {
                     Agent agent = agentBO.getAgent(data.getPayUser());
                     data.setPayUserName(agent.getRealName());
                 }
@@ -154,12 +162,14 @@ public class ChargeAOImpl implements IChargeAO {
     public Charge getCharge(String code) {
         Charge data = chargeBO.getCharge(code);
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-            .getLevel() && StringUtils.isNotBlank(data.getPayUser())) {
-            if (StringUtils.isNotBlank(data.getPayUser())) {
+            .getLevel()) {
+            if (StringUtils.isNotEmpty(data.getPayUser())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getPayUser());
                 data.setPayUserName(sysUser.getRealName());
             }
-        } else if (StringUtils.isNotBlank(data.getPayUser())) {
+
+        } else if (EChannelType.WeChat_H5.getCode().equals(data.getType())
+                && StringUtils.isNotEmpty(data.getPayUser())) {
             Agent agent = agentBO.getAgent(data.getPayUser());
             data.setPayUserName(agent.getRealName());
         }

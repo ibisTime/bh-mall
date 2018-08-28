@@ -34,6 +34,8 @@ public class XN627850 extends AProcessor {
         AgentReport condition = new AgentReport();
         condition.setUserId(req.getUserId());
         condition.setRealName(req.getRealName());
+        condition.setMobile(req.getMobile());
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
 
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);

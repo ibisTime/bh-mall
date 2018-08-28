@@ -50,13 +50,16 @@
 			<if test="realName != null and realName != '' ">
 				AND t.real_name like "%"#{realName}"%"
 			</if>
+			<if test="mobile != null and mobile != '' ">
+				AND t.mobile like "%"#{mobile}"%"
+			</if>
+			
 			<if test="manager != null and manager != '' ">
 				AND t.manager = #{manager}
 			</if>
 			<if test="province != null and province != '' ">
 				AND t.province = #{province}
 			</if>
-			
 			<if test="city != null and city != '' ">
 				AND t.city = #{city}
 			</if>

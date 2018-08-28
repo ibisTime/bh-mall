@@ -10,26 +10,59 @@ public class XN627915Req extends APageReq {
 
     private static final long serialVersionUID = -645972324512910733L;
 
-    // （选填）关键字
-    private String keyword;
+    // （选填）产品名称
+    private String productName;
 
     // （选填）状态
     private String status;
 
-    public String getKeyword() {
-        return keyword;
+    // （选填）下单人名称
+    private String realName;
+
+    // （选填）等级
+    private String level;
+
+    // （选填）团队名称
+    private String teamName;
+
+    public String getProductName() {
+        return productName;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public String getRealName() {
+        return realName;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }

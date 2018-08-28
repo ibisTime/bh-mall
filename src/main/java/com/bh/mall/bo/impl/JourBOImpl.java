@@ -41,7 +41,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     @Override
     public String addJour(Account dbAccount, EChannelType channelType,
             String channelOrder, String payGroup, String refNo,
-            EBizType bizType, String bizNote, Long transAmount) {
+            EBizType bizType, String bizNote, Long transAmount, String remark) {
         if (!EChannelType.Offline.getCode().equals(channelType.getCode())
                 && !EChannelType.NBZ.getCode().equals(channelType.getCode())) {// 线下和内部帐可为空，线上必须有
             if (StringUtils.isBlank(payGroup)) {// 必须要有的判断。每一次流水新增，必有有对应业务分组
@@ -77,7 +77,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setPreAmount(amount);
         data.setPostAmount(amount + transAmount);
         data.setStatus(EJourStatus.todoCheck.getCode());
-        data.setRemark("记得对账哦");
+        data.setRemark(remark);
 
         data.setCreateDatetime(new Date());
         data.setChannelType(channelType.getCode());

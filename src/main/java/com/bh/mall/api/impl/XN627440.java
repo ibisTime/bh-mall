@@ -36,7 +36,7 @@ public class XN627440 extends AProcessor {
                     + StringValidater.toLong(req.getAmount()) + "]",
             ECurrency.getCurrency(req.getFromAccount()) + "转入"
                     + ECurrency.getCurrency(req.getToAccount()) + "["
-                    + StringValidater.toLong(req.getAmount()) + "]",
+                    + (StringValidater.toLong(req.getAmount()) / 1000) + "]",
             req.getUserId());
         return null;
     }

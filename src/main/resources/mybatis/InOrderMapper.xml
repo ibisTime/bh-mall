@@ -67,9 +67,20 @@
 				</when>
 			</choose>
 			
-			<if test="keyword != null and keyword != '' ">
-				AND (t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%" or t.team_name like "%"#{keyword}"%" )
+			<if test="productName != null and productName != '' ">
+				AND t.product_name like "%"#{productName}"%" 
 			</if>
+				<if test="level != null and level != '' ">
+				AND t.level = #{level} 
+			</if>
+			
+			<if test="realName != null and realName != '' ">
+				AND t.real_name like "%"#{realName}"%" 
+			</if>
+			<if test="teamName != null and teamName != '' ">
+				AND t.team_name like "%"#{teamName}"%" 
+			</if>
+			
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime} ]]>
 			</if>

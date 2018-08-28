@@ -61,16 +61,16 @@ public class XN627790Req {
         this.changeSpecsCode = changeSpecsCode;
     }
 
-    public String getApplyNote() {
-        return applyNote;
-    }
-
     public void setApplyNote(String applyNote) {
         this.applyNote = applyNote;
     }
 
     public void setProductSpecsCode(String productSpecsCode) {
         this.productSpecsCode = productSpecsCode;
+    }
+
+    public String getApplyNote() {
+        return applyNote;
     }
 
 }

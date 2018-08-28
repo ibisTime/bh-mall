@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.Specs;
 
 /**
  * 云仓订单
@@ -48,5 +51,8 @@ public interface IInOrderAO {
 
     // 获取详情
     public InOrder getInOrder(String code);
+
+    void checkLimitNumber(Agent agent, Specs specs, AgentPrice price,
+            Integer quantity);
 
 }

@@ -42,7 +42,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
 
     @Override
     public void saveSpecsList(String productCode, String productName,
-            List<XN627546Req> specList, String updater) {
+            List<XN627546Req> specList, String updater, String remark) {
         // 添加产品规格
         for (XN627546Req productSpec : specList) {
             if (StringUtils.isBlank(productSpec.getCode())) {
@@ -76,7 +76,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 data.setIsNormalOrder(productSpec.getIsNormalOrder());
 
                 specsLogBO.saveSpecsLog(productCode, productName, data,
-                    ESpecsLogType.Input.getCode(), 0, updater);
+                    ESpecsLogType.Input.getCode(), 0, updater, remark);
                 specsDAO.insert(data);
 
                 List<XN627547Req> specsPriceList = productSpec
@@ -322,9 +322,9 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     @Override
     @Transactional
     public void refreshRepertory(String productName, Specs data, String type,
-            Integer number, String updater) {
+            Integer number, String updater, String remark) {
         specsLogBO.saveSpecsLog(data.getProductCode(), productName, data, type,
-            number, updater);
+            number, updater, remark);
 
         Integer nowNumber = data.getStockNumber() + number;
         if (0 > nowNumber) {

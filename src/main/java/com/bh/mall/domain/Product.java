@@ -94,6 +94,12 @@ public class Product extends ABaseDO {
     // 修改人名称
     private String updateName;
 
+    // 编号模糊查询
+    private String codeForQuery;
+
+    // 展示库存
+    private String showNumber;
+
     public String getCode() {
         return code;
     }
@@ -300,6 +306,22 @@ public class Product extends ABaseDO {
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
+    }
+
+    public String getCodeForQuery() {
+        return codeForQuery;
+    }
+
+    public void setCodeForQuery(String codeForQuery) {
+        this.codeForQuery = codeForQuery;
+    }
+
+    public String getShowNumber() {
+        return showNumber;
+    }
+
+    public void setShowNumber(String showNumber) {
+        this.showNumber = showNumber;
     }
 
 }

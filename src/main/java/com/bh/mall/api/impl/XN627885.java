@@ -33,6 +33,10 @@ public class XN627885 extends AProcessor {
         condition.setKeyword(req.getKeyword());
         condition.setProStatus(req.getProStatus());
 
+        condition.setMiniCodeForQuery(req.getMiniCode());
+        condition.setTraceCodeForQuery(req.getTraceCode());
+        condition.setRefCodeForQuery(req.getRefCode());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IMiniCodeAO.DEFAULT_ORDER_COLUMN;

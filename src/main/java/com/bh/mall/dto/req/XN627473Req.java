@@ -19,6 +19,9 @@ public class XN627473Req extends APageReq {
     // 状态（待审核/审核不通过/审核通过）
     private String status;
 
+    // 等级
+    private String level;
+
     // 申请时间起
     private String applyDateStart;
 
@@ -63,6 +66,14 @@ public class XN627473Req extends APageReq {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

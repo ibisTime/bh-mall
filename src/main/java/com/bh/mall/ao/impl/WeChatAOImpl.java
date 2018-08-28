@@ -37,7 +37,7 @@ import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.ESysConfigType;
-import com.bh.mall.enums.ESystemCode;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.http.PostSimulater;
 import com.bh.mall.util.HttpsUtil;
@@ -164,6 +164,7 @@ public class WeChatAOImpl implements IWeChatAO {
             if (isSucc) {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, true);
+
                 // 收款方账户加钱
                 accountBO.changeAmount(order.getAccountNumber(),
                     EChannelType.getEChannelType(order.getChannelType()),
@@ -171,7 +172,7 @@ public class WeChatAOImpl implements IWeChatAO {
                     EBizType.getBizTypeMap().get(order.getBizType()),
                     order.getBizNote(), order.getAmount());
                 // 托管账户加钱
-                accountBO.changeAmount(ESystemCode.BH.getCode(),
+                accountBO.changeAmount(ESysUser.TG_BH.getCode(),
                     EChannelType.getEChannelType(order.getChannelType()),
                     wechatOrderNo, order.getPayGroup(), order.getRefNo(),
                     EBizType.getBizTypeMap().get(order.getBizType()),

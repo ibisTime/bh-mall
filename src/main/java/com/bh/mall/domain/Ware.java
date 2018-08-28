@@ -89,6 +89,12 @@ public class Ware extends ABaseDO {
     // 团队长
     private String teamLeader;
 
+    // 编号
+    private String codeForQuery;
+
+    // 等级
+    private Integer level;
+
     public Agent getAgent() {
         return agent;
     }
@@ -287,6 +293,22 @@ public class Ware extends ABaseDO {
 
     public void setTeamLeader(String teamLeader) {
         this.teamLeader = teamLeader;
+    }
+
+    public String getCodeForQuery() {
+        return codeForQuery;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setCodeForQuery(String codeForQuery) {
+        this.codeForQuery = codeForQuery;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

@@ -21,6 +21,15 @@ public class XN627885Req extends APageReq {
     // 箱码状态
     private String proStatus;
 
+    // 防伪码
+    private String miniCode;
+
+    // 溯源码
+    private String traceCode;
+
+    // 箱码
+    private String refCode;
+
     public List<String> getStatusList() {
         return statusList;
     }
@@ -43,6 +52,30 @@ public class XN627885Req extends APageReq {
 
     public void setProStatus(String proStatus) {
         this.proStatus = proStatus;
+    }
+
+    public String getMiniCode() {
+        return miniCode;
+    }
+
+    public String getTraceCode() {
+        return traceCode;
+    }
+
+    public void setMiniCode(String miniCode) {
+        this.miniCode = miniCode;
+    }
+
+    public void setTraceCode(String traceCode) {
+        this.traceCode = traceCode;
+    }
+
+    public String getRefCode() {
+        return refCode;
+    }
+
+    public void setRefCode(String refCode) {
+        this.refCode = refCode;
     }
 
 }

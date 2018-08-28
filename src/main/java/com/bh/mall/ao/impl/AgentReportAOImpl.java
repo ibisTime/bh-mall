@@ -116,9 +116,11 @@ public class AgentReportAOImpl implements IAgentReportAO {
                 // 推荐/介绍人转义
                 userName = agentBO.getAgent(agentReport.getUserReferee());
                 agentReport.setUserRefereeName(userName.getRealName());
+
+            }
+            if (StringUtils.isNotBlank(agentReport.getIntroducer())) {
                 userName = agentBO.getAgent(agentReport.getIntroducer());
                 agentReport.setIntroduceName(userName.getRealName());
-
             }
 
             // 可提现账户余额

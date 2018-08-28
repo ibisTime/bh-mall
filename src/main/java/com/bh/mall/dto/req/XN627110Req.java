@@ -25,6 +25,9 @@ public class XN627110Req {
     // （选填）头像
     private String photo;
 
+    // （选填）头像
+    private String remark;
+
     public String getLoginPwd() {
         return loginPwd;
     }
@@ -55,6 +58,14 @@ public class XN627110Req {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

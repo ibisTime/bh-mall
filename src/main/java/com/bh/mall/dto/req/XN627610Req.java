@@ -13,6 +13,9 @@ public class XN627610Req extends APageReq {
     // （选填）产品编号
     private String productCode;
 
+    // （选填）产品名称
+    private String productName;
+
     // （选填） 类型 0出库 1入库
     private String type;
 
@@ -30,6 +33,14 @@ public class XN627610Req extends APageReq {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
 }

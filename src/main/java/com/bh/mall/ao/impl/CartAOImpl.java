@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.ICartAO;
+import com.bh.mall.ao.IInOrderAO;
+import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.ICartBO;
 import com.bh.mall.bo.IProductBO;
@@ -15,10 +17,13 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
+import com.bh.mall.enums.EAgentLevel;
+import com.bh.mall.enums.ECartType;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -36,6 +41,12 @@ public class CartAOImpl implements ICartAO {
     @Autowired
     IAgentPriceBO agentPriceBO;
 
+    @Autowired
+    IInOrderAO inOrderAO;
+
+    @Autowired
+    IAgentBO agentBO;
+
     @Override
     public String addCart(String userId, String level, String specsCode,
             String quantity) {
@@ -45,8 +56,27 @@ public class CartAOImpl implements ICartAO {
         }
 
         Specs specs = specsBO.getSpecs(specsCode);
-        if (specs.getSingleNumber() > StringValidater.toInteger(quantity)) {
+        if (specs.getStockNumber() < StringValidater.toInteger(quantity)) {
             throw new BizException("xn00000", "该产品库存不足");
+        }
+
+        String type = ECartType.AGENT.getCode();
+        // 代理添加购物车
+        if (StringValidater.toInteger(
+            EAgentLevel.FIVE.getCode()) >= StringValidater.toInteger(level)) {
+            type = ECartType.CUSER.getCode();
+            Agent agent = agentBO.getAgent(userId);
+            AgentPrice price = agentPriceBO.getPriceByLevel(specsCode,
+                agent.getLevel());
+
+            // 检查起购
+            if (price.getStartNumber() >= StringValidater.toInteger(quantity)) {
+                throw new BizException("xn00000",
+                    "您购买的数量不能低于[" + price.getStartNumber() + "]");
+            }
+
+            inOrderAO.checkLimitNumber(agent, specs, price,
+                StringValidater.toInteger(quantity));
         }
 
         Cart data = cartBO.getCartByProductCode(userId, specsCode);
@@ -63,6 +93,7 @@ public class CartAOImpl implements ICartAO {
             data = new Cart();
             data.setCode(code);
             data.setUserId(userId);
+            data.setType(type);
 
             data.setProductCode(specs.getProductCode());
             data.setSpecsCode(specsCode);
@@ -77,11 +108,32 @@ public class CartAOImpl implements ICartAO {
     @Override
     public void editCart(String code, String quantity) {
         Cart data = cartBO.getCart(code);
-        Product pData = productBO.getProduct(data.getProductCode());
-        if (pData.getRealNumber() < StringValidater.toInteger(quantity)
-                || StringValidater.toInteger(quantity) < 0) {
-            throw new BizException("xn00000", "产品数量不足或小于零");
+        if (StringValidater.toInteger(quantity) <= 0) {
+            throw new BizException("xn00000", "添加数量不能少于零");
         }
+
+        Specs specs = specsBO.getSpecs(data.getSpecsCode());
+        if (specs.getStockNumber() < StringValidater.toInteger(quantity)) {
+            throw new BizException("xn00000", "该产品库存不足");
+        }
+
+        // 代理添加购物车
+        if (ECartType.AGENT.getCode().equals(data.getType())) {
+            Agent agent = agentBO.getAgent(data.getUserId());
+            AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
+                agent.getLevel());
+
+            // 检查起购
+            if (price.getStartNumber() >= StringValidater.toInteger(quantity)) {
+                throw new BizException("xn00000",
+                    "您购买的数量不能低于[" + price.getStartNumber() + "]");
+            }
+
+            // 检查限购
+            inOrderAO.checkLimitNumber(agent, specs, price,
+                StringValidater.toInteger(quantity));
+        }
+        // 代理添加购物车
         data.setQuantity(StringValidater.toInteger(quantity));
         cartBO.refreshCart(data);
     }

@@ -39,6 +39,7 @@ public class MaterialAOImpl implements IMaterialAO {
         data.setType(req.getType());
         data.setUpdater(req.getUpdater());
         Date date = new Date();
+        data.setCreateDatetime(date);
         data.setRemark(req.getRemark());
 
         materialBO.addMaterial(data);

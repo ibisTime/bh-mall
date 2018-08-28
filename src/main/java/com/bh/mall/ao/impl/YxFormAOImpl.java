@@ -149,7 +149,7 @@ public class YxFormAOImpl implements IYxFormAO {
         Agent agent = agentBO.getAgent(userId);
         agentBO.refreshYx(agent, EAgentStatus.MIND.getCode(),
             sysUser.getUserId(), sysUser.getRealName(), logCode);
-
+        yxFormBO.removeYxForm(yxForm);
     }
 
     /**
@@ -167,6 +167,9 @@ public class YxFormAOImpl implements IYxFormAO {
         Agent agent = agentBO.getAgent(userId);
         agentBO.refreshYx(agent, EAgentStatus.MIND.getCode(), agent.getUserId(),
             agent.getRealName(), logCode);
+
+        // 删除意向单
+        yxFormBO.removeYxForm(yxForm);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +10,12 @@ import com.bh.mall.ao.IDeliveOrderAO;
 import com.bh.mall.bo.IDeliveOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IOutOrderBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.DeliveOrder;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.OutOrder;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.req.XN627930Req;
 import com.bh.mall.enums.EOrderKind;
 
@@ -28,6 +31,9 @@ public class DeliveOrderAOImpl implements IDeliveOrderAO {
     @Autowired
     private IInnerOrderBO innerOrderBO;
 
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
     @Override
     public Paginable<DeliveOrder> queryDeliveOrderPage(int start, int limit,
             DeliveOrder condition) {
@@ -39,7 +45,10 @@ public class DeliveOrderAOImpl implements IDeliveOrderAO {
         List<DeliveOrder> list = deliveOrderBO.queryDeliveOrderList(condition);
         for (DeliveOrder data : list) {
             // 发货人转义
-
+            if (StringUtils.isNotBlank(data.getDeliver())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
+                data.setDeliveName(sysUser.getRealName());
+            }
         }
         return deliveOrderBO.queryDeliveOrderList(condition);
     }

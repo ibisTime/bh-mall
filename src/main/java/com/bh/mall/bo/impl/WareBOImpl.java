@@ -19,9 +19,9 @@ import com.bh.mall.dao.IWareDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Ware;
-import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductStatus;
+import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
@@ -40,7 +40,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
     @Override
     public void saveWare(Ware data, String type, Integer quantity,
-            EBizType bizType, String bizNote, String refNo) {
+            ESpecsLogType bizType, String bizNote, String refNo) {
         String logCode = wareLogBO.saveWareLog(data, type, quantity, bizType,
             bizNote, refNo);
         data.setLastChangeCode(logCode);
@@ -90,8 +90,9 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     public void transQuantity(String fromUser, String fromSpecs,
             String fromType, String toUser, String toSpecs, String toType,
-            Integer quantity, EBizType fromBizType, EBizType toBizType,
-            String fromBizNote, String toBizNote, String refNo) {
+            Integer quantity, ESpecsLogType fromBizType,
+            ESpecsLogType toBizType, String fromBizNote, String toBizNote,
+            String refNo) {
         Ware fromWare = this.getWareByProductSpec(fromUser, fromSpecs);
         Ware toWare = this.getWareByProductSpec(toUser, toSpecs);
 
@@ -100,8 +101,8 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     private void transQuantity(Ware fromWare, String fromType, Ware toWare,
-            String toType, Integer quantity, EBizType fromBizType,
-            EBizType toBizType, String fromBizNote, String toBizNote,
+            String toType, Integer quantity, ESpecsLogType fromBizType,
+            ESpecsLogType toBizType, String fromBizNote, String toBizNote,
             String refNo) {
         String fromCode = fromWare.getCode();
         String toCode = toWare.getCode();
@@ -113,7 +114,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     @Transactional
     public void changeWare(String code, String type, Integer quantity,
-            EBizType bizType, String bizNote, String refNo) {
+            ESpecsLogType bizType, String bizNote, String refNo) {
 
         Ware dbData = this.getWare(code);
         Integer nowQuantity = dbData.getQuantity() + quantity;
@@ -161,7 +162,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     public void buyWare(String orderCode, String productCode,
             String productName, String specsCode, String specsName,
-            Integer quantity, Long price, Agent agent, EBizType bizType,
+            Integer quantity, Long price, Agent agent, ESpecsLogType bizType,
             String bizNote) {
         Ware ware = this.getWareByProductSpec(agent.getUserId(), specsCode);
 

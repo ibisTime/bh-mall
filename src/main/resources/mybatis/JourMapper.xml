@@ -169,8 +169,8 @@
 		,t.account_number
 		,t.trans_amount
 		
-		,(CASE WHEN  <![CDATA[t.trans_amount > 0]]>  THEN t.trans_amount ELSE 0 END) AS out_amount
-    	,(CASE WHEN <![CDATA[t.trans_amount < 0]]>  THEN t.trans_amount ELSE 0 END) AS in_amount 
+		,(CASE WHEN  <![CDATA[t.trans_amount < 0]]>  THEN t.trans_amount ELSE 0 END) AS out_amount
+    	,(CASE WHEN <![CDATA[t.trans_amount > 0]]>  THEN t.trans_amount ELSE 0 END) AS in_amount 
     	
 		,t.user_id
 		,t.real_name

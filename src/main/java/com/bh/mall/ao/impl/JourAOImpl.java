@@ -23,6 +23,7 @@ import com.bh.mall.domain.OrderReport;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Withdraw;
 import com.bh.mall.dto.res.XN627855Res;
+import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.ESysUser;
 
@@ -69,9 +70,9 @@ public class JourAOImpl implements IJourAO {
 
         Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
         for (Jour data : page.getList()) {
-            if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
+            if (EAccountType.Business.getCode().equals(data.getType())) {
                 Agent agent = agentBO.getAgent(data.getUserId());
-                data.setMobile(agent.getMobile());
+                data.setAgent(agent);
             }
 
             // 关联订单转义

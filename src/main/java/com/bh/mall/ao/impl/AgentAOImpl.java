@@ -142,7 +142,7 @@ public class AgentAOImpl implements IAgentAO {
 
     // doLoginWeChatH
     @Transactional
-    private XN627303Res doLoginWeChatH(String code, String refereeId,
+    private XN627303Res doLoginWeChatH(String code, String fromUserId,
             String status) {
         // Step1：获取密码参数信息
         Map<String, String> configPwd = sysConfigBO
@@ -236,7 +236,7 @@ public class AgentAOImpl implements IAgentAO {
                 String photo = (String) wxRes.get("headimgurl");
 
                 result = doWxLoginReg(unionId, null, h5OpenId, nickname, photo,
-                    refereeId, status);
+                    fromUserId, status);
                 result = new XN627303Res(result.getUserId(), result.getStatus(),
                     subscribe);
             }
@@ -369,11 +369,14 @@ public class AgentAOImpl implements IAgentAO {
     public void editUserReferee(String userId, String referrer, String updater,
             String remark) {
         Agent data = agentBO.getAgent(userId);
-        Agent referrAgent = agentBO.getAgent(referrer);
-        if (referrAgent.getLevel() != data.getLevel()) {
-            throw new BizException("xn00000", "代理要与推荐人的等级相同哦");
+        if (StringUtils.isNotBlank(referrer)) {
+            Agent referrAgent = agentBO.getAgent(referrer);
+            if (referrAgent.getLevel() != data.getLevel()) {
+                throw new BizException("xn00000", "代理要与推荐人的等级相同哦");
+            }
         }
-        agentBO.refreshReferee(data, referrAgent.getUserId(), updater, remark);
+
+        agentBO.refreshReferee(data, referrer, updater, remark);
     }
 
     // 分页查询代理
@@ -507,6 +510,14 @@ public class AgentAOImpl implements IAgentAO {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
                 data.setManageName(sysUser.getRealName());
             }
+
+            // 门槛余额
+            Account account = accountBO.getAccountNocheck(data.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            if (null != account) {
+                data.setMkAmount(account.getAmount());
+            }
+
         }
         return page;
     }
@@ -630,6 +641,12 @@ public class AgentAOImpl implements IAgentAO {
                 data.setToTeamName(fromAgent.getTeamName());
             }
         }
+
+        // 推荐人数
+        Agent aCondition = new Agent();
+        aCondition.setReferrer(data.getUserId());
+        Long reNumber = agentBO.getTotalCount(aCondition);
+        data.setReNumber(reNumber);
         return data;
     }
 

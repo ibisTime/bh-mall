@@ -52,9 +52,17 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<if test="noUserId != null and noUserId != '' ">
-				<![CDATA[AND t.user_id <> #{noUserId}]]>
-			</if>
+			<choose>
+				<when test="noUserId != null and noUserId != '' ">
+					<![CDATA[AND t.user_id <> #{noUserId}]]>
+				</when>
+				<when test="noUserIdList != null and noUserIdList.size()>0 ">
+					AND t.user_id NOT IN
+					<foreach collection="noUserIdList"></foreach>
+				</when>
+			</choose>
+			
+			
 			
 			<if test="fromUserId != null and fromUserId != '' ">
 				AND t.from_user_id = #{fromUserId}
@@ -77,8 +85,12 @@
 				AND t.referrer = #{referrer}
 			</if>
 			<if test="mobile != null and mobile != '' ">
-				AND t.mobile = #{mobile}
+				AND t.mobile like "%"#{mobile}"%"
 			</if>
+			<if test="teamName != null and teamName != '' ">
+				AND t.team_name like "%"#{teamName}"%"
+			</if>
+			
 			<if test="idKind != null and idKind != '' ">
 				AND t.id_kind = #{idKind}
 			</if>
@@ -87,7 +99,7 @@
 			</if>
 
 			<if test="realName != null and realName != '' ">
-				AND t.real_name = #{realName}
+				AND t.real_name like "%"#{realName}"%"
 			</if>
 
 			<choose>
@@ -144,13 +156,7 @@
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
 			<if test="teamName != null and teamName != '' ">
-				AND t.team_name = #{teamName}
-			</if>
-
-			<if test="keyWord !=null and keyWord != '' ">
-				AND (t.real_name like "%"#{keyWord}"%" or t.nickname like
-				"%"#{keyWord}"%" or t.wx_id like "%"#{keyWord}"%"
-				or t.mobile like "%"#{keyWord}"%")
+				AND t.team_name like "%"#{teamName}"%"
 			</if>
 		</trim>
 	</sql>
@@ -491,10 +497,12 @@
 		UPDATE tbh_agent
 		SET
 		status = #{status}
+		,high_user_id = #{highUserId}
 		,mobile = #{mobile}
 		,wx_id = #{wxId}
 		,real_name = #{realName}
 		,province = #{province}
+		
 		,city = #{city}
 		,area = #{area}
 		,address = #{address}
@@ -512,6 +520,7 @@
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		,id_hand = #{idHand}
+		,high_user_id = #{highUserId}
 		,mobile = #{mobile}
 		,wx_id = #{wxId}
 		,real_name = #{realName}
@@ -554,6 +563,8 @@
 		,level = #{level}
 		
 		,high_user_id = #{highUserId}
+		,referrer = #{referrer}
+		,introducer = #{introducer}
 		,team_name = #{teamName}
 		,manager = #{manager}
 		,impower_datetime = #{impowerDatetime}

@@ -11,6 +11,7 @@
 
 		<result column="level" property="level" />
 		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
 		<result column="updater_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -50,6 +51,7 @@
 
 		,t.status
 		,t.level
+		,t.create_datetime
 		,updater
 		,update_datetime
 		,remark
@@ -86,6 +88,7 @@
 
 		,status
 		,level
+		,create_datetime
 		,updater
 		,update_datetime
 		,remark
@@ -99,6 +102,7 @@
 
 		,#{status}
 		,#{level}
+		,#{createDatetime}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}

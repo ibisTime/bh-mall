@@ -62,7 +62,6 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
 
         data.setCode(code);
         data.setType(type);
-        data.setType(EAgentLogType.Imporder.getCode());
         data.setApplyUser(sqForm.getUserId());
         data.setRealName(sqForm.getRealName());
 
@@ -157,12 +156,13 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
     }
 
     @Override
-    public String refreshAgent(Agent agent) {
+    public String refreshAgent(Agent agent, String type) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         AgentLog data = new AgentLog();
 
         data.setCode(code);
+        data.setType(type);
         data.setApplyUser(agent.getUserId());
         data.setRealName(agent.getRealName());
         data.setWxId(agent.getWxId());

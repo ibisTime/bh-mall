@@ -16,7 +16,7 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
     void saveSpecs(String code, XN627546Req psReq);
 
     void saveSpecsList(String productCode, String productName,
-            List<XN627546Req> specList, String updater);
+            List<XN627546Req> specList, String updater, String remark);
 
     List<Specs> getSpecsByProduct(String productCode);
 
@@ -27,7 +27,7 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
     void removeSpecs(Specs specs);
 
     void refreshRepertory(String productName, Specs specs, String type,
-            Integer number, String updater);
+            Integer number, String updater, String remark);
 
     Integer getMinSpecsNumber(String productCode);
 

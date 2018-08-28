@@ -86,7 +86,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,
-            payGroup, refNo, bizType, bizNote, transAmount);
+            payGroup, refNo, bizType, bizNote, transAmount, bizNote);
 
         // 更改余额
         Account data = new Account();
@@ -117,7 +117,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     // 冻结金额
     @Override
     public void frozenAmount(Account dbAccount, Long freezeAmount,
-            String withdrawCode) {
+            String withdrawCode, String remark) {
         if (freezeAmount <= 0) {
             throw new BizException("xn000000", "冻结金额需大于0");
         }
@@ -128,7 +128,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
 
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline, null,
-            null, withdrawCode, EBizType.AJ_QX, "线下取现", -freezeAmount);
+            null, withdrawCode, EBizType.AJ_QX, "线下取现", -freezeAmount, remark);
         Long nowFrozenAmount = dbAccount.getFrozenAmount() + freezeAmount;
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
@@ -141,7 +141,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     // 解冻金额
     @Override
     public void unfrozenAmount(Account dbAccount, Long freezeAmount,
-            String withdrawCode) {
+            String withdrawCode, String approveNote) {
         if (freezeAmount <= 0) {
             throw new BizException("xn000000", "解冻金额需大于0");
         }
@@ -152,7 +152,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
 
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline, null,
-            null, withdrawCode, EBizType.AJ_QX, "线下取现失败退回", freezeAmount);
+            null, withdrawCode, EBizType.AJ_QX, "线下取现失败退回", freezeAmount,
+            approveNote);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(dbAccount.getAmount() + freezeAmount);

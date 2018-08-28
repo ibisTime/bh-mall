@@ -32,6 +32,7 @@ public class XN627852 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentReport condition = new AgentReport();
+        condition.setUserId(req.getUserId());
         condition.setUserReferee(req.getReferrer());
         condition.setIntroducer(req.getIntroducer());
 

@@ -17,7 +17,7 @@ public interface ISYSUserAO {
 
     // 新增用户
     public String addSYSUser(String mobile, String loginPwd, String realName,
-            String photo);
+            String photo, String remark);
 
     // 用户登录
     public String doLogin(String loginName, String loginPwd);

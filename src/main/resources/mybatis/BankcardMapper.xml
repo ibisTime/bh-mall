@@ -42,7 +42,7 @@
 				AND t.bank_code = #{bankCode}
 			</if> 
 			<if test="bankName != null and bankName != '' ">
-				AND t.bank_name = #{bankName}
+				AND t.bank_name LIKE "%"#{bankName}"%"
 			</if> 
 		</trim>
 	</sql>

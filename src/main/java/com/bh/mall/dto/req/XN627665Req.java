@@ -34,6 +34,21 @@ public class XN627665Req extends APageReq {
     // 下单人
     private String applyUser;
 
+    // 产品名称
+    private String productName;
+
+    // 下单代理等级
+    private String level;
+
+    // 发货人
+    private String deliver;
+
+    // 订单归属人
+    private String toUser;
+
+    // 是否云仓发货
+    private String isWareSend;
+
     public String getStatus() {
         return status;
     }
@@ -80,6 +95,46 @@ public class XN627665Req extends APageReq {
 
     public void setKindList(List<String> kindList) {
         this.kindList = kindList;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public String getDeliver() {
+        return deliver;
+    }
+
+    public String getToUser() {
+        return toUser;
+    }
+
+    public String getIsWareSend() {
+        return isWareSend;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public void setDeliver(String deliver) {
+        this.deliver = deliver;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
+    }
+
+    public void setIsWareSend(String isWareSend) {
+        this.isWareSend = isWareSend;
     }
 
 }

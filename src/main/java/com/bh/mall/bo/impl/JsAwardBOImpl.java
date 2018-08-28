@@ -107,7 +107,7 @@ public class JsAwardBOImpl extends PaginableBOImpl<JsAward>
     public JsAward getJsAwardByLevel(Integer fromLevel, Integer toLevel) {
         JsAward condition = new JsAward();
         condition.setLevel(fromLevel);
-        condition.setLevel(toLevel);
+        condition.setIntroLevel(toLevel);
         JsAward data = jsAwardDAO.select(condition);
         return data;
     }

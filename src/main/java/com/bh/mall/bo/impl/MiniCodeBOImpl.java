@@ -49,6 +49,7 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
 
     @Override
     public void refreshMiniCode(MiniCode data) {
+        data.setStatus(ECodeStatus.USE_YES.getCode());
         miniCodeDAO.update(data);
     }
 
@@ -88,7 +89,6 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
     @Override
     public MiniCode getNoUseMiniCode() {
         MiniCode condition = new MiniCode();
-        condition.setStatus(ECodeStatus.USE_NO.getCode());
         List<MiniCode> list = miniCodeDAO.selectCodeList(condition);
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn00000", "盒码没有啦");

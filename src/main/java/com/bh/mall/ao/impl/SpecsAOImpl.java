@@ -37,7 +37,7 @@ public class SpecsAOImpl implements ISpecsAO {
         }
         Product product = productBO.getProduct(specs.getProductCode());
         specsBO.refreshRepertory(product.getName(), specs, type, number,
-            updater);
+            updater, null);
     }
 
     @Override

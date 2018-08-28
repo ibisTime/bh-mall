@@ -2,8 +2,6 @@ package com.bh.mall.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627815Req;
@@ -16,7 +14,6 @@ import com.bh.mall.dto.res.XN627814Res;
  * @since: Jul 31, 2018 4:47:14 PM 
  * @history:
  */
-@Component
 public interface IWareAO {
 
     static final String DEFAULT_ORDER_COLUMN = "code";
