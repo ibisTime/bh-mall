@@ -295,26 +295,42 @@ public class WareAOImpl implements IWareAO {
 
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
-            int singleNumber = StringValidater.toInteger(req.getQuantity())
+            int orderNumber = StringValidater.toInteger(req.getQuantity())
                     / psData.getSingleNumber();
+
+            int quantity = psData.getSingleNumber();
             // 防止下单数量小于拆单数量
-            if (singleNumber <= 0) {
-                singleNumber = StringValidater.toInteger(req.getQuantity());
+            if (StringValidater.toInteger(req.getQuantity())
+                    % psData.getSingleNumber() > 0) {
+                orderNumber = orderNumber + 1;
             }
 
             Long amount = 0L;
-            for (int i = 0; i < singleNumber; i++) {
+            for (int i = 0; i < orderNumber; i++) {
+
+                if (i == orderNumber - 1) {
+                    if (orderNumber > 0) {
+                        quantity = StringValidater.toInteger(req.getQuantity())
+                                % psData.getSingleNumber();
+                    }
+                }
 
                 // 防止多出的订单为授权单或升级单
                 if (amount > agentLevel.getAmount()) {
                     kind = EOutOrderKind.Pick_Up.getCode();
                 }
                 amount = amount + psData.getSingleNumber() * data.getPrice();
+                // String code = outOrderBO.pickUpGoods(data, psData, agent,
+                // product.getPic(), teamLeader.getRealName(),
+                // sysUser.getUserId(), sysUser.getRealName(),
+                // EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
+                // req.getProvince(), req.getCity(), req.getArea(),
+                // req.getAddress(), kind);
+
                 String code = outOrderBO.pickUpGoods(data.getProductCode(),
                     data.getProductName(), product.getPic(),
-                    data.getSpecsCode(), data.getSpecsName(),
-                    psData.getSingleNumber(), data.getPrice(),
-                    psData.getSingleNumber() * data.getPrice(), yunfei,
+                    data.getSpecsCode(), data.getSpecsName(), quantity,
+                    data.getPrice(), quantity * data.getPrice(), yunfei,
                     agent.getHighUserId(), agent, teamLeader.getRealName(),
                     sysUser.getUserId(), sysUser.getRealName(),
                     EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
@@ -479,5 +495,9 @@ public class WareAOImpl implements IWareAO {
                 chargeAmount, agent.getLevel(), isWareHouse);
         }
         return res;
+    }
+
+    @Override
+    public void editWare() {
     }
 }

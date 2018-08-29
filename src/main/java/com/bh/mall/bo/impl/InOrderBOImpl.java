@@ -100,13 +100,6 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     }
 
     @Override
-    public InOrder getCheckInOrder(String userId, String kind) {
-        InOrder condition = new InOrder();
-        condition.setApplyUser(userId);
-        return inOrderDAO.select(condition);
-    }
-
-    @Override
     public long selectCount(InOrder oCondition) {
         return inOrderDAO.selectTotalCount(oCondition);
     }

@@ -47,4 +47,7 @@ public interface IWareAO {
     // 检查余额红线
     public XN627805Res checkAmount(String userId);
 
+    // 调整云仓数量
+    public void editWare();
+
 }

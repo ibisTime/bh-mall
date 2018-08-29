@@ -21,6 +21,7 @@ import com.bh.mall.bo.IJsAwardBO;
 import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISqFormBO;
+import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.IdCardChecker;
@@ -92,6 +93,9 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IWareBO wareBO;
 
     /**
      * 有头的代理申请授权
@@ -402,6 +406,7 @@ public class SqFormAOImpl implements ISqFormAO {
                 // 清空推荐关系
                 agentBO.resetUserReferee(agent.getUserId());
 
+                wareBO.removeByAgent(agent.getUserId());
             }
         }
         // 记录日志
@@ -436,6 +441,16 @@ public class SqFormAOImpl implements ISqFormAO {
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
                 null, null, data.getUserId(), EBizType.AJ_QXSQ,
                 EBizType.AJ_QXSQ.getValue(), -account.getAmount());
+
+            Account cAccount = accountBO.getAccountByUser(data.getUserId(),
+                ECurrency.C_CNY.getCode());
+            // 账户清零
+            accountBO.changeAmount(cAccount.getAccountNumber(),
+                EChannelType.NBZ, null, null, data.getUserId(),
+                EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
+                -cAccount.getAmount());
+
+            wareBO.removeByAgent(agent.getUserId());
 
             // 清空手机号等信息，防止重新申请时重复
             agent.setStatus(EAgentStatus.MIND.getCode());
@@ -670,8 +685,6 @@ public class SqFormAOImpl implements ISqFormAO {
             agentReportBO.refreshAgentReport(report, sqForm, agent);
         }
 
-        // 删除意向单
-        sqFormBO.removeSqForm(sqForm);
     }
 
 }

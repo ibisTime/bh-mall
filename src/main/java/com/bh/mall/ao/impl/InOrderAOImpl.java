@@ -203,11 +203,17 @@ public class InOrderAOImpl implements IInOrderAO {
             cartBO.removeCart(cart);
         }
 
-        // 金额不够授权单金额，继续购买
-        if (agentLevel.getAmount() > amount) {
-            throw new BizException("xn0000",
-                "授权单的金额为[" + agentLevel.getAmount() / 1000 + "]，您还需购买"
-                        + (agentLevel.getAmount() - amount) / 1000);
+        // 第一次购买，金额不够授权单金额，继续购买
+        InOrder condition = new InOrder();
+        condition.setApplyUser(applyAgent.getUserId());
+        condition.setStartDatetime(applyAgent.getImpowerDatetime());
+        long count = inOrderBO.getTotalCount(condition);
+        if (count == 0) {
+            if (agentLevel.getAmount() > amount) {
+                throw new BizException("xn0000",
+                    "授权单的金额为[" + agentLevel.getAmount() / 1000 + "]，您还需购买"
+                            + (agentLevel.getAmount() - amount) / 1000);
+            }
         }
 
         return list;
@@ -255,11 +261,17 @@ public class InOrderAOImpl implements IInOrderAO {
         // 检查限购
         this.checkLimitNumber(applyAgent, specs, agentPrice, quantity);
 
-        // 金额不够授权单金额，继续购买
-        if (agentLevel.getAmount() > amount) {
-            throw new BizException("xn0000",
-                "授权单的金额为[" + agentLevel.getAmount() / 1000 + "]，您还需购买"
-                        + (agentLevel.getAmount() - amount) / 1000);
+        // 第一次购买，金额不够授权单金额，继续购买
+        InOrder condition = new InOrder();
+        condition.setApplyUser(applyAgent.getUserId());
+        condition.setStartDatetime(applyAgent.getImpowerDatetime());
+        long count = inOrderBO.getTotalCount(condition);
+        if (count == 0) {
+            if (agentLevel.getAmount() > amount) {
+                throw new BizException("xn0000",
+                    "授权单的金额为[" + agentLevel.getAmount() / 1000 + "]，您还需购买"
+                            + (agentLevel.getAmount() - amount) / 1000);
+            }
         }
 
         // 团队长

@@ -237,6 +237,7 @@ DROP TABLE IF EXISTS `tbh_cart`;
 CREATE TABLE `tbh_cart` (
   `code` varchar(32) NOT NULL,
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户ID',
+  `type` varchar(4) DEFAULT NULL COMMENT '用户类型',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `specs_code` varchar(32) DEFAULT NULL COMMENT '产品规格编号',
   `price` bigint(20) DEFAULT NULL COMMENT '单价',
@@ -279,7 +280,7 @@ CREATE TABLE `tbh_channel_bank` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tbh_charge` */
 
@@ -634,6 +635,7 @@ CREATE TABLE `tbh_material` (
   `order_no` int(11) DEFAULT NULL COMMENT '排序',
   `status` varchar(4) DEFAULT NULL COMMENT '状态（0未发布 1发布）',
   `level` varchar(32) DEFAULT NULL COMMENT '查看等级',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` text COMMENT '备注',
@@ -839,26 +841,26 @@ CREATE TABLE `tbh_security_trace` (
 DROP TABLE IF EXISTS `tbh_sj_form`;
 
 CREATE TABLE `tbh_sj_form` (
-  `user_id` varchar(32) NOT NULL COMMENT '申请人',
-  `real_name` varchar(255) DEFAULT NULL COMMENT '真实姓名',
-  `id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
-  `id_no` varchar(18) DEFAULT NULL COMMENT '证件号',
-  `id_hand` varchar(255) DEFAULT NULL COMMENT '手持身份证',
-  `team_name` varchar(255) DEFAULT NULL COMMENT '团队名称',
-  `to_user_id` varchar(32) DEFAULT NULL COMMENT '归属人',
+  `user_id` varchar(32) CHARACTER SET utf8 NOT NULL COMMENT '申请人',
+  `real_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '真实姓名',
+  `id_kind` char(1) CHARACTER SET utf8 DEFAULT NULL COMMENT '证件类型',
+  `id_no` varchar(18) CHARACTER SET utf8 DEFAULT NULL COMMENT '证件号',
+  `id_hand` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '手持身份证',
+  `team_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '团队名称',
+  `to_user_id` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '归属人',
   `level` int(11) DEFAULT NULL COMMENT '当前等级',
-  `apply_level` varchar(32) DEFAULT NULL COMMENT '申请等级',
+  `apply_level` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '申请等级',
   `re_number` int(11) DEFAULT '0' COMMENT '半门槛推荐人数',
   `pay_amount` bigint(20) DEFAULT '0' COMMENT '打款金额',
-  `pay_pdf` varchar(255) DEFAULT NULL COMMENT '打款截图',
-  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
-  `approve_name` varchar(255) DEFAULT NULL COMMENT '审核人名称',
+  `pay_pdf` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '打款截图',
+  `approver` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '审核人',
+  `approve_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '审核人名称',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `remark` text COMMENT '备注',
+  `status` varchar(4) CHARACTER SET utf8 DEFAULT NULL COMMENT '状态',
+  `remark` text CHARACTER SET utf8 COMMENT '备注',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `tbh_specs` */
 
@@ -969,31 +971,6 @@ CREATE TABLE `tbh_ware` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Table structure for table `tbh_ware_house` */
-
-DROP TABLE IF EXISTS `tbh_ware_house`;
-
-CREATE TABLE `tbh_ware_house` (
-  `code` varchar(32) NOT NULL,
-  `type` varchar(4) DEFAULT NULL COMMENT '类型（B/P）',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户ID',
-  `currency` varchar(64) DEFAULT NULL COMMENT '币种',
-  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
-  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
-  `product_specs_code` varchar(255) DEFAULT NULL COMMENT '规格编号',
-  `product_specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
-  `price` bigint(20) DEFAULT NULL COMMENT '价格',
-  `amount` bigint(20) DEFAULT NULL COMMENT '总价',
-  `quantity` int(11) DEFAULT NULL COMMENT '数量',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `last_change_code` varchar(32) DEFAULT NULL COMMENT '最后一条流水',
-  `system_code` varchar(32) DEFAULT NULL,
-  `company_code` varbinary(32) DEFAULT NULL,
-  `real_name` varchar(255) DEFAULT NULL COMMENT '代理名称',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 /*Table structure for table `tbh_ware_log` */
 
 DROP TABLE IF EXISTS `tbh_ware_log`;
@@ -1065,25 +1042,25 @@ CREATE TABLE `tbh_withdraw` (
 DROP TABLE IF EXISTS `tbh_yx_form`;
 
 CREATE TABLE `tbh_yx_form` (
-  `user_id` varchar(32) NOT NULL COMMENT '申请人',
-  `wx_id` varchar(255) DEFAULT NULL COMMENT '微信号',
-  `to_user_id` varchar(32) DEFAULT NULL COMMENT '意向归属人',
-  `apply_level` varchar(32) DEFAULT NULL COMMENT '申请等级',
-  `real_name` varchar(64) DEFAULT NULL COMMENT '姓名',
-  `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
-  `address` varchar(255) DEFAULT NULL COMMENT '地址',
-  `area` varchar(64) DEFAULT NULL COMMENT '区',
-  `city` varchar(64) DEFAULT NULL COMMENT '市',
-  `province` varchar(64) DEFAULT NULL COMMENT '省',
-  `from_info` varchar(32) DEFAULT NULL COMMENT '信息来源',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `user_id` varchar(32) CHARACTER SET utf8 NOT NULL COMMENT '申请人',
+  `wx_id` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '微信号',
+  `to_user_id` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '意向归属人',
+  `apply_level` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '申请等级',
+  `real_name` varchar(64) CHARACTER SET utf8 DEFAULT NULL COMMENT '姓名',
+  `mobile` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '手机号',
+  `address` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '地址',
+  `area` varchar(64) CHARACTER SET utf8 DEFAULT NULL COMMENT '区',
+  `city` varchar(64) CHARACTER SET utf8 DEFAULT NULL COMMENT '市',
+  `province` varchar(64) CHARACTER SET utf8 DEFAULT NULL COMMENT '省',
+  `from_info` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '信息来源',
+  `status` varchar(4) CHARACTER SET utf8 DEFAULT NULL COMMENT '状态',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
-  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
-  `approve_name` varchar(255) DEFAULT NULL COMMENT '审核人名称',
+  `approver` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '审核人',
+  `approve_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '审核人名称',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
-  `remark` text COMMENT '备注',
+  `remark` text CHARACTER SET utf8 COMMENT '备注',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `tsys_config` */
 

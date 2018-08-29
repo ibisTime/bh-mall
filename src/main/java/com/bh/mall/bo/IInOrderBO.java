@@ -24,8 +24,6 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
 
     public void approveCancel(InOrder data);
 
-    public InOrder getCheckInOrder(String userId, String kind);
-
     public long selectCount(InOrder oCondition);
 
     public List<InOrder> queryToDealList(int pageNo, int pageSize,

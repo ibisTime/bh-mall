@@ -45,4 +45,6 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public void checkProduct(String toUser, String specsCode);
 
+    public void removeByAgent(String userId);
+
 }

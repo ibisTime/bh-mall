@@ -239,22 +239,34 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             // 订单拆单
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
-                int singleNumber = cart.getQuantity() / specs.getSingleNumber();
+                int nowNumber = cart.getQuantity() / specs.getSingleNumber();
+                int singleNumber = specs.getSingleNumber();
+
                 if ((cart.getQuantity() % specs.getSingleNumber()) != 0) {
-                    singleNumber = singleNumber + 1;
+                    nowNumber = nowNumber + 1;
                 }
 
-                for (int i = 0; i < singleNumber; i++) {
+                for (int i = 0; i < nowNumber; i++) {
+
+                    // 下单数量与查拆单数量不能整除时，最后一单取余
+                    if (i == nowNumber - 1) {
+                        if ((cart.getQuantity()
+                                % specs.getSingleNumber()) != 0) {
+                            singleNumber = cart.getQuantity()
+                                    % specs.getSingleNumber();
+                        }
+                    }
+
                     list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                         applyUser.getRealName(), applyUser.getLevel(),
                         applyUser.getHighUserId(), toUserName,
                         applyUser.getHighUserId(), applyUser.getTeamName(),
                         teamLeader.getRealName(), pData, specs,
-                        price.getPrice(), specs.getSingleNumber(),
-                        req.getApplyNote(), EBoolean.NO.getCode(),
-                        req.getSigner(), req.getMobile(), req.getProvince(),
-                        req.getCity(), req.getArea(), req.getAddress(),
-                        EOutOrderStatus.Unpaid.getCode(), kind));
+                        price.getPrice(), singleNumber, req.getApplyNote(),
+                        EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
+                        req.getProvince(), req.getCity(), req.getArea(),
+                        req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
+                        kind));
                 }
 
             } else {
@@ -308,16 +320,31 @@ public class OutOrderAOImpl implements IOutOrderAO {
             AgentPrice price = agentPriceBO.getPriceByLevel(specs.getCode(), 6);
             // 订单拆单
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
-                int singleNumber = cart.getQuantity() / specs.getSingleNumber();
-                for (int i = 0; i < singleNumber; i++) {
+                int nowNumber = cart.getQuantity() / specs.getSingleNumber();
+                int singleNumber = specs.getSingleNumber();
+
+                if ((cart.getQuantity() % specs.getSingleNumber()) != 0) {
+                    nowNumber = nowNumber + 1;
+                }
+
+                for (int i = 0; i < nowNumber; i++) {
+
+                    // 下单数量与查拆单数量不能整除时，最后一单取余
+                    if (i == nowNumber - 1) {
+                        if ((cart.getQuantity()
+                                % specs.getSingleNumber()) != 0) {
+                            singleNumber = cart.getQuantity()
+                                    % specs.getSingleNumber();
+                        }
+                    }
+
                     list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
                         cUser.getNickname(), null, agent.getUserId(),
                         agent.getRealName(), null, null, null, pData, specs,
-                        price.getPrice(), specs.getSingleNumber(),
-                        req.getApplyNote(), EBoolean.NO.getCode(),
-                        req.getSigner(), req.getMobile(), req.getProvince(),
-                        req.getCity(), req.getArea(), req.getAddress(),
-                        EOutOrderStatus.Unpaid.getCode(),
+                        price.getPrice(), singleNumber, req.getApplyNote(),
+                        EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
+                        req.getProvince(), req.getCity(), req.getArea(),
+                        req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
                         EOutOrderKind.C_ORDER.getCode()));
                 }
             } else {
@@ -403,18 +430,36 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         // 订单拆单
         if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
-            int singleNumber = StringValidater.toInteger(req.getQuantity())
+
+            int nowNumber = StringValidater.toInteger(req.getQuantity())
                     / specs.getSingleNumber();
-            for (int i = 0; i < singleNumber; i++) {
+            int singleNumber = specs.getSingleNumber();
+
+            if ((StringValidater.toInteger(req.getQuantity())
+                    % specs.getSingleNumber()) != 0) {
+                nowNumber = nowNumber + 1;
+            }
+
+            for (int i = 0; i < nowNumber; i++) {
+
+                // 下单数量与查拆单数量不能整除时，最后一单取余
+                if (i == nowNumber - 1) {
+                    if ((StringValidater.toInteger(req.getQuantity())
+                            % specs.getSingleNumber()) != 0) {
+                        singleNumber = StringValidater.toInteger(
+                            req.getQuantity()) % specs.getSingleNumber();
+                    }
+                }
+
                 list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                     applyUser.getRealName(), applyUser.getLevel(),
                     applyUser.getHighUserId(), toUserName,
                     applyUser.getHighUserId(), applyUser.getTeamName(),
                     teamLeader.getRealName(), pData, specs, price.getPrice(),
-                    specs.getSingleNumber(), req.getApplyNote(),
-                    EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(), kind));
+                    singleNumber, req.getApplyNote(), EBoolean.NO.getCode(),
+                    req.getSigner(), req.getMobile(), req.getProvince(),
+                    req.getCity(), req.getArea(), req.getAddress(),
+                    EOutOrderStatus.Unpaid.getCode(), kind));
             }
         } else {
             // 不可拆单
@@ -451,17 +496,32 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         // 订单拆单
         if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
-            int singleNumber = StringValidater.toInteger(req.getQuantity())
+            int nowNumber = StringValidater.toInteger(req.getQuantity())
                     / specs.getSingleNumber();
-            for (int i = 0; i < singleNumber; i++) {
+            int singleNumber = specs.getSingleNumber();
+
+            if ((StringValidater.toInteger(req.getQuantity())
+                    % specs.getSingleNumber()) != 0) {
+                nowNumber = nowNumber + 1;
+            }
+
+            for (int i = 0; i < nowNumber; i++) {
+
+                // 下单数量与查拆单数量不能整除时，最后一单取余
+                if (i == nowNumber - 1) {
+                    if ((StringValidater.toInteger(req.getQuantity())
+                            % specs.getSingleNumber()) != 0) {
+                        singleNumber = StringValidater.toInteger(
+                            req.getQuantity()) % specs.getSingleNumber();
+                    }
+                }
                 list.add(outOrderBO.saveOutOrder(cUser.getUserId(),
                     cUser.getNickname(), null, agent.getUserId(),
                     agent.getRealName(), null, null, null, pData, specs,
-                    price.getPrice(), specs.getSingleNumber(),
-                    req.getApplyNote(), EBoolean.NO.getCode(), req.getSigner(),
-                    req.getMobile(), req.getProvince(), req.getCity(),
-                    req.getArea(), req.getAddress(),
-                    EOutOrderStatus.Unpaid.getCode(),
+                    price.getPrice(), singleNumber, req.getApplyNote(),
+                    EBoolean.NO.getCode(), req.getSigner(), req.getMobile(),
+                    req.getProvince(), req.getCity(), req.getArea(),
+                    req.getAddress(), EOutOrderStatus.Unpaid.getCode(),
                     EOutOrderKind.C_ORDER.getCode()));
             }
         } else {

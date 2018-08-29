@@ -49,7 +49,7 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
 
     @Override
     public void refreshMiniCode(MiniCode data) {
-        data.setStatus(ECodeStatus.USE_YES.getCode());
+        data.setStatus(ECodeStatus.USE_NO.getCode());
         miniCodeDAO.update(data);
     }
 

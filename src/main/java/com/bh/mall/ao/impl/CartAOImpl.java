@@ -69,12 +69,6 @@ public class CartAOImpl implements ICartAO {
             AgentPrice price = agentPriceBO.getPriceByLevel(specsCode,
                 agent.getLevel());
 
-            // 检查起购
-            if (price.getStartNumber() >= StringValidater.toInteger(quantity)) {
-                throw new BizException("xn00000",
-                    "您购买的数量不能低于[" + price.getStartNumber() + "]");
-            }
-
             inOrderAO.checkLimitNumber(agent, specs, price,
                 StringValidater.toInteger(quantity));
         }

@@ -228,4 +228,14 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
     }
 
+    @Override
+    public void removeByAgent(String userId) {
+        Ware condition = new Ware();
+        condition.setUserId(userId);
+        List<Ware> list = wareDAO.selectList(condition);
+        for (Ware data : list) {
+            wareDAO.delete(data);
+        }
+    }
+
 }

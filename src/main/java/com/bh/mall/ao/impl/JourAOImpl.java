@@ -90,6 +90,11 @@ public class JourAOImpl implements IJourAO {
                         .equals(data.getBizType())) {
                 InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
                 data.setInOrder(inOrder);
+                // 取现订单
+            } else if (EBizType.AJ_QX.getCode().equals(data.getBizType())
+                    || EBizType.XXFK.getCode().equals(data.getBizType())) {
+                Withdraw withdraw = withdrawBO.getWithdraw(data.getRefNo());
+                data.setWithdraw(withdraw);
             }
         }
 
@@ -119,6 +124,11 @@ public class JourAOImpl implements IJourAO {
                         .equals(data.getBizType())) {
                 InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
                 data.setInOrder(inOrder);
+                // 取现订单
+            } else if (EBizType.AJ_QX.getCode().equals(data.getBizType())
+                    || EBizType.XXFK.getCode().equals(data.getBizType())) {
+                Withdraw withdraw = withdrawBO.getWithdraw(data.getRefNo());
+                data.setWithdraw(withdraw);
             }
         }
         return list;
