@@ -163,9 +163,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public String addPayGroup(OutOrder data, String payType) {
-        String payGroup = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
+    public String addPayGroup(OutOrder data, String payGroup, String payType) {
         data.setPayType(payType);
         data.setPayGroup(payGroup);
         outOrderDAO.addPayGroup(data);

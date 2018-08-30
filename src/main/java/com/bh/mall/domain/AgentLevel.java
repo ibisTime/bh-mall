@@ -38,9 +38,6 @@ public class AgentLevel extends ABaseDO {
     // 本等级授权是否需要公司审核
     private String isCompanyImpower;
 
-    // 授权单是否可以自发
-    private String isSend;
-
     // 本等级门槛款
     private Long minCharge;
 
@@ -226,14 +223,6 @@ public class AgentLevel extends ABaseDO {
 
     public void setIsWare(String isWare) {
         this.isWare = isWare;
-    }
-
-    public String getIsSend() {
-        return isSend;
-    }
-
-    public void setIsSend(String isSend) {
-        this.isSend = isSend;
     }
 
     public Integer getHighLevel() {

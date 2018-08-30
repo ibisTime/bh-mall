@@ -346,5 +346,10 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("123");
+        list.add("123");
+        System.out.println(list.toString());
+
     }
 }

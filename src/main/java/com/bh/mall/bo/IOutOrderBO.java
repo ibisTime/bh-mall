@@ -44,7 +44,7 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
     public List<OutOrder> queryToDealList(int pageNo, int pageSize,
             OutOrder condition);
 
-    public String addPayGroup(OutOrder data, String payType);
+    public String addPayGroup(OutOrder data, String payGroup, String payType);
 
     public OutOrder getOutOrderByPayGroup(String payGroup);
 

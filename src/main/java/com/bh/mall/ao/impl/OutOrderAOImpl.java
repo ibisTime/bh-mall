@@ -591,19 +591,19 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     private Object payWXH5(List<String> codeList, String applyUser,
             String payType, String callBackUrl) {
-        StringBuffer sb = new StringBuffer();
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.Order.getCode());
         StringBuffer refNo = new StringBuffer();
         Long amount = 0L;
         for (String code : codeList) {
             OutOrder data = outOrderBO.getOutOrder(code);
-            String payGroup = outOrderBO.addPayGroup(data, payType);
-            sb.append(payGroup);
+            outOrderBO.addPayGroup(data, payGroup, payType);
             refNo.append(data.getCode());
             amount = amount + data.getAmount();
         }
-        return weChatAO.getPrepayIdH5(applyUser, sb.toString(),
-            refNo.toString(), EBizType.AJ_GMCP.getCode(),
-            EBizType.AJ_GMCP.getValue(), amount, callBackUrl, payType);
+        return weChatAO.getPrepayIdH5(applyUser, payGroup, refNo.toString(),
+            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), amount,
+            callBackUrl, payType);
     }
 
     @Override

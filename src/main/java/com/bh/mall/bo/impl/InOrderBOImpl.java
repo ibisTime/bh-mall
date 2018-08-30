@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
@@ -110,10 +111,10 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     }
 
     @Override
-    public String addPayGroup(InOrder inOrder) {
-        String payGroup = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
+    public String addPayGroup(InOrder inOrder, String payGroup,
+            String payType) {
         inOrder.setPayGroup(payGroup);
+        inOrder.setPayType(payType);
         inOrderDAO.addPayGroup(inOrder);
         return payGroup;
     }
@@ -135,6 +136,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     @Override
     public void paySuccess(InOrder data) {
         Date date = new Date();
+        data.setPayAmount(data.getAmount());
         data.setPayDatetime(date);
         data.setStatus(EInOrderStatus.Received.getCode());
         inOrderDAO.paySuccess(data);
@@ -156,18 +158,17 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     }
 
     @Override
-    public Long getInOrderByUser(String userId, Date applyDatetime) {
+    public boolean getInOrderByUser(String userId, Date applyDatetime) {
 
         InOrder condition = new InOrder();
         condition.setApplyUser(userId);
         condition.setStartDatetime(applyDatetime);
 
         List<InOrder> list = inOrderDAO.selectList(condition);
-        Long amount = 0L;
-        for (InOrder inOrder : list) {
-            amount = amount + inOrder.getAmount();
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
         }
-        return amount;
+        return false;
     }
 
     @Override

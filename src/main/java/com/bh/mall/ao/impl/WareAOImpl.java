@@ -258,26 +258,13 @@ public class WareAOImpl implements IWareAO {
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
 
         // 是否完成授权单
-        Long allAmount = data.getPrice()
-                * StringValidater.toInteger(req.getQuantity());
-
         if (outOrderBO.checkImpowerOrder(agent.getUserId(),
             agent.getImpowerDatetime())) {
-            if (agentLevel.getAmount() > allAmount) {
-                throw new BizException("xn00000", agentLevel.getName()
-                        + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
-            }
             kind = EOutOrderKind.Impower_Order.getCode();
 
             // 是否完成升级单
         } else if (sjFormBO.checkIsSj(agent.getUserId())) {
-
             kind = EOutOrderKind.Upgrade_Order.getCode();
-            if (agentLevel.getAmount() > allAmount) {
-                throw new BizException("xn00000", agentLevel.getName()
-                        + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
-            }
-
         }
 
         // 产品不包邮，计算运费
@@ -309,7 +296,8 @@ public class WareAOImpl implements IWareAO {
             for (int i = 0; i < orderNumber; i++) {
 
                 if (i == orderNumber - 1) {
-                    if (orderNumber > 0) {
+                    if (StringValidater.toInteger(req.getQuantity())
+                            % psData.getSingleNumber() > 0) {
                         quantity = StringValidater.toInteger(req.getQuantity())
                                 % psData.getSingleNumber();
                     }
@@ -320,12 +308,6 @@ public class WareAOImpl implements IWareAO {
                     kind = EOutOrderKind.Pick_Up.getCode();
                 }
                 amount = amount + psData.getSingleNumber() * data.getPrice();
-                // String code = outOrderBO.pickUpGoods(data, psData, agent,
-                // product.getPic(), teamLeader.getRealName(),
-                // sysUser.getUserId(), sysUser.getRealName(),
-                // EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
-                // req.getProvince(), req.getCity(), req.getArea(),
-                // req.getAddress(), kind);
 
                 String code = outOrderBO.pickUpGoods(data.getProductCode(),
                     data.getProductName(), product.getPic(),
@@ -434,21 +416,20 @@ public class WareAOImpl implements IWareAO {
                     agent.getUserId(), agent.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
-                Long orderAmount = inOrderBO.getInOrderByUser(agent.getUserId(),
-                    agent.getImpowerDatetime());
 
                 // 红线设置为零视为无限制
                 if (0 < agentLevel.getRedAmount()
                         && whAmount < agentLevel.getRedAmount()) {
                     // 订单金额
-                    readAmount = readAmount - whAmount;
                     result = ECheckStatus.RED_LOW.getCode();
 
                     // 没有过任何订单购买云仓
-                } else if (orderAmount == 0) {
+                } else if (inOrderBO.getInOrderByUser(agent.getUserId(),
+                    agent.getImpowerDatetime())) {
                     readAmount = agentLevel.getAmount();
                     result = ECheckStatus.RED_LOW.getCode();
                 }
+
                 // 未开启云仓，只检查是否完成授权单
             } else if (0 != agentLevel.getAmount()
                     && outOrderBO.checkImpowerOrder(agent.getUserId(),

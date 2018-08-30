@@ -214,7 +214,7 @@ public class YxFormAOImpl implements IYxFormAO {
 
         // 更新最后一条轨迹
         Agent agent = agentBO.getAgent(userId);
-        agentBO.refreshYx(agent, EAgentStatus.ADD_INFO.getCode(),
+        agentBO.refreshYx(agent, EYxFormStatus.ACCEPT.getCode(),
             agent.getUserId(), agent.getRealName(), logCode);
 
         // 删除意向单

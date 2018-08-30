@@ -12,7 +12,6 @@
 		<result column="is_real_name" property="isRealName"/>
 		<result column="is_company_impower" property="isCompanyImpower"/>
 		<result column="is_ware" property="isWare"/>
-		<result column="is_send" property="isSend"/>
 		<result column="min_charge" property="minCharge"/>
 		
 		<result column="amount" property="amount"/>
@@ -39,10 +38,6 @@
 			<if test="isWare != null and isWare !=''">
 				AND t.is_ware = #{isWare}
 			</if>
-			<if test="isSend != null and isSend !=''">
-				AND t.is_send = #{isSend}
-			</if>
-			
 			
 			<if test="code != null and code != ''">
 				AND t.code=#{code}
@@ -88,7 +83,6 @@
 		,t.min_charge_amount
 		,t.min_surplus
 		,t.is_ware
-		,t.is_send
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -128,7 +122,6 @@
 		
 		,min_surplus = #{minSurplus}
 		,is_ware = #{isWare}
-		,is_send = #{isSend}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
