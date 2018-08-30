@@ -220,4 +220,13 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         double d = i / j;
         System.out.println(d);
     }
+
+    @Override
+    public String addPayGroup(InOrder inOrder) {
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.Order.getCode());
+        inOrder.setPayGroup(payGroup);
+        inOrderDAO.addPayGroup(inOrder);
+        return payGroup;
+    }
 }

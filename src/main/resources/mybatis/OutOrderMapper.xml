@@ -34,6 +34,7 @@
 		<result column="level" property="level" />
 		<result column="real_name" property="realName" />
 		<result column="team_name" property="teamName" />
+		<result column="team_leader" property="teamLeader" />
 		<result column="apply_datetime" property="applyDatetime" />
 		
 		<result column="apply_note" property="applyNote" />
@@ -65,6 +66,16 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>
+			<if test="realName != null and realName != '' ">
+				AND t.real_name LIKE "%"#{realName}"%"
+			</if>
+			<if test="teamName != null and teamName != '' ">
+				AND t.team_name LIKE "%"#{teamName}"%"
+			</if>
+			
 			<choose>
 				<when test="kind != null and kind != '' ">
 					AND t.kind = #{kind}
@@ -258,7 +269,7 @@
 		,#{realName}
 		,#{teamName}	
 		,#{highUserId}
-		,#{teamName}	
+		,#{teamLeader}	
 		,#{applyDatetime}
 		,#{applyNote}
 		,#{signer}

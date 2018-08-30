@@ -1,5 +1,6 @@
 package com.bh.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +40,9 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         data.setCity(sqForm.getCity());
         data.setArea(sqForm.getArea());
         data.setAddress(sqForm.getAddress());
-        data.setImpowerDatetime(sqForm.getImpowerDatetime());
+
+        Date date = new Date();
+        data.setImpowerDatetime(date);
 
         agentReportDAO.insert(data);
 

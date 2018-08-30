@@ -168,6 +168,9 @@ public class Agent extends ABaseDO {
     // 介绍人姓名
     private String introduceName;
 
+    // 介绍人姓名
+    private String introduceMobile;
+
     // 门槛余额
     private Long mkAmount;
 
@@ -692,6 +695,14 @@ public class Agent extends ABaseDO {
 
     public void setReNumber(Long reNumber) {
         this.reNumber = reNumber;
+    }
+
+    public String getIntroduceMobile() {
+        return introduceMobile;
+    }
+
+    public void setIntroduceMobile(String introduceMobile) {
+        this.introduceMobile = introduceMobile;
     }
 
 }

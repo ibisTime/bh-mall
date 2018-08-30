@@ -280,6 +280,8 @@ public class WareAOImpl implements IWareAO {
         // 订单归属人
         SYSUser sysUser = sysUserBO.getSYSUser();
 
+        StringBuffer sb = new StringBuffer();
+
         // 订单拆单
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
             int orderNumber = StringValidater.toInteger(req.getQuantity())
@@ -319,10 +321,8 @@ public class WareAOImpl implements IWareAO {
                     req.getProvince(), req.getCity(), req.getArea(),
                     req.getAddress(), kind);
 
-                // 减少云仓库存
-                wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
-                    -StringValidater.toInteger(req.getQuantity()),
-                    ESpecsLogType.Order, ESpecsLogType.Order.getValue(), code);
+                sb.append(code);
+                sb.append(",");
             }
         } else {
             String code = outOrderBO.pickUpGoods(data.getProductCode(),
@@ -335,11 +335,20 @@ public class WareAOImpl implements IWareAO {
                 EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
                 req.getProvince(), req.getCity(), req.getArea(),
                 req.getAddress(), kind);
-            // 减少云仓库存
-            wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
-                -StringValidater.toInteger(req.getQuantity()),
-                ESpecsLogType.Order, ESpecsLogType.Order.getValue(), code);
+            sb.append(code);
         }
+
+        String refNo = null;
+        if (sb.lastIndexOf(",") > 0) {
+            refNo = sb.substring(0, sb.lastIndexOf(","));
+        } else {
+            refNo = sb.toString();
+        }
+
+        // 减少云仓库存
+        wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
+            -StringValidater.toInteger(req.getQuantity()), ESpecsLogType.Order,
+            ESpecsLogType.Order.getValue(), refNo);
 
     }
 

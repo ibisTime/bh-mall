@@ -76,6 +76,12 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
 
     @Override
     public List<SYSRole> querySYSRoleList(SYSRole condition) {
+        List<SYSRole> list = sysRoleBO.querySYSRoleList(condition);
+        for (SYSRole data : list) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
+
         return sysRoleBO.querySYSRoleList(condition);
     }
 
@@ -93,6 +99,9 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         if (!sysRoleBO.isSYSRoleExist(code)) {
             throw new BizException("lh4000", "角色编号不存在！");
         }
-        return sysRoleBO.getSYSRole(code);
+        SYSRole data = sysRoleBO.getSYSRole(code);
+        SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+        data.setUpdateName(sysUser.getRealName());
+        return data;
     }
 }

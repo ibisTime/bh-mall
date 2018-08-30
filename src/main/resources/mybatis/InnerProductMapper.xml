@@ -109,7 +109,7 @@
 	<update id="update_innerProduct" parameterType="innerProduct">
 		UPDATE tbh_inner_product 
 		SET 
-		,name = #{name}
+		name = #{name}
 		,pic = #{pic}
 		,adv_pic = #{advPic}
 		,slogan = #{slogan}

@@ -57,4 +57,6 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
     // 删除未支付订单
     public void removeOrder(InOrder data);
 
+    public String addPayGroup(InOrder inOrder);
+
 }

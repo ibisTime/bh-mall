@@ -181,11 +181,13 @@ public class JourAOImpl implements IJourAO {
             list.add(EBizType.AJ_TJJL_OUT.getCode());
             list.add(EBizType.AJ_TJJL_IN.getCode());
             condition.setBizTypeList(list);
+            condition.setBizType(null);
         } else if (EBizType.AJ_CHJL.getCode().equals(condition.getBizType())) {
             List<String> list = new ArrayList<String>();
             list.add(EBizType.AJ_CHJL_OUT.getCode());
             list.add(EBizType.AJ_CHJL_IN.getCode());
             condition.setBizTypeList(list);
+            condition.setBizType(null);
         }
 
         Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);

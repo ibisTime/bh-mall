@@ -392,12 +392,6 @@ public class SqFormAOImpl implements ISqFormAO {
                     EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
                     -account.getAmount());
 
-                // if (StringUtils.isNotBlank(agent.getFromUserId())) {
-                // agent.setStatus(EAgentStatus.IMPOWERO_INFO.getCode());
-                // } else {
-                // agent.setStatus(EAgentStatus.MIND.getCode());
-                // }
-
                 agent.setStatus(EAgentStatus.MIND.getCode());
 
                 // 清空手机号等信息，防止重新申请时重复

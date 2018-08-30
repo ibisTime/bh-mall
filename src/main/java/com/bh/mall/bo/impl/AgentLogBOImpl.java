@@ -112,7 +112,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setMobile(agent.getMobile());
 
         data.setLevel(sjForm.getLevel());
-        data.setApplyLevel(data.getApplyLevel());
+        data.setApplyLevel(sjForm.getApplyLevel());
         data.setToUserId(sjForm.getToUserId());
         data.setTeamName(sjForm.getTeamName());
         data.setIntroducer(agent.getIntroducer());

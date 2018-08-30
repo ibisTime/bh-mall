@@ -362,7 +362,7 @@ public class ProductAOImpl implements IProductAO {
 
             // 产品规格
             Specs psCondition = new Specs();
-            psCondition.setLevel(condition.getLevel());
+            psCondition.setProductCode(product.getCode());
             psCondition.setIsBuy(EBoolean.YES.getCode());
             psCondition.setLevel(condition.getLevel());
             List<Specs> psList = specsBO.querySpecsListByB(psCondition);

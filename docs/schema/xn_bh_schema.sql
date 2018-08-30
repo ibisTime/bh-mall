@@ -977,7 +977,7 @@ DROP TABLE IF EXISTS `tbh_ware_log`;
 
 CREATE TABLE `tbh_ware_log` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '关联编号',
+  `ref_no` text COMMENT '关联编号',
   `ware_code` varchar(32) DEFAULT NULL COMMENT '所属云仓编号',
   `type` varchar(4) DEFAULT NULL COMMENT '类型(置换，购买/出货)',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',

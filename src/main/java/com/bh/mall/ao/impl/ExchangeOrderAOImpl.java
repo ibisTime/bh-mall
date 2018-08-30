@@ -249,7 +249,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         Product changeData = productBO.getProduct(data.getChangeProductCode());
         Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
 
-        if (0 < (changeSpecs.getStockNumber() - data.getCanChangeQuantity())) {
+        if (0 > (changeSpecs.getStockNumber() - canChangeQuantity)) {
             throw new BizException("xn00000", "产品[" + changeData.getName() + "-"
                     + changeSpecs.getName() + "]的数量不足");
         }
@@ -334,6 +334,9 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             .toInteger(req.getQuantity())) {
             throw new BizException("xn000", "该规格的产品数量不足");
         }
+        if (req.getProductSpecsCode().equals(req.getChangeSpecsCode())) {
+            throw new BizException("xn000", "相同规格之间不能置换");
+        }
 
         Specs specs = specsBO.getSpecs(req.getProductSpecsCode());
 
@@ -347,8 +350,8 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         ExchangeOrder cpData = new ExchangeOrder();
         cpData.setPrice(specsPrice.getPrice());
         cpData.setQuantity(StringValidater.toInteger(req.getQuantity()));
-        Long amount = AmountUtil.eraseLiUp(specsPrice.getPrice()
-                * StringValidater.toInteger(req.getQuantity()));
+        Long amount = specsPrice.getPrice()
+                * StringValidater.toInteger(req.getQuantity());
         cpData.setAmount(amount);
         int canChangeQuantity = 0;
         if (changeSpecsPrice.getChangePrice() == null

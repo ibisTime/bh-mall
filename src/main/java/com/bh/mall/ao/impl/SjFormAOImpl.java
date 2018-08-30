@@ -64,6 +64,7 @@ public class SjFormAOImpl implements ISjFormAO {
      * 4、检查升至申请等级门槛是否需要清零
      */
     @Override
+    @Transactional
     public void applySjForm(String userId, String newLevel, String payPdf,
             String payAmount, String teamName, String idKind, String idNo,
             String idHand) {
@@ -100,9 +101,9 @@ public class SjFormAOImpl implements ISjFormAO {
             .getAgentByUserReferee(data.getUserId());
         if (agenthLevel.getReNumber() > userReferee.size()) {
             if (StringValidater.toLong(payAmount) < agenthLevel
-                .getMinChargeAmount()) {
-                throw new BizException("xn00000", "您的直推人数不满足半门槛人数，打款金额不能低于"
-                        + StringValidater.toLong(payAmount) / 1000);
+                .getMinCharge()) {
+                throw new BizException("xn00000", "您的直推人数不满足半门槛人数，打款金额不能低于["
+                        + agenthLevel.getMinCharge() / 1000 + "]元");
             }
         }
 
@@ -126,13 +127,14 @@ public class SjFormAOImpl implements ISjFormAO {
                 if (StringUtils.isBlank(idNo) || StringUtils.isBlank(idHand)) {
                     throw new BizException("xn00000", "升至该等级需完成实名认证");
                 }
+
+                // 校验身份证号
+                IdCardChecker idCardChecker = new IdCardChecker(idNo);
+                if (!idCardChecker.validate()) {
+                    throw new BizException("xn00000", "请输入正确的身份证号");
+                }
             }
 
-            // 校验身份证号
-            IdCardChecker idCardChecker = new IdCardChecker(idNo);
-            if (!idCardChecker.validate()) {
-                throw new BizException("xn00000", "请输入正确的身份证号");
-            }
         }
 
         String status = ESjFormStatus.TO_UPGRADE.getCode();

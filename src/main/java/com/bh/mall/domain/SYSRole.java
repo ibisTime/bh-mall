@@ -34,6 +34,9 @@ public class SYSRole extends ABaseDO {
 
     // *****************DB****************
 
+    // 修改人名称
+    private String updateName;
+
     public String getSystemCode() {
         return systemCode;
     }
@@ -81,4 +84,13 @@ public class SYSRole extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
 }

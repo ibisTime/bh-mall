@@ -48,8 +48,8 @@
 			<if test="specsCode != null and specsCode != '' ">
 				AND t.specs_code = #{specsCode}
 			</if>
-			<if test="keyword != null and keyword != '' ">
-				AND (t.product_name like "%"#{keyword}"%" or t.real_name like "%"#{keyword}"%")
+			<if test="productName != null and productName != '' ">
+				AND t.product_name like "%"#{productName}"%"
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}

@@ -395,6 +395,7 @@ public class AgentAOImpl implements IAgentAO {
             if (StringUtils.isNotBlank(data.getIntroducer())) {
                 Agent introducer = agentBO.getAgent(data.getIntroducer());
                 data.setIntroduceName(introducer.getRealName());
+                data.setIntroduceMobile(introducer.getMobile());
             }
 
             // 上级转义
@@ -446,6 +447,7 @@ public class AgentAOImpl implements IAgentAO {
             if (StringUtils.isNotBlank(data.getIntroducer())) {
                 Agent introducer = agentBO.getAgent(data.getIntroducer());
                 data.setIntroduceName(introducer.getRealName());
+                data.setIntroduceMobile(introducer.getMobile());
             }
 
             // 上级转义
@@ -491,6 +493,7 @@ public class AgentAOImpl implements IAgentAO {
             if (StringUtils.isNotBlank(data.getIntroducer())) {
                 Agent introducer = agentBO.getAgent(data.getIntroducer());
                 data.setUserRefreeName(introducer.getRealName());
+                data.setIntroduceMobile(introducer.getMobile());
             }
 
             // 上级转义

@@ -1066,8 +1066,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // 非云仓发货初始状态
         String status = EOutOrderStatus.TO_APPROVE.getCode();
         // 初始状态是未支付
-        if (null == data.getPayAmount()) {
+        if (!EBoolean.YES.getCode().equals(data.getIsWareSend())
+                && null == data.getPayAmount()) {
             status = EOutOrderStatus.Unpaid.getCode();
+        } else {
+            status = EOutOrderStatus.TO_APPROVE.getCode();
         }
 
         if (EResult.Result_YES.getCode().equals(result)) {

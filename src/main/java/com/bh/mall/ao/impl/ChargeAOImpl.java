@@ -59,9 +59,9 @@ public class ChargeAOImpl implements IChargeAO {
         if (CollectionUtils.isEmpty(charge)) {
             // 首次不能低于授权金额
             AgentLevel impower = agentLevelBO.getAgentByLevel(agent.getLevel());
-            if (impower.getMinCharge() > amount) {
+            if (impower.getMinChargeAmount() > amount) {
                 throw new BizException("xn000000",
-                    "授权金额不能低于[" + impower.getMinCharge() / 1000 + "]");
+                    "授权金额不能低于[" + impower.getMinChargeAmount() / 1000 + "]");
             }
 
         }
@@ -125,8 +125,7 @@ public class ChargeAOImpl implements IChargeAO {
                     data.setPayUserName(sysUser.getRealName());
                 }
 
-            } else if (EChannelType.WeChat_H5.getCode().equals(data.getType())
-                    && StringUtils.isNotEmpty(data.getPayUser())) {
+            } else if (StringUtils.isNotBlank(data.getPayUser())) {
                 Agent agent = agentBO.getAgent(data.getPayUser());
                 data.setPayUserName(agent.getRealName());
             }

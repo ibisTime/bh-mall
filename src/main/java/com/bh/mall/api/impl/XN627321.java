@@ -1,5 +1,7 @@
 package com.bh.mall.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
@@ -27,6 +29,9 @@ public class XN627321 extends AProcessor {
         Agent condition = new Agent();
         condition.setKeyWord(req.getKeyword());
         condition.setHighUserId(req.getUserId());
+        if (StringUtils.isBlank(req.getUserId())) {
+            condition.setLevel(1);
+        }
         condition.setStatus(req.getStatus());
         return agentAO.queryAgentJgList(condition);
     }
