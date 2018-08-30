@@ -47,6 +47,9 @@ public class SYSConfig extends ABaseDO {
     // 查询key
     private String ckeyForQuery;
 
+    // 更新人名称
+    private String updateName;
+
     public Long getId() {
         return id;
     }
@@ -110,4 +113,13 @@ public class SYSConfig extends ABaseDO {
     public void setCkeyForQuery(String ckeyForQuery) {
         this.ckeyForQuery = ckeyForQuery;
     }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
 }

@@ -191,11 +191,11 @@ public class InOrderAOImpl implements IInOrderAO {
 
             String orderCode = inOrderBO.saveInOrder(applyAgent.getUserId(),
                 applyAgent.getRealName(), applyAgent.getLevel(),
-                applyAgent.getTeamName(), applyAgent.getHighUserId(),
-                toUserName, teamLeader.getRealName(), pData.getCode(),
-                pData.getName(), specs.getCode(), specs.getName(),
-                pData.getAdvPic(), agentPrice.getPrice(), cart.getQuantity(),
-                applyNote);
+                applyAgent.getHighUserId(), toUserName,
+                applyAgent.getTeamName(), teamLeader.getRealName(),
+                pData.getCode(), pData.getName(), specs.getCode(),
+                specs.getName(), pData.getAdvPic(), agentPrice.getPrice(),
+                cart.getQuantity(), applyNote);
             list.add(orderCode);
 
             amount = amount + cart.getQuantity() * agentPrice.getPrice();
@@ -213,6 +213,17 @@ public class InOrderAOImpl implements IInOrderAO {
                 throw new BizException("xn0000",
                     "授权单的金额为[" + agentLevel.getAmount() / 1000 + "]，您还需购买"
                             + (agentLevel.getAmount() - amount) / 1000);
+            }
+        }
+
+        // 检查门槛余额
+        Account mkAccount = accountBO.getAccountNocheck(applyAgent.getUserId(),
+            ECurrency.MK_CNY.getCode());
+        if (mkAccount.getAmount() > agentLevel.getMinSurplus()) {
+            if (agentLevel.getAmount() > amount) {
+                throw new BizException("xn0000",
+                    "剩余门槛不能大于[" + agentLevel.getMinSurplus() / 1000
+                            + "]元，目前余额还有[" + amount / 1000 + "]元");
             }
         }
 
@@ -766,7 +777,8 @@ public class InOrderAOImpl implements IInOrderAO {
                     inOrder.getSpecsCode());
                 // 上级云仓没有该产品
                 if (null == toWare) {
-                    throw new BizException("xn00000", "上级代理云仓中没有该产品");
+                    throw new BizException("xn00000",
+                        "上级代理云仓中没有产品：[" + pData.getName() + "]");
                 } else {
                     // 改变上级云仓
                     wareBO.changeWare(toWare.getCode(),
@@ -777,7 +789,7 @@ public class InOrderAOImpl implements IInOrderAO {
             } else {
                 // 无上级代理,扣减产品实际库存
                 specsBO.refreshRepertory(pData.getName(), psData,
-                    ESpecsLogType.Order.getCode(), -number, agent.getUserId(),
+                    ESpecsLogType.Order.getCode(), number, agent.getUserId(),
                     inOrder.getApplyNote());
             }
         }
@@ -793,8 +805,8 @@ public class InOrderAOImpl implements IInOrderAO {
             DateUtil.getTodayEnd());
         // 日限购
         if (0 != price.getDailyNumber() && number > price.getDailyNumber()) {
-            throw new BizException("xn00000", "您本日已购[" + number + "],还能购买["
-                    + (price.getDailyNumber() - number) + "]");
+            throw new BizException("xn00000",
+                "您已购[" + number + "],本日最多能购买[" + price.getDailyNumber() + "]");
         }
 
         // 本周已购数量
@@ -802,8 +814,8 @@ public class InOrderAOImpl implements IInOrderAO {
             DateUtil.getWeeklyEnd());
         // 周限购
         if (0 != price.getWeeklyNumber() && number > price.getWeeklyNumber()) {
-            throw new BizException("xn00000", "您本周已购[" + number + "],还能购买["
-                    + (price.getWeeklyNumber() - number) + "]");
+            throw new BizException("xn00000",
+                "您已购[" + number + "],本日最多能购买[" + price.getWeeklyNumber() + "]");
         }
 
         // 本月已购数量
@@ -812,8 +824,8 @@ public class InOrderAOImpl implements IInOrderAO {
         // 月限购
         if (0 != price.getMonthlyNumber()
                 && number > price.getMonthlyNumber()) {
-            throw new BizException("xn00000", "您本月已购[" + number + "],还能购买["
-                    + (price.getMonthlyNumber() - number) + "]");
+            throw new BizException("xn00000", "您已购[" + number + "],本月最多能购买["
+                    + price.getMonthlyNumber() + "]");
         }
     }
 

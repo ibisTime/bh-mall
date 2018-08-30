@@ -19,6 +19,9 @@ public class XN627320Req extends APageReq {
     // （选填）用户名
     private String realName;
 
+    // 等级
+    private String level;
+
     // （选填）备注
     private String keyword;
 
@@ -44,6 +47,14 @@ public class XN627320Req extends APageReq {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

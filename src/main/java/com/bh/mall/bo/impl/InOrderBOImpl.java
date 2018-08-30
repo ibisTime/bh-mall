@@ -1,6 +1,5 @@
 package com.bh.mall.bo.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -157,12 +156,12 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     }
 
     @Override
-    public Long getInOrderByUser(String userId) {
-        List<String> statusList = new ArrayList<String>();
-        statusList.add(EInOrderStatus.Received.getCode());
+    public Long getInOrderByUser(String userId, Date applyDatetime) {
 
         InOrder condition = new InOrder();
         condition.setApplyUser(userId);
+        condition.setStartDatetime(applyDatetime);
+
         List<InOrder> list = inOrderDAO.selectList(condition);
         Long amount = 0L;
         for (InOrder inOrder : list) {

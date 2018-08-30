@@ -25,13 +25,13 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         AgentReport data = new AgentReport();
         data.setUserId(sqForm.getUserId());
         data.setRealName(sqForm.getRealName());
-        data.setTeamName(agent.getTeamName());
+        data.setTeamName(sqForm.getTeamName());
         data.setWxId(sqForm.getWxId());
         data.setMobile(sqForm.getMobile());
 
         data.setLevel(sqForm.getApplyLevel());
         data.setUserReferee(sqForm.getReferrer());
-        data.setIntroducer(agent.getIntroducer());
+        data.setIntroducer(sqForm.getIntroducer());
         data.setHighUserId(agent.getHighUserId());
         data.setManager(agent.getManager());
 
@@ -60,13 +60,13 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
             Agent agent) {
         data.setUserId(sqForm.getUserId());
         data.setRealName(sqForm.getRealName());
-        data.setTeamName(agent.getTeamName());
+        data.setTeamName(sqForm.getTeamName());
         data.setWxId(sqForm.getWxId());
         data.setMobile(sqForm.getMobile());
 
         data.setLevel(agent.getLevel());
         data.setUserReferee(sqForm.getReferrer());
-        data.setIntroducer(agent.getIntroducer());
+        data.setIntroducer(sqForm.getIntroducer());
         data.setHighUserId(agent.getHighUserId());
         data.setManager(agent.getManager());
 

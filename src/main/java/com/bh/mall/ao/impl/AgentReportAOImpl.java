@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.bh.mall.ao.IAgentReportAO;
 import com.bh.mall.bo.IAccountBO;
@@ -52,9 +53,10 @@ public class AgentReportAOImpl implements IAgentReportAO {
                 // 推荐/介绍人转义
                 userName = agentBO.getAgent(agentReport.getUserReferee());
                 agentReport.setUserRefereeName(userName.getRealName());
+            }
+            if (StringUtils.isNotBlank(agentReport.getIntroducer())) {
                 userName = agentBO.getAgent(agentReport.getIntroducer());
                 agentReport.setIntroduceName(userName.getRealName());
-
             }
 
             // 可提现账户余额
@@ -76,9 +78,11 @@ public class AgentReportAOImpl implements IAgentReportAO {
                 // 推荐/介绍人转义
                 userName = agentBO.getAgent(agentReport.getUserReferee());
                 agentReport.setUserRefereeName(userName.getRealName());
+            }
+
+            if (StringUtils.isNotBlank(agentReport.getIntroducer())) {
                 userName = agentBO.getAgent(agentReport.getIntroducer());
                 agentReport.setIntroduceName(userName.getRealName());
-
             }
 
             // 可提现账户余额
@@ -92,7 +96,17 @@ public class AgentReportAOImpl implements IAgentReportAO {
 
     @Override
     public AgentReport getAgentReport(String code) {
-        return agentReportBO.getAgentReport(code);
+        AgentReport data = agentReportBO.getAgentReport(code);
+        if (StringUtils.isNotBlank(data.getUserReferee())) {
+            // 推荐/介绍人转义
+            Agent userReferee = agentBO.getAgent(data.getUserReferee());
+            data.setUserRefereeName(userReferee.getRealName());
+        }
+        if (StringUtils.isNotBlank(data.getIntroducer())) {
+            Agent introducer = agentBO.getAgent(data.getIntroducer());
+            data.setIntroduceName(introducer.getRealName());
+        }
+        return data;
     }
 
     @Override
@@ -110,6 +124,13 @@ public class AgentReportAOImpl implements IAgentReportAO {
 
         Paginable<AgentReport> page = agentReportBO.getPaginable(start, limit,
             condition);
+        long refreeAward = 0L;
+        if (!CollectionUtils.isEmpty(page.getList())) {
+            AgentReport report = page.getList().get(0);
+            refreeAward = report.getRefreeAward();
+
+        }
+
         Agent userName = null;
         for (AgentReport agentReport : page.getList()) {
             if (StringUtils.isNotBlank(agentReport.getUserReferee())) {
@@ -129,7 +150,7 @@ public class AgentReportAOImpl implements IAgentReportAO {
             agentReport.setYjAmount(account.getAmount());
         }
 
-        XN627852Res res = new XN627852Res(page.getList(), count);
+        XN627852Res res = new XN627852Res(page.getList(), count, refreeAward);
         return res;
     }
 }

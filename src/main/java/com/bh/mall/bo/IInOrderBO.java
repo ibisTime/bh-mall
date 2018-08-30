@@ -41,7 +41,7 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
     public List<InOrder> getProductQuantity(String userId, Date startDatetime,
             Date endDatetime);
 
-    public Long getInOrderByUser(String userId);
+    public Long getInOrderByUser(String userId, Date applyDatetime);
 
     // 提货
     public String pickUpGoods(String productCode, String productName,

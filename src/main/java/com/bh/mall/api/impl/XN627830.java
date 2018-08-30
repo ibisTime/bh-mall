@@ -33,6 +33,7 @@ public class XN627830 extends AProcessor {
         condition.setKeyword(req.getKeyword());
         condition.setProductCode(req.getProductCode());
         condition.setProductName(req.getProductName());
+        condition.setSpecsCode(req.getSpecsCode());
 
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));

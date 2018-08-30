@@ -196,11 +196,14 @@ public class SjFormAOImpl implements ISjFormAO {
                 status = ESjFormStatus.UPGRADE_COMPANY.getCode();
             } else {
                 status = ESjFormStatus.THROUGH_YES.getCode();
-                // 增加账户余额
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, sjForm.getUserId(),
-                    EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
-                    sjForm.getPayAmount());
+                if (null != sjForm.getPayAmount()
+                        && 0 != sjForm.getPayAmount()) {
+                    // 增加账户余额
+                    accountBO.changeAmount(account.getAccountNumber(),
+                        EChannelType.NBZ, null, null, sjForm.getUserId(),
+                        EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
+                        sjForm.getPayAmount());
+                }
 
                 // 更新云仓价格
                 wareBO.changeWarePrice(sjForm.getUserId(),
@@ -244,11 +247,13 @@ public class SjFormAOImpl implements ISjFormAO {
             Account account = accountBO.getAccountByUser(sjForm.getUserId(),
                 ECurrency.MK_CNY.getCode());
             status = ESjFormStatus.THROUGH_YES.getCode();
-            // 增加账户余额
-            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, null, sjForm.getUserId(), EBizType.AJ_QKYE,
-                EBizType.AJ_QKYE.getValue(), sjForm.getPayAmount());
-
+            if (null != sjForm.getPayAmount() && 0 != sjForm.getPayAmount()) {
+                // 增加账户余额
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.NBZ, null, null, sjForm.getUserId(),
+                    EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
+                    sjForm.getPayAmount());
+            }
             // 更新云仓价格
             wareBO.changeWarePrice(sjForm.getUserId(), sjForm.getApplyLevel());
 

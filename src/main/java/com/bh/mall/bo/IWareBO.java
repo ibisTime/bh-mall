@@ -47,4 +47,6 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public void removeByAgent(String userId);
 
+    public void removeWare(Ware data);
+
 }

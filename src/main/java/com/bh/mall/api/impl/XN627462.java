@@ -41,6 +41,8 @@ public class XN627462 extends AProcessor {
         if (EChannelType.WeChat_H5.getCode().equals(req.getChannelType())) {
             String payGroup = OrderNoGenerater
                 .generate(EGeneratePrefix.Charge.getCode());
+            System.out
+                .println("回调地址：" + PropertiesUtil.Config.WECHAT_H5_BACKURL);
             return weChatAO.toPrepayIdH5(req.getApplyUser(),
                 req.getAccountNumber(), payGroup, req.getApplyUser(),
                 EBizType.AJ_CZ.getCode(), "微信H5支付充值", transAmount,

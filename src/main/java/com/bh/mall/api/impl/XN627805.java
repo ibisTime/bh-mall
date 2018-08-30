@@ -17,13 +17,13 @@ import com.bh.mall.spring.SpringContextHolder;
  */
 public class XN627805 extends AProcessor {
 
-    private IWareAO wareAO = SpringContextHolder
-        .getBean(IWareAO.class);
+    private IWareAO wareAO = SpringContextHolder.getBean(IWareAO.class);
 
     private XN627805Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
+
         return wareAO.checkAmount(req.getUserId());
     }
 

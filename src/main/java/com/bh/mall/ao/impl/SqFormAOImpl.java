@@ -207,7 +207,7 @@ public class SqFormAOImpl implements ISqFormAO {
             if (!ESqFormStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
-            if (agent.getUserId().equals(req.getUserId())) {
+            if (agent.getUserId().equals(introducer)) {
                 throw new BizException("xn0000", "介绍人不能填自己哦！");
             }
             if (agent.getLevel() <= StringValidater
@@ -231,7 +231,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         AgentLevel agentLevel = agentLevelBO
-            .getAgentByLevel(log.getApplyLevel());
+            .getAgentByLevel(StringValidater.toInteger(req.getApplyLevel()));
         // 校验身份证
         if (EBoolean.YES.getCode().equals(agentLevel.getIsRealName())) {
             IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
@@ -588,7 +588,7 @@ public class SqFormAOImpl implements ISqFormAO {
         Account cAccount = accountBO.getAccountByUser(agent.getUserId(),
             ECurrency.C_CNY.getCode());
         if (cAccount.getAmount() > 0) {
-            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
+            throw new BizException("xn000", "您的微店账户中还有余额，请取出后再申请退出");
         }
 
         // 是否有未完成的订单
@@ -666,11 +666,12 @@ public class SqFormAOImpl implements ISqFormAO {
                     EAgentLevel.ONE.getCode()) != sqForm.getApplyLevel()) {
                     fromUserId = sqForm.getToUserId();
                 }
+
                 accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
                     buser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
                     EBizType.AJ_JSJL,
                     "介绍代理[" + sqForm.getRealName() + "]的"
-                            + EBizType.AJ_JSJL.getCode() + "支出",
+                            + EBizType.AJ_JSJL.getValue() + "支出",
                     "介绍代理[" + sqForm.getRealName() + "]的"
                             + EBizType.AJ_JSJL.getValue() + "收入",
                     sqForm.getUserId());

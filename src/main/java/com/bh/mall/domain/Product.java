@@ -80,7 +80,7 @@ public class Product extends ABaseDO {
     private List<TjAward> directAwardList;
 
     // 各级代理云仓该产品最小规格数量
-    private Integer whNumber;
+    private String whNumber;
 
     // 产品规格
     private Specs specs;
@@ -268,11 +268,11 @@ public class Product extends ABaseDO {
         this.directAwardList = directAwardList;
     }
 
-    public Integer getWhNumber() {
+    public String getWhNumber() {
         return whNumber;
     }
 
-    public void setWhNumber(Integer whNumber) {
+    public void setWhNumber(String whNumber) {
         this.whNumber = whNumber;
     }
 

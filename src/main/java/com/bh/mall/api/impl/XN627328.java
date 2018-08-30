@@ -23,6 +23,7 @@ public class XN627328 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+        System.out.println("userId:" + req.getUserId());
         return agentAO.getAgent(req.getUserId());
 
     }

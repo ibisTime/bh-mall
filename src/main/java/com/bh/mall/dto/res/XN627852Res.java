@@ -10,9 +10,12 @@ public class XN627852Res {
 
     private Long number;
 
-    public XN627852Res(List<AgentReport> list, Long number) {
+    private Long refreeAward;
+
+    public XN627852Res(List<AgentReport> list, Long number, Long refreeAward) {
         this.list = list;
         this.number = number;
+        this.refreeAward = refreeAward;
     }
 
     public List<AgentReport> getList() {
@@ -29,6 +32,14 @@ public class XN627852Res {
 
     public void setNumber(Long number) {
         this.number = number;
+    }
+
+    public Long getRefreeAward() {
+        return refreeAward;
+    }
+
+    public void setRefreeAward(Long refreeAward) {
+        this.refreeAward = refreeAward;
     }
 
 }

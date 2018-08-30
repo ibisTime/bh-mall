@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.ISYSConfigAO;
 import com.bh.mall.bo.ISYSConfigBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.SYSConfig;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -16,6 +18,9 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
 
     @Autowired
     ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     // 修改系统参数
     @Override
@@ -33,12 +38,24 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     @Override
     public Paginable<SYSConfig> querySYSConfigPage(int start, int limit,
             SYSConfig condition) {
-        return sysConfigBO.getPaginable(start, limit, condition);
+        Paginable<SYSConfig> page = sysConfigBO.getPaginable(start, limit,
+            condition);
+        // 更新人转义
+        for (SYSConfig data : page.getList()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
+
+        return page;
     }
 
     // 详细查询系统参数
     @Override
     public SYSConfig getSYSConfig(Long id) {
+        SYSConfig data = sysConfigBO.getConfig(id);
+        // 更新人转义
+        SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+        data.setUpdateName(sysUser.getRealName());
         return sysConfigBO.getConfig(id);
     }
 

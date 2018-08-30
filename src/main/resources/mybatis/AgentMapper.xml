@@ -62,8 +62,6 @@
 				</when>
 			</choose>
 			
-			
-			
 			<if test="fromUserId != null and fromUserId != '' ">
 				AND t.from_user_id = #{fromUserId}
 			</if>
@@ -100,6 +98,10 @@
 
 			<if test="realName != null and realName != '' ">
 				AND t.real_name like "%"#{realName}"%"
+			</if>
+			
+			<if test="keyWord != null and keyWord != '' ">
+				AND t.real_name like "%"#{keyWord}"%"
 			</if>
 
 			<choose>

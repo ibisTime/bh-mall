@@ -16,6 +16,9 @@ public class XN627830Req extends APageReq {
     // 产品名称
     private String productName;
 
+    // 产品名称
+    private String specsCode;
+
     // （选填）申请人
     private String keyword;
 
@@ -63,6 +66,14 @@ public class XN627830Req extends APageReq {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
 }

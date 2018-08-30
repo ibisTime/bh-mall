@@ -12,6 +12,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IInnerSpecsDAO;
 import com.bh.mall.domain.InnerSpecs;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -28,6 +29,9 @@ public class InnerSpecsBOImpl extends PaginableBOImpl<InnerSpecs>
             String code = OrderNoGenerater
                 .generate(EGeneratePrefix.InnerOrder.getCode());
             data.setCode(code);
+            if (EBoolean.NO.getCode().equals(data.getIsSingle())) {
+                data.setSingleNumber(null);
+            }
             data.setInnerProductCode(innerProductCode);
             innerSpecsDAO.insert(data);
         }

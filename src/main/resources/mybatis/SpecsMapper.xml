@@ -75,8 +75,9 @@
 		,t.is_sq_order
 		,t.is_sj_order
 		,t.is_normal_order
-		FROM tbh_specs t 
+		FROM tbh_specs t LEFT JOIN tbh_agent_price p ON t.code = p.specs_code
 		<include refid="where_condition"/>
+		GROUP BY t.code
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				${order}
@@ -86,8 +87,9 @@
 	
 	
 	<select id="select_specs_count" parameterType="specs" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_specs t
+		SELECT count(1) FROM tbh_specs t LEFT JOIN tbh_agent_price p ON t.code = p.specs_code
 		<include refid="where_condition"/>
+		GROUP BY t.code
 	</select>
 	
 	

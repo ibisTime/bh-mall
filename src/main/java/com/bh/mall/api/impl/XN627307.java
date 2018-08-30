@@ -23,7 +23,6 @@ public class XN627307 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         return sjFormAO.getSjForm(req.getUserId());
     }
 

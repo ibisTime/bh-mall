@@ -238,4 +238,9 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
         }
     }
 
+    @Override
+    public void removeWare(Ware data) {
+        // wareLogBO.saveWareLog(data, type, quantity, remark);
+    }
+
 }

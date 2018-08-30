@@ -88,7 +88,7 @@ public class WeChatAOImpl implements IWeChatAO {
         if (null != aData.getMinChargeAmount()
                 && (aData.getMinChargeAmount() / 1000) > transAmount) {
             throw new BizException("xn000000",
-                "充值金额不能低于[" + aData.getMinChargeAmount() + "]");
+                "充值金额不能低于[" + aData.getMinChargeAmount() / 1000 + "]");
         }
         // 获取收款方账户信息
         Account toAccount = accountBO.getAccount(accountNumber);

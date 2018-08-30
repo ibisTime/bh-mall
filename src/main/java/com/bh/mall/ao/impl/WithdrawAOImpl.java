@@ -149,8 +149,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             approveNote);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 释放冻结流水
-        accountBO.unfrozenAmount(dbAccount, data.getAmount(), data.getCode(),
-            approveNote);
+        accountBO.unfrozenAmount(dbAccount, dbAccount.getFrozenAmount(),
+            data.getCode(), approveNote);
     }
 
     private void payOrderNO(Withdraw data, String payUser, String payNote,

@@ -554,7 +554,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
             sb.append(
-                OrderNoGenerater.generate(EGeneratePrefix.OutOrder.getCode()));
+                OrderNoGenerater.generate(EGeneratePrefix.OutOrder.getCode())
+                        + ",");
             // 账户扣钱
             String status = EOutOrderStatus.TO_APPROVE.getCode();
 
@@ -819,18 +820,20 @@ public class OutOrderAOImpl implements IOutOrderAO {
             Long profit = (price.getPrice() - highPrice.getPrice())
                     * data.getQuantity();
 
-            // 订单归属人账户
-            account = accountBO.getAccountByUser(toUser.getUserId(),
-                ECurrency.YJ_CNY.getCode());
-            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, null, data.getCode(), EBizType.AJ_CELR,
-                EBizType.AJ_CELR.getValue(), profit);
+            if (profit > 0) {
+                // 订单归属人账户
+                account = accountBO.getAccountByUser(toUser.getUserId(),
+                    ECurrency.YJ_CNY.getCode());
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.NBZ, null, null, data.getCode(),
+                    EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(), profit);
 
-            // 统计差额利润
-            report = agentReportBO
-                .getAgentReportByUser(applyUser.getHighUserId());
-            report.setProfitAward(profit);
-            agentReportBO.refreshAward(report);
+                // 统计差额利润
+                report = agentReportBO
+                    .getAgentReportByUser(applyUser.getHighUserId());
+                report.setProfitAward(profit);
+                agentReportBO.refreshAward(report);
+            }
         }
 
         // 订单统计

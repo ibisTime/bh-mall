@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IAgentLevelAO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.req.XN627000Req;
 import com.bh.mall.dto.req.XN627001Req;
 import com.bh.mall.dto.req.XN627002Req;
@@ -21,6 +23,9 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
 
     @Autowired
     IAgentLevelBO agentLevelBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     @Override
     public void editAgentLevel(XN627000Req req) {
@@ -69,6 +74,7 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
         data.setReNumber(StringValidater.toInteger(req.getReNumber()));
         data.setIsReset(req.getIsReset());
 
+        data.setAmount(StringValidater.toLong(req.getAmount()));
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -79,18 +85,32 @@ public class AgentLevelAOImpl implements IAgentLevelAO {
     @Override
     public Paginable<AgentLevel> queryAgentLevelListPage(int start, int limit,
             AgentLevel condition) {
-        return agentLevelBO.getPaginable(start, limit, condition);
+        Paginable<AgentLevel> page = agentLevelBO.getPaginable(start, limit,
+            condition);
+        for (AgentLevel data : page.getList()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
+        return page;
 
     }
 
     @Override
     public List<AgentLevel> queryAgentLevelList(AgentLevel condition) {
-        return agentLevelBO.queryAgentList(condition);
+        List<AgentLevel> list = agentLevelBO.queryAgentList(condition);
+        for (AgentLevel data : list) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
+        return list;
     }
 
     @Override
     public AgentLevel getAgentLevel(String code) {
-        return agentLevelBO.getAgentLevel(code);
+        AgentLevel data = agentLevelBO.getAgentLevel(code);
+        SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+        data.setUpdateName(sysUser.getRealName());
+        return data;
     }
 
     @Override

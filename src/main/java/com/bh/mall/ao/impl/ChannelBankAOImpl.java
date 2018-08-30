@@ -79,8 +79,10 @@ public class ChannelBankAOImpl implements IChannelBankAO {
     @Override
     public ChannelBank getChannelBank(Long id) {
         ChannelBank data = channelBankBO.getChannelBank(id);
-        SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
-        data.setUpdateName(sysUser.getRealName());
+        if (StringUtils.isNotBlank(data.getUpdater())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
         return data;
     }
 }

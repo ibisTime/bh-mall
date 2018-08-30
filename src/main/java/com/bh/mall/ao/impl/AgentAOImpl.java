@@ -222,8 +222,7 @@ public class AgentAOImpl implements IAgentAO {
 
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
                 // 重新申请时，更新用户状态
-                if (EAgentStatus.IMPOWERO_INFO.getCode()
-                    .equals(dbUser.getStatus())
+                if (EAgentStatus.IGNORED.getCode().equals(dbUser.getStatus())
                         || EAgentStatus.MIND.getCode()
                             .equals(dbUser.getStatus())) {
                     agentBO.refreshStatus(dbUser, status);

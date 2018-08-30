@@ -249,7 +249,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         Product changeData = productBO.getProduct(data.getChangeProductCode());
         Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
 
-        if (0 < (changeData.getRealNumber() - data.getCanChangeQuantity())) {
+        if (0 < (changeSpecs.getStockNumber() - data.getCanChangeQuantity())) {
             throw new BizException("xn00000", "产品[" + changeData.getName() + "-"
                     + changeSpecs.getName() + "]的数量不足");
         }
@@ -282,7 +282,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
         // 要置换的产品
         Product changeData = productBO.getProduct(data.getChangeProductCode());
-        Specs changeSpecs = specsBO.getSpecs(data.getSpecsCode());
+        Specs changeSpecs = specsBO.getSpecs(data.getChangeSpecsCode());
         Agent agent = agentBO.getAgent(data.getApplyUser());
         AgentPrice changePrice = agentPriceBO
             .getPriceByLevel(changeSpecs.getCode(), agent.getLevel());

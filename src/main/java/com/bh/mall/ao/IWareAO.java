@@ -48,6 +48,7 @@ public interface IWareAO {
     public XN627805Res checkAmount(String userId);
 
     // 调整云仓数量
-    public void editWare();
+    public void editWare(String code, String quantity, String updater,
+            String remark);
 
 }

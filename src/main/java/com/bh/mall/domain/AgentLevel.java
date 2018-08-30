@@ -81,6 +81,9 @@ public class AgentLevel extends ABaseDO {
     // 结束等级
     private Integer highLevel;
 
+    // 更新名称
+    private String updateName;
+
     public String getCode() {
         return code;
     }
@@ -255,6 +258,14 @@ public class AgentLevel extends ABaseDO {
 
     public void setAmount(Long amount) {
         this.amount = amount;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 
 }

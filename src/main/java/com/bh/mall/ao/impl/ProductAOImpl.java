@@ -244,8 +244,6 @@ public class ProductAOImpl implements IProductAO {
 
                 // 产品规格价格
                 AgentPrice pspCondition = new AgentPrice();
-                pspCondition.setLevel(condition.getLevel());
-                pspCondition.setIsBuy(EBoolean.YES.getCode());
                 pspCondition.setSpecsCode(productSpecs.getCode());
                 List<AgentPrice> pspList = agentPriceBO
                     .queryAgentPriceList(pspCondition);
@@ -258,12 +256,15 @@ public class ProductAOImpl implements IProductAO {
 
             // 获取各个代理云仓库存
             List<Ware> whList = wareBO.getWareByProduct(product.getCode());
-            int whNumber = 0;
+            StringBuffer whNumber = new StringBuffer();
             for (Ware ware : whList) {
-                int nowNumber = specsBO.getMinSpecsNumber(product.getCode());
-                whNumber = whNumber + nowNumber * ware.getQuantity();
+                whNumber.append(
+                    "[" + ware.getQuantity() + "]" + ware.getSpecsName() + "，");
             }
-            product.setWhNumber(whNumber);
+            if (whNumber.lastIndexOf("，") > 0) {
+                product.setWhNumber(
+                    whNumber.substring(0, whNumber.lastIndexOf("，")));
+            }
 
             // 奖励
             List<TjAward> awardList = tjAwardBO
@@ -361,7 +362,9 @@ public class ProductAOImpl implements IProductAO {
 
             // 产品规格
             Specs psCondition = new Specs();
-            psCondition.setProductCode(product.getCode());
+            psCondition.setLevel(condition.getLevel());
+            psCondition.setIsBuy(EBoolean.YES.getCode());
+            psCondition.setLevel(condition.getLevel());
             List<Specs> psList = specsBO.querySpecsListByB(psCondition);
             for (Specs productSpecs : psList) {
 

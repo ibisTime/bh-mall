@@ -19,16 +19,24 @@ public class XN627002Req {
     private String level;
 
     // （必填）等级名称
+    @NotBlank(message = "等级不能为空")
     private String name;
 
     // （必填）本等级升级是否公司审核
+    @NotBlank(message = "等级不能为空")
     private String isCompanyApprove;
 
     // （必填）半门槛推荐人数
+    @NotBlank(message = "等级不能为空")
     private String reNumber;
 
     // （必填）升级门槛是否清零
+    @NotBlank(message = "等级不能为空")
     private String isReset;
+
+    // （必填）升级门槛是否清零
+    @NotBlank(message = "等级不能为空")
+    private String amount;
 
     // （必填）更新人
     @NotBlank(message = " 更新人不能为空")
@@ -99,6 +107,14 @@ public class XN627002Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
 }

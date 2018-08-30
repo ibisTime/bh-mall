@@ -363,12 +363,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshYx(Agent data, String status, String approver,
             String approveName, String logCode) {
 
-        if (EYxFormStatus.MIND.getCode().equals(status)) {
+        if (EYxFormStatus.IGNORED.getCode().equals(status)) {
+            data.setStatus(status);
             data.setMobile(null);
         } else if (EYxFormStatus.ACCEPT.getCode().equals(status)) {
             data.setStatus(EAgentStatus.ADD_INFO.getCode());
-        } else {
-            data.setStatus(status);
         }
 
         data.setApproveDatetime(new Date());
@@ -462,7 +461,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshSq(Agent data, SqForm sqForm, String manager,
             String highUserId, String teamName, Integer level, String status,
             String approver, String approveName, String logCode) {
-
+        data.setHighUserId(highUserId);
         if (EAgentStatus.IMPOWERED.getCode().equals(status)) {
             Date date = new Date();
             data.setLevel(sqForm.getApplyLevel());
@@ -477,12 +476,12 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setReferrer(sqForm.getReferrer());
 
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
+            data.setHighUserId(null);
             data.setStatus(EAgentStatus.MIND.getCode());
         } else {
             data.setStatus(status);
         }
 
-        data.setHighUserId(highUserId);
         data.setTeamName(teamName);
 
         data.setApprover(approver);

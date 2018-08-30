@@ -216,6 +216,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     @Override
     public List<Specs> getSpecsByProduct(String productCode) {
         Specs condition = new Specs();
+        condition.setLevel(condition.getLevel());
+        condition.setIsBuy(EBoolean.YES.getCode());
         condition.setProductCode(productCode);
         return specsDAO.selectList(condition);
     }

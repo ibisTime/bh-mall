@@ -434,14 +434,20 @@ public class WareAOImpl implements IWareAO {
                     agent.getUserId(), agent.getImpowerDatetime())) {
                     result = ECheckStatus.NO_Impwoer.getCode();
                 }
+                Long orderAmount = inOrderBO.getInOrderByUser(agent.getUserId(),
+                    agent.getImpowerDatetime());
 
                 // 红线设置为零视为无限制
                 if (0 < agentLevel.getRedAmount()
                         && whAmount < agentLevel.getRedAmount()) {
                     // 订单金额
+                    readAmount = readAmount - whAmount;
                     result = ECheckStatus.RED_LOW.getCode();
 
-                    // 没有过任何订单，或者购买云仓数量少于首次授权发货金额，继续购买云仓
+                    // 没有过任何订单购买云仓
+                } else if (orderAmount == 0) {
+                    readAmount = agentLevel.getAmount();
+                    result = ECheckStatus.RED_LOW.getCode();
                 }
                 // 未开启云仓，只检查是否完成授权单
             } else if (0 != agentLevel.getAmount()
@@ -498,6 +504,15 @@ public class WareAOImpl implements IWareAO {
     }
 
     @Override
-    public void editWare() {
+    public void editWare(String code, String quantity, String updater,
+            String remark) {
+        Ware data = wareBO.getWare(code);
+        // 数量为零，删除
+        if (EBoolean.NO.getCode().equals(quantity)) {
+            wareBO.removeWare(data);
+        } else {
+
+        }
     }
+
 }
