@@ -98,8 +98,8 @@ public class SjFormAOImpl implements ISjFormAO {
         // 推荐人数是否满足半门槛
         List<Agent> userReferee = agentBO
             .getAgentByUserReferee(data.getUserId());
-        if (agenthLevel.getReNumber() >= userReferee.size()) {
-            if (StringValidater.toLong(payAmount) <= agenthLevel
+        if (agenthLevel.getReNumber() > userReferee.size()) {
+            if (StringValidater.toLong(payAmount) < agenthLevel
                 .getMinChargeAmount()) {
                 throw new BizException("xn00000", "您的直推人数不满足半门槛人数，打款金额不能低于"
                         + StringValidater.toLong(payAmount) / 1000);
