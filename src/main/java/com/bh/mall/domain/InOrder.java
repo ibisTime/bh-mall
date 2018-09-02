@@ -133,6 +133,9 @@ public class InOrder extends ABaseDO {
     // 等级list
     private List<Integer> levelList;
 
+    // 总金额
+    private Long allAmount;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -443,6 +446,14 @@ public class InOrder extends ABaseDO {
 
     public void setTeamLeader(String teamLeader) {
         this.teamLeader = teamLeader;
+    }
+
+    public Long getAllAmount() {
+        return allAmount;
+    }
+
+    public void setAllAmount(Long allAmount) {
+        this.allAmount = allAmount;
     }
 
 }

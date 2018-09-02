@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bh.mall.ao.IDeliveOrderAO;
+import com.bh.mall.ao.IOutOrderAO;
 import com.bh.mall.bo.IDeliveOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IOutOrderBO;
@@ -33,6 +34,9 @@ public class DeliveOrderAOImpl implements IDeliveOrderAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IOutOrderAO outOrderAO;
 
     @Override
     public Paginable<DeliveOrder> queryDeliveOrderPage(int start, int limit,
@@ -63,16 +67,16 @@ public class DeliveOrderAOImpl implements IDeliveOrderAO {
         DeliveOrder data = deliveOrderBO.getDeliveOrder(req.getCode());
         if (EOrderKind.OUT_Order.getCode().equals(data.getKind())) {
             OutOrder outOrder = outOrderBO.getOutOrder(data.getCode());
-            outOrderBO.deliverOutOrder(outOrder, req.getDeliver(),
-                req.getLogisticsCode(), req.getLogisticsCompany(),
-                req.getRemark());
+            outOrderAO.deliverOutOrder(outOrder, req.getProCode(),
+                req.getDeliver(), req.getLogisticsCode(),
+                req.getLogisticsCompany(), req.getRemark());
         } else {
             InnerOrder innerOrder = innerOrderBO.getInnerOrder(data.getCode());
             innerOrderBO.deliverInnerProduct(innerOrder, req.getDeliver(),
                 req.getLogisticsCode(), req.getLogisticsCompany(),
                 req.getRemark());
         }
-        deliveOrderBO.deliverOrder(data, req.getDeliver(),
+        deliveOrderBO.deliverOrder(data, req.getProCode(), req.getDeliver(),
             req.getLogisticsCode(), req.getLogisticsCompany(), req.getRemark());
 
     }

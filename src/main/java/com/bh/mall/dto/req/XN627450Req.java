@@ -10,6 +10,9 @@ public class XN627450Req extends APageReq {
     private static final long serialVersionUID = 1L;
 
     // 户名
+    private String level;
+
+    // 户名
     private String realName;
 
     // 类别（B端账号，C端账号，平台账号）
@@ -23,6 +26,14 @@ public class XN627450Req extends APageReq {
 
     // 最近一次变动对应的流水编号
     private String lastOrder;
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
     public String getRealName() {
         return realName;

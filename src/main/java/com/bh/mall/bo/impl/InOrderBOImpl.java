@@ -32,7 +32,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
             Integer quantity, String applyNote) {
         InOrder data = new InOrder();
         String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
+            .generate(EGeneratePrefix.InOrder.getCode());
 
         data.setCode(code);
         data.setApplyUser(applyUser);
@@ -75,7 +75,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
             InOrder condition = new InOrder();
             condition.setCode(code);
             data = inOrderDAO.select(condition);
-            if (data == null) {
+            if (null == data) {
                 throw new BizException("xn0000", "订单不存在");
             }
         }
@@ -120,17 +120,11 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     }
 
     @Override
-    public InOrder getInOrderByPayGroup(String payGroup) {
-        InOrder data = null;
-        if (StringUtils.isNotBlank(payGroup)) {
-            InOrder condition = new InOrder();
-            condition.setPayGroup(payGroup);
-            data = inOrderDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "订单不存在");
-            }
-        }
-        return data;
+    public List<InOrder> getInOrderByPayGroup(String payGroup) {
+
+        InOrder condition = new InOrder();
+        condition.setPayGroup(payGroup);
+        return inOrderDAO.selectList(condition);
     }
 
     @Override
@@ -148,12 +142,14 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     }
 
     @Override
-    public List<InOrder> getProductQuantity(String userId, Date startDatetime,
-            Date endDatetime) {
+    public List<InOrder> getProductQuantity(String userId, String specsCode,
+            Date startDatetime, Date endDatetime) {
         InOrder condition = new InOrder();
         condition.setApplyUser(userId);
+        condition.setSpecsCode(specsCode);
         condition.setStartDatetime(startDatetime);
         condition.setEndDatetime(endDatetime);
+        condition.setStatus(EInOrderStatus.Received.getCode());
         return inOrderDAO.selectList(condition);
     }
 
@@ -163,6 +159,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         InOrder condition = new InOrder();
         condition.setApplyUser(userId);
         condition.setStartDatetime(applyDatetime);
+        condition.setStatus(EInOrderStatus.Received.getCode());
 
         List<InOrder> list = inOrderDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
@@ -224,9 +221,15 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     @Override
     public String addPayGroup(InOrder inOrder) {
         String payGroup = OrderNoGenerater
-            .generate(EGeneratePrefix.Order.getCode());
+            .generate(EGeneratePrefix.InOrder.getCode());
         inOrder.setPayGroup(payGroup);
         inOrderDAO.addPayGroup(inOrder);
         return payGroup;
+    }
+
+    @Override
+    public List<InOrder> queryInOrderListCount(InOrder condition) {
+
+        return inOrderDAO.selectorderCount(condition);
     }
 }

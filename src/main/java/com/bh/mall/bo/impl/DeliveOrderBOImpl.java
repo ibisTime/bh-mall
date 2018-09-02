@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IDeliveOrderBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.core.EGeneratePrefix;
-import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IDeliveOrderDAO;
 import com.bh.mall.domain.DeliveOrder;
 import com.bh.mall.domain.InnerOrder;
@@ -28,9 +26,7 @@ public class DeliveOrderBOImpl extends PaginableBOImpl<DeliveOrder>
 
     public void saveDeliveOrder(OutOrder outOrder) {
         DeliveOrder data = new DeliveOrder();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.DeliveOrder.getCode());
-        data.setCode(code);
+        data.setCode(outOrder.getCode());
         data.setProductCode(outOrder.getProductCode());
         data.setProductName(outOrder.getProductName());
 
@@ -40,6 +36,7 @@ public class DeliveOrderBOImpl extends PaginableBOImpl<DeliveOrder>
         data.setPrice(outOrder.getPrice());
         data.setPic(outOrder.getPic());
         data.setApplyUser(outOrder.getApplyUser());
+        data.setApplyDatetime(outOrder.getApplyDatetime());
 
         data.setRealName(outOrder.getRealName());
         data.setAmount(outOrder.getAmount());
@@ -56,9 +53,7 @@ public class DeliveOrderBOImpl extends PaginableBOImpl<DeliveOrder>
 
     public void saveDeliveOrder(InnerOrder innerOrder) {
         DeliveOrder data = new DeliveOrder();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.DeliveOrder.getCode());
-        data.setCode(code);
+        data.setCode(innerOrder.getCode());
         data.setProductCode(innerOrder.getProductCode());
         data.setProductName(innerOrder.getProductName());
 
@@ -106,10 +101,11 @@ public class DeliveOrderBOImpl extends PaginableBOImpl<DeliveOrder>
     }
 
     @Override
-    public void deliverOrder(DeliveOrder data, String deliver,
+    public void deliverOrder(DeliveOrder data, String proCode, String deliver,
             String logisticsCode, String logisticsCompany, String remark) {
         data.setDeliver(deliver);
         Date date = new Date();
+        data.setBarCode(proCode);
         data.setDeliveDatetime(date);
         data.setLogisticsCode(logisticsCode);
         data.setLogisticsCompany(logisticsCompany);

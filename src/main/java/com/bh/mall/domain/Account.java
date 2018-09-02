@@ -58,6 +58,9 @@ public class Account extends ABaseDO {
     // 代理
     private Agent agent;
 
+    // 等级
+    private Integer level;
+
     // 账户
     private List<String> currencyList;
 
@@ -179,6 +182,14 @@ public class Account extends ABaseDO {
 
     public void setCurrencyList(List<String> currencyList) {
         this.currencyList = currencyList;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

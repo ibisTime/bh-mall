@@ -52,9 +52,13 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public void payNo(OutOrder data);
 
-    public boolean checkImpowerOrder(String applyUser, Date impoweDatetime);
+    public boolean checkImpower(String applyUser, Date impoweDatetime);
 
-    public boolean checkUpgradeOrder(String applyUser, Date datetime);
+    public boolean checkUpgrade(String applyUser, Date datetime);
+
+    public Long checkImpowerOrder(String applyUser, Date impoweDatetime);
+
+    public Long checkUpgradeOrder(String applyUser, Date datetime);
 
     // 根据时间查询订单数量
     public List<OutOrder> getOutOrderQuantity(String userId, Date startDatetime,

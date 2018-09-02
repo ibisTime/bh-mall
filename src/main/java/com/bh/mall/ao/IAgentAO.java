@@ -68,4 +68,6 @@ public interface IAgentAO {
     // 修改所有下级团队名称
     void editTeamName(String highUserId, String teamName);
 
+    void checkCancel(Agent data);
+
 }

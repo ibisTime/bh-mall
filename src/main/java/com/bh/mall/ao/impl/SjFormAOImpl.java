@@ -69,9 +69,6 @@ public class SjFormAOImpl implements ISjFormAO {
             String payAmount, String teamName, String idKind, String idNo,
             String idHand) {
         Agent data = agentBO.getAgent(userId);
-        if (!EAgentStatus.IMPOWERED.getCode().equals(data.getStatus())) {
-            throw new BizException("xn000", "您的状态无法申请升级");
-        }
 
         // 已经申请过升级
         SjForm sjForm = sjFormBO.getSjForm(data.getUserId());
@@ -161,12 +158,14 @@ public class SjFormAOImpl implements ISjFormAO {
         // 申请升级
         String logCode = null;
         if (null == sjForm) {
-            logCode = sjFormBO.applySjForm(data, toUserId, newLevel, idKind,
-                idNo, idHand, payPdf, payAmount, status);
-        } else {
-            logCode = sjFormBO.refreshSjForm(sjForm, data, toUserId, newLevel,
+            logCode = sjFormBO.applySjForm(data, toUserId, teamName, newLevel,
                 idKind, idNo, idHand, payPdf, payAmount, status);
+        } else {
+            logCode = sjFormBO.refreshSjForm(sjForm, data, toUserId, teamName,
+                newLevel, idKind, idNo, idHand, payPdf, payAmount, status);
         }
+
+        data.setStatus(status);
         agentBO.refreshLog(data, logCode);
 
     }
@@ -198,12 +197,22 @@ public class SjFormAOImpl implements ISjFormAO {
                 status = ESjFormStatus.UPGRADE_COMPANY.getCode();
             } else {
                 status = ESjFormStatus.THROUGH_YES.getCode();
+                // 清空余额
+                if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
+                    if (account.getAmount() > 0) {
+                        accountBO.changeAmount(account.getAccountNumber(),
+                            EChannelType.NBZ, null, null, sjForm.getUserId(),
+                            EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
+                            -account.getAmount());
+                    }
+                }
+
                 if (null != sjForm.getPayAmount()
                         && 0 != sjForm.getPayAmount()) {
                     // 增加账户余额
                     accountBO.changeAmount(account.getAccountNumber(),
                         EChannelType.NBZ, null, null, sjForm.getUserId(),
-                        EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
+                        EBizType.AJ_MKCZ, EBizType.AJ_MKCZ.getValue(),
                         sjForm.getPayAmount());
                 }
 
@@ -227,6 +236,9 @@ public class SjFormAOImpl implements ISjFormAO {
         String logCode = sjFormBO.approveSjForm(sjForm, agent,
             approveAgent.getUserId(), approveAgent.getRealName(), remark,
             status);
+        if (ESjFormStatus.IMPOWERED.getCode().equals(status)) {
+            status = EAgentStatus.IMPOWERED.getCode();
+        }
 
         agentBO.refreshSj(agent, sjForm, approveAgent.getUserId(),
             approveAgent.getRealName(), remark, status, logCode);

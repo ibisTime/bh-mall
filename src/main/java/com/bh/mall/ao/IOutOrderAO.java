@@ -13,6 +13,7 @@ import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
 import com.bh.mall.dto.req.XN627645Req;
+import com.bh.mall.dto.res.XN627666Res;
 
 @Component
 public interface IOutOrderAO {
@@ -37,8 +38,9 @@ public interface IOutOrderAO {
     // 付款
     public Object payOutOrder(List<String> codeList, String payType);
 
-    // 发货
-    public void deliverOutOrder(XN627645Req req);
+    public void deliverOutOrder(OutOrder outOrder, String proCode,
+            String deliver, String logisticsCode, String logisticsCompany,
+            String remark);
 
     // 批量审单
     public void approveOutOrder(List<String> codeList, String approver,
@@ -73,5 +75,11 @@ public interface IOutOrderAO {
 
     // 详情查询订单
     public OutOrder getOutOrder(String code);
+
+    // 查询运费
+    public XN627666Res getYunFei(String productCode, String speccCode,
+            String province, String quantity, String kind);
+
+    public void deliverOutOrder(XN627645Req req);
 
 }

@@ -1,6 +1,11 @@
 package com.bh.mall.dto.req;
 
-public class XN627493Req {
+public class XN627496Req extends APageReq {
+
+    private static final long serialVersionUID = 954834300131559750L;
+
+    // 类型
+    private String kind;
 
     // 参考订单号
     private String refNo;
@@ -23,4 +28,13 @@ public class XN627493Req {
     public void setRefNo(String refNo) {
         this.refNo = refNo;
     }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
 }

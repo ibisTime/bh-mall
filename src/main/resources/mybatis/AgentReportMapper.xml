@@ -47,9 +47,15 @@
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name like "%"#{teamName}"%"
 			</if>
-			<if test="realName != null and realName != '' ">
-				AND t.real_name like "%"#{realName}"%"
-			</if>
+			
+			<choose>
+				<when test="realName != null and realName != '' ">
+					AND t.real_name like "%"#{realName}"%"
+				</when>
+				<when test="keyword != null and keyword != '' ">
+					AND t.real_name like "%"#{keyword}"%"
+				</when>
+			</choose>
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile like "%"#{mobile}"%"
 			</if>
@@ -129,6 +135,7 @@
 		,area
 		,address
 		,impower_datetime
+		,intr_award
 		)
 		VALUES(
 		#{userId}
@@ -146,6 +153,7 @@
 		,#{area}
 		,#{address}
 		,#{impowerDatetime}
+		,#{intrAward}
 		)
 	</insert>
 

@@ -36,6 +36,7 @@
 		
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
+		<result column="allAmount" property="allAmount" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -128,6 +129,23 @@
 		FROM
 		tbh_in_order t 
 		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
+	
+	<select id="select_count" parameterType="inOrder" resultMap="inOrder_DB_Result">
+		SELECT
+		t.level
+		,t.apply_user
+		,SUM(amount) AS allAmount
+		FROM
+		tbh_in_order t 
+		<include refid="where_condition" />
+		GROUP BY t.level,t.apply_user
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

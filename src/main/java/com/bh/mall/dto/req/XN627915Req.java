@@ -11,6 +11,9 @@ public class XN627915Req extends APageReq {
     private static final long serialVersionUID = -645972324512910733L;
 
     // （选填）产品名称
+    private String applyUser;
+
+    // （选填）产品名称
     private String productName;
 
     // （选填）状态
@@ -24,6 +27,14 @@ public class XN627915Req extends APageReq {
 
     // （选填）团队名称
     private String teamName;
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
 
     public String getProductName() {
         return productName;

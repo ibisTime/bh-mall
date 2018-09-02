@@ -47,9 +47,8 @@ public class OrderReportBOImpl extends PaginableBOImpl<OrderReport>
         data.setPrice(inOrder.getPrice());
         data.setAmount(inOrder.getAmount());
         data.setPic(inOrder.getPic());
-        Date date = new Date();
 
-        data.setApplyDatetime(date);
+        data.setApplyDatetime(inOrder.getApplyDatetime());
         data.setApplyNote(inOrder.getApplyNote());
         orderReportDAO.insert(data);
     }

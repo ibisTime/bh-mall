@@ -167,8 +167,7 @@ public class ChargeAOImpl implements IChargeAO {
                 data.setPayUserName(sysUser.getRealName());
             }
 
-        } else if (EChannelType.WeChat_H5.getCode().equals(data.getType())
-                && StringUtils.isNotEmpty(data.getPayUser())) {
+        } else if (StringUtils.isNotEmpty(data.getPayUser())) {
             Agent agent = agentBO.getAgent(data.getPayUser());
             data.setPayUserName(agent.getRealName());
         }

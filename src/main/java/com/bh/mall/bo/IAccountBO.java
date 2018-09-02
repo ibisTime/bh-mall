@@ -19,9 +19,9 @@ import com.bh.mall.enums.ECurrency;
 public interface IAccountBO extends IPaginableBO<Account> {
 
     // 分配账户
-    public String distributeAccount(String userId, String realName,
-            EAccountType accountType, List<String> currencyList,
-            String systemCode, String companyCode);
+    public String distributeAccount(String userId, Integer level,
+            String realName, EAccountType accountType,
+            List<String> currencyList, String systemCode, String companyCode);
 
     // 变更账户余额：流水落地
     public void changeAmount(String accountNumber, EChannelType channelType,
@@ -73,5 +73,11 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 获取账户
     public Account getAccountNocheck(String userId, String currency);
+
+    public void changeAmount(String accountNumber, EChannelType channleType,
+            String channelOrder, String payGroup, List<String> codeList,
+            EBizType biztType, String bizNote, Long transAmount);
+
+    public void removeByAgent(String userId);
 
 }

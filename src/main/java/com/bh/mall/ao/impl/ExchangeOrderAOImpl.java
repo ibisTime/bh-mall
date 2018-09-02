@@ -22,7 +22,6 @@ import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.IWareLogBO;
 import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
-import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
@@ -120,8 +119,8 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
 
         data.setPrice(specsPrice.getPrice());
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
-        Long amount = AmountUtil.eraseLiUp(specsPrice.getPrice()
-                * StringValidater.toInteger(req.getQuantity()));
+        Long amount = specsPrice.getPrice()
+                * StringValidater.toInteger(req.getQuantity());
         data.setAmount(amount);
         int canChangeQuantity = 0;
         if (null == changeSpecsPrice.getChangePrice()
@@ -277,8 +276,8 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         // 产品
         Specs specs = specsBO.getSpecs(data.getSpecsCode());
         specsBO.refreshRepertory(data.getProductName(), specs,
-            ESpecsLogType.ChangeProduct.getCode(), data.getQuantity(), approver,
-            approveNote);
+            ESpecsLogType.ChangeProduct.getCode(), -data.getQuantity(),
+            approver, approveNote);
 
         // 要置换的产品
         Product changeData = productBO.getProduct(data.getChangeProductCode());
@@ -298,7 +297,7 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             // 保存要置换的产品库存记录
             specsBO.refreshRepertory(changeData.getName(), changeSpecs,
                 ESpecsLogType.ChangeProduct.getCode(),
-                -data.getCanChangeQuantity(), approver, approveNote);
+                data.getCanChangeQuantity(), approver, approveNote);
 
             wareBO.buyWare(data.getCode(), data.getChangeProductCode(),
                 data.getChangeProductName(), data.getChangeSpecsCode(),

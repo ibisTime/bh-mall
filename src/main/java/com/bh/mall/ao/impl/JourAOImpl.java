@@ -74,28 +74,6 @@ public class JourAOImpl implements IJourAO {
                 Agent agent = agentBO.getAgent(data.getUserId());
                 data.setAgent(agent);
             }
-
-            // 关联订单转义
-            if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
-                    || EBizType.AJ_TJJL_OUT.getCode()
-                        .equals(data.getBizType())) {
-                OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
-                data.setOutOrder(outOrder);
-            } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
-                Agent agent = agentBO.getAgent(data.getRefNo());
-                data.setAgent(agent);
-
-            } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())
-                    || EBizType.AJ_TJJL_IN.getCode()
-                        .equals(data.getBizType())) {
-                InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
-                data.setInOrder(inOrder);
-                // 取现订单
-            } else if (EBizType.AJ_QX.getCode().equals(data.getBizType())
-                    || EBizType.XXFK.getCode().equals(data.getBizType())) {
-                Withdraw withdraw = withdrawBO.getWithdraw(data.getRefNo());
-                data.setWithdraw(withdraw);
-            }
         }
 
         return page;
@@ -103,11 +81,25 @@ public class JourAOImpl implements IJourAO {
 
     @Override
     public List<Jour> queryJourList(Jour condition) {
+        if (EBizType.AJ_TJJL.getCode().equals(condition.getBizType())) {
+            List<String> list = new ArrayList<String>();
+            list.add(EBizType.AJ_TJJL_OUT.getCode());
+            list.add(EBizType.AJ_TJJL_IN.getCode());
+            condition.setBizType(null);
+            condition.setBizTypeList(list);
+        } else if (EBizType.AJ_CHJL.getCode().equals(condition.getBizType())) {
+            List<String> list = new ArrayList<String>();
+            list.add(EBizType.AJ_CHJL_OUT.getCode());
+            list.add(EBizType.AJ_CHJL_IN.getCode());
+            condition.setBizType(null);
+            condition.setBizTypeList(list);
+        }
+
         List<Jour> list = jourBO.queryJourList(condition);
         for (Jour data : list) {
-            if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
+            if (EAccountType.Business.getCode().equals(data.getType())) {
                 Agent agent = agentBO.getAgent(data.getUserId());
-                data.setMobile(agent.getMobile());
+                data.setAgent(agent);
             }
             // 关联订单转义
             if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
@@ -132,6 +124,7 @@ public class JourAOImpl implements IJourAO {
             }
         }
         return list;
+
     }
 
     @Override
@@ -142,22 +135,7 @@ public class JourAOImpl implements IJourAO {
             data.setMobile(agent.getMobile());
         }
 
-        // 关联订单转义
-        if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
-                || EBizType.AJ_TJJL_OUT.getCode().equals(data.getBizType())) {
-            OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
-            data.setOutOrder(outOrder);
-        } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
-            Agent agent = agentBO.getAgent(data.getUserId());
-            data.setAgent(agent);
-
-        } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())
-                || EBizType.AJ_TJJL_IN.getCode().equals(data.getBizType())) {
-            InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
-            data.setInOrder(inOrder);
-
-            // 取现订单转义
-        } else if (EBizType.AJ_QX.getCode().equals(data.getBizType())
+        if (EBizType.AJ_QX.getCode().equals(data.getBizType())
                 || EBizType.XXFK.getClass().equals(data.getBizType())) {
             Withdraw withdraw = withdrawBO.getWithdraw(data.getRefNo());
             data.setWithdraw(withdraw);
@@ -192,28 +170,12 @@ public class JourAOImpl implements IJourAO {
 
         Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
         for (Jour data : page.getList()) {
-            if (!ESysUser.SYS_USER_BH.getCode().equals(data.getUserId())) {
-                Agent agent = agentBO.getAgent(data.getUserId());
-                data.setMobile(agent.getMobile());
-            }
-
-            // 关联订单转义
-            if (EBizType.AJ_CHJL_OUT.getCode().equals(data.getBizType())
-                    || EBizType.AJ_TJJL_OUT.getCode()
-                        .equals(data.getBizType())) {
-                OutOrder outOrder = outOrderBO.getOutOrder(data.getRefNo());
-                data.setOutOrder(outOrder);
-            } else if (EBizType.AJ_JSJL.getCode().equals(data.getBizType())) {
+            if (EAccountType.Business.getCode().equals(data.getType())) {
                 Agent agent = agentBO.getAgent(data.getUserId());
                 data.setAgent(agent);
-
-            } else if (EBizType.AJ_CHJL_IN.getCode().equals(data.getBizType())
-                    || EBizType.AJ_TJJL_IN.getCode()
-                        .equals(data.getBizType())) {
-                InOrder inOrder = inOrderBO.getInOrder(data.getRefNo());
-                data.setInOrder(inOrder);
             }
         }
+
         return page;
     }
 
@@ -236,6 +198,26 @@ public class JourAOImpl implements IJourAO {
         XN627855Res res = new XN627855Res(page.getList(),
             report.getProfitAward());
         return res;
+    }
+
+    @Override
+    public Object queryJourPageByRefNo(int start, int limit, Jour condition) {
+
+        if (EBizType.AJ_CHJL_IN.getCode().equals(condition.getBizType())
+                || EBizType.AJ_TJJL_IN.getCode()
+                    .equals(condition.getBizType())) {
+            InOrder orderCondittion = new InOrder();
+            orderCondittion.setPayGroup(condition.getRefNo());
+            return inOrderBO.getPaginable(start, limit, orderCondittion);
+
+        } else if (EBizType.AJ_CHJL_OUT.getCode().equals(condition.getBizType())
+                || EBizType.AJ_TJJL_OUT.getCode()
+                    .equals(condition.getBizType())) {
+            OutOrder orderCondittion = new OutOrder();
+            orderCondittion.setPayGroup(condition.getRefNo());
+            return outOrderBO.getPaginable(start, limit, orderCondittion);
+        }
+        return null;
     }
 
 }

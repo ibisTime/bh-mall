@@ -85,7 +85,9 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
     public SpecsLog getSpecsLog(String code) {
         SpecsLog data = specsLogBO.getSpecsLog(code);
         if (ESpecsLogType.Input.getCode().equals(data.getType())
-                || ESpecsLogType.Output.getCode().equals(data.getType())) {
+                || ESpecsLogType.Output.getCode().equals(data.getType())
+                || ESpecsLogType.ChangeProduct.getCode()
+                    .equals(data.getType())) {
             SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
             data.setUpdateName(sysUser.getRealName());
         } else {

@@ -19,6 +19,9 @@ public class XN627852Req extends APageReq {
     // 介绍人
     private String introducer;
 
+    // 关键查询
+    private String keyword;
+
     public String getUserId() {
         return userId;
     }
@@ -41,6 +44,14 @@ public class XN627852Req extends APageReq {
 
     public void setIntroducer(String introducer) {
         this.introducer = introducer;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 }

@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IInnerProductAO;
 import com.bh.mall.bo.IInnerProductBO;
 import com.bh.mall.bo.IInnerSpecsBO;
+import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.InnerProduct;
 import com.bh.mall.domain.InnerSpecs;
+import com.bh.mall.domain.SYSUser;
 import com.bh.mall.dto.req.XN627700Req;
 import com.bh.mall.dto.req.XN627702Req;
 import com.bh.mall.enums.EInnerProductStatus;
@@ -30,6 +32,9 @@ public class InnerProductAOImpl implements IInnerProductAO {
 
     @Autowired
     private IInnerSpecsBO innerSpecsBO;
+
+    @Autowired
+    ISYSUserBO sysUserBO;
 
     @Override
     public String addInnerProduct(XN627700Req req) {
@@ -125,14 +130,10 @@ public class InnerProductAOImpl implements IInnerProductAO {
         Paginable<InnerProduct> page = innerProductBO.getPaginable(start, limit,
             condition);
         for (InnerProduct data : page.getList()) {
-            StringBuffer sb = new StringBuffer();
-            List<InnerSpecs> specsList = innerSpecsBO
-                .getInnerSpecsByProduct(data.getCode());
-            for (InnerSpecs innerSpecs : specsList) {
-                sb.append(innerSpecs.getName() + ":["
-                        + innerSpecs.getStockNumber() + "]");
+            if (StringUtils.isNotBlank(data.getUpdater())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                data.setUpdateName(sysUser.getRealName());
             }
-            data.setSpecsList(specsList);
         }
         return page;
     }
@@ -155,6 +156,11 @@ public class InnerProductAOImpl implements IInnerProductAO {
         List<InnerSpecs> specsList = innerSpecsBO
             .getInnerSpecsByProduct(data.getCode());
         data.setSpecsList(specsList);
+
+        if (StringUtils.isNotBlank(data.getUpdater())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
         return data;
     }
 
@@ -206,8 +212,11 @@ public class InnerProductAOImpl implements IInnerProductAO {
 
     private boolean checkCode(String code, List<InnerSpecs> psList) {
         for (InnerSpecs data : psList) {
-            if (StringUtils.isNotBlank(code) && data.getCode().equals(code)) {
-                return false;
+            if (StringUtils.isNotBlank(code)) {
+                if (StringUtils.isNotBlank(data.getCode())
+                        && data.getCode().equals(code)) {
+                    return false;
+                }
             }
         }
         return true;

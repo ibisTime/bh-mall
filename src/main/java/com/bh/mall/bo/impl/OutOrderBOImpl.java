@@ -4,23 +4,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.bh.mall.bo.IOutOrderBO;
+import com.bh.mall.bo.IProductBO;
+import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.dao.IOutOrderDAO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
+import com.bh.mall.domain.SYSConfig;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -30,6 +35,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     @Autowired
     IOutOrderDAO outOrderDAO;
 
+    @Autowired
+    IProductBO productBO;
+
+    @Autowired
+    ISYSConfigBO sysConfigBO;
+
     @Override
     public String saveOutOrder(String applyUser, String name, Integer level,
             String toUserId, String toUserName, String highUserId,
@@ -37,6 +48,14 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
             Long price, Integer quantity, String applyNote, String isWareSend,
             String signer, String mobile, String province, String city,
             String area, String address, String status, String kind) {
+
+        // 产品不包邮，计算运费
+        Long yunfei = 0L;
+        if (EBoolean.NO.getCode().equals(pData.getIsFree())) {
+            SYSConfig sysConfig = sysConfigBO.getConfig(province,
+                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            yunfei = StringValidater.toLong(sysConfig.getCvalue());
+        }
 
         OutOrder data = new OutOrder();
         String code = OrderNoGenerater
@@ -61,7 +80,8 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setRealName(name);
         data.setTeamName(teamName);
         data.setTeamLeader(teamLeader);
-        data.setAmount(price * quantity);
+        data.setYunfei(yunfei);
+        data.setAmount(price * quantity + yunfei);
         data.setApplyDatetime(new Date());
 
         data.setApplyNote(applyNote);
@@ -71,6 +91,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setSigner(signer);
         data.setProvince(province);
 
+        data.setMobile(mobile);
         data.setCity(city);
         data.setArea(area);
         data.setAddress(address);
@@ -195,7 +216,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public boolean checkImpowerOrder(String applyUser, Date impoweDatetime) {
+    public Long checkImpowerOrder(String applyUser, Date impoweDatetime) {
 
         OutOrder condition = new OutOrder();
         condition.setApplyUser(applyUser);
@@ -203,24 +224,29 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         condition.setStartDatetime(impoweDatetime);
 
         List<OutOrder> list = outOrderDAO.selectList(condition);
-        if (CollectionUtils.isEmpty(list)) {
-            return true;
+        Long impowerAmount = 0L;
+        for (OutOrder data : list) {
+            impowerAmount = impowerAmount + data.getAmount();
         }
-        return false;
+
+        return impowerAmount;
     }
 
     @Override
-    public boolean checkUpgradeOrder(String applyUser, Date datetime) {
+    public Long checkUpgradeOrder(String applyUser, Date datetime) {
 
         OutOrder condition = new OutOrder();
         condition.setApplyDatetime(datetime);
         condition.setApplyUser(applyUser);
         condition.setKind(EOutOrderKind.Upgrade_Order.getCode());
+
         List<OutOrder> list = outOrderDAO.selectList(condition);
-        if (CollectionUtils.isEmpty(list)) {
-            return false;
+        Long impowerAmount = 0L;
+        for (OutOrder data : list) {
+            impowerAmount = impowerAmount + data.getAmount();
         }
-        return true;
+
+        return impowerAmount;
     }
 
     @Override
@@ -323,6 +349,44 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         condition.setStartDatetime(startDatetime);
         condition.setEndDatetime(endDatetime);
         return outOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public boolean checkImpower(String applyUser, Date datetime) {
+        OutOrder condition = new OutOrder();
+        condition.setApplyDatetime(datetime);
+        condition.setApplyUser(applyUser);
+        condition.setKind(EOutOrderKind.Upgrade_Order.getCode());
+
+        List<String> noStatusList = new ArrayList<String>();
+        noStatusList.add(EOutOrderStatus.Unpaid.getCode());
+        noStatusList.add(EOutOrderStatus.PAY_FAIL.getCode());
+        condition.setNoStatusList(noStatusList);
+
+        List<OutOrder> list = outOrderDAO.selectList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkUpgrade(String applyUser, Date datetime) {
+        OutOrder condition = new OutOrder();
+        condition.setApplyDatetime(datetime);
+        condition.setApplyUser(applyUser);
+
+        condition.setKind(EOutOrderKind.Impower_Order.getCode());
+        List<String> noStatusList = new ArrayList<String>();
+        noStatusList.add(EOutOrderStatus.Unpaid.getCode());
+        noStatusList.add(EOutOrderStatus.PAY_FAIL.getCode());
+        condition.setNoStatusList(noStatusList);
+
+        List<OutOrder> list = outOrderDAO.selectList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
+        }
+        return false;
     }
 
 }

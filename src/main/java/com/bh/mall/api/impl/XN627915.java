@@ -30,6 +30,7 @@ public class XN627915 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         InOrder condition = new InOrder();
+        condition.setApplyUser(req.getApplyUser());
         condition.setRealName(req.getRealName());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setTeamName(req.getTeamName());

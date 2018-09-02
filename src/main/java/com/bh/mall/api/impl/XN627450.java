@@ -33,6 +33,7 @@ public class XN627450 extends AProcessor {
         Account condition = new Account();
         condition.setRealName(req.getRealName());
 
+        condition.setLevel(StringValidater.toInteger(req.getLevel()));
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
         condition.setCurrency(req.getCurrency());

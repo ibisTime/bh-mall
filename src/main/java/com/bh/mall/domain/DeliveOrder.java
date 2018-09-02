@@ -56,6 +56,9 @@ public class DeliveOrder extends ABaseDO {
     // 下单人
     private String applyUser;
 
+    // 下单时间
+    private Date applyDatetime;
+
     // 真实姓名
     private String realName;
 
@@ -322,6 +325,14 @@ public class DeliveOrder extends ABaseDO {
 
     public void setDeliveName(String deliveName) {
         this.deliveName = deliveName;
+    }
+
+    public Date getApplyDatetime() {
+        return applyDatetime;
+    }
+
+    public void setApplyDatetime(Date applyDatetime) {
+        this.applyDatetime = applyDatetime;
     }
 
 }

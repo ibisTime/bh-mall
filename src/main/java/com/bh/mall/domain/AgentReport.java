@@ -90,6 +90,9 @@ public class AgentReport extends ABaseDO {
     // 可提现账户余额
     private Long yjAmount;
 
+    // 关键字模糊查询
+    private String keyword;
+
     public void setRealName(String realName) {
         this.realName = realName;
     }
@@ -288,6 +291,14 @@ public class AgentReport extends ABaseDO {
 
     public void setYjAmount(Long yjAmount) {
         this.yjAmount = yjAmount;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
 }

@@ -36,6 +36,8 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.callback.CallbackBzdhConroller;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.PropertiesUtil;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -157,18 +159,17 @@ public class InOrderAOImpl implements IInOrderAO {
             Specs specs = specsBO.getSpecs(cart.getSpecsCode());
             if (!EProductStatus.Shelf_YES.getCode().equals(pData.getStatus())) {
                 throw new BizException("xn0000",
-                    "您购物的[" + pData.getName() + "]商家已经下架喽！去看看其他的吧");
+                    "您购车物的[" + pData.getName() + "]商家已经下架喽！去看看其他的吧");
             }
             AgentPrice agentPrice = agentPriceBO
                 .getPriceByLevel(specs.getCode(), applyAgent.getLevel());
 
             // 检查是否可购买
-            if (EBoolean.NO.getCode().equals(agentPrice.getIsBuy())) {
-                throw new BizException("xn0000", "您的等级无法购买该规格的产品");
+            if (EBoolean.NO.getCode().equals(specs.getIsNormalOrder())) {
+                throw new BizException("xn0000", "该规格不允许普通单下单，换个商品看看吧");
             }
 
             // 非最高等级代理，检查上级云仓
-
             if (StringValidater.toInteger(
                 EAgentLevel.ONE.getCode()) != agentLevel.getLevel()) {
                 wareBO.checkProduct(applyAgent.getHighUserId(),
@@ -207,6 +208,7 @@ public class InOrderAOImpl implements IInOrderAO {
         InOrder condition = new InOrder();
         condition.setApplyUser(applyAgent.getUserId());
         condition.setStartDatetime(applyAgent.getImpowerDatetime());
+        condition.setStatus(EInOrderStatus.Received.getCode());
         long count = inOrderBO.getTotalCount(condition);
         if (count == 0) {
             if (agentLevel.getAmount() > amount) {
@@ -223,7 +225,8 @@ public class InOrderAOImpl implements IInOrderAO {
             if (agentLevel.getAmount() > amount) {
                 throw new BizException("xn0000",
                     "剩余门槛不能大于[" + agentLevel.getMinSurplus() / 1000
-                            + "]元，目前余额还有[" + amount / 1000 + "]元");
+                            + "]元，目前余额还有[" + mkAccount.getAmount() / 1000
+                            + "]元");
             }
         }
 
@@ -261,6 +264,11 @@ public class InOrderAOImpl implements IInOrderAO {
             throw new BizException("xn0000",
                 "剩余门槛不能大于[" + agentLevel.getMinSurplus() / 1000 + "]元，目前余额还有["
                         + restAmount / 1000 + "]元");
+        }
+
+        // 检查是否可购买
+        if (EBoolean.NO.getCode().equals(specs.getIsNormalOrder())) {
+            throw new BizException("xn0000", "该规格不允许普通单下单，换个商品看看吧");
         }
 
         // 检查起购数量
@@ -320,63 +328,86 @@ public class InOrderAOImpl implements IInOrderAO {
     @Override
     @Transactional
     public Object payInOrder(List<String> codeList, String payType) {
+
+        InOrder inOrder = inOrderBO.getInOrder(codeList.get(0));
+        Agent applyUser = agentBO.getAgent(inOrder.getApplyUser());
+        Long amount = 0L;
+        Long cjAward = 0L;
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.InOrder.getCode());
+
         Object result = null;
         for (String code : codeList) {
             InOrder data = inOrderBO.getInOrder(code);
             if (!EInOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
                 throw new BizException("xn0000", "订单未处于待支付状态");
             }
-            Agent uData = agentBO.getAgent(data.getApplyUser());
+
             if (EPayType.RMB_YE.getCode().equals(payType)) {
-                // 账户扣钱
-                String payGroup = inOrderBO.addPayGroup(data);
-                Account mkAccount = accountBO.getAccountByUser(
-                    data.getApplyUser(), ECurrency.MK_CNY.getCode());
-                data.setPayType(EChannelType.NBZ.getCode());
-                accountBO.changeAmount(mkAccount.getAccountNumber(),
-                    EChannelType.NBZ, null, payGroup, data.getCode(),
-                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
-                    -data.getAmount());
-
-                // 扣减上级云仓
-                Product pData = productBO.getProduct(data.getProductCode());
-                Specs specs = specsBO.getSpecs(data.getSpecsCode());
-                this.changeProductNumber(uData, pData, specs, data,
-                    -data.getQuantity(), data.getCode());
-
-                // 购买云仓
-                wareBO.buyWare(data.getCode(), data.getProductCode(),
-                    data.getProductName(), data.getSpecsCode(),
-                    data.getSpecsName(), data.getQuantity(), data.getPrice(),
-                    uData, ESpecsLogType.Order,
-                    "购买产品：[" + data.getProductName() + "]");
-                // 出货以及推荐奖励
-                this.payAward(data);
-
-                data.setPayCode(data.getCode());
                 data.setPayType(EPayType.RMB_YE.getCode());
-                inOrderBO.paySuccess(data);
 
-                result = new BooleanRes(true);
-            } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-                data.setPayType(EChannelType.WeChat_H5.getCode());
-                Object payResult = this.payWXH5(data,
-                    PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL);
-                result = payResult;
+                data.setPayGroup(payGroup);
+                inOrderBO.paySuccess(data);
+                // 计算差额
+                // if (StringValidater.toInteger(
+                // EAgentLevel.ONE.getCode()) != applyUser.getLevel()) {
+                // Agent highAgent = agentBO
+                // .getAgent(applyUser.getHighUserId());
+                // AgentPrice highPrice = agentPriceBO.getPriceByLevel(
+                // data.getSpecsCode(), highAgent.getLevel());
+                // AgentPrice price = agentPriceBO.getPriceByLevel(
+                // data.getSpecsCode(), applyUser.getLevel());
+                // cjAward = cjAward + highPrice.getPrice() - price.getPrice();
+                //
+                // }
+                payOrder(data, applyUser);
+                inOrderBO.paySuccess(data);
             }
+            amount = amount + data.getAmount();
+
+        }
+
+        if (EPayType.RMB_YE.getCode().equals(payType)) {
+            // 账户扣钱
+            Account mkAccount = accountBO.getAccountByUser(
+                applyUser.getUserId(), ECurrency.MK_CNY.getCode());
+            accountBO.changeAmount(mkAccount.getAccountNumber(),
+                EChannelType.NBZ, null, payGroup, payGroup, EBizType.AJ_GMYC,
+                EBizType.AJ_GMYC.getValue(), -amount);
+
+            // 差额利润
+            // if (cjAward > 0) {
+            // if (StringValidater.toInteger(
+            // EAgentLevel.ONE.getCode()) != applyUser.getLevel()) {
+            // Agent highAgent = agentBO
+            // .getAgent(applyUser.getHighUserId());
+            // mkAccount = accountBO.getAccountByUser(
+            // highAgent.getUserId(), ECurrency.MK_CNY.getCode());
+            // accountBO.changeAmount(mkAccount.getAccountNumber(),
+            // EChannelType.NBZ, null, payGroup, payGroup,
+            // EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(), -amount);
+            //
+            // }
+            // }
+            this.payAward(applyUser, inOrder.getProductCode(),
+                inOrder.getSpecsCode(), amount, payGroup);
+
+            result = new BooleanRes(true);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            Object payResult = this.payWXH5(applyUser.getUserId(), payGroup,
+                payGroup, amount, PropertiesUtil.Config.WECHAT_H5_ORDER_BACKURL,
+                EChannelType.WeChat_H5.getCode());
+            result = payResult;
         }
         return result;
 
     }
 
-    private Object payWXH5(InOrder data, String callBackUrl) {
-        Long rmbAmount = data.getAmount();
-        Agent agent = agentBO.getAgent(data.getApplyUser());
-        String payGroup = inOrderBO.addPayGroup(data);
-        return weChatAO.getPrepayIdH5(agent.getUserId(), payGroup,
-            data.getCode(), EBizType.AJ_GMCP.getCode(),
-            EBizType.AJ_GMCP.getValue(), rmbAmount, callBackUrl,
-            data.getPayType());
+    private Object payWXH5(String applyUser, String payGroup, String refNo,
+            Long amount, String callBackUrl, String payType) {
+        return weChatAO.getPrepayIdH5(applyUser, payGroup, refNo,
+            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), amount,
+            callBackUrl, payType);
     }
 
     @Override
@@ -387,41 +418,78 @@ public class InOrderAOImpl implements IInOrderAO {
             map = XMLUtil.doXMLParse(result);
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
-            InOrder data = inOrderBO.getInOrder(outTradeNo);
-            if (!EInOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
-                throw new BizException("xn0000", "订单已支付");
-            }
 
+            List<String> codeList = new ArrayList<String>();
             // 此处调用订单查询接口验证是否交易成功
+            List<InOrder> list = inOrderBO.getInOrderByPayGroup(outTradeNo);
             boolean isSucc = weChatAO.reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
+
             if (isSucc) {
+                Long amount = 0L;
+                Long cjAward = 0L;
+                Agent agent = agentBO.getAgent(list.get(0).getApplyUser());
+                for (InOrder data : list) {
+                    if (!EInOrderStatus.Unpaid.getCode()
+                        .equals(data.getStatus())) {
+                        throw new BizException("xn0000", "订单已支付");
+                    }
+                    payOrder(data, agent);
 
-                Agent agent = agentBO.getAgent(data.getApplyUser());
+                    data.setPayType(EChannelType.WeChat_H5.getCode());
+                    data.setPayCode(wechatOrderNo);
+                    inOrderBO.paySuccess(data);
+
+                    if (StringValidater.toInteger(
+                        EAgentLevel.ONE.getCode()) != agent.getLevel()) {
+                        Agent highAgent = agentBO
+                            .getAgent(agent.getHighUserId());
+                        AgentPrice highPrice = agentPriceBO.getPriceByLevel(
+                            data.getSpecsCode(), highAgent.getLevel());
+                        AgentPrice price = agentPriceBO.getPriceByLevel(
+                            data.getSpecsCode(), agent.getLevel());
+                        cjAward = cjAward + highPrice.getPrice()
+                                - price.getPrice();
+                    }
+
+                    amount = amount + data.getAmount();
+                }
+                InOrder inOrder = list.get(0);
                 // 账户收钱
-                this.payOrder(agent, data, wechatOrderNo);
+                this.payOrder(agent, EChannelType.WeChat_H5.getCode(), codeList,
+                    wechatOrderNo, wechatOrderNo, amount);
 
-                // 扣减上级云仓
-                Product pData = productBO.getProduct(data.getProductCode());
-                Specs specs = specsBO.getSpecs(data.getSpecsCode());
-                this.changeProductNumber(agent, pData, specs, data,
-                    -data.getQuantity(), data.getCode());
-
-                // 购买云仓
-                wareBO.buyWare(data.getCode(), data.getProductCode(),
-                    data.getProductName(), data.getSpecsCode(),
-                    data.getSpecsName(), data.getQuantity(), data.getPrice(),
-                    agent, ESpecsLogType.Order,
-                    "购买产品：[" + data.getProductName() + "]");
                 // 出货以及推荐奖励
-                this.payAward(data);
-                data.setPayCode(wechatOrderNo);
-                inOrderBO.paySuccess(data);
+                this.payAward(agent, inOrder.getProductCode(),
+                    inOrder.getSpecsCode(), amount, outTradeNo);
+
+                // 差额利润
+                if (cjAward > 0) {
+                    if (StringValidater.toInteger(
+                        EAgentLevel.ONE.getCode()) != agent.getLevel()) {
+                        Agent highAgent = agentBO
+                            .getAgent(agent.getHighUserId());
+                        Account mkAccount = accountBO.getAccountByUser(
+                            highAgent.getUserId(), ECurrency.MK_CNY.getCode());
+                        accountBO.changeAmount(mkAccount.getAccountNumber(),
+                            EChannelType.NBZ, null, outTradeNo, outTradeNo,
+                            EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(),
+                            -amount);
+
+                    }
+                }
             } else {
 
-                data.setStatus(EInOrderStatus.Pay_NO.getCode());
-                data.setPayDatetime(new Date());
-                inOrderBO.payNo(data);
+                for (InOrder data : list) {
+                    if (!EInOrderStatus.Unpaid.getCode()
+                        .equals(data.getStatus())) {
+                        throw new BizException("xn0000", "订单已支付");
+                    }
+                    data.setStatus(EInOrderStatus.Pay_NO.getCode());
+                    data.setPayDatetime(new Date());
+                    inOrderBO.payNo(data);
+                }
+
             }
         } catch (JDOMException |
 
@@ -489,68 +557,26 @@ public class InOrderAOImpl implements IInOrderAO {
         return inOrder;
     }
 
-    private void payAward(InOrder data) {
+    @Transactional
+    private void payAward(Agent applyUser, String productCode, String specsCode,
+            Long orderAmount, String payGroup) {
 
-        // 统计出货量
-        ProductReport productReport = productReportBO
-            .getProductReport(data.getTeamName(), data.getSpecsCode());
-        Agent applyUser = agentBO.getAgent(data.getApplyUser());
-        if (null == productReport) {
-            productReportBO.saveProductReport(data, applyUser.getRealName());
-        } else {
-            productReportBO.refreshProductReport(productReport,
-                productReport.getQuantity() + data.getQuantity());
-        }
-
-        // 统计差额利润
         AgentReport report = null;
-        Account account = null;
-        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != applyUser
-            .getLevel()) {
-
-            // 计算差额利润
-            AgentPrice price = agentPriceBO.getPriceByLevel(data.getSpecsCode(),
-                applyUser.getLevel());
-            Agent toUser = agentBO.getAgent(applyUser.getHighUserId());
-            AgentPrice highPrice = agentPriceBO
-                .getPriceByLevel(data.getSpecsCode(), toUser.getLevel());
-            Long profit = (price.getPrice() - highPrice.getPrice())
-                    * data.getQuantity();
-
-            // 订单归属人账户
-            account = accountBO.getAccountByUser(toUser.getUserId(),
-                ECurrency.YJ_CNY.getCode());
-            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
-                null, null, data.getCode(), EBizType.AJ_CELR,
-                EBizType.AJ_CELR.getValue(), profit);
-
-            // 统计差额利润
-            report = agentReportBO
-                .getAgentReportByUser(applyUser.getHighUserId());
-            report.setProfitAward(profit);
-            agentReportBO.refreshAward(report);
-
-            // 统计出货
-            orderReportBO.saveInOrderReport(data);
-        }
 
         // **********出货奖*******
-        Product product = productBO.getProduct(data.getProductCode());
-        Long orderAmount = data.getAmount();
+        Product product = productBO.getProduct(productCode);
         String fromUserId = ESysUser.SYS_USER_BH.getCode();
+
         // 出货奖励,且产品计入出货
         if (EProductIsTotal.YES.getCode().equals(product.getIsTotal())) {
             ChAward award = chAwardBO.getChAwardByLevel(applyUser.getLevel(),
-                data.getAmount());
+                orderAmount);
             if (award != null) {
                 Long awardAmount = (long) (orderAmount * award.getPercent()
                         / 100);
-                account = accountBO.getAccountByUser(applyUser.getUserId(),
-                    ECurrency.YJ_CNY.getCode());
-
                 // 是否是一级代理
-                if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != data
-                    .getLevel()) {
+                if (StringValidater.toInteger(
+                    EAgentLevel.ONE.getCode()) != applyUser.getLevel()) {
                     fromUserId = applyUser.getHighUserId();
                 }
 
@@ -558,25 +584,30 @@ public class InOrderAOImpl implements IInOrderAO {
                     applyUser.getUserId(), ECurrency.YJ_CNY.getCode(),
                     awardAmount, EBizType.AJ_CHJL_IN,
                     EBizType.AJ_CHJL_IN.getValue(),
-                    EBizType.AJ_CHJL_IN.getValue(), data.getCode());
+                    EBizType.AJ_CHJL_IN.getValue(), payGroup);
 
                 // 统计出货奖
                 report = agentReportBO
                     .getAgentReportByUser(applyUser.getUserId());
-                report.setSendAward(awardAmount);
+                report.setSendAward(awardAmount + report.getSendAward());
                 agentReportBO.refreshAward(report);
             }
         }
 
         // **********推荐奖**********
+
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != applyUser
+            .getLevel()) {
+            fromUserId = applyUser.getHighUserId();
+        }
         // 是否有推荐人
         if (this.checkAward(applyUser)) {
             if (StringUtils.isNotBlank(applyUser.getReferrer())) {
                 // 直接推荐人
-                TjAward tjAward = tjAwardBO.getAwardByLevel(
-                    applyUser.getLevel(), data.getProductCode());
-                if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                    .getLevel()) {
+                TjAward tjAward = tjAwardBO
+                    .getAwardByLevel(applyUser.getLevel(), productCode);
+                if (StringValidater.toInteger(
+                    EAgentLevel.ONE.getCode()) == applyUser.getLevel()) {
                     // 直接推荐奖
                     if (null != applyUser.getReferrer()) {
                         Agent firstReferee = agentBO
@@ -584,18 +615,20 @@ public class InOrderAOImpl implements IInOrderAO {
 
                         Long amount = (long) (orderAmount
                                 * (tjAward.getValue1() / 100));
-                        accountBO.transAmountCZB(fromUserId,
-                            ECurrency.YJ_CNY.getCode(),
-                            firstReferee.getUserId(),
-                            ECurrency.YJ_CNY.getCode(), amount,
-                            EBizType.AJ_TJJL_IN, EBizType.AJ_TJJL_IN.getValue(),
-                            EBizType.AJ_TJJL_IN.getValue(), data.getCode());
-
-                        // 统计推荐奖
-                        report = agentReportBO
-                            .getAgentReportByUser(firstReferee.getUserId());
-                        report.setRefreeAward(amount);
-                        agentReportBO.refreshAward(report);
+                        if (amount > 0) {
+                            accountBO.transAmountCZB(fromUserId,
+                                ECurrency.YJ_CNY.getCode(),
+                                firstReferee.getUserId(),
+                                ECurrency.YJ_CNY.getCode(), amount,
+                                EBizType.AJ_TJJL_IN,
+                                EBizType.AJ_TJJL_IN.getValue(),
+                                EBizType.AJ_TJJL_IN.getValue(), payGroup);
+                            // 统计推荐奖
+                            report = agentReportBO
+                                .getAgentReportByUser(firstReferee.getUserId());
+                            report.setRefreeAward(amount);
+                            agentReportBO.refreshAward(report);
+                        }
 
                         // 间接推荐奖
                         if (StringUtils
@@ -604,40 +637,45 @@ public class InOrderAOImpl implements IInOrderAO {
                                 .getAgent(firstReferee.getReferrer());
                             amount = (long) (orderAmount
                                     * (tjAward.getValue2() / 100));
-                            accountBO.transAmountCZB(fromUserId,
-                                ECurrency.YJ_CNY.getCode(),
-                                secondReferee.getUserId(),
-                                ECurrency.YJ_CNY.getCode(), amount,
-                                EBizType.AJ_TJJL_IN,
-                                EBizType.AJ_TJJL_IN.getValue(),
-                                EBizType.AJ_TJJL_IN.getValue(), data.getCode());
-
-                            // 统计推荐奖
-                            report = agentReportBO.getAgentReportByUser(
-                                secondReferee.getUserId());
-                            report.setRefreeAward(amount);
-                            agentReportBO.refreshAward(report);
+                            if (amount > 0) {
+                                accountBO.transAmountCZB(fromUserId,
+                                    ECurrency.YJ_CNY.getCode(),
+                                    secondReferee.getUserId(),
+                                    ECurrency.YJ_CNY.getCode(), amount,
+                                    EBizType.AJ_TJJL_IN,
+                                    EBizType.AJ_TJJL_IN.getValue(),
+                                    EBizType.AJ_TJJL_IN.getValue(), payGroup);
+                                // 统计推荐奖
+                                report = agentReportBO.getAgentReportByUser(
+                                    secondReferee.getUserId());
+                                report.setRefreeAward(amount);
+                                agentReportBO.refreshAward(report);
+                            }
 
                             // 次推荐奖
                             if (StringUtils
                                 .isNotBlank(secondReferee.getReferrer())) {
                                 Agent thirdReferee = agentBO
                                     .getAgent(secondReferee.getReferrer());
+                                amount = (long) (orderAmount
+                                        * (tjAward.getValue3() / 100));
 
-                                accountBO.transAmountCZB(fromUserId,
-                                    ECurrency.YJ_CNY.getCode(),
-                                    thirdReferee.getUserId(),
-                                    ECurrency.YJ_CNY.getCode(), amount,
-                                    EBizType.AJ_TJJL_IN,
-                                    EBizType.AJ_TJJL_IN.getValue(),
-                                    EBizType.AJ_TJJL_IN.getValue(),
-                                    data.getCode());
+                                if (amount > 0) {
+                                    accountBO.transAmountCZB(fromUserId,
+                                        ECurrency.YJ_CNY.getCode(),
+                                        thirdReferee.getUserId(),
+                                        ECurrency.YJ_CNY.getCode(), amount,
+                                        EBizType.AJ_TJJL_IN,
+                                        EBizType.AJ_TJJL_IN.getValue(),
+                                        EBizType.AJ_TJJL_IN.getValue(),
+                                        payGroup);
 
-                                // 统计推荐奖
-                                report = agentReportBO.getAgentReportByUser(
-                                    thirdReferee.getUserId());
-                                report.setRefreeAward(amount);
-                                agentReportBO.refreshAward(report);
+                                    // 统计推荐奖
+                                    report = agentReportBO.getAgentReportByUser(
+                                        thirdReferee.getUserId());
+                                    report.setRefreeAward(amount);
+                                    agentReportBO.refreshAward(report);
+                                }
                             }
                         }
                     }
@@ -718,14 +756,8 @@ public class InOrderAOImpl implements IInOrderAO {
         return true;
     }
 
-    private void payOrder(Agent agent, InOrder data, String wechatOrderNo) {
-
-        // 改变产品数量
-        Product pData = productBO.getProduct(data.getProductCode());
-        Specs psData = specsBO.getSpecs(data.getSpecsCode());
-        this.changeProductNumber(agent, pData, psData, data,
-            -data.getQuantity(), data.getCode());
-
+    private void payOrder(Agent agent, String payType, List<String> codeList,
+            String payGroup, String wechatOrderNo, Long amount) {
         // 订单归属人不是平台，托管账户与代理账户同时加钱
         if (!(StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
             .getLevel())) {
@@ -733,20 +765,19 @@ public class InOrderAOImpl implements IInOrderAO {
                 ECurrency.YJ_CNY.getCode());
             // 收款方账户价钱
             accountBO.changeAmount(account.getAccountNumber(),
-                EChannelType.WeChat_H5, wechatOrderNo, data.getPayGroup(),
-                data.getCode(), EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
-                data.getAmount());
+                EChannelType.WeChat_H5, wechatOrderNo, payGroup, codeList,
+                EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(), amount);
             // 托管账户加钱
             accountBO.changeAmount(ESysUser.TG_BH.getCode(),
-                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
-                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
-                EBizType.AJ_GMYC.getValue(), data.getAmount());
+                EChannelType.getEChannelType(payType), wechatOrderNo, payGroup,
+                codeList, EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
+                amount);
         } else {
             // 订单归属人是平台，只有托管账户加钱
             accountBO.changeAmount(ESysUser.TG_BH.getCode(),
-                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
-                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
-                EBizType.AJ_GMYC.getValue(), data.getAmount());
+                EChannelType.getEChannelType(payType), wechatOrderNo, payGroup,
+                codeList, EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
+                amount);
         }
     }
 
@@ -800,45 +831,71 @@ public class InOrderAOImpl implements IInOrderAO {
             Integer quantity) {
 
         // 今日已购数量
-        int number = getNumber(agent.getUserId(), DateUtil.getTodayStart(),
-            DateUtil.getTodayEnd());
+        int number = getNumber(agent.getUserId(), specs.getCode(),
+            DateUtil.getTodayStart(), DateUtil.getTodayEnd()) + quantity;
         // 日限购
         if (0 != price.getDailyNumber() && number > price.getDailyNumber()) {
             throw new BizException("xn00000",
-                "您已购[" + number + "],本日最多能购买[" + price.getDailyNumber() + "]");
+                "您今日的购买数量不能多于[" + price.getDailyNumber() + "]");
         }
 
         // 本周已购数量
-        number = getNumber(agent.getUserId(), DateUtil.getWeeklyStart(),
-            DateUtil.getWeeklyEnd());
+        number = getNumber(agent.getUserId(), specs.getCode(),
+            DateUtil.getWeeklyStart(), DateUtil.getWeeklyEnd()) + quantity;
         // 周限购
         if (0 != price.getWeeklyNumber() && number > price.getWeeklyNumber()) {
             throw new BizException("xn00000",
-                "您已购[" + number + "],本日最多能购买[" + price.getWeeklyNumber() + "]");
+                "您今日的购买数量不能多于[" + price.getWeeklyNumber() + "]");
         }
 
         // 本月已购数量
-        number = getNumber(agent.getUserId(), DateUtil.getMonthStart(),
-            DateUtil.getMonthEnd());
+        number = getNumber(agent.getUserId(), specs.getCode(),
+            DateUtil.getMonthStart(), DateUtil.getMonthEnd()) + quantity;
         // 月限购
         if (0 != price.getMonthlyNumber()
                 && number > price.getMonthlyNumber()) {
-            throw new BizException("xn00000", "您已购[" + number + "],本月最多能购买["
-                    + price.getMonthlyNumber() + "]");
+            throw new BizException("xn00000",
+                "您今日的购买数量不能多于[" + price.getMonthlyNumber() + "]");
         }
     }
 
     // 日、周、月已购数量
-    private int getNumber(String agentId, Date startDatetime,
+    private int getNumber(String agentId, String specsCode, Date startDatetime,
             Date endDatetime) {
         int number = 0;
-        List<InOrder> list = inOrderBO.getProductQuantity(agentId,
+        List<InOrder> list = inOrderBO.getProductQuantity(agentId, specsCode,
             startDatetime, endDatetime);
         for (InOrder inOrder : list) {
-            Specs specs = specsBO.getSpecs(inOrder.getSpecsCode());
-            number = number + specs.getNumber();
+            number = number + inOrder.getQuantity();
         }
         return number;
     }
 
+    private void payOrder(InOrder data, Agent applyUser) {
+        // 购买云仓
+        wareBO.buyWare(data.getCode(), data.getProductCode(),
+            data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
+            data.getQuantity(), data.getPrice(), applyUser, ESpecsLogType.Order,
+            "购买产品：[" + data.getProductName() + "]");
+
+        // 扣减上级云仓
+        Product pData = productBO.getProduct(data.getProductCode());
+        Specs specs = specsBO.getSpecs(data.getSpecsCode());
+        this.changeProductNumber(applyUser, pData, specs, data,
+            -data.getQuantity(), data.getCode());
+
+        // 统计团队产品销售,只统计最好等级代理
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == applyUser
+            .getLevel()) {
+            ProductReport report = productReportBO
+                .getProductReport(applyUser.getUserId(), data.getSpecsCode());
+            if (report == null) {
+                productReportBO.saveProductReport(data, data.getQuantity(),
+                    applyUser.getRealName());
+            } else {
+                productReportBO.refreshProductReport(report,
+                    data.getQuantity());
+            }
+        }
+    }
 }

@@ -31,6 +31,7 @@ public class XN627305 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SjForm condition = new SjForm();
+        condition.setToUserId(req.getUserId());
         condition.setKeyWord(req.getKeyword());
         condition.setStatus(req.getStatus());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));

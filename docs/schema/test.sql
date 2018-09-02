@@ -1,0 +1,48 @@
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031502364009699','PS201809031502364003073','1','10000','20000','1','1','1000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031502364014173','PS201809031502364003073','3','50000','60000','2','2','10000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031502364014846','PS201809031502364003073','2','30000','40000','1','1','10000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031502364024296','PS201809031502364003073','4','70000','80000','2','2','20000','20000','20000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031502364026389','PS201809031502364003073','5','90000','100000','1','1','20000','20000','20000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031502364036603','PS201809031502364003073','6','110000','120000','1','1','20000','20000','20000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP20180903152721185328','PS201809031527211846645','1','10000','20000','1','1','10000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031527211957630','PS201809031527211846645','3','50000','60000','2','2','200000','20000','20000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031527211958890','PS201809031527211846645','2','30000','40000','2','2','10000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031527211964698','PS201809031527211846645','4','70000','80000','1','1','20000','20000','200000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031527211967702','PS201809031527211846645','5','90000','100000','1','1','10000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031527211969985','PS201809031527211846645','6','110000','120000','2','2','10000','10000','100000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006802203','PS201809031531006806135','1','30000','40000','2','2','1000','2000','20000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006812143','PS201809031531006806135','4','90000','100000','1','1','10000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006812788','PS201809031531006806135','3','70000','80000','1','1','10000','100000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006818446','PS201809031531006806135','2','50000','60000','1','1','20000','20000','20000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006821891','PS201809031531006806135','5','110000','120000','1','1','10000','10000','100000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006828983','PS201809031531006806135','6','130000','140000','2','2','10000','10000','10000','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP20180903153100683110','PS201809031531006827657','3','55000','66000','1','1','10','10','10','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006833556','PS201809031531006827657','2','33000','44000','1','1','10','10','10','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006834643','PS201809031531006827657','1','11000','22000','1','1','10','10','10','0');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006841547','PS201809031531006827657','5','99000','111000','1','1','10','10','10','1');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006847448','PS201809031531006827657','6','112000','113000','1','1','10','10','10','0');
+insert into `tbh_agent_price` (`code`, `specs_code`, `level`, `price`, `change_price`, `start_number`, `min_number`, `daily_number`, `weekly_number`, `monthly_number`, `is_buy`) values('PSP201809031531006848120','PS201809031531006827657','4','77000','88000','1','1','10','10','10','1');
+
+
+
+insert into `tbh_specs` (`code`, `product_code`, `is_single`, `single_number`, `ref_code`, `name`, `number`, `weight`, `is_sq_order`, `is_sj_order`, `is_normal_order`, `stock_number`) values('PS201809031502364003073','P201809031502363986220','0',NULL,NULL,'普通单','1','10000','1','0','1','813');
+
+insert into `tbh_specs` (`code`, `product_code`, `is_single`, `single_number`, `ref_code`, `name`, `number`, `weight`, `is_sq_order`, `is_sj_order`, `is_normal_order`, `stock_number`) values('PS201809031527211846645','P201809031502363986220','0',NULL,NULL,'箱','1','1000','1','1','1','16');
+
+insert into `tbh_specs` (`code`, `product_code`, `is_single`, `single_number`, `ref_code`, `name`, `number`, `weight`, `is_sq_order`, `is_sj_order`, `is_normal_order`, `stock_number`) values('PS201809031531006806135','P201809031502363986220','1','1',NULL,'盒','10','10000','1','1','1','976');
+
+insert into `tbh_specs` (`code`, `product_code`, `is_single`, `single_number`, `ref_code`, `name`, `number`, `weight`, `is_sq_order`, `is_sj_order`, `is_normal_order`, `stock_number`) values('PS201809031531006827657','P201809031502363986220','0',NULL,NULL,'限购规格c董事不可买','100','10000','1','1','1','1000');
+
+
+insert into `tbh_product` (`code`, `is_free`, `name`, `ad_price`, `price`, `vir_number`, `real_number`, `order_no`, `pic`, `adv_pic`, `slogan`, `is_total`, `status`, `create_datetime`, `updater`, `update_datetime`, `remark`) values('P201809031502363986220','1','0901产品1','100000','2000000','100','200','1','f5a5c3fa6d565c6fa159711569fb315e_1535785278224.jpg','正汇aaa3 (2) (1)_1535785274342.jpg','广告语广告语广告语广告语','1','2','2018-09-03 15:02:36','USYS201800000000002','2018-09-03 15:31:06','');
+
+
+insert into `tbh_tj_award` (`code`, `product_code`, `level`, `value1`, `value2`, `value3`) values('TJ20181013151163453345','P201809031502363986220','2','5.000','5.000','5.000');
+insert into `tbh_tj_award` (`code`, `product_code`, `level`, `value1`, `value2`, `value3`) values('TJ2018101315116513453','P201809031502363986220','1','6.000','6.000','6.000');
+insert into `tbh_tj_award` (`code`, `product_code`, `level`, `value1`, `value2`, `value3`) values('TJ20181013551163453345','P201809031502363986220','3','4.000','4.000','4.000');
+insert into `tbh_tj_award` (`code`, `product_code`, `level`, `value1`, `value2`, `value3`) values('TJ201810151163453345','P201809031502363986220','5','1.000','1.000','1.000');
+insert into `tbh_tj_award` (`code`, `product_code`, `level`, `value1`, `value2`, `value3`) values('TJ2018101515163453345','P201809031502363986220','4','1.000','1.000','1.000');
+
+
+
+

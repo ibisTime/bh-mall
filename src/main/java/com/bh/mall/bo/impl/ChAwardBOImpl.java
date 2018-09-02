@@ -90,15 +90,11 @@ public class ChAwardBOImpl extends PaginableBOImpl<ChAward>
     }
 
     @Override
-    public boolean isChAwardExist(Integer level, Long startAmount) {
+    public ChAward isChAwardExist(Integer level, Long startAmount) {
         ChAward condition = new ChAward();
         condition.setLevel(level);
         condition.setAmount(startAmount);
-        ChAward data = chAwardDAO.select(condition);
-        if (data == null) {
-            return false;
-        }
-        return true;
+        return chAwardDAO.select(condition);
     }
 
 }

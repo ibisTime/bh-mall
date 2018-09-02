@@ -46,7 +46,7 @@ public class InnerProductBOImpl extends PaginableBOImpl<InnerProduct>
             InnerProduct condition = new InnerProduct();
             condition.setCode(code);
             data = innerProductDAO.select(condition);
-            if (data == null) {
+            if (null == data) {
                 throw new BizException("xn0000", "产品不存在");
             }
         }

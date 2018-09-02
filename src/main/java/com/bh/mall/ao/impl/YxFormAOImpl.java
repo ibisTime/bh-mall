@@ -269,10 +269,13 @@ public class YxFormAOImpl implements IYxFormAO {
             String mobile, Integer level, String province, String city,
             String area, String address) {
         YxForm data = yxFormBO.getYxForm(userId);
-        if (EYxFormStatus.MIND.getCode().equals(data.getStatus())) {
+        if (!EYxFormStatus.MIND.getCode().equals(data.getStatus())) {
             throw new BizException("xn00000", "该代理已经被接受喽，无法修改资料了");
         }
         yxFormBO.refreshYxForm(data, realName, wxId, mobile, level, province,
+            city, area, address);
+        Agent agent = agentBO.getAgent(data.getUserId());
+        agentBO.refreshAgent(agent, wxId, mobile, realName, null, province,
             city, area, address);
 
     }

@@ -12,7 +12,6 @@ import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.IWareLogBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.common.AmountUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWareDAO;
@@ -118,7 +117,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
         Ware dbData = this.getWare(code);
         Integer nowQuantity = dbData.getQuantity() + quantity;
-        Long nowAmount = AmountUtil.eraseLiUp(nowQuantity * dbData.getPrice());
+        Long nowAmount = nowQuantity * dbData.getPrice();
         if (nowQuantity < 0) {
             throw new BizException("xn0000", "该规格的产品数量不足");
         }

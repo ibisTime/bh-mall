@@ -20,6 +20,9 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>

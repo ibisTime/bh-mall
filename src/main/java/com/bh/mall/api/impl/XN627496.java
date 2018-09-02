@@ -4,8 +4,9 @@ import com.bh.mall.ao.IJourAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.ObjValidater;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Jour;
-import com.bh.mall.dto.req.XN627493Req;
+import com.bh.mall.dto.req.XN627496Req;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -16,23 +17,27 @@ import com.bh.mall.spring.SpringContextHolder;
  * @since: 2016年12月24日 上午8:17:00 
  * @history:
  */
-public class XN627493 extends AProcessor {
+public class XN627496 extends AProcessor {
 
     private IJourAO jourAO = SpringContextHolder.getBean(IJourAO.class);
 
-    private XN627493Req req = null;
+    private XN627496Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         Jour condition = new Jour();
-        condition.setRefNo(req.getRefNo());
         condition.setBizType(req.getBizType());
-        return jourAO.queryJourList(condition);
+        condition.setRefNo(req.getRefNo());
+
+        int start = StringValidater.toInteger(req.getStart());
+        int limit = StringValidater.toInteger(req.getLimit());
+
+        return jourAO.queryJourPageByRefNo(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN627493Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN627496Req.class);
         ObjValidater.validateReq(req);
     }
 }

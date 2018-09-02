@@ -19,7 +19,7 @@ public interface IDeliveOrderBO extends IPaginableBO<DeliveOrder> {
 
     public DeliveOrder getDeliveOrder(String code);
 
-    public void deliverOrder(DeliveOrder data, String deliver,
+    public void deliverOrder(DeliveOrder data, String proCode, String deliver,
             String logisticsCode, String logisticsCompany, String remark);
 
 }

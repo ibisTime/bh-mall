@@ -9,7 +9,11 @@ public enum EAgentStatus {
             "4", "待填写授权资料"), ADD_INFO("5", "补充授权资料"), TO_APPROVE("6", "待上级授权"),
 
     COMPANY_IMPOWER("7", "待公司授权"), IMPOWERED("8", "已授权"), CANCELED("9",
-            "授权未通过");
+            "授权未通过"),
+
+    TO_CANCEL("10", "退出待上级审核"), CANCEL_COMPANY("11", "退出待公司审核"), TO_UPGRADE(
+            "12", "升级待上级审核"), UPGRADE_COMPANY("13",
+                    "升级待公司审核"), THROUGH_YES("14", "已升级");
 
     EAgentStatus(String code, String value) {
         this.code = code;

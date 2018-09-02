@@ -198,6 +198,9 @@ public class Agent extends ABaseDO {
     // 推荐人人数
     private Long reNumber;
 
+    // 归属人的团队名称
+    private List<String> noStatusList;
+
     // 获取ID
     public String getUserId() {
         return userId;
@@ -703,6 +706,14 @@ public class Agent extends ABaseDO {
 
     public void setIntroduceMobile(String introduceMobile) {
         this.introduceMobile = introduceMobile;
+    }
+
+    public List<String> getNoStatusList() {
+        return noStatusList;
+    }
+
+    public void setNoStatusList(List<String> noStatusList) {
+        this.noStatusList = noStatusList;
     }
 
 }

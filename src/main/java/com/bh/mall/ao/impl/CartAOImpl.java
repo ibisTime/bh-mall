@@ -63,7 +63,7 @@ public class CartAOImpl implements ICartAO {
         String type = ECartType.AGENT.getCode();
         // 代理添加购物车
         if (StringValidater.toInteger(
-            EAgentLevel.FIVE.getCode()) >= StringValidater.toInteger(level)) {
+            EAgentLevel.FIVE.getCode()) < StringValidater.toInteger(level)) {
             type = ECartType.CUSER.getCode();
             Agent agent = agentBO.getAgent(userId);
             AgentPrice price = agentPriceBO.getPriceByLevel(specsCode,
@@ -118,7 +118,7 @@ public class CartAOImpl implements ICartAO {
                 agent.getLevel());
 
             // 检查起购
-            if (price.getStartNumber() >= StringValidater.toInteger(quantity)) {
+            if (price.getStartNumber() > StringValidater.toInteger(quantity)) {
                 throw new BizException("xn00000",
                     "您购买的数量不能低于[" + price.getStartNumber() + "]");
             }

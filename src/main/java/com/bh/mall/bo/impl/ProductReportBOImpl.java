@@ -40,7 +40,8 @@ public class ProductReportBOImpl extends PaginableBOImpl<ProductReport>
     }
 
     @Override
-    public void saveProductReport(InOrder order, String realName) {
+    public void saveProductReport(InOrder order, Integer quantity,
+            String realName) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ProductReport.getCode());
 
@@ -48,11 +49,13 @@ public class ProductReportBOImpl extends PaginableBOImpl<ProductReport>
         data.setCode(code);
         data.setTeamName(order.getTeamName());
         data.setTeamLeader(realName);
-        data.setProductName(order.getProductName());
         data.setSpecsName(order.getSpecsName());
+        data.setProductCode(order.getProductCode());
+        data.setProductName(order.getProductName());
 
         data.setSpecsCode(order.getSpecsCode());
-        data.setQuantity(order.getQuantity());
+        data.setSpecsName(order.getSpecsName());
+        data.setQuantity(quantity);
         productReportDAO.insert(data);
 
     }

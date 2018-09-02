@@ -69,10 +69,15 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setMobile(sqForm.getMobile());
         if (EAgentLogStatus.IMPOWERED.getCode().equals(sqForm.getStatus())
                 || EAgentLogStatus.COMPANY_IMPOWER.getCode()
+                    .equals(sqForm.getStatus())
+                || EAgentLogStatus.TO_CANCEL.getCode()
+                    .equals(sqForm.getStatus())
+                || EAgentLogStatus.CANCEL_COMPANY.getCode()
                     .equals(sqForm.getStatus())) {
             data.setLevel(sqForm.getApplyLevel());
-            data.setHighUserId(sqForm.getToUserId());
         }
+
+        data.setHighUserId(sqForm.getToUserId());
         data.setApplyLevel(sqForm.getApplyLevel());
         data.setToUserId(sqForm.getToUserId());
         data.setTeamName(sqForm.getTeamName());

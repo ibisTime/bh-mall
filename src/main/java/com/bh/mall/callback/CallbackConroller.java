@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bh.mall.ao.IInnerOrderAO;
 import com.bh.mall.ao.IInOrderAO;
+import com.bh.mall.ao.IInnerOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 
 /** 
@@ -42,6 +42,7 @@ public class CallbackConroller {
     @RequestMapping("/wechat/H5/callback")
     public synchronized void doCallbackWechatH5(HttpServletRequest request,
             HttpServletResponse response) {
+        logger.info("进入毁掉方法");
         try {
             // 获取回调参数
             PrintWriter out = response.getWriter();

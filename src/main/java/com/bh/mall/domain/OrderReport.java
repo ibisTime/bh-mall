@@ -17,8 +17,11 @@ public class OrderReport extends ABaseDO {
     // 编号
     private String code;
 
-    // 分类
+    // 分类（云仓订单，提货订单）
     private String kind;
+
+    // 订单类型
+    private String type;
 
     // 产品编号
     private String productCode;
@@ -542,6 +545,14 @@ public class OrderReport extends ABaseDO {
 
     public void setDeliveDatetime(Date deliveDatetime) {
         this.deliveDatetime = deliveDatetime;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

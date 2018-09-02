@@ -58,7 +58,9 @@
 				</when>
 				<when test="noUserIdList != null and noUserIdList.size()>0 ">
 					AND t.user_id NOT IN
-					<foreach collection="noUserIdList"></foreach>
+					<foreach collection="noUserIdList">
+						#{item}
+					</foreach>
 				</when>
 			</choose>
 			
@@ -111,6 +113,12 @@
 				<when test="statusList != null and statusList.size()>0 ">
 					AND t.status IN
 					<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+						#{item}					
+					</foreach>
+				</when>
+				<when test="noStatusList != null and noStatusList ">
+					AND t.status NOT IN
+					<foreach collection="noStatusList" item="item" index="index" open="(" separator="," close=")">
 						#{item}					
 					</foreach>
 				</when>
@@ -311,6 +319,9 @@
 		UPDATE tbh_agent
 		SET
 		status = #{status}
+		,id_no = 	#{idNo}
+		,mobile = #{mobile}
+		,from_user_id = #{fromUserId}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
@@ -552,6 +563,7 @@
 		,high_user_id = #{highUserId}
 		,id_no = #{idNo}
 		,team_name = #{teamName}
+		,level = #{level}
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -580,7 +592,8 @@
 	<update id="update_sj" parameterType="agent">
 		UPDATE tbh_agent
 		SET
-		level = #{level}
+		status = #{status}
+		,level = #{level}
 		,team_name = #{teamName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}

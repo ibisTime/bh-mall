@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
+import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSRoleBO;
 import com.bh.mall.bo.ISYSUserBO;
@@ -31,6 +33,7 @@ import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISmsOutBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.IWareBO;
+import com.bh.mall.bo.IWithdrawBO;
 import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.DateUtil;
@@ -41,15 +44,21 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLog;
+import com.bh.mall.domain.InnerOrder;
+import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Ware;
+import com.bh.mall.domain.Withdraw;
 import com.bh.mall.dto.res.XN627303Res;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EInnerOrderStatus;
+import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EUserPwd;
+import com.bh.mall.enums.EWithdrawStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.http.PostSimulater;
 import com.google.gson.Gson;
@@ -113,6 +122,12 @@ public class AgentAOImpl implements IAgentAO {
 
     @Autowired
     IAgentLogBO agentLogBO;
+
+    @Autowired
+    IOutOrderBO outOrderBO;
+
+    @Autowired
+    IWithdrawBO withdrawBO;
 
     // 微信注册
     private XN627303Res doWxLoginReg(String unionId, String appOpenId,
@@ -225,6 +240,7 @@ public class AgentAOImpl implements IAgentAO {
                 if (EAgentStatus.IGNORED.getCode().equals(dbUser.getStatus())
                         || EAgentStatus.MIND.getCode()
                             .equals(dbUser.getStatus())) {
+                    dbUser.setFromUserId(fromUserId);
                     agentBO.refreshStatus(dbUser, status);
                 }
 
@@ -400,7 +416,7 @@ public class AgentAOImpl implements IAgentAO {
 
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                .getLevel()) {
+                .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else if (StringUtils.isNotBlank(data.getHighUserId())) {
@@ -547,25 +563,14 @@ public class AgentAOImpl implements IAgentAO {
     }
 
     @Override
+    @Transactional
     public void abolishSqForm(String userId, String updater, String remark) {
         Agent data = agentBO.getAgent(userId);
         agentBO.refreshStatus(data, updater, remark);
 
-        // 清空推荐关系
-        Agent condition = new Agent();
-        condition.setReferrer(data.getUserId());
-        List<Agent> list = agentBO.queryAgentList(condition);
-        for (Agent agent : list) {
-            agentBO.resetInfo(agent);
-        }
-
-        // 清空介绍关系
-        Agent condition2 = new Agent();
-        condition2.setIntroducer(data.getUserId());
-        List<Agent> list2 = agentBO.queryAgentList(condition);
-        for (Agent agent : list2) {
-            agentBO.resetInfo(agent);
-        }
+        // 检验是否可取消
+        checkCancel(data);
+        wareBO.removeByAgent(data.getUserId());
 
     }
 
@@ -661,6 +666,75 @@ public class AgentAOImpl implements IAgentAO {
         for (Agent data : list) {
             agentBO.refreshTeamName(data, teamName);
         }
+    }
+
+    @Override
+    public void checkCancel(Agent data) {
+        // 是否有下级
+        Agent uCondition = new Agent();
+        uCondition.setHighUserId(data.getUserId());
+        List<Agent> list = agentBO.queryAgentList(uCondition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            throw new BizException("xn000", "您还有下级，无法退出");
+        }
+
+        // 清空账户余额
+        Account account = accountBO.getAccountNocheck(data.getUserId(),
+            ECurrency.MK_CNY.getCode());
+        if (null != account) {
+            if (0 < account.getAmount()) {
+                throw new BizException("xn00000", "您的门槛账户中还有余额");
+            }
+        }
+
+        Account txAccount = accountBO.getAccountNocheck(data.getUserId(),
+            ECurrency.YJ_CNY.getCode());
+        if (null != txAccount) {
+            if (0 < txAccount.getAmount()) {
+                throw new BizException("xn00000", "您的业绩账户中还有余额");
+            }
+        }
+
+        Account cAccount = accountBO.getAccountNocheck(data.getUserId(),
+            ECurrency.C_CNY.getCode());
+        if (null != cAccount) {
+            if (0 < cAccount.getAmount()) {
+                // 账户清零
+                throw new BizException("xn000", "您的微店账户中还有余额");
+            }
+        }
+
+        // 是否有未完成的订单
+        OutOrder oCondition = new OutOrder();
+        oCondition.setApplyUser(data.getUserId());
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EOutOrderStatus.TO_SEND.getCode());
+        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
+        oCondition.setStatusList(statusList);
+
+        long count = outOrderBO.selectCount(oCondition);
+        if (count != 0) {
+            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
+        }
+
+        // 是够有未完成的内购订单
+        InnerOrder ioCondition = new InnerOrder();
+        ioCondition.setApplyUser(data.getUserId());
+        ioCondition.setStatusForQuery(EInnerOrderStatus.TO_APPROVE.getCode());
+        long ioCount = innerOrderBO.selectCount(ioCondition);
+        if (ioCount != 0) {
+            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
+        }
+
+        // 是否有未完成的取现
+        Withdraw withDraw = new Withdraw();
+        withDraw.setApplyUser(data.getUserId());
+        withDraw.setStatus(EWithdrawStatus.toApprove.getCode());
+        List<Withdraw> withDrawList = withdrawBO.queryWithdrawList(withDraw);
+        if (CollectionUtils.isNotEmpty(withDrawList)) {
+            throw new BizException("xn000", "您还有未完成的取现订单,请在订单完成后申请");
+        }
+
     }
 
 }

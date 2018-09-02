@@ -5,6 +5,7 @@
 	<resultMap id="orderReport_DB_Result" type="orderReport">
 		<result column="code" property="code" />
 		<result column="kind" property="kind" />
+		<result column="type" property="type" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
 		<result column="specs_code" property="specsCode" />
@@ -61,6 +62,12 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="kind != null and kind != '' ">
+				AND t.kind = #{kind}
+			</if>
 			
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
@@ -80,13 +87,16 @@
 		SELECT
 		t.code
 		,t.kind
+		,t.type
 		,t.product_code
 		,t.product_name
+		
 		,t.specs_code
 		,t.specs_name
 		,t.pic
 		,t.quantity
 		,t.price
+		
 		,t.to_user_id
 		,t.to_user_name
 		,t.amount
@@ -143,6 +153,7 @@
 		tbh_order_report(
 		code
 		,kind
+		,type
 		,product_code
 		,product_name
 		,specs_code
@@ -189,6 +200,7 @@
 		VALUES(
 		#{code}
 		,#{kind}
+		,#{type}
 		,#{productCode}
 		,#{productName}
 		,#{specsCode}

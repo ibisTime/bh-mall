@@ -209,6 +209,9 @@ public class OutOrder extends ABaseDO {
     // 上级名称
     private String highUserName;
 
+    // 状态
+    private List<String> noStatusList;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -719,6 +722,14 @@ public class OutOrder extends ABaseDO {
 
     public void setHighUserName(String highUserName) {
         this.highUserName = highUserName;
+    }
+
+    public List<String> getNoStatusList() {
+        return noStatusList;
+    }
+
+    public void setNoStatusList(List<String> noStatusList) {
+        this.noStatusList = noStatusList;
     }
 
 }

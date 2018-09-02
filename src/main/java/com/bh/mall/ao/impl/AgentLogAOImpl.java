@@ -66,22 +66,22 @@ public class AgentLogAOImpl implements IAgentLogAO {
                 .getLevel()) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
-
-            } else if (StringUtils.isNotBlank(data.getHighUserId())) {
+            } else if (null != data.getLevel()
+                    && StringUtils.isNotBlank(data.getHighUserId())) {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
             }
 
             // 归属人转义
-            if (StringUtils.isNotBlank(data.getToUserId())) {
-                if (StringValidater.toInteger(EAgentLevel.ONE.getCode())
-                    .equals(data.getApplyLevel())) {
-                    SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
-                    data.setToUserName(sysUser.getRealName());
-                } else {
-                    Agent highAgent = agentBO.getAgent(data.getToUserId());
-                    data.setToUserName(highAgent.getRealName());
-                }
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+                .getApplyLevel()
+                    && StringUtils.isNotBlank(data.getToUserId())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+                data.setToUserName(sysUser.getRealName());
+            } else if (null != data.getApplyLevel()
+                    && StringUtils.isNotBlank(data.getToUserId())) {
+                Agent toAgent = agentBO.getAgent(data.getToUserId());
+                data.setToUserName(toAgent.getRealName());
             }
 
         }
@@ -109,7 +109,8 @@ public class AgentLogAOImpl implements IAgentLogAO {
                 .getLevel()) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
-            } else if (StringUtils.isNotBlank(data.getHighUserId())) {
+            } else if (null != data.getLevel()
+                    && StringUtils.isNotBlank(data.getHighUserId())) {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
             }
@@ -120,7 +121,8 @@ public class AgentLogAOImpl implements IAgentLogAO {
                     && StringUtils.isNotBlank(data.getToUserId())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
                 data.setToUserName(sysUser.getRealName());
-            } else if (StringUtils.isNotBlank(data.getToUserId())) {
+            } else if (null != data.getApplyLevel()
+                    && StringUtils.isNotBlank(data.getToUserId())) {
                 Agent toAgent = agentBO.getAgent(data.getToUserId());
                 data.setToUserName(toAgent.getRealName());
             }
@@ -146,21 +148,21 @@ public class AgentLogAOImpl implements IAgentLogAO {
             .getLevel()) {
             SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
             data.setHighUserName(sysUser.getRealName());
-        } else if (StringUtils.isNotBlank(data.getHighUserId())) {
+        } else if (null != data.getLevel()
+                && StringUtils.isNotBlank(data.getHighUserId())) {
             Agent highAgent = agentBO.getAgent(data.getHighUserId());
             data.setHighUserName(highAgent.getRealName());
         }
 
         // 归属人转义
-        if (StringUtils.isNotBlank(data.getToUserId())) {
-            if (StringValidater.toInteger(EAgentLevel.ONE.getCode())
-                .equals(data.getApplyLevel())) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
-                data.setToUserName(sysUser.getRealName());
-            } else {
-                Agent highAgent = agentBO.getAgent(data.getToUserId());
-                data.setToUserName(highAgent.getRealName());
-            }
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
+            .getApplyLevel() && StringUtils.isNotBlank(data.getToUserId())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
+            data.setToUserName(sysUser.getRealName());
+        } else if (null != data.getApplyLevel()
+                && StringUtils.isNotBlank(data.getToUserId())) {
+            Agent toAgent = agentBO.getAgent(data.getToUserId());
+            data.setToUserName(toAgent.getRealName());
         }
 
         return data;

@@ -27,6 +27,7 @@ public class XN627492 extends AProcessor {
 
     public Object doBusiness() throws BizException {
         Jour condition = new Jour();
+        condition.setUserId(req.getUserId());
         condition.setType(req.getType());
         condition.setKind(req.getKind());
         condition.setBizType(req.getBizType());

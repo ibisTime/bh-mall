@@ -5,6 +5,7 @@
 	<resultMap id="account_DB_Result" type="account" >
 		<result column="account_number" property="accountNumber" />
 		<result column="user_id" property="userId" />
+		<result column="level" property="level" />
 		<result column="real_name" property="realName" />
 		<result column="type" property="type" />
 		<result column="status" property="status" />
@@ -54,6 +55,9 @@
 			<if test="lastOrder != null and lastOrder != '' ">
 				AND t.last_order = #{lastOrder}
 			</if>
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>
 		</trim>
 	</sql>
 	
@@ -61,7 +65,9 @@
 		SELECT
 		t.account_number
 		,t.user_id
+		,t.level
 		,t.real_name
+		,t.level
 		,t.type
 		,t.status
 		
@@ -71,7 +77,7 @@
 		,t.create_datetime
 		,t.last_order
 		FROM
-		tbh_account t
+		tbh_account t 
 		<include refid="where_condition"/>
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -90,6 +96,7 @@
 		account_number
 		,user_id
 		,real_name
+		,level
 		,type
 		,status
 		
@@ -102,6 +109,7 @@
 		#{accountNumber}
 		,#{userId}
 		,#{realName}
+		,#{level}
 		,#{type}
 		,#{status}
 		
@@ -164,4 +172,6 @@
 		WHERE
 		account_number = #{accountNumber}
     </update>
+    
+    
 </mapper>

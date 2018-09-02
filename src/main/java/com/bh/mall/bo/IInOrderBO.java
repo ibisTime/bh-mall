@@ -31,15 +31,15 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
 
     public String addPayGroup(InOrder inOrder, String payGroup, String payType);
 
-    public InOrder getInOrderByPayGroup(String payGroup);
+    public List<InOrder> getInOrderByPayGroup(String payGroup);
 
     public void paySuccess(InOrder data);
 
     public void payNo(InOrder data);
 
     // 根据时间查询订单数量
-    public List<InOrder> getProductQuantity(String userId, Date startDatetime,
-            Date endDatetime);
+    public List<InOrder> getProductQuantity(String userId, String specsCode,
+            Date startDatetime, Date endDatetime);
 
     public boolean getInOrderByUser(String userId, Date applyDatetime);
 
@@ -58,5 +58,7 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
     public void removeOrder(InOrder data);
 
     public String addPayGroup(InOrder inOrder);
+
+    public List<InOrder> queryInOrderListCount(InOrder condition);
 
 }

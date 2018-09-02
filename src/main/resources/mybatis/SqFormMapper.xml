@@ -219,6 +219,7 @@
 		UPDATE tbh_sq_form
 		SET		
 		status = #{status}
+		,apply_level = #{applyLevel}
 		,to_user_id = #{toUserId}
         ,apply_datetime = #{applyDatetime}
 		,status = #{status}

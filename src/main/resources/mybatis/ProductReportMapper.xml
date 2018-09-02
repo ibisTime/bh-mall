@@ -28,6 +28,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_productReport" parameterType="productReport" resultMap="productReport_DB_Result">
 		SELECT
 		t.code
@@ -41,7 +42,7 @@
 		FROM
 		tbh_product_report t
 		<include refid="where_condition" />
-		GROUP BY t.team_name,t.product_code
+		GROUP BY t.team_name
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}
@@ -60,8 +61,9 @@
 		,t.specs_name
 		,t.quantity
 		FROM
-		tbh_product_report t
+		tbh_product_report t 
 		<include refid="where_condition" />
+		ORDER BY t.quantity LIMIT 3
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

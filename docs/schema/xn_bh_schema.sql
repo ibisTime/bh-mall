@@ -2,20 +2,18 @@
 DROP TABLE IF EXISTS `tbh_account`;
 
 CREATE TABLE `tbh_account` (
-  `account_number` varchar(32) NOT NULL DEFAULT '' COMMENT '账号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `real_name` varchar(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '真实姓名',
-  `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
-  `status` varchar(2) DEFAULT NULL COMMENT '状态（正常/程序冻结/人工冻结）',
-  `currency` varchar(8) DEFAULT NULL COMMENT '币种',
-  `amount` bigint(32) DEFAULT NULL COMMENT '余额',
-  `frozen_amount` bigint(32) DEFAULT NULL COMMENT '冻结金额',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `last_order` varchar(32) DEFAULT NULL COMMENT '最近一次变动对应的流水编号',
-  PRIMARY KEY (`account_number`),
-  UNIQUE KEY `UQ_stuID` (`account_number`),
-  UNIQUE KEY `UQ_ID` (`account_number`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`account_number` varchar (96),
+	`user_id` varchar (96),
+	`real_name` varchar (192),
+	`level` int (11),
+	`type` varchar (12),
+	`status` varchar (6),
+	`currency` varchar (24),
+	`amount` bigint (32),
+	`frozen_amount` bigint (32),
+	`create_datetime` datetime ,
+	`last_order` varchar (96)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `tbh_address` */
 
@@ -399,6 +397,7 @@ CREATE TABLE `tbh_delive_order` (
   `amount` bigint(20) DEFAULT '0' COMMENT '总价',
   `status` char(4) DEFAULT NULL COMMENT '状态',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '下单时间',
   `real_name` varchar(255) DEFAULT NULL COMMENT '下单人姓名',
   `apply_note` text COMMENT '下单备注',
   `signer` varchar(255) DEFAULT NULL COMMENT '收货人',
@@ -668,6 +667,7 @@ CREATE TABLE `tbh_order_report` (
   `level` int(32) DEFAULT NULL COMMENT '等级',
   `is_company_send` varchar(32) DEFAULT NULL COMMENT '是否公司发货',
   `kind` varchar(4) DEFAULT NULL COMMENT '分类',
+  `type` varchar(4) DEFAULT NULL COMMENT '分类',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
   `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',

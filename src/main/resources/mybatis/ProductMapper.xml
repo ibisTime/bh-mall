@@ -109,8 +109,8 @@
 		,t.is_free
 		,t.update_datetime
 		,t.remark
-		FROM tbh_product t  LEFT JOIN tbh_specs s ON t.code = s.product_code 
-		LEFT JOIN tbh_agent_price p ON s.code = p.specs_code 
+		FROM tbh_product t   JOIN tbh_specs s ON t.code = s.product_code 
+		 JOIN tbh_agent_price p ON s.code = p.specs_code 
 		<include refid="where_condition"/>
 		GROUP BY t.code
 		<trim prefix="ORDER BY ">
@@ -121,8 +121,8 @@
 	</select>
 	
 	<select id="select_product_count_b" parameterType="product" resultType="java.lang.Long">
-		SELECT count(1) FROM tbh_product t   LEFT JOIN tbh_specs s ON t.code = s.product_code 
-		LEFT JOIN tbh_agent_price p ON s.code = p.specs_code 
+		SELECT count(1) FROM tbh_product t JOIN tbh_specs s ON t.code = s.product_code 
+		 JOIN tbh_agent_price p ON s.code = p.specs_code 
 		<include refid="where_condition"/>
 	</select>
 	

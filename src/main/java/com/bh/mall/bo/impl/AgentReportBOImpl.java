@@ -22,7 +22,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
     @Autowired
     private IAgentReportDAO agentReportDAO;
 
-    public void saveAgentReport(SqForm sqForm, Agent agent) {
+    public void saveAgentReport(SqForm sqForm, Agent agent, Long jsAward) {
         AgentReport data = new AgentReport();
         data.setUserId(sqForm.getUserId());
         data.setRealName(sqForm.getRealName());
@@ -40,6 +40,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         data.setCity(sqForm.getCity());
         data.setArea(sqForm.getArea());
         data.setAddress(sqForm.getAddress());
+        data.setIntrAward(jsAward);
 
         Date date = new Date();
         data.setImpowerDatetime(date);
@@ -59,8 +60,8 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
     }
 
     @Override
-    public void refreshAgentReport(AgentReport data, SqForm sqForm,
-            Agent agent) {
+    public void refreshAgentReport(AgentReport data, SqForm sqForm, Agent agent,
+            Long jsAward) {
         data.setUserId(sqForm.getUserId());
         data.setRealName(sqForm.getRealName());
         data.setTeamName(sqForm.getTeamName());
@@ -78,7 +79,7 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
         data.setArea(sqForm.getArea());
         data.setAddress(sqForm.getAddress());
         data.setImpowerDatetime(sqForm.getImpowerDatetime());
-
+        data.setIntrAward(data.getIntrAward() + jsAward);
         agentReportDAO.update(data);
     }
 

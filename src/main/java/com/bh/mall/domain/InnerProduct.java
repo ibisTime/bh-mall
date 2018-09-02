@@ -65,7 +65,7 @@ public class InnerProduct extends ABaseDO {
     private String codeForQuery;
 
     // 展示库存
-    private String showNumber;
+    private String updateName;
 
     public String getCode() {
         return code;
@@ -195,12 +195,12 @@ public class InnerProduct extends ABaseDO {
         this.codeForQuery = codeForQuery;
     }
 
-    public String getShowNumber() {
-        return showNumber;
+    public String getUpdateName() {
+        return updateName;
     }
 
-    public void setShowNumber(String showNumber) {
-        this.showNumber = showNumber;
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 
 }

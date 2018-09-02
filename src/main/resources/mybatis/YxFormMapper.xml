@@ -166,7 +166,7 @@
 		,from_info = #{fromInfo}
 		
 		,apply_datetime = #{applyDatetime}
-		,status = status = #{status}	
+		,status = #{status}	
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,remark=#{remark}

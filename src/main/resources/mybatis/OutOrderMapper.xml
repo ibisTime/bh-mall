@@ -75,6 +75,9 @@
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name LIKE "%"#{teamName}"%"
 			</if>
+			<if test="isWareSend != null and isWareSend != '' ">
+				AND t.is_ware_send = #{isWareSend}
+			</if>
 			
 			<choose>
 				<when test="kind != null and kind != '' ">
@@ -103,6 +106,12 @@
 				<when test="statusList != null and statusList.size() > 0 ">
 					AND t.status IN
 					<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+				<when test="noStatusList != null and noStatusList.size() > 0 ">
+					AND t.status NOT IN
+					<foreach collection="noStatusList" index="index" item="item" open="(" separator="," close=")">
 						#{item}
 					</foreach>
 				</when>

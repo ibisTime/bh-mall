@@ -2,8 +2,6 @@ package com.bh.mall.dto.req;
 
 import java.util.List;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 分页
  * @author: nyc 
@@ -24,10 +22,6 @@ public class XN627665Req extends APageReq {
     // 类型
     private List<String> kindList;
 
-    // 订单归属人
-    @NotBlank(message = "用户ID不能为空")
-    private String toUserId;
-
     // 类型
     private String keyword;
 
@@ -44,7 +38,7 @@ public class XN627665Req extends APageReq {
     private String deliver;
 
     // 订单归属人
-    private String toUser;
+    private String toUserId;
 
     // 是否云仓发货
     private String isWareSend;
@@ -109,10 +103,6 @@ public class XN627665Req extends APageReq {
         return deliver;
     }
 
-    public String getToUser() {
-        return toUser;
-    }
-
     public String getIsWareSend() {
         return isWareSend;
     }
@@ -127,10 +117,6 @@ public class XN627665Req extends APageReq {
 
     public void setDeliver(String deliver) {
         this.deliver = deliver;
-    }
-
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
     }
 
     public void setIsWareSend(String isWareSend) {

@@ -323,24 +323,8 @@ public class Jour extends ABaseDO {
         return agent;
     }
 
-    public OutOrder getOutOrder() {
-        return outOrder;
-    }
-
-    public InOrder getInOrder() {
-        return inOrder;
-    }
-
     public void setAgent(Agent agent) {
         this.agent = agent;
-    }
-
-    public void setOutOrder(OutOrder outOrder) {
-        this.outOrder = outOrder;
-    }
-
-    public void setInOrder(InOrder inOrder) {
-        this.inOrder = inOrder;
     }
 
     public OrderReport getReport() {
@@ -357,6 +341,22 @@ public class Jour extends ABaseDO {
 
     public void setWithdraw(Withdraw withdraw) {
         this.withdraw = withdraw;
+    }
+
+    public OutOrder getOutOrder() {
+        return outOrder;
+    }
+
+    public InOrder getInOrdert() {
+        return inOrder;
+    }
+
+    public void setOutOrder(OutOrder outOrder) {
+        this.outOrder = outOrder;
+    }
+
+    public void setInOrder(InOrder inOrder) {
+        this.inOrder = inOrder;
     }
 
 }

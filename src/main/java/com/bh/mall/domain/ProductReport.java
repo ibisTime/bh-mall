@@ -40,10 +40,7 @@ public class ProductReport extends ABaseDO {
 
     // **************db******************
 
-    // 商产品数量
-    private List<String> productQuantity;
-
-    // 产品
+    private List<ProductReport> list;
 
     public void setCode(String code) {
         this.code = code;
@@ -85,14 +82,6 @@ public class ProductReport extends ABaseDO {
         this.quantity = quantity;
     }
 
-    public List<String> getProductQuantity() {
-        return productQuantity;
-    }
-
-    public void setProductQuantity(List<String> productQuantity) {
-        this.productQuantity = productQuantity;
-    }
-
     public String getProductName() {
         return productName;
     }
@@ -115,6 +104,14 @@ public class ProductReport extends ABaseDO {
 
     public void setTeamLeader(String teamLeader) {
         this.teamLeader = teamLeader;
+    }
+
+    public List<ProductReport> getList() {
+        return list;
+    }
+
+    public void setList(List<ProductReport> list) {
+        this.list = list;
     }
 
 }

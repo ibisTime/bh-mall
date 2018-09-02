@@ -1,5 +1,6 @@
 package com.bh.mall.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
@@ -97,7 +98,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public void refreshSq(Agent data, SqForm sqForm, String manager,
             String highUserId, String teamName, Integer level, String status,
-            String approver, String approveName, String logCode);
+            String approver, String approveName, String logCode, Date date);
 
     public void refreshYx(Agent agent, String status, String approver,
             String approveName, String logCode);

@@ -34,6 +34,8 @@ public interface IJourAO {
     // 列表查询流水记录
     public List<Jour> queryJourList(Jour condition);
 
+    // 列表查询流水记录
+
     // 获取详情
     public Jour getJour(String code);
 
@@ -42,5 +44,7 @@ public interface IJourAO {
             String accountNumber, String dateStart, String dateEnd);
 
     public XN627855Res queryJourPageByP(int start, int limit, Jour condition);
+
+    public Object queryJourPageByRefNo(int start, int limit, Jour condition);
 
 }

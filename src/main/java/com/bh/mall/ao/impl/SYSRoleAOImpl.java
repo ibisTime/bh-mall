@@ -82,13 +82,19 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
             data.setUpdateName(sysUser.getRealName());
         }
 
-        return sysRoleBO.querySYSRoleList(condition);
+        return list;
     }
 
     @Override
     public Paginable<SYSRole> querySYSRolePage(int start, int limit,
             SYSRole condition) {
-        return sysRoleBO.getPaginable(start, limit, condition);
+        Paginable<SYSRole> page = sysRoleBO.getPaginable(start, limit,
+            condition);
+        for (SYSRole data : page.getList()) {
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+            data.setUpdateName(sysUser.getRealName());
+        }
+        return page;
     }
 
     /** 

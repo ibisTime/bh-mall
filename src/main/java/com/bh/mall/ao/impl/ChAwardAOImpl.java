@@ -25,12 +25,20 @@ public class ChAwardAOImpl implements IChAwardAO {
         if (endAmount <= startAmount) {
             throw new BizException("xn00000", "起始金额不能大于截止金额");
         }
-        // 校验是否存在
-        if (chAwardBO.isChAwardExist(StringValidater.toInteger(level),
-            startAmount)
-                || chAwardBO.isChAwardExist(StringValidater.toInteger(level),
-                    endAmount)) {
-            throw new BizException("xn00000", "该区间的出货奖已存在了");
+        // 判断起始金额是否被改变
+        ChAward startData = chAwardBO
+            .isChAwardExist(StringValidater.toInteger(level), startAmount);
+        if (null != startData) {
+            throw new BizException("xn00000", startData.getStartAmount() + "至"
+                    + startData.getEndAmount() + "的奖励已经存在了");
+        }
+
+        // 判断终止金额是否被改变
+        ChAward endtData = chAwardBO
+            .isChAwardExist(StringValidater.toInteger(level), startAmount);
+        if (null != endtData) {
+            throw new BizException("xn00000", endtData.getStartAmount() + "至"
+                    + endtData.getEndAmount() + "的奖励已经存在了");
         }
 
         return chAwardBO.saveChAward(level, startAmount, endAmount, percent,
@@ -47,10 +55,23 @@ public class ChAwardAOImpl implements IChAwardAO {
         }
         ChAward data = chAwardBO.getChAward(req.getCode());
         // 判断起始金额是否被改变
-        if (StringValidater.toLong(req.getStartAmount()) == data
+        if (StringValidater.toLong(req.getStartAmount()) != data
             .getStartAmount()) {
-            if (chAwardBO.isChAwardExist(data.getLevel(), startAmount)) {
-                throw new BizException("xn00000", "该区间的出货奖已存在了");
+            ChAward startData = chAwardBO.isChAwardExist(data.getLevel(),
+                startAmount);
+            if (null != startData) {
+                throw new BizException("xn00000", startData.getStartAmount()
+                        + "至" + startData.getEndAmount() + "的奖励已经存在了");
+            }
+        }
+
+        // 判断终止金额是否被改变
+        if (StringValidater.toLong(req.getEndAmount()) != data.getEndAmount()) {
+            ChAward endtData = chAwardBO.isChAwardExist(data.getLevel(),
+                startAmount);
+            if (null != endtData) {
+                throw new BizException("xn00000", endtData.getStartAmount()
+                        + "至" + endtData.getEndAmount() + "的奖励已经存在了");
             }
         }
 

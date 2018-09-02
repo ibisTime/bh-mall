@@ -103,4 +103,10 @@ public class InOrderDAOImpl extends AMybatisTemplate implements IInOrderDAO {
         super.update(NAMESPACE.concat("invalid_inOrder"), data);
     }
 
+    @Override
+    public List<InOrder> selectorderCount(InOrder condition) {
+        return super.selectList(NAMESPACE.concat("select_count"), condition,
+            InOrder.class);
+    }
+
 }

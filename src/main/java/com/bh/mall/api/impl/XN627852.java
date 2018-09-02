@@ -35,6 +35,7 @@ public class XN627852 extends AProcessor {
         condition.setUserId(req.getUserId());
         condition.setUserReferee(req.getReferrer());
         condition.setIntroducer(req.getIntroducer());
+        condition.setKeyword(req.getKeyword());
 
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);

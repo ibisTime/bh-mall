@@ -63,6 +63,9 @@ public class XN627325Req extends APageReq {
     // （选填） 状态
     private List<String> statusList;
 
+    // （选填） 状态
+    private List<String> noStatusList;
+
     public String getApplyEndDatetime() {
         return applyEndDatetime;
     }
@@ -197,6 +200,14 @@ public class XN627325Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public List<String> getNoStatusList() {
+        return noStatusList;
+    }
+
+    public void setNoStatusList(List<String> noStatusList) {
+        this.noStatusList = noStatusList;
     }
 
 }

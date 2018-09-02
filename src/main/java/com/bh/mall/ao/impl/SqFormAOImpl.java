@@ -1,6 +1,7 @@
 package com.bh.mall.ao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.ao.ISqFormAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
@@ -33,9 +35,7 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.AgentReport;
-import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.JsAward;
-import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SqForm;
 import com.bh.mall.dto.req.XN627270Req;
@@ -48,10 +48,9 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EInnerOrderStatus;
-import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EResult;
 import com.bh.mall.enums.ESqFormStatus;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 
@@ -96,6 +95,9 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Autowired
     private IWareBO wareBO;
+
+    @Autowired
+    private IAgentAO agentAO;
 
     /**
      * 有头的代理申请授权
@@ -204,13 +206,14 @@ public class SqFormAOImpl implements ISqFormAO {
             Agent intrAgent = agentBO.getAgentByMobile(req.getIntroducer());
             introducer = intrAgent.getUserId();
 
-            if (!ESqFormStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+            if (!ESqFormStatus.IMPOWERED.getCode()
+                .equals(intrAgent.getStatus())) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
             if (agent.getUserId().equals(introducer)) {
                 throw new BizException("xn0000", "介绍人不能填自己哦！");
             }
-            if (agent.getLevel() <= StringValidater
+            if (intrAgent.getLevel() <= StringValidater
                 .toInteger(req.getApplyLevel())) {
                 throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
@@ -281,6 +284,7 @@ public class SqFormAOImpl implements ISqFormAO {
         // 审核通过
         String manager = null;
         String status = ESqFormStatus.CANCELED.getCode();
+        Date date = null;
         if (EResult.Result_YES.getCode().equals(result)) {
             AgentLevel impower = agentLevelBO
                 .getAgentByLevel(sqForm.getApplyLevel());
@@ -288,9 +292,12 @@ public class SqFormAOImpl implements ISqFormAO {
             if (EBoolean.YES.getCode().equals(impower.getIsCompanyImpower())) {
                 status = ESqFormStatus.COMPANY_IMPOWER.getCode();
             } else {
+                date = new Date();
+
                 status = ESqFormStatus.IMPOWERED.getCode();
                 manager = approveAgent.getManager();
                 this.approveSqForm(sqForm);
+                this.payAward(sqForm);
             }
         } else {
             // 未通过，清空手机号等信息，防止重新申请时重复
@@ -304,7 +311,7 @@ public class SqFormAOImpl implements ISqFormAO {
         Agent agent = agentBO.getAgent(sqForm.getUserId());
         agentBO.refreshSq(agent, sqForm, manager, sqForm.getToUserId(),
             sqForm.getTeamName(), sqForm.getApplyLevel(), status, approver,
-            approveAgent.getRealName(), logCode);
+            approveAgent.getRealName(), logCode, date);
 
     }
 
@@ -324,6 +331,7 @@ public class SqFormAOImpl implements ISqFormAO {
         }
 
         // 审核通过
+        Date date = null;
         String status = ESqFormStatus.CANCELED.getCode();
         if (EResult.Result_YES.getCode().equals(result)) {
             status = ESqFormStatus.IMPOWERED.getCode();
@@ -334,8 +342,14 @@ public class SqFormAOImpl implements ISqFormAO {
                     throw new BizException("xn000", "请给该代理关联一个管理员");
                 }
             }
+            date = new Date();
 
             this.approveSqForm(sqForm);
+            // 平台审核只统计最高等级
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sqForm
+                .getApplyLevel()) {
+                this.payAward(sqForm);
+            }
         } else {
             // 未通过，清空手机号等信息，防止重新申请时重复
             Agent agent = agentBO.getAgent(userId);
@@ -356,7 +370,7 @@ public class SqFormAOImpl implements ISqFormAO {
         Agent agent = agentBO.getAgent(sqForm.getUserId());
         agentBO.refreshSq(agent, sqForm, manager, sqForm.getToUserId(),
             sqForm.getTeamName(), sqForm.getApplyLevel(), status, approver,
-            sysUser.getRealName(), logCode);
+            sysUser.getRealName(), logCode, date);
 
     }
 
@@ -364,13 +378,13 @@ public class SqFormAOImpl implements ISqFormAO {
      * 审核退出，无需公司审核，清空账户
      */
     @Override
+    @Transactional
     public void cancelSqFormByB(String userId, String approver, String result,
             String remark) {
         SqForm sqForm = sqFormBO.getSqForm(userId);
         Agent agent = agentBO.getAgent(userId);
 
-        if (!ESqFormStatus.CANCEL_COMPANY.getCode()
-            .equals(sqForm.getStatus())) {
+        if (!ESqFormStatus.TO_CANCEL.getCode().equals(sqForm.getStatus())) {
             throw new BizException("xn000", "该代理未申请退出状态");
         }
 
@@ -384,13 +398,21 @@ public class SqFormAOImpl implements ISqFormAO {
                 .equals(agentLevel.getIsCompanyImpower())) {
                 status = ESqFormStatus.CANCEL_COMPANY.getCode();
             } else {
-                Account account = accountBO.getAccountByUser(sqForm.getUserId(),
+                Account account = accountBO.getAccountByUser(agent.getUserId(),
                     ECurrency.MK_CNY.getCode());
                 // 账户清零
                 accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, sqForm.getUserId(),
+                    EChannelType.NBZ, null, null, agent.getUserId(),
                     EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
                     -account.getAmount());
+
+                Account cAccount = accountBO.getAccountByUser(agent.getUserId(),
+                    ECurrency.C_CNY.getCode());
+                // 账户清零
+                accountBO.changeAmount(cAccount.getAccountNumber(),
+                    EChannelType.NBZ, null, null, agent.getUserId(),
+                    EBizType.AJ_QXSQ, EBizType.AJ_QXSQ.getValue(),
+                    -cAccount.getAmount());
 
                 agent.setStatus(EAgentStatus.MIND.getCode());
 
@@ -408,8 +430,10 @@ public class SqFormAOImpl implements ISqFormAO {
         String logCode = sqFormBO.approveSqForm(sqForm, approver,
             approveAgent.getRealName(), remark, status);
 
-        agentBO.refreshSq(agent, sqForm, null, null, null, null, status,
-            approver, approveAgent.getRealName(), logCode);
+        agentBO.refreshSq(agent, sqForm, agent.getManager(),
+            agent.getHighUserId(), agent.getManager(), agent.getLevel(), status,
+            approver, approveAgent.getRealName(), logCode,
+            agent.getImpowerDatetime());
 
     }
 
@@ -418,10 +442,12 @@ public class SqFormAOImpl implements ISqFormAO {
      * @see com.bh.mall.ao.ISqFormAO#cancelSqFormByB(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
+    @Transactional
     public void cancelSqFormByP(String userId, String approver, String result,
             String remark) {
         Agent agent = agentBO.getAgent(userId);
         SqForm data = sqFormBO.getSqForm(userId);
+
         if (!ESqFormStatus.CANCEL_COMPANY.getCode().equals(data.getStatus())) {
             throw new BizException("xn000", "该代理未申请退出");
         }
@@ -447,11 +473,11 @@ public class SqFormAOImpl implements ISqFormAO {
             wareBO.removeByAgent(agent.getUserId());
 
             // 清空手机号等信息，防止重新申请时重复
-            agent.setStatus(EAgentStatus.MIND.getCode());
             agentBO.resetInfo(agent);
 
             // 清空推荐关系
             agentBO.resetUserReferee(agent.getUserId());
+
         }
         sqFormBO.cancelSqForm(data, status);
 
@@ -460,8 +486,10 @@ public class SqFormAOImpl implements ISqFormAO {
         String logCode = sqFormBO.approveSqForm(data, approver,
             sysUser.getRealName(), remark, status);
 
-        agentBO.refreshSq(agent, data, null, null, null, null, status, approver,
-            sysUser.getRealName(), logCode);
+        agentBO.refreshSq(agent, data, agent.getManager(),
+            agent.getHighUserId(), agent.getTeamName(), agent.getLevel(),
+            status, approver, sysUser.getRealName(), logCode,
+            agent.getImpowerDatetime());
 
     }
 
@@ -562,50 +590,13 @@ public class SqFormAOImpl implements ISqFormAO {
     public void toQuit(String userId) {
         SqForm sqForm = sqFormBO.getSqForm(userId);
         Agent agent = agentBO.getAgent(userId);
-
-        // 是否有下级
-        Agent uCondition = new Agent();
-        uCondition.setHighUserId(agent.getUserId());
-        List<Agent> list = agentBO.queryAgentList(uCondition);
-        if (CollectionUtils.isNotEmpty(list)) {
-            throw new BizException("xn000", "您还有下级，无法申请退出");
+        if (ESqFormStatus.TO_CANCEL.getCode().equals(sqForm.getStatus())
+                || ESqFormStatus.CANCEL_COMPANY.getCode()
+                    .equals(sqForm.getStatus())) {
+            throw new BizException("xn000", "您已申请退出，请勿重复申请");
         }
 
-        // 可提现账户是否余额
-        Account txAccount = accountBO.getAccountByUser(agent.getUserId(),
-            ECurrency.YJ_CNY.getCode());
-        if (txAccount.getAmount() > 0) {
-            throw new BizException("xn000", "您的可提现账户中还有余额，请取出后再申请退出");
-        }
-
-        // C端现账户是否余额
-        Account cAccount = accountBO.getAccountByUser(agent.getUserId(),
-            ECurrency.C_CNY.getCode());
-        if (cAccount.getAmount() > 0) {
-            throw new BizException("xn000", "您的微店账户中还有余额，请取出后再申请退出");
-        }
-
-        // 是否有未完成的订单
-        OutOrder oCondition = new OutOrder();
-        oCondition.setApplyUser(agent.getUserId());
-        List<String> statusList = new ArrayList<String>();
-        statusList.add(EOutOrderStatus.TO_SEND.getCode());
-        statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
-        oCondition.setStatusList(statusList);
-
-        long count = outOrderBO.selectCount(oCondition);
-        if (count != 0) {
-            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
-        }
-
-        // 是够有未完成的内购订单
-        InnerOrder ioCondition = new InnerOrder();
-        ioCondition.setApplyUser(agent.getUserId());
-        ioCondition.setStatusForQuery(EInnerOrderStatus.TO_APPROVE.getCode());
-        long ioCount = innerOrderBO.selectCount(ioCondition);
-        if (ioCount != 0) {
-            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
-        }
+        agentAO.checkCancel(agent);
 
         // 最搞级别代理申请，直接由公司审核
         String status = ESqFormStatus.TO_CANCEL.getCode();
@@ -614,14 +605,16 @@ public class SqFormAOImpl implements ISqFormAO {
             status = ESqFormStatus.CANCEL_COMPANY.getCode();
         }
 
+        sqForm.setToUserId(agent.getHighUserId());
+        sqForm.setApplyLevel(agent.getLevel());
         String logCode = sqFormBO.cancelSqForm(sqForm, status);
         agent.setStatus(EAgentStatus.CANCELED.getCode());
+        agent.setStatus(status);
         agentBO.refreshLog(agent, logCode);
     }
 
     private void approveSqForm(SqForm sqForm) {
-        AgentLevel agentLevel = agentLevelBO
-            .getAgentByLevel(sqForm.getApplyLevel());
+
         // 根据用户类型获取账户列表
         List<String> currencyList = distributeAccount(sqForm.getUserId(),
             sqForm.getRealName());
@@ -630,8 +623,9 @@ public class SqFormAOImpl implements ISqFormAO {
         if (CollectionUtils.isEmpty(account)) {
             // 分配账户
             accountBO.distributeAccount(sqForm.getUserId(),
-                sqForm.getRealName(), EAccountType.Business, currencyList,
-                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+                sqForm.getApplyLevel(), sqForm.getRealName(),
+                EAccountType.Business, currencyList, ESystemCode.BH.getCode(),
+                ESystemCode.BH.getCode());
         }
 
         Address address = addressBO.getDefaultAddress(sqForm.getUserId(),
@@ -643,43 +637,50 @@ public class SqFormAOImpl implements ISqFormAO {
                 sqForm.getRealName(), sqForm.getProvince(), sqForm.getCity(),
                 sqForm.getArea(), sqForm.getAddress(), EBoolean.YES.getCode());
         }
-        // 介绍奖
+
+    }
+
+    private void payAward(SqForm sqForm) {
+        Long jsAward = 0L;
         if (StringUtils.isNotBlank(sqForm.getIntroducer())) {
 
+            AgentLevel agentLevel = agentLevelBO
+                .getAgentByLevel(sqForm.getApplyLevel());
             // 获取介绍奖
             Agent buser = agentBO.getAgent(sqForm.getIntroducer());
             JsAward iData = jsAwardBO.getJsAwardByLevel(buser.getLevel(),
                 sqForm.getApplyLevel());
             if (null != iData) {
-                Long amount = (long) (agentLevel.getMinCharge()
+                jsAward = (long) (agentLevel.getMinCharge()
                         * (iData.getPercent() / 100));
 
                 // 申请等级为最高等级，奖励由公司发，其余由该代理上级发介绍人
-                String fromUserId = ESystemCode.BH.getCode();
+                String fromUserId = ESysUser.SYS_USER_BH.getCode();
                 if (StringValidater.toInteger(
                     EAgentLevel.ONE.getCode()) != sqForm.getApplyLevel()) {
                     fromUserId = sqForm.getToUserId();
                 }
 
-                accountBO.transAmountCZB(fromUserId, ECurrency.YJ_CNY.getCode(),
-                    buser.getUserId(), ECurrency.YJ_CNY.getCode(), amount,
-                    EBizType.AJ_JSJL,
-                    "介绍代理[" + sqForm.getRealName() + "]的"
-                            + EBizType.AJ_JSJL.getValue() + "支出",
-                    "介绍代理[" + sqForm.getRealName() + "]的"
-                            + EBizType.AJ_JSJL.getValue() + "收入",
-                    sqForm.getUserId());
+                if (jsAward > 0) {
+                    accountBO.transAmountCZB(fromUserId,
+                        ECurrency.YJ_CNY.getCode(), buser.getUserId(),
+                        ECurrency.YJ_CNY.getCode(), jsAward, EBizType.AJ_JSJL,
+                        "介绍代理[" + sqForm.getRealName() + "]的"
+                                + EBizType.AJ_JSJL.getValue() + "支出",
+                        "介绍代理[" + sqForm.getRealName() + "]的"
+                                + EBizType.AJ_JSJL.getValue() + "收入",
+                        sqForm.getUserId());
+                }
 
             }
         }
         Agent agent = agentBO.getAgent(sqForm.getUserId());
         AgentReport report = agentReportBO.getAgentReport(agent.getUserId());
         if (null == report) {
-            agentReportBO.saveAgentReport(sqForm, agent);
+            agentReportBO.saveAgentReport(sqForm, agent, jsAward);
         } else {
-            agentReportBO.refreshAgentReport(report, sqForm, agent);
+            agentReportBO.refreshAgentReport(report, sqForm, agent, jsAward);
         }
-
     }
 
 }

@@ -194,6 +194,7 @@
 		UPDATE tbh_exchange_order
 		SET
 		change_price = #{changePrice}
+		,can_change_quantity =#{canChangeQuantity}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
 		,approve_note = #{approveNote}
