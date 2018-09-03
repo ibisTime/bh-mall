@@ -99,22 +99,6 @@ public class Specs extends ABaseDO {
         this.number = number;
     }
 
-    public String getIsImpowerOrder() {
-        return isSjOrder;
-    }
-
-    public void setIsImpowerOrder(String isImpowerOrder) {
-        this.isSjOrder = isImpowerOrder;
-    }
-
-    public String getIsUpgradeOrder() {
-        return isSqOrder;
-    }
-
-    public void setIsUpgradeOrder(String isUpgradeOrder) {
-        this.isSqOrder = isUpgradeOrder;
-    }
-
     public String getIsNormalOrder() {
         return isNormalOrder;
     }

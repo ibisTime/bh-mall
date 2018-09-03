@@ -15,6 +15,6 @@ public interface IOrderReportBO extends IPaginableBO<OrderReport> {
 
     public void saveInOrderReport(InOrder data);
 
-    public void saveInOrderReport(OutOrder data);
+    public void saveOutOrderReport(OutOrder data);
 
 }

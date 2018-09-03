@@ -8,8 +8,6 @@ import com.bh.mall.domain.OutOrder;
 public interface IOutOrderDAO extends IBaseDAO<OutOrder> {
     String NAMESPACE = IOutOrderDAO.class.getName().concat(".");
 
-    void payOutOrder(OutOrder data);
-
     void update(OutOrder data);
 
     void deliverOutOrder(OutOrder data);
@@ -35,4 +33,8 @@ public interface IOutOrderDAO extends IBaseDAO<OutOrder> {
     void paySuccess(OutOrder data);
 
     void invalidOutOrder(OutOrder data);
+
+    List<OutOrder> selectOutOrderListCount(OutOrder condition);
+
+    void updatePayGroup(OutOrder data);
 }

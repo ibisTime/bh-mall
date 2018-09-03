@@ -95,7 +95,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             throw new BizException("xn000000", "余额不足");
         }
         // 生成取现订单
-        Long fee = doGetFee(dbAccount.getType(), amount,
+        Long fee = doGetFee(dbAccount.getCurrency(), amount,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
 
         // 取现总金额
@@ -171,7 +171,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 扣减冻结流水
         accountBO.cutFrozenAmount(dbAccount, data.getAmount());
         Account account = accountBO.getAccount(data.getAccountNumber());
-        if (ECurrency.YJ_CNY.getCode().equals(account.getCurrency())
+        if (ECurrency.TX_CNY.getCode().equals(account.getCurrency())
                 || ECurrency.YC_CNY.getCode().equals(account.getCurrency())) {
             // 托管账户减钱
             accountBO.changeAmount(ESysUser.TG_BH.getCode(),
@@ -261,7 +261,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             systemCode, companyCode);
         String qxbs = null;
         String qxfl = null;
-        if (EAccountType.Customer.getCode().equals(accountType)) {
+        if (ECurrency.TX_CNY.getCode().equals(accountType)) {
             qxbs = SysConstant.CUSERQXBS;
             qxfl = SysConstant.CUSERQXFL;
         } else if (EAccountType.Business.getCode().equals(accountType)) {

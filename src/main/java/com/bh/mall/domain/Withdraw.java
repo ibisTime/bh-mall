@@ -80,6 +80,9 @@ public class Withdraw extends ABaseDO {
     // 支付回录时间
     private Date payDatetime;
 
+    // 归属人
+    private String toUserId;
+
     // *************** db****************
 
     // 申请时间起
@@ -355,6 +358,14 @@ public class Withdraw extends ABaseDO {
 
     public void setPayUserName(String payUserName) {
         this.payUserName = payUserName;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 
 }

@@ -20,7 +20,9 @@ public class XN627645Req {
     @NotBlank(message = "发货人不能为空")
     private String deliver;
 
-    private String isCompanySend;
+    // （必填）是否云仓发货
+    @NotBlank(message = "是否云仓发货不能为空")
+    private String isWareSend;
 
     // （选填）物流编号
     private String logisticsCode;
@@ -33,9 +35,6 @@ public class XN627645Req {
 
     // （选填）盒码
     private List<String> traceCodeList;
-
-    // （选填）物流单
-    private String pdf;
 
     // （选填）备注
     private String remark;
@@ -72,14 +71,6 @@ public class XN627645Req {
         this.logisticsCompany = logisticsCompany;
     }
 
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
-    }
-
     public String getRemark() {
         return remark;
     }
@@ -88,12 +79,12 @@ public class XN627645Req {
         this.remark = remark;
     }
 
-    public String getIsCompanySend() {
-        return isCompanySend;
+    public String getIsWareSend() {
+        return isWareSend;
     }
 
-    public void setIsCompanySend(String isCompanySend) {
-        this.isCompanySend = isCompanySend;
+    public void setIsWareSend(String isWareSend) {
+        this.isWareSend = isWareSend;
     }
 
     public String getProCode() {

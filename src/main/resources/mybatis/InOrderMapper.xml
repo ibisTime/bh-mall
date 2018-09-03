@@ -278,6 +278,7 @@
 		status = #{status}
 		,pay_type = #{payType}
 		,pay_code = #{payCode}
+		,pay_group = #{payGroup}
 		,pay_amount = #{payAmount}
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
@@ -299,4 +300,13 @@
 		WHERE
 		code = #{code}
 	</delete>
+	
+	<update id="update_payGroup" parameterType="inOrder">
+		UPDATE tbh_in_order
+		SET
+		pay_group = #{payGroup}
+		WHERE 
+		apply_user = #{applyUser} AND level = #{level}
+	</update>
+	
 </mapper>

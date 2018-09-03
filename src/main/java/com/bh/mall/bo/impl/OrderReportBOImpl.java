@@ -54,16 +54,17 @@ public class OrderReportBOImpl extends PaginableBOImpl<OrderReport>
     }
 
     @Override
-    public void saveInOrderReport(OutOrder outOrder) {
+    public void saveOutOrderReport(OutOrder outOrder) {
         OrderReport data = new OrderReport();
 
         data.setCode(outOrder.getCode());
         data.setApplyUser(outOrder.getApplyUser());
+        data.setApplyDatetime(outOrder.getApplyDatetime());
         data.setRealName(outOrder.getRealName());
         data.setLevel(outOrder.getLevel());
+
         data.setTeamName(outOrder.getTeamName());
         data.setToUserId(outOrder.getToUserId());
-
         data.setToUserName(outOrder.getToUserName());
         data.setTeamName(outOrder.getTeamName());
         data.setTeamLeader(outOrder.getTeamLeader());
@@ -77,6 +78,13 @@ public class OrderReportBOImpl extends PaginableBOImpl<OrderReport>
         data.setPrice(outOrder.getPrice());
         data.setAmount(outOrder.getAmount());
         data.setPic(outOrder.getPic());
+
+        data.setSigner(outOrder.getSigner());
+        data.setProvince(outOrder.getProvince());
+        data.setCity(outOrder.getCity());
+        data.setArea(outOrder.getArea());
+        data.setAddress(outOrder.getAddress());
+
         data.setDeliver(outOrder.getDeliver());
         data.setDeliveDatetime(new Date());
         data.setLogisticsCode(outOrder.getLogisticsCode());

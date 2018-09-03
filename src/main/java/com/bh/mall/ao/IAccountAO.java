@@ -53,4 +53,7 @@ public interface IAccountAO {
     public void addHighAccount(Agent agent, Long amount, String channelOrder,
             String payGroup);
 
+    public void doBizCallBack(String applyUser, String payCode, String payGroup,
+            String bizType, Long amount);
+
 }

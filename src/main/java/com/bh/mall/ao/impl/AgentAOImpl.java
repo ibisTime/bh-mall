@@ -633,19 +633,20 @@ public class AgentAOImpl implements IAgentAO {
         List<AgentLog> logList = agentLogAO.queryAgentLogList(condition);
 
         data.setLogList(logList);
+        // 无推荐人
+        AgentLog log = agentLogBO.getAgentLog(data.getLastAgentLog());
 
         // 获取归属人的团队名称(有推荐人)
         if (StringUtils.isNotBlank(data.getFromUserId())) {
             Agent fromAgent = agentBO.getAgent(data.getFromUserId());
             data.setToTeamName(fromAgent.getTeamName());
-        }
-        // 无推荐人
-        AgentLog log = agentLogBO.getAgentLog(data.getLastAgentLog());
-        if (null != log && StringValidater
+            data.setToLevel(fromAgent.getLevel());
+        } else if (null != log && StringValidater
             .toInteger(EAgentLevel.ONE.getCode()) != log.getApplyLevel()) {
             if (StringUtils.isNotBlank(log.getToUserId())) {
                 Agent fromAgent = agentBO.getAgent(log.getToUserId());
                 data.setToTeamName(fromAgent.getTeamName());
+                data.setToLevel(fromAgent.getLevel());
             }
         }
 
@@ -688,7 +689,7 @@ public class AgentAOImpl implements IAgentAO {
         }
 
         Account txAccount = accountBO.getAccountNocheck(data.getUserId(),
-            ECurrency.YJ_CNY.getCode());
+            ECurrency.TX_CNY.getCode());
         if (null != txAccount) {
             if (0 < txAccount.getAmount()) {
                 throw new BizException("xn00000", "您的业绩账户中还有余额");

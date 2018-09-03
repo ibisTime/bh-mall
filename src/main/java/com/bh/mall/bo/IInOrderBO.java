@@ -61,4 +61,6 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
 
     public List<InOrder> queryInOrderListCount(InOrder condition);
 
+    public void updatePayGroup(InOrder data);
+
 }

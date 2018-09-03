@@ -115,16 +115,23 @@ public class SqFormAOImpl implements ISqFormAO {
         String introducer = req.getIntroducer();
         if (StringUtils.isNotBlank(req.getIntroducer())) {
             PhoneUtil.checkMobile(req.getIntroducer());
-            Agent agent = agentBO.getAgentByMobile(req.getIntroducer());
-            introducer = agent.getUserId();
+            Agent introAgent = agentBO.getAgentByMobile(req.getIntroducer());
+            introducer = introAgent.getUserId();
 
-            if (!ESqFormStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+            if (!(EAgentStatus.IMPOWERED.getCode()
+                .equals(introAgent.getStatus())
+                    || EAgentStatus.TO_UPGRADE.getCode()
+                        .equals(introAgent.getStatus())
+                    || EAgentStatus.UPGRADE_COMPANY.getCode()
+                        .equals(introAgent.getStatus())
+                    || EAgentStatus.TO_UPGRADE.getCode()
+                        .equals(introAgent.getStatus()))) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
-            if (agent.getUserId().equals(req.getUserId())) {
+            if (introAgent.getUserId().equals(req.getUserId())) {
                 throw new BizException("xn0000", "介绍人不能填自己哦！");
             }
-            if (agent.getLevel() <= StringValidater
+            if (introAgent.getLevel() < StringValidater
                 .toInteger(req.getApplyLevel())) {
                 throw new BizException("xn0000", "您申请的等级需高于介绍人哦！");
             }
@@ -345,11 +352,7 @@ public class SqFormAOImpl implements ISqFormAO {
             date = new Date();
 
             this.approveSqForm(sqForm);
-            // 平台审核只统计最高等级
-            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sqForm
-                .getApplyLevel()) {
-                this.payAward(sqForm);
-            }
+            this.payAward(sqForm);
         } else {
             // 未通过，清空手机号等信息，防止重新申请时重复
             Agent agent = agentBO.getAgent(userId);
@@ -431,8 +434,8 @@ public class SqFormAOImpl implements ISqFormAO {
             approveAgent.getRealName(), remark, status);
 
         agentBO.refreshSq(agent, sqForm, agent.getManager(),
-            agent.getHighUserId(), agent.getManager(), agent.getLevel(), status,
-            approver, approveAgent.getRealName(), logCode,
+            agent.getHighUserId(), agent.getTeamName(), agent.getLevel(),
+            status, approver, approveAgent.getRealName(), logCode,
             agent.getImpowerDatetime());
 
     }
@@ -580,7 +583,7 @@ public class SqFormAOImpl implements ISqFormAO {
     // 分配账号
     private List<String> distributeAccount(String userId, String mobile) {
         List<String> currencyList = new ArrayList<String>();
-        currencyList.add(ECurrency.YJ_CNY.getCode());
+        currencyList.add(ECurrency.TX_CNY.getCode());
         currencyList.add(ECurrency.MK_CNY.getCode());
         currencyList.add(ECurrency.C_CNY.getCode());
         return currencyList;
@@ -603,6 +606,25 @@ public class SqFormAOImpl implements ISqFormAO {
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
             .getLevel()) {
             status = ESqFormStatus.CANCEL_COMPANY.getCode();
+        }
+
+        // 获取所有下级门槛款
+        Agent condition = new Agent();
+        condition.setHighUserId(agent.getUserId());
+        List<Agent> list = agentBO.queryAgentList(condition);
+        Account mkAccount = null;
+        Long amount = 0L;
+        for (Agent lowAgent : list) {
+            mkAccount = accountBO.getAccountByUser(lowAgent.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            amount = amount + mkAccount.getAmount();
+        }
+        // 门槛款不足支付下级上级新上级门槛
+        mkAccount = accountBO.getAccountByUser(agent.getUserId(),
+            ECurrency.MK_CNY.getCode());
+        if (mkAccount.getAmount() < amount) {
+            throw new BizException("xn000",
+                "您需要充值" + (amount - mkAccount.getAmount()) + "元，转移下级后，才可申请退出");
         }
 
         sqForm.setToUserId(agent.getHighUserId());
@@ -663,8 +685,8 @@ public class SqFormAOImpl implements ISqFormAO {
 
                 if (jsAward > 0) {
                     accountBO.transAmountCZB(fromUserId,
-                        ECurrency.YJ_CNY.getCode(), buser.getUserId(),
-                        ECurrency.YJ_CNY.getCode(), jsAward, EBizType.AJ_JSJL,
+                        ECurrency.TX_CNY.getCode(), buser.getUserId(),
+                        ECurrency.TX_CNY.getCode(), jsAward, EBizType.AJ_JSJL,
                         "介绍代理[" + sqForm.getRealName() + "]的"
                                 + EBizType.AJ_JSJL.getValue() + "支出",
                         "介绍代理[" + sqForm.getRealName() + "]的"

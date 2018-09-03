@@ -12,6 +12,7 @@ import com.bh.mall.ao.ISjFormAO;
 import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentReportBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IWareBO;
@@ -21,6 +22,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.enums.EAgentLevel;
@@ -55,6 +57,9 @@ public class SjFormAOImpl implements ISjFormAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IAgentReportBO agentReportBO;
 
     /**
      * 申请升级
@@ -116,6 +121,12 @@ public class SjFormAOImpl implements ISjFormAO {
             }
         }
 
+        Account txAccount = accountBO.getAccountByUser(data.getUserId(),
+            ECurrency.TX_CNY.getCode());
+        if (0 < txAccount.getAmount()) {
+            throw new BizException("xn00000", "升级时不允许业绩账户中有余额");
+        }
+
         // 新等级是否需要实名
         if (EBoolean.YES.getCode().equals(agenthLevel.getIsRealName())) {
             // 之前未实名
@@ -155,6 +166,10 @@ public class SjFormAOImpl implements ISjFormAO {
             }
         }
 
+        if (StringUtils.isBlank(teamName)) {
+            teamName = data.getTeamName();
+        }
+
         // 申请升级
         String logCode = null;
         if (null == sjForm) {
@@ -181,7 +196,7 @@ public class SjFormAOImpl implements ISjFormAO {
     @Transactional
     public void approveSjFormByB(String userId, String approver, String result,
             String remark) {
-
+        Agent agent = agentBO.getAgent(userId);
         SjForm sjForm = sjFormBO.getSjForm(userId);
         AgentLevel auData = agentLevelBO
             .getAgentByLevel(sjForm.getApplyLevel());
@@ -228,10 +243,14 @@ public class SjFormAOImpl implements ISjFormAO {
                     EAgentLevel.ONE.getCode()) == sjForm.getApplyLevel()) {
                     agentAO.editTeamName(userId, sjForm.getTeamName());
                 }
+                AgentReport report = agentReportBO
+                    .getAgentReportByUser(agent.getUserId());
+                report.setLevel(sjForm.getApplyLevel());
+                report.setTeamName(agent.getTeamName());
+                agentReportBO.refreshAward(report);
             }
         }
 
-        Agent agent = agentBO.getAgent(userId);
         Agent approveAgent = agentBO.getAgent(approver);
         String logCode = sjFormBO.approveSjForm(sjForm, agent,
             approveAgent.getUserId(), approveAgent.getRealName(), remark,
@@ -255,6 +274,8 @@ public class SjFormAOImpl implements ISjFormAO {
             String remark) {
 
         SjForm sjForm = sjFormBO.getSjForm(userId);
+
+        Agent agent = agentBO.getAgent(userId);
         // 审核通过
         String status = ESjFormStatus.IMPOWERED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
@@ -279,9 +300,13 @@ public class SjFormAOImpl implements ISjFormAO {
                 .getApplyLevel()) {
                 agentAO.editTeamName(userId, sjForm.getTeamName());
             }
+
+            AgentReport report = agentReportBO
+                .getAgentReportByUser(agent.getUserId());
+            report.setLevel(sjForm.getApplyLevel());
+            agentReportBO.refreshAward(report);
         }
 
-        Agent agent = agentBO.getAgent(userId);
         SYSUser sysUser = sysUserBO.getSYSUser(approver);
         String logCode = sjFormBO.approveSjForm(sjForm, agent,
             sysUser.getUserId(), sysUser.getRealName(), remark, status);

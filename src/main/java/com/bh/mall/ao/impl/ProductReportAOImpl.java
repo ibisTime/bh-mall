@@ -23,10 +23,8 @@ public class ProductReportAOImpl implements IProductReportAO {
             limit, condition);
 
         for (ProductReport data : page.getList()) {
-            ProductReport prCondition = new ProductReport();
-            prCondition.setTeamName(data.getTeamName());
             List<ProductReport> list = productReportBO
-                .queryProductReportList(prCondition);
+                .getReportByTeamName(data.getTeamName());
             data.setList(list);
         }
 

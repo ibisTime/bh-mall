@@ -164,8 +164,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         if (EBoolean.NO.getCode().equals(payType)) {
             // 支付订单，更新订单状态
             accountBO.transAmountCZB(innerOrder.getApplyUser(),
-                ECurrency.YJ_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
-                ECurrency.YJ_CNY.getCode(), allAmount, EBizType.AJ_GMCP,
+                ECurrency.TX_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
+                ECurrency.TX_CNY.getCode(), allAmount, EBizType.AJ_GMCP,
                 EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
                 refNo);
 
@@ -367,8 +367,8 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         if (EResult.Result_YES.getCode().equals(result)) {
             data.setStatus(EInnerOrderStatus.CANCELED.getCode());
             accountBO.transAmountCZB(ESysUser.SYS_USER_BH.getCode(),
-                ECurrency.YJ_CNY.getCode(), data.getApplyUser(),
-                ECurrency.YJ_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
+                ECurrency.TX_CNY.getCode(), data.getApplyUser(),
+                ECurrency.TX_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
                 null, null, data.getCode());
         } else {
             data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());

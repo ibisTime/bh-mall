@@ -29,4 +29,6 @@ public interface IInOrderDAO extends IBaseDAO<InOrder> {
     void invalidOrder(InOrder data);
 
     List<InOrder> selectorderCount(InOrder condition);
+
+    void updatePayGroup(InOrder data);
 }

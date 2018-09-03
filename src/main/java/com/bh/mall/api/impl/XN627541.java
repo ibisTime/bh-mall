@@ -19,7 +19,6 @@ public class XN627541 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        System.out.println(req.getSpecList().toString());
         productAO.editProduct(req);
         return new BooleanRes(true);
     }

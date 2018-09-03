@@ -20,16 +20,19 @@ public class SysConstant {
 
     public static String QINIU_DOMAIN = "qiniu_domain";
 
-    public static String IP = "192.168.1.1";
+    public static String IP = "47.96.161.183";
 
-    // C端用户取现倍数
-    public static String CUSERQXBS = "CUSERQXBS";
+    // 微店账户每月取现次数
+    public static String CUSERQXBS = "BUSERWDQX";
 
-    // C端用户取现费率
-    public static String CUSERQXFL = "CUSERQXFL";
+    // 微店账户每月取现费率
+    public static String CUSERQXFL = "BUSERWDQXFL";
+
+    // 微店账户每次取现最低金额
+    public static String BUSERWDQXJE = "BUSERWDQXFL";
 
     // C端用户取现时效
-    public static String CUSERQXSX = "CUSERQXSX";
+    public static String CUSERQXSX = "BUSERWDQXJE";
 
     // B端用户取现倍数
     public static String BUSERQXBS = "BUSERQXBS";

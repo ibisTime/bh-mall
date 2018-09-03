@@ -292,40 +292,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     }
 
     @Override
-    public void changeAmount(String accountNumber, EChannelType channelType,
-            String channelOrder, String payGroup, List<String> codeList,
-            EBizType bizType, String bizNote, Long transAmount) {
-
-        Account dbAccount = this.getAccount(accountNumber);
-        Long dbAmount = dbAccount.getAmount();
-        if (null == dbAmount) {
-            dbAmount = 0L;
-        }
-        Long nowAmount = dbAmount + transAmount;
-        // 特定账户余额可为负
-        if (!dbAccount.getUserId().contains(ESysUser.SYS_USER_BH.getCode())
-                && nowAmount < 0) {
-            throw new BizException("xn000000",
-                dbAccount.getRealName()
-                        + ECurrency.getCurrency(dbAccount.getCurrency())
-                        + "账户余额不足，需充值[" + -nowAmount / 1000 + "]元");
-        }
-        // 记录流水
-        String lastOrder = null;
-        for (String code : codeList) {
-            lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,
-                payGroup, code, bizType, bizNote, transAmount, bizNote);
-        }
-
-        // 更改余额
-        Account data = new Account();
-        data.setAccountNumber(accountNumber);
-        data.setAmount(nowAmount);
-        data.setLastOrder(lastOrder);
-        accountDAO.updateAmount(data);
-    }
-
-    @Override
     public void removeByAgent(String userId) {
         List<Account> list = getAccountByUser(userId);
         for (Account data : list) {

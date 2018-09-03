@@ -157,6 +157,9 @@ public class OutOrder extends ABaseDO {
     // 备注
     private String remark;
 
+    // 备注
+    private Long allAmount;
+
     // ************************db*********************
 
     // 下单开始时间
@@ -732,4 +735,11 @@ public class OutOrder extends ABaseDO {
         this.noStatusList = noStatusList;
     }
 
+    public Long getAllAmount() {
+        return allAmount;
+    }
+
+    public void setAllAmount(Long allAmount) {
+        this.allAmount = allAmount;
+    }
 }

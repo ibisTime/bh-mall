@@ -187,6 +187,9 @@ public class Agent extends ABaseDO {
     private String toTeamName;
 
     // 归属人的团队名称
+    private Integer toLevel;
+
+    // 归属人的团队名称
     private List<String> statusList;
 
     // 用户Id，过滤代理
@@ -714,6 +717,14 @@ public class Agent extends ABaseDO {
 
     public void setNoStatusList(List<String> noStatusList) {
         this.noStatusList = noStatusList;
+    }
+
+    public Integer getToLevel() {
+        return toLevel;
+    }
+
+    public void setToLevel(Integer toLevel) {
+        this.toLevel = toLevel;
     }
 
 }

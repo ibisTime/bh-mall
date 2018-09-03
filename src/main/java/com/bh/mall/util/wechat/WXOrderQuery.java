@@ -46,7 +46,7 @@ public class WXOrderQuery {
         StringEntity entity;
         Map<String, String> map = null;
         try {
-            entity = new StringEntity(xml, "utf-8");
+            entity = new StringEntity(xml, "UTF-8");
             httpPost.setEntity(entity);
 
             HttpResponse httpResponse;
@@ -96,7 +96,8 @@ public class WXOrderQuery {
         xml.append("<xml>\n");
 
         for (Map.Entry<String, String> entry : treeMap.entrySet()) {
-            if ("body".equals(entry.getKey()) || "sign".equals(entry.getKey())) {
+            if ("body".equals(entry.getKey())
+                    || "sign".equals(entry.getKey())) {
                 xml.append("<" + entry.getKey() + "><![CDATA[")
                     .append(entry.getValue())
                     .append("]]></" + entry.getKey() + ">\n");

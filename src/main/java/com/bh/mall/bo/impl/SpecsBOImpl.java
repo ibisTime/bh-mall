@@ -59,8 +59,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                     StringValidater.toInteger(productSpec.getNumber()));
                 data.setWeight(
                     StringValidater.toDouble(productSpec.getWeight()));
-                data.setIsUpgradeOrder(productSpec.getIsSjOrder());
-                data.setIsImpowerOrder(productSpec.getIsSqOrder());
+                data.setIsSjOrder(productSpec.getIsSjOrder());
+                data.setIsSqOrder(productSpec.getIsSqOrder());
                 data.setIsSingle(productSpec.getIsSingle());
 
                 if (EBoolean.YES.getCode().equals(productSpec.getIsSingle())
@@ -177,9 +177,9 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         data.setStockNumber(StringValidater.toInteger(psReq.getStockNumber()));
         data.setNumber(StringValidater.toInteger(psReq.getNumber()));
         data.setWeight(StringValidater.toDouble(psReq.getWeight()));
-        data.setIsUpgradeOrder(psReq.getIsSjOrder());
+        data.setIsSjOrder(psReq.getIsSjOrder());
 
-        data.setIsImpowerOrder(psReq.getIsSqOrder());
+        data.setIsSqOrder(psReq.getIsSqOrder());
         data.setIsNormalOrder(psReq.getIsNormalOrder());
         specsDAO.insert(data);
 
@@ -247,8 +247,8 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
 
         psData
             .setStockNumber(StringValidater.toInteger(psReq.getStockNumber()));
-        psData.setIsUpgradeOrder(psReq.getIsSjOrder());
-        psData.setIsImpowerOrder(psReq.getIsSqOrder());
+        psData.setIsSjOrder(psReq.getIsSjOrder());
+        psData.setIsSqOrder(psReq.getIsSqOrder());
         psData.setIsNormalOrder(psReq.getIsNormalOrder());
         specsDAO.update(psData);
 

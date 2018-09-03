@@ -35,9 +35,9 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.EConfigType;
-import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.ESysConfigType;
 import com.bh.mall.enums.ESysUser;
+import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.http.PostSimulater;
 import com.bh.mall.util.HttpsUtil;
@@ -139,16 +139,13 @@ public class WeChatAOImpl implements IWeChatAO {
     }
 
     @Override
-    @Transactional
     public void doCallbackH5(String result) {
         Map<String, String> map = null;
         try {
             map = XMLUtil.doXMLParse(result);
             String attach = map.get("attach");
             String[] codes = attach.split("\\|\\|");
-            String systemCode = codes[0];
-            String companyCode = codes[1];
-            String bizBackUrl = codes[2];
+            String bizBackUrl = codes[0];
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
 
@@ -178,17 +175,15 @@ public class WeChatAOImpl implements IWeChatAO {
                     EBizType.getBizTypeMap().get(order.getBizType()),
                     order.getBizNote(), order.getAmount());
 
-                // 上级加钱
-                Agent agent = agentBO.getAgent(order.getApplyUser());
-                accountAO.addHighAccount(agent, order.getAmount(),
-                    wechatOrderNo, order.getPayGroup());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);
             }
+            logger.info("回调业biz务:" + bizBackUrl);
             CallbackResult callbackResult = new CallbackResult(isSucc,
-                order.getBizType(), order.getCode(), order.getPayGroup(),
-                order.getAmount(), systemCode, companyCode, bizBackUrl);
+                order.getBizType(), order.getApplyUser(), order.getPayGroup(),
+                order.getAmount(), ESystemCode.BH.getCode(),
+                ESystemCode.BH.getCode(), bizBackUrl);
             // 回调业务biz
             doBizCallback(callbackResult);
         } catch (JDOMException | IOException e) {
@@ -230,7 +225,7 @@ public class WeChatAOImpl implements IWeChatAO {
 
         Map<String, String> sysConfig = null;
 
-        if (EPayType.WEIXIN_H5.getCode().equals(channelType)) {
+        if (EChannelType.WeChat_H5.getCode().equals(channelType)) {
             sysConfig = sysConfigBO
                 .getConfigsMap(ESysConfigType.WX_PAY.getCode());
 

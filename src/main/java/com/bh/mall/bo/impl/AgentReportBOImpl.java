@@ -100,11 +100,11 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
     }
 
     @Override
-    public AgentReport getAgentReportByUser(String highUserId) {
+    public AgentReport getAgentReportByUser(String userId) {
         AgentReport data = null;
-        if (StringUtils.isNotBlank(highUserId)) {
+        if (StringUtils.isNotBlank(userId)) {
             AgentReport condition = new AgentReport();
-            condition.setUserId(highUserId);
+            condition.setUserId(userId);
             data = agentReportDAO.select(condition);
             if (null == data) {
                 throw new BizException("xn000000", "该代理的统计信息不存在");
@@ -116,6 +116,11 @@ public class AgentReportBOImpl extends PaginableBOImpl<AgentReport>
     @Override
     public void refreshAward(AgentReport data) {
         agentReportDAO.updateAward(data);
+    }
+
+    @Override
+    public void refreshSendAward(AgentReport data) {
+        agentReportDAO.updateSendAward(data);
     }
 
 }

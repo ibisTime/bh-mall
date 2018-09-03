@@ -114,7 +114,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         } else {
             dbCharge.setStatus(EChargeStatus.Pay_NO.getCode());
         }
-        dbCharge.setPayUser(null);
+        dbCharge.setPayUser(dbCharge.getApplyUser());
         dbCharge.setPayNote("在线充值自动回调");
         dbCharge.setPayDatetime(new Date());
         chargeDAO.payOrder(dbCharge);

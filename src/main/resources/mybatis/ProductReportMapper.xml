@@ -64,11 +64,6 @@
 		tbh_product_report t 
 		<include refid="where_condition" />
 		ORDER BY t.quantity LIMIT 3
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>
 	</select>
 
 	<select id="select_productReport_count" parameterType="productReport"

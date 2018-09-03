@@ -74,10 +74,6 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 获取账户
     public Account getAccountNocheck(String userId, String currency);
 
-    public void changeAmount(String accountNumber, EChannelType channleType,
-            String channelOrder, String payGroup, List<String> codeList,
-            EBizType biztType, String bizNote, Long transAmount);
-
     public void removeByAgent(String userId);
 
 }

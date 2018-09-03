@@ -177,7 +177,7 @@
 		WHERE user_id = #{userId}
 	</update>
 
-<update id="update_award" parameterType="agentReport">
+	<update id="update_award" parameterType="agentReport">
 		UPDATE tbh_agent_report
 		SET
 		send_award = #{sendAward}
@@ -187,4 +187,10 @@
 		WHERE user_id = #{userId}
 	</update>
 
+	<update id="update_sendAward" parameterType="agentReport">
+		UPDATE tbh_agent_report
+		SET
+		send_award = #{sendAward}
+		WHERE user_id = #{userId}
+	</update>
 </mapper>

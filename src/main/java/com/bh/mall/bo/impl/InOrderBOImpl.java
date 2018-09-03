@@ -232,4 +232,9 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
 
         return inOrderDAO.selectorderCount(condition);
     }
+
+    @Override
+    public void updatePayGroup(InOrder data) {
+        inOrderDAO.updatePayGroup(data);
+    }
 }

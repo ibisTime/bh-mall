@@ -24,8 +24,6 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public OutOrder getOutOrder(String code);
 
-    public void payOutOrder(OutOrder data);
-
     public void deliverOutOrder(OutOrder data, String deliver,
             String logisticsCode, String logisticsCompany, String remark);
 
@@ -46,7 +44,7 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public String addPayGroup(OutOrder data, String payGroup, String payType);
 
-    public OutOrder getOutOrderByPayGroup(String payGroup);
+    public List<OutOrder> getOutOrderByPayGroup(String payGroup);
 
     public void paySuccess(OutOrder data);
 
@@ -81,5 +79,9 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
     // 查询订单
     public List<OutOrder> getProductQuantity(String agentId, Date startDatetime,
             Date endDatetime);
+
+    public List<OutOrder> queryOutOrderListCount(OutOrder condition);
+
+    public void updatePayGroup(OutOrder data);
 
 }

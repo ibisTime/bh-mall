@@ -196,4 +196,11 @@ public class AccountAOImpl implements IAccountAO {
         }
     }
 
+    @Override
+    public void doBizCallBack(String applyUser, String payCode, String payGroup,
+            String bizType, Long amount) {
+        Agent agent = agentBO.getAgent(applyUser);
+        this.addHighAccount(agent, amount, payCode, payGroup);
+    }
+
 }

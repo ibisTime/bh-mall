@@ -339,13 +339,15 @@ public class WareAOImpl implements IWareAO {
                 req.getProvince(), req.getCity(), req.getArea(),
                 req.getAddress(), kind);
             sb.append(code);
+
+            allYunfei = yunfei;
         }
 
         Account yjAccount = accountBO.getAccountByUser(data.getUserId(),
-            ECurrency.YJ_CNY.getCode());
+            ECurrency.TX_CNY.getCode());
         if (yunfei > yjAccount.getAmount()) {
             throw new BizException("xn00000", "您的业绩账户余额不足，无法支付运费哦");
-        } else if (0 != yunfei) {
+        } else if (0 != allYunfei) {
             accountBO.changeAmount(yjAccount.getAccountNumber(),
                 EChannelType.NBZ, null, null, data.getUserId(), EBizType.YUNFEI,
                 EBizType.YUNFEI.getValue(), allYunfei);
@@ -405,7 +407,12 @@ public class WareAOImpl implements IWareAO {
         Agent agent = agentBO.getAgent(userId);
 
         // 代理已通过审核
-        if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+        if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())
+                || EAgentStatus.TO_UPGRADE.getCode().equals(agent.getStatus())
+                || EAgentStatus.UPGRADE_COMPANY.getCode()
+                    .equals(agent.getStatus())
+                || EAgentStatus.UPGRADED.getCode()
+                    .equals(agent.getStatus())) {
             AgentLevel agentLevel = agentLevelBO
                 .getAgentByLevel(agent.getLevel());
 
@@ -428,12 +435,12 @@ public class WareAOImpl implements IWareAO {
 
                 // 是否完成授权单
                 if (0 != agentLevel.getAmount()) {
-                    if (agentLevel.getAmount() > outOrderBO.checkImpowerOrder(
-                        agent.getUserId(), agent.getImpowerDatetime())) {
-                        result = ECheckStatus.NO_Impwoer.getCode();
-                    } else if (sjFormBO.checkIsSj(agent.getUserId())) {
+                    if (EAgentStatus.IMPOWERED.getCode()
+                        .equals(agent.getStatus())
+                            || EAgentStatus.UPGRADED.getCode()
+                                .equals(agent.getStatus())) {
                         if (agentLevel.getAmount() > outOrderBO
-                            .checkUpgradeOrder(agent.getUserId(),
+                            .checkImpowerOrder(agent.getUserId(),
                                 agent.getImpowerDatetime())) {
                             result = ECheckStatus.NO_Impwoer.getCode();
                         }
@@ -487,8 +494,8 @@ public class WareAOImpl implements IWareAO {
 
             // 授权单金额为0，门槛款为0，红线为0，不去检查
 
-            if (0 != agentLevel.getAmount() && 0 != agentLevel.getMinCharge()
-                    && 0 != agentLevel.getRedAmount()) {
+            if (0 != agentLevel.getAmount() || 0 != agentLevel.getMinCharge()
+                    || 0 != agentLevel.getRedAmount()) {
                 // 是否有过充值
                 Long cAmount = 0L;
                 List<Charge> charge = chargeBO.getChargeByUser(

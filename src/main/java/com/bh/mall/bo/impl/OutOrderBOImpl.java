@@ -73,7 +73,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
         data.setQuantity(quantity);
         data.setPrice(price);
-        data.setPic(pData.getAdvPic());
+        data.setPic(pData.getPic());
         data.setApplyUser(applyUser);
         data.setLevel(level);
 
@@ -121,11 +121,6 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
             }
         }
         return data;
-    }
-
-    @Override
-    public void payOutOrder(OutOrder data) {
-        outOrderDAO.payOutOrder(data);
     }
 
     @Override
@@ -192,17 +187,10 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public OutOrder getOutOrderByPayGroup(String payGroup) {
-        OutOrder data = null;
-        if (StringUtils.isNotBlank(payGroup)) {
-            OutOrder condition = new OutOrder();
-            condition.setPayGroup(payGroup);
-            data = outOrderDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "订单不存在");
-            }
-        }
-        return data;
+    public List<OutOrder> getOutOrderByPayGroup(String payGroup) {
+        OutOrder condition = new OutOrder();
+        condition.setPayGroup(payGroup);
+        return outOrderDAO.selectList(condition);
     }
 
     @Override
@@ -387,6 +375,16 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<OutOrder> queryOutOrderListCount(OutOrder condition) {
+        return outOrderDAO.selectOutOrderListCount(condition);
+    }
+
+    @Override
+    public void updatePayGroup(OutOrder data) {
+        outOrderDAO.updatePayGroup(data);
     }
 
 }

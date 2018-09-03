@@ -39,7 +39,7 @@ public class XN627510 extends AProcessor {
         if (StringUtils.isNotBlank(req.getUserId())) {
             try {
                 List<Account> accounts = accountAO.getAccountByUserId(
-                    req.getUserId(), ECurrency.YJ_CNY.getCode());
+                    req.getUserId(), ECurrency.TX_CNY.getCode());
                 if (accounts.size() > 0) {
                     condition
                         .setAccountNumber(accounts.get(0).getAccountNumber());

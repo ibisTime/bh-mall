@@ -59,6 +59,9 @@ public class AgentReport extends ABaseDO {
     // 授权时间
     private Date impowerDatetime;
 
+    // 累计出货总额
+    private Long sendAmount;
+
     // 累计出货奖励
     private Long sendAward;
 
@@ -299,6 +302,14 @@ public class AgentReport extends ABaseDO {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public Long getSendAmount() {
+        return sendAmount;
+    }
+
+    public void setSendAmount(Long sendAmount) {
+        this.sendAmount = sendAmount;
     }
 
 }

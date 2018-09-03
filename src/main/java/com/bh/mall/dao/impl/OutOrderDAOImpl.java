@@ -114,7 +114,14 @@ public class OutOrderDAOImpl extends AMybatisTemplate implements IOutOrderDAO {
     }
 
     @Override
-    public void payOutOrder(OutOrder data) {
+    public List<OutOrder> selectOutOrderListCount(OutOrder condition) {
+        return super.selectList(NAMESPACE.concat("select_count"), condition,
+            OutOrder.class);
+    }
+
+    @Override
+    public void updatePayGroup(OutOrder data) {
+        super.update(NAMESPACE.concat("update_payGroup"), data);
     }
 
 }

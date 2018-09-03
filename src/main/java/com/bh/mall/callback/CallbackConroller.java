@@ -42,7 +42,7 @@ public class CallbackConroller {
     @RequestMapping("/wechat/H5/callback")
     public synchronized void doCallbackWechatH5(HttpServletRequest request,
             HttpServletResponse response) {
-        logger.info("进入毁掉方法");
+        logger.info("**** 进入回调 ****");
         try {
             // 获取回调参数
             PrintWriter out = response.getWriter();

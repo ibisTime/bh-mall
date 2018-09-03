@@ -59,6 +59,7 @@
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="approve_note" property="approveNote" />
 		<result column="remark" property="remark" />
+		<result column="allAmount" property="allAmount" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -213,6 +214,20 @@
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_out_order t 
 		<include refid="where_condition" />
+	</select>
+
+
+	
+	<select id="select_count" parameterType="outOrder" resultMap="order_DB_Result">
+		SELECT
+		t.level
+		,t.apply_user
+		,SUM(amount) AS allAmount
+		FROM
+		tbh_in_order t 
+		<include refid="where_condition" />
+		GROUP BY t.level,t.apply_user
+		ORDER BY t.level
 	</select>
 
 	<insert id="insert_outOrder" parameterType="outOrder">
@@ -407,5 +422,12 @@
 		tbh_out_order
 		WHERE
 		code = #{code}
+	</delete>
+	
+	<delete id="update_payGroup" parameterType="innerOrder">
+		DELETE FROM
+		tbh_out_order
+		WHERE
+		apply_user = #{applyUser} AND level = #{level}
 	</delete>
 </mapper>

@@ -32,9 +32,11 @@ public interface IAgentReportBO extends IPaginableBO<AgentReport> {
     public AgentReport getAgentReport(String code);
 
     // 根据代理查询统计信息
-    public AgentReport getAgentReportByUser(String highUserId);
+    public AgentReport getAgentReportByUser(String userId);
 
     // 更新累积奖励
     public void refreshAward(AgentReport data);
+
+    public void refreshSendAward(AgentReport agentReport);
 
 }

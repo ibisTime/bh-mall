@@ -119,7 +119,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
         Integer nowQuantity = dbData.getQuantity() + quantity;
         Long nowAmount = nowQuantity * dbData.getPrice();
         if (nowQuantity < 0) {
-            throw new BizException("xn0000", "该规格的产品数量不足");
+            throw new BizException("xn0000", "上级云仓该规格的产品数量不足");
         }
 
         // 记录流水

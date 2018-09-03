@@ -38,6 +38,7 @@ public interface IOutOrderAO {
     // 付款
     public Object payOutOrder(List<String> codeList, String payType);
 
+    // 发货
     public void deliverOutOrder(OutOrder outOrder, String proCode,
             String deliver, String logisticsCode, String logisticsCompany,
             String remark);

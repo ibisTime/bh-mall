@@ -61,7 +61,7 @@ public class AgentReportAOImpl implements IAgentReportAO {
 
             // 可提现账户余额
             Account account = accountBO.getAccountByUser(
-                agentReport.getUserId(), ECurrency.YJ_CNY.getCode());
+                agentReport.getUserId(), ECurrency.TX_CNY.getCode());
             agentReport.setYjAmount(account.getAmount());
         }
 
@@ -87,7 +87,7 @@ public class AgentReportAOImpl implements IAgentReportAO {
 
             // 可提现账户余额
             Account account = accountBO.getAccountByUser(
-                agentReport.getUserId(), ECurrency.YJ_CNY.getCode());
+                agentReport.getUserId(), ECurrency.TX_CNY.getCode());
             agentReport.setYjAmount(account.getAmount());
         }
 
@@ -146,7 +146,7 @@ public class AgentReportAOImpl implements IAgentReportAO {
 
             // 可提现账户余额
             Account account = accountBO.getAccountByUser(
-                agentReport.getUserId(), ECurrency.YJ_CNY.getCode());
+                agentReport.getUserId(), ECurrency.TX_CNY.getCode());
             agentReport.setYjAmount(account.getAmount());
         }
 
