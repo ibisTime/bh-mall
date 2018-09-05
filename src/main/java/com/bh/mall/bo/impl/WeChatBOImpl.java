@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 import com.bh.mall.bo.IWeChatBO;
 import com.bh.mall.callback.CallbackBzdhConroller;
-import com.bh.mall.common.PropertiesUtil;
 import com.bh.mall.dto.res.XN627462Res;
 import com.bh.mall.enums.EWeChatType;
 import com.bh.mall.util.wechat.MD5;
@@ -55,7 +54,7 @@ public class WeChatBOImpl implements IWeChatBO {
         prePay.setNotify_url(bizBackUrl);// 回调地址
         prePay.setPartnerKey(sysConfig.get("private_key1")); // 商户秘钥
         prePay.setOpenid(openId); // 支付者openid
-        prePay.setAttach(PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL); // 附加字段，回调时返回
+        prePay.setAttach(bizBackUrl); // 附加字段，回调时返回
         return prePay.submitXmlGetPrepayId();
     }
 
