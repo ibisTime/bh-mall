@@ -45,6 +45,7 @@ public class DeliveOrderBOImpl extends PaginableBOImpl<DeliveOrder>
         data.setSigner(outOrder.getSigner());
         data.setProvince(outOrder.getProvince());
 
+        data.setMobile(outOrder.getMobile());
         data.setCity(outOrder.getCity());
         data.setArea(outOrder.getArea());
         data.setAddress(outOrder.getAddress());
@@ -79,7 +80,17 @@ public class DeliveOrderBOImpl extends PaginableBOImpl<DeliveOrder>
     }
 
     @Override
-    public void refreshDeliveOrder(DeliveOrder data) {
+    public void refreshDeliveOrder(OutOrder outOrder) {
+        DeliveOrder data = this.getDeliveOrder(outOrder.getCode());
+        data.setSigner(outOrder.getSigner());
+        data.setProvince(outOrder.getProvince());
+
+        data.setMobile(outOrder.getMobile());
+        data.setCity(outOrder.getCity());
+        data.setArea(outOrder.getArea());
+        data.setAddress(outOrder.getAddress());
+        deliveOrderDAO.update(data);
+
     }
 
     @Override

@@ -116,7 +116,7 @@
 						#{item}					
 					</foreach>
 				</when>
-				<when test="noStatusList != null and noStatusList ">
+				<when test="noStatusList != null and noStatusList.size()>0 ">
 					AND t.status NOT IN
 					<foreach collection="noStatusList" item="item" index="index" open="(" separator="," close=")">
 						#{item}					
@@ -321,7 +321,9 @@
 		status = #{status}
 		,id_no = 	#{idNo}
 		,mobile = #{mobile}
+		,high_user_id = #{highUserId}
 		,from_user_id = #{fromUserId}
+		,level = #{level}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

@@ -34,6 +34,7 @@ public class XN627665 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
 
+        condition.setTeamName(req.getTeamName());
         condition.setIsWareSend(req.getIsWareSend());
         condition.setDeliver(req.getDeliver());
         condition.setProductName(req.getProductName());

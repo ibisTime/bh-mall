@@ -173,20 +173,21 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshStatus(Agent data, String updater, String remark) {
 
-        data.setStatus(EAgentStatus.MIND.getCode());
         data.setUpdater(updater);
         Date date = new Date();
         data.setUpdateDatetime(date);
         data.setRemark(remark);
         String logCode = agentLogBO.refreshAgent(data,
-            EAgentLogType.OUT.getCode());
+            EAgentLogType.OUT.getCode(), EAgentStatus.CANCELED.getCode());
 
+        data.setStatus(EAgentStatus.MIND.getCode());
         data.setLastAgentLog(logCode);
         data.setMobile(null);
         data.setHighUserId(null);
         data.setReferrer(null);
         data.setIntroducer(null);
         data.setIdNo(null);
+        data.setLevel(null);
 
         agentDAO.updateStatus(data);
 
@@ -240,7 +241,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         data.setRemark(remark);
 
         String logCode = agentLogBO.refreshAgent(data,
-            EAgentLogType.Update.getCode());
+            EAgentLogType.Update.getCode(), data.getStatus());
         data.setLastAgentLog(logCode);
         agentDAO.updateHigh(data);
 
@@ -508,6 +509,8 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setIdHand(sjForm.getIdHand());
             data.setHighUserId(sjForm.getToUserId());
 
+        } else if (ESjFormStatus.IMPOWERED.getCode().equals(status)) {
+            status = EAgentStatus.IMPOWERED.getCode();
         }
 
         data.setStatus(status);

@@ -613,7 +613,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public void paySuccess(String result) {
         Map<String, String> map = null;
         try {
-            logger.info("========回调信息=================");
+            logger.info("========出货订单回调信息=======");
             map = XMLUtil.doXMLParse(result);
 
             String wechatOrderNo = map.get("transaction_id");
@@ -637,7 +637,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                     data.setPayType(EChannelType.WeChat_H5.getCode());
                     data.setPayCode(wechatOrderNo);
-                    data.setStatus(EOutOrderStatus.TO_APPROVE.getCode());
+                    data.setStatus(EOutOrderStatus.TO_SEND.getCode());
                     outOrderBO.paySuccess(data);
 
                     amount = amount + data.getAmount();
@@ -795,10 +795,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Override
     public void editOutOrder(XN627643Req req) {
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
-        if (EOutOrderStatus.TO_RECEIVE.getCode().equals(data.getStatus())
+        if (EOutOrderStatus.TO_SEND.getCode().equals(data.getStatus())
+                || EOutOrderStatus.TO_RECEIVE.getCode().equals(data.getStatus())
                 || EOutOrderStatus.RECEIVED.getCode()
                     .equals(data.getStatus())) {
-            throw new BizException("xn00000", "订单已发货");
+            throw new BizException("xn00000", "订单无法修改");
         }
         data.setSigner(req.getSigner());
         data.setMobile(req.getMobile());
@@ -810,6 +811,40 @@ public class OutOrderAOImpl implements IOutOrderAO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setUpdateNote(req.getUpdateNote());
+
+        // 产品不包邮，计算运费
+        Product product = productBO.getProduct(data.getProductCode());
+        if (EBoolean.NO.getCode().equals(product.getIsFree())) {
+
+            Account txAccount = accountBO.getAccountByUser(data.getApplyUser(),
+                ECurrency.MK_CNY.getCode());
+            SYSConfig sysConfig = sysConfigBO.getConfig(data.getProvince(),
+                ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
+            Long yunfei = StringValidater.toLong(sysConfig.getCvalue());
+
+            // 运费增加
+            if (data.getYunfei() < yunfei) {
+                if (txAccount.getAmount() < (yunfei - data.getYunfei())) {
+                    throw new BizException("xn00000",
+                        "代理" + txAccount.getRealName() + "可提账户中余额不足以支付"
+                                + yunfei / 1000.0 + "元的运费");
+                }
+                accountBO.changeAmount(txAccount.getAccountNumber(),
+                    EChannelType.NBZ, null, null, data.getApplyUser(),
+                    EBizType.YUNFEI, EBizType.YUNFEI.getValue(),
+                    yunfei - data.getYunfei());
+
+                // 运费减少
+            } else {
+                accountBO.changeAmount(txAccount.getAccountNumber(),
+                    EChannelType.NBZ, null, null, data.getApplyUser(),
+                    EBizType.YUNFEI, EBizType.YUNFEI.getValue(),
+                    data.getYunfei() - yunfei);
+            }
+
+            data.setYunfei(yunfei);
+            data.setPayAmount(data.getPayAmount() + yunfei);
+        }
         outOrderBO.refreshOutOrder(data);
     }
 
@@ -862,9 +897,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                         tjAward.getValue1() / 100);
                     accountBO.transAmountCZB(fromUserId,
                         ECurrency.TX_CNY.getCode(), firstReferee.getUserId(),
-                        ECurrency.TX_CNY.getCode(), amount, EBizType.AJ_TJJL,
-                        EBizType.AJ_TJJL.getValue(),
-                        EBizType.AJ_TJJL.getValue(), data.getCode());
+                        ECurrency.TX_CNY.getCode(), amount, EBizType.AJ_TJJL_IN,
+                        EBizType.AJ_TJJL_IN.getValue(),
+                        EBizType.AJ_TJJL_IN.getValue(), data.getPayGroup());
 
                     // 统计推荐奖
                     report = agentReportBO
@@ -882,8 +917,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
                             ECurrency.TX_CNY.getCode(),
                             secondReferee.getUserId(),
                             ECurrency.TX_CNY.getCode(), amount,
-                            EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
-                            EBizType.AJ_TJJL.getValue(), data.getCode());
+                            EBizType.AJ_TJJL_IN, EBizType.AJ_TJJL_IN.getValue(),
+                            EBizType.AJ_TJJL_IN.getValue(), data.getPayGroup());
 
                         // 统计推荐奖
                         report = agentReportBO
@@ -901,8 +936,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                                 ECurrency.TX_CNY.getCode(),
                                 thirdReferee.getUserId(),
                                 ECurrency.TX_CNY.getCode(), amount,
-                                EBizType.AJ_TJJL, EBizType.AJ_TJJL.getValue(),
-                                EBizType.AJ_TJJL.getValue(), data.getCode());
+                                EBizType.AJ_TJJL_IN,
+                                EBizType.AJ_TJJL_IN.getValue(),
+                                EBizType.AJ_TJJL_IN.getValue(),
+                                data.getPayGroup());
 
                             // 统计推荐奖
                             report = agentReportBO
@@ -916,42 +953,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
 
         }
-
-        // **********出货奖*******
-        // // 出货奖励,且产品计入出货
-        // if (EProductIsTotal.YES.getCode().equals(product.getIsTotal()))
-        //
-        // {
-        // ChAward award = chAwardBO.getChAwardByLevel(applyUser.getLevel(),
-        // data.getAmount());
-        // if (award != null) {
-        // Long awardAmount = AmountUtil.mul(orderAmount,
-        // award.getPercent() / 100);
-        // // 一级代理直接发奖励
-        // if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-        // .getLevel()) {
-        // accountBO.changeAmount(account.getAccountNumber(),
-        // EChannelType.NBZ, null, null, data.getApplyUser(),
-        // EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getValue(),
-        // awardAmount);
-        //
-        // } else {
-        // // 非一级代理，上级发放奖励
-        // accountBO.transAmountCZB(applyUser.getHighUserId(),
-        // ECurrency.YJ_CNY.getCode(), applyUser.getUserId(),
-        // ECurrency.YJ_CNY.getCode(), awardAmount,
-        // EBizType.AJ_CHJL, EBizType.AJ_CHJL.getValue(),
-        // EBizType.AJ_CHJL.getValue(), data.getCode());
-        // }
-        //
-        // // 统计出货奖
-        // report = agentReportBO
-        // .getAgentReportByUser(applyUser.getUserId());
-        // report.setSendAward(awardAmount);
-        // agentReportBO.refreshAward(report);
-        // }
-        // }
-
     }
 
     @Override
@@ -1243,8 +1244,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 收款方账户价钱
             accountBO.changeAmount(account.getAccountNumber(),
                 EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
-                data.getPayGroup(), data.getCode(), EBizType.AJ_YCCH,
-                EBizType.AJ_YCCH.getValue(), data.getAmount());
+                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
+                EBizType.AJ_GMYC.getValue(), data.getAmount());
         }
     }
 
@@ -1465,6 +1466,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     }
                     data.setYunfei(yunfei);
                     data.setPayAmount(data.getPayAmount() + yunfei);
+
+                    accountBO.changeAmount(txAccount.getAccountNumber(),
+                        EChannelType.NBZ, null, null, applyAagent.getUserId(),
+                        EBizType.YUNFEI, EBizType.YUNFEI.getValue(), -yunfei);
                 }
 
                 // 订单状态会退回待审单
@@ -1472,7 +1477,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 data.setIsWareSend(EBoolean.YES.getCode());
             }
         }
-
         if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
             Agent applyAagent = agentBO.getAgent(data.getApplyUser());
             AgentLevel agentLevel = agentLevelBO
@@ -1522,12 +1526,13 @@ public class OutOrderAOImpl implements IOutOrderAO {
         statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
         statusList.add(EOutOrderStatus.RECEIVED.getCode());
         condition.setStatusList(statusList);
+        condition.setKind(EOutOrderKind.Normal_Order.getCode());
 
         List<OutOrder> list = outOrderBO.queryOutOrderListCount(condition);
 
         String fromUserId = ESysUser.SYS_USER_BH.getCode();
         String payGroup = OrderNoGenerater
-            .generate(EGeneratePrefix.InOrder.getCode());
+            .generate(EGeneratePrefix.OutOrder.getCode());
 
         Long allAward = 0L;
         for (OutOrder data : list) {
@@ -1574,6 +1579,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     @Override
-    public void eidtProCode() {
+    public void eidtProCode(String code, String proCode) {
+        OutOrder data = outOrderBO.getOutOrder(code);
+        if (!(EOutOrderStatus.TO_RECEIVE.getCode().equals(data.getStatus())
+                || EOutOrderStatus.TO_RECEIVE.getCode()
+                    .equals(data.getStatus()))) {
+
+        }
     }
 }

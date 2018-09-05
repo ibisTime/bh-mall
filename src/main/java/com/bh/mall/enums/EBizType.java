@@ -15,7 +15,7 @@ public enum EBizType {
     AJ_QX("11", "取现"), XXFK("XXFK", "提现回录"), AJ_CZ("AJ_CZ",
             "充值"), AJ_KK("AJ_KK", "扣款"), AJ_MKCZ("AJ_MKCZ", "门槛充值"),
 
-    AJ_GMNP("AJ_GMNP", "购买内购产品"), AJ_GMYC("AJ_GMYC", "购买云仓"), AJ_CELR("AJ_CELR",
+    AJ_GMNP("AJ_GMNP", "购买内购产品"), AJ_GMYC("AJ_GMYC", "购买产品"), AJ_CELR("AJ_CELR",
             "差额利润"), AJ_TJJL("AJ_TJJL", "推荐奖励"), AJ_CHJL("AJ_CHJL",
                     "出货奖励"), AJ_GMCP_TK("AJ_GMCP_TK", "取消订单"),
 

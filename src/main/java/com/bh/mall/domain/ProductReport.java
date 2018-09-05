@@ -29,12 +29,6 @@ public class ProductReport extends ABaseDO {
     // 产品编号
     private String productName;
 
-    // 规格编号
-    private String specsCode;
-
-    // 规格编号
-    private String specsName;
-
     // 数量
     private Integer quantity;
 
@@ -66,14 +60,6 @@ public class ProductReport extends ABaseDO {
         return productCode;
     }
 
-    public void setSpecsCode(String specsCode) {
-        this.specsCode = specsCode;
-    }
-
-    public String getSpecsCode() {
-        return specsCode;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -86,16 +72,8 @@ public class ProductReport extends ABaseDO {
         return productName;
     }
 
-    public String getSpecsName() {
-        return specsName;
-    }
-
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public void setSpecsName(String specsName) {
-        this.specsName = specsName;
     }
 
     public String getTeamLeader() {

@@ -15,18 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bh.mall.ao.IOutOrderAO;
+import com.bh.mall.ao.IInnerOrderAO;
 
 @Controller
-public class CallbackOutOrderController {
+public class CallbackInnerOrderController {
     private static Logger logger = Logger
-        .getLogger(CallbackOutOrderController.class);
+        .getLogger(CallbackInnerOrderController.class);
 
     @Autowired
-    IOutOrderAO outOrderAO;
+    IInnerOrderAO innerOrderAO;
 
     // 自身支付回调
-    @RequestMapping("/outOrder/callback")
+    @RequestMapping("/innerOrder/callback")
     public synchronized void doCallbackPay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
@@ -35,9 +35,9 @@ public class CallbackOutOrderController {
             PrintWriter out = response.getWriter();
             InputStream inStream = request.getInputStream();
             String result = getReqResult(out, inStream);
-            logger.info("**** 公众号支付出货订单回调结果 ****：" + result);
+            logger.info("**** 公众号支付内购订单回调结果 ****：" + result);
             // 解析回调结果并通知业务biz
-            outOrderAO.paySuccess(result);
+            innerOrderAO.paySuccess(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(

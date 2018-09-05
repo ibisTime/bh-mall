@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bh.mall.ao.IInOrderAO;
+import com.bh.mall.ao.IOutOrderAO;
 
 @Controller
 public class CallbackXCXController2 {
@@ -23,7 +23,7 @@ public class CallbackXCXController2 {
         .getLogger(CallbackXCXController2.class);
 
     @Autowired
-    IInOrderAO inOrderAO;
+    IOutOrderAO outOrderAO;
 
     // 自身支付回调
     @RequestMapping("/xcx/callback")
@@ -37,7 +37,7 @@ public class CallbackXCXController2 {
             String result = getReqResult(out, inStream);
             logger.info("**** 公众号支付内购订单回调结果 ****：" + result);
             // 解析回调结果并通知业务biz
-            inOrderAO.paySuccess(result);
+            outOrderAO.paySuccess(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(

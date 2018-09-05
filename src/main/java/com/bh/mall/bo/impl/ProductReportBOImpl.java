@@ -27,13 +27,13 @@ public class ProductReportBOImpl extends PaginableBOImpl<ProductReport>
     }
 
     @Override
-    public ProductReport getProductReport(String teamName, String specsCode) {
+    public ProductReport getProductReport(String teamName, String productCode) {
         ProductReport data = null;
         if (StringUtils.isNotBlank(teamName)
-                && StringUtils.isNotBlank(specsCode)) {
+                && StringUtils.isNotBlank(productCode)) {
             ProductReport condition = new ProductReport();
             condition.setTeamName(teamName);
-            condition.setSpecsCode(specsCode);
+            condition.setProductCode(productCode);
             data = productReportDAO.select(condition);
         }
         return data;
@@ -49,12 +49,9 @@ public class ProductReportBOImpl extends PaginableBOImpl<ProductReport>
         data.setCode(code);
         data.setTeamName(order.getTeamName());
         data.setTeamLeader(realName);
-        data.setSpecsName(order.getSpecsName());
         data.setProductCode(order.getProductCode());
         data.setProductName(order.getProductName());
 
-        data.setSpecsCode(order.getSpecsCode());
-        data.setSpecsName(order.getSpecsName());
         data.setQuantity(quantity);
         productReportDAO.insert(data);
 

@@ -62,4 +62,9 @@ public class AgentReportDAOImpl extends AMybatisTemplate
         super.update(NAMESPACE.concat("update_sendAward"), data);
     }
 
+    @Override
+    public void updateLevel(AgentReport data) {
+        super.update(NAMESPACE.concat("update_sendAward"), data);
+    }
+
 }

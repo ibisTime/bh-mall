@@ -83,6 +83,6 @@ public interface IOutOrderAO {
 
     public void deliverOutOrder(XN627645Req req);
 
-    public void eidtProCode();
+    public void eidtProCode(String code, String proCode);
 
 }

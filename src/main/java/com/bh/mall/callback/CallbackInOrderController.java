@@ -35,7 +35,7 @@ public class CallbackInOrderController {
             PrintWriter out = response.getWriter();
             InputStream inStream = request.getInputStream();
             String result = getReqResult(out, inStream);
-            logger.info("**** 公众号支付内购订单回调结果 ****：" + result);
+            logger.info("**** 公众号支付云仓订单回调结果 ****：" + result);
             // 解析回调结果并通知业务biz
             inOrderAO.paySuccess(result);
             // 通知微信服务器(我已收到请求，不用再继续回调我了)

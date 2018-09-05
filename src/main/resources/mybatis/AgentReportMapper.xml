@@ -193,4 +193,12 @@
 		send_award = #{sendAward}
 		WHERE user_id = #{userId}
 	</update>
+	
+	<update id="update_level" parameterType="agentReport">
+		UPDATE tbh_agent_report
+		SET
+		level = #{level}
+		,team_name = #{teamName}
+		WHERE user_id = #{userId}
+	</update>
 </mapper>

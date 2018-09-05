@@ -95,7 +95,7 @@ public class WeChatAOImpl implements IWeChatAO {
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
             refNo, EBizType.getBizType(bizType), bizNote, transAmount,
-            EChannelType.WeChat_H5, applyUser, agent.getLevel());
+            EChannelType.WeChat_H5, agent, agent.getLevel());
         return this.getPrepayIdH5(applyUser, payGroup, chargeOrderCode, bizType,
             bizNote, transAmount, backUrl, EChannelType.WeChat_H5.getCode());
     }

@@ -95,6 +95,9 @@ public class Ware extends ABaseDO {
     // 等级
     private Integer level;
 
+    // 等级
+    private Integer specsQuantity;
+
     public Agent getAgent() {
         return agent;
     }
@@ -309,6 +312,14 @@ public class Ware extends ABaseDO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public Integer getSpecsQuantity() {
+        return specsQuantity;
+    }
+
+    public void setSpecsQuantity(Integer specsQuantity) {
+        this.specsQuantity = specsQuantity;
     }
 
 }

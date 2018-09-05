@@ -53,4 +53,9 @@ public class DeliveOrderDAOImpl extends AMybatisTemplate
         super.update(NAMESPACE.concat("delive_Order"), data);
     }
 
+    @Override
+    public void update(DeliveOrder data) {
+        super.update(NAMESPACE.concat("update_Order"), data);
+    }
+
 }

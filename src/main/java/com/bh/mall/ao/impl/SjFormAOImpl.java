@@ -25,6 +25,7 @@ import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SjForm;
+import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
@@ -214,11 +215,10 @@ public class SjFormAOImpl implements ISjFormAO {
                 status = ESjFormStatus.THROUGH_YES.getCode();
                 // 清空余额
                 if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
-                    if (account.getAmount() > 0) {
-                        accountBO.changeAmount(account.getAccountNumber(),
-                            EChannelType.NBZ, null, null, sjForm.getUserId(),
-                            EBizType.AJ_QKYE, EBizType.AJ_QKYE.getValue(),
-                            -account.getAmount());
+                    List<Ware> wareList = wareBO
+                        .getWareByUser(agent.getUserId());
+                    for (Ware ware : wareList) {
+                        wareBO.removeWare(ware);
                     }
                 }
 
@@ -247,7 +247,7 @@ public class SjFormAOImpl implements ISjFormAO {
                     .getAgentReportByUser(agent.getUserId());
                 report.setLevel(sjForm.getApplyLevel());
                 report.setTeamName(agent.getTeamName());
-                agentReportBO.refreshAward(report);
+                agentReportBO.refreshLevel(report);
             }
         }
 
@@ -304,7 +304,7 @@ public class SjFormAOImpl implements ISjFormAO {
             AgentReport report = agentReportBO
                 .getAgentReportByUser(agent.getUserId());
             report.setLevel(sjForm.getApplyLevel());
-            agentReportBO.refreshAward(report);
+            agentReportBO.refreshLevel(report);
         }
 
         SYSUser sysUser = sysUserBO.getSYSUser(approver);
@@ -367,7 +367,7 @@ public class SjFormAOImpl implements ISjFormAO {
             sjForm.setUser(agent);
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sjForm
                 .getApplyLevel()) {
-                SYSUser sysUser = sysUserBO.getSYSUser(sjForm.getUserId());
+                SYSUser sysUser = sysUserBO.getSYSUser(sjForm.getToUserId());
                 sjForm.setToUserName(sysUser.getRealName());
             } else {
                 Agent toUser = agentBO.getAgent(sjForm.getToUserId());

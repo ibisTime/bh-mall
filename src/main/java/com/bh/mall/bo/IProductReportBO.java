@@ -13,7 +13,7 @@ public interface IProductReportBO extends IPaginableBO<ProductReport> {
 
     public List<ProductReport> queryProductReportList(ProductReport condition);
 
-    public ProductReport getProductReport(String teamName, String specsCOde);
+    public ProductReport getProductReport(String teamName, String productCode);
 
     public void refreshProductReport(ProductReport productReport,
             Integer quantity);

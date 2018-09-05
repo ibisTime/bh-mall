@@ -136,9 +136,8 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     }
 
     @Override
-    public String addPayGroup(InnerOrder data, String payType) {
-        String payGroup = OrderNoGenerater
-            .generate(EGeneratePrefix.InnerOrder.getCode());
+    public String addPayGroup(InnerOrder data, String payType,
+            String payGroup) {
         data.setPayGroup(payGroup);
         data.setPayType(payType);
         innerOrderDAO.addPayGroup(data);

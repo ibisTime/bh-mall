@@ -87,30 +87,6 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     @Override
-    public void transQuantity(String fromUser, String fromSpecs,
-            String fromType, String toUser, String toSpecs, String toType,
-            Integer quantity, ESpecsLogType fromBizType,
-            ESpecsLogType toBizType, String fromBizNote, String toBizNote,
-            String refNo) {
-        Ware fromWare = this.getWareByProductSpec(fromUser, fromSpecs);
-        Ware toWare = this.getWareByProductSpec(toUser, toSpecs);
-
-        transQuantity(fromWare, fromType, toWare, toType, quantity, fromBizType,
-            toBizType, fromBizNote, toBizNote, refNo);
-    }
-
-    private void transQuantity(Ware fromWare, String fromType, Ware toWare,
-            String toType, Integer quantity, ESpecsLogType fromBizType,
-            ESpecsLogType toBizType, String fromBizNote, String toBizNote,
-            String refNo) {
-        String fromCode = fromWare.getCode();
-        String toCode = toWare.getCode();
-        this.changeWare(fromCode, fromType, quantity, fromBizType, fromBizNote,
-            refNo);
-        this.changeWare(toCode, toType, -quantity, toBizType, toBizNote, refNo);
-    }
-
-    @Override
     @Transactional
     public void changeWare(String code, String type, Integer quantity,
             ESpecsLogType bizType, String bizNote, String refNo) {
@@ -121,21 +97,20 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
             throw new BizException("xn0000", "上级云仓该规格的产品数量不足");
         }
         Long nowAmount = nowQuantity * dbData.getPrice();
-        Ware data = new Ware();
-        data.setQuantity(nowQuantity);
+        dbData.setQuantity(nowQuantity);
         // 记录流水
         String logCode = wareLogBO.saveWareLog(dbData, type, quantity, bizType,
             bizNote, refNo);
 
         // 改变数量
-        data.setCode(code);
-        data.setAmount(nowAmount);
-        data.setLastChangeCode(logCode);
+        dbData.setCode(code);
+        dbData.setAmount(nowAmount);
+        dbData.setLastChangeCode(logCode);
         // 该规格产品数量为零时，从云仓删除该产品
         if (nowQuantity == 0) {
-            wareDAO.delete(data);
+            wareDAO.delete(dbData);
         } else {
-            wareDAO.updateQuantity(data);
+            wareDAO.updateQuantity(dbData);
         }
 
     }
@@ -240,6 +215,13 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     public void removeWare(Ware data) {
         // wareLogBO.saveWareLog(data, type, quantity, remark);
+    }
+
+    @Override
+    public List<Ware> getWareByProductList(String productCode) {
+        Ware condition = new Ware();
+        condition.setProductCode(productCode);
+        return wareDAO.selectByProduct(condition);
     }
 
 }

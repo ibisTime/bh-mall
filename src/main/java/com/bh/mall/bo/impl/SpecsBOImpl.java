@@ -163,6 +163,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                 && EBoolean.NO.getCode().equals(psReq.getSingleNumber())) {
             throw new BizException("xn00000", "拆单数量不能为零");
         }
+
         if (StringUtils.isNotBlank(psReq.getSingleNumber())) {
             data.setSingleNumber(
                 StringValidater.toInteger(psReq.getSingleNumber()));
@@ -237,6 +238,10 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         if (StringUtils.isNotBlank(psReq.getSingleNumber())) {
             psData.setSingleNumber(
                 StringValidater.toInteger(psReq.getSingleNumber()));
+        }
+        if (StringUtils.isNotBlank(psReq.getRefCode())
+                && 1 == psData.getNumber()) {
+            throw new BizException("xn00000", "数量为1的规格不能关联其他规格");
         }
 
         psData.setRefCode(psReq.getRefCode());

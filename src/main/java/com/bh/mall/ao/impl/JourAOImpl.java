@@ -207,6 +207,7 @@ public class JourAOImpl implements IJourAO {
                 || EBizType.AJ_TJJL_IN.getCode()
                     .equals(condition.getBizType())) {
             InOrder orderCondittion = new InOrder();
+            // orderCondittion.setStatus(status);
             orderCondittion.setPayGroup(condition.getRefNo());
             return inOrderBO.getPaginable(start, limit, orderCondittion);
 

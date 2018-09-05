@@ -352,7 +352,7 @@ public class WareAOImpl implements IWareAO {
         } else if (0 != allYunfei) {
             accountBO.changeAmount(yjAccount.getAccountNumber(),
                 EChannelType.NBZ, null, null, data.getUserId(), EBizType.YUNFEI,
-                EBizType.YUNFEI.getValue(), allYunfei);
+                EBizType.YUNFEI.getValue(), -allYunfei);
         }
 
         // 减少云仓库存
@@ -446,7 +446,6 @@ public class WareAOImpl implements IWareAO {
                     }
 
                     // 2、检查是否完成升级单
-
                 } else if (amount > upAmount) {
                     amount = amount - upAmount;
                     result = ECheckStatus.NO_Upgrae.getCode();
@@ -455,6 +454,10 @@ public class WareAOImpl implements IWareAO {
                 if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
                     if (whAmount < agentLevel.getRedAmount()) {
                         redAmount = agentLevel.getRedAmount() - whAmount;
+                        result = ECheckStatus.RED_LOW.getCode();
+                    }
+                    if (inOrderBO.getInOrderByUser(agent.getUserId(),
+                        log.getApproveDatetime())) {
                         result = ECheckStatus.RED_LOW.getCode();
                     }
                 }

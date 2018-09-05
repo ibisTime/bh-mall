@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jdom2.JDOMException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,18 +156,25 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             data.setPayCode(data.getPayCode());
             data.setPayAmount(data.getAmount() + data.getYunfei());
             data.setPayGroup(payGroup);
-            innerOrderBO.paySuccess(data);
 
             InnerSpecs specs = innerSpecsBO.getInnerSpecs(data.getSpecsCode());
 
             if (specs.getStockNumber() < data.getQuantity()) {
                 throw new BizException("xn00000", "产品规格不足");
             }
-            specs.setStockNumber(specs.getStockNumber() - data.getQuantity());
 
-            innerSpecsBO.refreshInnerSpecs(specs);
+            if (EBoolean.NO.getCode().equals(payType)) {
+                data.setPayType(EChannelType.NBZ.getCode());
+                innerOrderBO.paySuccess(data);
+                specs.setStockNumber(
+                    specs.getStockNumber() - data.getQuantity());
 
+            } else {
+                innerOrderBO.addPayGroup(data, EChannelType.WeChat_H5.getCode(),
+                    payGroup);
+            }
             allAmount = allAmount + data.getAmount() + data.getYunfei();
+            innerSpecsBO.refreshInnerSpecs(specs);
         }
 
         if (EBoolean.NO.getCode().equals(payType)) {
@@ -188,7 +196,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
         return weChatAO.getPrepayIdH5(applyUser, payGroup, payGroup,
             EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), amount,
-            PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
+            PropertiesUtil.Config.WECHAT_H5_INNER_ORDER_BACKURL,
             EChannelType.WeChat_H5.getCode());
     }
 
@@ -200,12 +208,17 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
+            String amount = map.get("total_fee");
             boolean isSuccess = weChatAO.reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
             List<InnerOrder> list = innerOrderBO
                 .getInnerOrderByPayGroup(outTradeNo);
+
+            if (CollectionUtils.isEmpty(list)) {
+                throw new BizException("xn00000", "订单不存在");
+            }
+            Long allAmount = 0L;
             if (isSuccess) {
-                Long allAmount = 0L;
                 for (InnerOrder data : list) {
                     if (!EInnerOrderStatus.Unpaid.getCode()
                         .equals(data.getStatus())) {
@@ -214,7 +227,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                     data.setPayCode(wechatOrderNo);
                     data.setPayAmount(data.getAmount() + data.getYunfei());
                     innerOrderBO.paySuccess(data);
-                    allAmount = allAmount + data.getAmount() + data.getYunfei();
 
                     InnerSpecs specs = innerSpecsBO
                         .getInnerSpecs(data.getSpecsCode());
@@ -226,6 +238,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                         specs.getStockNumber() - data.getQuantity());
 
                     innerSpecsBO.refreshInnerSpecs(specs);
+                    allAmount = allAmount + data.getAmount() + data.getYunfei();
                 }
 
                 Account account = accountBO.getSysAccountNumber(
@@ -233,7 +246,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                     ECurrency.TG_CNY);
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.WeChat_H5, wechatOrderNo, outTradeNo,
-                    outTradeNo, EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                    outTradeNo, EBizType.AJ_GMNP, EBizType.AJ_GMNP.getValue(),
                     allAmount);
 
             } else {

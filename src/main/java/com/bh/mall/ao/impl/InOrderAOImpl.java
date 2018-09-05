@@ -361,8 +361,9 @@ public class InOrderAOImpl implements IInOrderAO {
                 inOrderBO.paySuccess(data);
 
                 // 买入云仓
-                payOrder(data, applyUser);
+                this.payOrder(data, applyUser);
             } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+                inOrder.setPayType(EChannelType.WeChat_H5.getCode());
                 inOrder.setPayGroup(payGroup);
                 inOrderBO.addPayGroup(inOrder);
             }
@@ -403,7 +404,7 @@ public class InOrderAOImpl implements IInOrderAO {
     public void paySuccess(String result) {
         Map<String, String> map = null;
         try {
-            logger.info("========回调信息=================");
+            logger.info("========云仓订单回调信息========");
             map = XMLUtil.doXMLParse(result);
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
@@ -411,7 +412,7 @@ public class InOrderAOImpl implements IInOrderAO {
             // 此处调用订单查询接口验证是否交易成功
             List<InOrder> list = inOrderBO.getInOrderByPayGroup(outTradeNo);
             if (CollectionUtils.isEmpty(list)) {
-                throw new BizException("xn0000", "不存在");
+                throw new BizException("xn0000", "云仓订单订单不存在");
             }
             boolean isSucc = weChatAO.reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
@@ -425,7 +426,7 @@ public class InOrderAOImpl implements IInOrderAO {
                         .equals(data.getStatus())) {
                         throw new BizException("xn0000", "订单已支付");
                     }
-                    payOrder(data, agent);
+                    this.payOrder(data, agent);
 
                     data.setPayType(EChannelType.WeChat_H5.getCode());
                     data.setPayCode(wechatOrderNo);
@@ -433,13 +434,16 @@ public class InOrderAOImpl implements IInOrderAO {
 
                     amount = amount + data.getAmount();
 
-                    AgentPrice price = agentPriceBO
-                        .getPriceByLevel(data.getSpecsCode(), agent.getLevel());
-                    Agent toUser = agentBO.getAgent(agent.getHighUserId());
-                    AgentPrice highPrice = agentPriceBO.getPriceByLevel(
-                        data.getSpecsCode(), toUser.getLevel());
-                    cjAmount = (price.getPrice() - highPrice.getPrice())
-                            * data.getQuantity();
+                    if (StringValidater.toInteger(
+                        EAgentLevel.ONE.getCode()) != agent.getLevel()) {
+                        AgentPrice price = agentPriceBO.getPriceByLevel(
+                            data.getSpecsCode(), agent.getLevel());
+                        Agent toUser = agentBO.getAgent(agent.getHighUserId());
+                        AgentPrice highPrice = agentPriceBO.getPriceByLevel(
+                            data.getSpecsCode(), toUser.getLevel());
+                        cjAmount = (price.getPrice() - highPrice.getPrice())
+                                * data.getQuantity();
+                    }
                 }
                 InOrder inOrder = list.get(0);
                 // 账户收钱
@@ -566,19 +570,20 @@ public class InOrderAOImpl implements IInOrderAO {
                     Agent firstReferee = agentBO
                         .getAgent(applyUser.getReferrer());
 
-                    Long amount = (long) (orderAmount
+                    Long amount1 = (long) (orderAmount
                             * (tjAward.getValue1() / 100));
-                    if (amount > 0) {
+                    if (amount1 > 0) {
                         accountBO.transAmountCZB(fromUserId,
                             ECurrency.TX_CNY.getCode(),
                             firstReferee.getUserId(),
-                            ECurrency.TX_CNY.getCode(), amount,
+                            ECurrency.TX_CNY.getCode(), amount1,
                             EBizType.AJ_TJJL_IN, EBizType.AJ_TJJL_IN.getValue(),
                             EBizType.AJ_TJJL_IN.getValue(), payGroup);
                         // 统计推荐奖
                         report = agentReportBO
                             .getAgentReportByUser(firstReferee.getUserId());
-                        report.setRefreeAward(report.getRefreeAward() + amount);
+                        report
+                            .setRefreeAward(report.getRefreeAward() + amount1);
                         agentReportBO.refreshAward(report);
                     }
 
@@ -586,13 +591,13 @@ public class InOrderAOImpl implements IInOrderAO {
                     if (StringUtils.isNotBlank(firstReferee.getReferrer())) {
                         Agent secondReferee = agentBO
                             .getAgent(firstReferee.getReferrer());
-                        amount = (long) (orderAmount
+                        Long amount2 = (long) (orderAmount
                                 * (tjAward.getValue2() / 100));
-                        if (amount > 0) {
+                        if (amount2 > 0) {
                             accountBO.transAmountCZB(fromUserId,
                                 ECurrency.TX_CNY.getCode(),
                                 secondReferee.getUserId(),
-                                ECurrency.TX_CNY.getCode(), amount,
+                                ECurrency.TX_CNY.getCode(), amount2,
                                 EBizType.AJ_TJJL_IN,
                                 EBizType.AJ_TJJL_IN.getValue(),
                                 EBizType.AJ_TJJL_IN.getValue(), payGroup);
@@ -601,7 +606,7 @@ public class InOrderAOImpl implements IInOrderAO {
                             report = agentReportBO.getAgentReportByUser(
                                 secondReferee.getUserId());
                             report.setRefreeAward(
-                                report.getRefreeAward() + amount);
+                                report.getRefreeAward() + amount2);
                             agentReportBO.refreshAward(report);
                         }
 
@@ -610,14 +615,14 @@ public class InOrderAOImpl implements IInOrderAO {
                             .isNotBlank(secondReferee.getReferrer())) {
                             Agent thirdReferee = agentBO
                                 .getAgent(secondReferee.getReferrer());
-                            amount = (long) (orderAmount
+                            Long amount3 = (long) (orderAmount
                                     * (tjAward.getValue3() / 100));
 
-                            if (amount > 0) {
+                            if (amount3 > 0) {
                                 accountBO.transAmountCZB(fromUserId,
                                     ECurrency.TX_CNY.getCode(),
                                     thirdReferee.getUserId(),
-                                    ECurrency.TX_CNY.getCode(), amount,
+                                    ECurrency.TX_CNY.getCode(), amount3,
                                     EBizType.AJ_TJJL_IN,
                                     EBizType.AJ_TJJL_IN.getValue(),
                                     EBizType.AJ_TJJL_IN.getValue(), payGroup);
@@ -626,13 +631,12 @@ public class InOrderAOImpl implements IInOrderAO {
                                 report = agentReportBO.getAgentReportByUser(
                                     thirdReferee.getUserId());
                                 report.setRefreeAward(
-                                    report.getRefreeAward() + amount);
+                                    report.getRefreeAward() + amount3);
                                 agentReportBO.refreshAward(report);
                             }
                         }
                     }
                 }
-
             }
         }
 
@@ -725,7 +729,7 @@ public class InOrderAOImpl implements IInOrderAO {
             // 收款方账户价钱
             accountBO.changeAmount(account.getAccountNumber(),
                 EChannelType.WeChat_H5, wechatOrderNo, wechatOrderNo,
-                wechatOrderNo, EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                wechatOrderNo, EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(),
                 amount);
         }
     }
@@ -762,7 +766,7 @@ public class InOrderAOImpl implements IInOrderAO {
                     // 改变上级云仓
                     wareBO.changeWare(toWare.getCode(),
                         EWareLogType.OUT.getCode(), number, ESpecsLogType.Order,
-                        EBizType.AJ_YCCH.getValue(), inOrder.getCode());
+                        EBizType.AJ_GMYC.getValue(), inOrder.getCode());
                 }
 
             } else {
@@ -836,16 +840,16 @@ public class InOrderAOImpl implements IInOrderAO {
         // 统计团队产品销售,只统计最高等级代理
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == applyUser
             .getLevel()) {
-            specsBO.getMinSpecsNumber(specs, data.getQuantity());
-            ProductReport report = productReportBO
-                .getProductReport(applyUser.getUserId(), data.getSpecsCode());
+            Integer number = specsBO.getMinSpecsNumber(specs,
+                data.getQuantity() * specs.getNumber());
+            ProductReport report = productReportBO.getProductReport(
+                applyUser.getTeamName(), data.getProductCode());
 
-            if (report == null) {
-                productReportBO.saveProductReport(data, data.getQuantity(),
+            if (null == report) {
+                productReportBO.saveProductReport(data, number,
                     applyUser.getRealName());
             } else {
-                productReportBO.refreshProductReport(report,
-                    data.getQuantity());
+                productReportBO.refreshProductReport(report, number);
             }
         }
     }
@@ -875,16 +879,11 @@ public class InOrderAOImpl implements IInOrderAO {
         condition.setStatus(EInOrderStatus.Received.getCode());
         List<InOrder> list = inOrderBO.queryInOrderListCount(condition);
 
-        String fromUserId = ESysUser.SYS_USER_BH.getCode();
         String payGroup = OrderNoGenerater
             .generate(EGeneratePrefix.InOrder.getCode());
 
         Long allAward = 0L;
         for (InOrder data : list) {
-            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != data
-                .getLevel()) {
-                fromUserId = data.getToUserId();
-            }
 
             // 1、记录下个区间剩余出货金额
             Long orderAmount = data.getAllAmount();
@@ -916,6 +915,12 @@ public class InOrderAOImpl implements IInOrderAO {
 
             data.setPayGroup(payGroup);
             inOrderBO.updatePayGroup(data);
+
+            String fromUserId = ESysUser.SYS_USER_BH.getCode();
+            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != data
+                .getLevel()) {
+                fromUserId = data.getToUserId();
+            }
             // 发放奖励
             if (0 != allAward) {
                 accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),

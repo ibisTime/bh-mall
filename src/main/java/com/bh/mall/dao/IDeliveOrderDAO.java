@@ -8,4 +8,6 @@ public interface IDeliveOrderDAO extends IBaseDAO<DeliveOrder> {
     String NAMESPACE = IDeliveOrderDAO.class.getName().concat(".");
 
     void deliverOrder(DeliveOrder data);
+
+    void update(DeliveOrder data);
 }

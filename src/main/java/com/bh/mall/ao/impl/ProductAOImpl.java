@@ -250,20 +250,20 @@ public class ProductAOImpl implements IProductAO {
                 productSpecs.setPriceList(pspList);
                 product.setSpecsList(psList);
                 sb.append(productSpecs.getName() + ":["
-                        + productSpecs.getStockNumber() + "]");
+                        + productSpecs.getStockNumber() + "]  ");
             }
             product.setShowNumber(sb.toString());
 
             // 获取各个代理云仓库存
-            List<Ware> whList = wareBO.getWareByProduct(product.getCode());
+            List<Ware> whList = wareBO.getWareByProductList(product.getCode());
             StringBuffer whNumber = new StringBuffer();
             for (Ware ware : whList) {
                 whNumber.append(
-                    "[" + ware.getQuantity() + "]" + ware.getSpecsName() + "，");
+                    ware.getSpecsQuantity() + "[" + ware.getSpecsName() + "],");
             }
-            if (whNumber.lastIndexOf("，") > 0) {
+            if (whNumber.lastIndexOf(",") > 0) {
                 product.setWhNumber(
-                    whNumber.substring(0, whNumber.lastIndexOf("，")));
+                    whNumber.substring(0, whNumber.lastIndexOf(",")));
             }
 
             // 奖励

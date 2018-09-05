@@ -12,4 +12,6 @@ public interface IAgentReportDAO extends IBaseDAO<AgentReport> {
     void updateAward(AgentReport data);
 
     void updateSendAward(AgentReport data);
+
+    void updateLevel(AgentReport data);
 }

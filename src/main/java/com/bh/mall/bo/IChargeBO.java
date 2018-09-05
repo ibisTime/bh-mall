@@ -14,7 +14,7 @@ public interface IChargeBO extends IPaginableBO<Charge> {
 
     String applyOrderOnline(Account account, String payGroup, String refNo,
             EBizType bizType, String bizNote, Long transAmount,
-            EChannelType channelType, String applyUser, Integer level);
+            EChannelType channelType, Agent agent, Integer level);
 
     void callBackChange(Charge dbCharge, boolean booleanFlag);
 

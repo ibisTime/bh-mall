@@ -164,31 +164,13 @@
 	<update id="update_deliveOrder" parameterType="deliveOrder">
 		UPDATE tbh_delive_order
 		SET
-		kind = #{kind}
-		,product_code = #{productCode}
-		,product_name = #{productName}
-		,specs_code = #{specsCode}
-		,specs_name = #{specsName}
-		,pic = #{pic}
-		,quantity = #{quantity}
-		,price = #{price}
-		,amount = #{amount}
-		,yunfei = #{yunfei}
-		,status = #{status}
-		,apply_user = #{applyUser}
-		,real_name = #{realName}
-		,apply_note = #{applyNote}
+		yunfei = #{yunfei}
 		,signer = #{signer}
 		,mobile = #{mobile}
 		,province = #{province}
 		,city = #{city}
 		,area = #{area}
 		,address = #{address}
-		,deliver = #{deliver}
-		,delive_datetime = #{deliveDatetime}
-		,logistics_code = #{logisticsCode}
-		,logistics_company = #{logisticsCompany}
-		,bar_code = #{barCode}
 		WHERE code = #{code}
 	</update>
 

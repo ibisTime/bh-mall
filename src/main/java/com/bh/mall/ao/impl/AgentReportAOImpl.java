@@ -126,8 +126,13 @@ public class AgentReportAOImpl implements IAgentReportAO {
             condition);
         long refreeAward = 0L;
         if (!CollectionUtils.isEmpty(page.getList())) {
-            AgentReport report = page.getList().get(0);
-            refreeAward = report.getRefreeAward();
+            if (StringUtils.isNotBlank(condition.getUserReferee())) {
+                AgentReport agentReport = agentReportBO
+                    .getAgentReport(condition.getUserReferee());
+                if (null != agentReport) {
+                    refreeAward = agentReport.getRefreeAward();
+                }
+            }
 
         }
 

@@ -23,6 +23,7 @@
 		<result column="system_code" property="systemCode" />
 		<result column="company_code" property="companyCode" />
 		
+		<result column="specsQuantity" property="specsQuantity" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -86,6 +87,39 @@
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_ware t LEFT JOIN tbh_agent u ON t.user_id = u.user_id
 		<include refid="where_condition" />
+	</select>
+
+
+		
+	<select id="select_by_specs" parameterType="ware" resultMap="ware_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.amount
+		,t.currency
+		,t.product_code
+		
+		,t.product_name
+		,t.specs_code
+		,t.specs_name
+		,t.price
+		,t.quantity
+		
+		,t.user_id
+		,t.real_name
+		,t.status
+		,t.create_datetime
+		,t.last_change_code
+		,SUM(t.quantity) AS specsQuantity
+		FROM
+		tbh_ware t  
+		<include refid="where_condition" />
+		GROUP BY t.specs_code
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
 	</select>
 
 	<insert id="insert_ware" parameterType="ware">

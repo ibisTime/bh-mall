@@ -22,11 +22,6 @@ public interface IWareBO extends IPaginableBO<Ware> {
     void changeWare(String code, String type, Integer quantity,
             ESpecsLogType bizType, String fromBizNote, String refNo);
 
-    void transQuantity(String fromUser, String fromSpecs, String fromType,
-            String toUser, String toSpecs, String toType, Integer quantity,
-            ESpecsLogType fromBizType, ESpecsLogType toBizType,
-            String fromBizNote, String toBizNote, String refNo);
-
     public void saveWare(Ware data, String type, Integer quantity,
             ESpecsLogType bizType, String bizNote, String refNo);
 
@@ -48,5 +43,7 @@ public interface IWareBO extends IPaginableBO<Ware> {
     public void removeByAgent(String userId);
 
     public void removeWare(Ware data);
+
+    public List<Ware> getWareByProductList(String code);
 
 }

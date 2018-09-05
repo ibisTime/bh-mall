@@ -8,8 +8,6 @@
 		<result column="team_leader" property="teamLeader" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
-		<result column="specs_code" property="specsCode" />
-		<result column="specs_name" property="specsName" />
 		<result column="quantity" property="quantity" />
 	</resultMap>
 	<sql id="where_condition">
@@ -23,9 +21,6 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
-			<if test="specsCode != null and specsCode != '' ">
-				AND t.specs_code = #{specsCode}
-			</if>
 		</trim>
 	</sql>
 	
@@ -36,8 +31,6 @@
 		,t.team_leader
 		,t.product_code
 		,t.product_name
-		,t.specs_code
-		,t.specs_name
 		,t.quantity
 		FROM
 		tbh_product_report t
@@ -57,8 +50,6 @@
 		,t.team_leader
 		,t.product_code
 		,t.product_name
-		,t.specs_code
-		,t.specs_name
 		,t.quantity
 		FROM
 		tbh_product_report t 
@@ -81,8 +72,6 @@
 		,team_leader
 		,product_code
 		,product_name
-		,specs_code
-		,specs_name
 		,quantity
 		)
 		VALUES(
@@ -91,8 +80,6 @@
 		,#{teamLeader}
 		,#{productCode}
 		,#{productName}
-		,#{specsCode}
-		,#{specsName}
 		,#{quantity}
 		)
 	</insert>

@@ -35,6 +35,7 @@ public class XN627662 extends AProcessor {
         condition.setStatusList(req.getStatusList());
         condition.setLevel(StringValidater.toInteger(req.getLevel()));
 
+        condition.setTeamName(req.getTeamName());
         condition.setIsWareSend(req.getIsWareSend());
         condition.setDeliver(req.getDeliver());
         condition.setProductName(req.getProductName());

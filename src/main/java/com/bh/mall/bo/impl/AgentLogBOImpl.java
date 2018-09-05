@@ -161,7 +161,7 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
     }
 
     @Override
-    public String refreshAgent(Agent agent, String type) {
+    public String refreshAgent(Agent agent, String type, String statu) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AgentLog.getCode());
         AgentLog data = new AgentLog();

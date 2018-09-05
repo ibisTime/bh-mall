@@ -33,15 +33,19 @@ public class XN627641Req {
     private String quantity;
 
     // （选填）收件人
+    @NotBlank(message = "收件人不能为空")
     private String signer;
 
     // （选填）收件人电话
+    @NotBlank(message = "收件人电话不能为空")
     private String mobile;
 
     // （选填）收货地址
+    @NotBlank(message = "收货地址能为空")
     private String address;
 
     // （选填）区
+    @NotBlank(message = "区不能为空")
     private String area;
 
     // （选填）市

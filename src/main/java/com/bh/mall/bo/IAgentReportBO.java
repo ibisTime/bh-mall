@@ -39,4 +39,6 @@ public interface IAgentReportBO extends IPaginableBO<AgentReport> {
 
     public void refreshSendAward(AgentReport agentReport);
 
+    public void refreshLevel(AgentReport report);
+
 }

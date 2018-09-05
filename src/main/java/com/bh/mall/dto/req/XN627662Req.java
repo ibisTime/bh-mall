@@ -40,6 +40,9 @@ public class XN627662Req extends APageReq {
     // 是否云仓发货
     private String isWareSend;
 
+    // 产品名称
+    private String teamName;
+
     public String getProductName() {
         return productName;
     }
@@ -110,6 +113,14 @@ public class XN627662Req extends APageReq {
 
     public void setIsWareSend(String isWareSend) {
         this.isWareSend = isWareSend;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
 }

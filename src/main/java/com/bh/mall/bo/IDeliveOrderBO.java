@@ -13,7 +13,7 @@ public interface IDeliveOrderBO extends IPaginableBO<DeliveOrder> {
 
     public void saveDeliveOrder(InnerOrder innerOrder);
 
-    public void refreshDeliveOrder(DeliveOrder data);
+    public void refreshDeliveOrder(OutOrder data);
 
     public List<DeliveOrder> queryDeliveOrderList(DeliveOrder condition);
 
