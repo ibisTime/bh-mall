@@ -19,11 +19,13 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.AmountUtil;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.SysConstant;
+import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.Withdraw;
 import com.bh.mall.enums.EAccountType;
+import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
@@ -68,12 +70,17 @@ public class WithdrawAOImpl implements IWithdrawAO {
             throw new BizException("xn000000", "余额不足");
         }
 
+        String isCompanyPay = EBoolean.NO.getCode();
+        if (ECurrency.C_CNY.getCode().equals(dbAccount.getCurrency())) {
+            isCompanyPay = EBoolean.YES.getCode();
+        }
+
         // 生成取现订单
         Long fee = doGetFee(dbAccount.getType(), amount,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         // 取现总金额
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
-            payCardInfo, payCardNo, applyUser, applyNote);
+            payCardInfo, payCardNo, applyUser, applyNote, isCompanyPay);
         // 冻结取现金额
         amount = amount + fee;
         accountBO.frozenAmount(dbAccount, amount, withdrawCode, applyNote);
@@ -94,13 +101,22 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (dbAccount.getAmount() < amount) {
             throw new BizException("xn000000", "余额不足");
         }
-        // 生成取现订单
+
+        String isCompanyPay = EBoolean.NO.getCode();
+        Agent agent = agentBO.getAgent(applyUser);
+        if (ECurrency.C_CNY.getCode().equals(dbAccount.getCurrency())
+                || StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
+                    .getLevel()) {
+            isCompanyPay = EBoolean.YES.getCode();
+        }
+
+        // 手续费
         Long fee = doGetFee(dbAccount.getCurrency(), amount,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
 
         // 取现总金额
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount - fee,
-            fee, payCardInfo, payCardNo, applyUser, applyNote);
+            fee, payCardInfo, payCardNo, applyUser, applyNote, isCompanyPay);
 
         // 冻结取现金额
         accountBO.frozenAmount(dbAccount, amount, withdrawCode, applyNote);
@@ -194,12 +210,24 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 }
 
                 if (StringUtils.isNotBlank(data.getApproveUser())) {
-                    sysUser = sysUserAO.getSYSUser(data.getApproveUser());
-                    data.setApproveName(sysUser.getRealName());
+                    if (EBoolean.YES.getCode().equals(data.getIsCompanyPay())) {
+                        sysUser = sysUserAO.getSYSUser(data.getApproveUser());
+                        data.setApproveName(sysUser.getRealName());
+                    } else {
+                        Agent agent = agentBO.getAgent(data.getApproveUser());
+                        data.setApproveName(agent.getRealName());
+                    }
+
                 }
                 if (StringUtils.isNotBlank(data.getPayUser())) {
-                    sysUser = sysUserAO.getSYSUser(data.getPayUser());
-                    data.setPayUserName(sysUser.getRealName());
+                    if (EBoolean.YES.getCode().equals(data.getIsCompanyPay())) {
+                        sysUser = sysUserAO.getSYSUser(data.getPayUser());
+                        data.setApproveName(sysUser.getRealName());
+                    } else {
+                        Agent agent = agentBO.getAgent(data.getPayUser());
+                        data.setApproveName(agent.getRealName());
+                    }
+
                 }
             }
         }
@@ -215,12 +243,24 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 Agent agent = agentBO.getAgent(data.getApplyUser());
                 data.setAgent(agent);
                 if (StringUtils.isNotBlank(data.getApproveUser())) {
-                    sysUser = sysUserAO.getSYSUser(data.getApproveUser());
-                    data.setApproveName(sysUser.getRealName());
+                    if (EBoolean.YES.getCode().equals(data.getIsCompanyPay())) {
+                        sysUser = sysUserAO.getSYSUser(data.getApproveUser());
+                        data.setApproveName(sysUser.getRealName());
+                    } else {
+                        agent = agentBO.getAgent(data.getApproveUser());
+                        data.setApproveName(agent.getRealName());
+                    }
+
                 }
                 if (StringUtils.isNotBlank(data.getPayUser())) {
-                    sysUser = sysUserAO.getSYSUser(data.getPayUser());
-                    data.setPayUserName(sysUser.getRealName());
+                    if (EBoolean.YES.getCode().equals(data.getIsCompanyPay())) {
+                        sysUser = sysUserAO.getSYSUser(data.getPayUser());
+                        data.setApproveName(sysUser.getRealName());
+                    } else {
+                        agent = agentBO.getAgent(data.getPayUser());
+                        data.setApproveName(agent.getRealName());
+                    }
+
                 }
             }
         }
@@ -233,14 +273,25 @@ public class WithdrawAOImpl implements IWithdrawAO {
         Agent agent = agentBO.getAgent(data.getApplyUser());
         data.setAgent(agent);
 
-        SYSUser sysUser = null;
         if (StringUtils.isNotBlank(data.getApproveUser())) {
-            sysUser = sysUserAO.getSYSUser(data.getApproveUser());
-            data.setApproveName(sysUser.getRealName());
+            if (EBoolean.YES.getCode().equals(data.getIsCompanyPay())) {
+                SYSUser sysUser = sysUserAO.getSYSUser(data.getApproveUser());
+                data.setApproveName(sysUser.getRealName());
+            } else {
+                agent = agentBO.getAgent(data.getApproveUser());
+                data.setApproveName(agent.getRealName());
+            }
+
         }
         if (StringUtils.isNotBlank(data.getPayUser())) {
-            sysUser = sysUserAO.getSYSUser(data.getPayUser());
-            data.setPayUserName(sysUser.getRealName());
+            if (EBoolean.YES.getCode().equals(data.getIsCompanyPay())) {
+                SYSUser sysUser = sysUserAO.getSYSUser(data.getPayUser());
+                data.setApproveName(sysUser.getRealName());
+            } else {
+                agent = agentBO.getAgent(data.getPayUser());
+                data.setApproveName(agent.getRealName());
+            }
+
         }
         return data;
     }
@@ -261,10 +312,19 @@ public class WithdrawAOImpl implements IWithdrawAO {
             systemCode, companyCode);
         String qxbs = null;
         String qxfl = null;
-        if (ECurrency.TX_CNY.getCode().equals(accountType)) {
-            qxbs = SysConstant.CUSERQXBS;
-            qxfl = SysConstant.CUSERQXFL;
-        } else if (EAccountType.Business.getCode().equals(accountType)) {
+        if (ECurrency.C_CNY.getCode().equals(accountType)) {
+            qxfl = SysConstant.BUSERWDQXFL;
+            qxbs = SysConstant.BUSERQXBS;
+
+            String minAmount = argsMap.get(SysConstant.QXDBZDJE);
+            if (StringUtils.isNotBlank(qxfl)) {
+                Long qxDbzdje = AmountUtil.mul(1000L, Double.valueOf(qxfl));
+                if (amount > qxDbzdje) {
+                    throw new BizException("xn000000",
+                        "取现单笔最低金额不能低于" + minAmount + "元。");
+                }
+            }
+        } else if (ECurrency.TX_CNY.getCode().equals(accountType)) {
             qxbs = SysConstant.BUSERQXBS;
             qxfl = SysConstant.BUSERQXFL;
         } else {// 暂定其他账户类型不收手续费
@@ -280,6 +340,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
                     "取现单笔最大金额不能超过" + qxDbzdjeValue + "元。");
             }
         }
+
         String qxBsValue = argsMap.get(qxbs);
         if (StringUtils.isNotBlank(qxBsValue)) {
             // 取现金额倍数

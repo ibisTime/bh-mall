@@ -61,14 +61,14 @@ public class WareLogBOImpl extends PaginableBOImpl<WareLog>
         logData.setSpecsName(dbData.getSpecsName());
         logData.setPrice(dbData.getPrice());
         logData.setTranNumber(quantity);
-        logData.setBeforeNumber(dbData.getQuantity());
+        logData.setBeforeNumber(dbData.getQuantity() - quantity);
         logData.setStatus(dbData.getStatus());
 
         logData.setApplyUser(dbData.getUserId());
         logData.setApplyDatetime(new Date());
         logData.setRealName(dbData.getRealName());
         logData.setStatus(dbData.getStatus());
-        logData.setAfterNumber(dbData.getQuantity() + quantity);
+        logData.setAfterNumber(dbData.getQuantity());
         logData.setAmount(dbData.getAmount());
         logData.setBizType(bizType.getCode());
         logData.setBizNote(bizNote);

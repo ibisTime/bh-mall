@@ -279,35 +279,7 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
     }
 
     @Override
-    public Integer getMinSpecsNumber(String productCode) {
-        Specs condition = new Specs();
-        condition.setProductCode(productCode);
-        List<Specs> list = specsDAO.selectList(condition);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn00000", "该产品的规格不存在");
-        }
-
-        // 只要一个规格
-        Integer number = 0;
-        if (list.size() == 1) {
-            Specs specs = list.get(0);
-            return specs.getNumber();
-        }
-
-        // 两种以及以上规格
-        for (Specs data : list) {
-            // 规格之间有关联
-            if (StringUtils.isNotBlank(data.getRefCode())) {
-                number = getMinSpecsNumber(data, number);
-            } else {
-                // 各规格之前没有关联
-                number = data.getNumber();
-            }
-        }
-        return number;
-    }
-
-    private Integer getMinSpecsNumber(Specs data, int number) {
+    public Integer getMinSpecsNumber(Specs data, int number) {
         if (StringUtils.isNotBlank(data.getRefCode())) {
             Specs productSpecs = this.getSpecs(data.getRefCode());
             number = number * productSpecs.getNumber();

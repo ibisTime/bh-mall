@@ -160,7 +160,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         Charge condition = new Charge();
         condition.setApplyUser(userId);
         condition.setStatusList(statusList);
-        condition.setApplyDatetimeStart(impwoeDatetime);
+        condition.setPayDatetimeStart(impwoeDatetime);
 
         return chargeDAO.selectList(condition);
     }

@@ -45,7 +45,7 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
         data.setQuantity(quantity);
 
         Long amount = quantity * specs.getPrice();
-        data.setYunfei(0L);
+        data.setYunfei(yunfei);
 
         data.setAmount(amount);
         data.setApplyUser(agent.getUserId());
@@ -103,7 +103,7 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
         data.setDeliveDatetime(new Date());
         data.setLogisticsCode(logisticsCode);
         data.setLogisticsCompany(logisticsCompany);
-        data.setStatus(EInnerOrderStatus.TO_SEND.getCode());
+        data.setStatus(EInnerOrderStatus.TO_RECEIVE.getCode());
         data.setRemark(remark);
         innerOrderDAO.deliverInnerProduct(data);
     }
@@ -129,17 +129,10 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
     }
 
     @Override
-    public InnerOrder getInnerOrderByPayGroup(String payGroup) {
-        InnerOrder data = null;
-        if (StringUtils.isNotBlank(payGroup)) {
-            InnerOrder condition = new InnerOrder();
-            condition.setPayGroup(payGroup);
-            data = innerOrderDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "订单不存在");
-            }
-        }
-        return data;
+    public List<InnerOrder> getInnerOrderByPayGroup(String payGroup) {
+        InnerOrder condition = new InnerOrder();
+        condition.setPayGroup(payGroup);
+        return innerOrderDAO.selectList(condition);
     }
 
     @Override
@@ -178,6 +171,7 @@ public class InnerOrderBOImpl extends PaginableBOImpl<InnerOrder>
         data.setUpdater(approver);
         Date date = new Date();
         data.setApprover(approver);
+        data.setApplyDatetime(date);
         data.setApproveNote(approveNote);
 
         innerOrderDAO.batchApprove(data);

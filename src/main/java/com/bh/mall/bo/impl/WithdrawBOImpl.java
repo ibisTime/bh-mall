@@ -46,7 +46,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
     @Override
     public String applyOrder(Account account, Long amount, Long fee,
             String payCardInfo, String payCardNo, String applyUser,
-            String applyNote) {
+            String applyNote, String isCompanyPay) {
         if (amount == 0) {
             throw new BizException("xn000000", "取现金额不能为0");
         }
@@ -58,6 +58,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
         data.setType(account.getType());
         data.setAmount(amount);
         data.setFee(fee);
+        data.setIsCompanyPay(isCompanyPay);
 
         data.setChannelType(EChannelType.Offline.getCode());
         data.setPayCardInfo(payCardInfo);

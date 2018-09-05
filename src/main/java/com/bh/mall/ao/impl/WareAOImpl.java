@@ -14,6 +14,7 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAddressBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
+import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IInOrderBO;
@@ -29,6 +30,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.Product;
@@ -101,6 +103,9 @@ public class WareAOImpl implements IWareAO {
     @Autowired
     ISYSUserBO sysUserBO;
 
+    @Autowired
+    IAgentLogBO agentLogBO;
+
     // 分页查询
     @Override
     public Paginable<Ware> queryWarePage(int start, int limit, Ware condition) {
@@ -143,8 +148,6 @@ public class WareAOImpl implements IWareAO {
             specsCondition.setProductCode(ware.getProductCode());
 
             ware.setWhsList(wareBO.queryWareList(specsCondition));
-            int minSpecsNumber = specsBO.getMinSpecsNumber(product.getCode());
-            ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
 
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
                 .getLevel()) {
@@ -202,8 +205,6 @@ public class WareAOImpl implements IWareAO {
             specsCondition.setUserId(ware.getUserId());
             specsCondition.setProductCode(ware.getProductCode());
             ware.setWhsList(wareBO.queryWareList(specsCondition));
-            int minSpecsNumber = specsBO.getMinSpecsNumber(product.getCode());
-            ware.setAllQuantity(minSpecsNumber * ware.getQuantity());
 
         }
         return page;
@@ -345,8 +346,9 @@ public class WareAOImpl implements IWareAO {
 
         Account yjAccount = accountBO.getAccountByUser(data.getUserId(),
             ECurrency.TX_CNY.getCode());
-        if (yunfei > yjAccount.getAmount()) {
-            throw new BizException("xn00000", "您的业绩账户余额不足，无法支付运费哦");
+        if (allYunfei > yjAccount.getAmount()) {
+            throw new BizException("xn00000",
+                "您的业绩账户余额不足，无法支付" + allYunfei / 1000.0 + "元");
         } else if (0 != allYunfei) {
             accountBO.changeAmount(yjAccount.getAccountNumber(),
                 EChannelType.NBZ, null, null, data.getUserId(), EBizType.YUNFEI,
@@ -365,20 +367,15 @@ public class WareAOImpl implements IWareAO {
             Ware condition) {
         Paginable<Ware> page = wareBO.getPaginable(start, limit, condition);
 
-        Ware specsCondition = new Ware();
+        // Ware specsCondition = new Ware();
         Product product = null;
         for (Ware ware : page.getList()) {
             product = productBO.getProduct(ware.getProductCode());
             ware.setProduct(product);
-            specsCondition.setUserId(ware.getUserId());
-            specsCondition.setProductCode(ware.getProductCode());
-            List<Ware> whList = wareBO.queryWareList(specsCondition);
-            for (Ware wh : whList) {
-                AgentPrice price = agentPriceBO
-                    .getPriceByLevel(wh.getSpecsCode(), 6);
-                wh.setPrice(price.getPrice());
-            }
-            ware.setWhsList(whList);
+
+            AgentPrice price = agentPriceBO.getPriceByLevel(ware.getSpecsCode(),
+                6);
+            ware.setPrice(price.getPrice());
         }
         return page;
     }
@@ -411,17 +408,18 @@ public class WareAOImpl implements IWareAO {
                 || EAgentStatus.TO_UPGRADE.getCode().equals(agent.getStatus())
                 || EAgentStatus.UPGRADE_COMPANY.getCode()
                     .equals(agent.getStatus())
-                || EAgentStatus.UPGRADED.getCode()
-                    .equals(agent.getStatus())) {
+                || EAgentStatus.UPGRADED.getCode().equals(agent.getStatus())) {
+
             AgentLevel agentLevel = agentLevelBO
                 .getAgentByLevel(agent.getLevel());
 
             Long chargeAmount = agentLevel.getMinCharge();
             Long redAmount = agentLevel.getRedAmount();
+            Long amount = agentLevel.getAmount();
             String result = ECheckStatus.NORMAL.getCode();
             String isWareHouse = agentLevel.getIsWare();
 
-            // 检查云仓红线
+            // 云仓余额
             Long whAmount = 0L;
             List<Ware> list = wareBO.getWareByUser(userId);
             for (Ware wareHouse : list) {
@@ -430,107 +428,105 @@ public class WareAOImpl implements IWareAO {
                 }
             }
 
-            // 检查开启云仓代理的红线，
-            if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
+            // ******************已授权或已升级的代理*****************
+            AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
+            if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())
+                    || EAgentStatus.UPGRADED.getCode()
+                        .equals(agent.getStatus())) {
+                Long imopowerAmount = outOrderBO.checkImpowerOrder(
+                    agent.getUserId(), agent.getImpowerDatetime());
+                Long upAmount = outOrderBO.checkUpgradeOrder(agent.getUserId(),
+                    log.getApproveDatetime());
+                // 1、检查是否完成授权单
+                if (EAgentStatus.IMPOWERED.getCode()
+                    .equals(agent.getStatus())) {
+                    if (amount > imopowerAmount) {
+                        amount = amount - imopowerAmount;
+                        result = ECheckStatus.NO_Impwoer.getCode();
+                    }
 
-                // 是否完成授权单
-                if (0 != agentLevel.getAmount()) {
-                    if (EAgentStatus.IMPOWERED.getCode()
-                        .equals(agent.getStatus())
-                            || EAgentStatus.UPGRADED.getCode()
-                                .equals(agent.getStatus())) {
-                        if (agentLevel.getAmount() > outOrderBO
-                            .checkImpowerOrder(agent.getUserId(),
-                                agent.getImpowerDatetime())) {
-                            result = ECheckStatus.NO_Impwoer.getCode();
+                    // 2、检查是否完成升级单
+
+                } else if (amount > upAmount) {
+                    amount = amount - upAmount;
+                    result = ECheckStatus.NO_Upgrae.getCode();
+                }
+
+                if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
+                    if (whAmount < agentLevel.getRedAmount()) {
+                        redAmount = agentLevel.getRedAmount() - whAmount;
+                        result = ECheckStatus.RED_LOW.getCode();
+                    }
+                }
+            }
+
+            // *******************所有状态*************
+            // 1、检查红线
+            if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
+                if (whAmount < agentLevel.getRedAmount()) {
+                    redAmount = agentLevel.getRedAmount() - whAmount;
+                    result = ECheckStatus.RED_LOW.getCode();
+                }
+            }
+
+            // 2、 检查门槛可有余额
+            Account account = accountBO.getAccountByUser(agent.getUserId(),
+                ECurrency.MK_CNY.getCode());
+            if (account.getAmount() > agentLevel.getMinSurplus()) {
+                result = ECheckStatus.MIN_LOW.getCode();
+            }
+
+            // 3、检查是否有过充值或升级后门槛余额是否满足升级单（授权单金额为0，门槛款为0，红线为0，不去检查）
+            if (0 != agentLevel.getAmount() || 0 != agentLevel.getMinCharge()
+                    || 0 != agentLevel.getRedAmount()) {
+                if (EAgentStatus.IMPOWERED.getCode()
+                    .equals(agent.getStatus())) {
+                    // 获取充值金额
+                    Long cAmount = 0L;
+                    List<Charge> charge = chargeBO.getChargeByUser(
+                        agent.getUserId(), agent.getImpowerDatetime());
+                    for (Charge charge2 : charge) {
+                        cAmount = cAmount + charge2.getAmount();
+                    }
+
+                    // 4、 没有充值过，前去充值
+                    if (CollectionUtils.isEmpty(charge)) {
+                        result = ECheckStatus.To_Charge.getCode();
+
+                        if (0 == agentLevel.getMinCharge()) {
+                            chargeAmount = agentLevel.getAmount();
+                        } else if (agentLevel.getAmount() > agentLevel
+                            .getMinCharge()) {
+                            chargeAmount = agentLevel.getAmount();
+                        }
+
+                        // 是否有待审核的充值订单
+                        Charge condition = new Charge();
+                        condition.setApplyUser(agent.getUserId());
+                        condition.setStatus(EChargeStatus.TO_Cancel.getCode());
+                        condition
+                            .setApplyDatetimeStart(agent.getImpowerDatetime());
+                        charge = chargeBO.queryChargeList(condition);
+                        if (CollectionUtils.isNotEmpty(charge)) {
+                            result = ECheckStatus.Charging.getCode();
                         }
                     }
 
-                }
-
-                // 红线设置为零视为无限制
-                if (0 < agentLevel.getRedAmount()
-                        && whAmount < agentLevel.getRedAmount()) {
-                    // 订单金额
-                    redAmount = agentLevel.getRedAmount() - whAmount;
-                    result = ECheckStatus.RED_LOW.getCode();
-
-                    // 没有过任何订单购买云仓
-                } else if (inOrderBO.getInOrderByUser(agent.getUserId(),
-                    agent.getImpowerDatetime())) {
-                    redAmount = agentLevel.getAmount();
-                    result = ECheckStatus.RED_LOW.getCode();
-                }
-
-                // 未开启云仓，只检查是否完成授权单
-            } else if (0 != agentLevel.getAmount()) {
-                if (agentLevel.getAmount() > outOrderBO.checkImpowerOrder(
-                    agent.getUserId(), agent.getImpowerDatetime())) {
-                    result = ECheckStatus.NO_Impwoer.getCode();
-
-                    // 是否完成升级单
-                } else if (sjFormBO.checkIsSj(agent.getUserId())) {
-                    if (agentLevel.getAmount() > outOrderBO.checkUpgradeOrder(
-                        agent.getUserId(), agent.getImpowerDatetime())) {
-                        result = ECheckStatus.NO_Impwoer.getCode();
+                    // 5、升级的代理，且未完成升级单检查门槛与云仓余额是否满足升级单
+                } else if (EAgentStatus.UPGRADED.getCode()
+                    .equals(agent.getStatus())
+                        && ECheckStatus.NO_Upgrae.getCode().equals(result)) {
+                    if ((account.getAmount() + whAmount) < agentLevel
+                        .getAmount()) {
+                        chargeAmount = agentLevel.getAmount() - whAmount
+                                - account.getAmount();
+                        result = ECheckStatus.To_Charge.getCode();
                     }
                 }
             }
 
-            // 检查门槛余额
-            Account account = accountBO.getAccountNocheck(agent.getUserId(),
-                ECurrency.MK_CNY.getCode());
-            if (null != account) {
-                // 如果可剩余余额为零，不考虑等于的情况
-                if (0 == agentLevel.getMinSurplus()
-                        && account.getAmount() > 0) {
-                    result = ECheckStatus.MIN_LOW.getCode();
-                } else if (0 != agentLevel.getMinSurplus()
-                        && account.getAmount() >= agentLevel.getMinSurplus()) {
-                    result = ECheckStatus.MIN_LOW.getCode();
-                }
-
-            }
-
-            // 授权单金额为0，门槛款为0，红线为0，不去检查
-
-            if (0 != agentLevel.getAmount() || 0 != agentLevel.getMinCharge()
-                    || 0 != agentLevel.getRedAmount()) {
-                // 是否有过充值
-                Long cAmount = 0L;
-                List<Charge> charge = chargeBO.getChargeByUser(
-                    agent.getUserId(), agent.getImpowerDatetime());
-                for (Charge charge2 : charge) {
-                    cAmount = cAmount + charge2.getAmount();
-                }
-                // 没有过充值，前去充值
-                if (CollectionUtils.isEmpty(charge)) {
-                    result = ECheckStatus.To_Charge.getCode();
-
-                    if (0 == agentLevel.getMinCharge()) {
-                        chargeAmount = agentLevel.getAmount();
-                    } else if (agentLevel.getAmount() > agentLevel
-                        .getMinCharge()) {
-                        chargeAmount = agentLevel.getAmount();
-                    } else {
-                        chargeAmount = agentLevel.getMinCharge() - cAmount;
-                    }
-
-                    // 是否有待审核的充值订单
-                    Charge condition = new Charge();
-                    condition.setApplyUser(agent.getUserId());
-                    condition.setStatus(EChargeStatus.TO_Cancel.getCode());
-                    condition.setApplyDatetimeStart(agent.getImpowerDatetime());
-                    charge = chargeBO.queryChargeList(condition);
-                    if (CollectionUtils.isNotEmpty(charge)) {
-                        result = ECheckStatus.Charging.getCode();
-                    }
-
-                }
-            }
             res = new XN627805Res(result, redAmount, agentLevel.getMinSurplus(),
-                agentLevel.getAmount(), chargeAmount, agent.getLevel(),
-                isWareHouse);
+                amount, chargeAmount, agent.getLevel(), isWareHouse);
         }
         return res;
 
@@ -544,7 +540,10 @@ public class WareAOImpl implements IWareAO {
         if (EBoolean.NO.getCode().equals(quantity)) {
             wareBO.removeWare(data);
         } else {
-
+            data.setQuantity(StringValidater.toInteger(quantity));
+            data.setAmount(
+                StringValidater.toInteger(quantity) + data.getPrice());
+            wareBO.refreshWare(data);
         }
     }
 

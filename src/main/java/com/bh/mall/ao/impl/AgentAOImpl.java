@@ -715,7 +715,7 @@ public class AgentAOImpl implements IAgentAO {
 
         long count = outOrderBO.selectCount(oCondition);
         if (count != 0) {
-            throw new BizException("xn000", "您还有未完成的订单,请在订单完成后申请");
+            throw new BizException("xn000", "您还有代发货的订单,请在订单完成后申请");
         }
 
         // 是够有未完成的内购订单
@@ -724,7 +724,7 @@ public class AgentAOImpl implements IAgentAO {
         ioCondition.setStatusForQuery(EInnerOrderStatus.TO_APPROVE.getCode());
         long ioCount = innerOrderBO.selectCount(ioCondition);
         if (ioCount != 0) {
-            throw new BizException("xn000", "您还有未完成的内购订单,请在订单完成后申请");
+            throw new BizException("xn000", "您还有代发货的内购订单,请在订单完成后申请");
         }
 
         // 是否有未完成的取现

@@ -50,4 +50,10 @@ public class ChAwardDAOImpl extends AMybatisTemplate implements IChAwardDAO {
         super.update(NAMESPACE.concat("update_chAward"), data);
     }
 
+    @Override
+    public List<ChAward> selectListByLevel(ChAward condition) {
+        return super.selectList(NAMESPACE.concat("select_by_level"), condition,
+            ChAward.class);
+    }
+
 }

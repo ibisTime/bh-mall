@@ -50,6 +50,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
+import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.CUser;
@@ -225,27 +226,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     "您购买的数量不能低于" + price.getStartNumber() + "]");
             }
             // 检查是否可买
-            this.checkOrder(applyUser, specs);
-
-            // 是否完成授权单
-            if (EAgentStatus.IMPOWERED.getCode()
-                .equals(applyUser.getStatus())) {
-                if (outOrderBO.checkImpower(applyUser.getUserId(),
-                    applyUser.getImpowerDatetime())) {
-                    // 防止多出的订单计入授权单
-                    if (agentLevel.getAmount() > amount) {
-                        kind = EOutOrderKind.Impower_Order.getCode();
-                    }
-                    // 是否完成升级单
-                }
-            } else if (EAgentStatus.UPGRADED.getCode()
-                .equals(applyUser.getStatus())) {
-                if (sjFormBO.checkIsSj(applyUser.getUserId())) {
-                    if (agentLevel.getAmount() > amount) {
-                        kind = EOutOrderKind.Upgrade_Order.getCode();
-                    }
-                }
-            }
+            kind = this.checkOrder(applyUser, specs);
 
             amount = amount + price.getPrice() * cart.getQuantity();
             // 订单拆单
@@ -267,7 +248,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                                     % specs.getSingleNumber();
                         }
                     }
-
                     list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                         applyUser.getRealName(), applyUser.getLevel(),
                         applyUser.getHighUserId(), toUserName,
@@ -299,11 +279,13 @@ public class OutOrderAOImpl implements IOutOrderAO {
         }
 
         // 订单金额不能低于授权单金额
-        if (agentLevel.getAmount() > amount) {
-            if (EOutOrderKind.Impower_Order.getCode().equals(kind)) {
+        if (EOutOrderKind.Impower_Order.getCode().equals(kind)) {
+            if (agentLevel.getAmount() > amount) {
                 throw new BizException("xn00000", agentLevel.getName()
                         + "授权单金额为[" + agentLevel.getAmount() / 1000 + "]元");
-            } else if (EOutOrderKind.Upgrade_Order.getCode().equals(kind)) {
+            }
+        } else if (EOutOrderKind.Upgrade_Order.getCode().equals(kind)) {
+            if (agentLevel.getAmount() > amount) {
                 throw new BizException("xn00000", agentLevel.getName()
                         + "升级单金额为[" + agentLevel.getAmount() / 1000 + "]元");
             }
@@ -576,16 +558,26 @@ public class OutOrderAOImpl implements IOutOrderAO {
             if (EPayType.RMB_YE.getCode().equals(payType)) {
                 data.setPayDatetime(new Date());
                 data.setPayCode(data.getCode());
-                data.setPayAmount(data.getAmount());
+                data.setPayAmount(data.getAmount() + data.getYunfei());
                 data.setPayGroup(payGroup);
                 data.setStatus(status);
                 outOrderBO.paySuccess(data);
                 result = new BooleanRes(true);
+
                 // 统计出货
                 orderReportBO.saveOutOrderReport(data);
+            } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+                data.setPayGroup(payGroup);
+                outOrderBO.addPayGroup(data, payGroup,
+                    EChannelType.WeChat_H5.getCode());
+            } else if (EOutOrderKind.C_ORDER.getCode()
+                .equals(outOrder.getKind())) {
+                data.setPayGroup(payGroup);
+                outOrderBO.addPayGroup(data, payGroup,
+                    EChannelType.WeChat_XCX.getCode());
             }
 
-            amount = amount + data.getAmount();
+            amount = amount + data.getAmount() + data.getYunfei();
         }
 
         // C端下单支付
@@ -617,6 +609,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     @Override
+    @Transactional
     public void paySuccess(String result) {
         Map<String, String> map = null;
         try {
@@ -837,17 +830,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     * data.getQuantity();
 
             if (profit > 0) {
-                // 订单归属人账户
-                // account = accountBO.getAccountByUser(toUser.getUserId(),
-                // ECurrency.YJ_CNY.getCode());
-                // accountBO.changeAmount(account.getAccountNumber(),
-                // EChannelType.NBZ, null, null, data.getCode(),
-                // EBizType.AJ_CELR, EBizType.AJ_CELR.getValue(), profit);
 
                 // 统计差额利润
                 report = agentReportBO
                     .getAgentReportByUser(applyUser.getHighUserId());
-                report.setProfitAward(profit);
+                report.setProfitAward(report.getProfitAward() + profit);
                 agentReportBO.refreshAward(report);
             }
         }
@@ -1139,30 +1126,38 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         // 是否完成授权单
         if (EAgentStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
-            if (outOrderBO.checkImpower(applyUser.getUserId(),
-                applyUser.getImpowerDatetime())) {
+            boolean isImpower = outOrderBO.checkImpower(applyUser.getUserId(),
+                applyUser.getImpowerDatetime());
+            if (isImpower) {
                 kind = EOutOrderKind.Impower_Order.getCode();
                 if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(specs.getIsSjOrder())) {
+                    .equals(specs.getIsSqOrder())) {
                     throw new BizException("xn0000", "该产品规格不允许授权单下单");
                 }
+            } else if (EProductSpecsType.Apply_NO.getCode()
+                .equals(specs.getIsNormalOrder())) {
+                throw new BizException("xn0000", "该产品规格不允许普通单下单");
             }
         }
 
         // 是否有过升级记录
         if (EAgentStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
-            kind = EOutOrderKind.Upgrade_Order.getCode();
-            if (EProductSpecsType.Apply_NO.getCode()
-                .equals(specs.getIsSqOrder())) {
-                throw new BizException("xn0000", "该产品规格不允许升级单下单");
+            AgentLog log = agentLogBO.getAgentLog(applyUser.getLastAgentLog());
+            boolean isUpgrade = outOrderBO.checkUpgrade(applyUser.getUserId(),
+                log.getApproveDatetime());
+            if (isUpgrade) {
+                kind = EOutOrderKind.Upgrade_Order.getCode();
+                if (EProductSpecsType.Apply_NO.getCode()
+                    .equals(specs.getIsSjOrder())) {
+                    throw new BizException("xn0000", "该产品规格不允许升级单下单");
+                }
+            } else if (EProductSpecsType.Apply_NO.getCode()
+                .equals(specs.getIsNormalOrder())) {
+                throw new BizException("xn0000", "该产品规格不允许普通单下单");
             }
+
         }
 
-        // 是否允许普通单下单
-        if (EProductSpecsType.Apply_NO.getCode()
-            .equals(specs.getIsNormalOrder())) {
-            throw new BizException("xn0000", "该产品规格不允许普通单下单");
-        }
         return kind;
     }
 
@@ -1234,9 +1229,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
         this.changeProductNumber(agent, pData, specs, data, -data.getQuantity(),
             data.getCode(), data.getApplyNote());
 
+        // 订单归属人是平台，只有托管账户加钱
+        accountBO.changeAmount(ESysUser.TG_BH.getCode(),
+            EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
+            data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
+            EBizType.AJ_GMYC.getValue(), data.getAmount());
+
         // 订单归属人不是平台，托管账户与代理账户同时加钱
-        if (!(StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
-            .getLevel())) {
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agent
+            .getLevel()) {
             Account account = accountBO.getAccountByUser(agent.getUserId(),
                 ECurrency.TX_CNY.getCode());
             // 收款方账户价钱
@@ -1244,20 +1245,14 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
                 data.getPayGroup(), data.getCode(), EBizType.AJ_YCCH,
                 EBizType.AJ_YCCH.getValue(), data.getAmount());
-            // 托管账户加钱
-            accountBO.changeAmount(ESystemCode.BH.getCode(),
-                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
-                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
-                EBizType.AJ_GMYC.getValue(), data.getAmount());
-        } else {
-            // 订单归属人是平台，只有托管账户加钱
-            accountBO.changeAmount(ESystemCode.BH.getCode(),
-                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
-                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
-                EBizType.AJ_GMYC.getValue(), data.getAmount());
         }
     }
 
+    /**
+     * 1、开启云仓的代理订单作废，回退代理云仓库存
+     * 2、未开启云仓代理，由云仓代发的订单，归还下单人的门槛余额
+     * 
+     */
     @Override
     @Transactional
     public void invalidOutOrder(String code, String updater, String remark) {
@@ -1283,6 +1278,15 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
                 data.getQuantity(), data.getPrice(), agent,
                 ESpecsLogType.QX_ORDER, "取消订单");
+        }
+
+        AgentLevel agentLevel = agentLevelBO.getAgentByLevel(data.getLevel());
+        if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
+            Account account = accountBO.getAccountByUser(data.getApplyUser(),
+                ECurrency.TX_CNY.getCode());
+            accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
+                null, null, data.getCode(), EBizType.AJ_GMCP_TK,
+                EBizType.AJ_GMCP_TK.getCode(), data.getPayAmount());
         }
 
         outOrderBO.invalidOutOrder(data, updater, remark);
@@ -1418,10 +1422,14 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 data.getSpecsCode());
 
             if (null == ware) {
-                throw new BizException("xn00000", "您的云仓中该规格的数量不足");
+                throw new BizException("xn00000", "您的云仓中没改产品");
             }
             if (ware.getQuantity() < data.getQuantity()) {
                 throw new BizException("xn00000", "您的云仓中该规格的数量不足");
+            }
+
+            if (EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
+                throw new BizException("xn00000", "非下级的订单无法公司发货哦");
             }
 
             // 检查起购数量
@@ -1429,14 +1437,52 @@ public class OutOrderAOImpl implements IOutOrderAO {
             AgentPrice price = agentPriceBO.getPriceByLevel(ware.getSpecsCode(),
                 agent.getLevel());
             if (price.getMinNumber() > data.getQuantity()) {
-                throw new BizException("xn00000", "您的云仓中该规格的数量不足");
+                throw new BizException("xn00000",
+                    ware.getProductName() + "云仓提货不能低于：" + price.getMinNumber());
             }
 
-            wareBO.changeWare(ware.getUserId(), EWareLogType.OUT.getCode(),
+            wareBO.changeWare(ware.getCode(), EWareLogType.OUT.getCode(),
                 -data.getQuantity(), ESpecsLogType.Order, "下级下单",
                 data.getCode());
+
+            if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
+                // 支付运费
+                Agent applyAagent = agentBO.getAgent(data.getApplyUser());
+                Account txAccount = accountBO.getAccountByUser(
+                    applyAagent.getUserId(), ECurrency.TX_CNY.getCode());
+
+                // 产品不包邮，计算运费
+                Product product = productBO.getProduct(data.getProductCode());
+                if (EBoolean.NO.getCode().equals(product.getIsFree())) {
+                    SYSConfig sysConfig = sysConfigBO.getConfig(
+                        data.getProvince(), ESystemCode.BH.getCode(),
+                        ESystemCode.BH.getCode());
+                    Long yunfei = StringValidater.toLong(sysConfig.getCvalue());
+                    if (txAccount.getAmount() < yunfei) {
+                        throw new BizException("xn00000",
+                            "代理" + txAccount.getRealName() + "可提账户中余额不足以支付"
+                                    + yunfei / 1000.0 + "元的运费");
+                    }
+                    data.setYunfei(yunfei);
+                    data.setPayAmount(data.getPayAmount() + yunfei);
+                }
+
+                // 订单状态会退回待审单
+                data.setStatus(EOutOrderStatus.TO_APPROVE.getCode());
+                data.setIsWareSend(EBoolean.YES.getCode());
+            }
         }
 
+        if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
+            Agent applyAagent = agentBO.getAgent(data.getApplyUser());
+            AgentLevel agentLevel = agentLevelBO
+                .getAgentByLevel(applyAagent.getLevel());
+            if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
+                // 出货以及推荐奖励
+                this.payAward(data);
+            }
+
+        }
         data.setDeliver(req.getDeliver());
         data.setDeliveDatetime(new Date());
         data.setLogisticsCode(req.getLogisticsCode());
@@ -1483,29 +1529,51 @@ public class OutOrderAOImpl implements IOutOrderAO {
         String payGroup = OrderNoGenerater
             .generate(EGeneratePrefix.InOrder.getCode());
 
-        Long amount = 0L;
+        Long allAward = 0L;
         for (OutOrder data : list) {
 
-            ChAward chAward = chAwardBO.getChAwardByLevel(data.getLevel(),
-                data.getAllAmount());
+            // 1、记录下个区间剩余出货金额
+            Long orderAmount = data.getAllAmount();
+
+            // 2、获取本等级所有区间奖励，已开始金额排序
+            List<ChAward> awardList = chAwardBO
+                .getChAwardByLevel(data.getLevel());
+            for (ChAward award : awardList) {
+
+                // 4、出货总金额大于某个区间最高金额
+                if (orderAmount > award.getEndAmount()) {
+                    allAward = allAward + (long) ((award.getEndAmount() - 1)
+                            * (award.getPercent() / 100));
+                    orderAmount = orderAmount - award.getEndAmount();
+
+                    // 5、出货总金额位于某个区间之间
+                } else if (award.getStartAmount() <= data.getAllAmount()
+                        && data.getAllAmount() <= award.getEndAmount()) {
+                    allAward = allAward + (long) ((data.getAllAmount()
+                            - award.getStartAmount())
+                            * (award.getPercent() / 100));
+                }
+            }
+
             AgentReport report = agentReportBO
                 .getAgentReportByUser(data.getApplyUser());
-            if (null != chAward) {
-                amount = (long) (data.getAllAmount()
-                        * (chAward.getPercent() / 100));
-
-            }
-            report.setSendAward(report.getSendAward() + amount);
+            report.setSendAward(report.getSendAward() + allAward);
             agentReportBO.refreshSendAward(report);
 
             data.setPayGroup(payGroup);
             outOrderBO.updatePayGroup(data);
             // 发放奖励
-            accountBO.transAmountCZB(fromUserId, ECurrency.MK_CNY.getCode(),
-                data.getApplyUser(), ECurrency.MK_CNY.getCode(), amount,
-                EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getCode(),
-                EBizType.AJ_CHJL_OUT.getCode(), payGroup);
+            if (0 != allAward) {
+                accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),
+                    data.getApplyUser(), ECurrency.TX_CNY.getCode(), allAward,
+                    EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getCode(),
+                    EBizType.AJ_CHJL_OUT.getCode(), payGroup);
+            }
         }
         logger.info("============出货订单统计结束==========");
+    }
+
+    @Override
+    public void eidtProCode() {
     }
 }

@@ -1034,6 +1034,7 @@ CREATE TABLE `tbh_withdraw` (
   `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道订单编号',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付回录时间',
+  `is_company_pay` char(1) DEFAULT NULL COMMENT '是否公司支付',
   PRIMARY KEY (`code`) COMMENT '取现订单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

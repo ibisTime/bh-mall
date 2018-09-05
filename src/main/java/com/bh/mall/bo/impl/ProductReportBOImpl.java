@@ -62,7 +62,7 @@ public class ProductReportBOImpl extends PaginableBOImpl<ProductReport>
 
     @Override
     public void refreshProductReport(ProductReport data, Integer quantity) {
-        data.setQuantity(quantity);
+        data.setQuantity(data.getQuantity() + quantity);
         productReportDAO.update(data);
     }
 

@@ -1,19 +1,14 @@
 package com.bh.mall.api.impl;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 
-import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.ao.IWithdrawAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
 import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
-import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Withdraw;
 import com.bh.mall.dto.req.XN627510Req;
-import com.bh.mall.enums.ECurrency;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -28,31 +23,21 @@ public class XN627510 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);
 
-    private IAccountAO accountAO = SpringContextHolder
-        .getBean(IAccountAO.class);
-
     private XN627510Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         Withdraw condition = new Withdraw();
-        if (StringUtils.isNotBlank(req.getUserId())) {
-            try {
-                List<Account> accounts = accountAO.getAccountByUserId(
-                    req.getUserId(), ECurrency.TX_CNY.getCode());
-                if (accounts.size() > 0) {
-                    condition
-                        .setAccountNumber(accounts.get(0).getAccountNumber());
-                }
-            } catch (Exception e) {
-            }
-        }
         condition.setAccountNumber(req.getAccountNumber());
         condition.setAccountName(req.getAccountName());
         condition.setType(req.getType());
         condition.setChannelType(req.getChannelType());
+
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
+        condition.setHighUserId(req.getToUserId());
+        condition.setStatusList(req.getStatusList());
+        ;
 
         condition.setCode(req.getCode());
         condition.setApproveUser(req.getApproveUser());

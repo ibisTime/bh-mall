@@ -29,16 +29,16 @@ public class ChAwardAOImpl implements IChAwardAO {
         ChAward startData = chAwardBO
             .isChAwardExist(StringValidater.toInteger(level), startAmount);
         if (null != startData) {
-            throw new BizException("xn00000", startData.getStartAmount() + "至"
-                    + startData.getEndAmount() + "的奖励已经存在了");
+            throw new BizException("xn00000", startData.getStartAmount() / 1000
+                    + "至" + startData.getEndAmount() / 1000 + "的奖励已经存在了");
         }
 
         // 判断终止金额是否被改变
         ChAward endtData = chAwardBO
             .isChAwardExist(StringValidater.toInteger(level), startAmount);
         if (null != endtData) {
-            throw new BizException("xn00000", endtData.getStartAmount() + "至"
-                    + endtData.getEndAmount() + "的奖励已经存在了");
+            throw new BizException("xn00000", endtData.getStartAmount() / 1000
+                    + "至" + endtData.getEndAmount() / 1000 + "的奖励已经存在了");
         }
 
         return chAwardBO.saveChAward(level, startAmount, endAmount, percent,
@@ -55,23 +55,24 @@ public class ChAwardAOImpl implements IChAwardAO {
         }
         ChAward data = chAwardBO.getChAward(req.getCode());
         // 判断起始金额是否被改变
-        if (StringValidater.toLong(req.getStartAmount()) != data
-            .getStartAmount()) {
+        if (!startAmount.equals(data.getStartAmount())) {
             ChAward startData = chAwardBO.isChAwardExist(data.getLevel(),
                 startAmount);
             if (null != startData) {
-                throw new BizException("xn00000", startData.getStartAmount()
-                        + "至" + startData.getEndAmount() + "的奖励已经存在了");
+                throw new BizException("xn00000",
+                    startData.getStartAmount() / 1000 + "至"
+                            + startData.getEndAmount() / 1000 + "的奖励已经存在了");
             }
         }
 
         // 判断终止金额是否被改变
-        if (StringValidater.toLong(req.getEndAmount()) != data.getEndAmount()) {
+        if (!endAmount.equals(data.getEndAmount())) {
             ChAward endtData = chAwardBO.isChAwardExist(data.getLevel(),
-                startAmount);
+                endAmount);
             if (null != endtData) {
-                throw new BizException("xn00000", endtData.getStartAmount()
-                        + "至" + endtData.getEndAmount() + "的奖励已经存在了");
+                throw new BizException("xn00000",
+                    endtData.getStartAmount() / 1000 + "至"
+                            + endtData.getEndAmount() / 1000 + "的奖励已经存在了");
             }
         }
 
@@ -100,4 +101,8 @@ public class ChAwardAOImpl implements IChAwardAO {
     public ChAward getChAward(String code) {
         return chAwardBO.getChAward(code);
     }
+
+    public static void main(String[] args) {
+    }
+
 }

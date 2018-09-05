@@ -23,4 +23,6 @@ public interface IChAwardBO extends IPaginableBO<ChAward> {
 
     public ChAward isChAwardExist(Integer level, Long startAmount);
 
+    public List<ChAward> getChAwardByLevel(Integer level);
+
 }

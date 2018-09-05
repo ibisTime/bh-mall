@@ -63,11 +63,12 @@ public class DeliveOrderBOImpl extends PaginableBOImpl<DeliveOrder>
         data.setPrice(innerOrder.getPrice());
         data.setPic(innerOrder.getPic());
         data.setApplyUser(innerOrder.getApplyUser());
+        data.setApplyDatetime(innerOrder.getApplyDatetime());
 
         data.setRealName(innerOrder.getRealName());
         data.setAmount(innerOrder.getAmount());
         data.setStatus(innerOrder.getStatus());
-        data.setKind(EOrderKind.OUT_Order.getCode());
+        data.setKind(EOrderKind.INNER_Order.getCode());
         data.setSigner(innerOrder.getSigner());
         data.setProvince(innerOrder.getProvince());
 

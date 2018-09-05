@@ -586,6 +586,7 @@
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,approve_datetime =	#{approveDatetime}
+		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -602,6 +603,8 @@
 		,approver = #{approver}
 		,approve_name = #{approveName}
 		,approve_datetime =	#{approveDatetime}
+		,impower_datetime = #{impowerDatetime}
+		,last_agent_log = #{lastAgentLog}
 		WHERE user_id = #{userId}
 	</update>
 	

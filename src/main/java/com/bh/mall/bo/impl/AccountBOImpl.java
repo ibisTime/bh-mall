@@ -83,7 +83,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             throw new BizException("xn000000",
                 dbAccount.getRealName()
                         + ECurrency.getCurrency(dbAccount.getCurrency())
-                        + "账户余额不足，还需充值[" + -nowAmount / 1000 + "]元");
+                        + "账户余额不足，还需充值[" + (-nowAmount / 1000.0) + "]元");
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, channelType, channelOrder,

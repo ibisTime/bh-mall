@@ -137,6 +137,9 @@
 			<if test="deliver != null and deliver != '' ">
 				AND t.deliver = #{deliver}
 			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
 		</trim>
 	</sql>
 	
@@ -329,7 +332,7 @@
 		,pay_group = #{pay_group}
 		,pay_type = #{pay_type}
 		,pay_datetime = #{pay_datetime}
-		,pay_amount = #{pay_amount}
+		,pay_amount = #{payAmount}
 		,status = #{status}
 		WHERE code = #{code}
 	</update>
@@ -345,6 +348,8 @@
 		
 		,pro_code = #{proCode}
 		,status = #{status}
+		,yunfei = #{yunfei}
+		,pay_amount = #{payAmount}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>

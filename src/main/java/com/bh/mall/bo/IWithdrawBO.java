@@ -22,7 +22,7 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
     // 申请取现
     String applyOrder(Account account, Long amount, Long fee,
             String payCardInfo, String payCardNo, String applyUser,
-            String applyNote);
+            String applyNote, String isCompanyPay);
 
     // 接受取现
     void approveOrder(Withdraw data, EWithdrawStatus status, String approveUser,

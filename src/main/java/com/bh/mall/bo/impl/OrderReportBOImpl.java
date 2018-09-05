@@ -58,6 +58,8 @@ public class OrderReportBOImpl extends PaginableBOImpl<OrderReport>
         OrderReport data = new OrderReport();
 
         data.setCode(outOrder.getCode());
+        data.setKind(outOrder.getKind());
+        data.setType(outOrder.getKind());
         data.setApplyUser(outOrder.getApplyUser());
         data.setApplyDatetime(outOrder.getApplyDatetime());
         data.setRealName(outOrder.getRealName());
@@ -80,6 +82,7 @@ public class OrderReportBOImpl extends PaginableBOImpl<OrderReport>
         data.setPic(outOrder.getPic());
 
         data.setSigner(outOrder.getSigner());
+        data.setMobile(outOrder.getMobile());
         data.setProvince(outOrder.getProvince());
         data.setCity(outOrder.getCity());
         data.setArea(outOrder.getArea());

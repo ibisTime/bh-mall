@@ -124,7 +124,7 @@ public class SqFormAOImpl implements ISqFormAO {
                         .equals(introAgent.getStatus())
                     || EAgentStatus.UPGRADE_COMPANY.getCode()
                         .equals(introAgent.getStatus())
-                    || EAgentStatus.TO_UPGRADE.getCode()
+                    || EAgentStatus.UPGRADED.getCode()
                         .equals(introAgent.getStatus()))) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
@@ -213,8 +213,13 @@ public class SqFormAOImpl implements ISqFormAO {
             Agent intrAgent = agentBO.getAgentByMobile(req.getIntroducer());
             introducer = intrAgent.getUserId();
 
-            if (!ESqFormStatus.IMPOWERED.getCode()
-                .equals(intrAgent.getStatus())) {
+            if (!(EAgentStatus.IMPOWERED.getCode().equals(intrAgent.getStatus())
+                    || EAgentStatus.TO_UPGRADE.getCode()
+                        .equals(intrAgent.getStatus())
+                    || EAgentStatus.UPGRADE_COMPANY.getCode()
+                        .equals(intrAgent.getStatus())
+                    || EAgentStatus.UPGRADED.getCode()
+                        .equals(intrAgent.getStatus()))) {
                 throw new BizException("xn0000", "该介绍人还未授权哦！");
             }
             if (agent.getUserId().equals(introducer)) {
@@ -692,6 +697,12 @@ public class SqFormAOImpl implements ISqFormAO {
                         "介绍代理[" + sqForm.getRealName() + "]的"
                                 + EBizType.AJ_JSJL.getValue() + "收入",
                         sqForm.getUserId());
+
+                    AgentReport intoReport = agentReportBO
+                        .getAgentReport(sqForm.getIntroducer());
+                    intoReport
+                        .setIntrAward(intoReport.getIntrAward() + jsAward);
+                    agentReportBO.refreshAward(intoReport);
                 }
 
             }
@@ -699,10 +710,11 @@ public class SqFormAOImpl implements ISqFormAO {
         Agent agent = agentBO.getAgent(sqForm.getUserId());
         AgentReport report = agentReportBO.getAgentReport(agent.getUserId());
         if (null == report) {
-            agentReportBO.saveAgentReport(sqForm, agent, jsAward);
+            agentReportBO.saveAgentReport(sqForm, agent, 0L);
         } else {
-            agentReportBO.refreshAgentReport(report, sqForm, agent, jsAward);
+            agentReportBO.refreshAgentReport(report, sqForm, agent, 0L);
         }
+
     }
 
 }

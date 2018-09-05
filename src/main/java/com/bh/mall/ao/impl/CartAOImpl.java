@@ -60,11 +60,12 @@ public class CartAOImpl implements ICartAO {
             throw new BizException("xn00000", "该产品库存不足");
         }
 
-        String type = ECartType.AGENT.getCode();
+        String type = ECartType.CUSER.getCode();
+
         // 代理添加购物车
         if (StringValidater.toInteger(
-            EAgentLevel.FIVE.getCode()) < StringValidater.toInteger(level)) {
-            type = ECartType.CUSER.getCode();
+            EAgentLevel.FIVE.getCode()) >= StringValidater.toInteger(level)) {
+            type = ECartType.AGENT.getCode();
             Agent agent = agentBO.getAgent(userId);
             AgentPrice price = agentPriceBO.getPriceByLevel(specsCode,
                 agent.getLevel());

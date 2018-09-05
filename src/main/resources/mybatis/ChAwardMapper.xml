@@ -27,6 +27,7 @@
 			
 		</trim>
 	</sql>
+	
 	<select id="select_chAward" parameterType="chAward" resultMap="chAward_DB_Result">
 		SELECT
 		t.code
@@ -52,6 +53,25 @@
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_ch_award t
 		<include refid="where_condition" />
+	</select>
+
+
+	
+	<select id="select_by_level" parameterType="chAward" resultMap="chAward_DB_Result">
+		SELECT
+		t.code
+		,t.level
+		,t.start_amount
+		,t.end_amount
+		,t.percent
+		
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tbh_ch_award t
+		<include refid="where_condition" />
+		ORDER BY t.start_amount,t.end_amount
 	</select>
 
 	<insert id="insert_chAward" parameterType="chAward">

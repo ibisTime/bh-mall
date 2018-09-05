@@ -105,7 +105,7 @@ public class SjFormAOImpl implements ISjFormAO {
             if (StringValidater.toLong(payAmount) < agenthLevel
                 .getMinCharge()) {
                 throw new BizException("xn00000", "您的直推人数不满足半门槛人数，打款金额不能低于["
-                        + agenthLevel.getMinCharge() / 1000 + "]元");
+                        + agenthLevel.getMinCharge() / 1000.0 + "]元");
             }
         }
 
@@ -117,7 +117,7 @@ public class SjFormAOImpl implements ISjFormAO {
             if (0 < account.getAmount()) {
                 throw new BizException("xn00000",
                     "升至[" + agenthLevel.getName() + "]时，门槛中不允许有余额，您的门槛中现剩余["
-                            + account.getAmount() / 1000 + "]元");
+                            + account.getAmount() / 1000.0 + "]元");
             }
         }
 

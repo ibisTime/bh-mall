@@ -1,5 +1,7 @@
 package com.bh.mall.dao;
 
+import java.util.List;
+
 import com.bh.mall.dao.base.IBaseDAO;
 import com.bh.mall.domain.ChAward;
 
@@ -14,4 +16,6 @@ public interface IChAwardDAO extends IBaseDAO<ChAward> {
      * @history:
      */
     void update(ChAward data);
+
+    List<ChAward> selectListByLevel(ChAward condition);
 }

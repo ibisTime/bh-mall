@@ -117,18 +117,18 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
         Ware dbData = this.getWare(code);
         Integer nowQuantity = dbData.getQuantity() + quantity;
-        Long nowAmount = nowQuantity * dbData.getPrice();
         if (nowQuantity < 0) {
             throw new BizException("xn0000", "上级云仓该规格的产品数量不足");
         }
-
+        Long nowAmount = nowQuantity * dbData.getPrice();
+        Ware data = new Ware();
+        data.setQuantity(nowQuantity);
         // 记录流水
         String logCode = wareLogBO.saveWareLog(dbData, type, quantity, bizType,
             bizNote, refNo);
+
         // 改变数量
-        Ware data = new Ware();
         data.setCode(code);
-        data.setQuantity(nowQuantity);
         data.setAmount(nowAmount);
         data.setLastChangeCode(logCode);
         // 该规格产品数量为零时，从云仓删除该产品

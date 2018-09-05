@@ -34,7 +34,7 @@ public interface IInnerOrderBO extends IPaginableBO<InnerOrder> {
 
     public long selectCount(InnerOrder ioCondition);
 
-    public InnerOrder getInnerOrderByPayGroup(String payGroup);
+    public List<InnerOrder> getInnerOrderByPayGroup(String payGroup);
 
     public String addPayGroup(InnerOrder data, String payType);
 

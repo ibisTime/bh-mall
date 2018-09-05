@@ -23,16 +23,16 @@ public class SysConstant {
     public static String IP = "47.96.161.183";
 
     // 微店账户每月取现次数
-    public static String CUSERQXBS = "BUSERWDQX";
+    public static String BUSERWDQX = "BUSERWDQX";
 
     // 微店账户每月取现费率
-    public static String CUSERQXFL = "BUSERWDQXFL";
+    public static String BUSERWDQXFL = "BUSERWDQXFL";
 
     // 微店账户每次取现最低金额
-    public static String BUSERWDQXJE = "BUSERWDQXFL";
+    public static String BUSERWDQXJE = "BUSERWDQXJE";
 
-    // C端用户取现时效
-    public static String CUSERQXSX = "BUSERWDQXJE";
+    // B端用户每月取现次数
+    public static String BUSERMONTIMES = "BUSERMONTIMES";
 
     // B端用户取现倍数
     public static String BUSERQXBS = "BUSERQXBS";
@@ -43,11 +43,11 @@ public class SysConstant {
     // B端用户取现时效
     public static String BUSERQXSX = "BUSERQXSX";
 
+    // C端用户取现时效
+    public static String CUSERQXSX = "BUSERWDQXJE";
+
     // C端用户每月取现次数
     public static String CUSERMONTIMES = "CUSERMONTIMES";
-
-    // B端用户每月取现次数
-    public static String BUSERMONTIMES = "BUSERMONTIMES";
 
     // C端2C端转账金额倍数
     public static String TRANSAMOUNTBS = "TRANSAMOUNTBS";

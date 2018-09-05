@@ -1,6 +1,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -81,7 +82,10 @@ public class Withdraw extends ABaseDO {
     private Date payDatetime;
 
     // 归属人
-    private String toUserId;
+    private String highUserId;
+
+    // 是否公司审核
+    private String isCompanyPay;
 
     // *************** db****************
 
@@ -111,6 +115,9 @@ public class Withdraw extends ABaseDO {
 
     // 支付回录人
     private String payUserName;
+
+    // 支付回录人
+    private List<String> statusList;
 
     public Agent getAgent() {
         return agent;
@@ -360,12 +367,28 @@ public class Withdraw extends ABaseDO {
         this.payUserName = payUserName;
     }
 
-    public String getToUserId() {
-        return toUserId;
+    public String getHighUserId() {
+        return highUserId;
     }
 
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
+    public void setHighUserId(String highUserId) {
+        this.highUserId = highUserId;
+    }
+
+    public String getIsCompanyPay() {
+        return isCompanyPay;
+    }
+
+    public void setIsCompanyPay(String isCompanyPay) {
+        this.isCompanyPay = isCompanyPay;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

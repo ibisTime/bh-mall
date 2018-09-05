@@ -97,4 +97,11 @@ public class ChAwardBOImpl extends PaginableBOImpl<ChAward>
         return chAwardDAO.select(condition);
     }
 
+    @Override
+    public List<ChAward> getChAwardByLevel(Integer level) {
+        ChAward condition = new ChAward();
+        condition.setLevel(level);
+        return chAwardDAO.selectListByLevel(condition);
+    }
+
 }

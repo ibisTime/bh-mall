@@ -24,6 +24,8 @@ import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.PropertiesUtil;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -145,21 +147,27 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         }
 
         Long allAmount = 0L;
-        StringBuffer sb = new StringBuffer();
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.InnerOrder.getCode());
         for (String code : codeList) {
             InnerOrder data = innerOrderBO.getInnerOrder(code);
             data.setPayDatetime(new Date());
             data.setPayCode(data.getPayCode());
-            data.setPayAmount(data.getAmount());
-            data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
+            data.setPayAmount(data.getAmount() + data.getYunfei());
+            data.setPayGroup(payGroup);
             innerOrderBO.paySuccess(data);
 
-            allAmount = allAmount + data.getAmount();
-            sb.append(code);
-            sb.append(",");
-        }
+            InnerSpecs specs = innerSpecsBO.getInnerSpecs(data.getSpecsCode());
 
-        String refNo = sb.substring(0, sb.indexOf(","));
+            if (specs.getStockNumber() < data.getQuantity()) {
+                throw new BizException("xn00000", "产品规格不足");
+            }
+            specs.setStockNumber(specs.getStockNumber() - data.getQuantity());
+
+            innerSpecsBO.refreshInnerSpecs(specs);
+
+            allAmount = allAmount + data.getAmount() + data.getYunfei();
+        }
 
         if (EBoolean.NO.getCode().equals(payType)) {
             // 支付订单，更新订单状态
@@ -167,34 +175,19 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
                 ECurrency.TX_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
                 ECurrency.TX_CNY.getCode(), allAmount, EBizType.AJ_GMCP,
                 EBizType.AJ_GMCP.getValue(), EBizType.AJ_GMCP.getValue(),
-                refNo);
+                payGroup);
 
             result = new BooleanRes(true);
         } else if (EBoolean.YES.getCode().equals(payType)) {
-            return this.payWXH5(codeList, innerOrder.getApplyUser());
+            return this.payWXH5(payGroup, innerOrder.getApplyUser(), allAmount);
         }
         return result;
     }
 
-    private Object payWXH5(List<String> codeList, String applyUser) {
-        Long allAmount = 0L;
-        StringBuffer sb = new StringBuffer();
-        StringBuffer refSb = new StringBuffer();
+    private Object payWXH5(String payGroup, String applyUser, Long amount) {
 
-        for (String code : codeList) {
-            InnerOrder data = innerOrderBO.getInnerOrder(code);
-            sb.append(innerOrderBO.addPayGroup(data,
-                EChannelType.WeChat_H5.getCode()));
-            sb.append(",");
-            refSb.append(code);
-            refSb.append(",");
-            allAmount = allAmount + data.getAmount();
-        }
-        String payGroup = sb.substring(0, sb.indexOf(","));
-        String refNo = sb.substring(0, sb.indexOf(","));
-
-        return weChatAO.getPrepayIdH5(applyUser, payGroup, refNo,
-            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), allAmount,
+        return weChatAO.getPrepayIdH5(applyUser, payGroup, payGroup,
+            EBizType.AJ_GMCP.getCode(), EBizType.AJ_GMCP.getValue(), amount,
             PropertiesUtil.Config.WECHAT_H5_CZ_BACKURL,
             EChannelType.WeChat_H5.getCode());
     }
@@ -207,24 +200,46 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
-            InnerOrder data = null;
             boolean isSuccess = weChatAO.reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
+            List<InnerOrder> list = innerOrderBO
+                .getInnerOrderByPayGroup(outTradeNo);
             if (isSuccess) {
-                data = innerOrderBO.getInnerOrderByPayGroup(outTradeNo);
-                data.setPayCode(wechatOrderNo);
-                data.setPayAmount(data.getAmount());
+                Long allAmount = 0L;
+                for (InnerOrder data : list) {
+                    if (!EInnerOrderStatus.Unpaid.getCode()
+                        .equals(data.getStatus())) {
+                        throw new BizException("xn00000", "订单已支付");
+                    }
+                    data.setPayCode(wechatOrderNo);
+                    data.setPayAmount(data.getAmount() + data.getYunfei());
+                    innerOrderBO.paySuccess(data);
+                    allAmount = allAmount + data.getAmount() + data.getYunfei();
+
+                    InnerSpecs specs = innerSpecsBO
+                        .getInnerSpecs(data.getSpecsCode());
+
+                    if (specs.getStockNumber() < data.getQuantity()) {
+                        throw new BizException("xn00000", "产品规格不足");
+                    }
+                    specs.setStockNumber(
+                        specs.getStockNumber() - data.getQuantity());
+
+                    innerSpecsBO.refreshInnerSpecs(specs);
+                }
 
                 Account account = accountBO.getSysAccountNumber(
                     ESystemCode.BH.getCode(), ESystemCode.BH.getCode(),
                     ECurrency.TG_CNY);
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.WeChat_H5, wechatOrderNo, outTradeNo,
-                    data.getCode(), EBizType.AJ_YCCH,
-                    EBizType.AJ_YCCH.getValue(), data.getAmount());
-                innerOrderBO.paySuccess(data);
+                    outTradeNo, EBizType.AJ_YCCH, EBizType.AJ_YCCH.getValue(),
+                    allAmount);
+
             } else {
-                innerOrderBO.payNo(data);
+                for (InnerOrder data : list) {
+                    innerOrderBO.payNo(data);
+                }
             }
 
         } catch (JDOMException | IOException e) {
@@ -346,14 +361,15 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     @Override
     public void cancelInnerOrder(String code) {
-        InnerOrder data = innerOrderBO.getInnerOrder(code);
-        if (!EInnerOrderStatus.Unpaid.getCode().equals(data.getStatus())
-                || !EInnerOrderStatus.TO_APPROVE.getCode()
-                    .equals(data.getStatus())) {
-            throw new BizException("xn0000", "该订单无法申请取消");
-        }
-        data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
-        innerOrderBO.cancelInnerOrder(data);
+        throw new BizException("xn0000", "该订单无法申请取消");
+        // InnerOrder data = innerOrderBO.getInnerOrder(code);
+        // if (!(EInnerOrderStatus.Unpaid.getCode().equals(data.getStatus())
+        // || EInnerOrderStatus.TO_APPROVE.getCode()
+        // .equals(data.getStatus()))) {
+        // throw new BizException("xn0000", "该订单无法申请取消");
+        // }
+        // data.setStatus(EInnerOrderStatus.TO_CANECL.getCode());
+        // innerOrderBO.cancelInnerOrder(data);
     }
 
     @Override

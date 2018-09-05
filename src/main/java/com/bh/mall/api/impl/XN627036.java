@@ -7,6 +7,7 @@ import com.bh.mall.core.ObjValidater;
 import com.bh.mall.domain.CNavigate;
 import com.bh.mall.dto.req.XN627036Req;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.ECNavigateStatus;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -29,7 +30,7 @@ public class XN627036 extends AProcessor {
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
         condition.setLocation(req.getLocation());
-        condition.setStatus(EBoolean.YES.getCode());
+        condition.setStatus(ECNavigateStatus.APPROVE_YES.getCode());
         condition.setIsFront(EBoolean.YES.getCode());
         return cNavigateAO.queryCNavigateList(condition);
     }

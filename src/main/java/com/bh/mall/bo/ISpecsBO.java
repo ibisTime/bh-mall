@@ -29,8 +29,8 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
     void refreshRepertory(String productName, Specs specs, String type,
             Integer number, String updater, String remark);
 
-    Integer getMinSpecsNumber(String productCode);
-
     List<Specs> querySpecsListByB(Specs psCondition);
+
+    Integer getMinSpecsNumber(Specs data, int number);
 
 }

@@ -29,7 +29,7 @@
 	
 	<bean id="inOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="inOrderTimer"/>  
-       <property name="cronExpression" value="0 59 23 L * ?"/><!-- 0 0 0 1 * ?  每天的1点执行 -->
+       <property name="cronExpression" value=" 0 59 23 L * ?"/><!-- 0 0 0 1 * ?  每天的1点执行 -->
 	</bean>
 	
 	<bean id="inOrderTimer" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
@@ -40,7 +40,7 @@
 	
 	<bean id="outOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="outOrderTimer"/>  
-       <property name="cronExpression" value="0 59 23 L * ?"/><!-- 0 0 0 1 * ?  每天的1点执行 -->
+       <property name="cronExpression" value=" 0 59 23 L * ?"/><!-- 0 0 0 1 * ?  每天的1点执行 -->
 	</bean>
 	
 	<bean id="outOrderTimer" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   

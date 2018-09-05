@@ -63,7 +63,8 @@
 		FROM
 		tbh_product_report t 
 		<include refid="where_condition" />
-		ORDER BY t.quantity LIMIT 3
+		GROUP BY t.product_code
+		ORDER BY t.quantity DESC LIMIT 3
 	</select>
 
 	<select id="select_productReport_count" parameterType="productReport"
@@ -102,6 +103,5 @@
 		quantity = #{quantity}
 		WHERE code = #{code}
 	</update>
-
 
 </mapper>

@@ -22,6 +22,5 @@ public class AmountUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(AmountUtil.mul(1000L, Double.valueOf(5)));
     }
 }

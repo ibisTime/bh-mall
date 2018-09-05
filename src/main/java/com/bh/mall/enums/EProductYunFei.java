@@ -1,7 +1,7 @@
 package com.bh.mall.enums;
 
 public enum EProductYunFei {
-    YunFei_NO("0", "包邮"), YunFei_YES("1", "不包邮");
+    YunFei_NO("0", "不包邮"), YunFei_YES("1", "不包邮");
 
     EProductYunFei(String code, String value) {
         this.code = code;

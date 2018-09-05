@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 取现分页查询
  * @author: xieyj 
@@ -27,6 +29,9 @@ public class XN627510Req extends APageReq {
 
     // 状态（待审核/审核不通过/审核通过待支付/支付成功/支付失败）
     private String status;
+
+    // 状态（待审核/审核不通过/审核通过待支付/支付成功/支付失败）
+    private List<String> statusList;
 
     // 申请人
     private String applyUser;
@@ -65,6 +70,12 @@ public class XN627510Req extends APageReq {
 
     // 针对用户编号
     private String userId;
+
+    // 针对用户编号
+    private String toUserId;
+
+    // 针对用户编号
+    private String isCompanyPay;
 
     public String getCode() {
         return code;
@@ -209,4 +220,29 @@ public class XN627510Req extends APageReq {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    public String getIsCompanyPay() {
+        return isCompanyPay;
+    }
+
+    public void setIsCompanyPay(String isCompanyPay) {
+        this.isCompanyPay = isCompanyPay;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
 }

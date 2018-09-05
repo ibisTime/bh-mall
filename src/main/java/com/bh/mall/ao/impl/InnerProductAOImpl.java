@@ -134,6 +134,9 @@ public class InnerProductAOImpl implements IInnerProductAO {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
                 data.setUpdateName(sysUser.getRealName());
             }
+            List<InnerSpecs> specsList = innerSpecsBO
+                .getInnerSpecsByProduct(data.getCode());
+            data.setSpecsList(specsList);
         }
         return page;
     }
