@@ -12,7 +12,6 @@ import com.bh.mall.domain.Specs;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
-import com.bh.mall.dto.req.XN627645Req;
 import com.bh.mall.dto.res.XN627666Res;
 
 @Component
@@ -81,7 +80,8 @@ public interface IOutOrderAO {
     public XN627666Res getYunFei(String productCode, String speccCode,
             String province, String quantity, String kind);
 
-    public void deliverOutOrder(XN627645Req req);
+    public void deliverOutOrder(String code, String isWareSend, String deliver,
+            String logisticsCode, String logisticsCompany, String remark);
 
     public void eidtProCode(String code, String proCode);
 

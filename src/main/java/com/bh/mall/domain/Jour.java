@@ -106,6 +106,9 @@ public class Jour extends ABaseDO {
     // 取现订单
     private Withdraw withdraw;
 
+    // 图片
+    private String pic;
+
     // ********db************
 
     // 云仓订单
@@ -357,6 +360,14 @@ public class Jour extends ABaseDO {
 
     public void setInOrder(InOrder inOrder) {
         this.inOrder = inOrder;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
 }

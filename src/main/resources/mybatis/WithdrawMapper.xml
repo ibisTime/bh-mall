@@ -43,6 +43,9 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
+			<if test="highUserId != null and highUserId != '' ">
+				AND t.high_user_id = #{highUserId}
+			</if>
 			<if test="accountName != null and accountName != '' ">
 				AND t.account_name like "%"#{accountName}"%"
 			</if>

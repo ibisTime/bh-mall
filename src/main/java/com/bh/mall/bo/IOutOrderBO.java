@@ -24,8 +24,9 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public OutOrder getOutOrder(String code);
 
-    public void deliverOutOrder(OutOrder data, String deliver,
-            String logisticsCode, String logisticsCompany, String remark);
+    public void deliverOutOrder(OutOrder data, String status, String deliver,
+            String logisticsCode, String logisticsCompany, Date deliveDatetime,
+            String remark);
 
     public void approveOutOrder(OutOrder data);
 

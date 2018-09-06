@@ -71,7 +71,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
 
         String isCompanyPay = EBoolean.NO.getCode();
-        if (ECurrency.C_CNY.getCode().equals(dbAccount.getCurrency())) {
+        Agent agent = agentBO.getAgent(applyUser);
+        if (ECurrency.C_CNY.getCode().equals(dbAccount.getCurrency())
+                || StringValidater.toInteger(EAgentLevel.ONE.getCode()) == agent
+                    .getLevel()) {
             isCompanyPay = EBoolean.YES.getCode();
         }
 
@@ -80,7 +83,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         // 取现总金额
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
-            payCardInfo, payCardNo, applyUser, applyNote, isCompanyPay);
+            payCardInfo, payCardNo, agent, applyNote, isCompanyPay);
         // 冻结取现金额
         amount = amount + fee;
         accountBO.frozenAmount(dbAccount, amount, withdrawCode, applyNote);
@@ -116,7 +119,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
         // 取现总金额
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount - fee,
-            fee, payCardInfo, payCardNo, applyUser, applyNote, isCompanyPay);
+            fee, payCardInfo, payCardNo, agent, applyNote, isCompanyPay);
 
         // 冻结取现金额
         accountBO.frozenAmount(dbAccount, amount, withdrawCode, applyNote);
@@ -175,8 +178,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             payCode);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 释放冻结流水
-        accountBO.unfrozenAmount(dbAccount, data.getAmount(), data.getCode(),
-            payNote);
+        accountBO.unfrozenAmount(dbAccount, dbAccount.getFrozenAmount(),
+            data.getCode(), payNote);
     }
 
     private void payOrderYES(Withdraw data, String payUser, String payNote,
@@ -318,7 +321,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
             String minAmount = argsMap.get(SysConstant.QXDBZDJE);
             if (StringUtils.isNotBlank(qxfl)) {
-                Long qxDbzdje = AmountUtil.mul(1000L, Double.valueOf(qxfl));
+                Long qxDbzdje = AmountUtil.mul(1000L,
+                    Double.valueOf(minAmount));
                 if (amount > qxDbzdje) {
                     throw new BizException("xn000000",
                         "取现单笔最低金额不能低于" + minAmount + "元。");

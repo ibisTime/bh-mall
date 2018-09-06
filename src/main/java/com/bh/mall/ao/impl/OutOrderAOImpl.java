@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bh.mall.ao.IAccountAO;
 import com.bh.mall.ao.IOutOrderAO;
 import com.bh.mall.ao.IWeChatAO;
 import com.bh.mall.bo.IAccountBO;
@@ -71,7 +72,6 @@ import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.req.XN627640Req;
 import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
-import com.bh.mall.dto.req.XN627645Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.dto.res.XN627666Res;
 import com.bh.mall.enums.EAgentLevel;
@@ -175,6 +175,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     @Autowired
     IInnerSpecsBO innerSpecsBO;
+
+    @Autowired
+    IAccountAO accountAO;
 
     @Override
     @Transactional
@@ -567,27 +570,22 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                 // 统计出货
                 orderReportBO.saveOutOrderReport(data);
-            } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-                data.setPayGroup(payGroup);
-                outOrderBO.addPayGroup(data, payGroup,
-                    EChannelType.WeChat_H5.getCode());
             } else if (EOutOrderKind.C_ORDER.getCode()
                 .equals(outOrder.getKind())) {
                 data.setPayGroup(payGroup);
                 outOrderBO.addPayGroup(data, payGroup,
                     EChannelType.WeChat_XCX.getCode());
+            } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+                data.setPayGroup(payGroup);
+                outOrderBO.addPayGroup(data, payGroup,
+                    EChannelType.WeChat_H5.getCode());
             }
 
             amount = amount + data.getAmount() + data.getYunfei();
         }
 
         // C端下单支付
-        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-            result = this.payWXH5(outOrder.getApplyUser(), payGroup, payGroup,
-                amount, EChannelType.WeChat_H5.getCode(),
-                PropertiesUtil.Config.WECHAT_H5_OUT_ORDER_BACKURL);
-
-        } else if (EOutOrderKind.C_ORDER.getCode().equals(outOrder.getKind())) {
+        if (EOutOrderKind.C_ORDER.getCode().equals(outOrder.getKind())) {
             result = this.payWXH5(outOrder.getApplyUser(), payGroup, payGroup,
                 amount, EChannelType.WeChat_XCX.getCode(),
                 PropertiesUtil.Config.WECHAT_XCX_ORDER_BACKURL);
@@ -598,6 +596,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
             accountBO.changeAmount(mkAccount.getAccountNumber(),
                 EChannelType.NBZ, null, payGroup, payGroup, EBizType.AJ_GMYC,
                 EBizType.AJ_GMYC.getValue(), -amount);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            result = this.payWXH5(outOrder.getApplyUser(), payGroup, payGroup,
+                amount, EChannelType.WeChat_H5.getCode(),
+                PropertiesUtil.Config.WECHAT_H5_OUT_ORDER_BACKURL);
+
         }
         return result;
     }
@@ -646,14 +649,24 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 }
                 Account account = accountBO.getAccountByUser(
                     outOrder.getToUserId(), ECurrency.C_CNY.getCode());
-                // 收款方账户价钱
-                accountBO.changeAmount(account.getAccountNumber(),
+
+                accountBO.changeAmount(ESysUser.TG_BH.getCode(),
                     EChannelType.getEChannelType(outOrder.getPayType()),
                     wechatOrderNo, outOrder.getPayGroup(),
                     outOrder.getPayGroup(), EBizType.AJ_GMYC,
                     EBizType.AJ_GMYC.getValue(), amount);
+                if (!EOutOrderKind.C_ORDER.getCode()
+                    .equals(outOrder.getKind())) {
+                    accountAO.doBizCallBack(outOrder.getApplyUser(),
+                        outOrder.getPayCode(), outOrder.getPayGroup(),
+                        EBizType.AJ_XJCZ.getCode(), amount);
 
-                accountBO.changeAmount(ESysUser.TG_BH.getCode(),
+                    account = accountBO.getAccountByUser(outOrder.getToUserId(),
+                        ECurrency.TX_CNY.getCode());
+                }
+
+                // 收款方账户价钱
+                accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.getEChannelType(outOrder.getPayType()),
                     wechatOrderNo, outOrder.getPayGroup(),
                     outOrder.getPayGroup(), EBizType.AJ_GMYC,
@@ -667,6 +680,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     outOrderBO.payNo(data);
                 }
             }
+
         } catch (JDOMException | IOException e) {
             throw new BizException("xn000000", "回调结果XML解析失败");
         }
@@ -707,15 +721,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
             // 发货人转义
             if (StringUtils.isNotBlank(data.getDeliver())) {
-                if (agentBO.isHighest(data.getApplyUser())) {
-                    Agent agent = agentBO.getAgent(data.getApplyUser());
-                    SYSUser sysUser = sysUserBO
-                        .getSYSUser(agent.getHighUserId());
+                if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
+                    SYSUser sysUser = sysUserBO.getSYSUser(data.getDeliver());
                     data.setHighUserName(sysUser.getRealName());
                 } else {
-                    Agent agent = agentBO.getAgent(data.getApplyUser());
-                    data.setAgent(agent);
-                    data.setHighUserName(agent.getRealName());
+                    Agent highAgent = agentBO.getAgent(data.getDeliver());
+                    data.setHighUserName(highAgent.getRealName());
                 }
             }
 
@@ -1018,15 +1029,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
         // proCodeBO.splitSingle(barData);
         // }
 
-        data.setDeliver(deliver);
-        data.setDeliveDatetime(new Date());
-        data.setLogisticsCode(logisticsCode);
-        data.setLogisticsCompany(logisticsCompany);
-
-        data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
-        data.setRemark(remark);
-        outOrderBO.deliverOutOrder(data, deliver, logisticsCode,
-            logisticsCompany, remark);
+        outOrderBO.deliverOutOrder(data, EOutOrderStatus.TO_RECEIVE.getCode(),
+            deliver, logisticsCode, logisticsCompany, new Date(), remark);
 
     }
 
@@ -1403,11 +1407,18 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
     @Override
     @Transactional
-    public void deliverOutOrder(XN627645Req req) {
-        OutOrder data = outOrderBO.getOutOrder(req.getCode());
+    public void deliverOutOrder(String code, String isWareSend, String deliver,
+            String logisticsCode, String logisticsCompany, String remark) {
+        OutOrder data = outOrderBO.getOutOrder(code);
 
+        String status = EOutOrderStatus.TO_RECEIVE.getCode();
+        if (!EOutOrderStatus.TO_SEND.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "该订单不是待发货");
+        }
+
+        Date date = new Date();
         // 云仓发货扣减库存
-        if (EBoolean.YES.getCode().equals(req.getIsWareSend())) {
+        if (EBoolean.YES.getCode().equals(isWareSend)) {
             Ware ware = wareBO.getWareByProductSpec(data.getToUserId(),
                 data.getSpecsCode());
 
@@ -1454,7 +1465,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                                     + yunfei / 1000.0 + "元的运费");
                     }
                     data.setYunfei(yunfei);
-                    data.setPayAmount(data.getPayAmount() + yunfei);
+                    data.setPayAmount(data.getAmount() + yunfei);
 
                     accountBO.changeAmount(txAccount.getAccountNumber(),
                         EChannelType.NBZ, null, null, applyAagent.getUserId(),
@@ -1462,8 +1473,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 }
 
                 // 订单状态会退回待审单
-                data.setStatus(EOutOrderStatus.TO_APPROVE.getCode());
+                status = EOutOrderStatus.TO_APPROVE.getCode();
                 data.setIsWareSend(EBoolean.YES.getCode());
+                date = null;
+                deliver = null;
+                logisticsCode = null;
+                logisticsCompany = null;
             }
         }
         if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
@@ -1474,17 +1489,17 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 // 出货以及推荐奖励
                 this.payAward(data);
             }
-
         }
-        data.setDeliver(req.getDeliver());
-        data.setDeliveDatetime(new Date());
-        data.setLogisticsCode(req.getLogisticsCode());
-        data.setLogisticsCompany(req.getLogisticsCompany());
 
-        data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
-        data.setRemark(req.getRemark());
-        outOrderBO.deliverOutOrder(data, req.getDeliver(),
-            req.getLogisticsCode(), req.getLogisticsCompany(), req.getRemark());
+        data.setDeliver(deliver);
+        data.setDeliveDatetime(date);
+        data.setLogisticsCode(logisticsCode);
+        data.setLogisticsCompany(logisticsCompany);
+
+        data.setStatus(status);
+        data.setRemark(remark);
+        outOrderBO.deliverOutOrder(data, status, deliver, logisticsCode,
+            logisticsCompany, date, remark);
 
     }
 

@@ -388,7 +388,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
     public void approveInnerOrder(String code, String result, String updater,
             String remark) {
         InnerOrder data = innerOrderBO.getInnerOrder(code);
-        if (!EInnerOrderStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
+        if (!EInnerOrderStatus.TO_CANECL.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单不处于待审核状态");
         }
         // 审核通过取消订单，退钱

@@ -13,18 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bh.mall.ao.IAccountAO;
+import com.bh.mall.ao.IOutOrderAO;
 
 @Controller
-public class CallbackChargeController {
+public class CallbackOrderBizController {
     private static Logger logger = Logger
-        .getLogger(CallbackChargeController.class);
+        .getLogger(CallbackOrderBizController.class);
 
     @Autowired
-    IAccountAO accountAO;
+    IOutOrderAO outOrderAO;
 
     // 自身支付回调
-    @RequestMapping("/charge/callback")
+    @RequestMapping("/order/callback")
     public synchronized void doCallbackPay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
 
@@ -43,10 +43,9 @@ public class CallbackChargeController {
             // 处理业务开始
             // ------------------------------
             try {
-                System.out.println("**** 进入微信充值，服务器回调 start****");
-                accountAO.doBizCallBack(applyUser, payCode, payGroup, bizType,
-                    amount);
-                System.out.println("**** 进入微信充值，服务器回调 end****");
+                System.out.println("**** 进入内购订单服务器回调 start****");
+
+                System.out.println("**** 进入内购订单服服务器回调 end****");
             } catch (Exception e) {
                 logger.info("支付回调异常,原因：" + e.getMessage());
             }

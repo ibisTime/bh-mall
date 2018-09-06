@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bh.mall.ao.IJourAO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentReportBO;
+import com.bh.mall.bo.IChargeBO;
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.IJourBO;
 import com.bh.mall.bo.IOrderReportBO;
@@ -17,6 +18,7 @@ import com.bh.mall.bo.IWithdrawBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentReport;
+import com.bh.mall.domain.Charge;
 import com.bh.mall.domain.InOrder;
 import com.bh.mall.domain.Jour;
 import com.bh.mall.domain.OrderReport;
@@ -50,6 +52,9 @@ public class JourAOImpl implements IJourAO {
 
     @Autowired
     private IWithdrawBO withdrawBO;
+
+    @Autowired
+    private IChargeBO chargeBO;
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {
@@ -136,9 +141,12 @@ public class JourAOImpl implements IJourAO {
         }
 
         if (EBizType.AJ_QX.getCode().equals(data.getBizType())
-                || EBizType.XXFK.getClass().equals(data.getBizType())) {
+                || EBizType.XXFK.getCode().equals(data.getBizType())) {
             Withdraw withdraw = withdrawBO.getWithdraw(data.getRefNo());
             data.setWithdraw(withdraw);
+        } else if (EBizType.AJ_CZ.getCode().equals(data.getBizType())) {
+            Charge charge = chargeBO.getCharge(data.getRefNo());
+            data.setPic(charge.getChargePdf());
         }
 
         return data;

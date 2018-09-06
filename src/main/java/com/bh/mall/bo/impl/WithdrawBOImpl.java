@@ -19,6 +19,7 @@ import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IWithdrawDAO;
 import com.bh.mall.domain.Account;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Bankcard;
 import com.bh.mall.domain.ChannelBank;
 import com.bh.mall.domain.Withdraw;
@@ -45,7 +46,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
 
     @Override
     public String applyOrder(Account account, Long amount, Long fee,
-            String payCardInfo, String payCardNo, String applyUser,
+            String payCardInfo, String payCardNo, Agent applyUser,
             String applyNote, String isCompanyPay) {
         if (amount == 0) {
             throw new BizException("xn000000", "取现金额不能为0");
@@ -60,6 +61,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
         data.setFee(fee);
         data.setIsCompanyPay(isCompanyPay);
 
+        data.setHighUserId(applyUser.getHighUserId());
         data.setChannelType(EChannelType.Offline.getCode());
         data.setPayCardInfo(payCardInfo);
         // 取现户名，应该和银行卡户名一致
@@ -79,7 +81,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
         }
         data.setPayCardNo(payCardNo);
         data.setStatus(EWithdrawStatus.toApprove.getCode());
-        data.setApplyUser(applyUser);
+        data.setApplyUser(applyUser.getUserId());
 
         data.setApplyNote(applyNote);
         data.setApplyDatetime(new Date());

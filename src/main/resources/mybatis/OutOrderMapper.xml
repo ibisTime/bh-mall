@@ -345,7 +345,7 @@
 		,logistics_code = #{logisticsCode}
 		,logistics_company = #{logisticsCompany}
 		
-		
+		,is_ware_send = #{isWareSend}
 		,pro_code = #{proCode}
 		,status = #{status}
 		,yunfei = #{yunfei}

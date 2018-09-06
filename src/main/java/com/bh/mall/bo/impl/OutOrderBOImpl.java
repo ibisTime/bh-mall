@@ -115,12 +115,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public void deliverOutOrder(OutOrder data, String deliver,
-            String logisticsCode, String logisticsCompany, String remark) {
+    public void deliverOutOrder(OutOrder data, String status, String deliver,
+            String logisticsCode, String logisticsCompany, Date deliveDatetime,
+            String remark) {
         data.setDeliver(deliver);
-        Date date = new Date();
-        data.setDeliveDatetime(date);
         data.setLogisticsCode(logisticsCode);
+        data.setDeliveDatetime(deliveDatetime);
         data.setLogisticsCompany(logisticsCompany);
 
         data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
