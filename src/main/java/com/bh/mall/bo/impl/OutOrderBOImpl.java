@@ -186,6 +186,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
     @Override
     public void paySuccess(OutOrder data) {
+        data.setStatus(EOutOrderStatus.TO_SEND.getCode());
         outOrderDAO.paySuccess(data);
     }
 

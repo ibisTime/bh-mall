@@ -37,7 +37,7 @@ public class XN627510 extends AProcessor {
         condition.setApplyUser(req.getApplyUser());
         condition.setHighUserId(req.getToUserId());
         condition.setStatusList(req.getStatusList());
-        ;
+        condition.setIsCompanyPay(req.getIsCompanyPay());
 
         condition.setCode(req.getCode());
         condition.setApproveUser(req.getApproveUser());

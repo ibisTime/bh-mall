@@ -177,6 +177,7 @@ public class SjFormAOImpl implements ISjFormAO {
             logCode = sjFormBO.applySjForm(data, toUserId, teamName, newLevel,
                 idKind, idNo, idHand, payPdf, payAmount, status);
         } else {
+
             logCode = sjFormBO.refreshSjForm(sjForm, data, toUserId, teamName,
                 newLevel, idKind, idNo, idHand, payPdf, payAmount, status);
         }
@@ -340,9 +341,14 @@ public class SjFormAOImpl implements ISjFormAO {
         Agent agent = agentAO.getAgent(data.getUserId());
         data.setUser(agent);
 
+        if (StringUtils.isNotBlank(agent.getManager())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(agent.getManager());
+            data.setManageName(sysUser.getRealName());
+        }
+
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getApplyLevel()) {
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getUserId());
+            SYSUser sysUser = sysUserBO.getSYSUser(data.getToUserId());
             data.setToUserName(sysUser.getRealName());
         } else {
             Agent toUser = agentBO.getAgent(data.getToUserId());
@@ -365,6 +371,11 @@ public class SjFormAOImpl implements ISjFormAO {
         for (SjForm sjForm : page.getList()) {
             Agent agent = agentBO.getAgent(sjForm.getUserId());
             sjForm.setUser(agent);
+            if (StringUtils.isNotBlank(agent.getManager())) {
+                SYSUser sysUser = sysUserBO.getSYSUser(agent.getManager());
+                sjForm.setManageName(sysUser.getRealName());
+            }
+
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sjForm
                 .getApplyLevel()) {
                 SYSUser sysUser = sysUserBO.getSYSUser(sjForm.getToUserId());

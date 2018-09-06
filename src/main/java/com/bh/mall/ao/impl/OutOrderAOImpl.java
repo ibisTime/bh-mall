@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
@@ -620,28 +621,43 @@ public class OutOrderAOImpl implements IOutOrderAO {
             String outTradeNo = map.get("out_trade_no");
 
             List<OutOrder> list = outOrderBO.getOutOrderByPayGroup(outTradeNo);
+            if (CollectionUtils.isEmpty(list)) {
+                throw new BizException("xn00000", "出货订单不存在");
+            }
+            OutOrder outOrder = list.get(0);
 
             // 此处调用订单查询接口验证是否交易成功
-            boolean isSucc = weChatAO.reqOrderquery(map,
-                EChannelType.WeChat_H5.getCode());
+            boolean isSucc = weChatAO.reqOrderquery(map, outOrder.getPayType());
             if (isSucc) {
 
                 Long amount = 0L;
-                Agent agent = agentBO.getAgent(list.get(0).getApplyUser());
+
                 for (OutOrder data : list) {
                     if (!EInOrderStatus.Unpaid.getCode()
                         .equals(data.getStatus())) {
                         throw new BizException("xn0000", "订单已支付");
                     }
-                    this.payOrder(agent, data, wechatOrderNo);
 
-                    data.setPayType(EChannelType.WeChat_H5.getCode());
                     data.setPayCode(wechatOrderNo);
                     data.setStatus(EOutOrderStatus.TO_SEND.getCode());
                     outOrderBO.paySuccess(data);
 
                     amount = amount + data.getAmount();
                 }
+                Account account = accountBO.getAccountByUser(
+                    outOrder.getToUserId(), ECurrency.C_CNY.getCode());
+                // 收款方账户价钱
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.getEChannelType(outOrder.getPayType()),
+                    wechatOrderNo, outOrder.getPayGroup(),
+                    outOrder.getPayGroup(), EBizType.AJ_GMYC,
+                    EBizType.AJ_GMYC.getValue(), amount);
+
+                accountBO.changeAmount(ESysUser.TG_BH.getCode(),
+                    EChannelType.getEChannelType(outOrder.getPayType()),
+                    wechatOrderNo, outOrder.getPayGroup(),
+                    outOrder.getPayGroup(), EBizType.AJ_GMYC,
+                    EBizType.AJ_GMYC.getValue(), amount);
 
             } else {
                 for (OutOrder data : list) {
@@ -1220,33 +1236,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
         }
         return true;
-    }
-
-    private void payOrder(Agent agent, OutOrder data, String wechatOrderNo) {
-
-        // 改变产品数量
-        Product pData = productBO.getProduct(data.getProductCode());
-        Specs specs = specsBO.getSpecs(data.getSpecsCode());
-        this.changeProductNumber(agent, pData, specs, data, -data.getQuantity(),
-            data.getCode(), data.getApplyNote());
-
-        // 订单归属人是平台，只有托管账户加钱
-        accountBO.changeAmount(ESysUser.TG_BH.getCode(),
-            EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
-            data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
-            EBizType.AJ_GMYC.getValue(), data.getAmount());
-
-        // 订单归属人不是平台，托管账户与代理账户同时加钱
-        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agent
-            .getLevel()) {
-            Account account = accountBO.getAccountByUser(agent.getUserId(),
-                ECurrency.TX_CNY.getCode());
-            // 收款方账户价钱
-            accountBO.changeAmount(account.getAccountNumber(),
-                EChannelType.getEChannelType(data.getPayType()), wechatOrderNo,
-                data.getPayGroup(), data.getCode(), EBizType.AJ_GMYC,
-                EBizType.AJ_GMYC.getValue(), data.getAmount());
-        }
     }
 
     /**

@@ -139,6 +139,7 @@ public class WeChatAOImpl implements IWeChatAO {
     }
 
     @Override
+    @Transactional
     public void doCallbackH5(String result) {
         Map<String, String> map = null;
         try {
@@ -271,6 +272,7 @@ public class WeChatAOImpl implements IWeChatAO {
             formProperties.put("payGroup", callbackResult.getPayGroup());
             formProperties.put("payCode", callbackResult.getJourCode());
             formProperties.put("bizType", callbackResult.getBizType());
+            formProperties.put("jourCode", callbackResult.getJourCode());
             formProperties.put("transAmount", callbackResult.getTransAmount());
             PostSimulater.requestPostForm(callbackResult.getUrl(),
                 formProperties);

@@ -372,11 +372,21 @@ public class InOrderAOImpl implements IInOrderAO {
 
         if (EPayType.RMB_YE.getCode().equals(payType)) {
             // 账户扣钱
-            Account mkAccount = accountBO.getAccountByUser(
-                applyUser.getUserId(), ECurrency.MK_CNY.getCode());
-            accountBO.changeAmount(mkAccount.getAccountNumber(),
-                EChannelType.NBZ, null, payGroup, payGroup, EBizType.AJ_GMYC,
-                EBizType.AJ_GMYC.getValue(), -amount);
+
+            if (StringValidater
+                .toInteger(EAgentLevel.ONE.getCode()) == applyUser.getLevel()) {
+                accountBO.transAmountCZB(applyUser.getUserId(),
+                    ECurrency.MK_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
+                    ECurrency.TX_CNY.getCode(), amount, EBizType.AJ_GMYC,
+                    "购买产品", EBizType.AJ_GMYC.getCode(), payGroup);
+            } else {
+                Account mkAccount = accountBO.getAccountByUser(
+                    applyUser.getUserId(), ECurrency.MK_CNY.getCode());
+                accountBO.changeAmount(mkAccount.getAccountNumber(),
+                    EChannelType.NBZ, null, payGroup, payGroup,
+                    EBizType.AJ_GMYC, EBizType.AJ_GMYC.getValue(), -amount);
+            }
+
             this.payAward(applyUser, inOrder.getProductCode(),
                 inOrder.getSpecsCode(), amount, payGroup, cjAmount);
 

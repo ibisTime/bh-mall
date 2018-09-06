@@ -374,15 +374,14 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
 
     @Override
     public void cancelInnerOrder(String code) {
-        throw new BizException("xn0000", "该订单无法申请取消");
-        // InnerOrder data = innerOrderBO.getInnerOrder(code);
-        // if (!(EInnerOrderStatus.Unpaid.getCode().equals(data.getStatus())
-        // || EInnerOrderStatus.TO_APPROVE.getCode()
-        // .equals(data.getStatus()))) {
-        // throw new BizException("xn0000", "该订单无法申请取消");
-        // }
-        // data.setStatus(EInnerOrderStatus.TO_CANECL.getCode());
-        // innerOrderBO.cancelInnerOrder(data);
+        InnerOrder data = innerOrderBO.getInnerOrder(code);
+        if (!(EInnerOrderStatus.Unpaid.getCode().equals(data.getStatus())
+                || EInnerOrderStatus.TO_APPROVE.getCode()
+                    .equals(data.getStatus()))) {
+            throw new BizException("xn0000", "该订单无法申请取消");
+        }
+        data.setStatus(EInnerOrderStatus.TO_CANECL.getCode());
+        innerOrderBO.cancelInnerOrder(data);
     }
 
     @Override

@@ -97,6 +97,9 @@ public class SjForm extends ABaseDO {
     // 归属人名称
     private String toUserName;
 
+    // 归属人名称
+    private String manageName;
+
     public String getToUserId() {
         return toUserId;
     }
@@ -329,6 +332,14 @@ public class SjForm extends ABaseDO {
 
     public void setToUserName(String toUserName) {
         this.toUserName = toUserName;
+    }
+
+    public String getManageName() {
+        return manageName;
+    }
+
+    public void setManageName(String manageName) {
+        this.manageName = manageName;
     }
 
 }

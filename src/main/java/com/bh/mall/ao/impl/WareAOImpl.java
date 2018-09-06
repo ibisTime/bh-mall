@@ -258,14 +258,20 @@ public class WareAOImpl implements IWareAO {
         String kind = EOutOrderKind.Pick_Up.getCode();
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
 
-        // 是否完成授权单
-        if (agentLevel.getAmount() > outOrderBO
-            .checkImpowerOrder(agent.getUserId(), agent.getImpowerDatetime())) {
-            kind = EOutOrderKind.Impower_Order.getCode();
+        if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+            if (outOrderBO.checkImpower(agent.getUserId(),
+                agent.getImpowerDatetime())) {
+                kind = EOutOrderKind.Impower_Order.getCode();
+            }
+        }
 
-            // 是否完成升级单
-        } else if (sjFormBO.checkIsSj(agent.getUserId())) {
-            kind = EOutOrderKind.Upgrade_Order.getCode();
+        // 是否完成升级单
+        if (EAgentStatus.UPGRADED.getCode().equals(agent.getStatus())) {
+            AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
+            if (outOrderBO.checkUpgrade(agent.getUserId(),
+                log.getApproveDatetime())) {
+                kind = EOutOrderKind.Upgrade_Order.getCode();
+            }
         }
 
         // 产品不包邮，计算运费
@@ -359,7 +365,6 @@ public class WareAOImpl implements IWareAO {
         wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
             -StringValidater.toInteger(req.getQuantity()), ESpecsLogType.Order,
             ESpecsLogType.Order.getValue(), data.getUserId());
-
     }
 
     @Override
@@ -452,12 +457,9 @@ public class WareAOImpl implements IWareAO {
                 }
 
                 if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
-                    if (whAmount < agentLevel.getRedAmount()) {
-                        redAmount = agentLevel.getRedAmount() - whAmount;
-                        result = ECheckStatus.RED_LOW.getCode();
-                    }
                     if (inOrderBO.getInOrderByUser(agent.getUserId(),
-                        log.getApproveDatetime())) {
+                        log.getApproveDatetime())
+                            && whAmount < agentLevel.getAmount()) {
                         result = ECheckStatus.RED_LOW.getCode();
                     }
                 }
@@ -519,11 +521,9 @@ public class WareAOImpl implements IWareAO {
                 } else if (EAgentStatus.UPGRADED.getCode()
                     .equals(agent.getStatus())
                         && ECheckStatus.NO_Upgrae.getCode().equals(result)) {
-                    if ((account.getAmount() + whAmount) < agentLevel
-                        .getAmount()) {
-                        chargeAmount = agentLevel.getAmount() - whAmount
-                                - account.getAmount();
-                        result = ECheckStatus.To_Charge.getCode();
+                    if (whAmount < agentLevel.getAmount()) {
+                        redAmount = agentLevel.getAmount() - whAmount;
+                        result = ECheckStatus.RED_LOW.getCode();
                     }
                 }
             }

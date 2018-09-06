@@ -135,7 +135,7 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','award','2','介绍奖励','USYS201800000000002',NOW(),NULL);
 
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'charge_status','充值订单状态','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','charge_status','1','代支付','USYS201800000000002',NOW(),NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','charge_status','1','待支付','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','charge_status','2','支付失败','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','charge_status','3','支付成功','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','charge_status','4','待审核','USYS201800000000002',NOW(),NULL);

@@ -77,6 +77,9 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         sjForm.setPayAmount(StringValidater.toLong(payAmount));
         Date date = new Date();
         sjForm.setApplyDatetime(date);
+        sjForm.setApprover(null);
+        sjForm.setApproveName(null);
+        sjForm.setApproveDatetime(null);
         sjFormDAO.update(sjForm);
 
         return agentLogBO.applySjForm(sjForm, data);
