@@ -9,6 +9,7 @@ import com.bh.mall.common.JsonUtil;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Withdraw;
 import com.bh.mall.dto.req.XN627510Req;
+import com.bh.mall.enums.EBoolean;
 import com.bh.mall.exception.BizException;
 import com.bh.mall.exception.ParaException;
 import com.bh.mall.spring.SpringContextHolder;
@@ -38,6 +39,9 @@ public class XN627510 extends AProcessor {
         condition.setHighUserId(req.getToUserId());
         condition.setStatusList(req.getStatusList());
         condition.setIsCompanyPay(req.getIsCompanyPay());
+        if (StringUtils.isBlank(req.getIsCompanyPay())) {
+            condition.setIsCompanyPay(EBoolean.NO.getCode());
+        }
 
         condition.setCode(req.getCode());
         condition.setApproveUser(req.getApproveUser());
