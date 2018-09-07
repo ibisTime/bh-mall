@@ -397,3 +397,119 @@ SELECT
  #盒规格的为上级代理发货
  UPDATE tbh_out_order SET is_ware_send = '0' WHERE specs_code = 'PS201806291944580145174'; 
 
+ 
+ /*********** tbh_agent_log **************/
+ DROP TABLE IF EXISTS `tbh_agent_log`;
+CREATE TABLE `tbh_agent_log` (
+  `code` VARCHAR(32) NOT NULL COMMENT '编号',
+  `type` VARCHAR(1) DEFAULT NULL COMMENT '类型',
+  `apply_user` VARCHAR(32) DEFAULT NULL COMMENT '申请人',
+  `real_name` VARCHAR(255) DEFAULT NULL COMMENT '姓名',
+  `wx_id` VARCHAR(255) DEFAULT NULL COMMENT '微信号',
+  `mobile` VARCHAR(16) DEFAULT NULL COMMENT '手机号',
+  `to_user_id` VARCHAR(32) DEFAULT NULL COMMENT '意向归属人',
+  `level` INT(11) DEFAULT NULL COMMENT '当前等级',
+  `apply_level` INT(11) DEFAULT NULL COMMENT '申请等级',
+  `high_user_id` VARCHAR(32) DEFAULT NULL COMMENT '上级',
+  `referrer` VARCHAR(32) DEFAULT NULL COMMENT '推荐人',
+  `introducer` VARCHAR(32) DEFAULT NULL COMMENT '介绍人',
+  `team_name` VARCHAR(255) DEFAULT NULL COMMENT '团队名称',
+  `pay_amount` BIGINT(20) DEFAULT NULL COMMENT '打款金额',
+  `pay_pdf` VARCHAR(255) DEFAULT NULL COMMENT '打款截图',
+  `province` VARCHAR(255) DEFAULT NULL COMMENT '省',
+  `city` VARCHAR(255) DEFAULT NULL COMMENT '市',
+  `area` VARCHAR(255) DEFAULT NULL COMMENT '区',
+  `address` TEXT COMMENT '详细地址',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `apply_datetime` DATETIME DEFAULT NULL COMMENT '申请时间',
+  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
+  `approve_name` VARCHAR(255) DEFAULT NULL COMMENT '审核人姓名',
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `approve_note` TEXT COMMENT '审核备注',
+  `updater` VARCHAR(255) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  `impower_datetime` DATETIME DEFAULT NULL COMMENT '授权时间',
+  `remark` TEXT COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `tbh_agent_log`
+            (`code`,
+             `type`,
+             `apply_user`,
+             `real_name`,
+             `wx_id`,
+             `mobile`,
+             `to_user_id`,
+             `level`,
+             `apply_level`,
+             `high_user_id`,
+             `referrer`,
+             `introducer`,
+             `team_name`,
+             `pay_amount`,
+             `pay_pdf`,
+             `province`,
+             `city`,
+             `area`,
+             `address`,
+             `status`,
+             `apply_datetime`,
+             `approver`,
+             `approve_datetime`,
+             `approve_note`,
+             `updater`,
+             `update_datetime`,
+             `impower_datetime`,
+             `remark`)
+SELECT l.`code`,
+             l.`type`,
+             l.`apply_user`,
+             u.`real_name`,
+              u.`wx_id`,
+              u.`mobile`,
+              l.`to_user_id`,
+             l.`level`,
+             l.`apply_level`,
+             l.`high_user_id`,
+              u.`user_referee`,
+              u.`introducer`,
+             l.`team_name`,
+             u.`pay_amount`,
+             l.`pay_pdf`,
+              u.`province`,
+              u.`city`,
+              u.`area`,
+              u.`address`,
+             
+             CASE l.status
+             WHEN 16  THEN 0
+             WHEN 3  THEN 0
+             WHEN 4  THEN 1
+             WHEN 5  THEN 3
+             WHEN 7  THEN 8
+             
+             WHEN 8  THEN 10
+             WHEN 10  THEN 9
+             WHEN 11  THEN 7
+             WHEN 15 THEN 11
+             
+             WHEN 13 THEN 14
+             WHEN 14 THEN 13
+             WHEN 18 THEN 5
+             WHEN 19 THEN 4
+             ELSE l.status END ,
+             l.`apply_datetime`,
+             l.`approver`,
+ 
+             l.`approve_datetime`,
+            l.`remark`,
+              u.`updater`,
+              u.`update_datetime`,
+             u.`impower_datetime`,
+             l.`remark`
+ FROM tbh_agency_log l JOIN tbh_user u ON l.apply_user = u.user_id
+
+ UPDATE tbh_agent_log l, tbh_user u  SET l.approve_name = u.real_name WHERE u.user_id = l.approver AND u.approver LIKE 'U%' 
+ 
+ 
