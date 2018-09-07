@@ -53,6 +53,9 @@ public class ExchangeOrder extends ABaseDO {
     // 置换价格
     private Long changePrice;
 
+    // 可换数量
+    private Integer canChangeQuantity;
+
     // 申请人
     private String applyUser;
 
@@ -61,9 +64,6 @@ public class ExchangeOrder extends ABaseDO {
 
     // 申请人等级
     private Integer level;
-
-    // 可换数量
-    private Integer canChangeQuantity;
 
     // 申请时间
     private Date applyDatetime;

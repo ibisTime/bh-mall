@@ -48,7 +48,6 @@ public class Ware extends ABaseDO {
     // 总价值
     private Long amount;
 
-    // 用户名称
     private String realName;
 
     // 状态

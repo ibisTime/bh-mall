@@ -24,10 +24,10 @@ public class InnerOrder extends ABaseDO {
     // 产品名称
     private String productName;
 
-    // 产品编号
+    // 规格编号
     private String specsCode;
 
-    // 产品名称
+    // 规格名称
     private String specsName;
 
     // 缩略图
@@ -120,6 +120,7 @@ public class InnerOrder extends ABaseDO {
     // 最后审核时间
     private Date approveDatetime;
 
+    // 最后审核备注
     private String approveNote;
 
     // 最后更新人

@@ -10,7 +10,7 @@ CREATE TABLE `tbh_account` (
 	`status` varchar (6),
 	`currency` varchar (24),
 	`amount` bigint (32),
-	`frozen_amount` bigint (32),
+	`frozen_amount` bigint (20	),
 	`create_datetime` datetime ,
 	`last_order` varchar (96)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -74,7 +74,7 @@ CREATE TABLE `tbh_agent` (
   `last_agent_log` varchar(32) DEFAULT NULL COMMENT '最后一条代理轨迹记录',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `tbh_agent_level` */
 
@@ -139,7 +139,7 @@ CREATE TABLE `tbh_agent_log` (
   `impower_datetime` datetime DEFAULT NULL COMMENT '授权时间',
   `remark` text COMMENT '备注',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `tbh_agent_price` */
 
@@ -930,7 +930,7 @@ CREATE TABLE `tbh_sq_form` (
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `impower_datetime` datetime DEFAULT NULL COMMENT '授权时间',
   `remark` text COMMENT '备注'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Table structure for table `tbh_tj_award` */
 
