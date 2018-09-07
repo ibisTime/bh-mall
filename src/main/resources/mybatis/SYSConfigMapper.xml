@@ -18,9 +18,17 @@
 			<if test="id != null">
 				AND t.id = #{id}
 			</if>	
-			<if test="type != null and type != '' ">
-				AND t.type = #{type}
-			</if>	
+			<choose>
+				<when test="type != null and type != '' ">
+					AND t.type = #{type}
+				</when>
+				<when test="typeList != null and typeList.size() > 0 ">
+					AND t.type IN
+					<foreach collection="typeList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 			<if test="ckey != null and ckey != '' ">
 				AND t.ckey = #{ckey}
 			</if>	

@@ -9,6 +9,7 @@
 package com.bh.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.bh.mall.dao.base.ABaseDO;
 
@@ -49,6 +50,8 @@ public class SYSConfig extends ABaseDO {
 
     // 更新人名称
     private String updateName;
+
+    private List<String> typeList;
 
     public Long getId() {
         return id;
@@ -120,6 +123,14 @@ public class SYSConfig extends ABaseDO {
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 
 }

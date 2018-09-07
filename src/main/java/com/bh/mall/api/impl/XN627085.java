@@ -31,6 +31,8 @@ public class XN627085 extends AProcessor {
         condition.setType(req.getType());
         condition.setCkeyForQuery(req.getCkey());
         condition.setUpdater(req.getUpdater());
+        condition.setTypeList(req.getTypeList());
+
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISYSConfigAO.DEFAULT_ORDER_COLUMN;

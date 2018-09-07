@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * @author: xieyj 
  * @since: 2016年9月17日 下午4:09:39 
@@ -12,6 +14,9 @@ public class XN627085Req extends APageReq {
 
     // 类型(选填)
     private String type;
+
+    // 类型(选填)
+    private List<String> typeList;
 
     // key值(选填)
     private String ckey;
@@ -41,6 +46,14 @@ public class XN627085Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 
 }

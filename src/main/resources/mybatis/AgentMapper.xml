@@ -58,7 +58,7 @@
 				</when>
 				<when test="noUserIdList != null and noUserIdList.size()>0 ">
 					AND t.user_id NOT IN
-					<foreach collection="noUserIdList">
+					<foreach collection="noUserIdList" index="index" item="item" open="(" separator="," close=")">
 						#{item}
 					</foreach>
 				</when>

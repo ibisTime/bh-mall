@@ -283,6 +283,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setIsWareSend(EBoolean.YES.getCode());
         data.setToUserId(toUserId);
         data.setToUserName(toUserName);
+        data.setPayAmount(yunfei);
 
         data.setYunfei(yunfei);
         data.setAmount(amount + yunfei);

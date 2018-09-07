@@ -1112,7 +1112,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     accountBO.changeAmount(account.getAccountNumber(),
                         EChannelType.NBZ, null, null, data.getCode(),
                         EBizType.AJ_GMCP_TK, EBizType.AJ_GMCP_TK.getValue(),
-                        data.getAmount());
+                        data.getPayAmount());
                 }
             } else if (EBoolean.YES.getCode().equals(data.getIsWareSend())) {
                 // 云仓提货归还库存

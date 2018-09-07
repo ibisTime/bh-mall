@@ -23,8 +23,8 @@ import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Bankcard;
 import com.bh.mall.domain.ChannelBank;
 import com.bh.mall.domain.Withdraw;
-import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EChannelType;
+import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWithdrawStatus;
 import com.bh.mall.exception.BizException;
@@ -137,9 +137,9 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
         Map<String, String> argsMap = sysConfigBO.getConfigsMap(null,
             ESystemCode.BH.getCode(), ESystemCode.BH.getCode());
         String monthTimesKey = null;
-        if (EAccountType.Customer.getCode().equals(account.getType())) {
-            monthTimesKey = SysConstant.CUSERMONTIMES;
-        } else if (EAccountType.Business.getCode().equals(account.getType())) {
+        if (ECurrency.C_CNY.getCode().equals(account.getCurrency())) {
+            monthTimesKey = SysConstant.WDQXCS;
+        } else if (ECurrency.TX_CNY.getCode().equals(account.getCurrency())) {
             monthTimesKey = SysConstant.BUSERMONTIMES;
         }
         String monthTimesValue = argsMap.get(monthTimesKey);

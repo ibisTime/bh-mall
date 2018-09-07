@@ -378,7 +378,8 @@ public class InOrderAOImpl implements IInOrderAO {
                 accountBO.transAmountCZB(applyUser.getUserId(),
                     ECurrency.MK_CNY.getCode(), ESysUser.SYS_USER_BH.getCode(),
                     ECurrency.TX_CNY.getCode(), amount, EBizType.AJ_GMYC,
-                    "购买产品", EBizType.AJ_GMYC.getCode(), payGroup);
+                    EBizType.AJ_GMYC.getValue(), EBizType.AJ_GMYC.getValue(),
+                    payGroup);
             } else {
                 Account mkAccount = accountBO.getAccountByUser(
                     applyUser.getUserId(), ECurrency.MK_CNY.getCode());

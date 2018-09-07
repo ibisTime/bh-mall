@@ -154,7 +154,6 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             InnerOrder data = innerOrderBO.getInnerOrder(code);
             data.setPayDatetime(new Date());
             data.setPayCode(data.getPayCode());
-            data.setPayAmount(data.getAmount() + data.getYunfei());
             data.setPayGroup(payGroup);
 
             InnerSpecs specs = innerSpecsBO.getInnerSpecs(data.getSpecsCode());
@@ -164,6 +163,7 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
             }
 
             if (EBoolean.NO.getCode().equals(payType)) {
+                data.setPayAmount(data.getAmount() + data.getYunfei());
                 data.setPayType(EChannelType.NBZ.getCode());
                 innerOrderBO.paySuccess(data);
                 specs.setStockNumber(
@@ -391,13 +391,21 @@ public class InnerOrderAOImpl implements IInnerOrderAO {
         if (!EInnerOrderStatus.TO_CANECL.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单不处于待审核状态");
         }
+
         // 审核通过取消订单，退钱
         if (EResult.Result_YES.getCode().equals(result)) {
+            Long yunfei = 0L;
+            if (null != data.getYunfei()) {
+                yunfei = data.getYunfei();
+            }
             data.setStatus(EInnerOrderStatus.CANCELED.getCode());
-            accountBO.transAmountCZB(ESysUser.SYS_USER_BH.getCode(),
-                ECurrency.TX_CNY.getCode(), data.getApplyUser(),
-                ECurrency.TX_CNY.getCode(), data.getAmount(), EBizType.AJ_GMCP,
-                null, null, data.getCode());
+            if (null != data.getPayAmount()) {
+                accountBO.transAmountCZB(ESysUser.SYS_USER_BH.getCode(),
+                    ECurrency.TX_CNY.getCode(), data.getApplyUser(),
+                    ECurrency.TX_CNY.getCode(), data.getAmount() + yunfei,
+                    EBizType.AJ_GMCP_TK, EBizType.AJ_GMCP_TK.getValue(),
+                    EBizType.AJ_GMCP_TK.getValue(), data.getCode());
+            }
         } else {
             data.setStatus(EInnerOrderStatus.TO_APPROVE.getCode());
         }

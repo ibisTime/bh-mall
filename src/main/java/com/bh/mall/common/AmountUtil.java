@@ -22,5 +22,6 @@ public class AmountUtil {
     }
 
     public static void main(String[] args) {
+        System.out.println(mul(100L, 2.0));
     }
 }

@@ -23,13 +23,16 @@ public class SysConstant {
     public static String IP = "47.96.161.183";
 
     // 微店账户每月取现次数
-    public static String BUSERWDQX = "BUSERWDQX";
+    public static String WDQXCS = "WDQXCS";
 
     // 微店账户每月取现费率
-    public static String BUSERWDQXFL = "BUSERWDQXFL";
+    public static String WDQXFL = "WDQXFL";
+
+    // 微店账户微店取现倍数
+    public static String WDQXBS = "WDQXBS";
 
     // 微店账户每次取现最低金额
-    public static String BUSERWDQXJE = "BUSERWDQXJE";
+    public static String WDQXJE = "WDQXJE";
 
     // B端用户每月取现次数
     public static String BUSERMONTIMES = "BUSERMONTIMES";

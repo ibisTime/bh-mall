@@ -254,25 +254,27 @@ public class WareAOImpl implements IWareAO {
             throw new BizException("xn00000", "您仓库中该规格的产品数量不足");
         }
 
-        // 获取授权单
         String kind = EOutOrderKind.Pick_Up.getCode();
-        AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
-
+        // 是否完成授权单
         if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
-            if (outOrderBO.checkImpower(agent.getUserId(),
-                agent.getImpowerDatetime())) {
+            boolean isImpower = outOrderBO.checkImpower(agent.getUserId(),
+                agent.getImpowerDatetime());
+            if (isImpower) {
                 kind = EOutOrderKind.Impower_Order.getCode();
             }
         }
 
-        // 是否完成升级单
+        // 是否有过升级记录
         if (EAgentStatus.UPGRADED.getCode().equals(agent.getStatus())) {
             AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
-            if (outOrderBO.checkUpgrade(agent.getUserId(),
-                log.getApproveDatetime())) {
+            boolean isUpgrade = outOrderBO.checkUpgrade(agent.getUserId(),
+                log.getApproveDatetime());
+            if (isUpgrade) {
                 kind = EOutOrderKind.Upgrade_Order.getCode();
             }
         }
+
+        AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
 
         // 产品不包邮，计算运费
         Long allYunfei = 0L;
@@ -314,8 +316,10 @@ public class WareAOImpl implements IWareAO {
                 }
 
                 // 防止多出的订单为授权单或升级单
-                if (amount > agentLevel.getAmount()) {
-                    kind = EOutOrderKind.Pick_Up.getCode();
+                if (!EOutOrderKind.Pick_Up.getCode().equals(kind)) {
+                    if (amount > agentLevel.getAmount()) {
+                        kind = EOutOrderKind.Pick_Up.getCode();
+                    }
                 }
                 amount = amount + psData.getSingleNumber() * data.getPrice();
 
@@ -460,6 +464,7 @@ public class WareAOImpl implements IWareAO {
                     if (inOrderBO.getInOrderByUser(agent.getUserId(),
                         log.getApproveDatetime())
                             && whAmount < agentLevel.getAmount()) {
+                        redAmount = agentLevel.getAmount();
                         result = ECheckStatus.RED_LOW.getCode();
                     }
                 }
@@ -545,7 +550,7 @@ public class WareAOImpl implements IWareAO {
         } else {
             data.setQuantity(StringValidater.toInteger(quantity));
             data.setAmount(
-                StringValidater.toInteger(quantity) + data.getPrice());
+                StringValidater.toInteger(quantity) * data.getPrice());
             wareBO.refreshWare(data);
         }
     }
