@@ -447,7 +447,6 @@ CREATE TABLE `tbh_exchange_order` (
 /*Table structure for table `tbh_in_order` */
 
 DROP TABLE IF EXISTS `tbh_in_order`;
-
 CREATE TABLE `tbh_in_order` (
   `code` varchar(32) NOT NULL,
   `product_code` varchar(32) DEFAULT NULL COMMENT '是否云仓发货',

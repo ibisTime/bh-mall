@@ -174,7 +174,7 @@ CREATE TABLE `tbh_agent_level` (
 
 INSERT INTO tbh_agent_level (CODE,`level`,`name`,`red_amount`,`amount`,`min_charge_amount`,`min_surplus`,`is_send`,`is_ware`,`re_number`,
 `is_reset`,`is_company_approve`,`is_intent`,`is_jsAward`,`is_real_name`,`is_company_impower`,`min_charge`,`updater`,`update_datetime`,`remark`
-)SELECT *FROM 
+)SELECT * FROM 
 (SELECT 
  CONCAT('AL20180000000000000',a.level),a.level,a.name,a.red_amount,a.amount,a.min_charge_amount,a.min_surplus,a.is_send,a.is_wareHouse,u.re_number,
  u.is_reset,u.is_company_approve,i.is_intent,i.is_intro,i.is_real_name,i.is_company_impower,i.min_charge,i.updater,i.update_datetime,i.remark
@@ -267,7 +267,6 @@ INSERT INTO `tbh_agent` (`user_id`, `from_user_id`, `mobile`, `wx_id`, `photo`, 
 SELECT `user_id`, `user_referee`, `mobile`, `wx_id`, `photo`, `nickname`, `trade_pwd`, `trade_pwd_strength`, `level`, `user_referee`, `introducer`, `high_user_id`, `team_name`, `id_kind`, `id_no`, `id_hand`, `real_name`, `status`, `manager`, `union_id`, `h5_open_id`, `app_open_id`, `address`, `province`, `city`, `area`, `create_datetime`, `updater`, `update_datetime`, `approver`, `approve_datetime`, `impower_datetime`, `last_agent_log`, `remark`
 FROM tbh_user WHERE kind = 'B'; 
 
-
 UPDATE tbh_agent a JOIN tbh_user u ON a.updater = u.login_name
 SET a.updater = u.user_id;
 
@@ -276,6 +275,49 @@ SET a.approver = u.user_id,a.approve_name = u.real_name;
 
 
 
+/*********** tbh_in_order **************/
+DROP TABLE IF EXISTS `tbh_in_order`;
+CREATE TABLE `tbh_in_order` (
+  `code` VARCHAR(32) NOT NULL,
+  `product_code` VARCHAR(32) DEFAULT NULL COMMENT '是否云仓发货',
+  `product_name` VARCHAR(255) DEFAULT NULL COMMENT '分类',
+  `specs_code` VARCHAR(32) DEFAULT NULL COMMENT '产品编号',
+  `specs_name` VARCHAR(255) DEFAULT NULL COMMENT '产品名称',
+  `pic` VARBINARY(255) DEFAULT NULL COMMENT '规格编号',
+  `quantity` INT(11) DEFAULT NULL COMMENT '规格名称',
+  `price` BIGINT(20) DEFAULT NULL COMMENT '图片',
+  `to_user_id` VARCHAR(32) DEFAULT NULL COMMENT '订单归属人',
+  `to_user_name` VARCHAR(32) DEFAULT NULL,
+  `level` INT(11) DEFAULT NULL,
+  `amount` BIGINT(20) DEFAULT NULL COMMENT '总价',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `apply_user` VARCHAR(32) DEFAULT NULL COMMENT '下单人',
+  `real_name` VARCHAR(32) DEFAULT NULL,
+  `team_name` VARCHAR(32) DEFAULT NULL,
+  `team_leader` VARCHAR(32) DEFAULT NULL,
+  `pay_type` VARCHAR(64) DEFAULT NULL COMMENT '支付渠道',
+  `pay_group` VARCHAR(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_amount` BIGINT(20) DEFAULT NULL COMMENT '支付金额',
+  `pay_datetime` DATETIME DEFAULT NULL COMMENT '支付时间',
+  `pay_code` VARCHAR(32) DEFAULT NULL COMMENT '支付编号',
+  `apply_datetime` DATETIME DEFAULT NULL COMMENT '下单时间',
+  `apply_note` TEXT COMMENT '下单备注',
+  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `remark` TEXT COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+INSERT INTO tbh_in_order(`code`, `product_code`, `product_name`, `specs_code`, `specs_name`, `pic`, 
+`quantity`, `price`, `to_user_id`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
+`real_name`, `team_name`, `team_leader`, `pay_type`, `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
+`apply_note`, `approver`, `approve_datetime`, `remark` 
+)SELECT 
+`code`, `product_code`, `product_name`, `product_specs_code`, `product_specs_name`, `pic`, 
+`quantity`, `price`, `to_user`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
+`real_name`, `team_name`, `team_leader`, `pay_type`, `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
+`apply_note`, `approver`, `approve_datetime`, `remark` 
+ FROM tbh_order WHERE kind = '2'
 
 
 
