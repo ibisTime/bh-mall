@@ -5,8 +5,8 @@ import java.util.Map;
 
 public enum ESqFormStatus {
 
-    IMPOWERO_INFO("4", "待填写授权资料"), ADD_INFO("5", "补充授权资料"), TO_APPROVE("6",
-            "待上级审核授权"), COMPANY_IMPOWER("7", "授权待公司审核"), IMPOWERED("8", "已授权"),
+    TO_APPROVE("6", "待上级审核授权"), COMPANY_IMPOWER("7", "授权待公司审核"), IMPOWERED("8",
+            "已授权"),
 
     CANCELED("9", "授权未通过"), TO_CANCEL("10", "申请退出待上级审核"), CANCEL_COMPANY("11",
             "申请退出待公司审核");
