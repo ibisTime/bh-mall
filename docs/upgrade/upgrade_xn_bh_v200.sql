@@ -379,7 +379,6 @@ INSERT INTO `tbh_out_order` (`code`, `level`, `is_ware_send`, `kind`, `product_c
  `team_leader`, `apply_datetime`, `apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
  `address`, `deliver`, `delive_datetime`, `logistics_code`, `logistics_company`, 
  `updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`) 
- 
 SELECT 
 `code`, `level`, `is_company_send`, `kind`, `product_code`, 
 `product_name`, `product_specs_code`, `product_specs_name`, `bar_code`, `pic`, 
@@ -390,14 +389,14 @@ SELECT
 `apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
 `address`, `deliver`, `delive_datetime`, logistics_code, `logistics_company`, 
 `updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`
- FROM tbh_order WHERE kind != '2'
+ FROM tbh_order WHERE kind != '2';
 
  #箱规格的为公司发货
  UPDATE tbh_out_order SET is_ware_send = '1' WHERE specs_code = 'PS201806301939383841880'; 
  #盒规格的为上级代理发货
  UPDATE tbh_out_order SET is_ware_send = '0' WHERE specs_code = 'PS201806291944580145174'; 
 
- 
+DROP TABLE tbh_order;
  /*********** tbh_agent_log **************/
  DROP TABLE IF EXISTS `tbh_agent_log`;
 CREATE TABLE `tbh_agent_log` (
@@ -508,8 +507,303 @@ SELECT l.`code`,
               u.`update_datetime`,
              u.`impower_datetime`,
              l.`remark`
- FROM tbh_agency_log l JOIN tbh_user u ON l.apply_user = u.user_id
-
- UPDATE tbh_agent_log l, tbh_user u  SET l.approve_name = u.real_name WHERE u.user_id = l.approver AND u.approver LIKE 'U%' 
+ FROM tbh_agency_log l JOIN tbh_user u ON l.apply_user = u.user_id;
  
+ UPDATE tbh_agent_log l, tbh_user u  SET l.approve_name = u.real_name WHERE u.user_id = l.approver AND u.approver LIKE 'U%'; 
+ 
+ 
+ 
+ 
+ /************************tbh_agent****************/
+ DROP TABLE IF EXISTS `tbh_agent`;
+
+CREATE TABLE `tbh_agent` (
+  `user_id` VARCHAR(32) NOT NULL COMMENT '用户编号',
+  `from_user_id` VARCHAR(32) DEFAULT NULL COMMENT '分享二位码代理',
+  `mobile` VARCHAR(16) DEFAULT NULL COMMENT '手机号',
+  `wx_id` VARCHAR(32) DEFAULT NULL COMMENT '微信号',
+  `photo` VARCHAR(255) DEFAULT NULL COMMENT '头像',
+  `nickname` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
+  `trade_pwd` VARCHAR(32) DEFAULT NULL COMMENT '交易密码',
+  `trade_pwd_strength` VARCHAR(1) DEFAULT NULL,
+  `level` INT(32) DEFAULT NULL COMMENT '用户等级',
+  `referrer` VARCHAR(32) DEFAULT NULL COMMENT '推荐人',
+  `introducer` VARCHAR(32) DEFAULT NULL COMMENT '介绍人',
+  `high_user_id` VARCHAR(32) DEFAULT NULL COMMENT '上级用户',
+  `team_name` VARCHAR(32) DEFAULT NULL COMMENT '团队名称',
+  `id_kind` CHAR(1) DEFAULT NULL COMMENT '证件类型',
+  `id_no` VARCHAR(32) DEFAULT NULL COMMENT '证件号码',
+  `id_hand` TEXT COMMENT '手持身份证',
+  `real_name` VARCHAR(32) DEFAULT NULL COMMENT '真实姓名',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `manager` VARCHAR(32) DEFAULT NULL COMMENT '关联管理员',
+  `union_id` VARCHAR(255) DEFAULT NULL COMMENT '联合编号',
+  `h5_open_id` VARCHAR(255) DEFAULT NULL COMMENT '公众号开放编号',
+  `app_open_id` VARCHAR(255) DEFAULT NULL COMMENT 'app开放编号',
+  `address` VARCHAR(255) DEFAULT NULL COMMENT '详细地址',
+  `province` VARCHAR(255) DEFAULT NULL COMMENT '省',
+  `city` VARCHAR(255) DEFAULT NULL COMMENT '市',
+  `area` VARCHAR(255) DEFAULT NULL COMMENT '区',
+  `create_datetime` DATETIME DEFAULT NULL COMMENT '注册时间',
+  `updater` VARCHAR(32) DEFAULT NULL COMMENT '修改人',
+  `update_datetime` DATETIME DEFAULT NULL COMMENT '修改时间',
+  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
+  `approve_name` VARCHAR(32) DEFAULT NULL,
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `impower_datetime` DATETIME DEFAULT NULL COMMENT '最后审核时间',
+  `last_agent_log` VARCHAR(32) DEFAULT NULL COMMENT '最后一条代理轨迹记录',
+  `remark` VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`user_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+
+INSERT INTO `tbh_agent`
+            (`user_id`,
+             `mobile`,
+             `wx_id`,
+             `photo`,
+             `nickname`,
+             `trade_pwd`,
+             `trade_pwd_strength`,
+             `level`,
+             `referrer`,
+             `introducer`,
+             `high_user_id`,
+             `team_name`,
+             `id_kind`,
+             `id_no`,
+             `id_hand`,
+             `real_name`,
+             `status`,
+             `manager`,
+             `union_id`,
+             `h5_open_id`,
+             `app_open_id`,
+             `address`,
+             `province`,
+             `city`,
+             `area`,
+             `create_datetime`,
+             `updater`,
+             `update_datetime`,
+             `approver`,
+
+             `approve_datetime`,
+             `impower_datetime`,
+             `last_agent_log`,
+             `remark`)
+SELECT 
+             `user_id`,
+             `mobile`,
+             `wx_id`,
+             `photo`,
+             `nickname`,
+             `trade_pwd`,
+             `trade_pwd_strength`,
+             `level`,
+             `user_referee`,
+             `introducer`,
+             `high_user_id`,
+             `team_name`,
+             `id_kind`,
+             `id_no`,
+             `id_hand`,
+             `real_name`,
+             CASE `status` 
+             WHEN 16  THEN 0
+        
+             WHEN 4  THEN 1
+             WHEN 5  THEN 3
+             WHEN 7  THEN 8
+             
+             WHEN 8  THEN 10
+             WHEN 10  THEN 9
+             WHEN 11  THEN 7
+             WHEN 15 THEN 11
+             
+             WHEN 13 THEN 14
+             WHEN 14 THEN 13
+             WHEN 18 THEN 5
+             WHEN 19 THEN 4 
+               ELSE STATUS END  ,
+             `manager`,
+             `union_id`,
+             `h5_open_id`,
+             `app_open_id`,
+             `address`,
+             `province`,
+             `city`,
+             `area`,
+             `create_datetime`,
+             `updater`,
+             `update_datetime`,
+             `approver`,
+    
+             `approve_datetime`,
+             `impower_datetime`,
+             `last_agent_log`,
+             `remark`
+  FROM tbh_user where kind = 'B';
+  
+  UPDATE tbh_agent l, tbh_user u  SET l.approve_name = u.real_name WHERE u.user_id = l.approver AND u.approver LIKE 'U%'; 
+ 
+  # 更新二维码来源
+  UPDATE tbh_agent SET from_user_id = referrer WHERE referrer IS NOT NULL;
+  
+  
+  
+  /******************* th_yx_from **************/
+DROP TABLE IF EXISTS `tbh_yx_form`;
+
+CREATE TABLE `tbh_yx_form` (
+  `user_id` VARCHAR(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '申请人',
+  `wx_id` VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '微信号',
+  `to_user_id` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '意向归属人',
+  `apply_level` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '申请等级',
+  `real_name` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '姓名',
+  `mobile` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '手机号',
+  `address` VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '地址',
+  `area` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '区',
+  `city` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '市',
+  `province` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '省',
+  `from_info` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '信息来源',
+  `status` VARCHAR(4) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '状态',
+  `apply_datetime` DATETIME DEFAULT NULL COMMENT '申请时间',
+  `approver` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '审核人',
+  `approve_name` VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '审核人名称',
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `remark` TEXT CHARACTER SET utf8mb4 COMMENT '备注',
+  PRIMARY KEY (`user_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `tbh_yx_form`
+            (`user_id`,
+             `wx_id`,
+             `to_user_id`,
+             `apply_level`,
+             `real_name`,
+             `mobile`,
+             `address`,
+             `area`,
+             `city`,
+             `province`,
+             `status`,
+             `apply_datetime`,
+             `approver`,
+             `approve_datetime`,
+             `remark`)
+SELECT 
+	     u.`user_id`,
+             u.`wx_id`,
+             l.`to_user_id`,
+             l.`apply_level`,
+             u.`real_name`,
+             u.`mobile`,
+             u.`address`,
+             u.`area`,
+             u.`city`,
+             u.`province`,
+             u.`status`,
+             l.`apply_datetime`,
+             l.`approver`,
+             l.`approve_datetime`,
+             l.`remark`
+FROM tbh_agent u LEFT JOIN tbh_agent_log l ON l.apply_user = u.user_id WHERE u.status IN (0,1,3) GROUP BY u.user_id;
+
+UPDATE tbh_yx_form y, tbh_user u  SET y.approve_name = u.real_name WHERE u.user_id = y.approver AND u.approver LIKE 'U%'; 
+ 
+
+UPDATE tbh_yx_form SET from_info = 0 WHERE from_info IS NULL;
+
+
+
+/******************* tbh_sq_from *****************/
+DROP TABLE IF EXISTS `tbh_sq_form`;
+
+CREATE TABLE `tbh_sq_form` (
+  `user_id` VARCHAR(32) DEFAULT NULL COMMENT '申请人',
+  `wx_id` VARCHAR(255) DEFAULT NULL COMMENT '微信号',
+  `apply_level` VARCHAR(32) DEFAULT NULL COMMENT '申请等级',
+  `team_name` VARCHAR(255) DEFAULT NULL COMMENT '团队名称',
+  `real_name` VARCHAR(64) DEFAULT NULL COMMENT '真实姓名',
+  `to_user_id` VARCHAR(32) DEFAULT NULL COMMENT '授权归属人',
+  `address` VARCHAR(255) DEFAULT NULL COMMENT '地址',
+  `area` VARCHAR(64) DEFAULT NULL COMMENT '区',
+  `mobile` VARCHAR(32) DEFAULT NULL COMMENT '手机号',
+  `city` VARCHAR(64) DEFAULT NULL COMMENT '市',
+  `province` VARCHAR(64) DEFAULT NULL COMMENT '省',
+  `id_hand` TEXT COMMENT '手持身份证',
+  `id_kind` CHAR(1) DEFAULT NULL COMMENT '证件类型',
+  `id_no` VARCHAR(32) DEFAULT NULL COMMENT '身份证号',
+  `introducer` VARCHAR(32) DEFAULT NULL COMMENT '介绍人',
+  `referrer` VARCHAR(32) DEFAULT NULL COMMENT '推荐人',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `apply_datetime` DATETIME DEFAULT NULL COMMENT '申请时间',
+  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
+  `approve_name` VARCHAR(255) DEFAULT NULL COMMENT '审核人姓名',
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `impower_datetime` DATETIME DEFAULT NULL COMMENT '授权时间',
+  `remark` TEXT COMMENT '备注'
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+
+INSERT INTO `tbh_sq_form`
+            (`user_id`,
+             `wx_id`,
+             `apply_level`,
+             `team_name`,
+             `real_name`,
+             `to_user_id`,
+             `address`,
+             `area`,
+             `mobile`,
+             `city`,
+             `province`,
+             `id_hand`,
+             `id_kind`,
+             `id_no`,
+             `introducer`,
+             `referrer`,
+             `status`,
+             `apply_datetime`,
+             `approver`,
+             `approve_name`,
+             `approve_datetime`,
+             `impower_datetime`,
+             `remark`)
+SELECT 		
+	     u.`user_id`,
+             u.`wx_id`,
+             l.`apply_level`,
+             u.`team_name`,
+             u.`real_name`,
+             l.`to_user_id`,
+             u.`address`,
+             u.`area`,
+             u.`mobile`,
+             u.`city`,
+             u.`province`,
+             u.`id_hand`,
+             u.`id_kind`,
+             u.`id_no`,
+             u.`introducer`,
+             u.`referrer`,
+             u.`status`,
+             l.`apply_datetime`,
+             u.`approver`,
+             u.`approve_name`,
+             u.`approve_datetime`,
+             u.`impower_datetime`,
+             u.`remark`
+   FROM tbh_agent u LEFT JOIN  tbh_agent_log l
+   ON u.user_id = l.apply_user  WHERE u.status = l.status AND u.status IN (6,7,8,9,10,11);
+   
+
+UPDATE tbh_sq_form s, tbh_user u  SET s.approve_name = u.real_name WHERE u.user_id = s.approver AND u.approver LIKE 'U%'; 
+ 
+
+/******************* tbh_sj_from *****************/
+
+
+  
  
