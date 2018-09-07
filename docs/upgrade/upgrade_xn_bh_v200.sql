@@ -1,0 +1,281 @@
+/****************tbh_account  *****************/
+UPDATE tbh_account SET TYPE = 'P' WHERE account_number = 'CD-CBH000020';
+
+INSERT INTO `tbh_account` (`account_number`, `user_id`, `real_name`, `type`, `status`, `currency`, `amount`, `frozen_amount`, `create_datetime`, `last_order`)
+VALUES('CD-CBH000022','SYS_USER_BH','公司','P','0','TG_CNY','0','0',NOW(),NULL);
+
+INSERT INTO `tbh_account` (`account_number`, `user_id`, `real_name`, `type`, `status`);
+ SELECT CONCAT('X',account_number) ,user_id ,real_name,TYPE,STATUS
+FROM `tbh_account` WHERE TYPE = 'B';
+
+UPDATE tbh_account SET currency = 'C_CNY' WHERE currency IS NULL;
+
+
+/**************** tbh_agent_log  *****************/
+ALTER TABLE tbh_agency_log RENAME TO tbh_agent_log;
+
+ALTER TABLE tbh_agent_log  CHANGE  user_referee  referrer VARCHAR(32) DEFAULT NULL;
+
+ALTER TABLE tbh_agent_log  
+ADD real_name VARCHAR(255) DEFAULT NULL,
+ADD wx_id VARCHAR(255) DEFAULT NULL,
+ADD mobile VARCHAR(16) DEFAULT NULL,
+ADD introducer  VARCHAR(32) DEFAULT NULL,
+ADD pay_amount BIGINT (20) DEFAULT '0',
+ADD province VARCHAR(255) DEFAULT NULL,
+ADD city VARCHAR(255) DEFAULT NULL,
+ADD AREA VARCHAR(255) DEFAULT NULL,
+ADD address  VARCHAR(255) DEFAULT NULL,
+ADD approve_name VARCHAR(255) DEFAULT NULL,
+ADD updater  VARCHAR(32) DEFAULT NULL,
+ADD update_datetime DATETIME,
+ADD impower_datetime DATETIME;
+
+UPDATE tbh_agent_log  LOG INNER JOIN  tbh_user u ON u.user_id = log.apply_user 
+SET 
+log.real_name = u.real_name, 
+log.wx_id = u.wx_id, 
+log.mobile = u.mobile,
+log.introducer = u.introducer,
+log.pay_amount = u.pay_amount,
+log.province = u.province,
+log.city = u.city,
+log.AREA = u.AREA,
+log.address = u.address,
+log.impower_datetime = u.impower_datetime,
+log.updater = u.updater,
+log.update_datetime = u.update_datetime;
+
+UPDATE tbh_agent_log  LOG INNER JOIN  tbh_user u ON u.user_id = log.approver
+SET 
+log.approve_name = u.real_name;
+
+
+/*********** tbh_pro_code **************/
+ALTER TABLE tbh_bar_code RENAME tbh_pro_code;
+
+
+/*********** tbh_exchange_order **************/
+ALTER TABLE tbh_change_product RENAME tbh_exchange_order;
+
+ALTER TABLE tbh_exchange_order
+CHANGE  product_specs_code specs_code VARCHAR(32) DEFAULT NULL,
+CHANGE  product_specs_name specs_name VARCHAR(32) DEFAULT NULL;
+
+
+
+/*********** tbh_charge **************/
+ALTER TABLE tbh_charge
+ADD high_user_id VARCHAR(32) DEFAULT NULL,
+ADD team_name VARCHAR(255) DEFAULT NULL,
+ADD level INT(11) DEFAULT NULL;
+
+#待支付与待审核状态：保留当前信息
+UPDATE tbh_charge c JOIN tbh_user u ON  c.`apply_user` = u.`user_id`
+SET c.`high_user_id` = u.`high_user_id`, c.`team_name` = u.`team_name`, c.`level` = u.`level` WHERE c.`status`IN (1,4) ;
+
+#审核通过与审核不通过：保留操作
+UPDATE tbh_charge c JOIN tbh_user u ON  c.`apply_user` = u.`user_id`
+SET c.`high_user_id` = c.pay_user,  c.`level` = u.`level`,c.`team_name`=u.team_name WHERE c.`status` IN (5,6) ;
+/*********** tbh_inner_order **************/
+ALTER TABLE tbh_inner_order
+ADD specs_code VARCHAR(32) DEFAULT NULL,
+ADD specs_name VARCHAR(255) DEFAULT NULL,
+ADD approver VARCHAR(255) DEFAULT NULL,
+ADD approve_datetime DATETIME,
+ADD approve_note TEXT;
+
+
+/*********** tbh_intro **************/
+ALTER TABLE tbh_intro RENAME tbh_js_award;
+
+
+/*********** tbh_specs_log **************/
+ALTER TABLE tbh_product_log RENAME tbh_specs_log;
+
+ALTER TABLE tbh_specs_log 
+ADD product_name VARCHAR(256) DEFAULT NULL,
+ADD specs_code VARCHAR(32) DEFAULT NULL,
+ADD specs_name VARCHAR(256) DEFAULT NULL,
+ADD stock_number INT(11) DEFAULT NULL;
+
+
+
+/*********** tbh_specs **************/
+ALTER TABLE tbh_product_specs RENAME tbh_specs;
+
+
+
+/*********** tbh_specs **************/
+ALTER TABLE tbh_product_specs_price RENAME tbh_agent_price;
+
+ALTER TABLE tbh_agent_price
+CHANGE product_specs_code specs_code VARCHAR(32) DEFAULT NULL,
+CHANGE min_quantity start_number INT(11) DEFAULT 0;
+
+/*********** tbh_agent_report **************/
+ALTER TABLE tbh_report RENAME tbh_agent_report;
+
+ALTER TABLE  tbh_agent_report CHANGE price_spread profit_award INT(11) DEFAULT 0;
+ 
+ALTER TABLE  tbh_agent_report ADD send_amount INT(11) DEFAULT 0;
+ 
+/*********** tbh_mini_code **************/
+ALTER TABLE  tbh_security_trace RENAME tbh_mini_code;
+ 
+
+/*********** tbh_mini_code **************/
+ALTER TABLE  tbh_ware_house RENAME tbh_ware;
+
+ALTER TABLE  tbh_ware
+CHANGE product_specs_code specs_code  VARCHAR(32) DEFAULT NULL,
+CHANGE product_specs_name specs_name VARCHAR(32) DEFAULT NULL;
+
+/*********** tbh_mini_code **************/
+ALTER TABLE    tbh_ware_house_log RENAME tbh_ware_log;
+
+ALTER TABLE    tbh_ware_log
+CHANGE	ware_house_code ware_code VARCHAR(32) DEFAULT NULL,
+CHANGE product_specs_code specs_code  VARCHAR(32) DEFAULT NULL,
+CHANGE product_specs_name specs_name VARCHAR(32) DEFAULT NULL;
+
+/*********** tbh_mini_code **************/
+ALTER TABLE   tbh_withdraw 
+ADD high_user_id VARCHAR(32) DEFAULT NULL,
+ADD is_company_pay VARCHAR(32) DEFAULT NULL;
+
+
+
+/*********** tbh_agent_level **************/
+DROP TABLE IF EXISTS `tbh_agent_level`;
+CREATE TABLE `tbh_agent_level` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `level` bigint(32) DEFAULT NULL COMMENT '等级',
+  `name` varchar(64) DEFAULT NULL COMMENT '等级名称',
+  `red_amount` bigint(32) DEFAULT NULL COMMENT '红线金额',
+  `amount` bigint(32) DEFAULT NULL COMMENT '授权单金额',
+  `min_charge_amount` bigint(32) DEFAULT NULL COMMENT '本等级每次最低充值金额',
+  `min_surplus` bigint(20) DEFAULT NULL COMMENT '本等级门槛最低余额',
+  `is_send` char(1) DEFAULT NULL COMMENT '本等级授权单是否可以自发',
+  `is_ware` char(1) DEFAULT NULL COMMENT '本等级是否启用云仓',
+  `is_company_approve` char(1) DEFAULT NULL COMMENT '本等级升级是否公司审核',
+  `re_number` int(11) DEFAULT NULL COMMENT '半门槛推荐人数',
+  `is_reset` char(1) DEFAULT NULL COMMENT '本等级升级是否余额清零',
+  `is_intent` char(1) DEFAULT NULL COMMENT '是否被意向（0否 1是）',
+  `is_jsAward` char(1) DEFAULT NULL COMMENT '是否可被介绍（0否 1是）',
+  `is_real_name` char(1) DEFAULT NULL COMMENT '是否实名（0否 1是）',
+  `is_company_impower` char(1) DEFAULT NULL COMMENT '是否需要公司审核（0否 1是）',
+  `min_charge` bigint(20) DEFAULT NULL COMMENT '门槛款',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(64) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO tbh_agent_level (CODE,`level`,`name`,`red_amount`,`amount`,`min_charge_amount`,`min_surplus`,`is_send`,`is_ware`,`re_number`,
+`is_reset`,`is_company_approve`,`is_intent`,`is_jsAward`,`is_real_name`,`is_company_impower`,`min_charge`,`updater`,`update_datetime`,`remark`
+)SELECT *FROM 
+(SELECT 
+ CONCAT('AL20180000000000000',a.level),a.level,a.name,a.red_amount,a.amount,a.min_charge_amount,a.min_surplus,a.is_send,a.is_wareHouse,u.re_number,
+ u.is_reset,u.is_company_approve,i.is_intent,i.is_intro,i.is_real_name,i.is_company_impower,i.min_charge,i.updater,i.update_datetime,i.remark
+FROM tbh_agent a JOIN tbh_agent_impower i ON a.level = i.level
+JOIN tbh_agent_upgrade u ON  U.level = i.level
+ORDER BY A.LEVEL
+) AS t;
+
+
+UPDATE tbh_agent_level a JOIN tbh_user u ON u.login_name = a.updater
+SET a.updater = u.user_id;
+
+
+DROP TABLE IF EXISTS `tbh_agent`;
+
+
+/*********** tsys_user **************/
+DROP TABLE IF EXISTS `tsys_user`;
+CREATE TABLE `tsys_user` (
+  `user_id` VARCHAR(32) NOT NULL COMMENT '用户ID',
+  `role_code` VARCHAR(32) DEFAULT NULL COMMENT '角色编号',
+  `real_name` VARCHAR(64) DEFAULT NULL COMMENT '真实姓名',
+  `photo` VARCHAR(255) DEFAULT NULL COMMENT '头像',
+  `mobile` VARCHAR(16) DEFAULT NULL COMMENT '手机号',
+  `login_name` VARCHAR(64) DEFAULT NULL COMMENT '登录名',
+  `login_pwd` VARBINARY(32) DEFAULT NULL COMMENT '登录密码',
+  `login_pwd_strength` CHAR(1) DEFAULT NULL COMMENT '登录密码强度',
+  `create_datetime` DATETIME DEFAULT NULL COMMENT '注册时间',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `updater` VARCHAR(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  `remark` TEXT COMMENT '备注',
+  `system_code` VARCHAR(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`user_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+INSERT INTO `tsys_user` (`user_id`, `role_code`, `real_name`, `photo`, `mobile`, 
+`login_name`, `login_pwd`, `login_pwd_strength`, `create_datetime`, 
+`status`, `updater`, `update_datetime`, `remark`, `system_code`) 
+SELECT `user_id`, `role_code`, `real_name`, `photo`, `mobile`, 
+`login_name`, `login_pwd`, `login_pwd_strength`, `create_datetime`, 
+`status`, `updater`, `update_datetime`, `remark`, `system_code`
+FROM tbh_user WHERE kind = 'P';
+
+UPDATE tsys_user s   JOIN tbh_user u ON s.updater = u.login_name
+SET s.updater = u.user_id;
+
+/*********** tsys_user **************/
+DROP TABLE IF EXISTS `tbh_agent`;
+CREATE TABLE `tbh_agent` (
+  `user_id` VARCHAR(32) NOT NULL COMMENT '用户编号',
+  `from_user_id` VARCHAR(32) DEFAULT NULL COMMENT '分享二位码代理',
+  `mobile` VARCHAR(16) DEFAULT NULL COMMENT '手机号',
+  `wx_id` VARCHAR(32) DEFAULT NULL COMMENT '微信号',
+  `photo` VARCHAR(255) DEFAULT NULL COMMENT '头像',
+  `nickname` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
+  `trade_pwd` VARCHAR(32) DEFAULT NULL COMMENT '交易密码',
+  `trade_pwd_strength` VARCHAR(1) DEFAULT NULL,
+  `level` INT(32) DEFAULT NULL COMMENT '用户等级',
+  `referrer` VARCHAR(32) DEFAULT NULL COMMENT '推荐人',
+  `introducer` VARCHAR(32) DEFAULT NULL COMMENT '介绍人',
+  `high_user_id` VARCHAR(32) DEFAULT NULL COMMENT '上级用户',
+  `team_name` VARCHAR(32) DEFAULT NULL COMMENT '团队名称',
+  `id_kind` CHAR(1) DEFAULT NULL COMMENT '证件类型',
+  `id_no` VARCHAR(32) DEFAULT NULL COMMENT '证件号码',
+  `id_hand` TEXT COMMENT '手持身份证',
+  `real_name` VARCHAR(32) DEFAULT NULL COMMENT '真实姓名',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `manager` VARCHAR(32) DEFAULT NULL COMMENT '关联管理员',
+  `union_id` VARCHAR(255) DEFAULT NULL COMMENT '联合编号',
+  `h5_open_id` VARCHAR(255) DEFAULT NULL COMMENT '公众号开放编号',
+  `app_open_id` VARCHAR(255) DEFAULT NULL COMMENT 'app开放编号',
+  `address` VARCHAR(255) DEFAULT NULL COMMENT '详细地址',
+  `province` VARCHAR(255) DEFAULT NULL COMMENT '省',
+  `city` VARCHAR(255) DEFAULT NULL COMMENT '市',
+  `area` VARCHAR(255) DEFAULT NULL COMMENT '区',
+  `create_datetime` DATETIME DEFAULT NULL COMMENT '注册时间',
+  `updater` VARCHAR(32) DEFAULT NULL COMMENT '修改人',
+  `update_datetime` DATETIME DEFAULT NULL COMMENT '修改时间',
+  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
+  `approve_name` VARCHAR(32) DEFAULT NULL,
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `impower_datetime` DATETIME DEFAULT NULL COMMENT '最后审核时间',
+  `last_agent_log` VARCHAR(32) DEFAULT NULL COMMENT '最后一条代理轨迹记录',
+  `remark` VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`user_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `tbh_agent` (`user_id`, `from_user_id`, `mobile`, `wx_id`, `photo`, `nickname`, `trade_pwd`, `trade_pwd_strength`, `level`, `referrer`, `introducer`, `high_user_id`, `team_name`, `id_kind`, `id_no`, `id_hand`, `real_name`, `status`, `manager`, `union_id`, `h5_open_id`, `app_open_id`, `address`, `province`, `city`, `area`, `create_datetime`, `updater`, `update_datetime`, `approver`,  `approve_datetime`, `impower_datetime`, `last_agent_log`, `remark`)
+SELECT `user_id`, `user_referee`, `mobile`, `wx_id`, `photo`, `nickname`, `trade_pwd`, `trade_pwd_strength`, `level`, `user_referee`, `introducer`, `high_user_id`, `team_name`, `id_kind`, `id_no`, `id_hand`, `real_name`, `status`, `manager`, `union_id`, `h5_open_id`, `app_open_id`, `address`, `province`, `city`, `area`, `create_datetime`, `updater`, `update_datetime`, `approver`, `approve_datetime`, `impower_datetime`, `last_agent_log`, `remark`
+FROM tbh_user WHERE kind = 'B'; 
+
+
+UPDATE tbh_agent a JOIN tbh_user u ON a.updater = u.login_name
+SET a.updater = u.user_id;
+
+UPDATE tbh_agent a JOIN tbh_user u ON a.approver = u.login_name
+SET a.approver = u.user_id,a.approve_name = u.real_name;
+
+
+
+
+
+
