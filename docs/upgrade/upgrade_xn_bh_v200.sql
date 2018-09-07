@@ -708,7 +708,13 @@ SELECT
              l.`approver`,
              l.`approve_datetime`,
              l.`remark`
-FROM tbh_agent u LEFT JOIN tbh_agent_log l ON l.apply_user = u.user_id WHERE u.status IN (0,1,3) GROUP BY u.user_id;
+FROM tbh_agent u  JOIN 
+(SELECT * FROM (SELECT l.* FROM  tbh_agent_log l  
+WHERE l.status IN (0,1,3)
+ORDER BY CODE DESC) l
+GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
+
+
 
 UPDATE tbh_yx_form y, tbh_user u  SET y.approve_name = u.real_name WHERE u.user_id = y.approver AND u.approver LIKE 'U%'; 
  
@@ -795,14 +801,82 @@ SELECT
              u.`approve_datetime`,
              u.`impower_datetime`,
              u.`remark`
-   FROM tbh_agent u LEFT JOIN  tbh_agent_log l
-   ON u.user_id = l.apply_user  WHERE u.status = l.status AND u.status IN (6,7,8,9,10,11);
-   
-
+   FROM tbh_agent u JOIN 
+(SELECT * FROM (SELECT l.* FROM  tbh_agent_log l  
+WHERE l.status IN (6,7,8,9,10,11)
+ORDER BY CODE DESC) l
+GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
+ 
 UPDATE tbh_sq_form s, tbh_user u  SET s.approve_name = u.real_name WHERE u.user_id = s.approver AND u.approver LIKE 'U%'; 
  
 
 /******************* tbh_sj_from *****************/
+
+DROP TABLE IF EXISTS `tbh_sj_form`;
+CREATE TABLE `tbh_sj_form` (
+  `user_id` VARCHAR(32) CHARACTER SET utf8 NOT NULL COMMENT '申请人',
+  `real_name` VARCHAR(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '真实姓名',
+  `id_kind` CHAR(1) CHARACTER SET utf8 DEFAULT NULL COMMENT '证件类型',
+  `id_no` VARCHAR(18) CHARACTER SET utf8 DEFAULT NULL COMMENT '证件号',
+  `id_hand` VARCHAR(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '手持身份证',
+  `team_name` VARCHAR(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '团队名称',
+  `to_user_id` VARCHAR(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '归属人',
+  `level` INT(11) DEFAULT NULL COMMENT '当前等级',
+  `apply_level` VARCHAR(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '申请等级',
+  `re_number` INT(11) DEFAULT '0' COMMENT '半门槛推荐人数',
+  `pay_amount` BIGINT(20) DEFAULT '0' COMMENT '打款金额',
+  `pay_pdf` VARCHAR(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '打款截图',
+  `approver` VARCHAR(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '审核人',
+  `approve_name` VARCHAR(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '审核人名称',
+  `apply_datetime` DATETIME DEFAULT NULL COMMENT '申请时间',
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `status` VARCHAR(4) CHARACTER SET utf8 DEFAULT NULL COMMENT '状态',
+  `remark` TEXT CHARACTER SET utf8 COMMENT '备注',
+  PRIMARY KEY (`user_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+
+INSERT INTO tbh_sj_form
+            (`user_id`,
+             `real_name`,
+             `id_kind`,
+             `id_no`,
+             `id_hand`,
+             `team_name`,
+             `to_user_id`,
+             `level`,
+             `apply_level`,
+             `pay_amount`,
+             `pay_pdf`,
+             `approver`,
+
+             `apply_datetime`,
+             `approve_datetime`,
+             `status`,
+             `remark`)
+SELECT 
+	     u.`user_id`,
+             u.`real_name`,
+             u.`id_kind`,
+             u.`id_no`,
+             u.`id_hand`,
+             l.`team_name`,
+             l.`to_user_id`,
+             l.`level`,
+             l.`apply_level`,
+        
+	     l.`pay_amount`,
+             l.`pay_pdf`,
+             l.`approver`,
+             l.`apply_datetime`,
+             l.`approve_datetime`,
+             l.`status`,
+             l.`remark`
+FROM tbh_agent u  JOIN 
+(SELECT * FROM (SELECT l.* FROM  tbh_agent_log l  
+WHERE l.status IN (12,13,14)
+ORDER BY CODE DESC) l
+GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
 
 
   
