@@ -906,9 +906,6 @@ INSERT INTO tbh_in_order(`code`, `product_code`, `product_name`, `specs_code`, `
 
 UPDATE tbh_in_order SET pay_group = CODE;
 
- 
-DROP TABLE tbh_order;
-
 
 /********** tsys_config *************/
 

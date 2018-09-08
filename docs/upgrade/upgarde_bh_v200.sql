@@ -59,30 +59,94 @@ DROP TABLE IF EXISTS `tbh_agent`;
 DROP TABLE IF EXISTS `tbh_agent_impower`;
 DROP TABLE IF EXISTS `tbh_agent_upgrade`;
 
-/*********** tbh_tj_award、tbh_ch_award **************/
+/*********** tbh_tj_award **************/
 DROP TABLE IF EXISTS `tbh_tj_award`;
 CREATE TABLE `tbh_tj_award` (
   `code` VARCHAR(32) NOT NULL,
   `product_code` VARCHAR(32) DEFAULT NULL COMMENT '产品编号',
   `level` VARCHAR(64) DEFAULT NULL COMMENT '等级',
-  `value1` DECIMAL(10,3) DEFAULT '0.000' COMMENT '直接推荐',
+  `value1` DECIMAL(10,3) DEFAULT '0.000' COMMENT '直接推荐/出货奖励',
   `value2` DECIMAL(10,3) DEFAULT '0.000' COMMENT '间接推荐奖励',
   `value3` DECIMAL(10,3) DEFAULT '0.000' COMMENT '次推荐奖励',
   PRIMARY KEY (`code`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `tbh_ch_award`;
-CREATE TABLE `tbh_ch_award` (
-  `code` VARCHAR(32) NOT NULL COMMENT '编号',
-  `level` VARCHAR(32) DEFAULT NULL COMMENT '等级',
-  `start_amount` BIGINT(20) DEFAULT '0' COMMENT '起始金额',
-  `end_amount` BIGINT(20) DEFAULT '0' COMMENT '结束金额',
-  `percent` DECIMAL(10,2) DEFAULT '0.00' COMMENT '奖励百分比',
-  `updater` VARCHAR(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` DATETIME DEFAULT NULL COMMENT '更新时间',
-  `remark` TEXT COMMENT '备注',
-  PRIMARY KEY (`code`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
+INSERT INTO `tbh_tj_award`
+            (`code`,
+             `product_code`,
+             `level`,
+             `value1`,
+             `value2`,
+             `value3`)
+SELECT 	
+	    `code`,
+             `product_code`,
+             `level`,
+             `value1`,
+             `value2`,
+             `value3`
+  FROM tbh_award WHERE TYPE = '0';
+  
+  DROP TABLE tbh_award;
 
+ /*********** tbh_ch_award **************/
 
+ALTER TABLE tbh_award_interval RENAME tbh_ch_award;
+
+UPDATE tbh_ch_award a JOIN tbh_user u ON u.login_name = a.updater
+SET a.updater = u.user_id;
+
+/*********** tbh_js_award **************/
+ALTER TABLE tbh_intro RENAME tbh_js_award;
+UPDATE tbh_js_award a JOIN tbh_user u ON u.login_name = a.updater
+SET a.updater = u.user_id;
+
+/*********** tbh_bar_code **************/
+ALTER TABLE tbh_bar_code RENAME tbh_pro_code;
+
+/*********** tbh_security_trace **************/
+ALTER TABLE  tbh_security_trace RENAME tbh_mini_code;
+ 
+/*********** tbh_change_product **************/
+ALTER TABLE tbh_change_product RENAME tbh_exchange_order;
+
+ALTER TABLE tbh_exchange_order
+CHANGE  product_specs_code specs_code VARCHAR(32) DEFAULT NULL,
+CHANGE  product_specs_name specs_name VARCHAR(255) DEFAULT NULL;
+
+/*********** tbh_charge **************/
+ALTER TABLE tbh_charge
+ADD high_user_id VARCHAR(32) DEFAULT NULL,
+ADD team_name VARCHAR(255) DEFAULT NULL,
+ADD `level` INT(11) DEFAULT NULL;
+
+UPDATE tbh_charge c JOIN tbh_user u ON  c.`apply_user` = u.`user_id`
+SET c.`high_user_id` = u.`high_user_id`, c.`team_name` = u.`team_name`, c.`level` = u.`level` WHERE c.`status`IN (1,4) ;
+
+UPDATE tbh_charge c JOIN tbh_user u ON  c.`apply_user` = u.`user_id`
+SET c.`high_user_id` = c.pay_user,  c.`level` = u.`level`,c.`team_name`=u.team_name WHERE c.`status` IN (5,6) ;
+
+/*********** tbh_charge **************/
+DROP TABLE tbh_company_channel;
+
+/*********** tbh_inner_order **************/
+ALTER TABLE tbh_inner_order
+ADD specs_code VARCHAR(32) DEFAULT NULL,
+ADD specs_name VARCHAR(255) DEFAULT NULL,
+ADD approver VARCHAR(255) DEFAULT NULL,
+ADD approve_datetime DATETIME,
+ADD approve_note TEXT;
+
+/*********** tbh_jour **************/
+UPDATE tbh_jour j JOIN tbh_order o ON j.`ref_no` = o.`code` SET j.biz_type  = (
+CASE o.kind WHEN 2 THEN 'AJ_TJJL_IN'
+ ELSE 'AJ_TJJL_OUT' END
+  )WHERE j.biz_type = 'AJ_TJJL';
+
+UPDATE tbh_jour j JOIN tbh_order o ON j.`ref_no` = o.`code` SET j.biz_type  = (
+CASE o.kind WHEN 2 THEN 'AJ_CHJL_IN'
+ ELSE 'AJ_CHJL_OUT' END
+  )WHERE j.biz_type = 'AJ_CHJL';
+
+UPDATE tbh_order SET pay_group	= CODE;
