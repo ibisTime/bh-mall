@@ -24,6 +24,9 @@ public class Ware extends ABaseDO {
     // 用户编号
     private String userId;
 
+    // 真实姓名
+    private String realName;
+
     // 币种
     private String currency;
 
@@ -47,8 +50,6 @@ public class Ware extends ABaseDO {
 
     // 总价值
     private Long amount;
-
-    private String realName;
 
     // 状态
     private String status;

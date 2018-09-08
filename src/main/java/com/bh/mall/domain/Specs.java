@@ -50,10 +50,9 @@ public class Specs extends ABaseDO {
     // 是否允许普通单下单
     private String isNormalOrder;
 
+    // *************db**************
     // 规格价格
     private List<AgentPrice> priceList;
-
-    // *************db**************
 
     // 规格价格
     private AgentPrice price;

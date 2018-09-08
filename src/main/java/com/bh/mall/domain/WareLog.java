@@ -47,17 +47,17 @@ public class WareLog extends ABaseDO {
     // 变动后数量
     private Integer afterNumber;
 
-    // 置换数量
-    private Integer changeNumber;
-
-    // 置换单价
-    private Long changePrice;
-
     // 单价
     private Long price;
 
     // 总价
     private Long amount;
+
+    // 置换数量
+    private Integer changeNumber;
+
+    // 置换单价
+    private Long changePrice;
 
     // 状态
     private String status;
