@@ -908,4 +908,70 @@ UPDATE tbh_in_order SET pay_group = CODE;
 
  
 DROP TABLE tbh_order;
+
+
+/********** tsys_config *************/
+
+DROP TABLE IF EXISTS `tsys_config`;
+
+CREATE TABLE `tsys_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `type` varchar(32) DEFAULT NULL COMMENT '类型',
+  `ckey` varchar(255) DEFAULT NULL COMMENT 'key',
+  `cvalue` text COMMENT 'value',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `tsys_dict` */
+
+DROP TABLE IF EXISTS `tsys_dict`;
+
+CREATE TABLE `tsys_dict` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` char(9) DEFAULT NULL,
+  `parent_key` varchar(288) DEFAULT NULL,
+  `dkey` varchar(288) DEFAULT NULL,
+  `dvalue` varchar(2295) DEFAULT NULL,
+  `updater` varchar(288) DEFAULT NULL,
+  `update_datetime` datetime DEFAULT NULL,
+  `remark` varchar(2295) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `tsys_menu` */
+
+DROP TABLE IF EXISTS `tsys_menu`;
+
+CREATE TABLE `tsys_menu` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `parent_code` varchar(32) DEFAULT NULL COMMENT '父亲节点',
+  `name` varchar(32) DEFAULT NULL COMMENT '名称',
+  `type` varchar(2) DEFAULT NULL COMMENT '类型',
+  `url` varchar(64) DEFAULT NULL COMMENT '请求url',
+  `order_no` int(11) DEFAULT NULL COMMENT '序号',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `tsys_menu_role` */
+
+DROP TABLE IF EXISTS `tsys_menu_role`;
+
+CREATE TABLE `tsys_menu_role` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT,
+  `role_code` varchar(32) DEFAULT NULL,
+  `menu_code` varchar(32) DEFAULT NULL,
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
  
