@@ -279,128 +279,6 @@ SET a.approver = u.user_id,a.approve_name = u.real_name;
 
 
 
-/*********** tbh_in_order **************/
-DROP TABLE IF EXISTS `tbh_in_order`;
-CREATE TABLE `tbh_in_order` (
-  `code` VARCHAR(32) NOT NULL,
-  `product_code` VARCHAR(32) DEFAULT NULL COMMENT '是否云仓发货',
-  `product_name` VARCHAR(255) DEFAULT NULL COMMENT '分类',
-  `specs_code` VARCHAR(32) DEFAULT NULL COMMENT '产品编号',
-  `specs_name` VARCHAR(255) DEFAULT NULL COMMENT '产品名称',
-  `pic` VARBINARY(255) DEFAULT NULL COMMENT '规格编号',
-  `quantity` INT(11) DEFAULT NULL COMMENT '规格名称',
-  `price` BIGINT(20) DEFAULT NULL COMMENT '图片',
-  `to_user_id` VARCHAR(32) DEFAULT NULL COMMENT '订单归属人',
-  `to_user_name` VARCHAR(32) DEFAULT NULL,
-  `level` INT(11) DEFAULT NULL,
-  `amount` BIGINT(20) DEFAULT NULL COMMENT '总价',
-  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
-  `apply_user` VARCHAR(32) DEFAULT NULL COMMENT '下单人',
-  `real_name` VARCHAR(32) DEFAULT NULL,
-  `team_name` VARCHAR(32) DEFAULT NULL,
-  `team_leader` VARCHAR(32) DEFAULT NULL,
-  `pay_type` VARCHAR(64) DEFAULT NULL COMMENT '支付渠道',
-  `pay_group` VARCHAR(32) DEFAULT NULL COMMENT '支付组号',
-  `pay_amount` BIGINT(20) DEFAULT NULL COMMENT '支付金额',
-  `pay_datetime` DATETIME DEFAULT NULL COMMENT '支付时间',
-  `pay_code` VARCHAR(32) DEFAULT NULL COMMENT '支付编号',
-  `apply_datetime` DATETIME DEFAULT NULL COMMENT '下单时间',
-  `apply_note` TEXT COMMENT '下单备注',
-  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
-  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
-  `remark` TEXT COMMENT '备注',
-  PRIMARY KEY (`code`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
-INSERT INTO tbh_in_order(`code`, `product_code`, `product_name`, `specs_code`, `specs_name`, `pic`, 
-`quantity`, `price`, `to_user_id`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
-`real_name`, `team_name`, `team_leader`, `pay_type`, `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
-`apply_note`, `approver`, `approve_datetime`, `remark` 
-)SELECT 
-`code`, `product_code`, `product_name`, `product_specs_code`, `product_specs_name`, `pic`, 
-`quantity`, `price`, `to_user`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
-`real_name`, `team_name`, `team_leader`, `pay_type`, `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
-`apply_note`, `approver`, `approve_datetime`, `remark` 
- FROM tbh_order WHERE kind = '2'
-
-/*********** tbh_out_order **************/
-DROP TABLE IF EXISTS `tbh_out_order`;
-
-CREATE TABLE `tbh_out_order` (
-  `code` VARCHAR(32) NOT NULL,
-  `level` INT(32) DEFAULT NULL COMMENT '等级',
-  `is_ware_send` VARCHAR(32) DEFAULT NULL COMMENT '是否云仓发货',
-  `kind` VARCHAR(4) DEFAULT NULL COMMENT '分类',
-  `product_code` VARCHAR(32) DEFAULT NULL COMMENT '产品编号',
-  `product_name` VARCHAR(255) DEFAULT NULL COMMENT '产品名称',
-  `specs_code` VARCHAR(32) DEFAULT NULL COMMENT '规格编号',
-  `specs_name` VARCHAR(255) DEFAULT NULL COMMENT '规格名称',
-  `pro_code` VARCHAR(32) DEFAULT NULL COMMENT '关联箱码',
-  `pic` VARBINARY(255) DEFAULT NULL COMMENT '图片',
-  `quantity` INT(11) DEFAULT NULL COMMENT '数量',
-  `price` BIGINT(20) DEFAULT NULL COMMENT '单价',
-  `to_user_id` VARCHAR(32) DEFAULT NULL COMMENT '向谁提货',
-  `to_user_name` VARCHAR(255) DEFAULT NULL COMMENT '订单归属人姓名',
-  `amount` BIGINT(20) DEFAULT NULL COMMENT '总价',
-  `yunfei` BIGINT(20) DEFAULT NULL COMMENT '运费',
-  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
-  `pay_type` VARCHAR(64) DEFAULT NULL COMMENT '支付渠道',
-  `pay_group` VARCHAR(32) DEFAULT NULL COMMENT '支付组号',
-  `pay_amount` BIGINT(20) DEFAULT NULL COMMENT '支付金额',
-  `pay_datetime` DATETIME DEFAULT NULL COMMENT '支付时间',
-  `pay_code` VARCHAR(32) DEFAULT NULL COMMENT '渠道编号',
-  `apply_user` VARCHAR(32) DEFAULT NULL COMMENT '下单人',
-  `high_user_id` VARCHAR(32) DEFAULT NULL COMMENT '上级',
-  `real_name` VARCHAR(255) DEFAULT NULL COMMENT '下单人姓名',
-  `team_name` VARCHAR(255) DEFAULT NULL COMMENT '团队名称',
-  `team_leader` VARCHAR(255) DEFAULT NULL COMMENT '团队长',
-  `apply_datetime` DATETIME DEFAULT NULL COMMENT '下单时间',
-  `apply_note` TEXT COMMENT '下单备注',
-  `signer` VARCHAR(32) DEFAULT NULL COMMENT '收件人姓名',
-  `mobile` VARCHAR(32) DEFAULT NULL COMMENT '收件人电话',
-  `province` VARCHAR(32) DEFAULT NULL COMMENT '省',
-  `city` VARCHAR(32) DEFAULT NULL COMMENT '市',
-  `area` VARCHAR(32) DEFAULT NULL COMMENT '区',
-  `address` VARCHAR(255) DEFAULT NULL COMMENT '收货地址',
-  `deliver` VARCHAR(32) DEFAULT NULL COMMENT '发货人',
-  `delive_datetime` DATETIME DEFAULT NULL COMMENT '发货时间',
-  `logistics_code` VARCHAR(255) DEFAULT NULL COMMENT '物流单号',
-  `logistics_company` VARCHAR(255) DEFAULT NULL COMMENT '物流公司',
-  `updater` VARCHAR(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` DATETIME DEFAULT NULL COMMENT '更新时间',
-  `update_note` VARCHAR(32) DEFAULT NULL COMMENT '更新备注',
-  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
-  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
-  `approve_note` VARCHAR(32) DEFAULT NULL COMMENT '支付组号',
-  `remark` TEXT COMMENT '备注',
-  PRIMARY KEY (`code`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
-INSERT INTO `tbh_out_order` (`code`, `level`, `is_ware_send`, `kind`, `product_code`, `product_name`, 
-`specs_code`, `specs_name`, `pro_code`, `pic`, `quantity`, `price`, 
-`to_user_id`, `to_user_name`, `amount`, `yunfei`, `status`, `pay_type`,
- `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_user`, `high_user_id`, `real_name`, `team_name`, 
- `team_leader`, `apply_datetime`, `apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
- `address`, `deliver`, `delive_datetime`, `logistics_code`, `logistics_company`, 
- `updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`) 
-SELECT 
-`code`, `level`, `is_company_send`, `kind`, `product_code`, 
-`product_name`, `product_specs_code`, `product_specs_name`, `bar_code`, `pic`, 
-`quantity`, `price`, `to_user`, `to_user_name`, `amount`, 
-`yunfei`, `status`, `pay_type`, `pay_group`, `pay_amount`, 
-`pay_datetime`, `pay_code`, `apply_user`, `to_user`, 
-`real_name`, `team_name`, `team_leader`, `apply_datetime`, 
-`apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
-`address`, `deliver`, `delive_datetime`, logistics_code, `logistics_company`, 
-`updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`
- FROM tbh_order WHERE kind != '2';
-
- #箱规格的为公司发货
- UPDATE tbh_out_order SET is_ware_send = '1' WHERE specs_code = 'PS201806301939383841880'; 
- #盒规格的为上级代理发货
- UPDATE tbh_out_order SET is_ware_send = '0' WHERE specs_code = 'PS201806291944580145174'; 
-
-DROP TABLE tbh_order;
  /*********** tbh_agent_log **************/
  DROP TABLE IF EXISTS `tbh_agent_log`;
 CREATE TABLE `tbh_agent_log` (
@@ -882,8 +760,152 @@ WHERE l.status IN (12,13,14)
 ORDER BY CODE DESC) l
 GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
 
+UPDATE tbh_sj_form s, tbh_user u  SET s.approve_name = u.real_name WHERE u.user_id = s.approver AND u.approver LIKE 'U%'; 
+ 
+
 /************************ tbh_jour***************/
+#更新推荐奖励 biz_type
+UPDATE tbh_jour j JOIN tbh_order o ON j.`ref_no` = o.`code` SET j.biz_type  = (
+CASE o.kind WHEN 2 THEN 'AJ_TJJL_IN'
+ ELSE 'AJ_TJJL_OUT' END
+  )WHERE j.biz_type = 'AJ_TJJL';
+
+#更新出货奖励 biz_type
+UPDATE tbh_jour j JOIN tbh_order o ON j.`ref_no` = o.`code` SET j.biz_type  = (
+CASE o.kind WHEN 2 THEN 'AJ_CHJL_IN'
+ ELSE 'AJ_CHJL_OUT' END
+  )WHERE j.biz_type = 'AJ_CHJL';
 
 
   
+/*********** tbh_out_order **************/
+DROP TABLE IF EXISTS `tbh_out_order`;
+
+CREATE TABLE `tbh_out_order` (
+  `code` VARCHAR(32) NOT NULL,
+  `level` INT(32) DEFAULT NULL COMMENT '等级',
+  `is_ware_send` VARCHAR(32) DEFAULT NULL COMMENT '是否云仓发货',
+  `kind` VARCHAR(4) DEFAULT NULL COMMENT '分类',
+  `product_code` VARCHAR(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` VARCHAR(255) DEFAULT NULL COMMENT '产品名称',
+  `specs_code` VARCHAR(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` VARCHAR(255) DEFAULT NULL COMMENT '规格名称',
+  `pro_code` VARCHAR(32) DEFAULT NULL COMMENT '关联箱码',
+  `pic` VARBINARY(255) DEFAULT NULL COMMENT '图片',
+  `quantity` INT(11) DEFAULT NULL COMMENT '数量',
+  `price` BIGINT(20) DEFAULT NULL COMMENT '单价',
+  `to_user_id` VARCHAR(32) DEFAULT NULL COMMENT '向谁提货',
+  `to_user_name` VARCHAR(255) DEFAULT NULL COMMENT '订单归属人姓名',
+  `amount` BIGINT(20) DEFAULT NULL COMMENT '总价',
+  `yunfei` BIGINT(20) DEFAULT NULL COMMENT '运费',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `pay_type` VARCHAR(64) DEFAULT NULL COMMENT '支付渠道',
+  `pay_group` VARCHAR(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_amount` BIGINT(20) DEFAULT NULL COMMENT '支付金额',
+  `pay_datetime` DATETIME DEFAULT NULL COMMENT '支付时间',
+  `pay_code` VARCHAR(32) DEFAULT NULL COMMENT '渠道编号',
+  `apply_user` VARCHAR(32) DEFAULT NULL COMMENT '下单人',
+  `high_user_id` VARCHAR(32) DEFAULT NULL COMMENT '上级',
+  `real_name` VARCHAR(255) DEFAULT NULL COMMENT '下单人姓名',
+  `team_name` VARCHAR(255) DEFAULT NULL COMMENT '团队名称',
+  `team_leader` VARCHAR(255) DEFAULT NULL COMMENT '团队长',
+  `apply_datetime` DATETIME DEFAULT NULL COMMENT '下单时间',
+  `apply_note` TEXT COMMENT '下单备注',
+  `signer` VARCHAR(32) DEFAULT NULL COMMENT '收件人姓名',
+  `mobile` VARCHAR(32) DEFAULT NULL COMMENT '收件人电话',
+  `province` VARCHAR(32) DEFAULT NULL COMMENT '省',
+  `city` VARCHAR(32) DEFAULT NULL COMMENT '市',
+  `area` VARCHAR(32) DEFAULT NULL COMMENT '区',
+  `address` VARCHAR(255) DEFAULT NULL COMMENT '收货地址',
+  `deliver` VARCHAR(32) DEFAULT NULL COMMENT '发货人',
+  `delive_datetime` DATETIME DEFAULT NULL COMMENT '发货时间',
+  `logistics_code` VARCHAR(255) DEFAULT NULL COMMENT '物流单号',
+  `logistics_company` VARCHAR(255) DEFAULT NULL COMMENT '物流公司',
+  `updater` VARCHAR(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` DATETIME DEFAULT NULL COMMENT '更新时间',
+  `update_note` VARCHAR(32) DEFAULT NULL COMMENT '更新备注',
+  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `approve_note` VARCHAR(32) DEFAULT NULL COMMENT '支付组号',
+  `remark` TEXT COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+INSERT INTO `tbh_out_order` (`code`, `level`, `is_ware_send`, `kind`, `product_code`, `product_name`, 
+`specs_code`, `specs_name`, `pro_code`, `pic`, `quantity`, `price`, 
+`to_user_id`, `to_user_name`, `amount`, `yunfei`, `status`, `pay_type`,
+ `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_user`, `high_user_id`, `real_name`, `team_name`, 
+ `team_leader`, `apply_datetime`, `apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
+ `address`, `deliver`, `delive_datetime`, `logistics_code`, `logistics_company`, 
+ `updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`) 
+SELECT 
+`code`, `level`, `is_company_send`, `kind`, `product_code`, 
+`product_name`, `product_specs_code`, `product_specs_name`, `bar_code`, `pic`, 
+`quantity`, `price`, `to_user`, `to_user_name`, `amount`, 
+`yunfei`, `status`, `pay_type`, `pay_group`, `pay_amount`, 
+`pay_datetime`, `pay_code`, `apply_user`, `to_user`, 
+`real_name`, `team_name`, `team_leader`, `apply_datetime`, 
+`apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
+`address`, `deliver`, `delive_datetime`, logistics_code, `logistics_company`, 
+`updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`
+ FROM tbh_order WHERE kind != '2';
+
+ #箱规格的为公司发货
+ UPDATE tbh_out_order SET is_ware_send = '1' WHERE specs_code = 'PS201806301939383841880'; 
+ #盒规格的为上级代理发货
+ UPDATE tbh_out_order SET is_ware_send = '0' WHERE specs_code = 'PS201806291944580145174'; 
+
+#更新收货人
+UPDATE tbh_out_order o JOIN tbh_user u ON o.`signer`=u.`user_id`
+SET o.signer = u.`real_name`;
+
+UPDATE tbh_out_order SET pay_group = CODE;
+/*********** tbh_in_order **************/
+DROP TABLE IF EXISTS `tbh_in_order`;
+CREATE TABLE `tbh_in_order` (
+  `code` VARCHAR(32) NOT NULL,
+  `product_code` VARCHAR(32) DEFAULT NULL COMMENT '是否云仓发货',
+  `product_name` VARCHAR(255) DEFAULT NULL COMMENT '分类',
+  `specs_code` VARCHAR(32) DEFAULT NULL COMMENT '产品编号',
+  `specs_name` VARCHAR(255) DEFAULT NULL COMMENT '产品名称',
+  `pic` VARBINARY(255) DEFAULT NULL COMMENT '规格编号',
+  `quantity` INT(11) DEFAULT NULL COMMENT '规格名称',
+  `price` BIGINT(20) DEFAULT NULL COMMENT '图片',
+  `to_user_id` VARCHAR(32) DEFAULT NULL COMMENT '订单归属人',
+  `to_user_name` VARCHAR(32) DEFAULT NULL,
+  `level` INT(11) DEFAULT NULL,
+  `amount` BIGINT(20) DEFAULT NULL COMMENT '总价',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
+  `apply_user` VARCHAR(32) DEFAULT NULL COMMENT '下单人',
+  `real_name` VARCHAR(32) DEFAULT NULL,
+  `team_name` VARCHAR(32) DEFAULT NULL,
+  `team_leader` VARCHAR(32) DEFAULT NULL,
+  `pay_type` VARCHAR(64) DEFAULT NULL COMMENT '支付渠道',
+  `pay_group` VARCHAR(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_amount` BIGINT(20) DEFAULT NULL COMMENT '支付金额',
+  `pay_datetime` DATETIME DEFAULT NULL COMMENT '支付时间',
+  `pay_code` VARCHAR(32) DEFAULT NULL COMMENT '支付编号',
+  `apply_datetime` DATETIME DEFAULT NULL COMMENT '下单时间',
+  `apply_note` TEXT COMMENT '下单备注',
+  `approver` VARCHAR(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` DATETIME DEFAULT NULL COMMENT '审核时间',
+  `remark` TEXT COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+INSERT INTO tbh_in_order(`code`, `product_code`, `product_name`, `specs_code`, `specs_name`, `pic`, 
+`quantity`, `price`, `to_user_id`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
+`real_name`, `team_name`, `team_leader`, `pay_type`, `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
+`apply_note`, `approver`, `approve_datetime`, `remark` 
+)SELECT 
+`code`, `product_code`, `product_name`, `product_specs_code`, `product_specs_name`, `pic`, 
+`quantity`, `price`, `to_user`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
+`real_name`, `team_name`, `team_leader`, `pay_type`, `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
+`apply_note`, `approver`, `approve_datetime`, `remark` 
+ FROM tbh_order WHERE kind = '2'
+
+UPDATE tbh_in_order SET pay_group = CODE;
+
+ 
+DROP TABLE tbh_order;
  

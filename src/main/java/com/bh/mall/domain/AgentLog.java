@@ -23,13 +23,13 @@ public class AgentLog extends ABaseDO {
     // 申请人
     private String applyUser;
 
-    // 申请人姓名 +++++
+    // 申请人姓名
     private String realName;
 
-    // 微信号 +++++
+    // 微信号
     private String wxId;
 
-    // 手机号 +++++
+    // 手机号
     private String mobile;
 
     // 归属人
@@ -44,31 +44,31 @@ public class AgentLog extends ABaseDO {
     // 上级
     private String highUserId;
 
-    // 推荐人 user_referee ->>referrer
+    // 推荐人
     private String referrer;
 
-    // 介绍人+++++
+    // 介绍人
     private String introducer;
 
     // 团队名称
     private String teamName;
 
-    // 打款金额+++++
+    // 打款金额
     private Long payAmount;
 
     // 打款截图
     private String payPdf;
 
-    // 省+++++
+    // 省
     private String province;
 
-    // 市+++++
+    // 市
     private String city;
 
-    // 区(县)+++++
+    // 区(县)
     private String area;
 
-    // 具体地址+++++
+    // 具体地址
     private String address;
 
     // 状态
@@ -77,7 +77,7 @@ public class AgentLog extends ABaseDO {
     // 审核人
     private String approver;
 
-    // 审核人+++++
+    // 审核人
     private String approveName;
 
     // 审核时间
@@ -86,16 +86,16 @@ public class AgentLog extends ABaseDO {
     // 审核备注
     private String approveNote;
 
-    // 更新人+++++
+    // 更新人
     private String updater;
 
-    // 更新时间+++++
+    // 更新时间
     private Date updateDatetime;
 
     // 申请时间
     private Date applyDatetime;
 
-    // 授权时间+++++
+    // 授权时间
     private Date impowerDatetime;
 
     // 备注
