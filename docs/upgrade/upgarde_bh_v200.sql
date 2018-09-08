@@ -1806,3 +1806,25 @@ UPDATE tsys_role SET updater='USYS201800000000002' WHERE updater = 'admin';
 
 /**************** tsys_config *******************/
 UPDATE tsys_config SET updater='USYS201800000000002' WHERE updater = 'admin';
+
+/**************** tbh_inner_specs *******************/
+DROP TABLE IF EXISTS `tbh_inner_specs`;
+CREATE TABLE `tbh_inner_specs` (
+  `code` VARCHAR(32) NOT NULL COMMENT '编号',
+  `inner_product_code` VARCHAR(32) DEFAULT NULL COMMENT '内购产品编号',
+  `name` VARCHAR(64) DEFAULT NULL COMMENT '规格名称',
+  `number` INT(11) DEFAULT '0' COMMENT '规格包含数量',
+  `weight` INT(11) DEFAULT '0' COMMENT '重量',
+  `price` INT(11) DEFAULT '0' COMMENT '单价',
+  `ref_code` VARCHAR(32) DEFAULT NULL COMMENT '关联规格编号',
+  `stock_number` INT(11) DEFAULT '0' COMMENT '库存',
+  `is_single` CHAR(1) DEFAULT NULL COMMENT '是否可拆单',
+  `single_number` INT(11) DEFAULT '0' COMMENT '拆单数量',
+  PRIMARY KEY (`code`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+/**************** tbh_order *******************/
+DROP TABLE tbh_order;
+
+/**************** tbh_user *******************/
+DROP TABLE tbh_user;
