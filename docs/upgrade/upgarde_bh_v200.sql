@@ -675,7 +675,7 @@ SELECT
              `area`,
              `city`,
              `province`,
-		'0',
+				'0',
              `apply_datetime`,
              `approver`,
              `approve_datetime`,
@@ -710,7 +710,10 @@ SELECT
              u.`area`,
              u.`city`,
              u.`province`,
-             u.`status`,
+              CASE  u.`status`
+				WHEN 4 THEN 1
+				WHEN 5 THEN 3
+		 		END,
              l.`apply_datetime`,
              l.`approver`,
              l.`approve_datetime`,
@@ -791,20 +794,22 @@ SELECT
              u.`introducer`,
              u.`user_referee`,
  
-             CASE     u.`status`
+              CASE u.status
              WHEN 7  THEN 8
              
              WHEN 8  THEN 10
              WHEN 10  THEN 9
              WHEN 11  THEN 7
-             ELSE u.`status` END ,             
+             WHEN 15 THEN 11
+             
+             ELSE u.status END ,            
              
              l.`apply_datetime`,
              u.`approver`,
              u.`approve_datetime`,
              u.`impower_datetime`,
              u.`remark`
-FROM tbh_user u,tbh_agency_log l WHERE u.last_agent_log = l.code AND u.status IN (6,7,8,9,10,11);
+FROM tbh_user u,tbh_agency_log l WHERE u.last_agent_log = l.code AND u.status IN (6,7,8,9,10,11,15);
 
  
 UPDATE tbh_sq_form s, tbh_user u  SET s.approve_name = u.real_name WHERE u.user_id = s.approver AND u.approver LIKE 'U%'; 
@@ -844,13 +849,14 @@ INSERT INTO tbh_sj_form
              `to_user_id`,
              `level`,
              `apply_level`,
+              `status`,
              `pay_amount`,
              `pay_pdf`,
              `approver`,
 
              `apply_datetime`,
              `approve_datetime`,
-             `status`,
+
              `remark`)
 SELECT 
 	         u.`user_id`,
@@ -862,16 +868,18 @@ SELECT
              l.`to_user_id`,
              l.`level`,
              l.`apply_level`,
-        
+              CASE     u.`status`
+             WHEN 13  THEN 14
+             WHEN 14  THEN 13
+             ELSE u.`status` END ,
+		
 	         u.`pay_amount`,
              l.`pay_pdf`,
              l.`approver`,
              l.`apply_datetime`,
              l.`approve_datetime`,
-             l.`status`,
              l.`remark`
 FROM tbh_user u ,tbh_agency_log l  WHERE u.last_agent_log = l.code AND u.status IN (12,13,14);
-
 UPDATE tbh_sj_form s, tbh_user u  SET s.approve_name = u.real_name WHERE u.user_id = s.approver AND u.approver LIKE 'U%'; 
  
 /*********** tbh_ware_house **************/
