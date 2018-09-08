@@ -76,4 +76,6 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     public void removeByAgent(String userId);
 
+    public void refreshLevel(String userId, Integer applyLevel);
+
 }

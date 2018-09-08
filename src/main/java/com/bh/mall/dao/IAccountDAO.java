@@ -72,4 +72,6 @@ public interface IAccountDAO extends IBaseDAO<Account> {
      * @history:
      */
     public int cutFrozenAmount(Account data);
+
+    public void updateLevel(Account account);
 }

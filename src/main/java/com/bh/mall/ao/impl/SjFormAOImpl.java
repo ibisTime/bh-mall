@@ -249,6 +249,9 @@ public class SjFormAOImpl implements ISjFormAO {
                 report.setLevel(sjForm.getApplyLevel());
                 report.setTeamName(agent.getTeamName());
                 agentReportBO.refreshLevel(report);
+
+                accountBO.refreshLevel(sjForm.getUserId(),
+                    sjForm.getApplyLevel());
             }
         }
 

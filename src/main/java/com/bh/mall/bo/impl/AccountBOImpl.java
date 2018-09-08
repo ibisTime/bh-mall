@@ -299,4 +299,14 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         }
     }
 
+    @Override
+    public void refreshLevel(String userId, Integer applyLevel) {
+        List<Account> list = getAccountByUser(userId);
+        for (Account account : list) {
+            account.setLevel(applyLevel);
+            accountDAO.updateLevel(account);
+        }
+
+    }
+
 }

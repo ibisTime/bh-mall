@@ -173,5 +173,14 @@
 		account_number = #{accountNumber}
     </update>
     
+    	
+	<update id="update_level" parameterType="account">
+		UPDATE tbh_account
+		SET
+		level = #{level}
+		WHERE
+		account_number = #{accountNumber}
+    </update>
+    
     
 </mapper>
