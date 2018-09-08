@@ -445,7 +445,23 @@ INSERT INTO `tbh_agent` (
 SELECT 
 `user_id`, `user_referee`, `mobile`, `wx_id`, `photo`, `nickname`, `trade_pwd`, `trade_pwd_strength`,
 `level`, `user_referee`, `introducer`, `high_user_id`, `team_name`, `id_kind`, `id_no`, `id_hand`, `real_name`, 
-`status`, `manager`, `union_id`, `h5_open_id`, `app_open_id`, `address`, `province`, `city`, `area`, 
+   	CASE status
+             WHEN 16  THEN 0
+             WHEN 3  THEN 0
+             WHEN 4  THEN 1
+             WHEN 5  THEN 3
+             WHEN 7  THEN 8
+             
+             WHEN 8  THEN 10
+             WHEN 10  THEN 9
+             WHEN 11  THEN 7
+             WHEN 15 THEN 11
+             
+             WHEN 13 THEN 14
+             WHEN 14 THEN 13
+             WHEN 18 THEN 5
+             WHEN 19 THEN 4,
+`manager`, `union_id`, `h5_open_id`, `app_open_id`, `address`, `province`, `city`, `area`, 
 `create_datetime`, `updater`, `update_datetime`, `approver`, `approve_datetime`, `impower_datetime`, `last_agent_log`, `remark`
 FROM tbh_user WHERE kind = 'B'; 
 
