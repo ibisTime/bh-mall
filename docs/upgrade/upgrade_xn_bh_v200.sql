@@ -103,7 +103,11 @@ ADD stock_number INT(11) DEFAULT NULL;
 
 /*********** tbh_specs **************/
 ALTER TABLE tbh_product_specs RENAME tbh_specs;
-
+ALTER TABLE tbh_specs 
+CHANGE is_impower_order is_sq_order CHAR(1) DEFAULT NULL,
+CHANGE is_upgrade_order is_sj_order CHAR(1) DEFAULT NULL;
+ALTER TABLE tbh_specs 
+ADD stock_number INT(11) DEFAULT 0;
 
 
 /*********** tbh_specs **************/
@@ -778,7 +782,7 @@ INSERT INTO `tbh_sq_form`
              `impower_datetime`,
              `remark`)
 SELECT 		
-	     u.`user_id`,
+	        u.`user_id`,
              u.`wx_id`,
              l.`apply_level`,
              u.`team_name`,
@@ -877,6 +881,8 @@ FROM tbh_agent u  JOIN
 WHERE l.status IN (12,13,14)
 ORDER BY CODE DESC) l
 GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
+
+/************************ tbh_jour***************/
 
 
   
