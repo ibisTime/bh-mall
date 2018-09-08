@@ -223,8 +223,8 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'out_order_type','订单类型','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','0','授权单','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','1','升级单','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','2','云仓提货','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','3','普通单','USYS201800000000002',NOW(),NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','2','普通单','USYS201800000000002',NOW(),NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','3','云仓提货','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','4','微店订单','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'currency','币种','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','TX_CNY','可提现账户','USYS201800000000002',NOW(),NULL);
