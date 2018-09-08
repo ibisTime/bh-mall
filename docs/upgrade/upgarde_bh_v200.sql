@@ -653,6 +653,39 @@ CREATE TABLE `tbh_yx_form` (
 INSERT INTO `tbh_yx_form`
             (`user_id`,
              `wx_id`,
+             `apply_level`,
+             `real_name`,
+             `mobile`,
+             `address`,
+             `area`,
+             `city`,
+             `province`,
+             `status`,
+             `apply_datetime`,
+             `approver`,
+             `approve_datetime`,
+             `remark`)
+SELECT 
+	     `user_id`,
+             `wx_id`,
+             `apply_level`,
+             `real_name`,
+             `mobile`,
+             `address`,
+             `area`,
+             `city`,
+             `province`,
+		'0',
+             `apply_datetime`,
+             `approver`,
+             `approve_datetime`,
+             `remark`
+FROM tbh_user u WHERE u.status = 3;
+
+
+INSERT INTO `tbh_yx_form`
+            (`user_id`,
+             `wx_id`,
              `to_user_id`,
              `apply_level`,
              `real_name`,
@@ -682,11 +715,7 @@ SELECT
              l.`approver`,
              l.`approve_datetime`,
              l.`remark`
-FROM tbh_agent u  JOIN 
-(SELECT * FROM (SELECT l.* FROM  tbh_agent_log l  
-WHERE l.status IN (0,1,3)
-ORDER BY CODE DESC) l
-GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
+FROM tbh_user u,  tbh_agency_log l WHERE u.last_agent_log = l.code AND u.status IN (4,5);
 
 UPDATE tbh_yx_form y, tbh_user u  SET y.approve_name = u.real_name WHERE u.user_id = y.approver AND u.approver LIKE 'U%'; 
  
@@ -740,7 +769,7 @@ INSERT INTO `tbh_sq_form`
              `status`,
              `apply_datetime`,
              `approver`,
-             `approve_name`,
+
              `approve_datetime`,
              `impower_datetime`,
              `remark`)
@@ -760,19 +789,23 @@ SELECT
              u.`id_kind`,
              u.`id_no`,
              u.`introducer`,
-             u.`referrer`,
-             u.`status`,
+             u.`user_referee`,
+ 
+             CASE     u.`status`
+             WHEN 7  THEN 8
+             
+             WHEN 8  THEN 10
+             WHEN 10  THEN 9
+             WHEN 11  THEN 7
+             ELSE u.`status` END ,             
+             
              l.`apply_datetime`,
              u.`approver`,
-             u.`approve_name`,
              u.`approve_datetime`,
              u.`impower_datetime`,
              u.`remark`
-   FROM tbh_agent u JOIN 
-(SELECT * FROM (SELECT l.* FROM  tbh_agent_log l  
-WHERE l.status IN (6,7,8,9,10,11)
-ORDER BY CODE DESC) l
-GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
+FROM tbh_user u,tbh_agency_log l WHERE u.last_agent_log = l.code AND u.status IN (6,7,8,9,10,11);
+
  
 UPDATE tbh_sq_form s, tbh_user u  SET s.approve_name = u.real_name WHERE u.user_id = s.approver AND u.approver LIKE 'U%'; 
  
@@ -820,7 +853,7 @@ INSERT INTO tbh_sj_form
              `status`,
              `remark`)
 SELECT 
-	     u.`user_id`,
+	         u.`user_id`,
              u.`real_name`,
              u.`id_kind`,
              u.`id_no`,
@@ -830,18 +863,14 @@ SELECT
              l.`level`,
              l.`apply_level`,
         
-	     l.`pay_amount`,
+	         u.`pay_amount`,
              l.`pay_pdf`,
              l.`approver`,
              l.`apply_datetime`,
              l.`approve_datetime`,
              l.`status`,
              l.`remark`
-FROM tbh_agent u  JOIN 
-(SELECT * FROM (SELECT l.* FROM  tbh_agent_log l  
-WHERE l.status IN (12,13,14)
-ORDER BY CODE DESC) l
-GROUP BY l.apply_user) l ON u.user_id = l.apply_user;
+FROM tbh_user u ,tbh_agency_log l  WHERE u.last_agent_log = l.code AND u.status IN (12,13,14);
 
 UPDATE tbh_sj_form s, tbh_user u  SET s.approve_name = u.real_name WHERE u.user_id = s.approver AND u.approver LIKE 'U%'; 
  
