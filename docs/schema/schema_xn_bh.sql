@@ -381,7 +381,6 @@ CREATE TABLE `tbh_cuser` (
 /*Table structure for table `tbh_delive_order` */
 
 DROP TABLE IF EXISTS `tbh_delive_order`;
-
 CREATE TABLE `tbh_delive_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `kind` char(1) DEFAULT NULL COMMENT '类型（0 出货订单，1内购订单）',
