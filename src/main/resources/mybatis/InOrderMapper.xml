@@ -71,7 +71,13 @@
 			<if test="productName != null and productName != '' ">
 				AND t.product_name like "%"#{productName}"%" 
 			</if>
-				<if test="level != null and level != '' ">
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode} 
+			</if>
+			<if test="specsCode != null and specsCode != '' ">
+				AND t.specs_code = #{specsCode} 
+			</if>
+			<if test="level != null and level != '' ">
 				AND t.level = #{level} 
 			</if>
 			

@@ -313,6 +313,8 @@ CHANGE COLUMN `specs_code` `specs_code` VARCHAR(32) NULL DEFAULT NULL COMMENT '�
 CHANGE COLUMN `specs_name` `specs_name` VARCHAR(255) NULL DEFAULT NULL COMMENT '规格名称' AFTER `specs_code`,
 CHANGE COLUMN `ref_code` `ref_code` VARCHAR(32) NULL DEFAULT NULL COMMENT '关联订单' AFTER `post_count`;
 
+UPDATE tbh_specs_log l JOIN tbh_user u 
+SET l.updater=u.`user_id` WHERE l.`updater`=u.`login_name`;
 /*********** tbh_product_specs **************/
 ALTER TABLE tbh_product_specs RENAME tbh_specs;
 ALTER TABLE tbh_specs 

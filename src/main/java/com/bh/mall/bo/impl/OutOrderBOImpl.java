@@ -325,10 +325,18 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     @Override
     public List<OutOrder> getProductQuantity(String agentId, Date startDatetime,
             Date endDatetime) {
+
         OutOrder condition = new OutOrder();
         condition.setApplyUser(agentId);
         condition.setStartDatetime(startDatetime);
         condition.setEndDatetime(endDatetime);
+
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EOutOrderStatus.TO_SEND.getCode());
+        statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
+        statusList.add(EOutOrderStatus.RECEIVED.getCode());
+        condition.setStatusList(statusList);
+
         return outOrderDAO.selectList(condition);
     }
 
