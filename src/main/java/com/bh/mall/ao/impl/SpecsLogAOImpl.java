@@ -2,6 +2,7 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,14 +57,17 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
         SYSUser sysUser = null;
         Agent agent = null;
         for (SpecsLog data : page.getList()) {
-            if (ESpecsLogType.Order.getCode().equals(data.getType())
-                    || ESpecsLogType.QX_ORDER.getCode()
-                        .equals(data.getType())) {
-                agent = agentBO.getAgent(data.getUpdater());
-                data.setUpdateName(agent.getRealName());
-            } else {
-                sysUser = sysUserBO.getSYSUser(data.getUpdater());
-                data.setUpdateName(sysUser.getRealName());
+            if (StringUtils.isNotBlank(data.getUpdater())) {
+                if (ESpecsLogType.Input.getCode().equals(data.getType())
+                        || ESpecsLogType.Output.getCode().equals(data.getType())
+                        || ESpecsLogType.ChangeProduct.getCode()
+                            .equals(data.getType())) {
+                    agent = agentBO.getAgent(data.getUpdater());
+                    data.setUpdateName(agent.getRealName());
+                } else {
+                    sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                    data.setUpdateName(sysUser.getRealName());
+                }
             }
             Specs specs = specsBO.getSpecs(data.getSpecsCode());
             data.setSpecsName(specs.getName());
@@ -84,15 +88,17 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
     @Override
     public SpecsLog getSpecsLog(String code) {
         SpecsLog data = specsLogBO.getSpecsLog(code);
-        if (ESpecsLogType.Input.getCode().equals(data.getType())
-                || ESpecsLogType.Output.getCode().equals(data.getType())
-                || ESpecsLogType.ChangeProduct.getCode()
-                    .equals(data.getType())) {
-            SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
-            data.setUpdateName(sysUser.getRealName());
-        } else {
-            Agent agent = agentBO.getAgent(data.getUpdater());
-            data.setUpdateName(agent.getRealName());
+        if (StringUtils.isNotBlank(data.getUpdater())) {
+            if (ESpecsLogType.Input.getCode().equals(data.getType())
+                    || ESpecsLogType.Output.getCode().equals(data.getType())
+                    || ESpecsLogType.ChangeProduct.getCode()
+                        .equals(data.getType())) {
+                Agent agent = agentBO.getAgent(data.getUpdater());
+                data.setUpdateName(agent.getRealName());
+            } else {
+                SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
+                data.setUpdateName(sysUser.getRealName());
+            }
         }
         return data;
     }

@@ -62,7 +62,9 @@ public class AgentReportAOImpl implements IAgentReportAO {
             // 可提现账户余额
             Account account = accountBO.getAccountByUser(
                 agentReport.getUserId(), ECurrency.TX_CNY.getCode());
-            agentReport.setYjAmount(account.getAmount());
+            Account cAccount = accountBO.getAccountByUser(
+                agentReport.getUserId(), ECurrency.C_CNY.getCode());
+            agentReport.setYjAmount(account.getAmount() + cAccount.getAmount());
         }
 
         return page;
@@ -88,7 +90,9 @@ public class AgentReportAOImpl implements IAgentReportAO {
             // 可提现账户余额
             Account account = accountBO.getAccountByUser(
                 agentReport.getUserId(), ECurrency.TX_CNY.getCode());
-            agentReport.setYjAmount(account.getAmount());
+            Account cAccount = accountBO.getAccountByUser(
+                agentReport.getUserId(), ECurrency.C_CNY.getCode());
+            agentReport.setYjAmount(account.getAmount() + cAccount.getAmount());
         }
 
         return list;
@@ -152,7 +156,9 @@ public class AgentReportAOImpl implements IAgentReportAO {
             // 可提现账户余额
             Account account = accountBO.getAccountByUser(
                 agentReport.getUserId(), ECurrency.TX_CNY.getCode());
-            agentReport.setYjAmount(account.getAmount());
+            Account cAccount = accountBO.getAccountByUser(
+                agentReport.getUserId(), ECurrency.C_CNY.getCode());
+            agentReport.setYjAmount(account.getAmount() + cAccount.getAmount());
         }
 
         XN627852Res res = new XN627852Res(page.getList(), count, refreeAward);

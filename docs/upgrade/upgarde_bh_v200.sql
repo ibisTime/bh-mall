@@ -13,6 +13,10 @@ SELECT
 CONCAT('X',account_number) ,user_id ,real_name,TYPE,STATUS,'C_CNY','0','0',NOW()
 FROM `tbh_account` WHERE TYPE = 'B' AND currency IS NULL;
 
+ALTER TABLE tbh_account ADD LEVEL INT(11)  DEFAULT NULL COMMENT '代理等级';
+
+UPDATE tbh_account a JOIN tbh_agent u SET a.`level`=u.`level`;
+
 /**********  tbh_address ********/
 ALTER TABLE tbh_address DROP COLUMN TYPE,DROP COLUMN system_code,DROP COLUMN company_code;
 
@@ -111,6 +115,9 @@ ALTER TABLE tbh_bar_code RENAME tbh_pro_code;
 
 /*********** tbh_security_trace **************/
 ALTER TABLE  tbh_security_trace RENAME tbh_mini_code;
+
+ALTER TABLE tbh_mini_code 
+CHANGE security_code mini_code VARCHAR(13) DEFAULT NULL;
  
 /*********** tbh_change_product **************/
 ALTER TABLE tbh_change_product RENAME tbh_exchange_order;
@@ -118,6 +125,13 @@ ALTER TABLE tbh_change_product RENAME tbh_exchange_order;
 ALTER TABLE tbh_exchange_order
 CHANGE  product_specs_code specs_code VARCHAR(32) DEFAULT NULL,
 CHANGE  product_specs_name specs_name VARCHAR(255) DEFAULT NULL;
+
+/*********** tbh_channel_bank **************/
+ALTER TABLE tbh_channel_bank 
+ADD updater VARCHAR(32) DEFAULT NULL COMMENT '更新人',
+ADD update_datetime DATETIME COMMENT '更新时间';
+
+UPDATE tbh_channel_bank SET updater = 'USYS201800000000002', update_datetime = NOW();
 
 /*********** tbh_charge **************/
 ALTER TABLE tbh_charge
@@ -136,11 +150,13 @@ DROP TABLE tbh_company_channel;
 
 /*********** tbh_inner_order **************/
 ALTER TABLE tbh_inner_order
-ADD specs_code VARCHAR(32) DEFAULT NULL,
-ADD specs_name VARCHAR(255) DEFAULT NULL,
-ADD approver VARCHAR(255) DEFAULT NULL,
-ADD approve_datetime DATETIME,
-ADD approve_note TEXT;
+ADD real_name VARCHAR(255) DEFAULT NULL COMMENT '真实姓名',
+ADD specs_code VARCHAR(32) DEFAULT NULL COMMENT '规格编号',
+ADD specs_name VARCHAR(255) DEFAULT NULL COMMENT '规格名称',
+ADD approver VARCHAR(255) DEFAULT NULL COMMENT '审核人',
+ADD approve_datetime DATETIME COMMENT '审核名称',
+ADD approve_note TEXT COMMENT '审核备注';
+
 
 /*********** tbh_jour **************/
 UPDATE tbh_jour j JOIN tbh_order o ON j.`ref_no` = o.`code` SET j.biz_type  = (
@@ -897,6 +913,10 @@ CHANGE ware_house_code ware_code VARCHAR(32) DEFAULT NULL,
 CHANGE product_specs_code specs_code  VARCHAR(32) DEFAULT NULL,
 CHANGE product_specs_name specs_name VARCHAR(255) DEFAULT NULL;
 
+ALTER TABLE tbh_ware_log
+ADD updater VARCHAR(32) DEFAULT NULL COMMENT '更新人',
+ADD update_datetime DATETIME COMMENT '更新时间',
+ADD remark VARCHAR(255)  DEFAULT NULL COMMENT '备注';
 /*********** thf_ware_house_specs **************/
 DROP TABLE thf_ware_house_specs;
 
@@ -1190,6 +1210,9 @@ insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','private_key1','r2jgDFSdiikklwlllejlwjio3242342n','USYS201800000000002',NOW(),'秘钥1');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','private_key2','wxa0c8f09abc470f2f','USYS201800000000002',NOW(),'秘钥2');
 
+UPDATE tsys_config SET cvalue = '0' WHERE ckey = '四川省';
+
+UPDATE tsys_config SET cvalue = '0' WHERE ckey = '西藏自治区';
 
 /********** tsys_dict ************/
 TRUNCATE TABLE tsys_dict;
@@ -1876,7 +1899,14 @@ CREATE TABLE `tbh_inner_specs` (
   PRIMARY KEY (`code`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-/**************** tbh_order *******************/
+/**************** tbh_material *******************/
+ALTER TABLE tbh_material 
+ADD create_datetime DATETIME COMMENT '创建时间',
+ADD updater VARCHAR(32) DEFAULT NULL COMMENT '更新人',
+ADD update_datetime DATETIME COMMENT '更新时间',
+ADD remark VARCHAR(255) DEFAULT NULL COMMENT '备注';
+
+
 DROP TABLE tbh_order;
 
 DROP TABLE tbh_user;
