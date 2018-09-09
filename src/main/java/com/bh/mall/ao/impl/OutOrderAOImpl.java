@@ -998,6 +998,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 .equals(barData.getStatus())) {
                 throw new BizException("xn00000", "该箱码已拆分");
             }
+            barData.setStatus(ECodeStatus.USE_YES.getCode());
+            barData.setUseDatetime(new Date());
             proCodeBO.refreshProCode(barData);
 
             // 更新箱码关联的盒码与订单编号

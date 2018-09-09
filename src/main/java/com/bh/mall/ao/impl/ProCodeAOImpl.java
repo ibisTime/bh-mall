@@ -188,6 +188,7 @@ public class ProCodeAOImpl implements IProCodeAO {
             if (!ECodeStatus.TO_USER.getCode().equals(proCode.getStatus())) {
                 throw new BizException("xn00000", "箱码已被使用");
             }
+            proCode.setStatus(ECodeStatus.USE_NO.getCode());
             proCodeBO.refreshProCode(proCode);
 
             // 是否还有可用盒码

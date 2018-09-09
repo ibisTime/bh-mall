@@ -490,6 +490,7 @@ SET a.updater = u.user_id;
 UPDATE tbh_agent a JOIN tbh_user u ON a.approver = u.login_name
 SET a.approver = u.user_id,a.approve_name = u.real_name;
 
+UPDATE tbh_agent SET manager = 'USYS201800000000002';
   
 DROP TABLE IF EXISTS `tbh_cuser`;
 CREATE TABLE `tbh_cuser` (
