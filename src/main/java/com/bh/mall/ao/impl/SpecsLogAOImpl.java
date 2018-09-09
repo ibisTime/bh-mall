@@ -62,11 +62,11 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
                         || ESpecsLogType.Output.getCode().equals(data.getType())
                         || ESpecsLogType.ChangeProduct.getCode()
                             .equals(data.getType())) {
-                    agent = agentBO.getAgent(data.getUpdater());
-                    data.setUpdateName(agent.getRealName());
-                } else {
                     sysUser = sysUserBO.getSYSUser(data.getUpdater());
                     data.setUpdateName(sysUser.getRealName());
+                } else {
+                    agent = agentBO.getAgent(data.getUpdater());
+                    data.setUpdateName(agent.getRealName());
                 }
             }
             if (StringUtils.isNotBlank(data.getSpecsCode())) {
@@ -95,11 +95,11 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
                     || ESpecsLogType.Output.getCode().equals(data.getType())
                     || ESpecsLogType.ChangeProduct.getCode()
                         .equals(data.getType())) {
-                Agent agent = agentBO.getAgent(data.getUpdater());
-                data.setUpdateName(agent.getRealName());
-            } else {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getUpdater());
                 data.setUpdateName(sysUser.getRealName());
+            } else {
+                Agent agent = agentBO.getAgent(data.getUpdater());
+                data.setUpdateName(agent.getRealName());
             }
         }
         return data;

@@ -1906,6 +1906,12 @@ ADD updater VARCHAR(32) DEFAULT NULL COMMENT '更新人',
 ADD update_datetime DATETIME COMMENT '更新时间',
 ADD remark VARCHAR(255) DEFAULT NULL COMMENT '备注';
 
+/**************** tbh_cart *******************/
+ALTER TABLE tbh_cart 
+ADD TYPE CHAR(1) DEFAULT NULL COMMENT '类型';
+
+ALTER TABLE tbh_cart 
+CHANGE product_specs_code specs_code VARCHAR(32) DEFAULT NULL;
 
 DROP TABLE tbh_order;
 
