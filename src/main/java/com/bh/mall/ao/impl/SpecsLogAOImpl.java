@@ -69,8 +69,10 @@ public class SpecsLogAOImpl implements ISpecsLogAO {
                     data.setUpdateName(sysUser.getRealName());
                 }
             }
-            Specs specs = specsBO.getSpecs(data.getSpecsCode());
-            data.setSpecsName(specs.getName());
+            if (StringUtils.isNotBlank(data.getSpecsCode())) {
+                Specs specs = specsBO.getSpecs(data.getSpecsCode());
+                data.setSpecsName(specs.getName());
+            }
         }
         return page;
     }
