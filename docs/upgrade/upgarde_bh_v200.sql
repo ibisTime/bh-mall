@@ -427,6 +427,13 @@ FROM tbh_user WHERE kind = 'P';
 UPDATE tsys_user s   JOIN tbh_user u ON s.updater = u.login_name
 SET s.updater = u.user_id;
 
+/*********************************************************************/
+UPDATE tbh_user SET user_id = 'U201807101359562302076' WHERE user_id = 'U201809071221480269150';
+
+UPDATE tbh_agency_log SET apply_user = 'U201807101359562302076' WHERE apply_user = 'U201809071221480269150';
+
+/********************************************************************/
+
 DROP TABLE IF EXISTS `tbh_agent`;
 CREATE TABLE `tbh_agent` (
   `user_id` VARCHAR(32) NOT NULL COMMENT '用户编号',
@@ -1205,7 +1212,7 @@ SELECT
              o.`approve_datetime`,
              o.`approve_note`,
              o.`remark`
-FROM tbh_order o,tbh_agent a WHERE o.apply_user = a.user_id AND o.status IN(1,2,3,4);
+FROM tbh_order o,tbh_agent a WHERE o.apply_user = a.user_id AND o.status IN(2,3,4);
 
 
 
@@ -1948,7 +1955,6 @@ UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U20180
 
 UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U201807111435137758097';
 
-
 INSERT INTO `tbh_agent_price`
             (`code`,
              `specs_code`,
@@ -1982,7 +1988,64 @@ ALTER TABLE tbh_cnavigate
 ADD updater VARCHAR(32) DEFAULT NULL COMMENT '更新人',
 ADD update_datetime DATETIME COMMENT '更新时间';
 
+UPDATE tbh_cnavigate SET updater = 'USYS201800000000002',update_datetime = NOW();
+
 DELETE FROM tbh_jour WHERE trans_amount = '0';
 
+UPDATE tbh_out_order SET STATUS = '2' WHERE STATUS = '1' AND specs_code = 'PS201806291944580145174';
 
+UPDATE tbh_out_order SET high_user_id = 'USYS201800000000002' WHERE LEVEL = 1;
 
+INSERT INTO `tbh_agent_level`
+            (`code`,
+             `level`,
+             `name`,
+             `red_amount`,
+             `amount`,
+             `min_charge_amount`,
+             `min_surplus`,
+             `is_send`,
+             `is_ware`,
+             `is_company_approve`,
+             `re_number`,
+             `is_reset`,
+             `is_intent`,
+             `is_jsAward`,
+             `is_real_name`,
+             `is_company_impower`,
+             `min_charge`,
+             `updater`,
+             `update_datetime`,
+             `remark`)
+VALUES 
+		('AL201800000000000006',
+        '6',
+        'C店用户',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        'USYS201800000000002',
+        NOW(),
+        '');
+
+UPDATE tbh_ware_log w JOIN tbh_agent u SET w.`real_name` = u.`real_name`;
+
+UPDATE tbh_ware_log SET TYPE = '1' WHERE biz_type = 'AJ_YCTH'; 
+
+UPDATE tbh_ware_log SET TYPE = '0' WHERE biz_type = 'AJ_GMYC';
+
+UPDATE tbh_ware_log SET TYPE = '1' WHERE biz_type = 'AJ_YCCH';
+
+/*********************** WH201807231615508828525 *************************/
+UPDATE tbh_ware SET user_id = 'U201807081440374532026',quantity=0 WHERE user_id = 'USYS201800000000002';

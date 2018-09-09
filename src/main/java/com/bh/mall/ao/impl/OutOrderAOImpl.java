@@ -1277,7 +1277,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
         }
 
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(data.getLevel());
-        if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())) {
+        if (EBoolean.NO.getCode().equals(agentLevel.getIsWare())
+                && null != data.getPayAmount()) {
             Account account = accountBO.getAccountByUser(data.getApplyUser(),
                 ECurrency.TX_CNY.getCode());
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,

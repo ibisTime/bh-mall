@@ -85,6 +85,11 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
                     throw new BizException("xn00000", "规格价格不能为空");
                 }
 
+                // 保证所有等级都有价格
+                if (specsPriceList.size() < 6) {
+                    throw new BizException("xn00000", "请保证所有等级的价格都已添加");
+                }
+
                 // 新增价格体系
                 for (XN627547Req specsPrice : specsPriceList) {
                     AgentPrice agentPrice = new AgentPrice();
@@ -185,6 +190,10 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         specsDAO.insert(data);
 
         List<XN627547Req> specsPriceList = psReq.getSpecsPriceList();
+        // 保证所有等级都有价格
+        if (specsPriceList.size() < 6) {
+            throw new BizException("xn00000", "请保证所有等级的价格都已添加");
+        }
         // 新增价格体系
         for (XN627547Req specsPrice : specsPriceList) {
             AgentPrice agentPrice = new AgentPrice();
@@ -257,9 +266,12 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         psData.setIsNormalOrder(psReq.getIsNormalOrder());
         specsDAO.update(psData);
 
-        List<XN627547Req> pspList = specsPriceList;
+        // 保证所有等级都有价格
+        if (specsPriceList.size() < 6) {
+            throw new BizException("xn00000", "请保证所有等级的价格都已添加");
+        }
 
-        for (XN627547Req specsPrice : pspList) {
+        for (XN627547Req specsPrice : specsPriceList) {
             AgentPrice pspData = agentPriceBO
                 .getAgentPrice(specsPrice.getCode());
             pspData.setCode(specsPrice.getCode());
