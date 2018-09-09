@@ -1978,7 +1978,11 @@ FROM tbh_agent_price GROUP BY  specs_code;
 UPDATE tbh_out_order o JOIN `tbh_agent_log` l
 SET o.`high_user_id` = l.`high_user_id` WHERE o.`apply_user` = l.`apply_user` AND o.`level` = l.`level`;
 
+ALTER TABLE tbh_cnavigate 
+ADD updater VARCHAR(32) DEFAULT NULL COMMENT '更新人',
+ADD update_datetime DATETIME COMMENT '更新时间';
 
+DELETE FROM tbh_jour WHERE trans_amount = '0';
 
 
 

@@ -126,7 +126,6 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
