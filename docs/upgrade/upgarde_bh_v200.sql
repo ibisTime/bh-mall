@@ -212,12 +212,20 @@ INSERT INTO tbh_in_order(
 `quantity`, `price`, `to_user_id`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
 `real_name`, `team_name`, `team_leader`, `pay_type`, `pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
 `apply_note`, `approver`, `approve_datetime`, `remark` 
-)SELECT 
+)
+SELECT 
 `code`, `product_code`, `product_name`, `product_specs_code`, `product_specs_name`, `pic`, 
-`quantity`, `price`, `to_user`, `to_user_name`, `level`, `amount`, `status`, `apply_user`, 
+`quantity`, `price`, `to_user`, `to_user_name`, `level`, `amount`, 
+CASE `status`
+WHEN 4 THEN 1
+WHEN 5 THEN 2
+WHEN 6 THEN 3
+WHEN 7 THEN 4
+ELSE `status` END, 
+`apply_user`, 
 `real_name`, `team_name`, `team_leader`, `pay_type`, `code`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_datetime`, 
 `apply_note`, `approver`, `approve_datetime`, `remark` 
- FROM tbh_order WHERE kind = '2';
+FROM tbh_order WHERE kind = '2';
 
 /*********** tbh_out_order **************/
 DROP TABLE IF EXISTS `tbh_out_order`;
@@ -271,7 +279,7 @@ CREATE TABLE `tbh_out_order` (
   PRIMARY KEY (`code`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-INSERT INTO bh_online_test2.`tbh_out_order` (
+INSERT INTO `tbh_out_order` (
 `code`, `level`, `is_ware_send`, `kind`, `product_code`, `product_name`, 
 `specs_code`, `specs_name`, `pro_code`, `pic`, `quantity`, `price`, 
 `to_user_id`, `to_user_name`, `amount`, `yunfei`, `status`, `pay_type`,
@@ -291,7 +299,7 @@ SELECT
 `team_leader`, `apply_datetime`, `apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
 `address`, `deliver`, `delive_datetime`, logistics_code, `logistics_company`, 
 `updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`
-FROM bh_online_test5.tbh_order WHERE kind != '2';
+FROM tbh_order WHERE kind != '2';
  
 UPDATE tbh_out_order SET is_ware_send = '1' WHERE specs_code = 'PS201806301939383841880'; 
 
@@ -1941,7 +1949,7 @@ UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U20180
 UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U201807111435137758097';
 
 
-INSERT INTO `bh_online_test2`.`tbh_agent_price`
+INSERT INTO `tbh_agent_price`
             (`code`,
              `specs_code`,
              `level`,

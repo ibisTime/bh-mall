@@ -334,7 +334,7 @@ public class AgentAOImpl implements IAgentAO {
             .getLevel()) {
             agentBO.refreshTeamName(data, teamName);
             this.editTeamName(data.getUserId(), teamName);
-        } else {
+        } else if (!data.getTeamName().equals(teamName)) {
             // 非一级代理不允许修改团队名称
             throw new BizException("xn00000", "非最高等级代理的团队名称无法修改");
         }
