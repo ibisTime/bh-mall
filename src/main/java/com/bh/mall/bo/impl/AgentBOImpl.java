@@ -86,7 +86,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             condition.setUserId(userId);
             data = agentDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "用户不存在");
+                throw new BizException("xn0000", "用户" + userId + "不存在");
             }
         }
         return data;

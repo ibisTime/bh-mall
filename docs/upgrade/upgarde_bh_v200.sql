@@ -1909,6 +1909,12 @@ ADD updater VARCHAR(32) DEFAULT NULL COMMENT '更新人',
 ADD update_datetime DATETIME COMMENT '更新时间',
 ADD remark VARCHAR(255) DEFAULT NULL COMMENT '备注';
 
+DROP TABLE tbh_order;
+
+DROP TABLE tbh_user;
+
+DROP TABLE tbh_agency_log;
+
 /**************** tbh_cart *******************/
 ALTER TABLE tbh_cart 
 ADD TYPE CHAR(1) DEFAULT NULL COMMENT '类型';
@@ -1916,8 +1922,17 @@ ADD TYPE CHAR(1) DEFAULT NULL COMMENT '类型';
 ALTER TABLE tbh_cart 
 CHANGE product_specs_code specs_code VARCHAR(32) DEFAULT NULL;
 
-DROP TABLE tbh_order;
+DELETE FROM tbh_pro_code WHERE STATUS = '0';
 
-DROP TABLE tbh_user;
+DELETE FROM tbh_mini_code WHERE STATUS = '0';
 
-DROP TABLE tbh_agency_log;
+UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U201807171405128051197';
+
+UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U201807101359562302076';
+
+UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U201807111435137758097';
+
+
+
+
+

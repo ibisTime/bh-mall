@@ -150,6 +150,7 @@ public class AgentAOImpl implements IAgentAO {
 
         String status = EAgentStatus.MIND.getCode();
         if (StringUtils.isNotBlank(fromUserId)) {
+            agentBO.getAgent(fromUserId);
             status = EAgentStatus.IMPOWERO_INFO.getCode();
         }
         return doLoginWeChatH(code, fromUserId, status);
