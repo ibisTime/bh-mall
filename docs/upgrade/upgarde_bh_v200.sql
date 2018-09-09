@@ -11,7 +11,7 @@ INSERT INTO `tbh_account` (
 `account_number`, `user_id`, `real_name`, `type`, `status`,currency,`amount`, `frozen_amount`,`create_datetime`)
 SELECT 
 CONCAT('X',account_number) ,user_id ,real_name,TYPE,STATUS,'C_CNY','0','0',NOW()
-FROM `tbh_account` WHERE TYPE = 'B' AND currency IS NULL;
+FROM `tbh_account` WHERE TYPE = 'B' GROUP BY user_id ;
 
 ALTER TABLE tbh_account ADD LEVEL INT(11)  DEFAULT NULL COMMENT '代理等级';
 
@@ -454,6 +454,10 @@ CREATE TABLE `tbh_agent` (
   `remark` VARCHAR(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `tbh_agent` 
+ADD INDEX `idx_high_user_id` (`high_user_id` ASC),
+ADD INDEX `idx_level` (`level` ASC);
 
 INSERT INTO `tbh_agent` (
 `user_id`, `from_user_id`, `mobile`, `wx_id`, `photo`, `nickname`, `trade_pwd`, `trade_pwd_strength`, 
@@ -1931,6 +1935,36 @@ UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U20180
 UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U201807101359562302076';
 
 UPDATE tbh_agent SET referrer= NULL ,from_user_id= NULL WHERE referrer = 'U201807111435137758097';
+
+
+INSERT INTO `bh_online_test2`.`tbh_agent_price`
+            (`code`,
+             `specs_code`,
+             `level`,
+             `price`,
+             `change_price`,
+             `start_number`,
+             `min_number`,
+             `daily_number`,
+             `weekly_number`,
+             `monthly_number`,
+             `is_buy`)
+SELECT 
+	     CONCAT('C',CODE),
+             `specs_code`,
+             '6',
+             '1000000',
+             '1000000',
+             '0',
+             '0',
+             '0',
+             '0',
+             '0',
+             '1'
+FROM tbh_agent_price GROUP BY  specs_code;            
+
+UPDATE tbh_out_order o JOIN `tbh_agent_log` l
+SET o.`high_user_id` = l.`high_user_id` WHERE o.`apply_user` = l.`apply_user` AND o.`level` = l.`level`;
 
 
 
