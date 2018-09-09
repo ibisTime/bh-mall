@@ -271,24 +271,28 @@ CREATE TABLE `tbh_out_order` (
   PRIMARY KEY (`code`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-INSERT INTO `tbh_out_order` (
+INSERT INTO bh_online_test2.`tbh_out_order` (
 `code`, `level`, `is_ware_send`, `kind`, `product_code`, `product_name`, 
 `specs_code`, `specs_name`, `pro_code`, `pic`, `quantity`, `price`, 
 `to_user_id`, `to_user_name`, `amount`, `yunfei`, `status`, `pay_type`,
-`pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_user`, `high_user_id`, `real_name`, `team_name`, 
+`pay_group`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_user`, `real_name`, `team_name`, 
 `team_leader`, `apply_datetime`, `apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
 `address`, `deliver`, `delive_datetime`, `logistics_code`, `logistics_company`, 
 `updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`) 
 SELECT 
-`code`, `level`, `is_company_send`, `kind`, `product_code`,`product_name`, 
+`code`, `level`, `is_company_send`,
+ CASE `kind`
+ WHEN 4 THEN 2
+ ELSE kind END,
+`product_code`,`product_name`, 
 `product_specs_code`, `product_specs_name`, `bar_code`, `pic`, `quantity`, `price`, 
 `to_user`, `to_user_name`, `amount`, `yunfei`, `status`, `pay_type`,
-`code`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_user`, `to_user`, `real_name`, `team_name`, 
+`code`, `pay_amount`, `pay_datetime`, `pay_code`, `apply_user`,  `real_name`, `team_name`, 
 `team_leader`, `apply_datetime`, `apply_note`, `signer`, `mobile`, `province`, `city`, `area`, 
 `address`, `deliver`, `delive_datetime`, logistics_code, `logistics_company`, 
 `updater`, `update_datetime`, `update_note`, `approver`, `approve_datetime`, `approve_note`, `remark`
- FROM tbh_order WHERE kind != '2';
-
+FROM bh_online_test5.tbh_order WHERE kind != '2';
+ 
 UPDATE tbh_out_order SET is_ware_send = '1' WHERE specs_code = 'PS201806301939383841880'; 
 
 UPDATE tbh_out_order SET is_ware_send = '0' WHERE specs_code = 'PS201806291944580145174'; 
@@ -1343,8 +1347,8 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'out_order_type','订单类型','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','0','授权单','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','1','升级单','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','2','云仓提货','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','3','普通单','USYS201800000000002',NOW(),NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','2','普通单','USYS201800000000002',NOW(),NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','3','云仓提货','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','4','微店订单','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'currency','币种','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','TX_CNY','可提现账户','USYS201800000000002',NOW(),NULL);
