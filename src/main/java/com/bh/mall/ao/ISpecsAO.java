@@ -35,4 +35,7 @@ public interface ISpecsAO {
     // 根据等级查询规格
     public Specs getSpecsByLevel(String code, String level);
 
+    public Paginable<Specs> queryProductCFrontPage(int start, int limit,
+            Specs condition);
+
 }

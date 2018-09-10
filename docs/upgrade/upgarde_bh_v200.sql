@@ -1227,13 +1227,13 @@ insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('wx_pay','type','35','USYS201800000000002',NOW(),'渠道类型');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('wx_pay','company_code','1508468601','USYS201800000000002',NOW(),'渠道代号');
 
-insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('wx_pay','private_key1','r2jdDFSdiikklwlllejlwjio3232451n','USYS201800000000002',NOW(),'秘钥1');
+insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('wx_pay','private_key1','r2jgDFSdiikklwlllejlwjio3238431h','USYS201800000000002',NOW(),'秘钥1');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('wx_pay','private_key2','wx1f67df3de14d4fcf','USYS201800000000002',NOW(),'秘钥2');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','name','微信小程序','USYS201800000000002',NOW(),'渠道名称');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','type','1','USYS201800000000002',NOW(),'渠道类型');
 
-insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','company_code','1400666002','USYS201800000000002',NOW(),'渠道代号');
-insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','private_key1','r2jgDFSdiikklwlllejlwjio3242342n','USYS201800000000002',NOW(),'秘钥1');
+insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','company_code','1508468601','USYS201800000000002',NOW(),'渠道代号');
+insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','private_key1','r2jgDFSdiikklwlllejlwjio3238431h','USYS201800000000002',NOW(),'秘钥1');
 insert into `tsys_config` (`type`, `ckey`, `cvalue`, `updater`, `update_datetime`, `remark`) values('xcx_pay','private_key2','wxa0c8f09abc470f2f','USYS201800000000002',NOW(),'秘钥2');
 
 UPDATE tsys_config SET cvalue = '0' WHERE ckey = '四川省';
@@ -2061,6 +2061,9 @@ UPDATE tbh_agent_log SET to_user_id = 'USYS201800000000002' WHERE apply_level = 
 
 UPDATE tbh_agent_log SET high_user_id = 'USYS201800000000002' WHERE LEVEL = '1';
 
+update `tsys_config` set cvalue = 'wxa0c8f09abc470f2f' where type='wx_xcx' and  ckey='wx_xcx_access_key';
+
+update `tsys_config` set cvalue = '0aebaab70f987fe95bc88e9f4aecdfaa' where type='wx_xcx' and  ckey='wx_xcx_secret_key';
 
 
 

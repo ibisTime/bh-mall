@@ -66,6 +66,15 @@ public class Specs extends ABaseDO {
     // 等级
     private Integer level;
 
+    // 等级
+    private Integer status;
+
+    private String productName;
+
+    private String pic;
+
+    private String advPic;
+
     public String getCode() {
         return code;
     }
@@ -200,6 +209,38 @@ public class Specs extends ABaseDO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public String getAdvPic() {
+        return advPic;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public void setAdvPic(String advPic) {
+        this.advPic = advPic;
     }
 
 }

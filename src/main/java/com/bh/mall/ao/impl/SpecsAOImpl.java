@@ -67,4 +67,14 @@ public class SpecsAOImpl implements ISpecsAO {
         return data;
     }
 
+    @Override
+    public Paginable<Specs> queryProductCFrontPage(int start, int limit,
+            Specs condition) {
+        Paginable<Specs> page = specsBO.getPaginable(start, limit, condition);
+        for (Specs data : page.getList()) {
+
+        }
+        return null;
+    }
+
 }
