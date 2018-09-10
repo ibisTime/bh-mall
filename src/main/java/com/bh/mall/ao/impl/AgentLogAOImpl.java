@@ -63,7 +63,7 @@ public class AgentLogAOImpl implements IAgentLogAO {
 
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                .getLevel()) {
+                .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else if (null != data.getLevel()
@@ -106,7 +106,7 @@ public class AgentLogAOImpl implements IAgentLogAO {
 
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-                .getLevel()) {
+                .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
             } else if (null != data.getLevel()
@@ -145,7 +145,7 @@ public class AgentLogAOImpl implements IAgentLogAO {
         }
         // 上级转义
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
-            .getLevel()) {
+            .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
             SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
             data.setHighUserName(sysUser.getRealName());
         } else if (null != data.getLevel()

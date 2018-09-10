@@ -2055,7 +2055,8 @@ WHERE l.`apply_user` = u.`user_id` AND l.to_user_id = 'USYS201800000000002' AND 
 UPDATE tbh_order_report o JOIN tbh_agent u ON o.`signer`=u.`user_id`
 SET o.signer = u.`real_name`;
 
+UPDATE tbh_cnavigate SET STATUS = 0 AND belong = 0 WHERE CODE = 'DH201807251626344874399';
 
 
-
+UPDATE tbh_agent_log SET high_user_id = 'USYS201800000000002' WHERE LEVEL = '1';
 
