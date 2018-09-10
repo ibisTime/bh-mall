@@ -2057,6 +2057,10 @@ SET o.signer = u.`real_name`;
 
 UPDATE tbh_cnavigate SET STATUS = 0 AND belong = 0 WHERE CODE = 'DH201807251626344874399';
 
+UPDATE tbh_agent_log SET to_user_id = 'USYS201800000000002' WHERE apply_level = '1';
 
 UPDATE tbh_agent_log SET high_user_id = 'USYS201800000000002' WHERE LEVEL = '1';
+
+
+
 
