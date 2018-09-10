@@ -1576,10 +1576,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
             outOrderBO.updatePayGroup(data);
             // 发放奖励
             if (0 != allAward) {
-                accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),
-                    data.getApplyUser(), ECurrency.TX_CNY.getCode(), allAward,
-                    EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getCode(),
-                    EBizType.AJ_CHJL_OUT.getCode(), payGroup);
+                Account mkAccount = accountBO.getAccountByUser(
+                    data.getApplyUser(), ECurrency.TX_CNY.getCode());
+                accountBO.changeAmount(mkAccount.getAccountNumber(),
+                    EChannelType.NBZ, null, payGroup, payGroup,
+                    EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getValue(),
+                    allAward);
             }
         }
         logger.info("============出货订单统计结束==========");

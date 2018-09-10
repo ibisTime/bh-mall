@@ -927,17 +927,14 @@ public class InOrderAOImpl implements IInOrderAO {
             data.setPayGroup(payGroup);
             inOrderBO.updatePayGroup(data);
 
-            String fromUserId = ESysUser.SYS_USER_BH.getCode();
-            if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != data
-                .getLevel()) {
-                fromUserId = data.getToUserId();
-            }
             // 发放奖励
             if (0 != allAward) {
-                accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),
-                    data.getApplyUser(), ECurrency.TX_CNY.getCode(), allAward,
-                    EBizType.AJ_CHJL_IN, EBizType.AJ_CHJL_IN.getCode(),
-                    EBizType.AJ_CHJL_IN.getCode(), payGroup);
+                Account mkAccount = accountBO.getAccountByUser(
+                    data.getApplyUser(), ECurrency.TX_CNY.getCode());
+                accountBO.changeAmount(mkAccount.getAccountNumber(),
+                    EChannelType.NBZ, null, payGroup, payGroup,
+                    EBizType.AJ_CHJL_IN, EBizType.AJ_CHJL_IN.getValue(),
+                    allAward);
             }
 
         }
