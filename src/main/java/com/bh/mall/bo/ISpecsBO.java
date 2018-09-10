@@ -33,4 +33,6 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
 
     Integer getMinSpecsNumber(Specs data, int number);
 
+    List<Specs> querySpecsPage(int start, int pageSize, Specs condition);
+
 }

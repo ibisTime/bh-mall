@@ -52,4 +52,6 @@ public interface IProductAO {
     Paginable<Product> selectProductPageByB(int start, int limit,
             Product condition);
 
+    Object getProductByCustomer(String code);
+
 }

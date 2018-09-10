@@ -15,4 +15,6 @@ public interface ISpecsDAO extends IBaseDAO<Specs> {
     void updateRepertory(Specs data);
 
     List<Specs> selectSpecsListByB(Specs condition);
+
+    List<Specs> selectSpecsPage(int start, int pageSize, Specs condition);
 }

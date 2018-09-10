@@ -67,13 +67,15 @@ public class Specs extends ABaseDO {
     private Integer level;
 
     // 等级
-    private Integer status;
+    private String status;
 
     private String productName;
 
     private String pic;
 
     private String advPic;
+
+    private Long agentPrice;
 
     public String getCode() {
         return code;
@@ -211,7 +213,7 @@ public class Specs extends ABaseDO {
         this.level = level;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -227,7 +229,7 @@ public class Specs extends ABaseDO {
         return advPic;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -241,6 +243,14 @@ public class Specs extends ABaseDO {
 
     public void setAdvPic(String advPic) {
         this.advPic = advPic;
+    }
+
+    public Long getAgentPrice() {
+        return agentPrice;
+    }
+
+    public void setAgentPrice(Long agentPrice) {
+        this.agentPrice = agentPrice;
     }
 
 }

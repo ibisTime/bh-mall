@@ -330,4 +330,10 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         return specsDAO.selectSpecsListByB(condition);
     }
 
+    @Override
+    public List<Specs> querySpecsPage(int start, int pageSize,
+            Specs condition) {
+        return specsDAO.selectSpecsPage(start, pageSize, condition);
+    }
+
 }

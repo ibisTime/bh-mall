@@ -9,6 +9,7 @@ import com.bh.mall.ao.ISpecsAO;
 import com.bh.mall.bo.IAgentPriceBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISpecsBO;
+import com.bh.mall.bo.base.Page;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.AgentPrice;
@@ -70,11 +71,21 @@ public class SpecsAOImpl implements ISpecsAO {
     @Override
     public Paginable<Specs> queryProductCFrontPage(int start, int limit,
             Specs condition) {
-        Paginable<Specs> page = specsBO.getPaginable(start, limit, condition);
-        for (Specs data : page.getList()) {
-
+        long count = specsBO.getTotalCount(condition);
+        Page<Specs> page = new Page<Specs>(start, limit, count);
+        List<Specs> list = specsBO.querySpecsPage(page.getStart(),
+            page.getPageSize(), condition);
+        for (Specs data : list) {
+            Product product = productBO.getProduct(data.getProductCode());
+            data.setAdvPic(product.getAdvPic());
+            data.setPic(product.getPic());
+            data.setProductName(product.getName());
+            data.setProduct(product);
+            AgentPrice price = agentPriceBO.getPriceByLevel(data.getCode(), 6);
+            data.setAgentPrice(price.getPrice());
         }
-        return null;
+        page.setList(list);
+        return page;
     }
 
 }

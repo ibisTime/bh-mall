@@ -50,6 +50,9 @@
 			<if test="refCode != null and refCode !=''">
 				AND t.ref_code  = #{refCode}
 			</if>
+			<if test="refCode != null and refCode !=''">
+				AND c.ref_code  = #{refCode}
+			</if>
 			<if test="isBuy != null and isBuy !=''">
 				AND p.is_buy  = #{isBuy}
 			</if>
@@ -85,11 +88,35 @@
 		</trim>
 	</select>
 	
+	<select id="select_specs_c" parameterType="specs" resultMap="specs_DB_Result">
+		SELECT 
+		t.code
+		,t.product_code
+		,t.is_single
+		,t.single_number
+		,t.ref_code
+		
+		,t.name
+		,t.number
+		,t.stock_number
+		,t.weight
+		
+		,t.is_sq_order
+		,t.is_sj_order
+		,t.is_normal_order
+		FROM tbh_specs t  JOIN tbh_product c ON t.product_code = c.code
+		<include refid="where_condition"/>
+		GROUP BY t.code
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
 	
 	<select id="select_specs_count" parameterType="specs" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_specs t  JOIN tbh_agent_price p ON t.code = p.specs_code
 		<include refid="where_condition"/>
-		GROUP BY t.code
 	</select>
 	
 	

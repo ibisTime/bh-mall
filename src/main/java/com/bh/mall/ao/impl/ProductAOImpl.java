@@ -384,4 +384,14 @@ public class ProductAOImpl implements IProductAO {
         page.setList(list);
         return page;
     }
+
+    @Override
+    public Specs getProductByCustomer(String code) {
+        Specs data = specsBO.getSpecs(code);
+        AgentPrice price = agentPriceBO.getPriceByLevel(data.getCode(), 6);
+        data.setAgentPrice(price.getPrice());
+        Product product = productBO.getProduct(data.getProductCode());
+        data.setProduct(product);
+        return data;
+    }
 }
