@@ -145,6 +145,8 @@ SET c.`high_user_id` = u.`high_user_id`, c.`team_name` = u.`team_name`, c.`level
 UPDATE tbh_charge c JOIN tbh_user u ON  c.`apply_user` = u.`user_id`
 SET c.`high_user_id` = c.pay_user,  c.`level` = u.`level`,c.`team_name`=u.team_name WHERE c.`status` IN (5,6) ;
 
+UPDATE tbh_charge SET high_user_id  = 'USYS201800000000002' WHERE LEVEL = 1;
+
 UPDATE tbh_charge SET high_user_id = 'USYS201800000000002' , LEVEL = '1',team_name = '小义团队' WHERE apply_user = 'U201807101359562302076';
 
 /*********** tbh_charge **************/
