@@ -1449,8 +1449,7 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','source','0','公众号','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','C_CNY','C端账户','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'bananer_belong','banner图位置','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','0','全局','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','1','地方','USYS201800000000002',NOW(),NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','0','地方','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'ware_log_type','云仓变动类型','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','ware_log_type','0','购买云仓','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','ware_log_type','1','云仓出货','USYS201800000000002',NOW(),NULL);
@@ -2049,3 +2048,14 @@ UPDATE tbh_ware_log SET TYPE = '1' WHERE biz_type = 'AJ_YCCH';
 
 /*********************** WH201807231615508828525 *************************/
 UPDATE tbh_ware SET user_id = 'U201807081440374532026',quantity=0 WHERE user_id = 'USYS201800000000002';
+
+UPDATE tbh_agent_log l,tbh_agent u SET l.`to_user_id` = u.`high_user_id`
+WHERE l.`apply_user` = u.`user_id` AND l.to_user_id = 'USYS201800000000002' AND l.apply_level != 1;
+
+UPDATE tbh_order_report o JOIN tbh_agent u ON o.`signer`=u.`user_id`
+SET o.signer = u.`real_name`;
+
+
+
+
+

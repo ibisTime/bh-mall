@@ -332,6 +332,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         condition.setEndDatetime(endDatetime);
 
         List<String> statusList = new ArrayList<String>();
+        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
         statusList.add(EOutOrderStatus.TO_SEND.getCode());
         statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
         statusList.add(EOutOrderStatus.RECEIVED.getCode());
@@ -348,6 +349,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         condition.setKind(EOutOrderKind.Impower_Order.getCode());
 
         List<String> statusList = new ArrayList<String>();
+        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
         statusList.add(EOutOrderStatus.TO_SEND.getCode());
         statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
         statusList.add(EOutOrderStatus.RECEIVED.getCode());
@@ -368,6 +370,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
 
         condition.setKind(EOutOrderKind.Upgrade_Order.getCode());
         List<String> statusList = new ArrayList<String>();
+        statusList.add(EOutOrderStatus.TO_APPROVE.getCode());
         statusList.add(EOutOrderStatus.TO_SEND.getCode());
         statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
         statusList.add(EOutOrderStatus.RECEIVED.getCode());
