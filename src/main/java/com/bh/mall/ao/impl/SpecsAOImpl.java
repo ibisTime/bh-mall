@@ -71,7 +71,7 @@ public class SpecsAOImpl implements ISpecsAO {
     @Override
     public Paginable<Specs> queryProductCFrontPage(int start, int limit,
             Specs condition) {
-        long count = specsBO.getTotalCount(condition);
+        long count = specsBO.getTotalCountC(condition);
         Page<Specs> page = new Page<Specs>(start, limit, count);
         List<Specs> list = specsBO.querySpecsPage(page.getStart(),
             page.getPageSize(), condition);

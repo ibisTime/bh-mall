@@ -1972,8 +1972,8 @@ SELECT
 	     CONCAT('C',CODE),
              `specs_code`,
              '6',
-             '1000000',
-             '1000000',
+             '268000',
+             '268000',
              '0',
              '0',
              '0',
@@ -1981,6 +1981,8 @@ SELECT
              '0',
              '1'
 FROM tbh_agent_price GROUP BY  specs_code;            
+
+UPDATE tbh_agent_price SET price = 10720000 WHERE specs_code = 'PS201806301939383841880' AND LEVEL= 6;
 
 UPDATE tbh_out_order o JOIN `tbh_agent_log` l
 SET o.`high_user_id` = l.`high_user_id` WHERE o.`apply_user` = l.`apply_user` AND o.`level` = l.`level`;
@@ -2040,7 +2042,7 @@ VALUES
         NOW(),
         '');
 
-UPDATE tbh_ware_log w JOIN tbh_agent u SET w.`real_name` = u.`real_name`;
+UPDATE tbh_ware_log w JOIN tbh_agent u SET w.`real_name` = u.`real_name` WHERE u.user_id = w.apply_user;
 
 UPDATE tbh_ware_log SET TYPE = '1' WHERE biz_type = 'AJ_YCTH'; 
 

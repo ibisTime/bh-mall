@@ -35,4 +35,6 @@ public interface ISpecsBO extends IPaginableBO<Specs> {
 
     List<Specs> querySpecsPage(int start, int pageSize, Specs condition);
 
+    long getTotalCountC(Specs condition);
+
 }

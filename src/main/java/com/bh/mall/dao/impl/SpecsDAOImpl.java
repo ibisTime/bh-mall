@@ -74,4 +74,10 @@ public class SpecsDAOImpl extends AMybatisTemplate implements ISpecsDAO {
             pageSize, condition, Specs.class);
     }
 
+    @Override
+    public long selectTotalCountC(Specs condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_count_c"),
+            condition);
+    }
+
 }

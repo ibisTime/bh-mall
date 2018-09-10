@@ -50,8 +50,8 @@
 			<if test="refCode != null and refCode !=''">
 				AND t.ref_code  = #{refCode}
 			</if>
-			<if test="refCode != null and refCode !=''">
-				AND c.ref_code  = #{refCode}
+			<if test="status != null and status !=''">
+				AND c.status  = #{status}
 			</if>
 			<if test="isBuy != null and isBuy !=''">
 				AND p.is_buy  = #{isBuy}
@@ -114,10 +114,17 @@
 		</trim>
 	</select>
 	
+	<select id="select_count_c" parameterType="specs" resultType="java.lang.Long">
+		SELECT count(1) FROM tbh_specs t JOIN tbh_product c ON t.product_code = c.code
+		<include refid="where_condition"/>
+	</select>
+	
+	
 	<select id="select_specs_count" parameterType="specs" resultType="java.lang.Long">
 		SELECT count(1) FROM tbh_specs t  JOIN tbh_agent_price p ON t.code = p.specs_code
 		<include refid="where_condition"/>
 	</select>
+	
 	
 	
 		

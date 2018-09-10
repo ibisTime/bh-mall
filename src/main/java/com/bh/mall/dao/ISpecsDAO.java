@@ -17,4 +17,6 @@ public interface ISpecsDAO extends IBaseDAO<Specs> {
     List<Specs> selectSpecsListByB(Specs condition);
 
     List<Specs> selectSpecsPage(int start, int pageSize, Specs condition);
+
+    long selectTotalCountC(Specs condition);
 }

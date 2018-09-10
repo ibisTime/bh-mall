@@ -317,11 +317,15 @@ public class ProductAOImpl implements IProductAO {
             // 查询该等级能够看到的规格
             AgentPrice specsPrice = agentPriceBO
                 .getPriceByLevel(productSpecs.getCode(), level);
-            if (EBoolean.YES.getCode().equals(specsPrice.getIsBuy())) {
+            if (EBoolean.YES.getCode().equals(specsPrice.getIsBuy())
+                    || 6 == level) {
                 Specs ps = specsBO.getSpecs(specsPrice.getSpecsCode());
                 ps.setPrice(specsPrice);
                 list.add(ps);
             }
+        }
+        if (CollectionUtils.isEmpty(specsList)) {
+            return null;
         }
 
         data.setSpecsList(list);

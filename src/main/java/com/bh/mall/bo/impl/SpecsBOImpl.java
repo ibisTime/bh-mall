@@ -336,4 +336,9 @@ public class SpecsBOImpl extends PaginableBOImpl<Specs> implements ISpecsBO {
         return specsDAO.selectSpecsPage(start, pageSize, condition);
     }
 
+    @Override
+    public long getTotalCountC(Specs condition) {
+        return specsDAO.selectTotalCountC(condition);
+    }
+
 }
