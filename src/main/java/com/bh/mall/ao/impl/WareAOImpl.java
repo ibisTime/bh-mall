@@ -49,6 +49,7 @@ import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.ECheckStatus;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESystemCode;
@@ -255,21 +256,21 @@ public class WareAOImpl implements IWareAO {
         }
 
         String kind = EOutOrderKind.Pick_Up.getCode();
-        // 是否完成授权单
+
+        // 用户是否已授权
         if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
-            boolean isImpower = outOrderBO.checkImpower(agent.getUserId(),
-                agent.getImpowerDatetime());
-            if (isImpower) {
+
+            // 是否完成授权单
+            if (EIsImpower.NO_Impwoer.getCode().equals(agent.getIsImpower())) {
                 kind = EOutOrderKind.Impower_Order.getCode();
             }
         }
 
-        // 是否有过升级记录
+        // 用户是否已升级
         if (EAgentStatus.UPGRADED.getCode().equals(agent.getStatus())) {
-            AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
-            boolean isUpgrade = outOrderBO.checkUpgrade(agent.getUserId(),
-                log.getApproveDatetime());
-            if (isUpgrade) {
+
+            // 是否完成升级单
+            if (EIsImpower.NO_Upgrade.getCode().equals(agent.getIsImpower())) {
                 kind = EOutOrderKind.Upgrade_Order.getCode();
             }
         }
@@ -293,6 +294,7 @@ public class WareAOImpl implements IWareAO {
         StringBuffer sb = new StringBuffer();
 
         // 订单拆单
+        Long amount = 0L;
         if (EBoolean.YES.getCode().equals(psData.getIsSingle())) {
             int orderNumber = StringValidater.toInteger(req.getQuantity())
                     / psData.getSingleNumber();
@@ -304,7 +306,6 @@ public class WareAOImpl implements IWareAO {
                 orderNumber = orderNumber + 1;
             }
 
-            Long amount = 0L;
             for (int i = 0; i < orderNumber; i++) {
 
                 if (i == orderNumber - 1) {
@@ -339,18 +340,19 @@ public class WareAOImpl implements IWareAO {
                 allYunfei = allYunfei + yunfei;
             }
         } else {
+            amount = StringValidater.toInteger(req.getQuantity())
+                    * data.getPrice();
+
             String code = outOrderBO.pickUpGoods(data.getProductCode(),
                 data.getProductName(), product.getPic(), data.getSpecsCode(),
                 data.getSpecsName(),
                 StringValidater.toInteger(req.getQuantity()), data.getPrice(),
-                StringValidater.toInteger(req.getQuantity()) * data.getPrice(),
-                yunfei, agent.getHighUserId(), agent, teamLeader.getRealName(),
-                sysUser.getUserId(), sysUser.getRealName(),
-                EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
-                req.getProvince(), req.getCity(), req.getArea(),
-                req.getAddress(), kind);
+                amount, yunfei, agent.getHighUserId(), agent,
+                teamLeader.getRealName(), sysUser.getUserId(),
+                sysUser.getRealName(), EBoolean.YES.getCode(), req.getSigner(),
+                req.getMobile(), req.getProvince(), req.getCity(),
+                req.getArea(), req.getAddress(), kind);
             sb.append(code);
-
             allYunfei = yunfei;
         }
 
@@ -369,6 +371,28 @@ public class WareAOImpl implements IWareAO {
         wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
             -StringValidater.toInteger(req.getQuantity()), ESpecsLogType.Order,
             ESpecsLogType.Order.getValue(), data.getUserId());
+
+        // 订单类型为授权单，获取类型为授权单的订单金额与本次下单金额，金额不满足该等级授权单金额是，用户状态为未完成授权单
+        String isImpower = EIsImpower.Normal.getCode();
+        if (EOutOrderKind.Impower_Order.getCode().equals(kind)) {
+            // 获取所有授权单金额
+            Long orderAmount = outOrderBO.checkImpowerOrder(agent.getUserId(),
+                agent.getImpowerDatetime());
+            // 授权单金额不满足授权金额
+            if (agentLevel.getAmount() > orderAmount + amount) {
+                isImpower = EIsImpower.NO_Impwoer.getCode();
+            }
+
+            // 订单类型为升级单，获取最后一次升级后类型为升级单的订单金额与本次金额，金额不满足该等级升级单金额时，用户状态为未完成升级单
+        } else if (EOutOrderKind.Upgrade_Order.getCode().equals(kind)) {
+            AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
+            Long orderAmount = outOrderBO.checkImpowerOrder(agent.getUserId(),
+                log.getApproveDatetime());
+            if (agentLevel.getAmount() > orderAmount + amount) {
+                isImpower = EIsImpower.NO_Upgrade.getCode();
+            }
+        }
+        agentBO.refreshIsImpower(agent, isImpower);
     }
 
     @Override
@@ -438,35 +462,23 @@ public class WareAOImpl implements IWareAO {
             }
 
             // ******************已授权或已升级的代理*****************
+            if (EIsImpower.NO_Impwoer.getCode().equals(agent.getStatus())) {
+                result = ECheckStatus.NO_Impwoer.getCode();
+
+            } else if (EIsImpower.NO_Upgrade.getCode()
+                .equals(agent.getStatus())) {
+                result = ECheckStatus.NO_Upgrae.getCode();
+            }
+
             AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
-            if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())
-                    || EAgentStatus.UPGRADED.getCode()
-                        .equals(agent.getStatus())) {
-                Long imopowerAmount = outOrderBO.checkImpowerOrder(
-                    agent.getUserId(), agent.getImpowerDatetime());
-                Long upAmount = outOrderBO.checkUpgradeOrder(agent.getUserId(),
-                    log.getApproveDatetime());
-                // 1、检查是否完成授权单
-                if (EAgentStatus.IMPOWERED.getCode()
-                    .equals(agent.getStatus())) {
-                    if (amount > imopowerAmount) {
-                        amount = amount - imopowerAmount;
-                        result = ECheckStatus.NO_Impwoer.getCode();
-                    }
 
-                    // 2、检查是否完成升级单
-                } else if (amount > upAmount) {
-                    amount = amount - upAmount;
-                    result = ECheckStatus.NO_Upgrae.getCode();
-                }
-
-                if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
-                    if (inOrderBO.getInOrderByUser(agent.getUserId(),
-                        log.getApproveDatetime())
-                            && whAmount < agentLevel.getAmount()) {
-                        redAmount = agentLevel.getAmount();
-                        result = ECheckStatus.RED_LOW.getCode();
-                    }
+            // 3、判断开启云仓用户买入云仓金额是否满足授权单或升级单的金额
+            if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
+                if (inOrderBO.getInOrderByUser(agent.getUserId(),
+                    log.getApproveDatetime())
+                        && whAmount < agentLevel.getAmount()) {
+                    redAmount = agentLevel.getAmount();
+                    result = ECheckStatus.RED_LOW.getCode();
                 }
             }
 

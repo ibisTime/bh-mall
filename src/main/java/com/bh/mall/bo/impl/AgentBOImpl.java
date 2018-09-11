@@ -531,4 +531,10 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         agentDAO.updateStatus(data);
     }
 
+    @Override
+    public void refreshIsImpower(Agent agent, String isImpower) {
+        agent.setIsImpower(isImpower);
+        agentDAO.updateImpower(agent);
+    }
+
 }

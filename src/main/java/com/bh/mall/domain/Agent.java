@@ -118,6 +118,9 @@ public class Agent extends ABaseDO {
     // 最后一条代理轨迹记录
     private String lastAgentLog;
 
+    // 是否完成授权单、升级单(0 未完成授权单，1 未完成升级单 2 正常)
+    private String isImpower;
+
     // 备注
     private String remark;
 
@@ -725,6 +728,14 @@ public class Agent extends ABaseDO {
 
     public void setToLevel(Integer toLevel) {
         this.toLevel = toLevel;
+    }
+
+    public String getIsImpower() {
+        return isImpower;
+    }
+
+    public void setIsImpower(String isImpower) {
+        this.isImpower = isImpower;
     }
 
 }

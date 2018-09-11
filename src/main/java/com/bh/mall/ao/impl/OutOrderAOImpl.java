@@ -52,7 +52,6 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
-import com.bh.mall.domain.AgentLog;
 import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.CUser;
@@ -75,13 +74,13 @@ import com.bh.mall.dto.req.XN627643Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.dto.res.XN627666Res;
 import com.bh.mall.enums.EAgentLevel;
-import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInOrderStatus;
+import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EPayType;
@@ -265,6 +264,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 }
 
             } else {
+                amount = price.getPrice() * cart.getQuantity();
                 // 不可拆单
                 list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                     applyUser.getRealName(), applyUser.getLevel(),
@@ -279,7 +279,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 删除购物车记录
             cartBO.removeCart(cart);
 
-            amount = amount + price.getPrice() * cart.getQuantity();
         }
 
         // 订单金额不能低于授权单金额
@@ -1148,40 +1147,28 @@ public class OutOrderAOImpl implements IOutOrderAO {
         String kind = EOutOrderKind.Normal_Order.getCode();
 
         // 是否完成授权单
-        if (EAgentStatus.IMPOWERED.getCode().equals(applyUser.getStatus())) {
-            boolean isImpower = outOrderBO.checkImpower(applyUser.getUserId(),
-                applyUser.getImpowerDatetime());
-            if (isImpower) {
-                kind = EOutOrderKind.Impower_Order.getCode();
-                if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(specs.getIsSqOrder())) {
-                    throw new BizException("xn0000", "该产品规格不允许授权单下单");
-                }
-            } else if (EProductSpecsType.Apply_NO.getCode()
-                .equals(specs.getIsNormalOrder())) {
-                throw new BizException("xn0000", "该产品规格不允许普通单下单");
-            }
-        }
-
-        // 是否有过升级记录
-        if (EAgentStatus.UPGRADED.getCode().equals(applyUser.getStatus())) {
-            AgentLog log = agentLogBO.getAgentLog(applyUser.getLastAgentLog());
-            boolean isUpgrade = outOrderBO.checkUpgrade(applyUser.getUserId(),
-                log.getApproveDatetime());
-            if (isUpgrade) {
-                kind = EOutOrderKind.Upgrade_Order.getCode();
-                if (EProductSpecsType.Apply_NO.getCode()
-                    .equals(specs.getIsSjOrder())) {
-                    throw new BizException("xn0000", "该产品规格不允许升级单下单");
-                }
-            } else if (EProductSpecsType.Apply_NO.getCode()
-                .equals(specs.getIsNormalOrder())) {
-                throw new BizException("xn0000", "该产品规格不允许普通单下单");
+        if (EIsImpower.NO_Impwoer.getCode().equals(applyUser.getIsImpower())) {
+            kind = EOutOrderKind.Impower_Order.getCode();
+            if (EProductSpecsType.Apply_NO.getCode()
+                .equals(specs.getIsSqOrder())) {
+                throw new BizException("xn0000", "该产品规格不允许授权单下单");
             }
 
+        } else if (EIsImpower.NO_Upgrade.getCode()
+            .equals(applyUser.getIsImpower())) {
+            kind = EOutOrderKind.Upgrade_Order.getCode();
+            if (EProductSpecsType.Apply_NO.getCode()
+                .equals(specs.getIsSjOrder())) {
+                throw new BizException("xn0000", "该产品规格不允许升级单下单");
+            }
+
+        } else if (EProductSpecsType.Apply_NO.getCode()
+            .equals(specs.getIsNormalOrder())) {
+            throw new BizException("xn0000", "该产品规格不允许普通单下单");
         }
 
         return kind;
+
     }
 
     // 变动产品数量

@@ -45,6 +45,7 @@
 		
 		<result column="remark" property="remark" />
 		<result column="last_agent_log" property="lastAgentLog" />
+		<result column="is_impower" property="isImpower" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -168,6 +169,9 @@
 			<if test="teamName != null and teamName != '' ">
 				AND t.team_name like "%"#{teamName}"%"
 			</if>
+			<if test="isImpower != null and isImpower != '' ">
+				AND is_impower = #{isImpower}
+			</if>
 		</trim>
 	</sql>
 
@@ -213,6 +217,7 @@
 		,t.approve_name
 		,t.approve_datetime
 		,t.last_agent_log
+		,t.is_impower
 		,t.impower_datetime
 		,t.remark
 		FROM
@@ -616,6 +621,14 @@
 		referrer = #{referrer}
 		WHERE user_id = #{userId}
 	</update>
+	
+	<update id="update_is_impower" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		is_impower = #{isImpower}
+		WHERE user_id = #{userId}
+	</update>
+	
 	
 	
 </mapper>

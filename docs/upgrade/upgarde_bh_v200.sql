@@ -2071,5 +2071,6 @@ update `tsys_config` set cvalue = 'wxa0c8f09abc470f2f' where type='wx_xcx' and  
 
 update `tsys_config` set cvalue = '0aebaab70f987fe95bc88e9f4aecdfaa' where type='wx_xcx' and  ckey='wx_xcx_secret_key';
 
-
+ALTER TABLE tbh_agent 
+ADD is_impower CHAR(1) DEFAULT NULL COMMENT '是否完成授权单/升级单';
 

@@ -108,4 +108,6 @@ public interface IAgentBO extends IPaginableBO<Agent> {
 
     public void refreshStatus(Agent dbUser, String status);
 
+    public void refreshIsImpower(Agent agent, String isImpower);
+
 }
