@@ -257,28 +257,25 @@ public class WareAOImpl implements IWareAO {
 
         String kind = EOutOrderKind.Pick_Up.getCode();
 
-        // 用户是否已授权
-        if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())) {
+        // 用户已授权且没有完成授权单，所下订单为授权单
+        if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())
+                && EIsImpower.NO_Impwoer.getCode()
+                    .equals(agent.getIsImpower())) {
+            kind = EOutOrderKind.Impower_Order.getCode();
 
-            // 是否完成授权单
-            if (EIsImpower.NO_Impwoer.getCode().equals(agent.getIsImpower())) {
-                kind = EOutOrderKind.Impower_Order.getCode();
-            }
-        }
+            // 用户已升级且没有完成升级单，所下订单为升级单
+        } else if (EAgentStatus.UPGRADED.getCode().equals(agent.getStatus())
+                && EIsImpower.NO_Upgrade.getCode()
+                    .equals(agent.getIsImpower())) {
 
-        // 用户是否已升级
-        if (EAgentStatus.UPGRADED.getCode().equals(agent.getStatus())) {
-
-            // 是否完成升级单
-            if (EIsImpower.NO_Upgrade.getCode().equals(agent.getIsImpower())) {
-                kind = EOutOrderKind.Upgrade_Order.getCode();
-            }
+            kind = EOutOrderKind.Upgrade_Order.getCode();
         }
 
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
 
         // 产品不包邮，计算运费
         Long allYunfei = 0L;
+
         Long yunfei = 0L;
         if (EBoolean.NO.getCode().equals(product.getIsFree())) {
             SYSConfig sysConfig = sysConfigBO.getConfig(req.getProvince(),
@@ -288,6 +285,7 @@ public class WareAOImpl implements IWareAO {
 
         // 获取团队长
         Agent teamLeader = agentBO.getTeamLeader(agent.getTeamName());
+
         // 订单归属人
         SYSUser sysUser = sysUserBO.getSYSUser();
 
@@ -379,16 +377,18 @@ public class WareAOImpl implements IWareAO {
             Long orderAmount = outOrderBO.checkImpowerOrder(agent.getUserId(),
                 agent.getImpowerDatetime());
             // 授权单金额不满足授权金额
-            if (agentLevel.getAmount() > orderAmount + amount) {
+            long allAmount = orderAmount + amount;
+            if (agentLevel.getAmount().longValue() > allAmount) {
                 isImpower = EIsImpower.NO_Impwoer.getCode();
             }
 
             // 订单类型为升级单，获取最后一次升级后类型为升级单的订单金额与本次金额，金额不满足该等级升级单金额时，用户状态为未完成升级单
         } else if (EOutOrderKind.Upgrade_Order.getCode().equals(kind)) {
             AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
-            Long orderAmount = outOrderBO.checkImpowerOrder(agent.getUserId(),
+            Long orderAmount = outOrderBO.checkUpgradeOrder(agent.getUserId(),
                 log.getApproveDatetime());
-            if (agentLevel.getAmount() > orderAmount + amount) {
+            long allAmount = orderAmount + amount;
+            if (agentLevel.getAmount().longValue() > allAmount) {
                 isImpower = EIsImpower.NO_Upgrade.getCode();
             }
         }
@@ -461,13 +461,13 @@ public class WareAOImpl implements IWareAO {
                 }
             }
 
-            // ******************已授权或已升级的代理*****************
-            if (EIsImpower.NO_Impwoer.getCode().equals(agent.getStatus())) {
-                result = ECheckStatus.NO_Impwoer.getCode();
+            // 代理授权单或升级单是否已完成，若已完成状态为正常
+            if (EIsImpower.NO_Impwoer.getCode().equals(agent.getIsImpower())) {
+                result = ECheckStatus.NO_Impower.getCode();
 
             } else if (EIsImpower.NO_Upgrade.getCode()
-                .equals(agent.getStatus())) {
-                result = ECheckStatus.NO_Upgrae.getCode();
+                .equals(agent.getIsImpower())) {
+                result = ECheckStatus.NO_Upgrade.getCode();
             }
 
             AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
@@ -537,7 +537,7 @@ public class WareAOImpl implements IWareAO {
                     // 5、升级的代理，且未完成升级单检查门槛与云仓余额是否满足升级单
                 } else if (EAgentStatus.UPGRADED.getCode()
                     .equals(agent.getStatus())
-                        && ECheckStatus.NO_Upgrae.getCode().equals(result)) {
+                        && ECheckStatus.NO_Upgrade.getCode().equals(result)) {
                     if (whAmount < agentLevel.getAmount()) {
                         redAmount = agentLevel.getAmount() - whAmount;
                         result = ECheckStatus.RED_LOW.getCode();

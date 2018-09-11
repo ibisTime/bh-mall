@@ -157,8 +157,8 @@ public class OutOrder extends ABaseDO {
     // 备注
     private String remark;
 
-    // 备注
-    private Long allAmount;
+    // 奖励是否发放
+    private String isPay;
 
     // ************************db*********************
 
@@ -167,6 +167,12 @@ public class OutOrder extends ABaseDO {
 
     // 下单结束时间
     private Date endDatetime;
+
+    // 下单开始时间
+    private Date payStartDatetime;
+
+    // 下单结束时间
+    private Date payEndDatetime;
 
     // 状态
     private String statusForQuery;
@@ -211,6 +217,9 @@ public class OutOrder extends ABaseDO {
 
     // 上级名称
     private String highUserName;
+
+    // 备注
+    private Long allAmount;
 
     // 状态
     private List<String> noStatusList;
@@ -742,4 +751,29 @@ public class OutOrder extends ABaseDO {
     public void setAllAmount(Long allAmount) {
         this.allAmount = allAmount;
     }
+
+    public String getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(String isPay) {
+        this.isPay = isPay;
+    }
+
+    public Date getPayStartDatetime() {
+        return payStartDatetime;
+    }
+
+    public Date getPayEndDatetime() {
+        return payEndDatetime;
+    }
+
+    public void setPayStartDatetime(Date payStartDatetime) {
+        this.payStartDatetime = payStartDatetime;
+    }
+
+    public void setPayEndDatetime(Date payEndDatetime) {
+        this.payEndDatetime = payEndDatetime;
+    }
+
 }

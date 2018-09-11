@@ -351,12 +351,13 @@ public class AgentAOImpl implements IAgentAO {
     public void editHighUser(String userId, String highUserId, String updater,
             String remark) {
         Agent data = agentBO.getAgent(userId);
-
+        String oldHighUser = data.getHighUserId();
         // 判断上级
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
             .getLevel()) {
             SYSUser sysUser = sysUserBO.getSYSUser(highUserId);
             highUserId = sysUser.getUserId();
+            oldHighUser = sysUser.getUserId();
         } else {
             // 非一级代理同步上级团队名称
             Agent highAgent = agentBO.getAgent(highUserId);
@@ -368,7 +369,7 @@ public class AgentAOImpl implements IAgentAO {
                 ECurrency.MK_CNY.getCode());
 
             if (0 != account.getAmount()) {
-                accountBO.transAmountCZB(data.getUserId(),
+                accountBO.transAmountCZB(oldHighUser,
                     ECurrency.MK_CNY.getCode(), highUserId,
                     ECurrency.MK_CNY.getCode(), account.getAmount(),
                     EBizType.AJ_XGSJ, EBizType.AJ_XGSJ.getValue(),

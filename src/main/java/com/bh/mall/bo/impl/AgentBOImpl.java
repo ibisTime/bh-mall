@@ -23,6 +23,7 @@ import com.bh.mall.domain.SqForm;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentLogType;
 import com.bh.mall.enums.EAgentStatus;
+import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.ESjFormStatus;
 import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
@@ -479,6 +480,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setIntroducer(sqForm.getIntroducer());
             data.setReferrer(sqForm.getReferrer());
 
+            data.setIsImpower(EIsImpower.NO_Impwoer.getCode());
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
             data.setHighUserId(null);
             data.setLevel(null);
@@ -509,6 +511,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setIdHand(sjForm.getIdHand());
             data.setHighUserId(sjForm.getToUserId());
 
+            data.setIsImpower(EIsImpower.NO_Upgrade.getCode());
         } else if (ESjFormStatus.IMPOWERED.getCode().equals(status)) {
             status = EAgentStatus.IMPOWERED.getCode();
         }

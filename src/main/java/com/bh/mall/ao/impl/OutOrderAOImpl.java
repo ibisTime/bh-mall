@@ -81,6 +81,7 @@ import com.bh.mall.enums.ECodeStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInOrderStatus;
 import com.bh.mall.enums.EIsImpower;
+import com.bh.mall.enums.EIsPay;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EPayType;
@@ -234,6 +235,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             amount = amount + price.getPrice() * cart.getQuantity();
             // 订单拆单
             if (EBoolean.YES.getCode().equals(specs.getIsSingle())) {
+
                 int nowNumber = cart.getQuantity() / specs.getSingleNumber();
                 int singleNumber = specs.getSingleNumber();
 
@@ -251,6 +253,13 @@ public class OutOrderAOImpl implements IOutOrderAO {
                                     % specs.getSingleNumber();
                         }
                     }
+
+                    // 订单金额已满足授权单或升级单，剩余订单为正常单
+                    if (!EOutOrderKind.Normal_Order.getCode().equals(kind)
+                            && agentLevel.getAmount() <= amount) {
+                        kind = EOutOrderKind.Normal_Order.getCode();
+                    }
+
                     list.add(outOrderBO.saveOutOrder(applyUser.getUserId(),
                         applyUser.getRealName(), applyUser.getLevel(),
                         applyUser.getHighUserId(), toUserName,
@@ -595,6 +604,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
             accountBO.changeAmount(mkAccount.getAccountNumber(),
                 EChannelType.NBZ, null, payGroup, payGroup, EBizType.AJ_GMYC,
                 EBizType.AJ_GMYC.getValue(), -amount);
+
+            // 更新用户状态
+            Agent agent = agentBO.getAgent(outOrder.getApplyUser());
+            if (!EIsImpower.Normal.getCode().equals(agent.getIsImpower())) {
+                agentBO.refreshIsImpower(agent, EIsImpower.Normal.getCode());
+            }
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
             result = this.payWXH5(outOrder.getApplyUser(), payGroup, payGroup,
                 amount, EChannelType.WeChat_H5.getCode(),
@@ -670,6 +685,9 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     wechatOrderNo, outOrder.getPayGroup(),
                     outOrder.getPayGroup(), EBizType.AJ_GMYC,
                     EBizType.AJ_GMYC.getValue(), amount);
+
+                Agent agent = agentBO.getAgent(outOrder.getApplyUser());
+                agentBO.refreshIsImpower(agent, EIsImpower.Normal.getCode());
 
             } else {
                 for (OutOrder data : list) {
@@ -1048,6 +1066,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             data.setApprover(approver);
             data.setApproveDatetime(new Date());
             data.setApproveNote(approveNote);
+            data.setIsPay(EIsPay.PAY_NO.getCode());
             outOrderBO.approveOutOrder(data);
 
             // 添加至发货的字段
@@ -1407,6 +1426,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
         }
 
         Date date = new Date();
+
         // 云仓发货扣减库存
         if (EBoolean.YES.getCode().equals(isWareSend)) {
             Ware ware = wareBO.getWareByProductSpec(data.getToUserId(),
@@ -1481,13 +1501,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
         }
 
-        data.setDeliver(deliver);
-        data.setDeliveDatetime(date);
-        data.setLogisticsCode(logisticsCode);
-        data.setLogisticsCompany(logisticsCompany);
-
-        data.setStatus(status);
-        data.setRemark(remark);
         outOrderBO.deliverOutOrder(data, status, deliver, logisticsCode,
             logisticsCompany, date, remark);
 
@@ -1501,26 +1514,18 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public void outOrderChAward() {
         logger.info("============出货订单统计开始==========");
         // 清空所有代理的出货金额与奖励
-        AgentReport rCondition = new AgentReport();
-        List<AgentReport> reportList = agentReportBO
-            .queryAgentReportList(rCondition);
-        for (AgentReport agentReport : reportList) {
-            agentReport.setSendAmount(0L);
-            agentReportBO.refreshSendAward(agentReport);
-        }
-
         Date startDate = DateUtil.getMonthStart();
         Date endDate = DateUtil.getMonthEnd();
         OutOrder condition = new OutOrder();
-        condition.setStartDatetime(startDate);
-        condition.setEndDatetime(endDate);
+        condition.setPayStartDatetime(startDate);
+        condition.setPayEndDatetime(endDate);
 
+        condition.setIsPay(EIsPay.PAY_NO.getCode());
         List<String> statusList = new ArrayList<String>();
         statusList.add(EOutOrderStatus.TO_SEND.getCode());
         statusList.add(EOutOrderStatus.TO_RECEIVE.getCode());
         statusList.add(EOutOrderStatus.RECEIVED.getCode());
         condition.setStatusList(statusList);
-        condition.setKind(EOutOrderKind.Normal_Order.getCode());
 
         List<OutOrder> list = outOrderBO.queryOutOrderListCount(condition);
 
@@ -1541,12 +1546,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                 // 4、出货总金额大于某个区间最高金额
                 if (orderAmount > award.getEndAmount()) {
-                    allAward = allAward + (long) ((award.getEndAmount() - 1)
+                    allAward = allAward + (long) ((award.getEndAmount())
                             * (award.getPercent() / 100));
                     orderAmount = orderAmount - award.getEndAmount();
 
                     // 5、出货总金额位于某个区间之间
-                } else if (award.getStartAmount() <= data.getAllAmount()
+                } else if (award.getStartAmount() < data.getAllAmount()
                         && data.getAllAmount() <= award.getEndAmount()) {
                     allAward = allAward + (long) ((data.getAllAmount()
                             - award.getStartAmount())
@@ -1560,15 +1565,22 @@ public class OutOrderAOImpl implements IOutOrderAO {
             agentReportBO.refreshSendAward(report);
 
             data.setPayGroup(payGroup);
+            data.setIsPay(EIsPay.PAY_YES.getCode());
             outOrderBO.updatePayGroup(data);
+
             // 发放奖励
             if (0 != allAward) {
-                Account mkAccount = accountBO.getAccountByUser(
-                    data.getApplyUser(), ECurrency.TX_CNY.getCode());
-                accountBO.changeAmount(mkAccount.getAccountNumber(),
-                    EChannelType.NBZ, null, payGroup, payGroup,
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+
+                if (StringValidater
+                    .toInteger(EAgentLevel.ONE.getCode()) != agent.getLevel()) {
+                    fromUserId = agent.getHighUserId();
+                }
+
+                accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),
+                    agent.getUserId(), ECurrency.TX_CNY.getCode(), allAward,
                     EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getValue(),
-                    allAward);
+                    EBizType.AJ_CHJL_OUT.getValue(), payGroup);
             }
         }
         logger.info("============出货订单统计结束==========");
@@ -1583,4 +1595,5 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         }
     }
+
 }

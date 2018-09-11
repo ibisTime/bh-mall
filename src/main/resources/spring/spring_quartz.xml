@@ -35,7 +35,7 @@
 	<bean id="inOrderTimer" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="inOrderAOImpl"/>  
 	        <property name="targetMethod" value="inOrderChAward"/>  
-	        <property name="concurrent" value="true"/>  <!--  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	        <property name="concurrent" value="true"/>   <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean>
 	
 	<bean id="outOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
@@ -49,8 +49,8 @@
 	        <property name="concurrent" value="true"/>   <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean>
 	
-<!-- 	
 	
+<!-- 	
 	<bean id="inOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="inOrderTimer"/>  
        <property name="cronExpression" value=" * */2 * * * ?"/>
@@ -71,8 +71,8 @@
 	        <property name="targetObject" ref="outOrderAOImpl"/>  
 	        <property name="targetMethod" value="outOrderChAward"/>  
 	        <property name="concurrent" value="true"/>  
-	</bean>
-	 -->
+	</bean> -->
+	
 	
 	
 </beans>

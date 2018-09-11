@@ -85,4 +85,8 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public void updatePayGroup(OutOrder data);
 
+    public List<OutOrder> getChAmount(String userId);
+
+    public void refreshIsPay(OutOrder outOrder);
+
 }

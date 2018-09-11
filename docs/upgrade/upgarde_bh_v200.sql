@@ -1341,7 +1341,7 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_QXSQ','退出清空余额','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','YUNFEI','支付运费','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_GMCP_TK','取消订单','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_QKYE','升级清空余额','USYS201800000000002',NOW(),NULL);
+insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_QKYE','升级余额变动','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','biz_type','AJ_JSJL','介绍奖励','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'withdraw_status','取现状态','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','withdraw_status','1','待审批','USYS201800000000002',NOW(),NULL);
@@ -2073,4 +2073,24 @@ update `tsys_config` set cvalue = '0aebaab70f987fe95bc88e9f4aecdfaa' where type=
 
 ALTER TABLE tbh_agent 
 ADD is_impower CHAR(1) DEFAULT NULL COMMENT '是否完成授权单/升级单';
+
+UPDATE tbh_agent SET is_impower = '2';
+
+UPDATE tbh_agent ag,(SELECT `user_id` FROM tbh_agent a  WHERE  NOT EXISTS 
+(SELECT a.`user_id` FROM tbh_out_order o WHERE a.user_id = o.`apply_user` AND a.`status`IN ('8','10','11','12','13') AND o.kind = '0' )) re
+SET is_impower = '0' WHERE ag.`user_id` = re.user_id;
+
+ALTER TABLE tbh_in_order 
+ADD is_pay CHAR(1) DEFAULT NULL COMMENT '奖励是否发放';
+
+ALTER TABLE tbh_out_order
+ADD is_pay CHAR(1) DEFAULT NULL COMMENT '奖励是否发放';
+
+UPDATE tbh_in_order SET is_pay = '1' WHERE apply_datetime < '2018-09-01 00:00:00';
+
+UPDATE tbh_out_order SET is_pay = '1' WHERE apply_datetime < '2018-09-01 00:00:00';
+
+UPDATE tbh_out_order SET is_pay = '0' WHERE apply_datetime >= '2018-09-01 00:00:00';
+
+UPDATE tbh_in_order SET is_pay = '0' WHERE apply_datetime >= '2018-09-01 00:00:00';
 

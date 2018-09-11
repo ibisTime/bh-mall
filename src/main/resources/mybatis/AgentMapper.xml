@@ -594,6 +594,7 @@
 		,approve_name = #{approveName}
 		,approve_datetime =	#{approveDatetime}
 		,last_agent_log = #{lastAgentLog}
+		,is_impower = #{isImpower}
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -612,6 +613,7 @@
 		,approve_datetime =	#{approveDatetime}
 		,impower_datetime = #{impowerDatetime}
 		,last_agent_log = #{lastAgentLog}
+		,is_impower = #{isImpower}
 		WHERE user_id = #{userId}
 	</update>
 	

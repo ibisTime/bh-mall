@@ -96,12 +96,21 @@ public class InOrder extends ABaseDO {
     // 备注
     private String remark;
 
+    // 是否已支付奖励
+    private String isPay;
+
     // **************************db properties **************************
     // 下单开始时间
     private Date startDatetime;
 
     // 下单结束时间
     private Date endDatetime;
+
+    // 支付开始时间
+    private Date payStartDatetime;
+
+    // 支付结束时间
+    private Date payEndDatetime;
 
     // 状态
     private List<String> statusList;
@@ -454,6 +463,30 @@ public class InOrder extends ABaseDO {
 
     public void setAllAmount(Long allAmount) {
         this.allAmount = allAmount;
+    }
+
+    public String getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(String isPay) {
+        this.isPay = isPay;
+    }
+
+    public Date getPayStartDatetime() {
+        return payStartDatetime;
+    }
+
+    public Date getPayEndDatetime() {
+        return payEndDatetime;
+    }
+
+    public void setPayStartDatetime(Date payStartDatetime) {
+        this.payStartDatetime = payStartDatetime;
+    }
+
+    public void setPayEndDatetime(Date payEndDatetime) {
+        this.payEndDatetime = payEndDatetime;
     }
 
 }

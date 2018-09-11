@@ -63,4 +63,8 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
 
     public void updatePayGroup(InOrder data);
 
+    public List<InOrder> getChAmount(String userId);
+
+    public void refreshIsPay(InOrder order);
+
 }

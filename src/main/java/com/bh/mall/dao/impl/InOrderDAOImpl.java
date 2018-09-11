@@ -114,4 +114,9 @@ public class InOrderDAOImpl extends AMybatisTemplate implements IInOrderDAO {
         super.update(NAMESPACE.concat("update_payGroup"), data);
     }
 
+    @Override
+    public void updateIsPay(InOrder data) {
+        super.update(NAMESPACE.concat("update_isPay"), data);
+    }
+
 }

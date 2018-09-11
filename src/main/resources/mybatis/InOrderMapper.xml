@@ -37,6 +37,7 @@
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
 		<result column="allAmount" property="allAmount" />
+		<result column="is_pay" property="isPay" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -91,6 +92,9 @@
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group  = #{payGroup} 
 			</if>
+			<if test="isPay != null and isPay != '' ">
+				AND t.is_pay  = #{isPay} 
+			</if>
 			
 			
 			<if test="startDatetime != null and startDatetime != ''">
@@ -98,6 +102,13 @@
 			</if>
 			<if test="endDatetime != null and endDatetime != ''">
 				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
+			</if>
+			
+			<if test="payStartDatetime != null and payStartDatetime != ''">
+				<![CDATA[AND t.pay_datetime >= #{payStartDatetime} ]]>
+			</if>
+			<if test="payEndDatetime != null and payEndDatetime != ''">
+				<![CDATA[AND t.pay_datetime <= #{payEndDatetime}]]>
 			</if>
 		</trim>
 	</sql>
@@ -137,6 +148,7 @@
 		,t.approver
 		,t.approve_datetime
 		,t.remark
+		,t.is_pay
 		FROM
 		tbh_in_order t 
 		<include refid="where_condition" />
@@ -196,6 +208,7 @@
 		,team_leader
 		,apply_datetime
 		,apply_note
+		,is_pay
 		)
 		VALUES(
 		#{code}
@@ -219,6 +232,7 @@
 		,#{teamLeader}
 		,#{applyDatetime}
 		,#{applyNote}
+		,#{isPay}
 		)
 	</insert>
 
@@ -242,7 +256,6 @@
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
 		,approve_note = #{approveNote}
-		,status = #{status}
 		WHERE code = #{code}
 	</update>
 	
@@ -316,8 +329,16 @@
 		UPDATE tbh_in_order
 		SET
 		pay_group = #{payGroup}
+		,is_pay = #{isPay}
 		WHERE 
-		apply_user = #{applyUser} AND level = #{level}
+		apply_user = #{applyUser} AND level = #{level} AND is_pay = '0'
 	</update>
 	
+	<update id="update_isPay" parameterType="inOrder">
+		UPDATE tbh_in_order
+		SET
+		is_pay = #{isPay}
+		WHERE 
+		code = #{code}
+	</update>
 </mapper>

@@ -60,6 +60,7 @@
 		<result column="approve_note" property="approveNote" />
 		<result column="remark" property="remark" />
 		<result column="allAmount" property="allAmount" />
+		<result column="is_pay" property="isPay" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -131,6 +132,13 @@
 				<![CDATA[AND t.apply_datetime <= #{endDatetime}]]>
 			</if>
 			
+			<if test="payStartDatetime != null and payStartDatetime != ''">
+				<![CDATA[AND t.pay_datetime >= #{payStartDatetime} ]]>
+			</if>
+			<if test="payEndDatetime != null and payEndDatetime != ''">
+				<![CDATA[AND t.pay_datetime <= #{payEndDatetime}]]>
+			</if>
+			
 			<if test="proCode != null and proCode != '' ">
 				AND t.pro_code = #{proCode}
 			</if>
@@ -139,6 +147,9 @@
 			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="isPay != null and isPay != '' ">
+				AND t.is_pay = #{isPay}
 			</if>
 		</trim>
 	</sql>
@@ -202,6 +213,7 @@
 		
 		,t.approve_note
 		,t.remark
+		,t.is_pay
 		FROM
 		tbh_out_order t
 		<include refid="where_condition" />
@@ -225,7 +237,8 @@
 		SELECT
 		t.level
 		,t.apply_user
-		,SUM(amount) AS allAmount
+		,SUM(t.amount) AS allAmount
+		,t.is_pay
 		FROM
 		tbh_out_order t 
 		<include refid="where_condition" />
@@ -270,6 +283,7 @@
 		,city
 		,area
 		,address
+		,is_pay
 		)
 		VALUES(
 		#{code}
@@ -306,6 +320,7 @@
 		,#{city}
 		,#{area}
 		,#{address}
+		,#{isPay}
 		)
 	</insert>
 
@@ -362,6 +377,7 @@
 		,approve_datetime = #{approveDatetime}
 		,approve_note = #{approveNote}
 		,status = #{status}
+		,is_pay = #{isPay}
 		WHERE code = #{code}
 	</update>
 	
@@ -431,9 +447,19 @@
 	</delete>
 	
 	<update id="update_payGroup" parameterType="innerOrder">
-		DELETE FROM
-		tbh_out_order
+		UPDATE tbh_out_order
+		SET  
+		pay_group = #{payGroup}
+		,is_pay = #{isPay}
 		WHERE
-		apply_user = #{applyUser} AND level = #{level}
+		apply_user = #{applyUser} AND level = #{level} AND is_pay = '0'
+	</update>
+	
+	<update id="update_isPay" parameterType="innerOrder">
+		UPDATE tbh_out_order
+		SET
+		is_pay = #{isPay}
+		WHERE
+		code = #{code}
 	</update>
 </mapper>

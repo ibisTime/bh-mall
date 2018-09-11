@@ -37,4 +37,6 @@ public interface IOutOrderDAO extends IBaseDAO<OutOrder> {
     List<OutOrder> selectOutOrderListCount(OutOrder condition);
 
     void updatePayGroup(OutOrder data);
+
+    void updateIsPay(OutOrder data);
 }

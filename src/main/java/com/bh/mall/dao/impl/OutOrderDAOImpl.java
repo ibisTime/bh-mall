@@ -124,4 +124,9 @@ public class OutOrderDAOImpl extends AMybatisTemplate implements IOutOrderDAO {
         super.update(NAMESPACE.concat("update_payGroup"), data);
     }
 
+    @Override
+    public void updateIsPay(OutOrder data) {
+        super.update(NAMESPACE.concat("update_isPay"), data);
+    }
+
 }

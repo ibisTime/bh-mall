@@ -13,6 +13,7 @@ import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.IProductBO;
 import com.bh.mall.bo.ISYSConfigBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IOutOrderDAO;
@@ -21,6 +22,7 @@ import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.EBoolean;
+import com.bh.mall.enums.EIsPay;
 import com.bh.mall.enums.EOutOrderKind;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.exception.BizException;
@@ -86,6 +88,8 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setCity(city);
         data.setArea(area);
         data.setAddress(address);
+        data.setIsPay(EIsPay.PAY_NO.getCode());
+
         outOrderDAO.insert(data);
         return code;
     }
@@ -123,7 +127,8 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setDeliveDatetime(deliveDatetime);
         data.setLogisticsCompany(logisticsCompany);
 
-        data.setStatus(EOutOrderStatus.TO_RECEIVE.getCode());
+        data.setIsPay(EIsPay.PAY_NO.getCode());
+        data.setStatus(status);
         data.setRemark(remark);
         outOrderDAO.deliverOutOrder(data);
     }
@@ -305,6 +310,7 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setAddress(address);
         data.setKind(kind);
 
+        data.setIsPay(EIsPay.PAY_YES.getCode());
         data.setStatus(EOutOrderStatus.TO_APPROVE.getCode());
         outOrderDAO.insert(data);
         return code;
@@ -391,6 +397,23 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     @Override
     public void updatePayGroup(OutOrder data) {
         outOrderDAO.updatePayGroup(data);
+    }
+
+    @Override
+    public List<OutOrder> getChAmount(String userId) {
+        OutOrder condition = new OutOrder();
+        condition.setIsPay(EIsPay.PAY_NO.getCode());
+        condition.setApplyUser(userId);
+        condition.setStartDatetime(DateUtil.getMonthStart());
+        condition.setEndDatetime(new Date());
+
+        return outOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public void refreshIsPay(OutOrder outOrder) {
+        outOrder.setIsPay(EIsPay.PAY_YES.getCode());
+        outOrderDAO.updateIsPay(outOrder);
     }
 
 }

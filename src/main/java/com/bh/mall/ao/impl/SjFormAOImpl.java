@@ -2,6 +2,7 @@ package com.bh.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,24 @@ import com.bh.mall.bo.IAccountBO;
 import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentReportBO;
+import com.bh.mall.bo.IChAwardBO;
+import com.bh.mall.bo.IInOrderBO;
+import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.IdCardChecker;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.domain.AgentReport;
+import com.bh.mall.domain.ChAward;
+import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.SYSUser;
 import com.bh.mall.domain.SjForm;
 import com.bh.mall.domain.Ware;
@@ -62,6 +71,15 @@ public class SjFormAOImpl implements ISjFormAO {
     @Autowired
     private IAgentReportBO agentReportBO;
 
+    @Autowired
+    private IInOrderBO inOrderBO;
+
+    @Autowired
+    private IOutOrderBO outOrderBO;
+
+    @Autowired
+    private IChAwardBO chAwardBO;
+
     /**
      * 申请升级
      * 1、检验升级门槛是否清零，是否满足半门槛人数（满足的情况下可免费升级）
@@ -75,9 +93,8 @@ public class SjFormAOImpl implements ISjFormAO {
             String payAmount, String teamName, String idKind, String idNo,
             String idHand) {
         Agent data = agentBO.getAgent(userId);
-
-        // 已经申请过升级
         SjForm sjForm = sjFormBO.getSjForm(data.getUserId());
+
         if (null != sjForm) {
             if (ESjFormStatus.TO_UPGRADE.getCode().equals(sjForm.getStatus())
                     || ESjFormStatus.UPGRADE_COMPANY.getCode()
@@ -213,6 +230,8 @@ public class SjFormAOImpl implements ISjFormAO {
             if (EBoolean.YES.getCode().equals(auData.getIsCompanyApprove())) {
                 status = ESjFormStatus.UPGRADE_COMPANY.getCode();
             } else {
+                // 检查该代理是否有未发放的奖励，如果有，将奖金转给新上级
+                this.payAward(agent, sjForm);
                 status = ESjFormStatus.THROUGH_YES.getCode();
                 // 清空余额
                 if (EBoolean.YES.getCode().equals(auData.getIsReset())) {
@@ -283,6 +302,9 @@ public class SjFormAOImpl implements ISjFormAO {
         // 审核通过
         String status = ESjFormStatus.IMPOWERED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
+            // 检查该代理是否有未发放的奖励，如果有，将奖金转给新上级
+            this.payAward(agent, sjForm);
+
             Account account = accountBO.getAccountByUser(sjForm.getUserId(),
                 ECurrency.MK_CNY.getCode());
             status = ESjFormStatus.THROUGH_YES.getCode();
@@ -402,4 +424,60 @@ public class SjFormAOImpl implements ISjFormAO {
         return highAgent.getUserId();
     }
 
+    private void payAward(Agent agent, SjForm sjForm) {
+        // 新上级与旧上级不是同一个人，该代理是否有未发放的出货奖励，若有未发放的奖励，从旧上级可提现账户转入新上级账户
+        List<InOrder> inOrderList = inOrderBO.getChAmount(agent.getUserId());
+        long chAmount = 0L;
+        for (InOrder order : inOrderList) {
+            chAmount = chAmount + order.getAmount();
+        }
+
+        List<OutOrder> outOrderList = outOrderBO.getChAmount(agent.getUserId());
+        for (OutOrder order : outOrderList) {
+            chAmount = chAmount + order.getAmount();
+        }
+
+        ChAward chAward = chAwardBO.getChAwardByLevel(agent.getLevel(),
+            chAmount);
+        if (null != chAward) {
+            long award = (long) (chAmount * chAward.getPercent() / 100);
+            if (award > 0) {
+                Account highAccount = accountBO.getAccountByUser(
+                    agent.getHighUserId(), ECurrency.TX_CNY.getCode());
+                if (highAccount.getAmount() < award) {
+                    throw new BizException("xn00000",
+                        "该代理的出货奖未发放，旧上级的业绩账户中余额不足，无法支付奖金：" + award / 1000.0
+                                + "元");
+                }
+                String payGroup = OrderNoGenerater
+                    .generate(EGeneratePrefix.InOrder.getCode());
+
+                EBizType bizType = EBizType.AJ_CHJL_IN;
+                if (CollectionUtils.isNotEmpty(outOrderList)) {
+                    bizType = EBizType.AJ_CHJL_OUT;
+                }
+
+                // 上级发奖励给下级
+                accountBO.transAmountCZB(agent.getHighUserId(),
+                    ECurrency.TX_CNY.getCode(), agent.getUserId(),
+                    ECurrency.TX_CNY.getCode(), award, bizType,
+                    agent.getRealName() + "升级，出货奖励转转出",
+                    agent.getRealName() + "升级，出货奖励转入", payGroup);
+
+                AgentReport report = agentReportBO
+                    .getAgentReportByUser(agent.getUserId());
+                report.setSendAward(report.getSendAward() + award);
+                agentReportBO.refreshSendAward(report);
+
+                // 更新订单支付状态
+                for (InOrder inOrder : inOrderList) {
+                    inOrderBO.refreshIsPay(inOrder);
+                }
+
+                for (OutOrder outOrder : outOrderList) {
+                    outOrderBO.refreshIsPay(outOrder);
+                }
+            }
+        }
+    }
 }

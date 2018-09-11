@@ -61,6 +61,7 @@ import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInOrderStatus;
+import com.bh.mall.enums.EIsPay;
 import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
@@ -872,20 +873,13 @@ public class InOrderAOImpl implements IInOrderAO {
      */
     public void inOrderChAward() {
         logger.info("============云仓订单统计开始==========");
-        // 清空所有代理的出货金额与奖励
-        AgentReport rCondition = new AgentReport();
-        List<AgentReport> reportList = agentReportBO
-            .queryAgentReportList(rCondition);
-        for (AgentReport agentReport : reportList) {
-            agentReport.setSendAmount(0L);
-            agentReportBO.refreshSendAward(agentReport);
-        }
 
         Date startDate = DateUtil.getMonthStart();
         Date endDate = DateUtil.getMonthEnd();
         InOrder condition = new InOrder();
-        condition.setStartDatetime(startDate);
-        condition.setEndDatetime(endDate);
+        condition.setPayStartDatetime(startDate);
+        condition.setPayEndDatetime(endDate);
+        condition.setIsPay(EBoolean.NO.getCode());
 
         condition.setStatus(EInOrderStatus.Received.getCode());
         List<InOrder> list = inOrderBO.queryInOrderListCount(condition);
@@ -925,16 +919,23 @@ public class InOrderAOImpl implements IInOrderAO {
             agentReportBO.refreshSendAward(report);
 
             data.setPayGroup(payGroup);
+            data.setIsPay(EIsPay.PAY_YES.getCode());
             inOrderBO.updatePayGroup(data);
 
             // 发放奖励
             if (0 != allAward) {
-                Account mkAccount = accountBO.getAccountByUser(
-                    data.getApplyUser(), ECurrency.TX_CNY.getCode());
-                accountBO.changeAmount(mkAccount.getAccountNumber(),
-                    EChannelType.NBZ, null, payGroup, payGroup,
+                String fromUserId = ESysUser.SYS_USER_BH.getCode();
+                Agent agent = agentBO.getAgent(data.getApplyUser());
+
+                if (StringValidater
+                    .toInteger(EAgentLevel.ONE.getCode()) != agent.getLevel()) {
+                    fromUserId = agent.getHighUserId();
+                }
+
+                accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),
+                    agent.getUserId(), ECurrency.TX_CNY.getCode(), allAward,
                     EBizType.AJ_CHJL_IN, EBizType.AJ_CHJL_IN.getValue(),
-                    allAward);
+                    EBizType.AJ_CHJL_IN.getValue(), payGroup);
             }
 
         }

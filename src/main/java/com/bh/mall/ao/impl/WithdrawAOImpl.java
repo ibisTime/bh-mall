@@ -30,6 +30,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWithdrawStatus;
 import com.bh.mall.exception.BizException;
@@ -189,6 +190,13 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 扣减冻结流水
         accountBO.cutFrozenAmount(dbAccount, data.getAmount() + data.getFee());
         Account account = accountBO.getAccount(data.getAccountNumber());
+        Agent agent = agentBO.getAgent(data.getApplyUser());
+        String toUserId = ESysUser.SYS_USER_BH.getCode();
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agent
+            .getLevel()) {
+            toUserId = agent.getHighUserId();
+        }
+
         if (ECurrency.TX_CNY.getCode().equals(account.getCurrency())
                 || ECurrency.C_CNY.getCode().equals(account.getCurrency())) {
             if (EBoolean.YES.getCode().equals(data.getIsCompanyPay())) {
@@ -197,6 +205,15 @@ public class WithdrawAOImpl implements IWithdrawAO {
                     EChannelType.Offline, null, null, data.getCode(),
                     EBizType.AJ_QX, "线下取现",
                     -(data.getAmount() + data.getFee()));
+
+            } else {
+                // 上级加钱
+                Account highAccount = accountBO.getAccountByUser(toUserId,
+                    ECurrency.TX_CNY.getCode());
+                accountBO.changeAmount(highAccount.getAccountNumber(),
+                    EChannelType.Offline, null, null, data.getCode(),
+                    EBizType.AJ_QX, "代理：" + account.getRealName() + "线下取现",
+                    data.getAmount() + data.getFee());
             }
         }
     }

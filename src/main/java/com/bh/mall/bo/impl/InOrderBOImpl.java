@@ -10,11 +10,13 @@ import org.springframework.util.CollectionUtils;
 
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
+import com.bh.mall.common.DateUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IInOrderDAO;
 import com.bh.mall.domain.InOrder;
 import com.bh.mall.enums.EInOrderStatus;
+import com.bh.mall.enums.EIsPay;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -57,6 +59,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         data.setStatus(EInOrderStatus.Unpaid.getCode());
         Date date = new Date();
 
+        data.setIsPay(EIsPay.PAY_NO.getCode());
         data.setApplyDatetime(date);
         data.setApplyNote(applyNote);
         inOrderDAO.insert(data);
@@ -231,6 +234,24 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
 
     @Override
     public void updatePayGroup(InOrder data) {
+
         inOrderDAO.updatePayGroup(data);
+    }
+
+    @Override
+    public List<InOrder> getChAmount(String applyUser) {
+        InOrder condition = new InOrder();
+        condition.setIsPay(EIsPay.PAY_NO.getCode());
+        condition.setApplyUser(applyUser);
+        condition.setStartDatetime(DateUtil.getMonthStart());
+        condition.setEndDatetime(new Date());
+
+        return inOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public void refreshIsPay(InOrder data) {
+        data.setIsPay(EIsPay.PAY_YES.getCode());
+        inOrderDAO.updateIsPay(data);
     }
 }
