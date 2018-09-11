@@ -43,6 +43,7 @@ public class XN627325 extends AProcessor {
         condition.setUnionId(req.getUnionId());
         condition.setH5OpenId(req.getH5OpenId());
         condition.setAppOpenId(req.getAppOpenId());
+        condition.setStatusList(req.getStatusList());
 
         condition.setCreateDatetimeStart(DateUtil.strToDate(
             req.getApplyStartDatetime(), DateUtil.DATA_TIME_PATTERN_1));

@@ -1517,8 +1517,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
         Date startDate = DateUtil.getMonthStart();
         Date endDate = DateUtil.getMonthEnd();
         OutOrder condition = new OutOrder();
-        condition.setPayStartDatetime(startDate);
-        condition.setPayEndDatetime(endDate);
+        condition.setStartDatetime(startDate);
+        condition.setEndDatetime(endDate);
 
         condition.setIsPay(EIsPay.PAY_NO.getCode());
         List<String> statusList = new ArrayList<String>();
@@ -1559,15 +1559,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 }
             }
 
-            AgentReport report = agentReportBO
-                .getAgentReportByUser(data.getApplyUser());
-            report.setSendAward(report.getSendAward() + allAward);
-            agentReportBO.refreshSendAward(report);
-
-            data.setPayGroup(payGroup);
-            data.setIsPay(EIsPay.PAY_YES.getCode());
-            outOrderBO.updatePayGroup(data);
-
             // 发放奖励
             if (0 != allAward) {
                 Agent agent = agentBO.getAgent(data.getApplyUser());
@@ -1577,11 +1568,28 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     fromUserId = agent.getHighUserId();
                 }
 
-                accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),
-                    agent.getUserId(), ECurrency.TX_CNY.getCode(), allAward,
-                    EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getValue(),
-                    EBizType.AJ_CHJL_OUT.getValue(), payGroup);
+                Account account = accountBO.getAccountByUser(fromUserId,
+                    ECurrency.TX_CNY.getCode());
+
+                if (account.getAmount() > allAward) {
+                    accountBO.transAmountCZB(fromUserId,
+                        ECurrency.TX_CNY.getCode(), agent.getUserId(),
+                        ECurrency.TX_CNY.getCode(), allAward,
+                        EBizType.AJ_CHJL_OUT, EBizType.AJ_CHJL_OUT.getValue(),
+                        EBizType.AJ_CHJL_OUT.getValue(), payGroup);
+
+                    AgentReport report = agentReportBO
+                        .getAgentReportByUser(data.getApplyUser());
+                    report.setSendAward(report.getSendAward() + allAward);
+                    agentReportBO.refreshSendAward(report);
+
+                    data.setPayGroup(payGroup);
+                    data.setIsPay(EIsPay.PAY_YES.getCode());
+                    outOrderBO.updatePayGroup(data);
+                }
+
             }
+
         }
         logger.info("============出货订单统计结束==========");
     }

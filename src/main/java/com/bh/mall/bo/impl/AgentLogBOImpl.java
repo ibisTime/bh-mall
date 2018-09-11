@@ -18,6 +18,7 @@ import com.bh.mall.domain.SqForm;
 import com.bh.mall.domain.YxForm;
 import com.bh.mall.enums.EAgentLogStatus;
 import com.bh.mall.enums.EAgentLogType;
+import com.bh.mall.enums.ESjFormStatus;
 import com.bh.mall.exception.BizException;
 
 @Component
@@ -116,7 +117,11 @@ public class AgentLogBOImpl extends PaginableBOImpl<AgentLog>
         data.setWxId(agent.getWxId());
         data.setMobile(agent.getMobile());
 
-        data.setLevel(sjForm.getLevel());
+        if (ESjFormStatus.THROUGH_YES.getCode().equals(sjForm.getStatus())) {
+            data.setLevel(sjForm.getApplyLevel());
+        } else {
+            data.setLevel(sjForm.getLevel());
+        }
         data.setApplyLevel(sjForm.getApplyLevel());
         data.setToUserId(sjForm.getToUserId());
         data.setTeamName(sjForm.getTeamName());

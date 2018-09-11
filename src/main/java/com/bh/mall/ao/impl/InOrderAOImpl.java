@@ -913,15 +913,6 @@ public class InOrderAOImpl implements IInOrderAO {
                 }
             }
 
-            AgentReport report = agentReportBO
-                .getAgentReportByUser(data.getApplyUser());
-            report.setSendAward(report.getSendAward() + allAward);
-            agentReportBO.refreshSendAward(report);
-
-            data.setPayGroup(payGroup);
-            data.setIsPay(EIsPay.PAY_YES.getCode());
-            inOrderBO.updatePayGroup(data);
-
             // 发放奖励
             if (0 != allAward) {
                 String fromUserId = ESysUser.SYS_USER_BH.getCode();
@@ -931,11 +922,26 @@ public class InOrderAOImpl implements IInOrderAO {
                     .toInteger(EAgentLevel.ONE.getCode()) != agent.getLevel()) {
                     fromUserId = agent.getHighUserId();
                 }
+                Account account = accountBO.getAccountByUser(fromUserId,
+                    ECurrency.TX_CNY.getCode());
+                if (account.getAmount() > allAward) {
 
-                accountBO.transAmountCZB(fromUserId, ECurrency.TX_CNY.getCode(),
-                    agent.getUserId(), ECurrency.TX_CNY.getCode(), allAward,
-                    EBizType.AJ_CHJL_IN, EBizType.AJ_CHJL_IN.getValue(),
-                    EBizType.AJ_CHJL_IN.getValue(), payGroup);
+                    AgentReport report = agentReportBO
+                        .getAgentReportByUser(data.getApplyUser());
+                    report.setSendAward(report.getSendAward() + allAward);
+                    agentReportBO.refreshSendAward(report);
+
+                    data.setPayGroup(payGroup);
+                    data.setIsPay(EIsPay.PAY_YES.getCode());
+                    inOrderBO.updatePayGroup(data);
+
+                    accountBO.transAmountCZB(fromUserId,
+                        ECurrency.TX_CNY.getCode(), agent.getUserId(),
+                        ECurrency.TX_CNY.getCode(), allAward,
+                        EBizType.AJ_CHJL_IN, EBizType.AJ_CHJL_IN.getValue(),
+                        EBizType.AJ_CHJL_IN.getValue(), payGroup);
+                }
+
             }
 
         }

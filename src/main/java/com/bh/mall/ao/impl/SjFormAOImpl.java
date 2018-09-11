@@ -215,8 +215,12 @@ public class SjFormAOImpl implements ISjFormAO {
     @Transactional
     public void approveSjFormByB(String userId, String approver, String result,
             String remark) {
-        Agent agent = agentBO.getAgent(userId);
         SjForm sjForm = sjFormBO.getSjForm(userId);
+        if (!ESjFormStatus.TO_UPGRADE.getCode().equals(sjForm.getStatus())) {
+            throw new BizException("xn00000", "该代理已经过审核");
+        }
+
+        Agent agent = agentBO.getAgent(userId);
         AgentLevel auData = agentLevelBO
             .getAgentByLevel(sjForm.getApplyLevel());
 
@@ -297,6 +301,10 @@ public class SjFormAOImpl implements ISjFormAO {
             String remark) {
 
         SjForm sjForm = sjFormBO.getSjForm(userId);
+        if (!ESjFormStatus.UPGRADE_COMPANY.getCode()
+            .equals(sjForm.getStatus())) {
+            throw new BizException("xn00000", "该代理已经过审核");
+        }
 
         Agent agent = agentBO.getAgent(userId);
         // 审核通过
@@ -469,14 +477,14 @@ public class SjFormAOImpl implements ISjFormAO {
                 report.setSendAward(report.getSendAward() + award);
                 agentReportBO.refreshSendAward(report);
 
-                // 更新订单支付状态
-                for (InOrder inOrder : inOrderList) {
-                    inOrderBO.refreshIsPay(inOrder);
-                }
+            }
+            // 更新订单支付状态
+            for (InOrder inOrder : inOrderList) {
+                inOrderBO.refreshIsPay(inOrder);
+            }
 
-                for (OutOrder outOrder : outOrderList) {
-                    outOrderBO.refreshIsPay(outOrder);
-                }
+            for (OutOrder outOrder : outOrderList) {
+                outOrderBO.refreshIsPay(outOrder);
             }
         }
     }

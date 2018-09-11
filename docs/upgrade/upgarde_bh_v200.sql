@@ -2076,9 +2076,10 @@ ADD is_impower CHAR(1) DEFAULT NULL COMMENT '是否完成授权单/升级单';
 
 UPDATE tbh_agent SET is_impower = '2';
 
-UPDATE tbh_agent ag,(SELECT `user_id` FROM tbh_agent a  WHERE  NOT EXISTS 
-(SELECT a.`user_id` FROM tbh_out_order o WHERE a.user_id = o.`apply_user` AND a.`status`IN ('8','10','11','12','13') AND o.kind = '0' )) re
-SET is_impower = '0' WHERE ag.`user_id` = re.user_id;
+UPDATE tbh_agent ag 
+SET is_impower = '0' 
+WHERE user_id NOT IN 
+(SELECT DISTINCT `apply_user` FROM tbh_out_order o WHERE o.kind = '0');
 
 ALTER TABLE tbh_in_order 
 ADD is_pay CHAR(1) DEFAULT NULL COMMENT '奖励是否发放';
