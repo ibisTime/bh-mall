@@ -322,15 +322,14 @@ public class WareAOImpl implements IWareAO {
                 }
                 amount = amount + psData.getSingleNumber() * data.getPrice();
 
-                String code = outOrderBO.pickUpGoods(data.getProductCode(),
-                    data.getProductName(), product.getPic(),
-                    data.getSpecsCode(), data.getSpecsName(), quantity,
-                    data.getPrice(), quantity * data.getPrice(), yunfei,
-                    agent.getHighUserId(), agent, teamLeader.getRealName(),
-                    sysUser.getUserId(), sysUser.getRealName(),
-                    EBoolean.YES.getCode(), req.getSigner(), req.getMobile(),
-                    req.getProvince(), req.getCity(), req.getArea(),
-                    req.getAddress(), kind);
+                outOrderBO.pickUpGoods(agent, teamLeader.getRealName(),
+                    sysUser.getUserId(), sysUser.getRealName(), data,
+                    product.getPic(), quantity, yunfei, req, kind);
+
+                String code = outOrderBO.pickUpGoods(agent,
+                    teamLeader.getRealName(), sysUser.getUserId(),
+                    sysUser.getRealName(), data, product.getPic(), quantity,
+                    yunfei, req, kind);
 
                 sb.append(code);
                 sb.append(",");
@@ -341,15 +340,11 @@ public class WareAOImpl implements IWareAO {
             amount = StringValidater.toInteger(req.getQuantity())
                     * data.getPrice();
 
-            String code = outOrderBO.pickUpGoods(data.getProductCode(),
-                data.getProductName(), product.getPic(), data.getSpecsCode(),
-                data.getSpecsName(),
-                StringValidater.toInteger(req.getQuantity()), data.getPrice(),
-                amount, yunfei, agent.getHighUserId(), agent,
+            String code = outOrderBO.pickUpGoods(agent,
                 teamLeader.getRealName(), sysUser.getUserId(),
-                sysUser.getRealName(), EBoolean.YES.getCode(), req.getSigner(),
-                req.getMobile(), req.getProvince(), req.getCity(),
-                req.getArea(), req.getAddress(), kind);
+                sysUser.getRealName(), data, product.getPic(),
+                StringValidater.toInteger(req.getQuantity()), yunfei, req,
+                kind);
             sb.append(code);
             allYunfei = yunfei;
         }
@@ -501,8 +496,8 @@ public class WareAOImpl implements IWareAO {
             // 3、检查是否有过充值或升级后门槛余额是否满足升级单（授权单金额为0，门槛款为0，红线为0，不去检查）
             if (0 != agentLevel.getAmount() || 0 != agentLevel.getMinCharge()
                     || 0 != agentLevel.getRedAmount()) {
-                if (EAgentStatus.IMPOWERED.getCode()
-                    .equals(agent.getStatus())) {
+                if (EIsImpower.NO_CHARGE.getCode()
+                    .equals(agent.getIsImpower())) {
                     // 获取充值金额
                     Long cAmount = 0L;
                     List<Charge> charge = chargeBO.getChargeByUser(

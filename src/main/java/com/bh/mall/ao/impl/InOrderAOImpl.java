@@ -191,13 +191,17 @@ public class InOrderAOImpl implements IInOrderAO {
             this.checkLimitNumber(applyAgent, specs, agentPrice,
                 cart.getQuantity());
 
-            String orderCode = inOrderBO.saveInOrder(applyAgent.getUserId(),
-                applyAgent.getRealName(), applyAgent.getLevel(),
-                applyAgent.getHighUserId(), toUserName,
-                applyAgent.getTeamName(), teamLeader.getRealName(),
-                pData.getCode(), pData.getName(), specs.getCode(),
-                specs.getName(), pData.getPic(), agentPrice.getPrice(),
+            String orderCode = inOrderBO.saveInOrder(applyAgent, toUserName,
+                teamLeader.getRealName(), pData, specs, agentPrice.getPrice(),
                 cart.getQuantity(), applyNote);
+
+            // String orderCode = inOrderBO.saveInOrder(applyAgent.getUserId(),
+            // applyAgent.getRealName(), applyAgent.getLevel(),
+            // applyAgent.getHighUserId(), toUserName,
+            // applyAgent.getTeamName(), teamLeader.getRealName(),
+            // pData.getCode(), pData.getName(), specs.getCode(),
+            // specs.getName(), pData.getPic(), agentPrice.getPrice(),
+            // cart.getQuantity(), applyNote);
             list.add(orderCode);
 
             amount = amount + cart.getQuantity() * agentPrice.getPrice();
@@ -318,12 +322,10 @@ public class InOrderAOImpl implements IInOrderAO {
             }
         }
 
-        return inOrderBO.saveInOrder(applyAgent.getUserId(),
-            applyAgent.getRealName(), applyAgent.getLevel(),
-            applyAgent.getHighUserId(), toUserName, applyAgent.getTeamName(),
-            teamLeader.getRealName(), pData.getCode(), pData.getName(),
-            specs.getCode(), specs.getName(), pData.getPic(),
-            agentPrice.getPrice(), quantity, applyNote);
+        return inOrderBO.saveInOrder(applyAgent, toUserName,
+            teamLeader.getRealName(), pData, specs, agentPrice.getPrice(),
+            quantity, applyNote);
+
     }
 
     @Override
@@ -873,23 +875,17 @@ public class InOrderAOImpl implements IInOrderAO {
      */
     public void inOrderChAward() {
         logger.info("============云仓订单统计开始==========");
-
-        Date startDate = DateUtil.getMonthStart();
-        Date endDate = DateUtil.getMonthEnd();
         InOrder condition = new InOrder();
-        condition.setPayStartDatetime(startDate);
-        condition.setPayEndDatetime(endDate);
         condition.setIsPay(EBoolean.NO.getCode());
 
         condition.setStatus(EInOrderStatus.Received.getCode());
         List<InOrder> list = inOrderBO.queryInOrderListCount(condition);
 
-        String payGroup = OrderNoGenerater
-            .generate(EGeneratePrefix.InOrder.getCode());
-
         Long allAward = 0L;
         for (InOrder data : list) {
 
+            String payGroup = OrderNoGenerater
+                .generate(EGeneratePrefix.InOrder.getCode());
             // 1、记录下个区间剩余出货金额
             Long orderAmount = data.getAllAmount();
 
@@ -900,12 +896,13 @@ public class InOrderAOImpl implements IInOrderAO {
 
                 // 4、出货总金额大于某个区间最高金额
                 if (orderAmount > award.getEndAmount()) {
-                    allAward = allAward + (long) ((award.getEndAmount() - 1)
+                    allAward = allAward + (long) ((award.getEndAmount()
+                            - award.getStartAmount())
                             * (award.getPercent() / 100));
                     orderAmount = orderAmount - award.getEndAmount();
 
                     // 5、出货总金额位于某个区间之间
-                } else if (award.getStartAmount() <= data.getAllAmount()
+                } else if (award.getStartAmount() < data.getAllAmount()
                         && data.getAllAmount() <= award.getEndAmount()) {
                     allAward = allAward + (long) ((data.getAllAmount()
                             - award.getStartAmount())
@@ -931,10 +928,6 @@ public class InOrderAOImpl implements IInOrderAO {
                     report.setSendAward(report.getSendAward() + allAward);
                     agentReportBO.refreshSendAward(report);
 
-                    data.setPayGroup(payGroup);
-                    data.setIsPay(EIsPay.PAY_YES.getCode());
-                    inOrderBO.updatePayGroup(data);
-
                     accountBO.transAmountCZB(fromUserId,
                         ECurrency.TX_CNY.getCode(), agent.getUserId(),
                         ECurrency.TX_CNY.getCode(), allAward,
@@ -942,7 +935,11 @@ public class InOrderAOImpl implements IInOrderAO {
                         EBizType.AJ_CHJL_IN.getValue(), payGroup);
                 }
 
+                data.setPayGroup(payGroup);
+
             }
+            data.setIsPay(EIsPay.PAY_YES.getCode());
+            inOrderBO.updatePayGroup(data);
 
         }
         logger.info("============云仓订单统计结束==========");

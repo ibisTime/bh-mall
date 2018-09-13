@@ -40,9 +40,9 @@ public class XN627365 extends AProcessor {
         condition.setWxId(req.getWxId());
         condition.setTeamName(req.getTeamName());
 
-        condition.setApproveDatetimeStart(DateUtil.strToDate(req.getDateStart(),
+        condition.setApplyDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));
-        condition.setApproveDatetimeEnd(
+        condition.setApplyDatetimeEnd(
             DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));
 
         String column = req.getOrderColumn();

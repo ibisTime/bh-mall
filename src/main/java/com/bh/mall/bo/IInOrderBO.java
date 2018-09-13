@@ -4,15 +4,16 @@ import java.util.Date;
 import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.Product;
+import com.bh.mall.domain.Specs;
 
 public interface IInOrderBO extends IPaginableBO<InOrder> {
 
-    public String saveInOrder(String applyUser, String name, Integer level,
-            String toUserId, String toUserName, String teamName,
-            String teamLeader, String productCode, String productName,
-            String specsCode, String specsName, String pic, Long price,
-            Integer quantity, String applyNote);
+    public String saveInOrder(Agent agent, String toUserName, String teamLeader,
+            Product pData, Specs specs, Long price, Integer quantity,
+            String applyNote);
 
     public List<InOrder> queryInOrderList(InOrder condition);
 
@@ -42,14 +43,6 @@ public interface IInOrderBO extends IPaginableBO<InOrder> {
             Date startDatetime, Date endDatetime);
 
     public boolean getInOrderByUser(String userId, Date applyDatetime);
-
-    // 提货
-    public String pickUpGoods(String productCode, String productName,
-            String pic, String productSpecsCode, String productSpecsName,
-            Integer singleNumber, Long price, Long amount, Long yunfei,
-            String highUserId, String userId, String signer, String mobile,
-            String province, String city, String area, String address,
-            String kind);
 
     // 作废订单
     public void invalidOrder(InOrder data, String updater, String remark);

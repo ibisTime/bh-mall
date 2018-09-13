@@ -445,47 +445,57 @@ public class SjFormAOImpl implements ISjFormAO {
             chAmount = chAmount + order.getAmount();
         }
 
-        ChAward chAward = chAwardBO.getChAwardByLevel(agent.getLevel(),
-            chAmount);
-        if (null != chAward) {
-            long award = (long) (chAmount * chAward.getPercent() / 100);
-            if (award > 0) {
-                Account highAccount = accountBO.getAccountByUser(
-                    agent.getHighUserId(), ECurrency.TX_CNY.getCode());
-                if (highAccount.getAmount() < award) {
-                    throw new BizException("xn00000",
-                        "该代理的出货奖未发放，旧上级的业绩账户中余额不足，无法支付奖金：" + award / 1000.0
-                                + "元");
-                }
-                String payGroup = OrderNoGenerater
-                    .generate(EGeneratePrefix.InOrder.getCode());
+        Long chAward = 0L;
+        List<ChAward> awardList = chAwardBO.getChAwardByLevel(agent.getLevel());
+        for (ChAward award : awardList) {
 
-                EBizType bizType = EBizType.AJ_CHJL_IN;
-                if (CollectionUtils.isNotEmpty(outOrderList)) {
-                    bizType = EBizType.AJ_CHJL_OUT;
-                }
+            if (chAmount >= award.getEndAmount()) {
+                chAward = chAward + (long) ((award.getEndAmount()
+                        - award.getStartAmount()) * (award.getPercent() / 100));
+                chAmount = chAmount - award.getStartAmount();
 
-                // 上级发奖励给下级
-                accountBO.transAmountCZB(agent.getHighUserId(),
-                    ECurrency.TX_CNY.getCode(), agent.getUserId(),
-                    ECurrency.TX_CNY.getCode(), award, bizType,
-                    agent.getRealName() + "升级，出货奖励转转出",
-                    agent.getRealName() + "升级，出货奖励转入", payGroup);
-
-                AgentReport report = agentReportBO
-                    .getAgentReportByUser(agent.getUserId());
-                report.setSendAward(report.getSendAward() + award);
-                agentReportBO.refreshSendAward(report);
-
+            } else if (award.getStartAmount() < chAmount
+                    && chAmount <= award.getEndAmount()) {
+                chAward = chAward + (long) ((chAmount - award.getStartAmount())
+                        * (award.getPercent() / 100));
             }
-            // 更新订单支付状态
-            for (InOrder inOrder : inOrderList) {
-                inOrderBO.refreshIsPay(inOrder);
+        }
+        if (chAward > 0) {
+            Account highAccount = accountBO.getAccountByUser(
+                agent.getHighUserId(), ECurrency.TX_CNY.getCode());
+            if (highAccount.getAmount() < chAward) {
+                throw new BizException("xn00000",
+                    "该代理的出货奖未发放，旧上级的业绩账户中余额不足，无法支付奖金：" + chAward / 1000.0
+                            + "元");
+            }
+            String payGroup = OrderNoGenerater
+                .generate(EGeneratePrefix.InOrder.getCode());
+
+            EBizType bizType = EBizType.AJ_CHJL_IN;
+            if (CollectionUtils.isNotEmpty(outOrderList)) {
+                bizType = EBizType.AJ_CHJL_OUT;
             }
 
-            for (OutOrder outOrder : outOrderList) {
-                outOrderBO.refreshIsPay(outOrder);
-            }
+            // 上级发奖励给下级
+            accountBO.transAmountCZB(agent.getHighUserId(),
+                ECurrency.TX_CNY.getCode(), agent.getUserId(),
+                ECurrency.TX_CNY.getCode(), chAward, bizType,
+                agent.getRealName() + "升级，出货奖励转转出",
+                agent.getRealName() + "升级，出货奖励转入", payGroup);
+
+            AgentReport report = agentReportBO
+                .getAgentReportByUser(agent.getUserId());
+            report.setSendAward(report.getSendAward() + chAward);
+            agentReportBO.refreshSendAward(report);
+
+        }
+        // 更新订单支付状态
+        for (InOrder inOrder : inOrderList) {
+            inOrderBO.refreshIsPay(inOrder);
+        }
+
+        for (OutOrder outOrder : outOrderList) {
+            outOrderBO.refreshIsPay(outOrder);
         }
     }
 }

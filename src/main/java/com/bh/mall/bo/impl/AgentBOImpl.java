@@ -480,7 +480,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
             data.setIntroducer(sqForm.getIntroducer());
             data.setReferrer(sqForm.getReferrer());
 
-            data.setIsImpower(EIsImpower.NO_Impwoer.getCode());
+            data.setIsImpower(EIsImpower.NO_CHARGE.getCode());
         } else if (EAgentStatus.CANCELED.getCode().equals(status)) {
             data.setHighUserId(null);
             data.setLevel(null);

@@ -168,12 +168,8 @@
 		FROM
 		tbh_in_order t 
 		<include refid="where_condition" />
-		GROUP BY t.level,t.apply_user
-		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
-		</trim>
+		GROUP BY t.level,t.apply_user,t.level
+		ORDER BY t.level
 	</select>
 	
 
@@ -331,7 +327,7 @@
 		pay_group = #{payGroup}
 		,is_pay = #{isPay}
 		WHERE 
-		apply_user = #{applyUser} AND level = #{level} AND is_pay = '0'
+		apply_user = #{applyUser}  AND is_pay = '0'
 	</update>
 	
 	<update id="update_isPay" parameterType="inOrder">

@@ -26,6 +26,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
+import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.exception.BizException;
 
 @Service
@@ -93,6 +94,10 @@ public class ChargeAOImpl implements IChargeAO {
         }
         if (EBoolean.YES.getCode().equals(payResult)) {
             payOrderYES(data, payUser, payNote);
+
+            // 更新用户快照
+            Agent agent = agentBO.getAgent(data.getApplyUser());
+            agentBO.refreshIsImpower(agent, EIsImpower.NO_Impwoer.getCode());
         } else {
             payOrderNO(data, payUser, payNote);
         }
@@ -111,6 +116,7 @@ public class ChargeAOImpl implements IChargeAO {
             null, null, data.getCode(), EBizType.getBizType(data.getBizType()),
             EBizType.getBizType(data.getBizType()).getValue(),
             data.getAmount());
+
     }
 
     @Override

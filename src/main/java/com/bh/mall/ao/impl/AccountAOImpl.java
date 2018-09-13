@@ -23,6 +23,7 @@ import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 
@@ -169,6 +170,11 @@ public class AccountAOImpl implements IAccountAO {
             bizNote = EBizType.AJ_CZ.getValue();
         }
 
+        if (ECurrency.MK_CNY.getCode().equals(account.getCurrency())) {
+            Agent agent = agentBO.getAgent(account.getUserId());
+            agentBO.refreshIsImpower(agent, EIsImpower.NO_Impwoer.getCode());
+
+        }
         Long totalAmount = amount + account.getAmount();
         if (totalAmount < 0) {
             throw new BizException("xn00000", "用户账户余额不足");

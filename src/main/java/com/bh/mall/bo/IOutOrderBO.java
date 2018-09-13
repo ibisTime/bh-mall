@@ -5,18 +5,32 @@ import java.util.List;
 
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
+import com.bh.mall.domain.CUser;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.Product;
 import com.bh.mall.domain.Specs;
+import com.bh.mall.domain.Ware;
+import com.bh.mall.dto.req.XN627640Req;
+import com.bh.mall.dto.req.XN627641Req;
+import com.bh.mall.dto.req.XN627815Req;
 
 public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
-    public String saveOutOrder(String applyUser, String name, Integer level,
-            String toUserId, String toUserName, String highUserId,
-            String teamName, String teamLeader, Product pData, Specs specs,
-            Long price, Integer quantity, String applyNote, String isWareSend,
-            String signer, String mobile, String province, String city,
-            String area, String address, String status, String kind);
+    public String saveOutOrder(Agent applyUser, String toUserId,
+            String toUserName, String teamLeader, Product pData, Specs specs,
+            Long price, int quantity, String kind, XN627640Req req);
+
+    public String saveOutOrder(Agent applyUser, String highUserId,
+            String toUserName, String realName, Product pData, Specs specs,
+            Long price, int singleNumber, String kind, XN627641Req req);
+
+    public String saveOutOrder(CUser cUser, String toUserId, String toUserName,
+            Product product, Specs specs, Long price, int quantity,
+            XN627640Req req, String kind);
+
+    public String saveOutOrder(CUser cUser, String toUserId, String toUserName,
+            Product product, Specs specs, Long price, int quantity,
+            XN627641Req req, String kind);
 
     public void refreshOutOrder(OutOrder data);
 
@@ -65,14 +79,9 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public Long getOutOrderByUser(String userId);
 
-    // 提货
-    public String pickUpGoods(String productCode, String productName,
-            String pic, String specsCode, String specsName,
-            Integer singleNumber, Long price, Long amount, Long yunfei,
-            String highUserId, Agent agent, String teamLeader, String toUserId,
-            String toUserName, String isWareSend, String signer, String mobile,
-            String province, String city, String area, String address,
-            String kind);
+    public String pickUpGoods(Agent agent, String teamLeader, String toUserId,
+            String toUserName, Ware ware, String pic, int quantity, Long yunfei,
+            XN627815Req req, String kind);
 
     // 作废订单
     public void invalidOutOrder(OutOrder data, String updater, String remark);

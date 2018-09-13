@@ -205,9 +205,15 @@ public class YxFormAOImpl implements IYxFormAO {
      * @see com.bh.mall.ao.IYxFormAO#applyYxForm(com.bh.mall.dto.req.XN627250Req)
      */
     @Override
+    @Transactional
     public void acceptYxFormByB(String userId, String approver, String remark) {
         // 确认申请id
         YxForm yxForm = yxFormBO.getYxForm(userId);
+        if (null == yxForm
+                || !EYxFormStatus.ACCEPT.getCode().equals(yxForm.getStatus())) {
+            throw new BizException("xn00000", "该代理意向已接受，请勿重复操作");
+        }
+
         Agent data = agentBO.getAgent(approver);
         String logCode = yxFormBO.acceptYxForm(yxForm, data.getUserId(),
             data.getRealName(), remark);

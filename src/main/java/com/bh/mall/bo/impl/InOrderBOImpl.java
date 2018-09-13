@@ -10,11 +10,13 @@ import org.springframework.util.CollectionUtils;
 
 import com.bh.mall.bo.IInOrderBO;
 import com.bh.mall.bo.base.PaginableBOImpl;
-import com.bh.mall.common.DateUtil;
 import com.bh.mall.core.EGeneratePrefix;
 import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.dao.IInOrderDAO;
+import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.InOrder;
+import com.bh.mall.domain.Product;
+import com.bh.mall.domain.Specs;
 import com.bh.mall.enums.EInOrderStatus;
 import com.bh.mall.enums.EIsPay;
 import com.bh.mall.exception.BizException;
@@ -27,35 +29,36 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     IInOrderDAO inOrderDAO;
 
     @Override
-    public String saveInOrder(String applyUser, String realName, Integer level,
-            String toUserId, String toUserName, String teamName,
-            String teamLeader, String productCode, String productName,
-            String specsCode, String specsName, String pic, Long price,
-            Integer quantity, String applyNote) {
+
+    public String saveInOrder(Agent agent, String toUserName, String teamLeader,
+            Product product, Specs specs, Long price, Integer quantity,
+            String applyNote)
+
+    {
         InOrder data = new InOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.InOrder.getCode());
 
         data.setCode(code);
-        data.setApplyUser(applyUser);
-        data.setRealName(realName);
-        data.setLevel(level);
-        data.setTeamName(teamName);
-        data.setToUserId(toUserId);
+        data.setApplyUser(agent.getUserId());
+        data.setRealName(agent.getRealName());
+        data.setLevel(agent.getLevel());
+        data.setTeamName(agent.getTeamName());
+        data.setToUserId(agent.getHighUserId());
 
         data.setToUserName(toUserName);
-        data.setTeamName(teamName);
+        data.setTeamName(agent.getTeamName());
         data.setTeamLeader(teamLeader);
 
-        data.setProductCode(productCode);
-        data.setProductName(productName);
-        data.setSpecsCode(specsCode);
-        data.setSpecsName(specsName);
+        data.setProductCode(product.getCode());
+        data.setProductName(product.getName());
+        data.setSpecsCode(specs.getCode());
+        data.setSpecsName(specs.getName());
 
         data.setQuantity(quantity);
         data.setPrice(price);
         data.setAmount(quantity * price);
-        data.setPic(pic);
+        data.setPic(product.getPic());
         data.setStatus(EInOrderStatus.Unpaid.getCode());
         Date date = new Date();
 
@@ -172,33 +175,6 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
     }
 
     @Override
-    public String pickUpGoods(String productCode, String productName,
-            String pic, String productSpecsCode, String specsName,
-            Integer singleNumber, Long price, Long amount, Long yunfei,
-            String highUserId, String userId, String signer, String mobile,
-            String province, String city, String area, String address,
-            String kind) {
-        InOrder data = new InOrder();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.OutOrder.getCode());
-
-        data.setCode(code);
-        data.setProductCode(productCode);
-        data.setProductName(productName);
-        data.setPic(pic);
-
-        data.setSpecsCode(productSpecsCode);
-        data.setSpecsName(specsName);
-        data.setQuantity(singleNumber);
-        data.setPrice(price);
-
-        data.setStatus(EInOrderStatus.Received.getCode());
-        inOrderDAO.insert(data);
-        return code;
-
-    }
-
-    @Override
     public void invalidOrder(InOrder data, String approver, String remark) {
         Date date = new Date();
         data.setStatus(EInOrderStatus.Canceled.getCode());
@@ -243,7 +219,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
         InOrder condition = new InOrder();
         condition.setIsPay(EIsPay.PAY_NO.getCode());
         condition.setApplyUser(applyUser);
-        condition.setStartDatetime(DateUtil.getMonthStart());
+        condition.setStatus(EInOrderStatus.Received.getCode());
         condition.setEndDatetime(new Date());
 
         return inOrderDAO.selectList(condition);
