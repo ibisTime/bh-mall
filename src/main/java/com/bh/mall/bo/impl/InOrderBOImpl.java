@@ -32,9 +32,7 @@ public class InOrderBOImpl extends PaginableBOImpl<InOrder>
 
     public String saveInOrder(Agent agent, String toUserName, String teamLeader,
             Product product, Specs specs, Long price, Integer quantity,
-            String applyNote)
-
-    {
+            String applyNote) {
         InOrder data = new InOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.InOrder.getCode());

@@ -1193,14 +1193,16 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn00000", "该订单无法作废");
         }
 
-        if (EOutOrderKind.Upgrade_Order.getCode().equals(data.getKind())
-                || EOutOrderKind.Impower_Order.getCode()
-                    .equals(data.getKind())) {
-            throw new BizException("xn00000", "授权单或升级单无法作废");
+        // 非云仓提货单，且已经发放过奖励
+        if (EOutOrderKind.Pick_Up.getCode().equals(data.getKind())
+                && EBoolean.YES.getCode().equals(data.getIsPay())) {
+            throw new BizException("xn00000", "该订单无法作废");
         }
 
         // 云仓提货订单归还库存
-        if (EOutOrderKind.Pick_Up.getCode().equals(data.getKind())) {
+        if (EBoolean.YES.getCode().equals(data.getIsWareSend()) && data
+            .getToUserId().equals(sysUserBO.getSYSUser().getUserId())) {
+
             Agent agent = agentBO.getAgent(data.getApplyUser());
             wareBO.buyWare(data.getCode(), data.getProductCode(),
                 data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
@@ -1216,7 +1218,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     EBizType.AJ_GMCP_TK, EBizType.AJ_GMCP_TK.getCode(),
                     data.getYunfei());
             }
-        } else if (null != data.getPayAmount()) {
+        } else if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
             Account account = accountBO.getAccountByUser(data.getApplyUser(),
                 ECurrency.TX_CNY.getCode());
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,

@@ -195,13 +195,6 @@ public class InOrderAOImpl implements IInOrderAO {
                 teamLeader.getRealName(), pData, specs, agentPrice.getPrice(),
                 cart.getQuantity(), applyNote);
 
-            // String orderCode = inOrderBO.saveInOrder(applyAgent.getUserId(),
-            // applyAgent.getRealName(), applyAgent.getLevel(),
-            // applyAgent.getHighUserId(), toUserName,
-            // applyAgent.getTeamName(), teamLeader.getRealName(),
-            // pData.getCode(), pData.getName(), specs.getCode(),
-            // specs.getName(), pData.getPic(), agentPrice.getPrice(),
-            // cart.getQuantity(), applyNote);
             list.add(orderCode);
 
             amount = amount + cart.getQuantity() * agentPrice.getPrice();
