@@ -153,9 +153,9 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
         exchangeOrderBO.saveChangeOrder(data);
 
         wareBO.changeWare(whData.getCode(), EWareLogType.CHANGE.getCode(),
-            -StringValidater.toInteger(req.getQuantity()),
-            ESpecsLogType.ChangeProduct, "[" + product.getName() + "]申请置换为["
-                    + exchangeProduct.getName() + "]",
+            -StringValidater.toInteger(req.getQuantity()), EWareLogType.CHANGE,
+            "[" + product.getName() + "]申请置换为[" + exchangeProduct.getName()
+                    + "]",
             code);
         return code;
 
@@ -302,16 +302,16 @@ public class ExchangeOrderAOImpl implements IExchangeOrderAO {
             wareBO.buyWare(data.getCode(), data.getChangeProductCode(),
                 data.getChangeProductName(), data.getChangeSpecsCode(),
                 changeSpecs.getName(), data.getCanChangeQuantity(),
-                changePrice.getPrice(), agent, ESpecsLogType.ChangeProduct,
+                changePrice.getPrice(), agent, EWareLogType.CHANGE,
                 "[" + data.getProductName() + "]置换为["
                         + data.getChangeProductName() + "]");
 
         } else {
             wareBO.buyWare(data.getCode(), data.getProductCode(),
                 data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
-                data.getQuantity(), data.getPrice(), agent,
-                ESpecsLogType.ChangeProduct, "[" + data.getProductName()
-                        + "]置换为[" + data.getChangeProductName() + "]");
+                data.getQuantity(), data.getPrice(), agent, EWareLogType.CHANGE,
+                "[" + data.getProductName() + "]置换为["
+                        + data.getChangeProductName() + "]");
         }
 
         data.setApprover(approver);

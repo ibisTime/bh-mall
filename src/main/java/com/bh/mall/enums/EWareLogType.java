@@ -18,7 +18,8 @@ import java.util.Map;
  */
 public enum EWareLogType {
 
-    IN("0", "购买云仓"), OUT("1", "云仓出货"), CHANGE("2", "云仓置换");
+    IN("0", "购买云仓"), OUT("1", "云仓出货"), CHANGE("2", "云仓置换"), PLAT_UPDATE("3",
+            "平台调整"), QXDD("4", "取消订单");
 
     public static Map<String, EWareLogType> getFromTypeMap() {
         Map<String, EWareLogType> map = new HashMap<String, EWareLogType>();

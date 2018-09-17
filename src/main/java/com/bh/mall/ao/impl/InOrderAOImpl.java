@@ -772,7 +772,7 @@ public class InOrderAOImpl implements IInOrderAO {
                 } else {
                     // 改变上级云仓
                     wareBO.changeWare(toWare.getCode(),
-                        EWareLogType.OUT.getCode(), number, ESpecsLogType.Order,
+                        EWareLogType.OUT.getCode(), number, EWareLogType.OUT,
                         EBizType.AJ_GMYC.getValue(), inOrder.getCode());
                 }
 
@@ -835,7 +835,7 @@ public class InOrderAOImpl implements IInOrderAO {
         // 购买云仓
         wareBO.buyWare(data.getCode(), data.getProductCode(),
             data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
-            data.getQuantity(), data.getPrice(), applyUser, ESpecsLogType.Order,
+            data.getQuantity(), data.getPrice(), applyUser, EWareLogType.IN,
             "购买产品：[" + data.getProductName() + "]");
 
         // 扣减上级云仓

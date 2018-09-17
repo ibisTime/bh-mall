@@ -5,7 +5,7 @@ import java.util.List;
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.Ware;
-import com.bh.mall.enums.ESpecsLogType;
+import com.bh.mall.enums.EWareLogType;
 
 public interface IWareBO extends IPaginableBO<Ware> {
 
@@ -20,10 +20,10 @@ public interface IWareBO extends IPaginableBO<Ware> {
     public List<Ware> getWareByProduct(String productCode);
 
     void changeWare(String code, String type, Integer quantity,
-            ESpecsLogType bizType, String fromBizNote, String refNo);
+            EWareLogType bizType, String fromBizNote, String refNo);
 
     public void saveWare(Ware data, String type, Integer quantity,
-            ESpecsLogType bizType, String bizNote, String refNo);
+            EWareLogType bizType, String bizNote, String refNo);
 
     public void refreshLogCode(Ware whData);
 
@@ -33,7 +33,7 @@ public interface IWareBO extends IPaginableBO<Ware> {
 
     public void buyWare(String orderCode, String productCode,
             String productName, String specsCode, String specsName,
-            Integer quantity, Long price, Agent agent, ESpecsLogType bizType,
+            Integer quantity, Long price, Agent agent, EWareLogType bizType,
             String bizNote);
 
     public void changeWarePrice(String userId, Integer level);

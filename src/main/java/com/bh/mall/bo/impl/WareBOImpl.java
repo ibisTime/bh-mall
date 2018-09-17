@@ -20,7 +20,6 @@ import com.bh.mall.domain.AgentPrice;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EProductStatus;
-import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
@@ -39,9 +38,9 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
     @Override
     public void saveWare(Ware data, String type, Integer quantity,
-            ESpecsLogType bizType, String bizNote, String refNo) {
-        String logCode = wareLogBO.saveWareLog(data, type, quantity, bizType,
-            bizNote, refNo);
+            EWareLogType bizType, String bizNote, String refNo) {
+        String logCode = wareLogBO.saveWareLog(data, type, quantity,
+            bizType.getCode(), bizNote, refNo);
         data.setLastChangeCode(logCode);
         wareDAO.insert(data);
 
@@ -50,6 +49,9 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     public void refreshWare(Ware data) {
         wareDAO.updateQuantity(data);
+        wareLogBO.saveWareLog(data, EWareLogType.PLAT_UPDATE.getCode(),
+            data.getQuantity(), EWareLogType.PLAT_UPDATE.getCode(), "平台调整数量",
+            null);
     }
 
     @Override
@@ -89,7 +91,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     @Transactional
     public void changeWare(String code, String type, Integer quantity,
-            ESpecsLogType bizType, String bizNote, String refNo) {
+            EWareLogType bizType, String bizNote, String refNo) {
 
         Ware dbData = this.getWare(code);
         Integer nowQuantity = dbData.getQuantity() + quantity;
@@ -99,8 +101,8 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
         Long nowAmount = nowQuantity * dbData.getPrice();
         dbData.setQuantity(nowQuantity);
         // 记录流水
-        String logCode = wareLogBO.saveWareLog(dbData, type, quantity, bizType,
-            bizNote, refNo);
+        String logCode = wareLogBO.saveWareLog(dbData, type, quantity,
+            bizType.getCode(), bizNote, refNo);
 
         // 改变数量
         dbData.setCode(code);
@@ -136,7 +138,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     @Override
     public void buyWare(String orderCode, String productCode,
             String productName, String specsCode, String specsName,
-            Integer quantity, Long price, Agent agent, ESpecsLogType bizType,
+            Integer quantity, Long price, Agent agent, EWareLogType bizType,
             String bizNote) {
         Ware ware = this.getWareByProductSpec(agent.getUserId(), specsCode);
 
@@ -214,7 +216,9 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
 
     @Override
     public void removeWare(Ware data) {
-        // wareLogBO.saveWareLog(data, type, quantity, remark);
+        wareDAO.delete(data);
+        wareLogBO.saveWareLog(data, EWareLogType.PLAT_UPDATE.getCode(),
+            data.getQuantity(), null, "平台调整库存", null);
     }
 
     @Override

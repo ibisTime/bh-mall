@@ -5,7 +5,6 @@ import java.util.List;
 import com.bh.mall.bo.base.IPaginableBO;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.domain.WareLog;
-import com.bh.mall.enums.ESpecsLogType;
 
 public interface IWareLogBO extends IPaginableBO<WareLog> {
 
@@ -14,6 +13,6 @@ public interface IWareLogBO extends IPaginableBO<WareLog> {
     public WareLog getWareLog(String code);
 
     public String saveWareLog(Ware dbData, String type, Integer quantity,
-            ESpecsLogType bizType, String bizNote, String refNo);
+            String bizType, String bizNote, String refNo);
 
 }

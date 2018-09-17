@@ -250,13 +250,12 @@ public class WareAOImpl implements IWareAO {
         }
 
         // 剩余产品是否充足
-        Product product = productBO.getProduct(data.getProductCode());
         if (data.getQuantity() < StringValidater.toInteger(req.getQuantity())) {
             throw new BizException("xn00000", "您仓库中该规格的产品数量不足");
         }
 
         String kind = EOutOrderKind.Pick_Up.getCode();
-
+        Product product = productBO.getProduct(data.getProductCode());
         // 用户已授权且没有完成授权单，所下订单为授权单
         if (EAgentStatus.IMPOWERED.getCode().equals(agent.getStatus())
                 && EIsImpower.NO_Impwoer.getCode()
@@ -322,10 +321,6 @@ public class WareAOImpl implements IWareAO {
                 }
                 amount = amount + psData.getSingleNumber() * data.getPrice();
 
-                outOrderBO.pickUpGoods(agent, teamLeader.getRealName(),
-                    sysUser.getUserId(), sysUser.getRealName(), data,
-                    product.getPic(), quantity, yunfei, req, kind);
-
                 String code = outOrderBO.pickUpGoods(agent,
                     teamLeader.getRealName(), sysUser.getUserId(),
                     sysUser.getRealName(), data, product.getPic(), quantity,
@@ -362,12 +357,12 @@ public class WareAOImpl implements IWareAO {
 
         // 减少云仓库存
         wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
-            -StringValidater.toInteger(req.getQuantity()), ESpecsLogType.Order,
+            -StringValidater.toInteger(req.getQuantity()), EWareLogType.OUT,
             ESpecsLogType.Order.getValue(), data.getUserId());
 
         // 订单类型为授权单，获取类型为授权单的订单金额与本次下单金额，金额不满足该等级授权单金额是，用户状态为未完成授权单
         String isImpower = EIsImpower.Normal.getCode();
-        if (EOutOrderKind.Impower_Order.getCode().equals(kind)) {
+        if (EIsImpower.NO_Impwoer.getCode().equals(agent.getIsImpower())) {
             // 获取所有授权单金额
             Long orderAmount = outOrderBO.checkImpowerOrder(agent.getUserId(),
                 agent.getImpowerDatetime());
@@ -378,7 +373,7 @@ public class WareAOImpl implements IWareAO {
             }
 
             // 订单类型为升级单，获取最后一次升级后类型为升级单的订单金额与本次金额，金额不满足该等级升级单金额时，用户状态为未完成升级单
-        } else if (EOutOrderKind.Upgrade_Order.getCode().equals(kind)) {
+        } else if (EIsImpower.NO_Upgrade.getCode().equals(kind)) {
             AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
             Long orderAmount = outOrderBO.checkUpgradeOrder(agent.getUserId(),
                 log.getApproveDatetime());
@@ -457,24 +452,13 @@ public class WareAOImpl implements IWareAO {
             }
 
             // 代理授权单或升级单是否已完成，若已完成状态为正常
+            AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
             if (EIsImpower.NO_Impwoer.getCode().equals(agent.getIsImpower())) {
                 result = ECheckStatus.NO_Impower.getCode();
 
             } else if (EIsImpower.NO_Upgrade.getCode()
                 .equals(agent.getIsImpower())) {
                 result = ECheckStatus.NO_Upgrade.getCode();
-            }
-
-            AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
-
-            // 3、判断开启云仓用户买入云仓金额是否满足授权单或升级单的金额
-            if (EBoolean.YES.getCode().equals(agentLevel.getIsWare())) {
-                if (inOrderBO.getInOrderByUser(agent.getUserId(),
-                    log.getApproveDatetime())
-                        && whAmount < agentLevel.getAmount()) {
-                    redAmount = agentLevel.getAmount();
-                    result = ECheckStatus.RED_LOW.getCode();
-                }
             }
 
             // *******************所有状态*************
@@ -560,6 +544,10 @@ public class WareAOImpl implements IWareAO {
                 StringValidater.toInteger(quantity) * data.getPrice());
             wareBO.refreshWare(data);
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(2 % 1);
     }
 
 }

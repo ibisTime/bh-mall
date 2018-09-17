@@ -88,7 +88,6 @@ import com.bh.mall.enums.EPayType;
 import com.bh.mall.enums.EProductSpecsType;
 import com.bh.mall.enums.EProductStatus;
 import com.bh.mall.enums.EResult;
-import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWareLogType;
@@ -1095,7 +1094,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 wareBO.buyWare(data.getCode(), data.getProductCode(),
                     data.getProductName(), data.getSpecsCode(),
                     data.getSpecsName(), data.getQuantity(), data.getPrice(),
-                    agent, ESpecsLogType.Order,
+                    agent, EWareLogType.QXDD,
                     "购买产品：[" + data.getProductName() + "]");
             }
         }
@@ -1193,12 +1192,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn00000", "该订单无法作废");
         }
 
-        // 非云仓提货单，且已经发放过奖励
-        if (EOutOrderKind.Pick_Up.getCode().equals(data.getKind())
-                && EBoolean.YES.getCode().equals(data.getIsPay())) {
-            throw new BizException("xn00000", "该订单无法作废");
-        }
-
         // 云仓提货订单归还库存
         if (EBoolean.YES.getCode().equals(data.getIsWareSend()) && data
             .getToUserId().equals(sysUserBO.getSYSUser().getUserId())) {
@@ -1206,8 +1199,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
             Agent agent = agentBO.getAgent(data.getApplyUser());
             wareBO.buyWare(data.getCode(), data.getProductCode(),
                 data.getProductName(), data.getSpecsCode(), data.getSpecsName(),
-                data.getQuantity(), data.getPrice(), agent,
-                ESpecsLogType.QX_ORDER, "取消订单");
+                data.getQuantity(), data.getPrice(), agent, EWareLogType.QXDD,
+                "取消订单");
 
             // 运费不为零时退还运费
             if (null != data.getYunfei() && 0 > data.getYunfei().longValue()) {
@@ -1387,8 +1380,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
 
             wareBO.changeWare(ware.getCode(), EWareLogType.OUT.getCode(),
-                -data.getQuantity(), ESpecsLogType.Order, "下级下单",
-                data.getCode());
+                -data.getQuantity(), EWareLogType.OUT, "下级下单", data.getCode());
 
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
                 // 支付运费
