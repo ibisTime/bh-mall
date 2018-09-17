@@ -73,6 +73,7 @@ import com.bh.mall.dto.req.XN627641Req;
 import com.bh.mall.dto.req.XN627643Req;
 import com.bh.mall.dto.res.BooleanRes;
 import com.bh.mall.dto.res.XN627666Res;
+import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
@@ -1185,7 +1186,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     public void invalidOutOrder(String code, String updater, String remark) {
 
         OutOrder data = outOrderBO.getOutOrder(code);
-        // 非待支付与未审核订单无法作废
+        // 非待支付、支付失败、未审核订单无法作废
         if (!(EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
                 || EOutOrderStatus.TO_APPROVE.getCode()
                     .equals(data.getStatus()))) {
@@ -1488,7 +1489,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
                 Account account = accountBO.getAccountByUser(fromUserId,
                     ECurrency.TX_CNY.getCode());
 
-                if (account.getAmount() > allAward) {
+                if (EAccountType.Plat.getCode().equals(account.getType())
+                        || account.getAmount() > allAward) {
                     accountBO.transAmountCZB(fromUserId,
                         ECurrency.TX_CNY.getCode(), agent.getUserId(),
                         ECurrency.TX_CNY.getCode(), allAward,

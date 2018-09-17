@@ -55,6 +55,7 @@ import com.bh.mall.domain.Specs;
 import com.bh.mall.domain.TjAward;
 import com.bh.mall.domain.Ware;
 import com.bh.mall.dto.res.BooleanRes;
+import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EBoolean;
@@ -914,7 +915,8 @@ public class InOrderAOImpl implements IInOrderAO {
                 }
                 Account account = accountBO.getAccountByUser(fromUserId,
                     ECurrency.TX_CNY.getCode());
-                if (account.getAmount() > allAward) {
+                if (EAccountType.Plat.getCode().equals(account.getType())
+                        || account.getAmount() > allAward) {
 
                     AgentReport report = agentReportBO
                         .getAgentReportByUser(data.getApplyUser());
