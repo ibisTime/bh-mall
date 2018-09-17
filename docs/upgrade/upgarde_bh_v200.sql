@@ -1371,7 +1371,6 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','out_order_type','4','微店订单','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'currency','币种','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','TX_CNY','可提现账户','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','TC_CNY','云仓账户','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','MK_CNY','门槛账户','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','C_CNY','C端账户','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'change_product_status','置换单','USYS201800000000002',NOW(),NULL);
@@ -1451,7 +1450,6 @@ insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `upd
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','mini_code_status','2','已使用','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'source','意向来源','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','source','0','公众号','USYS201800000000002',NOW(),NULL);
-insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','currency','C_CNY','C端账户','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'bananer_belong','banner图位置','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('1','bananer_belong','0','地方','USYS201800000000002',NOW(),NULL);
 insert into `tsys_dict` (`type`, `parent_key`, `dkey`, `dvalue`, `updater`, `update_datetime`, `remark`) values('0',NULL,'ware_log_type','云仓变动类型','USYS201800000000002',NOW(),NULL);
