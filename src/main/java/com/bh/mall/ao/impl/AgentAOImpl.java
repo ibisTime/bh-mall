@@ -209,7 +209,6 @@ public class AgentAOImpl implements IAgentAO {
                 .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = (String) wxRes.get("openid");
-            System.out.println("unionId:" + unionId);
             // Step4：根据openId，unionId从数据库中查询用户信息
             Agent dbUser = agentBO.doGetUserByOpenId(h5OpenId);
 

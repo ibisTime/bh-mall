@@ -42,9 +42,6 @@ public interface IAccountAO {
     // 列表查询账户
     public List<Account> queryAccountList(Account condition);
 
-    // 检查红线
-    public boolean checkAmount(String userId);
-
     // 扣款/充值
     public void transAmount(String accountNumber, String changeAmount,
             String remark);

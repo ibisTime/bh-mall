@@ -17,13 +17,11 @@ import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
-import com.bh.mall.domain.AgentLevel;
 import com.bh.mall.enums.EAccountType;
 import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
-import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 
@@ -140,21 +138,6 @@ public class AccountAOImpl implements IAccountAO {
     }
 
     @Override
-    public boolean checkAmount(String userId) {
-        Account account = accountBO.getAccountByUser(userId,
-            ECurrency.MK_CNY.getCode());
-        Agent user = agentBO.getAgent(userId);
-        AgentLevel agent = null;
-        if (null != user.getLevel() && 0 != user.getLevel()) {
-            agent = agentLevelBO.getAgentByLevel(user.getLevel());
-        }
-        if (account.getAmount() <= agent.getRedAmount()) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public void transAmount(String accountNumber, String changeAmount,
             String remark) {
         Account account = accountBO.getAccount(accountNumber);
@@ -170,11 +153,6 @@ public class AccountAOImpl implements IAccountAO {
             bizNote = EBizType.AJ_CZ.getValue();
         }
 
-        if (ECurrency.MK_CNY.getCode().equals(account.getCurrency())) {
-            Agent agent = agentBO.getAgent(account.getUserId());
-            agentBO.refreshIsImpower(agent, EIsImpower.NO_Impwoer.getCode());
-
-        }
         Long totalAmount = amount + account.getAmount();
         if (totalAmount < 0) {
             throw new BizException("xn00000", "用户账户余额不足");
