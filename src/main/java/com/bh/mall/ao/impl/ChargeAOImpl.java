@@ -55,16 +55,13 @@ public class ChargeAOImpl implements IChargeAO {
         }
         Agent agent = agentBO.getAgent(applyUser);
         // 没有充值过
-        List<Charge> charge = chargeBO.getChargeByUser(agent.getUserId(),
-            agent.getImpowerDatetime());
-        if (CollectionUtils.isEmpty(charge)) {
+        if (EIsImpower.NO_CHARGE.getCode().equals(agent.getIsImpower())) {
             // 首次不能低于授权金额
             AgentLevel impower = agentLevelBO.getAgentByLevel(agent.getLevel());
             if (impower.getMinChargeAmount() > amount) {
                 throw new BizException("xn000000",
                     "授权金额不能低于[" + impower.getMinChargeAmount() / 1000 + "]");
             }
-
         }
         // 普通充值
         AgentLevel agentLevl = agentLevelBO.getAgentByLevel(agent.getLevel());
@@ -95,9 +92,11 @@ public class ChargeAOImpl implements IChargeAO {
         if (EBoolean.YES.getCode().equals(payResult)) {
             payOrderYES(data, payUser, payNote);
 
-            // 更新用户快照
             Agent agent = agentBO.getAgent(data.getApplyUser());
-            agentBO.refreshIsImpower(agent, EIsImpower.NO_Impwoer.getCode());
+            if (EIsImpower.NO_CHARGE.getCode().equals(agent.getIsImpower())) {
+                agentBO.refreshIsImpower(agent,
+                    EIsImpower.NO_Impwoer.getCode());
+            }
         } else {
             payOrderNO(data, payUser, payNote);
         }

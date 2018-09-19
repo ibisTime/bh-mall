@@ -22,6 +22,7 @@ import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.exception.BizException;
 
@@ -160,6 +161,11 @@ public class AccountAOImpl implements IAccountAO {
         accountBO.changeAmount(accountNumber, EChannelType.NBZ, null, null,
             account.getUserId(), bizType, bizNote,
             StringValidater.toLong(changeAmount));
+
+        Agent agent = agentBO.getAgent(account.getUserId());
+        if (EIsImpower.NO_CHARGE.getCode().equals(agent.getIsImpower())) {
+            agentBO.refreshIsImpower(agent, EIsImpower.NO_Impwoer.getCode());
+        }
 
     }
 

@@ -109,11 +109,7 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
         dbData.setAmount(nowAmount);
         dbData.setLastChangeCode(logCode);
         // 该规格产品数量为零时，从云仓删除该产品
-        if (nowQuantity == 0) {
-            wareDAO.delete(dbData);
-        } else {
-            wareDAO.updateQuantity(dbData);
-        }
+        wareDAO.updateQuantity(dbData);
 
     }
 

@@ -455,10 +455,21 @@ public class WareAOImpl implements IWareAO {
             AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
             if (EIsImpower.NO_Impwoer.getCode().equals(agent.getIsImpower())) {
                 result = ECheckStatus.NO_Impower.getCode();
+                if (inOrderBO.getInOrderByUser(agent.getUserId(),
+                    agent.getImpowerDatetime())) {
+                    redAmount = agentLevel.getAmount();
+                    result = ECheckStatus.RED_LOW.getCode();
+                }
 
             } else if (EIsImpower.NO_Upgrade.getCode()
                 .equals(agent.getIsImpower())) {
+
                 result = ECheckStatus.NO_Upgrade.getCode();
+                if (inOrderBO.getInOrderByUser(agent.getUserId(),
+                    log.getApproveDatetime())) {
+                    redAmount = agentLevel.getAmount();
+                    result = ECheckStatus.RED_LOW.getCode();
+                }
             }
 
             // *******************所有状态*************
@@ -480,8 +491,9 @@ public class WareAOImpl implements IWareAO {
             // 3、检查是否有过充值或升级后门槛余额是否满足升级单（授权单金额为0，门槛款为0，红线为0，不去检查）
             if (0 != agentLevel.getAmount() || 0 != agentLevel.getMinCharge()
                     || 0 != agentLevel.getRedAmount()) {
-                if (EIsImpower.NO_CHARGE.getCode()
-                    .equals(agent.getIsImpower())) {
+                if (EIsImpower.NO_CHARGE.getCode().equals(agent.getIsImpower())
+                        || EIsImpower.NO_Upgrade.getCode()
+                            .equals(agent.getIsImpower())) {
                     // 获取充值金额
                     Long cAmount = 0L;
                     List<Charge> charge = chargeBO.getChargeByUser(
@@ -536,14 +548,9 @@ public class WareAOImpl implements IWareAO {
             String remark) {
         Ware data = wareBO.getWare(code);
         // 数量为零，删除
-        if (EBoolean.NO.getCode().equals(quantity)) {
-            wareBO.removeWare(data);
-        } else {
-            data.setQuantity(StringValidater.toInteger(quantity));
-            data.setAmount(
-                StringValidater.toInteger(quantity) * data.getPrice());
-            wareBO.refreshWare(data);
-        }
+        data.setQuantity(StringValidater.toInteger(quantity));
+        data.setAmount(StringValidater.toInteger(quantity) * data.getPrice());
+        wareBO.refreshWare(data);
     }
 
     public static void main(String[] args) {
