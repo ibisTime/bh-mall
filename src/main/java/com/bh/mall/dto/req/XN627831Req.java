@@ -22,6 +22,9 @@ public class XN627831Req extends APageReq {
     // （选填）状态 0 申请置换 1 申请通过 2 申请未通过
     private String status;
 
+    // 代理名称
+    private String realName;
+
     public String getUserId() {
         return userId;
     }
@@ -52,6 +55,14 @@ public class XN627831Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

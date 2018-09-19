@@ -16,6 +16,9 @@ public class XN627834Req extends APageReq {
     // （选填）状态
     private String status;
 
+    // （选填）代理名称
+    private String realName;
+
     public String getProductCode() {
         return productCode;
     }
@@ -30,6 +33,14 @@ public class XN627834Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

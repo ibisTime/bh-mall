@@ -47,10 +47,10 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
     }
 
     @Override
-    public void refreshWare(Ware data) {
+    public void refreshWare(Ware data, String updater, String remark) {
         wareDAO.updateQuantity(data);
         wareLogBO.saveWareLog(data, EWareLogType.PLAT_UPDATE.getCode(),
-            data.getQuantity(), EWareLogType.PLAT_UPDATE.getCode(), "平台调整数量",
+            data.getQuantity(), EWareLogType.PLAT_UPDATE.getCode(), remark,
             null);
     }
 

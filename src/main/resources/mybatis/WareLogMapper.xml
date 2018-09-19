@@ -51,9 +51,16 @@
 			<if test="productName != null and productName != '' ">
 				AND t.product_name like "%"#{productName}"%"
 			</if>
+			<if test="realName != null and realName != '' ">
+				AND t.real_name like "%"#{realName}"%"
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			
 			
 			<if test="startDatetime != null and startDatetime != ''">
 				<![CDATA[AND t.apply_datetime >= #{startDatetime}]]>

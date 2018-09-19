@@ -958,6 +958,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
     @Transactional
     public void deliverOutOrder(OutOrder data, String proCode, String deliver,
             String logisticsCode, String logisticsCompany, String remark) {
+
+        if (!EOutOrderStatus.TO_SEND.getCode().equals(data.getStatus())) {
+            throw new BizException("xn00000", "该订单不是待发货的订单");
+        }
+
         // 订单与箱码关联（整箱发货）
         if (StringUtils.isNotBlank(proCode)) {
             data.setProCode(proCode);
@@ -988,20 +993,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 出货以及推荐奖励
             this.payAward(data);
         }
-
-        // // 订单与盒码关联（盒装发货）
-        // if (CollectionUtils.isNotEmpty(req.getTraceCodeList())) {
-        // for (String stCode : req.getTraceCodeList()) {
-        // MiniCode stData = miniCodeBO.getMiniCode(stCode);
-        // miniCodeBO.refreshStatus(stData, data.getCode());
-        // }
-        //
-        // MiniCode stData = miniCodeBO
-        // .getMiniCode(req.getTraceCodeList().get(0));
-        // ProCode barData = proCodeBO.getProCode(stData.getRefCode());
-        // // 更新关联的箱码状态
-        // proCodeBO.splitSingle(barData);
-        // }
 
         outOrderBO.deliverOutOrder(data, EOutOrderStatus.TO_RECEIVE.getCode(),
             deliver, logisticsCode, logisticsCompany, new Date(), remark);
@@ -1047,8 +1038,12 @@ public class OutOrderAOImpl implements IOutOrderAO {
             throw new BizException("xn00000", "订单已发货或已收货，无法申请取消");
         }
 
-        // 授权单无法取消
+        // 授权单/升级单无法取消
         if (EOutOrderKind.Impower_Order.getCode().equals(data.getKind())) {
+            throw new BizException("xn00000", "授权单无法取消哦！");
+        }
+
+        if (EOutOrderKind.Upgrade_Order.getCode().equals(data.getKind())) {
             throw new BizException("xn00000", "授权单无法取消哦！");
         }
 
@@ -1188,7 +1183,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
         OutOrder data = outOrderBO.getOutOrder(code);
         // 非待支付、支付失败、未审核订单无法作废
         if (!(EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())
-                || EOutOrderStatus.TO_APPROVE.getCode()
+                || EOutOrderStatus.TO_APPROVE.getCode().equals(data.getStatus())
+                || EOutOrderStatus.TO_SEND.getCode()
                     .equals(data.getStatus()))) {
             throw new BizException("xn00000", "该订单无法作废");
         }
@@ -1214,10 +1210,11 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
         } else if (!EOutOrderStatus.Unpaid.getCode().equals(data.getStatus())) {
             Account account = accountBO.getAccountByUser(data.getApplyUser(),
-                ECurrency.TX_CNY.getCode());
+                ECurrency.MK_CNY.getCode());
             accountBO.changeAmount(account.getAccountNumber(), EChannelType.NBZ,
                 null, null, data.getCode(), EBizType.AJ_GMCP_TK,
-                EBizType.AJ_GMCP_TK.getCode(), data.getPayAmount());
+                EBizType.AJ_GMCP_TK.getCode(),
+                data.getAmount() + data.getYunfei());
         }
 
         outOrderBO.invalidOutOrder(data, updater, remark);

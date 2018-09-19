@@ -23,10 +23,16 @@ public class XN627830Req extends APageReq {
     private String keyword;
 
     // （选填）等级
+    private String userId;
+
+    // （选填）等级
     private String level;
 
     // （选填）状态 0 申请置换 1 申请通过 2 申请未通过
     private String status;
+
+    // 真实姓名
+    private String realName;
 
     public String getLevel() {
         return level;
@@ -74,6 +80,22 @@ public class XN627830Req extends APageReq {
 
     public void setSpecsCode(String specsCode) {
         this.specsCode = specsCode;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

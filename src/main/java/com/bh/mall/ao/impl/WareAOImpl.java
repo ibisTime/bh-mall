@@ -367,8 +367,7 @@ public class WareAOImpl implements IWareAO {
             Long orderAmount = outOrderBO.checkImpowerOrder(agent.getUserId(),
                 agent.getImpowerDatetime());
             // 授权单金额不满足授权金额
-            long allAmount = orderAmount + amount;
-            if (agentLevel.getAmount().longValue() > allAmount) {
+            if (agentLevel.getAmount().longValue() > orderAmount) {
                 isImpower = EIsImpower.NO_Impwoer.getCode();
             }
 
@@ -377,8 +376,7 @@ public class WareAOImpl implements IWareAO {
             AgentLog log = agentLogBO.getAgentLog(agent.getLastAgentLog());
             Long orderAmount = outOrderBO.checkUpgradeOrder(agent.getUserId(),
                 log.getApproveDatetime());
-            long allAmount = orderAmount + amount;
-            if (agentLevel.getAmount().longValue() > allAmount) {
+            if (agentLevel.getAmount().longValue() > orderAmount) {
                 isImpower = EIsImpower.NO_Upgrade.getCode();
             }
         }
@@ -550,7 +548,7 @@ public class WareAOImpl implements IWareAO {
         // 数量为零，删除
         data.setQuantity(StringValidater.toInteger(quantity));
         data.setAmount(StringValidater.toInteger(quantity) * data.getPrice());
-        wareBO.refreshWare(data);
+        wareBO.refreshWare(data, updater, remark);
     }
 
     public static void main(String[] args) {

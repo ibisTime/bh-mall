@@ -9,7 +9,7 @@ import com.bh.mall.enums.EWareLogType;
 
 public interface IWareBO extends IPaginableBO<Ware> {
 
-    public void refreshWare(Ware data);
+    public void refreshWare(Ware data, String updater, String remark);
 
     public List<Ware> queryWareList(Ware condition);
 

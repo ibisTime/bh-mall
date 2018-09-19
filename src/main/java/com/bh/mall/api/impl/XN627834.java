@@ -30,6 +30,8 @@ public class XN627834 extends AProcessor {
         WareLog condition = new WareLog();
         condition.setProductCode(req.getProductCode());
         condition.setStatus(req.getStatus());
+        condition.setRealName(req.getRealName());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IWareLogAO.DEFAULT_ORDER_COLUMN;
