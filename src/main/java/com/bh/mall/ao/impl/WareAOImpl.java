@@ -489,9 +489,8 @@ public class WareAOImpl implements IWareAO {
             // 3、检查是否有过充值或升级后门槛余额是否满足升级单（授权单金额为0，门槛款为0，红线为0，不去检查）
             if (0 != agentLevel.getAmount() || 0 != agentLevel.getMinCharge()
                     || 0 != agentLevel.getRedAmount()) {
-                if (EIsImpower.NO_CHARGE.getCode().equals(agent.getIsImpower())
-                        || EIsImpower.NO_Upgrade.getCode()
-                            .equals(agent.getIsImpower())) {
+                if (EIsImpower.NO_CHARGE.getCode()
+                    .equals(agent.getIsImpower())) {
                     // 获取充值金额
                     Long cAmount = 0L;
                     List<Charge> charge = chargeBO.getChargeByUser(

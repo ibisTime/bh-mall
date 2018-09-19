@@ -56,11 +56,11 @@ public class ChargeAOImpl implements IChargeAO {
         Agent agent = agentBO.getAgent(applyUser);
         // 没有充值过
         if (EIsImpower.NO_CHARGE.getCode().equals(agent.getIsImpower())) {
-            // 首次不能低于授权金额
+            // 首次不能低于门槛款
             AgentLevel impower = agentLevelBO.getAgentByLevel(agent.getLevel());
-            if (impower.getMinChargeAmount() > amount) {
+            if (impower.getMinCharge() > amount) {
                 throw new BizException("xn000000",
-                    "授权金额不能低于[" + impower.getMinCharge() / 1000 + "]");
+                    "门槛费不能低于[" + impower.getMinCharge() / 1000 + "]");
             }
         }
         // 普通充值

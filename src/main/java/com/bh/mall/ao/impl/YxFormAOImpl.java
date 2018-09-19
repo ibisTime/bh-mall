@@ -210,7 +210,7 @@ public class YxFormAOImpl implements IYxFormAO {
         // 确认申请id
         YxForm yxForm = yxFormBO.getYxForm(userId);
         if (null == yxForm
-                || !EYxFormStatus.ACCEPT.getCode().equals(yxForm.getStatus())) {
+                || EYxFormStatus.ACCEPT.getCode().equals(yxForm.getStatus())) {
             throw new BizException("xn00000", "该代理意向已接受，请勿重复操作");
         }
 

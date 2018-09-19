@@ -420,7 +420,8 @@ public class AgentAOImpl implements IAgentAO {
                 .getLevel() && StringUtils.isNotBlank(data.getHighUserId())) {
                 SYSUser sysUser = sysUserBO.getSYSUser(data.getHighUserId());
                 data.setHighUserName(sysUser.getRealName());
-            } else if (StringUtils.isNotBlank(data.getHighUserId())) {
+            } else if (null != data.getLevel()
+                    && StringUtils.isNotBlank(data.getHighUserId())) {
                 Agent highAgent = agentBO.getAgent(data.getHighUserId());
                 data.setHighUserName(highAgent.getRealName());
                 data.setHighUserMobile(highAgent.getMobile());
