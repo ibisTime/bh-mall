@@ -129,6 +129,10 @@ public class SqFormAOImpl implements ISqFormAO {
         AgentLevel impower = agentLevelBO
             .getAgentByLevel(StringValidater.toInteger(req.getApplyLevel()));
         if (EBoolean.YES.getCode().equals(impower.getIsRealName())) {
+            if (StringUtils.isBlank(req.getIdNo())) {
+                throw new BizException("xn0000", "本等级需要实名认证,请输入身份证号");
+            }
+
             IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
             if (!idCardChecker.validate()) {
                 throw new BizException("xn0000", "请输入正确的身份证号码");
@@ -237,6 +241,10 @@ public class SqFormAOImpl implements ISqFormAO {
             .getAgentByLevel(StringValidater.toInteger(req.getApplyLevel()));
         // 校验身份证
         if (EBoolean.YES.getCode().equals(agentLevel.getIsRealName())) {
+            if (StringUtils.isBlank(req.getIdNo())) {
+                throw new BizException("xn0000", "本等级需要实名认证,请输入身份证号");
+            }
+
             IdCardChecker idCardChecker = new IdCardChecker(req.getIdNo());
             if (!idCardChecker.validate()) {
                 throw new BizException("xn0000", "请输入正确的身份证号码");
