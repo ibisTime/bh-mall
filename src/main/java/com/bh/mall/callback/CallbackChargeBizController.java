@@ -34,6 +34,7 @@ public class CallbackChargeBizController {
         Long amount = Long.valueOf(request.getParameter("transAmount"));
         String bizType = request.getParameter("bizType");
         String applyUser = request.getParameter("jourCode");
+        String currency = request.getParameter("currency");
         // 支付成功，商户处理后同步返回给微信参数
         if (!isSuccess) {
             logger.info("支付失败");
@@ -45,7 +46,7 @@ public class CallbackChargeBizController {
             try {
                 System.out.println("**** 进入微信充值，服务器回调 start****");
                 accountAO.doBizCallBack(applyUser, payCode, payGroup, bizType,
-                    amount);
+                    amount, currency);
                 System.out.println("**** 进入微信充值，服务器回调 end****");
             } catch (Exception e) {
                 logger.info("支付回调异常,原因：" + e.getMessage());

@@ -616,9 +616,8 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
                     amount = amount + data.getAmount();
                 }
-                Account account = accountBO.getAccountByUser(
-                    outOrder.getToUserId(), ECurrency.C_CNY.getCode());
 
+                String currency = ECurrency.C_CNY.getCode();
                 accountBO.changeAmount(ESysUser.TG_BH.getCode(),
                     EChannelType.getEChannelType(outOrder.getPayType()),
                     wechatOrderNo, outOrder.getPayGroup(),
@@ -628,12 +627,14 @@ public class OutOrderAOImpl implements IOutOrderAO {
                     .equals(outOrder.getKind())) {
                     accountAO.doBizCallBack(outOrder.getApplyUser(),
                         outOrder.getPayCode(), outOrder.getPayGroup(),
-                        EBizType.AJ_XJCZ.getCode(), amount);
-
-                    account = accountBO.getAccountByUser(outOrder.getToUserId(),
+                        EBizType.AJ_XJCZ.getCode(), amount,
                         ECurrency.TX_CNY.getCode());
+
+                    currency = ECurrency.TX_CNY.getCode();
                 }
 
+                Account account = accountBO
+                    .getAccountByUser(outOrder.getToUserId(), currency);
                 // 收款方账户价钱
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.getEChannelType(outOrder.getPayType()),

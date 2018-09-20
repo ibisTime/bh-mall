@@ -48,9 +48,9 @@ public interface IAccountAO {
 
     // 微信H5充值增加上级库存
     public void addHighAccount(Agent agent, Long amount, String channelOrder,
-            String payGroup);
+            String payGroup, String currency);
 
     public void doBizCallBack(String applyUser, String payCode, String payGroup,
-            String bizType, Long amount);
+            String bizType, Long amount, String currency);
 
 }

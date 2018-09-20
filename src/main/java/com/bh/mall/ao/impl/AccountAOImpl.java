@@ -171,26 +171,27 @@ public class AccountAOImpl implements IAccountAO {
 
     @Override
     public void addHighAccount(Agent agent, Long amount, String channelOrder,
-            String payGroup) {
+            String payGroup, String currency) {
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agent
             .getLevel()) {
+
             Agent highAgent = agentBO.getAgent(agent.getHighUserId());
             Account account = accountBO.getAccountByUser(highAgent.getUserId(),
-                ECurrency.MK_CNY.getCode());
+                ECurrency.getCurrency(currency));
             accountBO.changeAmount(account.getAccountNumber(),
                 EChannelType.WeChat_H5, channelOrder, payGroup,
                 agent.getUserId(), EBizType.AJ_XJCZ,
                 EBizType.AJ_XJCZ.getValue(), amount);
-            addHighAccount(highAgent, amount, channelOrder, payGroup);
+            addHighAccount(highAgent, amount, channelOrder, payGroup, currency);
 
         }
     }
 
     @Override
     public void doBizCallBack(String applyUser, String payCode, String payGroup,
-            String bizType, Long amount) {
+            String bizType, Long amount, String currency) {
         Agent agent = agentBO.getAgent(applyUser);
-        this.addHighAccount(agent, amount, payCode, payGroup);
+        this.addHighAccount(agent, amount, payCode, payGroup, currency);
     }
 
 }

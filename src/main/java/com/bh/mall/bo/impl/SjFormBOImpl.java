@@ -39,7 +39,7 @@ public class SjFormBOImpl extends PaginableBOImpl<SjForm> implements ISjFormBO {
         sjForm.setLevel(data.getLevel());
 
         sjForm.setApplyLevel(StringValidater.toInteger(newLevel));
-        if (StringUtils.isBlank(idKind)) {
+        if (StringUtils.isBlank(idNo)) {
             sjForm.setIdKind(data.getIdKind());
             sjForm.setIdNo(data.getIdNo());
             sjForm.setIdHand(data.getIdHand());

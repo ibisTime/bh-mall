@@ -18,13 +18,10 @@ import com.bh.mall.bo.IAgentBO;
 import com.bh.mall.bo.IAgentLevelBO;
 import com.bh.mall.bo.IAgentLogBO;
 import com.bh.mall.bo.IAgentReportBO;
-import com.bh.mall.bo.IInnerOrderBO;
 import com.bh.mall.bo.IJsAwardBO;
-import com.bh.mall.bo.IOutOrderBO;
 import com.bh.mall.bo.ISYSUserBO;
 import com.bh.mall.bo.ISqFormBO;
 import com.bh.mall.bo.IWareBO;
-import com.bh.mall.bo.IYxFormBO;
 import com.bh.mall.bo.base.Paginable;
 import com.bh.mall.common.IdCardChecker;
 import com.bh.mall.common.PhoneUtil;
@@ -77,15 +74,6 @@ public class SqFormAOImpl implements ISqFormAO {
 
     @Autowired
     private IAgentReportBO agentReportBO;
-
-    @Autowired
-    private IOutOrderBO outOrderBO;
-
-    @Autowired
-    private IInnerOrderBO innerOrderBO;
-
-    @Autowired
-    private IYxFormBO yxFormBO;
 
     @Autowired
     private IAgentLogBO agentLogBO;

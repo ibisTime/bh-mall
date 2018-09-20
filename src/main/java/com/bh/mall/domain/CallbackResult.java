@@ -38,6 +38,9 @@ public class CallbackResult {
     // 业务biz回调URL
     private String url;
 
+    // 币种
+    private String currency;
+
     public CallbackResult(boolean isSuccess, String bizType, String jourCode,
             String payGroup, Long transAmount, String systemCode,
             String companyCode, String url) {
@@ -50,6 +53,21 @@ public class CallbackResult {
         this.systemCode = systemCode;
         this.companyCode = companyCode;
         this.url = url;
+    }
+
+    public CallbackResult(boolean isSuccess, String bizType, String jourCode,
+            String payGroup, Long transAmount, String systemCode,
+            String companyCode, String url, String currency) {
+        super();
+        this.isSuccess = isSuccess;
+        this.bizType = bizType;
+        this.jourCode = jourCode;
+        this.payGroup = payGroup;
+        this.transAmount = transAmount;
+        this.systemCode = systemCode;
+        this.companyCode = companyCode;
+        this.url = url;
+        this.currency = currency;
     }
 
     public boolean isSuccess() {
@@ -116,10 +134,18 @@ public class CallbackResult {
         this.url = url;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     @Override
     public String toString() {
-        return "CallbackResult [isSuccess=" + isSuccess + ", bizType="
-                + bizType + ", jourCode=" + jourCode + ", payGroup=" + payGroup
+        return "CallbackResult [isSuccess=" + isSuccess + ", bizType=" + bizType
+                + ", jourCode=" + jourCode + ", payGroup=" + payGroup
                 + ", transAmount=" + transAmount + ", systemCode=" + systemCode
                 + ", companyCode=" + companyCode + ", url=" + url + "]";
     }

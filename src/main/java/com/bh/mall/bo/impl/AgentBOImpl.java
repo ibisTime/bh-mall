@@ -506,9 +506,11 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         if (ESjFormStatus.THROUGH_YES.getCode().equals(status)) {
             data.setLevel(sjForm.getApplyLevel());
             data.setTeamName(sjForm.getTeamName());
-            data.setIdKind(sjForm.getIdKind());
-            data.setIdNo(sjForm.getIdNo());
-            data.setIdHand(sjForm.getIdHand());
+            if (StringUtils.isNotBlank(sjForm.getIdNo())) {
+                data.setIdKind(sjForm.getIdKind());
+                data.setIdNo(sjForm.getIdNo());
+                data.setIdHand(sjForm.getIdHand());
+            }
             data.setHighUserId(sjForm.getToUserId());
 
             data.setIsImpower(EIsImpower.NO_Upgrade.getCode());

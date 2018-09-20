@@ -35,6 +35,8 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EChannelType;
 import com.bh.mall.enums.EChargeStatus;
 import com.bh.mall.enums.EConfigType;
+import com.bh.mall.enums.ECurrency;
+import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.ESysConfigType;
 import com.bh.mall.enums.ESysUser;
 import com.bh.mall.enums.ESystemCode;
@@ -85,13 +87,20 @@ public class WeChatAOImpl implements IWeChatAO {
             Long transAmount, String backUrl) {
         Agent agent = agentBO.getAgent(applyUser);
         AgentLevel aData = agentLevelBO.getAgentByLevel(agent.getLevel());
-        if (null != aData.getMinChargeAmount()
-                && (aData.getMinChargeAmount() / 1000) > transAmount) {
-            throw new BizException("xn000000",
-                "充值金额不能低于[" + aData.getMinChargeAmount() / 1000 + "]");
-        }
         // 获取收款方账户信息
         Account toAccount = accountBO.getAccount(accountNumber);
+
+        if (ECurrency.MK_CNY.getCode().equals(toAccount.getCurrency())) {
+            if (EIsImpower.NO_CHARGE.getCode().equals(agent.getIsImpower())
+                    && aData.getMinCharge() > transAmount) {
+                throw new BizException("xn000000",
+                    "门槛费不能低于[" + aData.getMinCharge() / 1000 + "]");
+            } else if (aData.getMinChargeAmount() > transAmount) {
+                throw new BizException("xn000000",
+                    "充值金额不能低于[" + aData.getMinChargeAmount() / 1000 + "]");
+            }
+        }
+
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
             refNo, EBizType.getBizType(bizType), bizNote, transAmount,
@@ -155,6 +164,8 @@ public class WeChatAOImpl implements IWeChatAO {
             if (!EChargeStatus.toPay.getCode().equals(order.getStatus())) {
                 throw new BizException("xn000000", "充值订单不处于待支付状态，重复回调");
             }
+            Account account = accountBO.getAccount(order.getAccountNumber());
+
             // 此处调用订单查询接口验证是否交易成功
             boolean isSucc = reqOrderquery(map,
                 EChannelType.WeChat_H5.getCode());
@@ -184,7 +195,7 @@ public class WeChatAOImpl implements IWeChatAO {
             CallbackResult callbackResult = new CallbackResult(isSucc,
                 order.getBizType(), order.getApplyUser(), order.getPayGroup(),
                 order.getAmount(), ESystemCode.BH.getCode(),
-                ESystemCode.BH.getCode(), bizBackUrl);
+                ESystemCode.BH.getCode(), bizBackUrl, account.getCurrency());
             // 回调业务biz
             doBizCallback(callbackResult);
         } catch (JDOMException | IOException e) {
