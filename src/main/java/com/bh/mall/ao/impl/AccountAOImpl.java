@@ -173,7 +173,7 @@ public class AccountAOImpl implements IAccountAO {
     public void addHighAccount(Agent agent, Long amount, String channelOrder,
             String payGroup, String currency) {
         if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != agent
-            .getLevel()) {
+            .getLevel() && ECurrency.MK_CNY.getCode().equals(currency)) {
 
             Agent highAgent = agentBO.getAgent(agent.getHighUserId());
             Account account = accountBO.getAccountByUser(highAgent.getUserId(),

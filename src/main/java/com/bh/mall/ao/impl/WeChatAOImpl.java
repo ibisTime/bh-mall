@@ -285,6 +285,7 @@ public class WeChatAOImpl implements IWeChatAO {
             formProperties.put("bizType", callbackResult.getBizType());
             formProperties.put("jourCode", callbackResult.getJourCode());
             formProperties.put("transAmount", callbackResult.getTransAmount());
+            formProperties.put("currency", callbackResult.getCurrency());
             PostSimulater.requestPostForm(callbackResult.getUrl(),
                 formProperties);
         } catch (Exception e) {
