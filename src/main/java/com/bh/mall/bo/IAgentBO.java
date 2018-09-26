@@ -88,7 +88,7 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public void refreshAgent(SqForm sqForm, String logCode, String status);
 
     // 清空推荐关系
-    public void resetUserReferee(String userId);
+    public void resetUserReferee(Agent data, String referrer);
 
     // 最后代理记录
     public void refreshLog(Agent agent, String logCode);
@@ -103,11 +103,15 @@ public interface IAgentBO extends IPaginableBO<Agent> {
     public void refreshYx(Agent agent, String status, String approver,
             String approveName, String logCode);
 
-    public void refreshSj(Agent agent, SjForm sjForm, String userId,
-            String realName, String remark, String status, String logCode);
+    public void refreshSj(Agent agent, SjForm sjForm, String approver,
+            String approveName, String remark, String status, String logCode);
 
     public void refreshStatus(Agent dbUser, String status);
 
     public void refreshIsImpower(Agent agent, String isImpower);
+
+    public void doSetTrader(Agent data, String updater, String remark);
+
+    public void doCancelTrader(Agent data, String updater, String remark);
 
 }

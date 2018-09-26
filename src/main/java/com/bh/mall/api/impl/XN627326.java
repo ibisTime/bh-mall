@@ -1,5 +1,7 @@
 package com.bh.mall.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.bh.mall.ao.IAgentAO;
 import com.bh.mall.api.AProcessor;
 import com.bh.mall.common.DateUtil;
@@ -37,6 +39,13 @@ public class XN627326 extends AProcessor {
         condition.setWxId(req.getWxId());
         condition.setTeamName(req.getTeamName());
         condition.setReferrer(req.getUserReferee());
+
+        condition.setNoStatusList(req.getNoStatusList());
+        condition.setStatusList(req.getStatusList());
+        condition.setIsTrader(req.getIsTrader());
+        if (StringUtils.isNotBlank(req.getIsTrader())) {
+            condition.setLevel(1);
+        }
 
         condition.setCreateDatetimeStart(DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1));

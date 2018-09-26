@@ -424,7 +424,7 @@ public class SqFormAOImpl implements ISqFormAO {
                 agentBO.resetInfo(agent);
 
                 // 清空推荐关系
-                agentBO.resetUserReferee(agent.getUserId());
+                agentBO.resetUserReferee(agent, null);
 
                 wareBO.removeByAgent(agent.getUserId());
             }
@@ -480,7 +480,7 @@ public class SqFormAOImpl implements ISqFormAO {
             agentBO.resetInfo(agent);
 
             // 清空推荐关系
-            agentBO.resetUserReferee(agent.getUserId());
+            agentBO.resetUserReferee(agent, null);
 
         }
         sqFormBO.cancelSqForm(data, status);

@@ -38,6 +38,7 @@
 		<result column="remark" property="remark" />
 		<result column="allAmount" property="allAmount" />
 		<result column="is_pay" property="isPay" />
+		<result column="highUserName" property="highUserName" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -126,6 +127,7 @@
 		,t.quantity
 		,t.price
 		,t.to_user_id
+		,t.to_user_name AS highUserName
 		,t.to_user_name
 		
 		,t.level

@@ -168,12 +168,6 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
     }
 
     @Override
-    public List<OutOrder> queryToDealList(int pageNo, int pageSize,
-            OutOrder condition) {
-        return outOrderDAO.queryToDealList(pageNo, pageSize, condition);
-    }
-
-    @Override
     public String addPayGroup(OutOrder data, String payGroup, String payType) {
         data.setPayType(payType);
         data.setPayGroup(payGroup);
@@ -558,6 +552,12 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         data.setStatus(EOutOrderStatus.TO_APPROVE.getCode());
         outOrderDAO.insert(data);
         return code;
+    }
+
+    @Override
+    public List<OutOrder> queryOutOrderList(int start, int pageNO,
+            OutOrder condition) {
+        return outOrderDAO.selectList(condition, start, pageNO);
     }
 
 }

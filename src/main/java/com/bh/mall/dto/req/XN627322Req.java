@@ -3,7 +3,7 @@ package com.bh.mall.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 本等级是够需要实名
+ * 
  * @author: nyc 
  * @since: 2018年4月1日 上午10:58:40 
  * @history:
@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN627322Req {
 
     // 用户编号
-    @NotBlank(message = "用户编号不能为空")
+    @NotBlank(message = "手机号不能为空")
     private String mobile;
 
     public String getMobile() {

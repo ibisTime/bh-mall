@@ -79,23 +79,9 @@ public class OutOrderDAOImpl extends AMybatisTemplate implements IOutOrderDAO {
     }
 
     @Override
-    public List<OutOrder> queryToDealList(int pageNo, int pageSize,
-            OutOrder condition) {
-        return super.selectList(NAMESPACE.concat("select_to_deal"), pageNo,
-            pageSize, condition, OutOrder.class);
-    }
-
-    @Override
     public void addPayGroup(OutOrder data) {
         super.update(NAMESPACE.concat("add_payGroup"), data);
 
-    }
-
-    @Override
-    public List<OutOrder> selectOutOrderPage(int pageNO, int pageSize,
-            OutOrder condition) {
-        return super.selectList(NAMESPACE.concat("select_outOrder"), pageNO,
-            pageSize, condition, OutOrder.class);
     }
 
     @Override

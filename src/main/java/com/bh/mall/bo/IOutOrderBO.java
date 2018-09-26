@@ -54,9 +54,6 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
 
     public long selectCount(OutOrder oCondition);
 
-    public List<OutOrder> queryToDealList(int pageNo, int pageSize,
-            OutOrder condition);
-
     public String addPayGroup(OutOrder data, String payGroup, String payType);
 
     public List<OutOrder> getOutOrderByPayGroup(String payGroup);
@@ -97,5 +94,8 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
     public List<OutOrder> getChAmount(String userId);
 
     public void refreshIsPay(OutOrder outOrder);
+
+    public List<OutOrder> queryOutOrderList(int start, int pageNO,
+            OutOrder condition);
 
 }

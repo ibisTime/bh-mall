@@ -56,6 +56,7 @@ import com.bh.mall.enums.EBizType;
 import com.bh.mall.enums.EConfigType;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EInnerOrderStatus;
+import com.bh.mall.enums.EIsTrader;
 import com.bh.mall.enums.EOutOrderStatus;
 import com.bh.mall.enums.EUserPwd;
 import com.bh.mall.enums.EWithdrawStatus;
@@ -740,4 +741,48 @@ public class AgentAOImpl implements IAgentAO {
 
     }
 
+    @Override
+    public void doSetTrader(String userId, String updater, String remark) {
+        Agent data = agentBO.getAgent(userId);
+        if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) != data
+            .getLevel()) {
+            throw new BizException("xn00000", "非最高级别代理不能设置为操盘手");
+        }
+
+        if (EIsTrader.TRADER_YES.getCode().equals(data.getIsTrader())) {
+            throw new BizException("xn00000", "该代理已是操盘手，请勿重复操作");
+        }
+
+        agentBO.doSetTrader(data, updater, remark);
+
+    }
+
+    @Override
+    public void doCancelTrader(String userId, String updater, String remark) {
+        Agent data = agentBO.getAgent(userId);
+        if (!EIsTrader.TRADER_YES.getCode().equals(data.getIsTrader())) {
+            throw new BizException("xn00000", "该代理不是操盘手，无需取消");
+        }
+
+        agentBO.doCancelTrader(data, updater, remark);
+    }
+
+    @Override
+    public List<Agent> queryTrader(Agent condition) {
+        List<Agent> list = agentBO.queryAgentList(condition);
+        this.getTrader(list);
+        return list;
+    }
+
+    private void getTrader(List<Agent> list) {
+        for (Agent agent : list) {
+            Agent condition = new Agent();
+            condition.setReferrer(agent.getUserId());
+            List<Agent> refList = agentBO.queryAgentList(condition);
+            agent.setAgentList(refList);
+            if (StringUtils.isNotBlank(agent.getReferrer())) {
+                getTrader(refList);
+            }
+        }
+    }
 }

@@ -70,4 +70,10 @@ public interface IAgentAO {
 
     void checkCancel(Agent data);
 
+    public void doSetTrader(String userId, String updater, String remark);
+
+    public void doCancelTrader(String userId, String updater, String remark);
+
+    public List<Agent> queryTrader(Agent conditon);
+
 }

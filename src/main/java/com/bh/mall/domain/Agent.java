@@ -121,6 +121,9 @@ public class Agent extends ABaseDO {
     // 是否完成授权单、升级单(0 未完成授权单，1 未完成升级单 2 正常)
     private String isImpower;
 
+    // 是否是操盘手
+    private String isTrader;
+
     // 备注
     private String remark;
 
@@ -736,6 +739,14 @@ public class Agent extends ABaseDO {
 
     public void setIsImpower(String isImpower) {
         this.isImpower = isImpower;
+    }
+
+    public String getIsTrader() {
+        return isTrader;
+    }
+
+    public void setIsTrader(String isTrader) {
+        this.isTrader = isTrader;
     }
 
 }

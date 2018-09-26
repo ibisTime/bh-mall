@@ -24,6 +24,7 @@ import com.bh.mall.enums.EAgentLevel;
 import com.bh.mall.enums.EAgentLogType;
 import com.bh.mall.enums.EAgentStatus;
 import com.bh.mall.enums.EIsImpower;
+import com.bh.mall.enums.EIsTrader;
 import com.bh.mall.enums.ESjFormStatus;
 import com.bh.mall.enums.EYxFormStatus;
 import com.bh.mall.exception.BizException;
@@ -421,18 +422,18 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     }
 
     @Override
-    public void resetUserReferee(String userId) {
+    public void resetUserReferee(Agent agent, String userReferee) {
 
-        Agent data = getAgent(userId);
-        data.setReferrer(null);
+        Agent data = getAgent(agent.getUserId());
+        data.setReferrer(userReferee);
         agentDAO.resetUserReferee(data);
 
         Agent condition = new Agent();
-        condition.setReferrer(userId);
+        condition.setReferrer(agent.getUserId());
         List<Agent> list = agentDAO.selectList(condition);
-        for (Agent agent : list) {
-            agent.setReferrer(null);
-            agentDAO.resetUserReferee(agent);
+        for (Agent referrer : list) {
+            referrer.setReferrer(null);
+            agentDAO.resetUserReferee(referrer);
         }
 
     }
@@ -467,7 +468,9 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshSq(Agent data, SqForm sqForm, String manager,
             String highUserId, String teamName, Integer level, String status,
             String approver, String approveName, String logCode, Date date) {
+
         data.setHighUserId(highUserId);
+
         if (EAgentStatus.IMPOWERED.getCode().equals(status)) {
             data.setLevel(sqForm.getApplyLevel());
             data.setImpowerDatetime(date);
@@ -488,7 +491,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
         } else {
             data.setStatus(status);
         }
-
+        data.setIsTrader(EIsTrader.TRADER_NO.getCode());
         data.setTeamName(teamName);
 
         data.setApprover(approver);
@@ -503,6 +506,7 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     @Override
     public void refreshSj(Agent data, SjForm sjForm, String approver,
             String approveName, String remark, String status, String logCode) {
+
         if (ESjFormStatus.THROUGH_YES.getCode().equals(status)) {
             data.setLevel(sjForm.getApplyLevel());
             data.setTeamName(sjForm.getTeamName());
@@ -540,6 +544,32 @@ public class AgentBOImpl extends PaginableBOImpl<Agent> implements IAgentBO {
     public void refreshIsImpower(Agent agent, String isImpower) {
         agent.setIsImpower(isImpower);
         agentDAO.updateImpower(agent);
+    }
+
+    @Override
+    public void doSetTrader(Agent data, String updater, String remark) {
+        Date date = new Date();
+        data.setIsTrader(EIsTrader.TRADER_YES.getCode());
+        data.setUpdater(updater);
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+        agentLogBO.refreshAgent(data, EAgentLogType.Trader.getCode(),
+            data.getStatus());
+        agentDAO.updaterTrader(data);
+
+    }
+
+    @Override
+    public void doCancelTrader(Agent data, String updater, String remark) {
+        Date date = new Date();
+        data.setIsTrader(EIsTrader.TRADER_NO.getCode());
+        data.setUpdater(updater);
+        data.setUpdateDatetime(date);
+        data.setRemark(remark);
+        agentLogBO.refreshAgent(data, EAgentLogType.Trader.getCode(),
+            data.getStatus());
+        agentDAO.updaterTrader(data);
+
     }
 
 }

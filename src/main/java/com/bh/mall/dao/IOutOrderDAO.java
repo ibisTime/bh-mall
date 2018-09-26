@@ -20,13 +20,7 @@ public interface IOutOrderDAO extends IBaseDAO<OutOrder> {
 
     void receivedOutOrder(OutOrder data);
 
-    List<OutOrder> queryToDealList(int pageNo, int pageSize,
-            OutOrder condition);
-
     void addPayGroup(OutOrder data);
-
-    List<OutOrder> selectOutOrderPage(int pageNO, int pageSize,
-            OutOrder condition);
 
     void payNo(OutOrder data);
 

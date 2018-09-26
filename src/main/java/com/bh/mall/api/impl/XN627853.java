@@ -44,7 +44,7 @@ public class XN627853 extends AProcessor {
 
         Date startDatetime = DateUtil.strToDate(req.getDateStart(),
             DateUtil.DATA_TIME_PATTERN_1);
-        Date endDatetime = DateUtil.strToDate(req.getDateStart(),
+        Date endDatetime = DateUtil.strToDate(req.getDateEnd(),
             DateUtil.DATA_TIME_PATTERN_1);
         condition.setStartDatetime(startDatetime);
         condition.setEndDatetime(endDatetime);

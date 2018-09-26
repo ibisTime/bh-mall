@@ -136,4 +136,6 @@ public interface IAgentDAO extends IBaseDAO<Agent> {
 
     public void updateImpower(Agent agent);
 
+    public void updaterTrader(Agent data);
+
 }

@@ -26,6 +26,8 @@ import com.bh.mall.bo.ISjFormBO;
 import com.bh.mall.bo.ISpecsBO;
 import com.bh.mall.bo.IWareBO;
 import com.bh.mall.bo.base.Paginable;
+import com.bh.mall.core.EGeneratePrefix;
+import com.bh.mall.core.OrderNoGenerater;
 import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
@@ -51,7 +53,6 @@ import com.bh.mall.enums.ECheckStatus;
 import com.bh.mall.enums.ECurrency;
 import com.bh.mall.enums.EIsImpower;
 import com.bh.mall.enums.EOutOrderKind;
-import com.bh.mall.enums.ESpecsLogType;
 import com.bh.mall.enums.ESystemCode;
 import com.bh.mall.enums.EWareLogType;
 import com.bh.mall.exception.BizException;
@@ -288,7 +289,8 @@ public class WareAOImpl implements IWareAO {
         // 订单归属人
         SYSUser sysUser = sysUserBO.getSYSUser();
 
-        StringBuffer sb = new StringBuffer();
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.OutOrder.getCode());
 
         // 订单拆单
         Long amount = 0L;
@@ -321,13 +323,9 @@ public class WareAOImpl implements IWareAO {
                 }
                 amount = amount + psData.getSingleNumber() * data.getPrice();
 
-                String code = outOrderBO.pickUpGoods(agent,
-                    teamLeader.getRealName(), sysUser.getUserId(),
-                    sysUser.getRealName(), data, product.getPic(), quantity,
-                    yunfei, req, kind);
-
-                sb.append(code);
-                sb.append(",");
+                outOrderBO.pickUpGoods(agent, teamLeader.getRealName(),
+                    sysUser.getUserId(), sysUser.getRealName(), data,
+                    product.getPic(), quantity, yunfei, req, kind);
 
                 allYunfei = allYunfei + yunfei;
             }
@@ -335,12 +333,10 @@ public class WareAOImpl implements IWareAO {
             amount = StringValidater.toInteger(req.getQuantity())
                     * data.getPrice();
 
-            String code = outOrderBO.pickUpGoods(agent,
-                teamLeader.getRealName(), sysUser.getUserId(),
-                sysUser.getRealName(), data, product.getPic(),
-                StringValidater.toInteger(req.getQuantity()), yunfei, req,
-                kind);
-            sb.append(code);
+            outOrderBO.pickUpGoods(agent, teamLeader.getRealName(),
+                sysUser.getUserId(), sysUser.getRealName(), data,
+                product.getPic(), StringValidater.toInteger(req.getQuantity()),
+                yunfei, req, kind);
             allYunfei = yunfei;
         }
 
@@ -358,7 +354,7 @@ public class WareAOImpl implements IWareAO {
         // 减少云仓库存
         wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
             -StringValidater.toInteger(req.getQuantity()), EWareLogType.OUT,
-            ESpecsLogType.Order.getValue(), data.getUserId());
+            "代理：" + agent + "[" + agent.getLevel() + "]，云仓提货", payGroup);
 
         // 订单类型为授权单，获取类型为授权单的订单金额与本次下单金额，金额不满足该等级授权单金额是，用户状态为未完成授权单
         String isImpower = EIsImpower.Normal.getCode();

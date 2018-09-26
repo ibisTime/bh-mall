@@ -1,5 +1,6 @@
 package com.bh.mall.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -222,6 +223,7 @@ public class SjFormAOImpl implements ISjFormAO {
             .getAgentByLevel(sjForm.getApplyLevel());
 
         // 审核通过
+        String referrer = null;
         String status = ESjFormStatus.IMPOWERED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
             Account account = accountBO.getAccountByUser(sjForm.getUserId(),
@@ -256,8 +258,12 @@ public class SjFormAOImpl implements ISjFormAO {
                 wareBO.changeWarePrice(sjForm.getUserId(),
                     sjForm.getApplyLevel());
 
-                // 清空推荐关系
-                agentBO.resetUserReferee(userId);
+                // 清空推荐关系，若所升等级与旧上级等级相同，推荐人变为旧上级
+                Agent highAgent = agentBO.getAgent(agent.getHighUserId());
+                if (highAgent.getLevel() == sjForm.getApplyLevel()) {
+                    referrer = agent.getHighUserId();
+                }
+                agentBO.resetUserReferee(agent, referrer);
 
                 // 升级等级为最高等级，下级同步新的团队名称
                 if (StringValidater.toInteger(
@@ -268,6 +274,7 @@ public class SjFormAOImpl implements ISjFormAO {
                     .getAgentReportByUser(agent.getUserId());
                 report.setLevel(sjForm.getApplyLevel());
                 report.setTeamName(agent.getTeamName());
+                report.setImpowerDatetime(new Date());
                 agentReportBO.refreshLevel(report);
 
                 accountBO.refreshLevel(sjForm.getUserId(),
@@ -305,6 +312,7 @@ public class SjFormAOImpl implements ISjFormAO {
 
         Agent agent = agentBO.getAgent(userId);
         // 审核通过
+        String referrer = null;
         String status = ESjFormStatus.IMPOWERED.getCode();
         if (EBoolean.YES.getCode().equals(result)) {
             // 检查该代理是否有未发放的奖励，如果有，将奖金转给新上级
@@ -324,7 +332,12 @@ public class SjFormAOImpl implements ISjFormAO {
             wareBO.changeWarePrice(sjForm.getUserId(), sjForm.getApplyLevel());
 
             // 清空推荐关系
-            agentBO.resetUserReferee(userId);
+            // 清空推荐关系，若所升等级与旧上级等级相同，推荐人变为旧上级
+            Agent highAgent = agentBO.getAgent(agent.getHighUserId());
+            if (highAgent.getLevel() == sjForm.getApplyLevel()) {
+                referrer = agent.getHighUserId();
+            }
+            agentBO.resetUserReferee(agent, referrer);
 
             // 升级等级为最高等级，下级同步新的团队名称
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == sjForm

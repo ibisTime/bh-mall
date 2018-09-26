@@ -4,3 +4,6 @@ insert into `tsys_menu` (`code`, `name`, `type`, `url`, `order_no`, `updater`, `
 
 insert into `tsys_menu_role` (`role_code`, `menu_code`, `updater`, `update_datetime`, `remark`, `system_code`) values('RO201800000000000001','SM201809171901328717564','USYS201800000000002',NOW(),NULL,'CD-CBH000020');
 insert into `tsys_menu_role` (`role_code`, `menu_code`, `updater`, `update_datetime`, `remark`, `system_code`) values('RO201800000000000001','SM20180919111511797842','USYS201800000000002',NOW(),NULL,'CD-CBH000020');
+
+
+UPDATE tbh_ware w,tbh_agent u SET w.`real_name`=u.`real_name` WHERE w.`user_id`=u.`user_id` AND w.`real_name` IS NULL;

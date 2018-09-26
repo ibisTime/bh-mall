@@ -670,6 +670,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
 
         Paginable<OutOrder> page = outOrderBO.getPaginable(start, limit,
             condition);
+
         for (OutOrder data : page.getList()) {
 
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
@@ -1379,7 +1380,10 @@ public class OutOrderAOImpl implements IOutOrderAO {
             }
 
             wareBO.changeWare(ware.getCode(), EWareLogType.OUT.getCode(),
-                -data.getQuantity(), EWareLogType.OUT, "下级下单", data.getCode());
+                -data.getQuantity(), EWareLogType.OUT,
+                "下级代理：" + agent.getRealName() + "[" + agent.getLevel()
+                        + "]，订单云仓发货",
+                data.getCode());
 
             if (!EOutOrderKind.C_ORDER.getCode().equals(data.getKind())) {
                 // 支付运费

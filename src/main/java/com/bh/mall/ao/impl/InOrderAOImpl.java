@@ -773,12 +773,14 @@ public class InOrderAOImpl implements IInOrderAO {
                 } else {
                     // 改变上级云仓
                     wareBO.changeWare(toWare.getCode(),
-                        EWareLogType.OUT.getCode(), number, EWareLogType.OUT,
-                        EBizType.AJ_GMYC.getValue(), inOrder.getCode());
+                        EWareLogType.OUT.getCode(), number,
+                        EWareLogType.OUT, "下级代理：" + agent.getRealName() + "["
+                                + agent.getLevel() + "]，买入云仓",
+                        inOrder.getCode());
                 }
 
             } else {
-                // 无上级代理,扣减产品实际库存
+                // 最高等级代理,扣减产品实际库存
                 specsBO.refreshRepertory(pData.getName(), psData,
                     ESpecsLogType.Order.getCode(), number, agent.getUserId(),
                     inOrder.getApplyNote());

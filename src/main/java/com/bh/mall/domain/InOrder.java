@@ -145,6 +145,9 @@ public class InOrder extends ABaseDO {
     // 总金额
     private Long allAmount;
 
+    // 上级
+    private String highUserName;
+
     public Date getStartDatetime() {
         return startDatetime;
     }
@@ -487,6 +490,14 @@ public class InOrder extends ABaseDO {
 
     public void setPayEndDatetime(Date payEndDatetime) {
         this.payEndDatetime = payEndDatetime;
+    }
+
+    public String getHighUserName() {
+        return highUserName;
+    }
+
+    public void setHighUserName(String highUserName) {
+        this.highUserName = highUserName;
     }
 
 }

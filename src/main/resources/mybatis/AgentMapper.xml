@@ -46,6 +46,7 @@
 		<result column="remark" property="remark" />
 		<result column="last_agent_log" property="lastAgentLog" />
 		<result column="is_impower" property="isImpower" />
+		<result column="is_trader" property="isTrader" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -172,6 +173,9 @@
 			<if test="isImpower != null and isImpower != '' ">
 				AND is_impower = #{isImpower}
 			</if>
+			<if test="isTrader != null and isTrader != '' ">
+				AND is_trader = #{isTrader}
+			</if>
 		</trim>
 	</sql>
 
@@ -218,6 +222,7 @@
 		,t.approve_datetime
 		,t.last_agent_log
 		,t.is_impower
+		,t.is_trader
 		,t.impower_datetime
 		,t.remark
 		FROM
@@ -557,6 +562,9 @@
 		UPDATE tbh_agent
 		SET
 		referrer = #{referrer}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
 
@@ -630,6 +638,15 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+		<update id="update_is_trader" parameterType="agent">
+		UPDATE tbh_agent
+		SET
+		is_trader = #{isTrader}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
 	
 	
 </mapper>

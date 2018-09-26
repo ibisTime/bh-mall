@@ -66,6 +66,9 @@ public class XN627325Req extends APageReq {
     // （选填） 状态
     private List<String> noStatusList;
 
+    // 是否是操盘手
+    private String isTrader;
+
     public String getApplyEndDatetime() {
         return applyEndDatetime;
     }
@@ -208,6 +211,14 @@ public class XN627325Req extends APageReq {
 
     public void setNoStatusList(List<String> noStatusList) {
         this.noStatusList = noStatusList;
+    }
+
+    public String getIsTrader() {
+        return isTrader;
+    }
+
+    public void setIsTrader(String isTrader) {
+        this.isTrader = isTrader;
     }
 
 }

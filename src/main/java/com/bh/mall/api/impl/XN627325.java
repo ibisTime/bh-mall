@@ -45,6 +45,11 @@ public class XN627325 extends AProcessor {
         condition.setAppOpenId(req.getAppOpenId());
         condition.setStatusList(req.getStatusList());
 
+        condition.setIsTrader(req.getIsTrader());
+        if (StringUtils.isNotBlank(req.getIsTrader())) {
+            condition.setLevel(1);
+        }
+
         condition.setCreateDatetimeStart(DateUtil.strToDate(
             req.getApplyStartDatetime(), DateUtil.DATA_TIME_PATTERN_1));
         condition.setCreateDatetimeEnd(DateUtil.strToDate(

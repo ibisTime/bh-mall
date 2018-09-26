@@ -1,5 +1,7 @@
 package com.bh.mall.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查意向代理
  * @author: nyc 
@@ -60,6 +62,15 @@ public class XN627326Req extends APageReq {
 
     // 用户Id
     private String noUserId;
+
+    // （选填） 状态
+    private List<String> statusList;
+
+    // （选填） 状态
+    private List<String> noStatusList;
+
+    // 是否是操盘手
+    private String isTrader;
 
     public String getApplyEndDatetime() {
         return applyEndDatetime;
@@ -195,6 +206,30 @@ public class XN627326Req extends APageReq {
 
     public void setNoUserId(String noUserId) {
         this.noUserId = noUserId;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public List<String> getNoStatusList() {
+        return noStatusList;
+    }
+
+    public String getIsTrader() {
+        return isTrader;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public void setNoStatusList(List<String> noStatusList) {
+        this.noStatusList = noStatusList;
+    }
+
+    public void setIsTrader(String isTrader) {
+        this.isTrader = isTrader;
     }
 
 }
