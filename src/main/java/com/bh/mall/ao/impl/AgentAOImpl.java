@@ -70,6 +70,8 @@ public class AgentAOImpl implements IAgentAO {
 
     private static Logger logger = Logger.getLogger(AgentAOImpl.class);
 
+    private static boolean flag = false;
+
     @Autowired
     IAgentBO agentBO;
 
@@ -391,9 +393,52 @@ public class AgentAOImpl implements IAgentAO {
             if (referrAgent.getLevel() != data.getLevel()) {
                 throw new BizException("xn00000", "代理要与推荐人的等级相同哦");
             }
+            if (checkReferrer(data, referrAgent.getUserId())
+                    || checkReferrer(referrAgent, data.getUserId())) {
+                throw new BizException("xn00000", "这两个代理有相同的推荐人，无法绑定推荐关系");
+            }
+
+            Agent condition = new Agent();
+            condition.setReferrer(referrAgent.getUserId());
+            List<Agent> list = agentBO.queryAgentList(condition);
+
+            // 两个都是操盘手的董事无法绑定推荐关系
+            if (EIsTrader.TRADER_YES.getCode().equals(referrAgent.getIsTrader())
+                    && EIsTrader.TRADER_YES.getCode()
+                        .equals(data.getIsTrader())) {
+                throw new BizException("xn00000", "该代理与推荐人都是操盘手，无法绑定关系");
+
+                // 推荐人是操盘手，检查该代理所推荐的代理是否有操盘手,推荐该代理的线无需检查
+            } else if (EIsTrader.TRADER_YES.getCode()
+                .equals(referrAgent.getIsTrader())) {
+                condition.setReferrer(data.getUserId());
+                list = agentBO.queryAgentList(condition);
+                if (checkTrader(list)) {
+                    throw new BizException("xn00000",
+                        "新推荐人是操盘手，且该代理已属于其他操盘手团队");
+                }
+
+                // 代理自己是操盘手，检查新代理所处线上是否有操盘手
+            } else if (EIsTrader.TRADER_YES.getCode().equals(data.getIsTrader())
+                    && (checkTrader(referrAgent) || checkTrader(list))) {
+                throw new BizException("xn00000", "该代理是操盘手，且新推荐人已属于其他操盘手团队");
+
+                // 代理与新推荐人都不是操盘手且不在一条线上，确保两个人中至少有一个人不属于其他操盘手团队
+            } else if (StringValidater
+                .toInteger(EAgentLevel.ONE.getCode()) == data.getLevel()
+                    && !(checkReferrer(data, referrAgent.getUserId())
+                            || checkReferrer(referrAgent, data.getUserId()))) {
+                condition.setReferrer(data.getUserId());
+                List<Agent> agentList = agentBO.queryAgentList(condition);
+                if ((checkTrader(list) || checkTrader(referrAgent))
+                        && checkTrader(agentList)) {
+                    throw new BizException("xn00000", "该代理是操盘手与新推荐人属于不同操盘手团队");
+                }
+            }
         }
 
         agentBO.refreshReferee(data, referrer, updater, remark);
+
     }
 
     // 分页查询代理
@@ -753,6 +798,16 @@ public class AgentAOImpl implements IAgentAO {
             throw new BizException("xn00000", "该代理已是操盘手，请勿重复操作");
         }
 
+        // 检查该代理所在线上有无已是操盘手的代理
+        Agent condition = new Agent();
+        condition.setReferrer(data.getUserId());
+        List<Agent> list = agentBO.queryAgentList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            if (checkTrader(list) || checkTrader(data)) {
+                throw new BizException("xn00000", "该代理已属于其他操盘手的团队，无法成为操盘手");
+            }
+        }
+
         agentBO.doSetTrader(data, updater, remark);
 
     }
@@ -785,4 +840,43 @@ public class AgentAOImpl implements IAgentAO {
             }
         }
     }
+
+    private boolean checkTrader(List<Agent> list) {
+        for (Agent agent : list) {
+            if (EIsTrader.TRADER_YES.getCode().equals(agent.getIsTrader())) {
+                flag = true;
+                return flag;
+            }
+            Agent condition = new Agent();
+            condition.setReferrer(agent.getUserId());
+            List<Agent> refList = agentBO.queryAgentList(condition);
+            checkTrader(refList);
+        }
+        return flag;
+    }
+
+    private boolean checkTrader(Agent agent) {
+        if (StringUtils.isNotBlank(agent.getReferrer())) {
+            Agent referrer = agentBO.getAgent(agent.getReferrer());
+            if (EIsTrader.TRADER_YES.getCode().equals(referrer.getIsTrader())) {
+                flag = true;
+                return flag;
+            }
+            checkTrader(referrer);
+        }
+        return flag;
+    }
+
+    private boolean checkReferrer(Agent data, String userId) {
+        if (StringUtils.isNotBlank(data.getReferrer())) {
+            Agent agent = agentBO.getAgent(data.getReferrer());
+            if (agent.getUserId().equals(userId)) {
+                flag = true;
+                return flag;
+            }
+            checkReferrer(agent, userId);
+        }
+        return flag;
+    }
+
 }
