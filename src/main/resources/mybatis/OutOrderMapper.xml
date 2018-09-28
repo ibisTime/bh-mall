@@ -443,7 +443,7 @@
 		DELETE FROM
 		tbh_out_order
 		WHERE
-		code = #{code}
+		status = #{status} AND apply_datetime <![CDATA[ <= ]]> #{startDatetime} 
 	</delete>
 	
 	<update id="update_payGroup" parameterType="innerOrder">

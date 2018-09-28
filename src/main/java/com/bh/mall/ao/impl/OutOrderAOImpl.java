@@ -983,11 +983,6 @@ public class OutOrderAOImpl implements IOutOrderAO {
             // 更新箱码关联的盒码与订单编号
             miniCodeBO.refreshStatusByProCode(proData.getCode(),
                 data.getCode());
-            // List<MiniCode> stList = miniCodeBO
-            // .getMiniCodeByProCode(proData.getCode());
-            // for (MiniCode miniCode : stList) {
-            // miniCodeBO.refreshStatus(miniCode, data.getCode());
-            // }
         }
         Agent agent = agentBO.getAgent(data.getApplyUser());
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());
@@ -1522,8 +1517,17 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (!(EOutOrderStatus.TO_RECEIVE.getCode().equals(data.getStatus())
                 || EOutOrderStatus.TO_RECEIVE.getCode()
                     .equals(data.getStatus()))) {
-
         }
     }
 
+    public void removeOutOrder() {
+
+        logger.info("==========开始删除未支付的订单===========");
+        long start = System.currentTimeMillis();
+        OutOrder data = new OutOrder();
+        data.setStartDatetime(DateUtil.getBeforeTime(0));
+        outOrderBO.removeOutOrder(data);
+        long end = System.currentTimeMillis();
+        logger.info("耗时：" + (end - start));
+    }
 }

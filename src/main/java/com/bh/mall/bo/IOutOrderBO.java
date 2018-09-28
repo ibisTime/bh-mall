@@ -98,4 +98,6 @@ public interface IOutOrderBO extends IPaginableBO<OutOrder> {
     public List<OutOrder> queryOutOrderList(int start, int pageNO,
             OutOrder condition);
 
+    public void removeOutOrder(OutOrder data);
+
 }

@@ -168,10 +168,10 @@ public class OutOrder extends ABaseDO {
     // 下单结束时间
     private Date endDatetime;
 
-    // 下单开始时间
+    // 支付开始时间
     private Date payStartDatetime;
 
-    // 下单结束时间
+    // 支付结束时间
     private Date payEndDatetime;
 
     // 状态

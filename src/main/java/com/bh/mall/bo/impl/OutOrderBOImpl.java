@@ -560,4 +560,9 @@ public class OutOrderBOImpl extends PaginableBOImpl<OutOrder>
         return outOrderDAO.selectList(condition, start, pageNO);
     }
 
+    @Override
+    public void removeOutOrder(OutOrder data) {
+        outOrderDAO.delete(data);
+    }
+
 }

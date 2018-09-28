@@ -345,6 +345,19 @@ public class DateUtil {
         return date;
     }
 
+    /**
+     * 获取当前时间的前N小时
+     * @param args 
+     * @create: 2018年9月28日 下午3:13:13 nyc
+     * @history:
+     */
+
+    public static Date getBeforeTime(int hours) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) - hours);
+        return cal.getTime();
+    }
+
     public static void main(String[] args) {
         List<String> list = new ArrayList<>();
         list.add("123");

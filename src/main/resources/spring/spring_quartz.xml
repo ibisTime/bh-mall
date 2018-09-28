@@ -19,7 +19,8 @@
        <property name="triggers">  
            <list>
            	  <ref bean="inOrderTrigger"/> 
-           	   <ref bean="outOrderTrigger"/> 
+           	  <ref bean="outOrderTrigger"/> 
+           	  <ref bean="removeOutOrderTrigger" /> 
  		   </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -60,19 +61,19 @@
 	        <property name="targetObject" ref="inOrderAOImpl"/>  
 	        <property name="targetMethod" value="inOrderChAward"/>  
 	        <property name="concurrent" value="true"/>  
+	</bean>-->
+<!-- 	
+	<bean id="removeOutOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="removeOutOrderTimer"/>  
+       <property name="cronExpression" value=" 0 59 23 */1 * ?"/>
 	</bean>
 	
-	<bean id="outOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="outOrderTimer"/>  
-       <property name="cronExpression" value=" * */2 * *  * ?"/>
-	</bean>
-	
-	<bean id="outOrderTimer" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	<bean id="removeOutOrderTimer" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="outOrderAOImpl"/>  
-	        <property name="targetMethod" value="outOrderChAward"/>  
+	        <property name="targetMethod" value="removeOutOrder"/>  
 	        <property name="concurrent" value="true"/>  
-	</bean> -->
-	
+	</bean> 
+	 -->
 	
 	
 </beans>
