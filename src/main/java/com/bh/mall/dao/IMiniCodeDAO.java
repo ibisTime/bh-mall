@@ -16,4 +16,6 @@ public interface IMiniCodeDAO extends IBaseDAO<MiniCode> {
 
     void updateNumber(MiniCode data);
 
+    void updateStatusByProCode(MiniCode data);
+
 }

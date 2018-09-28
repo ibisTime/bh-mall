@@ -142,5 +142,14 @@
 		number = #{number}
 		WHERE mini_code = #{miniCode}
 	</update>
+	
+	<update id="update_by_pro" parameterType="miniCode">
+		UPDATE tbh_mini_code
+		SET 
+		status = #{status}
+		,order_code = #{orderCode}
+		,use_datetime = #{useDatetime}
+		WHERE ref_code = #{refCode}
+	</update>
 
 </mapper>

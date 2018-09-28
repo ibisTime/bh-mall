@@ -59,7 +59,6 @@ import com.bh.mall.domain.Cart;
 import com.bh.mall.domain.ChAward;
 import com.bh.mall.domain.InnerProduct;
 import com.bh.mall.domain.InnerSpecs;
-import com.bh.mall.domain.MiniCode;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.ProCode;
 import com.bh.mall.domain.Product;
@@ -969,24 +968,26 @@ public class OutOrderAOImpl implements IOutOrderAO {
         if (StringUtils.isNotBlank(proCode)) {
             data.setProCode(proCode);
             // 修改箱码状态
-            ProCode barData = proCodeBO.getProCode(proCode);
-            if (ECodeStatus.USE_YES.getCode().equals(barData.getStatus())) {
+            ProCode proData = proCodeBO.getProCode(proCode);
+            if (ECodeStatus.USE_YES.getCode().equals(proData.getStatus())) {
                 throw new BizException("xn00000", "该箱码已经使用过");
             }
             if (ECodeStatus.SPLIT_SINGLE.getCode()
-                .equals(barData.getStatus())) {
+                .equals(proData.getStatus())) {
                 throw new BizException("xn00000", "该箱码已拆分");
             }
-            barData.setStatus(ECodeStatus.USE_YES.getCode());
-            barData.setUseDatetime(new Date());
-            proCodeBO.refreshProCode(barData);
+            proData.setStatus(ECodeStatus.USE_YES.getCode());
+            proData.setUseDatetime(new Date());
+            proCodeBO.refreshProCode(proData);
 
             // 更新箱码关联的盒码与订单编号
-            List<MiniCode> stList = miniCodeBO
-                .getMiniCodeByProCode(barData.getCode());
-            for (MiniCode miniCode : stList) {
-                miniCodeBO.refreshStatus(miniCode, data.getCode());
-            }
+            miniCodeBO.refreshStatusByProCode(proData.getCode(),
+                data.getCode());
+            // List<MiniCode> stList = miniCodeBO
+            // .getMiniCodeByProCode(proData.getCode());
+            // for (MiniCode miniCode : stList) {
+            // miniCodeBO.refreshStatus(miniCode, data.getCode());
+            // }
         }
         Agent agent = agentBO.getAgent(data.getApplyUser());
         AgentLevel agentLevel = agentLevelBO.getAgentByLevel(agent.getLevel());

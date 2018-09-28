@@ -24,7 +24,10 @@ public class XN627930 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+        long start = System.currentTimeMillis();
         deliveOrderAO.deliverOrder(req);
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
         return new BooleanRes(true);
     }
 

@@ -16,6 +16,6 @@ UPDATE tsys_dict SET dkey = 6 WHERE parent_key = 'in_order_status' AND dkey = 3;
 UPDATE tbh_ware_log SET biz_note = CONCAT(real_name,'[',CASE LEVEL WHEN price = '3400000' THEN '董事' ELSE '总代' END ,']','，云仓提货') WHERE biz_note ='代理下单' AND ref_no LIKE 'U%';
 
 UPDATE tbh_ware_log w JOIN tbh_out_order o ON w.`apply_user` = o.`apply_user` SET ref_no = o.`code`
- WHERE w.`apply_datetime` = o.`apply_datetime` AND ref_no LIKE "U%";
+ WHERE w.`apply_datetime` = o.`apply_datetime` AND ref_no LIKE 'U%';
 
 UPDATE tbh_ware_log SET biz_note = CONCAT('下级代理：',real_name,'[',CASE LEVEL WHEN price = '3400000' THEN '董事' ELSE '总代' END ,']','，买入云仓') WHERE biz_note ='代理下单';

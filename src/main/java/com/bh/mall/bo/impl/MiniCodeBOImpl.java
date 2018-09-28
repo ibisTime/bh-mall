@@ -131,4 +131,14 @@ public class MiniCodeBOImpl extends PaginableBOImpl<MiniCode>
         return data;
     }
 
+    @Override
+    public void refreshStatusByProCode(String proCode, String orderCode) {
+        MiniCode data = new MiniCode();
+        data.setStatus(ECodeStatus.USE_YES.getCode());
+        data.setOrderCode(orderCode);
+        data.setUseDatetime(new Date());
+        data.setRefCode(proCode);
+        miniCodeDAO.updateStatusByProCode(data);
+    }
+
 }

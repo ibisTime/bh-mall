@@ -66,4 +66,9 @@ public class MiniCodeDAOImpl extends AMybatisTemplate implements IMiniCodeDAO {
         super.update(NAMESPACE.concat("update_number"), data);
     }
 
+    @Override
+    public void updateStatusByProCode(MiniCode data) {
+        super.update(NAMESPACE.concat("update_by_pro"), data);
+    }
+
 }

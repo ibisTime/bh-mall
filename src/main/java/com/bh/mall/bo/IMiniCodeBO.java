@@ -31,4 +31,6 @@ public interface IMiniCodeBO extends IPaginableBO<MiniCode> {
 
     public int refreshSecurity(MiniCode data);
 
+    public void refreshStatusByProCode(String proCode, String orderCode);
+
 }
