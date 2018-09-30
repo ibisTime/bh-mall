@@ -20,7 +20,6 @@
            <list>
            	  <ref bean="inOrderTrigger"/> 
            	  <ref bean="outOrderTrigger"/> 
-           	  <ref bean="removeOutOrderTrigger" /> 
  		   </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
