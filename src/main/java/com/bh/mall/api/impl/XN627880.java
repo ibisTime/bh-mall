@@ -24,7 +24,7 @@ public class XN627880 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return miniCodeAO.getSecurity(req.getMiniCode());
+        return miniCodeAO.getSecurity(req.getSecurityCode());
     }
 
     @Override

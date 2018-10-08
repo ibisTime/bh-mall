@@ -46,6 +46,7 @@ public class MiniCode extends ABaseDO {
 
     // 订单
     private OutOrder outOrder;
+    
 
     // 状态List
     private List<String> statusList;

@@ -12,14 +12,14 @@ public class XN627880Req {
 
     // 防伪码
     @NotBlank(message = "防伪码不能为空")
-    private String miniCode;
+    private String securityCode;
 
-    public String getMiniCode() {
-        return miniCode;
+    public String getSecurityCode() {
+        return securityCode;
     }
 
-    public void setminiCode(String miniCode) {
-        this.miniCode = miniCode;
+    public void setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
     }
 
 }

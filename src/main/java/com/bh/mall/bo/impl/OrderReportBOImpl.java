@@ -23,35 +23,35 @@ public class OrderReportBOImpl extends PaginableBOImpl<OrderReport>
     @Autowired
     private IOrderReportDAO orderReportDAO;
 
-    @Override
-    public void saveInOrderReport(InOrder inOrder) {
-        OrderReport data = new OrderReport();
-        data.setCode(inOrder.getCode());
-        data.setKind(EOrderReportKind.IN_ORDER.getCode());
-        data.setApplyUser(inOrder.getApplyUser());
-        data.setRealName(inOrder.getRealName());
-        data.setLevel(inOrder.getLevel());
-
-        data.setTeamName(inOrder.getTeamName());
-        data.setToUserId(inOrder.getToUserId());
-        data.setToUserName(inOrder.getToUserName());
-        data.setTeamName(inOrder.getTeamName());
-        data.setTeamLeader(inOrder.getTeamLeader());
-
-        data.setProductCode(inOrder.getProductCode());
-        data.setProductName(inOrder.getProductName());
-        data.setSpecsCode(inOrder.getSpecsCode());
-        data.setSpecsName(inOrder.getSpecsName());
-
-        data.setQuantity(inOrder.getQuantity());
-        data.setPrice(inOrder.getPrice());
-        data.setAmount(inOrder.getAmount());
-        data.setPic(inOrder.getPic());
-
-        data.setApplyDatetime(inOrder.getApplyDatetime());
-        data.setApplyNote(inOrder.getApplyNote());
-        orderReportDAO.insert(data);
-    }
+//    @Override
+//    public void saveInOrderReport(InOrder inOrder) {
+//        OrderReport data = new OrderReport();
+//        data.setCode(inOrder.getCode());
+//        data.setKind(EOrderReportKind.IN_ORDER.getCode());
+//        data.setApplyUser(inOrder.getApplyUser());
+//        data.setRealName(inOrder.getRealName());
+//        data.setLevel(inOrder.getLevel());
+//
+//        data.setTeamName(inOrder.getTeamName());
+//        data.setToUserId(inOrder.getToUserId());
+//        data.setToUserName(inOrder.getToUserName());
+//        data.setTeamName(inOrder.getTeamName());
+//        data.setTeamLeader(inOrder.getTeamLeader());
+//
+//        data.setProductCode(inOrder.getProductCode());
+//        data.setProductName(inOrder.getProductName());
+//        data.setSpecsCode(inOrder.getSpecsCode());
+//        data.setSpecsName(inOrder.getSpecsName());
+//
+//        data.setQuantity(inOrder.getQuantity());
+//        data.setPrice(inOrder.getPrice());
+//        data.setAmount(inOrder.getAmount());
+//        data.setPic(inOrder.getPic());
+//
+//        data.setApplyDatetime(inOrder.getApplyDatetime());
+//        data.setApplyNote(inOrder.getApplyNote());
+//        orderReportDAO.insert(data);
+//    }
 
     @Override
     public void saveOutOrderReport(OutOrder outOrder) {

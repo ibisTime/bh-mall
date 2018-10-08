@@ -66,10 +66,14 @@ public class XN627662 extends AProcessor {
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        Paginable<OutOrder> outPage = outOrderAO.queryOutOrderPage(start,
-            limit / 2, condition);
-        list.addAll(outPage.getList());
-
+        
+        long outCount = 0;
+        if(StringUtils.isBlank(req.getKind()) || !"5".equals(req.getKind())){
+        	Paginable<OutOrder> outPage = outOrderAO.queryOutOrderPage(start,
+                    limit / 2, condition);
+        	outCount = outPage.getTotalCount();
+            list.addAll(outPage.getList());
+        }
         InOrder inCondition = new InOrder();
 
         inCondition.setKeyword(req.getKeyword());
@@ -93,12 +97,16 @@ public class XN627662 extends AProcessor {
         }
         inCondition.setOrder(column, req.getOrderDir());
 
-        Paginable<InOrder> inPage = inOrderAO.queryInOrderPage(start, limit / 2,
-            inCondition);
-        list.addAll(inPage.getList());
+        long inCount = 0;
+       if(StringUtils.isBlank(req.getKind()) || "5".equals(req.getKind())){
+    	   Paginable<InOrder> inPage = inOrderAO.queryInOrderPage(start, limit / 2,
+    	            inCondition);
+    	    list.addAll(inPage.getList());
+    	    inCount = inPage.getTotalCount();
+       }
 
         Paginable<Object> page = new Page<Object>(start, limit,
-            outPage.getTotalCount() + inPage.getTotalCount());
+        		outCount + inCount);
         page.setList(list);
         return page;
     }
