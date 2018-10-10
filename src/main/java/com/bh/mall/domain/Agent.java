@@ -131,6 +131,9 @@ public class Agent extends ABaseDO {
 
     // 手机号模糊查询
     private String mobileForQuery;
+    
+    // 团队名称模糊查询
+    private String teamNameForQuery;
 
     // 真实姓名模糊查询
     private String realNameForQuery;
@@ -748,5 +751,15 @@ public class Agent extends ABaseDO {
     public void setIsTrader(String isTrader) {
         this.isTrader = isTrader;
     }
+
+	public String getTeamNameForQuery() {
+		return teamNameForQuery;
+	}
+
+	public void setTeamNameForQuery(String teamNameForQuery) {
+		this.teamNameForQuery = teamNameForQuery;
+	}
+    
+    
 
 }

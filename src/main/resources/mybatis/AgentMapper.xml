@@ -90,7 +90,10 @@
 				AND t.mobile like "%"#{mobile}"%"
 			</if>
 			<if test="teamName != null and teamName != '' ">
-				AND t.team_name like "%"#{teamName}"%"
+				AND t.team_name = #{teamName}
+			</if>
+			<if test="teamNameForQuery != null and teamNameForQuery != '' ">
+				AND t.teamNameForQuery like "%"#{teamNameForQuery}"%"
 			</if>
 			
 			<if test="idKind != null and idKind != '' ">

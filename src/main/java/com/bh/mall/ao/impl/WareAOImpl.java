@@ -354,7 +354,7 @@ public class WareAOImpl implements IWareAO {
         // 减少云仓库存
         wareBO.changeWare(data.getCode(), EWareLogType.OUT.getCode(),
             -StringValidater.toInteger(req.getQuantity()), EWareLogType.OUT,
-            agent + "[" + agent.getLevel() + "]，云仓提货", payGroup);
+            agent.getRealName() + "[" + agentLevel.getName() + "]，云仓提货", payGroup);
 
         // 订单类型为授权单，获取类型为授权单的订单金额与本次下单金额，金额不满足该等级授权单金额是，用户状态为未完成授权单
         String isImpower = EIsImpower.Normal.getCode();

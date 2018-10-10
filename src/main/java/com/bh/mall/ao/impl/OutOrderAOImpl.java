@@ -298,6 +298,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     @Override
+    @Transactional
     public List<String> addOutOrderC(XN627640Req req) {
         List<String> list = new ArrayList<String>();
 
@@ -793,6 +794,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     @Override
+    @Transactional
     public void editOutOrder(XN627643Req req) {
         OutOrder data = outOrderBO.getOutOrder(req.getCode());
         if (EOutOrderStatus.TO_SEND.getCode().equals(data.getStatus())
@@ -998,6 +1000,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     @Override
+    @Transactional
     public void approveOutOrder(List<String> codeList, String approver,
             String approveNote) {
         for (String code : codeList) {
@@ -1050,6 +1053,7 @@ public class OutOrderAOImpl implements IOutOrderAO {
     }
 
     @Override
+    @Transactional
     public void approveCancel(String code, String result, String updater,
             String remark) {
         OutOrder data = outOrderBO.getOutOrder(code);

@@ -2,6 +2,7 @@ package com.bh.mall.dto.req;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -34,6 +35,7 @@ public class XN627640Req {
 
     // （必填）收件人电话
     @NotBlank(message = "收件人电话不能为空")
+    @Length(max=16,message="电话长度不能超过16位")
     private String mobile;
 
     // （必填）收货地址
@@ -52,17 +54,6 @@ public class XN627640Req {
     @NotBlank(message = "省不能为空")
     private String province;
 
-    // 是否送货到家
-    @NotBlank(message = "是否送货到家")
-    private String isSendHome;
-
-    public String getIsSendHome() {
-        return isSendHome;
-    }
-
-    public void setIsSendHome(String isSendHome) {
-        this.isSendHome = isSendHome;
-    }
 
     public List<String> getCartList() {
         return cartList;
