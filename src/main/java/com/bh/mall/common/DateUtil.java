@@ -357,12 +357,15 @@ public class DateUtil {
         cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) - hours);
         return cal.getTime();
     }
-
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("123");
-        list.add("123");
-        System.out.println(list.toString());
-
+    
+    public static List<Date> getBeforeTime(Date endDate) {
+    	List<Date> list = new ArrayList<Date>();
+        Calendar startDate = Calendar.getInstance();
+        while (endDate.after(startDate.getTime())) {
+			list.add(startDate.getTime());
+			startDate.add(Calendar.DAY_OF_MONTH, 1);
+		}
+        return list;
     }
+
 }

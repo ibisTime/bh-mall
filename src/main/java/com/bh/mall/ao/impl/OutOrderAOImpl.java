@@ -1524,14 +1524,4 @@ public class OutOrderAOImpl implements IOutOrderAO {
         }
     }
 
-    public void removeOutOrder() {
-
-        logger.info("==========开始删除未支付的订单===========");
-        long start = System.currentTimeMillis();
-        OutOrder data = new OutOrder();
-        data.setStartDatetime(DateUtil.getBeforeTime(0));
-        outOrderBO.removeOutOrder(data);
-        long end = System.currentTimeMillis();
-        logger.info("耗时：" + (end - start));
-    }
 }
