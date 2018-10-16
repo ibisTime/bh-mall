@@ -484,12 +484,6 @@ public class AgentAOImpl implements IAgentAO {
     public List<Agent> queryAgentList(Agent condition) {
         List<Agent> list = agentBO.queryAgentList(condition);
         for (Agent data : list) {
-            // 推荐人转义
-            if (StringUtils.isNotBlank(data.getReferrer())) {
-                Agent userRefree = agentBO.getAgent(data.getReferrer());
-                data.setUserRefreeName(userRefree.getRealName());
-                data.setUserRefreeMobile(userRefree.getMobile());
-            }
             // 介绍人转义
             if (StringUtils.isNotBlank(data.getIntroducer())) {
                 Agent introducer = agentBO.getAgent(data.getIntroducer());
