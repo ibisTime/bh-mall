@@ -94,9 +94,8 @@
 				AND t.team_name = #{teamName}
 			</if>
 			<if test="teamNameForQuery != null and teamNameForQuery != '' ">
-				AND t.teamNameForQuery like "%"#{teamNameForQuery}"%"
+				AND t.team_name like "%"#{teamNameForQuery}"%"
 			</if>
-			
 			<if test="idKind != null and idKind != '' ">
 				AND t.id_kind = #{idKind}
 			</if>

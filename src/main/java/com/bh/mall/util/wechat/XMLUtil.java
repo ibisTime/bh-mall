@@ -19,6 +19,7 @@ import org.jdom2.input.SAXBuilder;
  */
 public class XMLUtil {
 
+	
     /**
      * 解析xml,返回第一级元素键值对。如果第一级元素有子节点，则此节点的值是子节点的xml数据。
      * @param strxml
@@ -35,6 +36,11 @@ public class XMLUtil {
         Map m = new HashMap();
         InputStream in = HttpClientUtil.String2Inputstream(strxml);
         SAXBuilder builder = new SAXBuilder();
+
+        // 禁用外部实体引用
+		builder.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		builder.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		builder.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
         Document doc = builder.build(in);
         Element root = doc.getRootElement();
         List list = root.getChildren();
