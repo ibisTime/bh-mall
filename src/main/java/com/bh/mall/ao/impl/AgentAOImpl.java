@@ -448,18 +448,6 @@ public class AgentAOImpl implements IAgentAO {
         Paginable<Agent> page = agentBO.getPaginable(start, limit, condition);
 
         for (Agent data : page.getList()) {
-            // 推荐人转义
-            if (StringUtils.isNotBlank(data.getReferrer())) {
-                Agent userRefree = agentBO.getAgent(data.getReferrer());
-                data.setUserRefreeName(userRefree.getRealName());
-                data.setUserRefreeMobile(userRefree.getMobile());
-            }
-            // 介绍人转义
-            if (StringUtils.isNotBlank(data.getIntroducer())) {
-                Agent introducer = agentBO.getAgent(data.getIntroducer());
-                data.setIntroduceName(introducer.getRealName());
-                data.setIntroduceMobile(introducer.getMobile());
-            }
 
             // 上级转义
             if (StringValidater.toInteger(EAgentLevel.ONE.getCode()) == data
@@ -473,11 +461,6 @@ public class AgentAOImpl implements IAgentAO {
                 data.setHighUserMobile(highAgent.getMobile());
             }
 
-            // 管理员
-            if (StringUtils.isNotBlank(data.getManager())) {
-                SYSUser sysUser = sysUserBO.getSYSUser(data.getManager());
-                data.setManageName(sysUser.getRealName());
-            }
             // 门槛余额
             Account account = accountBO.getAccountNocheck(data.getUserId(),
                 ECurrency.MK_CNY.getCode());

@@ -47,6 +47,7 @@
 		<result column="last_agent_log" property="lastAgentLog" />
 		<result column="is_impower" property="isImpower" />
 		<result column="is_trader" property="isTrader" />
+		<result column="userRefreeName" property="userRefreeName" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -195,6 +196,9 @@
 		,t.trade_pwd_strength
 		,t.level
 		,t.referrer
+		<if test="referrer != null and referrer != '' ">
+		,(SELECT real_name FROM tbh_agent WHERE user_id = #{referrer}) AS userRefreeName
+		</if>
 		,t.introducer
 
 		,t.high_user_id
