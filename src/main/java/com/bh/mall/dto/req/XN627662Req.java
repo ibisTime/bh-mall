@@ -42,6 +42,9 @@ public class XN627662Req extends APageReq {
 
     // 产品名称
     private String teamName;
+    
+    // 订单编号
+    private String code;
 
     public String getProductName() {
         return productName;
@@ -123,4 +126,13 @@ public class XN627662Req extends APageReq {
         this.teamName = teamName;
     }
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+    
 }

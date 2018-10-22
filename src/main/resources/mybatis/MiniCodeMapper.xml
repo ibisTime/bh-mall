@@ -19,33 +19,15 @@
 	<sql id="where_condition">
 	
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<choose>
-				<when test="miniCode != null and miniCode != '' ">
-					AND t.mini_code = #{miniCode}
-				</when>
-				<when test="miniCodeForQuery != null and miniCodeForQuery != '' ">
-					AND t.mini_code LIKE "%"#{miniCodeForQuery}"%"
-				</when>
-			</choose>
-			
-			<choose>
-				<when test="traceCode != null and traceCode != '' ">
-					AND t.trace_code = #{traceCode}
-				</when>
-				<when test="traceCodeForQuery != null and traceCodeForQuery != '' ">
-					AND t.mini_code LIKE "%"#{traceCodeForQuery}"%"
-				</when>
-			</choose>
-			
-			<choose>
-				<when test="refCode != null and refCode != '' ">
-					AND t.ref_code = #{refCode}
-				</when>
-				<when test="refCodeForQuery != null and refCodeForQuery != '' ">
-					AND t.ref_code LIKE "%"#{refCodeForQuery}"%"
-				</when>
-			</choose>
-		
+			<if test="miniCode != null and miniCode != '' ">
+				AND t.mini_code = #{miniCode}
+			</if>
+			<if test="traceCode != null and traceCode != '' ">
+				AND t.trace_code = #{traceCode}
+			</if>
+			<if test="refCode != null and refCode != '' ">
+				AND t.ref_code = #{refCode}
+			</if>
 			<choose>
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
@@ -57,6 +39,9 @@
 					</foreach>
 				</when>
 			</choose>
+			<if test="keyword != null and keyword != '' ">
+				AND (t.trace_code = #{keyword} OR t.mini_code = #{keyword} OR t.ref_code = #{keyword})
+			</if>
 			
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
@@ -104,7 +89,6 @@
 		tbh_mini_code(
 		mini_code
 		,trace_code
-		,ref_code
 		,status
 		,batch
 		,create_datetime
@@ -112,7 +96,6 @@
 		VALUES(
 		#{miniCode}
 		,#{traceCode}
-		,#{refCode}
 		,#{status}
 		,#{batch}
 		,#{createDatetime}
@@ -141,15 +124,6 @@
 		SET 
 		number = #{number}
 		WHERE mini_code = #{miniCode}
-	</update>
-	
-	<update id="update_by_pro" parameterType="miniCode">
-		UPDATE tbh_mini_code
-		SET 
-		status = #{status}
-		,order_code = #{orderCode}
-		,use_datetime = #{useDatetime}
-		WHERE ref_code = #{refCode}
 	</update>
 
 </mapper>

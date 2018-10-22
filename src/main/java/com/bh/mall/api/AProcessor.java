@@ -14,8 +14,8 @@ public abstract class AProcessor implements IProcessor {
      * 
      * @see com.ibis.account.service.IProcessor#doProcessor(java.lang.String)
      */
-    public final Object doProcessor(String inputparams) throws BizException,
-            ParaException {
+    public final Object doProcessor(String inputparams)
+            throws BizException, ParaException {
         doCheck(inputparams);
         return doBusiness();
     }

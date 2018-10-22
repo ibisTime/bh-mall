@@ -29,6 +29,7 @@ public class XN627662 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         OutOrder condition = new OutOrder();
+        condition.setCode(req.getCode());
         condition.setKeyword(req.getKeyword());
         condition.setKind(req.getKind());
         condition.setStatus(req.getStatus());

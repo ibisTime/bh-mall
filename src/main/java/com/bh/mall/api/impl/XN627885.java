@@ -30,7 +30,7 @@ public class XN627885 extends AProcessor {
     public Object doBusiness() throws BizException {
         MiniCode condition = new MiniCode();
         condition.setStatusList(req.getStatusList());
-        condition.setKeyword(req.getKeyword());
+        condition.setOrderCode(req.getOrderCode());
         condition.setProStatus(req.getProStatus());
 
         condition.setMiniCodeForQuery(req.getMiniCode());

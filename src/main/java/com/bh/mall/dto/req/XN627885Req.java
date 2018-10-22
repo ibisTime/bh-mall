@@ -29,7 +29,10 @@ public class XN627885Req extends APageReq {
 
     // 箱码
     private String refCode;
+    
 
+    private String orderCode;
+    
     public List<String> getStatusList() {
         return statusList;
     }
@@ -78,4 +81,13 @@ public class XN627885Req extends APageReq {
         this.refCode = refCode;
     }
 
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
+	}
+
+    
 }
