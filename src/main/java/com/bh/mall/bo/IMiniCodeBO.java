@@ -23,8 +23,6 @@ public interface IMiniCodeBO extends IPaginableBO<MiniCode> {
 
     public void refreshMiniCode(MiniCode trace);
 
-    void refreshStatus(MiniCode data, String orderCode);
-
     public MiniCode getSecurity(String miniCode);
 
     public MiniCode getTrace(String traceCode);

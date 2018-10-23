@@ -116,7 +116,7 @@
 		status = #{status}
 		,order_code = #{orderCode}
 		,use_datetime = #{useDatetime}
-		WHERE mini_code = #{miniCode}
+		WHERE ref_code = #{refCode}
 	</update>
 
 	<update id="update_number" parameterType="miniCode">
