@@ -139,6 +139,13 @@ public class SjFormAOImpl implements ISjFormAO {
                             + account.getAmount() / 1000.0 + "]元");
             }
         }
+        // 云仓是否还有货物
+        List<Ware> list = wareBO.getWareByUser(userId);
+        for (Ware ware : list) {
+            if (ware.getQuantity() > 0) {
+                throw new BizException("xn00000", "请将您云仓的货物全部提出后再申请升级");
+            }
+        }
 
         Account txAccount = accountBO.getAccountByUser(data.getUserId(),
             ECurrency.TX_CNY.getCode());

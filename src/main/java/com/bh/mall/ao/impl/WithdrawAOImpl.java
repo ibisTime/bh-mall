@@ -389,7 +389,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             DateUtil.strToDate(payDatetime, DateUtil.FRONT_DATE_FORMAT_STRING),
             payCardInfo, payCardNo, applyUser, applyNote);
         accountBO.changeAmount(accountNumber, EChannelType.Offline, null, null,
-            code, EBizType.XXFK, "提现回录", -amount);
+            code, EBizType.XXFK, applyNote, -amount);
         return code;
     }
 

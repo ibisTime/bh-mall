@@ -113,8 +113,7 @@ public class ChargeAOImpl implements IChargeAO {
         // 账户加钱
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
             null, null, data.getCode(), EBizType.getBizType(data.getBizType()),
-            EBizType.getBizType(data.getBizType()).getValue(),
-            data.getAmount());
+            payNote, data.getAmount());
 
     }
 

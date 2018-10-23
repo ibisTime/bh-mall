@@ -193,7 +193,8 @@
 	<update id="update_price" parameterType="ware">
 		UPDATE tbh_ware
 		SET
-		price = #{price}
+		quantity = #{quantity}
+		,price = #{price}
 		,amount = #{amount}
 		,last_change_code = #{lastChangeCode}
 		WHERE code = #{code}

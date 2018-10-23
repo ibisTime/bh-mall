@@ -178,8 +178,9 @@ public class WareBOImpl extends PaginableBOImpl<Ware> implements IWareBO {
         for (Ware data : list) {
             AgentPrice psPrice = agentPriceBO
                 .getPriceByLevel(data.getSpecsCode(), level);
+            data.setQuantity(0);
             data.setPrice(psPrice.getPrice());
-            data.setAmount(data.getQuantity() * psPrice.getPrice());
+            data.setAmount(0L);
             wareDAO.changePrice(data);
         }
     }

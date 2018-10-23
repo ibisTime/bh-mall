@@ -143,7 +143,6 @@ public class AccountAOImpl implements IAccountAO {
             String remark) {
         Account account = accountBO.getAccount(accountNumber);
         EBizType bizType = EBizType.AJ_KK;
-        String bizNote = EBizType.AJ_KK.getValue();
         Long amount = StringValidater.toLong(changeAmount);
 
         if (amount == 0) {
@@ -151,7 +150,6 @@ public class AccountAOImpl implements IAccountAO {
         }
         if (amount > 0) {
             bizType = EBizType.AJ_CZ;
-            bizNote = EBizType.AJ_CZ.getValue();
         }
 
         Long totalAmount = amount + account.getAmount();
@@ -159,7 +157,7 @@ public class AccountAOImpl implements IAccountAO {
             throw new BizException("xn00000", "用户账户余额不足");
         }
         accountBO.changeAmount(accountNumber, EChannelType.NBZ, null, null,
-            account.getUserId(), bizType, bizNote,
+            account.getUserId(), bizType, remark,
             StringValidater.toLong(changeAmount));
 
         Agent agent = agentBO.getAgent(account.getUserId());
