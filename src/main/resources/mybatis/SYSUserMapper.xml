@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bh.mall.dao.ISYSUserDAO">
+<mapper namespace="com.xn.sdhh.dao.ISYSUserDAO">
 	<resultMap id="sysuser_DB_Result" type="sysuser">
 		<result column="user_id" property="userId" />
 		<result column="role_code" property="roleCode" />
@@ -134,14 +134,6 @@
 		,remark=#{remark}
 		,system_code=#{systemCode}
 		WHERE user_id = #{userId}
-	</update>
-	
-	<update id="update_photo" parameterType="sysuser">
-		UPDATE tsys_user
-		SET
-		 photo = #{photo}
-		WHERE
-		user_id = #{userId}	
 	</update>
 	
 	<update id="update_login_pwd" parameterType="sysuser">

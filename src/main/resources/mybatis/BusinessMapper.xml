@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xn.sdhh.dao.IBusinessDAO">
+	<resultMap id="business_DB_Result" type="business">
+		<result column="code" property="code" />
+		<result column="qyfzrmc" property="qyfzrmc" />
+		<result column="qczl" property="qczl" />
+		<result column="khmc" property="khmc" />
+		<result column="dkje" property="dkje" />
+
+		<result column="zhll" property="zhll" />
+		<result column="dkrq" property="dkrq" />
+		<result column="yhfkrq" property="yhfkrq" />
+		<result column="gshkrq" property="gshkrq" />
+		<result column="fbhrc" property="fbhrc" />
+
+		<result column="wzdzrq" property="wzdzrq" />
+		<result column="djrq" property="djrq" />
+		<result column="djrc" property="djrc" />
+		<result column="terq" property="terq" />
+		<result column="fkrc" property="fkrc" />
+
+		<result column="dyrq" property="dyrq" />
+		<result column="dyrc" property="dyrc" />
+		<result column="fdje" property="fdje" />
+		<result column="pgf" property="pgf" />
+		<result column="dzlx" property="dzlx" />
+
+		<result column="ysfdje" property="ysfdje" />
+		<result column="qdf" property="qdf" />
+		<result column="jx" property="jx" />
+		<result column="qtlr" property="qtlr" />
+		<result column="bzjdke" property="bzjdke" />
+
+		<result column="mlr" property="mlr" />
+		<result column="status" property="status" />
+	</resultMap>
+
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="qczl != null and qczl != '' ">
+				AND t.qczl = #{qczl}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="qyfzrmc != null and qyfzrmc != '' ">
+				AND t.qyfzrmc like "%"#{qyfzrmc}"%"
+			</if>
+			<if test="khmc != null and khmc != '' ">
+				AND t.khmc like "%"#{khmc}"%"
+			</if>
+		</trim>
+	</sql>
+
+	<select id="select_business" parameterType="business" resultMap="business_DB_Result">
+		SELECT
+		t.code
+		,t.qyfzrmc
+		,t.qczl
+		,t.khmc
+		,t.dkje
+
+		,t.zhll
+		,t.dkrq
+		,t.yhfkrq
+		,t.gshkrq
+		,t.fbhrc
+
+		,t.wzdzrq
+		,t.djrq
+		,t.djrc
+		,t.terq
+		,t.fkrc
+
+		,t.dyrq
+		,t.dyrc
+		,t.fdje
+		,t.pgf
+		,t.dzlx
+
+
+		,t.ysfdje
+		,t.qdf
+		,t.jx
+		,t.qtlr
+		,t.bzjdke
+
+		,t.mlr
+		,t.status
+		FROM
+		tsd_business t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY">
+			<if test="order !=null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_business_count" parameterType="business"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsd_business t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_business" parameterType="business">
+		INSERT INTO tsd_business(
+		code
+		,qyfzrmc
+		,qczl
+		,khmc
+		,dkje
+
+		,zhll
+		,dkrq
+		,yhfkrq
+		,gshkrq
+		,fbhrc
+
+		,wzdzrq
+		,djrq
+		,djrc
+		,terq
+		,fkrc
+
+		,dyrq
+		,dyrc
+		,fdje
+		,pgf
+		,dzlx
+
+		,ysfdje
+		,qdf
+		,jx
+		,qtlr
+		,bzjdke
+
+		,mlr
+		,status
+		)
+		VALUES(
+		#{code}
+		,#{qyfzrmc}
+		,#{qczl}
+		,#{khmc}
+		,#{dkje}
+
+		,#{zhll}
+		,#{dkrq}
+		,#{yhfkrq}
+		,#{gshkrq}
+		,#{fbhrc}
+
+		,#{wzdzrq}
+		,#{djrq}
+		,#{djrc}
+		,#{terq}
+		,#{fkrc}
+
+		,#{dyrq}
+		,#{dyrc}
+		,#{fdje}
+		,#{pgf}
+		,#{dzlx}
+
+		,#{ysfdje}
+		,#{qdf}
+		,#{jx}
+		,#{qtlr}
+		,#{bzjdke}
+
+		,#{mlr}
+		,#{status}
+		)
+	</insert>
+
+</mapper>

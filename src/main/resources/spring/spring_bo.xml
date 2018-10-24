@@ -12,177 +12,23 @@
 
 	
 	<!-- 分页BO层注入paginableDao -->
-	<bean id="agentBO" class="com.bh.mall.bo.impl.AgentBOImpl">
-		<property name="paginableDAO" ref="agentDAOImpl"/>
-	</bean>	
-	<bean id="addressBO" class="com.bh.mall.bo.impl.AddressBOImpl">
-		<property name="paginableDAO" ref="addressDAOImpl"/>
-	</bean>	
-	<bean id="sysMenuBO" class="com.bh.mall.bo.impl.SYSMenuBOImpl">
+	<bean id="sysMenuBO" class="com.xn.sdhh.bo.impl.SYSMenuBOImpl">
 		<property name="paginableDAO" ref="sysMenuDAOImpl"/>
 	</bean>
 	
-	<bean id="sysRoleBO" class="com.bh.mall.bo.impl.SYSRoleBOImpl">
+	<bean id="sysRoleBO" class="com.xn.sdhh.bo.impl.SYSRoleBOImpl">
 		<property name="paginableDAO" ref="sysRoleDAOImpl"/>
 	</bean>
-	<bean id="sysMenuRoleBO" class="com.bh.mall.bo.impl.SYSMenuRoleBOImpl">
+	<bean id="sysMenuRoleBO" class="com.xn.sdhh.bo.impl.SYSMenuRoleBOImpl">
 		<property name="paginableDAO" ref="sysMenuRoleDAOImpl"/>
 	</bean>
-	
-
-	<bean id="cNavigateBO" class="com.bh.mall.bo.impl.CNavigateBOImpl">
-		<property name="paginableDAO" ref="cNavigateDAOImpl"/>
-	</bean>
-	
-	<bean id="sysDictBO" class="com.bh.mall.bo.impl.SYSDictBOImpl">
+	<bean id="sysDictBO" class="com.xn.sdhh.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl"/>
 	</bean>	
-	<bean id="sysConfigBO" class="com.bh.mall.bo.impl.SYSConfigBOImpl">
+	<bean id="sysConfigBO" class="com.xn.sdhh.bo.impl.SYSConfigBOImpl">
 		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
 	</bean>	
-	
-	<bean id="agentLevelBO" class="com.bh.mall.bo.impl.AgentLevelBOImpl">
-		<property name="paginableDAO" ref="agentLevelDAOImpl"></property>
-	</bean>
-	
-	
-	<bean id="materialBO" class="com.bh.mall.bo.impl.MaterialBOImpl">
-		<property name="paginableDAO" ref="materialDAOImpl"></property>
-	</bean>
-	
-	<bean id="accountBO" class="com.bh.mall.bo.impl.AccountBOImpl">
-		<property name="paginableDAO" ref="accountDAOImpl"></property>
-	</bean>
-	
-	<bean id="jourBO" class="com.bh.mall.bo.impl.JourBOImpl">
-		<property name="paginableDAO" ref="jourDAOImpl"></property>
-	</bean>
-	
-	<bean id="withdrawBO" class="com.bh.mall.bo.impl.WithdrawBOImpl">
-		<property name="paginableDAO" ref="withdrawDAOImpl"></property>
-	</bean>
-	
-	<bean id="bankcardBO" class="com.bh.mall.bo.impl.BankcardBOImpl">
-		<property name="paginableDAO" ref="bankcardDAOImpl"></property>
-	</bean>
-	
-
-	<bean id="productBO" class="com.bh.mall.bo.impl.ProductBOImpl">
-		<property name="paginableDAO" ref="productDAOImpl"></property>
-	</bean>
-	
-	<bean id="specsBO" class="com.bh.mall.bo.impl.SpecsBOImpl">
-		<property name="paginableDAO" ref="specsDAOImpl"></property>
-	</bean>
-	
-	<bean id="agentPriceBO" class="com.bh.mall.bo.impl.AgentPriceBOImpl">
-		<property name="paginableDAO" ref="agentPriceDAOImpl"></property>
-	</bean>
-	
-	<bean id="specsLogBO" class="com.bh.mall.bo.impl.SpecsLogBOImpl">
-		<property name="paginableDAO" ref="specsLogDAOImpl"></property>
-	</bean>
-	
-	<bean id="tjAwardBO" class="com.bh.mall.bo.impl.TjAwardBOImpl">
-		<property name="paginableDAO" ref="tjAwardDAOImpl"></property>
-	</bean>
-	
-	<bean id="innerProductBO" class="com.bh.mall.bo.impl.InnerProductBOImpl">
-		<property name="paginableDAO" ref="innerProductDAOImpl"></property>
-	</bean>
-	
-	<bean id="innerOrderBO" class="com.bh.mall.bo.impl.InnerOrderBOImpl">
-		<property name="paginableDAO" ref="innerOrderDAOImpl"></property>
-	</bean>
-	
-	
-	<bean id="cartBO" class="com.bh.mall.bo.impl.CartBOImpl">
-		<property name="paginableDAO" ref="cartDAOImpl"></property>
-	</bean>
-	
-	<bean id="inOrderBO" class="com.bh.mall.bo.impl.InOrderBOImpl">
-		<property name="paginableDAO" ref="inOrderDAOImpl"></property>
-	</bean>
-	<bean id="outOrderBO" class="com.bh.mall.bo.impl.OutOrderBOImpl">
-		<property name="paginableDAO" ref="outOrderDAOImpl"></property>
-	</bean>
-	
-	<bean id="chargeBO" class="com.bh.mall.bo.impl.ChargeBOImpl">
-		<property name="paginableDAO" ref="chargeDAOImpl"></property>
-	</bean>
-	
-	
-	<bean id="jsAwardBO" class="com.bh.mall.bo.impl.JsAwardBOImpl">
-		<property name="paginableDAO" ref="jsAwardDAOImpl"></property>
-	</bean>
-	
-	<bean id="wareBO" class="com.bh.mall.bo.impl.WareBOImpl">
-		<property name="paginableDAO" ref="wareDAOImpl"></property>
-	</bean>
-	
-	<bean id="wareLogBO" class="com.bh.mall.bo.impl.WareLogBOImpl">
-		<property name="paginableDAO" ref="wareLogDAOImpl"></property>
-	</bean>
-	
-	<bean id="exchangeOrderBO" class="com.bh.mall.bo.impl.ExchangeOrderBOImpl">
-		<property name="paginableDAO" ref="exchangeOrderDAOImpl"></property>
-	</bean>
-	
-	<bean id="agentReportBO" class="com.bh.mall.bo.impl.AgentReportBOImpl">
-		<property name="paginableDAO" ref="agentReportDAOImpl"/>
-	</bean>
-	
-	<bean id="chAwardBO" class="com.bh.mall.bo.impl.ChAwardBOImpl">
-		<property name="paginableDAO" ref="chAwardDAOImpl"/>
+	<bean id="businessBO" class="com.xn.sdhh.bo.impl.BusinessBOImpl">
+		<property name="paginableDAO" ref="businessDAOImpl"/>
 	</bean>	
-	<bean id="proCodeBO" class="com.bh.mall.bo.impl.ProCodeBOImpl">
-		<property name="paginableDAO" ref="proCodeDAOImpl"/>
-	</bean>	
-	<bean id="miniCodeBO" class="com.bh.mall.bo.impl.MiniCodeBOImpl">
-		<property name="paginableDAO" ref="miniCodeDAOImpl"/>
-	</bean>
-	
-	<bean id="sysUserBO" class="com.bh.mall.bo.impl.SYSUserBOImpl">
-		<property name="paginableDAO" ref="sysuserDAOImpl"/>
-	</bean>
-	
-	<bean id="yxFormBO" class="com.bh.mall.bo.impl.YxFormBOImpl">
-		<property name="paginableDAO" ref="yxFormDAOImpl"/>
-	</bean>
-	
-	<bean id="sqFormBO" class="com.bh.mall.bo.impl.SqFormBOImpl">
-		<property name="paginableDAO" ref="sqFormDAOImpl"/>
-	</bean>
-	
-	<bean id="sjFormBO" class="com.bh.mall.bo.impl.SjFormBOImpl">
-		<property name="paginableDAO" ref="sjFormDAOImpl"/>
-	</bean>
-	
-	<bean id="cuserBO" class="com.bh.mall.bo.impl.CUserBOImpl">
-		<property name="paginableDAO" ref="cuserDAOImpl"/>
-	</bean>
-	
-	<bean id="innerSpecsBO" class="com.bh.mall.bo.impl.InnerSpecsBOImpl">
-		<property name="paginableDAO" ref="innerSpecsDAOImpl"/>
-	</bean>
-		
-	<bean id="agentLogBO" class="com.bh.mall.bo.impl.AgentLogBOImpl">
-		<property name="paginableDAO" ref="agentLogDAOImpl"/>
-	</bean>
-			
-	<bean id="channelBankBO" class="com.bh.mall.bo.impl.ChannelBankBOImpl">
-		<property name="paginableDAO" ref="channelBankDAOImpl"/>
-	</bean>
-	
-	<bean id="productReportBO" class="com.bh.mall.bo.impl.ProductReportBOImpl">
-		<property name="paginableDAO" ref="productReportDAOImpl"/>
-	</bean>
-	
-	<bean id="orderReportBO" class="com.bh.mall.bo.impl.OrderReportBOImpl">
-		<property name="paginableDAO" ref="orderReportDAOImpl"/>
-	</bean>
-	
-	<bean id="deliveOrderBO" class="com.bh.mall.bo.impl.DeliveOrderBOImpl">
-		<property name="paginableDAO" ref="deliveOrderDAOImpl"/>
-	</bean>
 </beans>
