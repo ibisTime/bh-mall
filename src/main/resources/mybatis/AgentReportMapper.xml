@@ -199,6 +199,7 @@
 		SET
 		level = #{level}
 		,team_name = #{teamName}
+		,user_referee = #{userReferee}
 		,impower_datetime = #{impowerDatetime}
 		WHERE user_id = #{userId}
 	</update>

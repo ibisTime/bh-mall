@@ -44,6 +44,7 @@ import com.bh.mall.core.StringValidater;
 import com.bh.mall.domain.Account;
 import com.bh.mall.domain.Agent;
 import com.bh.mall.domain.AgentLog;
+import com.bh.mall.domain.AgentReport;
 import com.bh.mall.domain.InnerOrder;
 import com.bh.mall.domain.OutOrder;
 import com.bh.mall.domain.SYSUser;
@@ -438,6 +439,10 @@ public class AgentAOImpl implements IAgentAO {
         }
 
         agentBO.refreshReferee(data, referrer, updater, remark);
+        AgentReport report = agentReportBO
+            .getAgentReportByUser(data.getUserId());
+        report.setUserReferee(referrer);
+        agentReportBO.refreshLevel(report);
 
     }
 

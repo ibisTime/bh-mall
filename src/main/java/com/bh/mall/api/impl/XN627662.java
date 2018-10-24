@@ -43,9 +43,9 @@ public class XN627662 extends AProcessor {
 
         condition.setTeamName(req.getTeamName());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
-            DateUtil.DATA_TIME_PATTERN_1));
+            DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setEndDatetime(
-            DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));
+            DateUtil.strToDate(req.getDateEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

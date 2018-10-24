@@ -1,6 +1,5 @@
 package com.bh.mall.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -279,9 +278,9 @@ public class SjFormAOImpl implements ISjFormAO {
                 }
                 AgentReport report = agentReportBO
                     .getAgentReportByUser(agent.getUserId());
+                report.setUserReferee(referrer);
                 report.setLevel(sjForm.getApplyLevel());
                 report.setTeamName(agent.getTeamName());
-                report.setImpowerDatetime(new Date());
                 agentReportBO.refreshLevel(report);
 
                 accountBO.refreshLevel(sjForm.getUserId(),
